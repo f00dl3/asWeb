@@ -1,0 +1,46 @@
+#header
+{
+background-color: lightblue;
+border: 2px solid black;
+border-radius: 35px;
+height: auto;
+margin-left: 30%;
+position: inline;
+text-align: center;
+width: 33%;
+z-index: 1;
+}
+
+#name
+{
+font-family: Verdana, cursive;
+font-size: 26px;
+font-style: italic;
+}
+
+body
+{
+background-color: lightgrey;
+}
+
+h3
+{
+font-family: Times, cursive;
+font-style: italic;
+}
+
+table
+{
+border: 2px solid black;
+}
+
+td
+{
+border: 2px solid grey;
+}
+
+th
+{
+text-align: center;
+border: 2px solid black;
+}

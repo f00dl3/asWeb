@@ -1,0 +1,65 @@
+/*
+by Anthony Stump
+Created: 16 Feb 2018
+Updated: 20 Feb 2018
+*/
+
+package asWebRest.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import asWebRest.shared.MyDBConnector;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class AddressBookDAO {
+    
+    
+    
+    public JSONArray getAddressBook() {
+        final String query_AddressBook = "SELECT Business, LastName, FirstName,"
+            + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2,"
+            + " EMail, AsOf, Holiday2014, Birthday, Point, Website"
+            + " FROM Core.Addresses"
+            + " ORDER BY Business, LastName, FirstName"
+            + " DESC;";
+        JSONArray addressBook = new JSONArray();
+        try {
+            Connection connection = MyDBConnector.getMyConnection();
+            PreparedStatement pStatement = connection.prepareStatement(query_AddressBook);
+            ResultSet resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                JSONObject tAddressBook = new JSONObject();
+                tAddressBook
+                    .put("Business", resultSet.getString("Business"))
+                    .put("LastName", resultSet.getString("LastName"))
+                    .put("FirstName", resultSet.getString("FirstName"))
+                    .put("Category", resultSet.getString("Category"))
+                    .put("Address", resultSet.getString("Address"))
+                    .put("City", resultSet.getString("City"))
+                    .put("State", resultSet.getString("State"))
+                    .put("Zip", resultSet.getString("Zip")) // May be Double
+                    .put("P_Business", resultSet.getString("P_Business"))
+                    .put("P_Home", resultSet.getString("P_Home"))
+                    .put("P_Cell", resultSet.getString("P_Cell"))
+                    .put("P_Cell2", resultSet.getString("P_Cell2"))
+                    .put("EMail", resultSet.getString("EMail"))
+                    .put("AsOf", resultSet.getString("AsOf"))
+                    .put("Holiday2014", resultSet.getInt("Holiday2014"))
+                    .put("Birthday", resultSet.getString("Birthday"))
+                    .put("Point", resultSet.getString("Point"))
+                    .put("Website", resultSet.getString("Website"));
+                addressBook.put(tAddressBook);
+            }
+           
+        } catch (SQLException sx) {
+            sx.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return addressBook;
+    }
+    
+}
