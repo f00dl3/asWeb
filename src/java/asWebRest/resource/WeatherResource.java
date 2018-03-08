@@ -1,36 +1,70 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 27 Feb 2018
+Updated: 7 Mar 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetWeatherAction;
+import asWebRest.action.GetWebLinkAction;
 import asWebRest.dao.WeatherDAO;
+import asWebRest.dao.WebLinkDAO;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.restlet.resource.Get;
+import org.restlet.data.Form;
+import org.restlet.representation.Representation;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 public class WeatherResource extends ServerResource {
     
-    @Get
-    public String represent() {
-        
-        List<String> inParams = new ArrayList<>();
-        /* inParams.add(0, "2017-12-23 10");
-        inParams.add(1, "2018-01-23 15");
-        inParams.add(2, "250"); */
-        
-        List<String> qParams = new ArrayList<>();
-        qParams.add(0, "2018-01-01%");
-        qParams.add(1, "2018-01-02");
-        
+    @Post
+    public String represent(Representation argsIn) {
+
+        List<String> qParams = new ArrayList<>();      
+        List<String> inParams = new ArrayList<>();      
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
-        JSONArray tData = getWeatherAction.getStormReportsByDate(qParams); 
-        return tData.toString();
+        final Form argsInForm = new Form(argsIn);
+        
+        String doWhat = null;
+        String returnData = "";
+         
+        try {
+            doWhat = argsInForm.getFirstValue("doWhat");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        if(doWhat != null) {
+            switch (doWhat) {
+                case "getObjsJson": 
+                    String startTime = "";
+                    String endTime = "";
+                    int limit = 0;      
+                    inParams.add(0, "DESC");
+                    try {
+                        qParams.add(0, argsInForm.getFirstValue("startTime"));
+                        qParams.add(1, argsInForm.getFirstValue("endTime"));
+                        qParams.add(2, argsInForm.getFirstValue("limit"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray wxObs = getWeatherAction.getObsJson(qParams, inParams);
+                    returnData = wxObs.toString();
+                    break;
+                    
+                case "getObsJsonLast":
+                    JSONArray latestObs = getWeatherAction.getObsJsonLast();
+                    returnData = latestObs.toString();
+                    break;
+            }
+        } else {
+            returnData = "ERROR: NO POST DATA!";
+        }        
+        
+        return returnData;
         
     }
     

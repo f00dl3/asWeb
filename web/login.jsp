@@ -1,9 +1,9 @@
 <%-- 
     Document   : login
     Created on : Feb 10, 2018, 1:09:23 PM
+    Updated:    4 Mar 2018
     Author     : astump
 
-session.setAttribute("userLoggedIn", user);
 
 --%>
 
@@ -15,10 +15,10 @@ session.setAttribute("userLoggedIn", user);
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/inc/Header.jsp?type=full&title=login&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full&title=Login&scripts=true"></jsp:include>
 
     <body>
-        
+        <script>isLoggedIn("Anthony");</script>
         <h1><% out.println(pageTitle); %></h1>
         
         <% 
@@ -37,11 +37,7 @@ session.setAttribute("userLoggedIn", user);
         <strong>Version: </strong><span id="webVersion"></span><br/>
         <strong>Your IP: </strong><% out.println(remoteIpAddr); %><br/>
         <strong>Browser: </strong><% out.println(userAgent); %><br/>
-        Last login from <span id="lastUser"></span> at <span id="lastTime"></span> from <span id="lastIP"></span><br/>       
-        <strong>Debug 1: </strong>${loginCheck}<br/>
-        <strong>Debug 2: </strong><span id="debug2"></span><br/>
-        <strong>Debug 3: </strong><span id="debug3"></span><br/>
-        
+        Last login from <span id="lastUser"></span> at <span id="lastTime"></span> from <span id="lastIP"></span><br/>
     </body>
 
 <jsp:include page="/inc/Footer.jsp"></jsp:include>

@@ -30,42 +30,42 @@ public class AddressBook {
     private String website;
     private int zip;
     
-    private String getAddress() { return address; }
-    private String getAsOf() { return asOf; }
-    private String getBusiness() { return business; }
-    private String getBirthday() { return birthday; }
-    private String getCategory() { return category; }
-    private String getCity() { return city; }
-    private String getEMail() { return eMail; }
-    private String getFirstName() { return firstName; }
-    private int getHoliday2014() { return holiday2014; }
-    private String getLastName() { return lastName; }
-    private String getP_Business() { return p_Business; }
-    private String getP_Cell() { return p_Cell; }
-    private String getP_Cell2() { return p_Cell2; }
-    private String getP_Home() { return p_Home; }
-    private String getPoint() { return point; }
-    private String getState() { return state; }
-    private String getWebsite() { return website; }
-    private int getZip() { return zip; }
+    public String getAddress() { return address; }
+    public String getAsOf() { return asOf; }
+    public String getBusiness() { return business; }
+    public String getBirthday() { return birthday; }
+    public String getCategory() { return category; }
+    public String getCity() { return city; }
+    public String getEMail() { return eMail; }
+    public String getFirstName() { return firstName; }
+    public int getHoliday2014() { return holiday2014; }
+    public String getLastName() { return lastName; }
+    public String getP_Business() { return p_Business; }
+    public String getP_Cell() { return p_Cell; }
+    public String getP_Cell2() { return p_Cell2; }
+    public String getP_Home() { return p_Home; }
+    public String getPoint() { return point; }
+    public String getState() { return state; }
+    public String getWebsite() { return website; }
+    public int getZip() { return zip; }
     
-    private void setAddress(String address) { this.address = address; }
-    private void setAsOf(String asOf) { this.asOf = asOf; }
-    private void setBusiness(String business) { this.business = business; }
-    private void setBirthday(String birthday) { this.birthday = birthday; }
-    private void setCategory(String category) { this.category = category; }
-    private void setCity(String city) { this.city = city; }
-    private void setEMail(String eMail) { this.eMail = eMail; }
-    private void setFirstName(String firstName) { this.firstName = firstName; }
-    private void setHoliday2014(int holiday2014) { this.holiday2014 = holiday2014; }
-    private void setLastName(String lastName) { this.lastName = lastName; }
-    private void setP_Business(String p_Business) { this.p_Business = p_Business; }
-    private void setP_Cell(String p_Cell) { this.p_Cell = p_Cell; }
-    private void setP_Cell2(String p_Cell2) { this.p_Cell2 = p_Cell2; }
-    private void setP_Home(String p_Home) { this.p_Home = p_Home; }
-    private void setPoint(String point) { this.point = point; }
-    private void setState(String state) { this.state = state; }
-    private void setWebsite(String website) { this.website = website; }
-    private void setZip(int zip) { this.zip = zip; }
+    public void setAddress(String address) { this.address = address; }
+    public void setAsOf(String asOf) { this.asOf = asOf; }
+    public void setBusiness(String business) { this.business = business; }
+    public void setBirthday(String birthday) { this.birthday = birthday; }
+    public void setCategory(String category) { this.category = category; }
+    public void setCity(String city) { this.city = city; }
+    public void setEMail(String eMail) { this.eMail = eMail; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setHoliday2014(int holiday2014) { this.holiday2014 = holiday2014; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setP_Business(String p_Business) { this.p_Business = p_Business; }
+    public void setP_Cell(String p_Cell) { this.p_Cell = p_Cell; }
+    public void setP_Cell2(String p_Cell2) { this.p_Cell2 = p_Cell2; }
+    public void setP_Home(String p_Home) { this.p_Home = p_Home; }
+    public void setPoint(String point) { this.point = point; }
+    public void setState(String state) { this.state = state; }
+    public void setWebsite(String website) { this.website = website; }
+    public void setZip(int zip) { this.zip = zip; }
     
 }

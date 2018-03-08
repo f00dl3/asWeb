@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
+Updated: 7 Mar 2018
  */
 
 package asWebRest.resource;
@@ -9,9 +10,9 @@ import asWebRest.action.GetWebLinkAction;
 import asWebRest.dao.WebLinkDAO;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
+import org.restlet.data.Form;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Options;
 import org.restlet.resource.Post;
@@ -30,12 +31,21 @@ public class WebLinkResource extends ServerResource {
     }
     
     @Post
-    public String doPost(HttpServletRequest request, HttpServletResponse response) {
+    public String doPost(Representation argsIn) {
+        
+        final Form argsInForm = new Form(argsIn);
+        
         String master = null;
-        try { master = request.getParameter("Master"); } catch (Exception e) { e.printStackTrace(); }
+         
+        try {
+            master = argsInForm.getFirstValue("master");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         if(master != null) {
             List<String> qParams = new ArrayList<>();
-            qParams.add(1, master);
+            qParams.add(0, master);
             GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
             JSONArray webLinks = getWebLinkAction.getWebLinks(qParams);
             return webLinks.toString();

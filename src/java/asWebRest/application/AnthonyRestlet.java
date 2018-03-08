@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 27 Feb 2018
+Updated: 28 Feb 2018
  */
 
 package asWebRest.application;
@@ -31,8 +31,7 @@ import org.restlet.service.CorsService;
 
 public class AnthonyRestlet extends Application {
     
-    public AnthonyRestlet() {
-        
+    public AnthonyRestlet() {     
         CorsService corsService = new CorsService();
         corsService.setAllowingAllRequestedHeaders(true);
         corsService.setAllowedOrigins(new HashSet(Arrays.asList(
@@ -44,11 +43,10 @@ public class AnthonyRestlet extends Application {
         corsService.setAllowedCredentials(true);
         corsService.setSkippingResourceForCorsOptions(true);
         getServices().add(corsService);
-        
     }
     
+    @Override
     public synchronized Restlet createInboundRoot() {
-        
         Router router = new Router(getContext());
         router.attach("/Cooking", CookingResource.class);
         router.attach("/DatabaseInfo", DatabaseInfoResource.class);
@@ -61,12 +59,11 @@ public class AnthonyRestlet extends Application {
         router.attach("/MediaServer", MediaServerResource.class);
         router.attach("/NewsFeed", NewsFeedResource.class);
         router.attach("/SNMP", SnmpResource.class);
-        router.attach("/SprintPTO", PtoResource.class);
+        router.attach("/PTO", PtoResource.class);
         router.attach("/UtilityUse", UtilityUseResource.class);
         router.attach("/Wx", WeatherResource.class);
         router.attach("/WebLinks", WebLinkResource.class);
         router.attach("/WebVersion", WebVersionResource.class);
-        return router;
-        
+        return router;      
     }
 }
