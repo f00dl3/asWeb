@@ -54,12 +54,23 @@
         <servlet-name>asWebRest</servlet-name>
         <url-pattern>/r/*</url-pattern>
     </servlet-mapping>
-<!--    <servlet>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>asWeb</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-gaurantee>CONFIDENTIAL</transport-gaurantee>
+        </user-data-constraint>
+    </security-constraint>
+    <!--
+    <servlet>
         <servlet-name>asWeb</servlet-name>
         <servlet-class>asWeb.servlet.Controller</servlet-class>
     </servlet> 
     <servlet-mapping>
         <servlet-name>asWeb</servlet-name>
         <url-pattern>/ui/*</url-pattern>
-    </servlet-mapping> -->
+    </servlet-mapping>
+    -->
 </web-app>

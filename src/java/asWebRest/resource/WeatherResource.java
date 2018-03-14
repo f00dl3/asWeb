@@ -1,15 +1,13 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 7 Mar 2018
+Updated: 8 Mar 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetWeatherAction;
-import asWebRest.action.GetWebLinkAction;
 import asWebRest.dao.WeatherDAO;
-import asWebRest.dao.WebLinkDAO;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -39,10 +37,7 @@ public class WeatherResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
-                case "getObjsJson": 
-                    String startTime = "";
-                    String endTime = "";
-                    int limit = 0;      
+                case "getObjsJson":
                     inParams.add(0, "DESC");
                     try {
                         qParams.add(0, argsInForm.getFirstValue("startTime"));
