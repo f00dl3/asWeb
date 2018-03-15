@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 14 Mar 2018
+Updated: 15 Mar 2018
 
  (function worker() {
     var obsUrl = "/asWeb/inc/ObsMarq.jsp";
@@ -19,7 +19,7 @@ Updated: 14 Mar 2018
  */
 
 function getMarqueeData() {
-    var obsJson = baseForRestlet+"/Wx";
+    var obsJson = getBasePath("rest")+"/Wx";
     var obsJsonLastPostData = "doWhat=getObsJsonLast";
     var arObsJsonMq = {
         preventCache: true,

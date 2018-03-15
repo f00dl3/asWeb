@@ -85,10 +85,10 @@ public class FitnessDAO {
                     .put("High", resultSet.getInt("High"))
                     .put("Low", resultSet.getInt("Low"))
                     .put("Average", resultSet.getInt("Average"))
-                    .put("isGpsCycJSON", resultSet.getString("isGpsCycJSON"))
-                    .put("isGpsCyc2JSON", resultSet.getString("isGpsCyc2JSON"))
-                    .put("isGpsRunJSON", resultSet.getString("isGpsRunJSON"))
-                    .put("isGpsRun2JSON", resultSet.getString("isGpsRun2JSON"));
+                    .put("isGPSCycJSON", resultSet.getBoolean("isGPSCycJSON"))
+                    .put("isGPSCyc2JSON", resultSet.getBoolean("isGPSCyc2JSON"))
+                    .put("isGPSRunJSON", resultSet.getBoolean("isGPSRunJSON"))
+                    .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }

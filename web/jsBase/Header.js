@@ -4,16 +4,14 @@ Created: 4 Mar 2018
 Updated: 14 Mar 2018
  */
 
-var baseForUi = "/asWeb";
-var shortBaseForRestlet = baseForUi + "/r";
-var fullBaseForRestlet = self.location.protocol + "//" + self.location.host + shortBaseForRestlet;
-var baseForRestlet = fullBaseForRestlet;
 var timeOutMilli = (60*1000);
+var hiddenFeatures = 1;
+var costPerMile = 3.50;
 
 function animatedArrow(thisArrow) {
     switch(true) {
-        case (thisArrow > 0): return "<img class='arrow' src='"+baseForUi+"/img/Icons/ar_up.gif'/>";
-        case (thisArrow < 0): return "<img class='arrow' src='"+baseForUi+"/img/Icons/ar_dn.gif'/>";
+        case (thisArrow > 0): return "<img class='arrow' src='"+getBasePath("ui")+"/img/Icons/ar_up.gif'/>";
+        case (thisArrow < 0): return "<img class='arrow' src='"+getBasePath("ui")+"/img/Icons/ar_dn.gif'/>";
         case (thisArrow === 0): return "";
     }
 }
@@ -86,27 +84,6 @@ function checkMobile() {
     }
 }
 
-function colorShoeMile(rsm) {
-    switch (true) {
-        case (rsm <= 29.9): return 'FtSL030';
-        case (rsm >= 30) && (rsm <= 59.9): return 'FtSL060';
-        case (rsm >= 60) && (rsm <= 89.9): return 'FtSL090';
-        case (rsm >= 90) && (rsm <= 119.9): return 'FtSL120';
-        case (rsm >= 120) && (rsm <= 149.9): return 'FtSL150';
-        case (rsm >= 150) && (rsm <= 179.9): return 'FtSL180';
-        case (rsm >= 180) && (rsm <= 209.9): return 'FtSL210';
-        case (rsm >= 210) && (rsm <= 239.9): return 'FtSL240';
-        case (rsm >= 240) && (rsm <= 269.9): return 'FtSL270';
-        case (rsm >= 270) && (rsm <= 299.9): return 'FtSL300';
-        case (rsm >= 300) && (rsm <= 329.9): return 'FtSL330';
-        case (rsm >= 330) && (rsm <= 359.9): return 'FtSL360';
-        case (rsm >= 360) && (rsm <= 389.9): return 'FtSL390';
-        case (rsm >= 390) && (rsm <= 419.9): return 'FtSL420';
-        case (rsm >= 420) && (rsm <= 449.9): return 'FtSL450';
-        case (rsm >= 450): return 'FtSG450';
-    }
-}
-
 function deg2rad(degrees) {
     return degrees * Math.PI/180;
 }
@@ -122,6 +99,7 @@ function formatDate(inDate, request) {
     var fmtDate;
     dojo.require("dojo.date.locale");
     switch(request) {
+        case "dateOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd", selector: "date"}); break;
         case "full": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
         case "js": fmtDate = inDate; break;
     }
@@ -138,6 +116,25 @@ function getActivityType(inFile) {
     return activ;
 } 
 */ 
+
+function getBasePath(opt) {
+    var tBase = " ";
+    var base = self.location.protocol + "//" + self.location.host;
+    var baseForUi = "/asWeb";
+    var shortBaseForRestlet = baseForUi + "/r";
+    var fullBaseForRestlet = base + shortBaseForRestlet;
+    var baseForRestlet = fullBaseForRestlet;
+    switch(opt) {
+        case "rest": tBase = baseForRestlet; break;
+        case "ui": tBase = baseForUi; break;
+        case "old":
+            tBase = base.split(":")[1];
+            if(checkMobile === true) { tBase += ":8082"; }
+            tBase += "/ASWebUI";
+            break;
+    }
+    return tBase;
+}
 
 function getDate(inType, inInput, rdFormat) {
     dojo.require("dojo.date");
@@ -193,8 +190,21 @@ function iLinks3d(elems, maxW, maxH, tFact) {
 	return genOut;
 }     
 
+function inRange(value, low, high) {
+	if (value > low && value <= high) { return value; }
+	else { return !value; }
+}
+
 function isSet(varIn) {
-    if(typeof varIn !== 'undefined') { return true; } else { return false; }
+    if(typeof varIn !== 'undefined' && varIn) {
+        return true;
+    } else { return false; }
+}
+
+function isSetNotZero(varIn) {
+    if(typeof varIn !== 'undefined' && varIn) {
+        return true;
+    } else { return false; }
 }
 
 function nodeState(tNode, state) {
@@ -241,7 +251,7 @@ function timeMinutes(inMin) {
 }
 
 function scLd(scriptName) {
-    if (!scriptName) scriptName = baseForUi+"/js/"+scriptName+".js";
+    if (!scriptName) scriptName = getBasePath("ui")+"/js/"+scriptName+".js";
     var scripts = document.getElementsByTagName('script');
     for (var i = scripts.length; i--;) {
         if (scripts[i].src === scriptName) return true;

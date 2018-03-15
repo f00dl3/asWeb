@@ -19,6 +19,8 @@
     <body>
         
         <h1><% out.println(pageTitle); %></h1>
+    
+        <table><tbody id="fitnessTable"></tbody></table>
              
     </body>
 

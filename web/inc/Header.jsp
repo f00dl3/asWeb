@@ -31,6 +31,9 @@
     
     if(scripts.equals("true")) {
         switch(title) {
+            case "Fitness":
+                scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
+                break;
             case "ObsMarq":
                 scripts2Load += "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
                         "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
@@ -56,6 +59,8 @@
         " <meta charset='UTF-8'>" +
         " <meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
         miniHeader;
     
     if(type.equals("full")) {

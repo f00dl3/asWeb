@@ -1,12 +1,12 @@
 /* 
 by Anthony Stump
 Created: 5 Feb 2018
-Updated: 14 Feb 2018
+Updated: 15 Mar 2018
  */
 
 function getWeblinks() {
     
-    var urlXhr1 = baseForRestlet+"/WebLinks";
+    var urlXhr1 = getBasePath("rest")+"/WebLinks";
 
     var arXhr1 = {
         url: urlXhr1,
@@ -43,7 +43,7 @@ function getWeblinks() {
 }
 
 function getWebVersion() {
-    var firstXhrUrl = baseForRestlet+"/WebVersion";
+    var firstXhrUrl = getBasePath("rest")+"/WebVersion";
     var xhrWebVersionArgs = {
         url: firstXhrUrl,
         handleAs: "json",

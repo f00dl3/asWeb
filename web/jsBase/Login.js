@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 14 Mar 2018
+Updated: 15 Mar 2018
 
   $(window).width or $(window).height for JS
  @media (width) @media (height) for CSS window props
@@ -12,7 +12,7 @@ var loggedIn = false;
 
 function getWebLogs() {
     var xhrLogArgs = {
-        url: baseForRestlet+"/Login",
+        url: getBasePath("rest")+"/Login",
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
@@ -29,7 +29,7 @@ function getWebLogs() {
 }
 
 function getWebVersion() {
-    var firstXhrUrl = baseForRestlet+"/WebVersion";
+    var firstXhrUrl = getBasePath("rest")+"/WebVersion";
     var xhrWebVersionArgs = {
         url: firstXhrUrl,
         handleAs: "json",
@@ -51,7 +51,7 @@ function isLoggedIn(userName) {
     if(getCookie("ValidLogin") === true) {
         window.location.href = "/asWeb/"+userName+".jsp";
     } else {
-        window.alert("Not logged in. Please log in!\nAttempt redirect to ["+baseForRestlet+"/"+userName+".jsp]");
+        window.alert("Not logged in. Please log in!\nAttempt redirect to ["+getBasePath("rest")+"/"+userName+".jsp]");
         window.location.href = "/asWeb/"+userName+".jsp";
     }
 }
@@ -63,7 +63,7 @@ function sendLogin() {
         dojo.stopEvent(event);
         var xhrArgs = {
             form: dojo.byId('loginForm'),
-            url: baseForRestlet+"/Login",
+            url: getBasePath("rest")+"/Login",
             timeout: timeOutMilli,
             handleAs: "json",
             load: function(data) {
