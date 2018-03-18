@@ -1,11 +1,16 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 14 Mar 2018
+Updated: 18 Mar 2018
  */
 
+var annMaint = 910.66;
+var annMiles = 12672;
+var carOwnershipYears = (2018-2010);
+var carStartMiles = 44150;
+var cpmNoMpg = (annMaint / annMiles);
 var timeOutMilli = (60*1000);
-var hiddenFeatures = 1;
+var hiddenFeatures = 0;
 var costPerMile = 3.50;
 
 function animatedArrow(thisArrow) {
@@ -102,6 +107,7 @@ function formatDate(inDate, request) {
         case "dateOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd", selector: "date"}); break;
         case "full": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
         case "js": fmtDate = inDate; break;
+        case "yearOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy", selector: "date"}); break;
     }
     return fmtDate;
 }
@@ -141,6 +147,13 @@ function getDate(inType, inInput, rdFormat) {
     var initDate = new Date();
     var retDate = formatDate(dojo.date.add(initDate, inType, inInput), rdFormat);
     return retDate;
+}
+
+function getResource(what) {
+    switch(what) {
+        case "Fitness": return getBasePath("rest") + "/Fitness";
+        case "Finance": return getBasePath("rest") + "/Finance";
+    }
 }
 
 /* Conv to JScript
@@ -258,4 +271,3 @@ function scLd(scriptName) {
     }
     return false;
 }
-    

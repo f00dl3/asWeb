@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 26 Feb 2018
+Updated: 18 Mar 2018
 */
 
 package asWebRest.dao;
@@ -18,9 +18,12 @@ public class FitnessDAO {
     
     public JSONArray getAll(List<String> qParams) {
         final String query_Fitness_All = "SELECT" +
-                " f.Date, f.Weight, f.RunWalk, f.Shoe, f.RSMile, f.RunGeoJSON," +
-                " f.Bicycle, f.Cycling, f.BkStudT, f.CycGeoJSON," +
-                " f.AltGeoJSON, f.ReelMow, f.MowNotes, f.Calories," +
+                " f.Date, f.Weight, f.RunWalk, f.Shoe, f.RSMile," +
+                " f.Bicycle, f.Cycling, f.BkStudT," +
+                " f.ReelMow, f.MowNotes, f.Calories," +
+                " CASE WHEN f.gpsLogRun IS NULL THEN f.RunGeoJSON ELSE null END AS RunGeoJSON," +
+                " CASE WHEN f.gpsLogCyc IS NULL THEN f.CycGeoJSON ELSE null END AS CycGeoJSON," +
+                " CASE WHEN f.gpsLogRun2 IS NULL THEN f.AltGeoJSON ELSE null END AS AltGeoJSON," +
                 " f.Fat, f.Protein, f.Carbs, f.Sugar, f.Fiber, f.Cholest, f.Sodium, f.Water, f.FruitsVeggies," +
                 " f.TrackedTime, f.TrackedDist," +
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
@@ -149,27 +152,48 @@ public class FitnessDAO {
         return tContainer;
     }
     
+    public JSONArray getBike(String bike) {
+        
+        final String query_Fitness_Bike = "SELECT Description, Who, Purchased, PurchPrice FROM Core.Fit_Bike WHERE Code='" + bike +"'";
+        
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_Fitness_Bike, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Description", resultSet.getString("Description"))
+                    .put("Who", resultSet.getString("Who"))
+                    .put("Purchased", resultSet.getString("Purchased"))
+                    .put("PurchPrice", resultSet.getDouble("PurchPrice"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+        
+    }
+    
     public JSONArray getBkStats(String bike) {
         final String query_Fitness_BkStats = "SELECT" +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain=1 AND Bicycle="+bike+") AS LastChain," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkCln=1 AND Bicycle="+bike+") AS LastCleaned," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkFlt=1 AND Bicycle="+bike+") AS LastFlat," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF=1 AND Bicycle="+bike+") AS LastTireFront," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain=1 AND Bicycle='"+bike+"') AS LastChain," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkCln=1 AND Bicycle='"+bike+"') AS LastCleaned," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkFlt=1 AND Bicycle='"+bike+"') AS LastFlat," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF=1 AND Bicycle='"+bike+"') AS LastTireFront," +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireFS=1) AS LastTireFrontStudded," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR=1 AND Bicycle="+bike+") AS LastTireRear," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR=1 AND Bicycle='"+bike+"') AS LastTireRear," +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireRS=1) AS LastTireRearStudded," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF=1 AND Bicycle="+bike+") AS LastWheelFront," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR=1 AND Bicycle="+bike+") AS LastWheelRear," +
-                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkOH=1 AND Bicycle="+bike+") AS LastOverhaul," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain = 1) AND Bicycle="+bike+") AS MilesChain," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Bicycle="+bike+") AS MilesBike," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkOH = 1) AND Bicycle="+bike+") AS MilesOverhaul," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF = 1) AND BkStudT = 0 AND Bicycle="+bike+") AS MilesTireFront," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF=1 AND Bicycle='"+bike+"') AS LastWheelFront," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR=1 AND Bicycle='"+bike+"') AS LastWheelRear," +
+                " (SELECT MAX(Date) FROM Core.Fitness WHERE BkOH=1 AND Bicycle='"+bike+"') AS LastOverhaul," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain = 1) AND Bicycle='"+bike+"') AS MilesChain," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Bicycle='"+bike+"') AS MilesBike," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkOH = 1) AND Bicycle='"+bike+"') AS MilesOverhaul," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF = 1) AND BkStudT = 0 AND Bicycle='"+bike+"') AS MilesTireFront," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireFS = 1) AND BkStudT = 1) AS MilesTireFrontStudded," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR = 1) AND BkStudT = 0 AND Bicycle="+bike+") AS MilesTireRear," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR = 1) AND BkStudT = 0 AND Bicycle='"+bike+"') AS MilesTireRear," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireRS = 1) AND BkStudT = 1) AS MilesTireRearStudded," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF = 1) AND Bicycle="+bike+") AS MilesWheelFront," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR = 1) AND Bicycle="+bike+") AS MilesWheelRear" +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF = 1) AND Bicycle='"+bike+"') AS MilesWheelFront," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR = 1) AND Bicycle='"+bike+"') AS MilesWheelRear" +
                 " FROM Core.Fitness LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -325,7 +349,7 @@ public class FitnessDAO {
     }
      
     public JSONArray getCrsm() {
-        final String query_Fitness_CRSM = "SELECT MAX(RSMile) AS CRSM FROM Core.Fitness WHERE Shoe = (SELECT MAX(Shoe) FROM Core.Fitness WHERE SHoe LIKE 'R%';";
+        final String query_Fitness_CRSM = "SELECT MAX(RSMile) AS CRSM FROM Core.Fitness WHERE Shoe = (SELECT MAX(Shoe) FROM Core.Fitness WHERE Shoe LIKE 'R%');";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Fitness_CRSM, null);
@@ -467,7 +491,7 @@ public class FitnessDAO {
     }
     
     public JSONArray getOverallSensors() {
-        final String query_Fitness_OverallStats = "SELECT" +
+        final String query_Fitness_OverallSensors = "SELECT" +
             " AVG(CycCadAvg) AS AvgCycCadAvg," +
             " MAX(CycCadAvg) AS MaxCycCadAvg," +
             " AVG(CycCadMax) AS AvgCycCadMax," +
@@ -482,7 +506,7 @@ public class FitnessDAO {
             " WHERE CycCadAvg IS NOT NULL AND CycCadAvg != 0;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_OverallStats, null);
+            ResultSet resultSet = wc.q2rs(query_Fitness_OverallSensors, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -524,7 +548,7 @@ public class FitnessDAO {
     }
       
     public JSONArray getRPlans() {
-        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done from Core.Fit_RPlans ORDER BY Description DESC;";
+        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans ORDER BY Description DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Fitness_RPlans, null);
@@ -533,7 +557,8 @@ public class FitnessDAO {
                 tObject
                     .put("Description", resultSet.getString("Description"))
                     .put("GeoJSON", resultSet.getString("GeoJSON"))
-                    .put("Done", resultSet.getInt("Done"));
+                    .put("Done", resultSet.getInt("Done"))
+                    .put("DistKm", resultSet.getDouble("DistKm"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -591,18 +616,50 @@ public class FitnessDAO {
         return tContainer;
     }  
     
-    public JSONArray getYear(List<String> qParams) {
-        final String query_Fitness_Year = "SELECT SUM(RunWalk) AS YearRW, SUM(Cycling) AS YearCY," +
-                "(SUM(Cycling)+SUM(RunWalk)) AS YearOA FROM Core.Fitness WHERE Date LIKE ?;";
+    public JSONArray getYear(String yearIn) {
+        int yearInt = Integer.parseInt(yearIn);
+        int yb1 = yearInt-1;
+        int yb2 = yearInt-2;
+        int yb3 = yearInt-3;
+        int yb4 = yearInt-4;
+        final String query_Fitness_Year = "SELECT" +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4oa" +
+                " FROM Core.Fitness LIMIT 1";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_Year, qParams);
+            ResultSet resultSet = wc.q2rs(query_Fitness_Year, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("YearRW", resultSet.getDouble("YearRW"))
-                    .put("YearCY", resultSet.getDouble("YearCY"))
-                    .put("YearOA", resultSet.getDouble("YearOA"));
+                    .put("yb0rw", resultSet.getDouble("yb0rw"))
+                    .put("yb0cy", resultSet.getDouble("yb0cy"))
+                    .put("yb0oa", resultSet.getDouble("yb0oa"))
+                    .put("yb1rw", resultSet.getDouble("yb1rw"))
+                    .put("yb1cy", resultSet.getDouble("yb1cy"))
+                    .put("yb1oa", resultSet.getDouble("yb1oa"))
+                    .put("yb2rw", resultSet.getDouble("yb2rw"))
+                    .put("yb2cy", resultSet.getDouble("yb2cy"))
+                    .put("yb2oa", resultSet.getDouble("yb2oa"))
+                    .put("yb3rw", resultSet.getDouble("yb3rw"))
+                    .put("yb3cy", resultSet.getDouble("yb3cy"))
+                    .put("yb3oa", resultSet.getDouble("yb3oa"))
+                    .put("yb4rw", resultSet.getDouble("yb4rw"))
+                    .put("yb4cy", resultSet.getDouble("yb4cy"))
+                    .put("yb4oa", resultSet.getDouble("yb4oa"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }

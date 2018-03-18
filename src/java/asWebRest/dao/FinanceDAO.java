@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 27 Feb 2018
+Updated: 18 Mar 2018
 */
 
 package asWebRest.dao;
@@ -64,6 +64,26 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+    
+    public JSONArray getAutoMpg() {
+        
+        final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, AVG(CostPG) AS AvgCost FROM Core.Auto_MPG;";
+        
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_AutoMPG_Average, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("EndMiles", resultSet.getInt("EndMiles"))
+                    .put("StartMiles", resultSet.getInt("StartMiles"))
+                    .put("Gallons", resultSet.getDouble("Gallons"))
+                    .put("AvgCost", resultSet.getDouble("AvgCost"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }    
     
     public JSONArray getAssetTrack() {
 

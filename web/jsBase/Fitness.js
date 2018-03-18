@@ -1,11 +1,12 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 15 Feb 2018
+Updated: 18 Feb 2018
  */
 
+var bicycleUsed = "A16";
 var myHeight = 68;
-
+    
 function colorCalories(tValue) {
     switch(tValue) {
         case inRange(tValue, 0, 1799): return 'FtCL2000';
@@ -54,16 +55,141 @@ function colorWeight(tValue) {
     }
 }
 
-function getAllFitnessData() {
-    var fitnessResource = getBasePath("rest") + "/Fitness";
-    var dateOverrideStart = getDate("day", -365, "dateOnly"); 
-    var dateOverrideEnd = getDate("day", 0, "dateOnly");
+function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, bikeInfo, yearStats) {
+    var yb0 = getDate("year", 0, "yearOnly");
+    var yb1 = yb0 - 1;
+    var yb2 = yb0 - 2;
+    var yb3 = yb0 - 3;
+    var yb4 = yb0 - 4;
+    var avgPace = (overallStats.TT / overallStats.TD);
+    var costPerMileTco = 14000/((autoMpg.EndMiles - 47500) + 60000);
+    var costPerMile = costPerMileTco + cpmNoMpg + (autoMpg.AvgCost / ((autoMpg.EndMiles - autoMpg.StartMiles) / autoMpg.Gallons));
+    var costPerGallon = autoMpg.AvgCost;
+    var estSteps = ((fitTot.TOTRW * 1508.57)/1000000).toFixed(2);
+    var bikeStats = {
+        "Bicycle": bicycleUsed + "<br/>" + bikeInfo.Purchased + "<br/>" + bikeStats.MilesBike + " mi",
+        "Saved": "$" + (costPerMile * fitTot.TOTCY).toFixed(2),
+        "Cleaned": bikeStats.LastCleaned,
+        "LastFlat": bikeStats.LastFlat,
+        "Overhauled": bikeStats.LastOverhaul + "<br/>" + bikeStats.MilesOverhaul + " mi",
+        "Chain": bikeStats.LastChain + "<br/>" + bikeStats.MilesChain + " mi",
+        "TireFront": bikeStats.LastTireFront + "<br/>" + bikeStats.MilesTireFront + " mi",
+        "TireRear": bikeStats.LastTireRear + "<br/>" + bikeStats.MilesTireRear + " mi",
+        "StuddedFront": bikeStats.LastTireFrontStudded + "<br/>" + bikeStats.MilesTireFrontStudded + " mi",
+        "StuddedRear": bikeStats.LastTireRearStudded + "<br/>" + bikeStats.MilesTireRearStudded + " mi",
+        "WheelFront": bikeStats.LastWheelFront + "<br/>" + bikeStats.MilesWheelFront + " mi",
+        "WheelRear": bikeStats.LastWheelRear + "<br/>" + bikeStats.MilesWheelRear + " mi"
+    };
+    var boxRun = " <div class='UBox'>" +
+            "<span>RunWalk</span><br/>" + fitTot.TOTRW + "<br/><span>miles</span>" +
+            "<div class='UBoxO'>" +
+            yb0 + ": <strong>" + yearStats.yb0rw + "</strong> mi<br/>" +
+            yb1 + ": <strong>" + yearStats.yb1rw + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + yearStats.yb2rw + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + yearStats.yb3rw + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + yearStats.yb4rw + "</strong> mi<br/>" +
+            "<p>Average pace: <br/><strong>" + avgPace.toFixed(1) + "</strong> min/mile." +
+            "<p>Running shoes: <br/><strong>" + crsm.CRSM + "</strong> miles on <strong>" + rshoe.Pair + "</strong>" +
+            "<p>Est. steps: <br/><strong>" + estSteps + "</strong> mil." +
+            "</div></div>";
+    var boxCyc = " <div class='UBox'>" +
+            "<span>Cycling</span><br/>" + fitTot.TOTCY + "<br/><span>miles</span>" +
+            "<div class='UBoxO'>" +
+            yb0 + ": <strong>" + yearStats.yb0cy + "</strong> mi<br/>" +
+            yb1 + ": <strong>" + yearStats.yb1cy + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + yearStats.yb2cy + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + yearStats.yb3cy + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + yearStats.yb4cy + "</strong> mi<br/>" +
+            "<p><em>Based on $<strong>" + costPerGallon.toFixed(2) + "</strong>/gal<br/>" +
+            "and $<strong>" + annMaint.toFixed(2) + "</strong>/yr maint</em><p>" +
+            "<div class='table'>";
+    for(var key in bikeStats) {
+        boxCyc += "<div class='tr'><span class='td'>" + key + "</span><span class='td'>" + bikeStats[key] + "</span></div>";
+    }
+    boxCyc += "</div>" +
+            "</div></div>";
+    var boxTot = " <div class='UBox'>" +
+            "<span>Combined</span><br/>" + fitTot.TOTOA + "<br/><span>miles</span>" +
+            "<div class='UBoxO'>" +
+            yb0 + ": <strong>" + yearStats.yb0oa + "</strong>mi<br/>" +
+            yb1 + ": <strong>" + yearStats.yb1oa + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + yearStats.yb2oa + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + yearStats.yb3oa + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + yearStats.yb4oa + "</strong> mi<br/>" +
+            "<p><a href='" + getBasePath("old") + "/OutMap.php?AllRoutes=1'>" +
+            "<button class='UButton'>All Routes</button></a>" +
+            "</div></div>";
+    var returnData = boxRun + boxCyc + boxTot;
+    dojo.byId("FitBubbleHolder").innerHTML = returnData;
+}
+
+function fitnessPlans(dataIn) {
+    var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
+            "<form><button class='UButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
+    var routeOptions = [ "RunGeoJSON", "CycGeoJSON" ];
+    var routeId = 1;
+    var routeDoneFlag;
+    var tableData = "<table><thead><tr>";
+    var tableDefs = [ "Do", "Description", "Link", "Type", "Done", "Dist" ];
+    tableDefs.forEach(function(def) {
+        tableData += "<th>" + def + "</th>";
+    });
+    tableData += "</tr></thead><tbody>";
+    dataIn.forEach(function(tData) {
+        var routeDistMi = (tData.DistKm * 0.621371).toFixed(1);
+        var pRoute = tData.GeoJSON;
+        var rpMap = "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tData.Description + "&Route=" + pRoute + "&KML=true'>Mapped</a>";
+        if(tData.Done === 1) { routeDoneFlag = "Yes"; } else { routeDoneFlag = "No"; }
+        tableData += "<tr><input type='hidden' name='RouteID[" + routeId + "]' value=" + routeId + ">" +
+                "<td><input type='checkbox' name='RouteSetCommit[" + routeId + "]' value='Yes'/></td>" +
+                "<td><input type='hidden' name='RouteDescription[" + routeId + "]' value='" + tData.Description + "'/>" + tData.Description + "</td>" +
+                "<td>" + rpMap + "</td>" +
+                "<td><select name='RouteType[" + routeId + "]'>";
+        routeOptions.forEach(function(tType) {
+            tableData += "<option value='" + tType + "'>" + tType.substring(0, 3) + "</option>";
+        });
+        tableData += "</select></td>" +
+                "<td>" + routeDoneFlag + "</td>" +
+                "<td>" + routeDistMi + "</td>" +
+                "</tr>";
+        routeId++;
+    });
+    tableData += "</tbody></table>";
+    container += tableData + "</form></div></div>";
+    dojo.byId("Plans").innerHTML = container;
+}
+
+function fitnessToday(dataIn) {
+    var studChecked, commonRouteChecked;
+    studChecked = commonRouteChecked = "";
+    if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
+    if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
+    var holderData = "<div class='UBox'>Today" +
+            "<div class='UBoxO'>Update Today<br/>" +
+            "<form><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
+    var tableData = "<table><tbody>" +
+            "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value=" + dataIn.Weight + "/></td></tr>" +
+            "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value=" + dataIn.RunWalk + "/></td></tr>" +
+            "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + dataIn.Shoe + "'/></td></tr>" +
+            "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value=" + dataIn.RSMile + "/></td></tr>" +
+            "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value=" + dataIn.Cycling + "/><br/>" +
+            "S<input type='checkbox' style='width: 15px;' name='TodayBkStudT' " + studChecked + "/>" +
+            "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
+            "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + dataIn.MowNotes + "/></td></tr>" +
+            "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + dataIn.xTags + "/></td></tr>" +
+            "</tbody></table>";
+    holderData += tableData +
+            "</form></div></div>";
+    dojo.byId("Today").innerHTML = holderData;
+}
+
+function getFitnessAllData() {
     var thePostData = "doWhat=getAll" +
-        "&XDT1=" + dateOverrideStart +
-        "&XDT2=" + dateOverrideEnd;
-    var arGetAll = {
+        "&XDT1=" + getDate("day", -365, "dateOnly") +
+        "&XDT2=" + getDate("day", 0, "dateOnly");
+    var xhArgs = {
         preventCache: true,
-        url: fitnessResource,
+        url: getResource("Fitness"),
         postData: thePostData,
         handleAs: "json",
         timeout: timeOutMilli,
@@ -71,10 +197,191 @@ function getAllFitnessData() {
             processFitnessAll(data);
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet for arGetAll: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            window.alert("xhrGet for arg: All: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
-    dojo.xhrPost(arGetAll);
+    dojo.xhrPost(xhArgs);
+}
+
+function getFitnessBubbleData() {
+    dojo.require("dojo.DeferredList");
+    var oYear = getDate("year", 0, "yearOnly");
+    var postAutoMpg = "doWhat=getAutoMpg";
+    var postBikeInfo = "doWhat=getBike&Bicycle=" + bicycleUsed;
+    var postBkStats = "doWhat=getBkStats&Bicycle=" + bicycleUsed;
+    var postCrsm = "doWhat=getCrsm";
+    var postOverallStats = "doWhat=getOverallStats";
+    var postRShoe = "doWhat=getRShoe";
+    var postTotalStats = "doWhat=getTot";
+    var postYears = "doWhat=getYear&year=" + oYear;
+    var argsAutoMpg = {  
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: postAutoMpg,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: AutoMpg: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsBikeInfo = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postBikeInfo,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: BikeInfo: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsBkStats = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postBkStats,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: BkStats: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsCrsm = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postCrsm,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: Crsm: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsOverallStats = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postOverallStats,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: OverallStats: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsRShoe = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postRShoe,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: RShoe: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsTotalStats = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postTotalStats,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: Tot: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var argsYears = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: postYears,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: Years: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    var finAutoMpg = dojo.xhrPost(argsAutoMpg);
+    var fitBikeInfo = dojo.xhrPost(argsBikeInfo);
+    var fitBikeStats = dojo.xhrPost(argsBkStats);
+    var fitCrsm = dojo.xhrPost(argsCrsm);
+    var fitOverallStats = dojo.xhrPost(argsOverallStats);
+    var fitRShoe = dojo.xhrPost(argsRShoe);
+    var fitTotalStats = dojo.xhrPost(argsTotalStats);
+    var fitYears = dojo.xhrPost(argsYears); 
+    var dList = new dojo.DeferredList([
+        fitBikeStats,
+        fitOverallStats,
+        fitTotalStats,
+        fitCrsm,
+        fitRShoe,
+        finAutoMpg,
+        fitBikeInfo,
+        fitYears
+    ]).then(function(res) {
+        var fitBikeStats = res[0][1][0];
+        var fitOverallStats = res[1][1][0];
+        var fitTotalStats = res[2][1][0];
+        var fitCrsm = res[3][1][0];
+        var fitRShoe = res[4][1][0];
+        var finAutoMpg = res[5][1][0];
+        var fitBikeInfo = res[6][1][0];
+        var fitYears = res[7][1][0];
+        fitnessBubbles(fitBikeStats, fitOverallStats, fitTotalStats, fitCrsm, fitRShoe, finAutoMpg, fitBikeInfo, fitYears);
+    });
+}
+
+function getFitnessPlans() {
+    var thePostData = "doWhat=getPlans";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            fitnessPlans(data);
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: Plans: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function getFitnessToday() {
+    var thePostData = "doWhat=getDay";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            fitnessToday(data[0]);
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet for arg: Day: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function getMapLinkString(inDate, inType, inAct, commonFlag) {
@@ -205,8 +512,35 @@ function processFitnessAll(dataIn) {
     dojo.byId("fitnessTable").innerHTML = rData;
 }
 
+function populateFitnessChart() {
+    var tElement = "<div class='trafcam'>" +
+            "<div class='UPopNM'>" +
+            "<img class='ch_large' src='" + getBasePath("old") + "/pChart/ch_Dynamic.php?Thumb=1&DynVar=FitWeight'/>" +
+            "<div class='UPopNMO'>" +
+            "<strong>Chart Type</strong><br/>" +
+            "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeight' target='pChart'><button class='UButton'>Range</button></a>" +
+            "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
+            "</div></div>" +
+            "</div>";
+    dojo.byId("WeightChartHolder").innerHTML = tElement;
+}
+
+function populateSearchBox() {
+    var tElement = "<div class='UBox'><form>" +
+            "<span><button class='UButton' id='FitSearchButton' type='Submit' name='DoFitSearch'>Search</button> to 2007-06-27</span><br/>" +
+            "<span>Start: </span><input type='text' name='FitSearchStart' value='' style='width: 80px;'/> | " +
+            "<span>End: </span><input type='text' name='FitSearchEnd' value='' style='width: 80px;'/><br/>" +
+            "</form></div><br/>";
+    dojo.byId("FitDateRangeSearch").innerHTML = tElement;            
+}
+
 var init = function(event) {
-    getAllFitnessData();
+    populateFitnessChart();
+    populateSearchBox();
+    getFitnessBubbleData();
+    getFitnessPlans();
+    getFitnessToday();
+    getFitnessAllData();
 };
 
 dojo.ready(init);

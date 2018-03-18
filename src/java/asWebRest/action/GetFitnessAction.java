@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Feb 2018
+Updated: 18 Mar 2018
  */
 
 package asWebRest.action;
@@ -18,6 +18,7 @@ public class GetFitnessAction {
     public JSONArray getAll(List qParams) { return fitnessDAO.getAll(qParams); }
     public JSONArray getAllE() { return fitnessDAO.getAllE(); }
     public JSONArray getAllRoutes() { return fitnessDAO.getAllRoutes(); }
+    public JSONArray getBike(String bike) { return fitnessDAO.getBike(bike); }    
     public JSONArray getBkStats(String bike) { return fitnessDAO.getBkStats(bike); }
     public JSONArray getCalories() { return fitnessDAO.getCalories(); }
     public JSONArray getCaloriesServingsLast(List qParams) { return fitnessDAO.getCaloriesServingsLast(qParams); }
@@ -39,6 +40,6 @@ public class GetFitnessAction {
     public JSONArray getRSMileMax(List qParams) { return fitnessDAO.getRSMileMax(qParams); }
     public JSONArray getRPlans() { return fitnessDAO.getRPlans(); }
     public JSONArray getTot() { return fitnessDAO.getTot(); }
-    public JSONArray getYear(List qParams) { return fitnessDAO.getYear(qParams); } 
+    public JSONArray getYear(String yearIn) { return fitnessDAO.getYear(yearIn); } 
     
 }

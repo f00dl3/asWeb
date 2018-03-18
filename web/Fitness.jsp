@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 14 Mar 2018
-    Updated:    14 Mar 2018
+    Updated:    18 Mar 2018
     Author     : astump
 --%>
 
@@ -20,6 +20,22 @@
         
         <h1><% out.println(pageTitle); %></h1>
     
+        <table id="FitLayoutTop">
+        <thead></thead>
+        <tbody>
+            <tr id="FitBubbleHolder"></tr>
+            <tr>
+                <td>
+                    <div id="WeightChartHolder"></div>
+                    <p>
+                    <div id="FitDateRangeSearch"></div>
+                </td>
+                <td>
+                    <div id="Calories"></div><br/>
+                    <div id="Plans"></div><br/>
+                    <div id="Today"></div>
+                </td>
+            </tr>
         <table><tbody id="fitnessTable"></tbody></table>
              
     </body>
