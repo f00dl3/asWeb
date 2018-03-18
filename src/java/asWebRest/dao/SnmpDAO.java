@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 25 Feb 2018
+Updated: 18 Mar 2018
  */
 
 package asWebRest.dao;
@@ -127,7 +127,8 @@ public class SnmpDAO {
                 " pi.OctetsIn as piOctetsIn, pi.OctetsOut as piOctetsOut, pi.WifiOctetsIn as piWifiIn, pi.WifiOctetsOut as piWifiOut," +
                 " pi2.OctetsIn as pi2OctetsIn, pi2.OctetsOut as pi2OctetsOut, pi2.WifiOctetsIn as pi2WifiIn, pi2.WifiOctetsOut as pi2WifiOut," +
                 " pi.ExtTemp as piExtTemp, pi2.ExtTemp as pi2ExtTemp," +
-                " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH " +
+                " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH, " +
+                " dt.ExpandedJSONData as dtExpandedJSONData" +
                 " FROM ( SELECT @row :=0 ) r, net_snmp.Main dt" +
                 " LEFT JOIN net_snmp.Laptop lap ON lap.WalkTime = dt.WalkTime" +
                 " LEFT JOIN net_snmp.CiscoCMVM cmvm ON cmvm.WalkTime = dt.WalkTime" +
@@ -274,7 +275,8 @@ public class SnmpDAO {
                     .put("piExtTemp", resultSet.getDouble("piExtTemp"))
                     .put("pi2ExtTemp", resultSet.getDouble("pi2ExtTemp"))
                     .put("dtNS5Active", resultSet.getInt("dtNS5Active"))
-                    .put("dtNS5ActiveSSH", resultSet.getInt("dtNS5ActiveSSH"));                    
+                    .put("dtNS5ActiveSSH", resultSet.getInt("dtNS5ActiveSSH"))
+                    .put("dtExpandedJSONData", resultSet.getString("dtExpandedJSONData"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }

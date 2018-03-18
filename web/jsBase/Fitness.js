@@ -160,19 +160,23 @@ function fitnessPlans(dataIn) {
 }
 
 function fitnessToday(dataIn) {
-    var studChecked, commonRouteChecked;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight;
     studChecked = commonRouteChecked = "";
+    if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
+    if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
+    if(!isSet(dataIn.RSMile)) { rsMile = ""; } else { rsMile = dataIn.RSMile; }
+    if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
     if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
     var holderData = "<div class='UBox'>Today" +
             "<div class='UBoxO'>Update Today<br/>" +
             "<form><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
-            "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value=" + dataIn.Weight + "/></td></tr>" +
-            "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value=" + dataIn.RunWalk + "/></td></tr>" +
+            "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value='" + weight + "'/></td></tr>" +
+            "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value='" + runWalk + "'/></td></tr>" +
             "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + dataIn.Shoe + "'/></td></tr>" +
-            "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value=" + dataIn.RSMile + "/></td></tr>" +
-            "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value=" + dataIn.Cycling + "/><br/>" +
+            "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value='" + rsMile + "'/></td></tr>" +
+            "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value='" + cycling + "'/><br/>" +
             "S<input type='checkbox' style='width: 15px;' name='TodayBkStudT' " + studChecked + "/>" +
             "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
             "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + dataIn.MowNotes + "/></td></tr>" +
@@ -528,8 +532,8 @@ function populateFitnessChart() {
 function populateSearchBox() {
     var tElement = "<div class='UBox'><form>" +
             "<span><button class='UButton' id='FitSearchButton' type='Submit' name='DoFitSearch'>Search</button> to 2007-06-27</span><br/>" +
-            "<span>Start: </span><input type='text' name='FitSearchStart' value='' style='width: 80px;'/> | " +
-            "<span>End: </span><input type='text' name='FitSearchEnd' value='' style='width: 80px;'/><br/>" +
+            "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/> | " +
+            "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
             "</form></div><br/>";
     dojo.byId("FitDateRangeSearch").innerHTML = tElement;            
 }
