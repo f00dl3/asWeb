@@ -12,6 +12,16 @@ function actOnCaloriesSubmit(event) {
     window.alert("Calories submitted!");
 }
 
+function actOnCommitRoute(event) {
+    dojo.stopEvent(event);
+    window.alert("Commit Route button pressed!");
+}
+
+function actOnMakeUpdates(event) {
+    dojo.stopEvent(event);
+    window.alert("Make Update button pressed!");
+}
+
 function actOnSearch(event) {
     dojo.stopEvent(event);
     window.alert("Search button pressed!");
@@ -175,7 +185,7 @@ function fitnessCalories(calQ) {
 
 function fitnessPlans(dataIn) {
     var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
-            "<form><button class='UButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
+            "<form><button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
     var routeOptions = [ "RunGeoJSON", "CycGeoJSON" ];
     var routeId = 1;
     var routeDoneFlag;
@@ -207,6 +217,8 @@ function fitnessPlans(dataIn) {
     tableData += "</tbody></table>";
     container += tableData + "</form></div></div>";
     dojo.byId("Plans").innerHTML = container;
+    var commitRouteButton = dojo.byId("CommitRouteButton");
+    dojo.connect(commitRouteButton, "onclick", actOnCommitRoute);
 }
 
 function fitnessToday(dataIn) {
@@ -235,6 +247,8 @@ function fitnessToday(dataIn) {
     holderData += tableData +
             "</form></div></div>";
     dojo.byId("Today").innerHTML = holderData;
+    var makeUpdateButton = dojo.byId("MakeUpdates");
+    dojo.connect(makeUpdateButton, "onclick", actOnMakeUpdates);
 }
 
 function getFitnessAllData() {
