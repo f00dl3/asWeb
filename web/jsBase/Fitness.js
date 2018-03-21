@@ -6,7 +6,17 @@ Updated: 21 Feb 2018
 
 var bicycleUsed = "A16";
 var myHeight = 68;
-    
+
+function actOnCaloriesSubmit(event) {
+    dojo.stopEvent(event);
+    window.alert("Calories submitted!");
+}
+
+function actOnSearch(event) {
+    dojo.stopEvent(event);
+    window.alert("Search button pressed!");
+}
+
 function colorCalories(tValue) {
     switch(tValue) {
         case inRange(tValue, 0, 1799): return 'FtCL2000';
@@ -159,6 +169,8 @@ function fitnessCalories(calQ) {
             "</form>" +
             "</div></div>";
     dojo.byId("Calories").innerHTML = dataBack;
+    var calSubmitButton = dojo.byId("CalSubmitButton");
+    dojo.connect(calSubmitButton, "onclick", actOnCaloriesSubmit);
 }
 
 function fitnessPlans(dataIn) {
@@ -404,11 +416,13 @@ function populateFitnessChart() {
 
 function populateSearchBox() {
     var tElement = "<div class='UBox'><form>" +
-            "<span><button class='UButton' id='FitSearchButton' type='Submit' name='DoFitSearch'>Search</button> to 2007-06-27</span><br/>" +
+            "<span><button class='UButton' id='FitSearchButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
             "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/> | " +
             "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
             "</form></div><br/>";
-    dojo.byId("FitDateRangeSearch").innerHTML = tElement;            
+    dojo.byId("FitDateRangeSearch").innerHTML = tElement;
+    var searchButton = dojo.byId("FitSearchButton");
+    dojo.connect(searchButton, "onclick", actOnSearch);
 }
 
 var init = function(event) {

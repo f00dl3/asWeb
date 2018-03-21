@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Feb 2018
-Updated: 15 Mar 2018
+Updated: 21 Mar 2018
  */
 
 function getWeblinks() {
@@ -19,10 +19,15 @@ function getWeblinks() {
                 placeholder = "<ul>";
                 for (var i = 0; i < data.length; i++) {
                     var theData = data[i];
+                    var theLink;
                     if(checkMobile() && isSet(theData.DesktopLink)) {
-                        var theLink = theData.DesktopLink;
+                        theLink = theData.DesktopLink;
                     } else {
-                        var theLink = theData.URL;
+                        if(isSet(theData.TomcatURL)) {
+                            theLink = theData.TomcatURL;
+                        } else {
+                            theLink = theData.URL;
+                        }
                     }
                     placeholder += "<li><a href='"+theLink+"'>";
                     placeholder += theData.Description;
