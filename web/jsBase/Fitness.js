@@ -135,11 +135,12 @@ function fitnessCalories(calQ) {
     }
     tableElement += "</tr></thead><tbody>";
     calQ.forEach(function (cDat) {
-        var servingsLast = cDat.ThisServingsLast;
+        var slSet = "";
+        if(isSet(cDat.ThisServingsLast)) { slSet = cDat.ThisServingsLast; }
         tableElement += "<tr><input type='hidden' name='FoodID[" + foods + "]' value='" + foods + "' />" +
                 "<td><input type='hidden' name='FoodDescription[" + foods + "]' value='" + cDat.Food + "' />" +
                 "<div class='U2Pop'>" + cDat.Food + "<div class='UPopO'>Last consumed: " + cDat.Last + "</div></div></td>" +
-                "<td><input type='number' step='0.1' name='Qantity[" + foods + "]' value = '" + servingsLast + "' style='width: 34px;'/></td>" +
+                "<td><input type='number' step='0.1' name='Qantity[" + foods + "]' value = '" + slSet + "' style='width: 34px;'/></td>" +
                 "<td>" + cDat.Serving + "</td>" +
                 "<td><input type='hidden' name='Calories[" + foods + "]' value='" + cDat.Calories + "'/>" + cDat.Calories + "</td>" +
                 "<input type='hidden' name='Fat[" + foods + "]' value='" + cDat.Fat + "' />" +

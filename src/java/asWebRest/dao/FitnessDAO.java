@@ -227,11 +227,13 @@ public class FitnessDAO {
     }
         
     public JSONArray getCalories() {
-        final String query_Calories_Main = "SELECT Food, Serving, Calories, Carbs, Protein, Sugar," +
-                " Sodium, Fat, Cholest, Fiber, Water, FruitVeggie, Last, ServingsLast, ServingsLastE, LastE," +
-                " (SELECT ServingsLast FROM Core.Fit_Calories WHERE Last=CURDATE() AND Food=Food LIMIT 1) as ThisServingsLast," +
-                " (SELECT ServingsLastE FROM Core.Fit_Calories WHERE Last=CURDATE() AND Food=Food LIMIT 1) as ThisServingsLastE" +
-                " FROM Core.Fit_Calories;";
+        final String query_Calories_Main = "SELECT c.Food, c.Serving, c.Calories, c.Carbs, c.Protein, c.Sugar," +
+        " c.Sodium, c.Fat, c.Cholest, c.Fiber, c.Water, c.FruitVeggie, c.Last, c.ServingsLast, c.ServingsLastE, c.LastE," +
+        " sla.ServingsLast as ThisServingsLast," +
+        " sle.ServingsLastE as ThisServingsLastE" +
+        " FROM Core.Fit_Calories c" +
+        " LEFT JOIN (SELECT ServingsLast, Last, Food FROM Core.Fit_Calories WHERE Last=CURDATE()) AS sla ON sla.Last = c.Last AND sla.Food = c.Food" +
+        " LEFT JOIN (SELECT ServingsLastE, LastE, Food FROM Core.Fit_Calories WHERE LastE=CURDATE()) AS sle ON sle.LastE = c.LastE AND sla.Food = c.Food;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Calories_Main, null);
@@ -254,8 +256,8 @@ public class FitnessDAO {
                     .put("ServingsLast", resultSet.getDouble("ServingsLast"))
                     .put("ServingsLastE", resultSet.getDouble("ServingsLastE"))
                     .put("LastE", resultSet.getString("LastE"))
-                    .put("ThisServingsLast", resultSet.getDouble("ServingsLast"))
-                    .put("ThisServingsLastE", resultSet.getDouble("ServingsLastE"));
+                    .put("ThisServingsLast", resultSet.getDouble("ThisServingsLast"))
+                    .put("ThisServingsLastE", resultSet.getDouble("ThisServingsLastE"));
                 tContainer.put(tObject);
             }
            
