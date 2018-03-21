@@ -1,16 +1,19 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 18 Mar 2018
+Updated: 21 Mar 2018
  */
 
 package asWebRest.resource;
 
+import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
+import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -22,7 +25,9 @@ public class FitnessResource extends ServerResource {
     public String doPost(Representation argsIn) {
         
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
+        GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
                         
+        JSONObject mergedResults = new JSONObject();
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
         
@@ -41,75 +46,42 @@ public class FitnessResource extends ServerResource {
                 case "getAll": 
                     String xdt1 = argsInForm.getFirstValue("XDT1");
                     String xdt2 = argsInForm.getFirstValue("XDT2");
-                    if(xdt1 != null && xdt2 != null) {
+                    String bike = argsInForm.getFirstValue("Bicycle");
+                    String year = argsInForm.getFirstValue("year");
+                    if(xdt1 != null && xdt2 != null && bike != null && year != null) {
                         qParams.add(xdt1);
                         qParams.add(xdt2);
-                        JSONArray allRecs = getFitnessAction.getAll(qParams);  
-                        returnData += allRecs.toString();
-                    } else {
-                        returnData += "ERROR";
-                    }
-                    break;
-                    
-                case "getBike":
-                    String bike = argsInForm.getFirstValue("Bicycle");
-                    if(bike != null) {
+                        JSONArray allRecs = getFitnessAction.getAll(qParams);
+                        JSONArray calories = getFitnessAction.getCalories();
+                        JSONArray plans = getFitnessAction.getRPlans();
+                        JSONArray today = getFitnessAction.getDay();
                         JSONArray bkInf = getFitnessAction.getBike(bike);
-                        returnData += bkInf.toString();
+                        JSONArray bkStats = getFitnessAction.getBkStats(bike);
+                        JSONArray overall = getFitnessAction.getOverallStats();
+                        JSONArray crsm = getFitnessAction.getCrsm();
+                        JSONArray rShoe = getFitnessAction.getRShoe();
+                        JSONArray tot = getFitnessAction.getTot();
+                        JSONArray yData = getFitnessAction.getYear(year);
+                        JSONArray autoMpg = getFinanceAction.getAutoMpg();
+                        mergedResults
+                            .put("allRecs", allRecs)
+                            .put("calories", calories)
+                            .put("plans", plans)
+                            .put("today", today)
+                            .put("bkInf", bkInf)
+                            .put("bkStats", bkStats)
+                            .put("overall", overall)
+                            .put("crsm", crsm)
+                            .put("rShoe", rShoe)
+                            .put("tot", tot)
+                            .put("yData", yData)
+                            .put("autoMpg", autoMpg);
                     } else {
                         returnData += "ERROR";
                     }
+                    returnData += mergedResults.toString();
                     break;
                     
-                case "getBkStats":
-                    String bikeStats = argsInForm.getFirstValue("Bicycle");
-                    if(bikeStats != null) {
-                        JSONArray bkStats = getFitnessAction.getBkStats(bikeStats);
-                        returnData += bkStats.toString();
-                    } else {
-                        returnData += "ERROR";
-                    }
-                    break;
-                    
-                case "getCrsm":
-                    JSONArray crsm = getFitnessAction.getCrsm();
-                    returnData += crsm.toString();
-                    break;
-                    
-                case "getDay":
-                    JSONArray today = getFitnessAction.getDay();
-                    returnData += today.toString();
-                    break;
-                    
-                case "getOverallStats":
-                    JSONArray overall = getFitnessAction.getOverallStats();
-                    returnData += overall.toString();
-                    break;
-                    
-                case "getPlans":
-                    JSONArray plans = getFitnessAction.getRPlans();
-                    returnData += plans.toString();
-                    break;
-                    
-                case "getRShoe":
-                    JSONArray rShoe = getFitnessAction.getRShoe();
-                    returnData += rShoe.toString();
-                    break;
-                    
-                case "getTot":
-                    JSONArray tot = getFitnessAction.getTot();
-                    returnData += tot.toString();
-                    break;
-                    
-                case "getYear":
-                    String tYear = argsInForm.getFirstValue("year");
-                    if(tYear != null) {
-                        JSONArray yData = getFitnessAction.getYear(tYear);
-                        returnData += yData.toString();
-                    } else {
-                        returnData += "ERROR";
-                    }
-                    break;
             }
         }
         

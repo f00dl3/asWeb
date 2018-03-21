@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 18 Mar 2018
+Updated: 21 Mar 2018
  */
 
 package asWebRest.action;
@@ -21,7 +21,6 @@ public class GetFitnessAction {
     public JSONArray getBike(String bike) { return fitnessDAO.getBike(bike); }    
     public JSONArray getBkStats(String bike) { return fitnessDAO.getBkStats(bike); }
     public JSONArray getCalories() { return fitnessDAO.getCalories(); }
-    public JSONArray getCaloriesServingsLast(List qParams) { return fitnessDAO.getCaloriesServingsLast(qParams); }
     public JSONArray getChCaloriesR(List qParams) { return fitnessDAO.getChCaloriesR(qParams); }
     public JSONArray getChWeightA() { return fitnessDAO.getChWeightA(); }
     public JSONArray getChWeightR(List qParams) { return fitnessDAO.getChWeightR(qParams); }

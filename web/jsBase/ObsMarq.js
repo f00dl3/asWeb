@@ -95,7 +95,7 @@ function processMarqueeData(theData, lastData) {
         var flTempC = wxObs("Feel", theData.TimeString, theData.Temperature, cSpeed, theData.RelativeHumidity, theData.Weather);
         returnData += "<div id='WxObsMarq' style='" + marqStyle + "'>" +
             shortTime +
-            "<img class='th_icon' src='" + baseForUi + "/img/Icons/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' /> " + theData.Weather + " " +
+            "<img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' /> " + theData.Weather + " " +
             " " + animatedArrow(diffTemperature) + Math.round(theData.Temperature) + "F (" + diffTemperature + "F/hr)" +
             " " + animatedArrow(diffDewpoint) + Math.round(theData.Dewpoint) + "F ( " + diffDewpoint + "F/hr) - " +
             " RH: <span style='" + colorRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%</span> - ";
@@ -105,7 +105,7 @@ function processMarqueeData(theData, lastData) {
             returnData += "<span style='" + colorWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span> " + gust + " - ";
         }
         returnData += " Feel: <span style='" + colorTemp(flTemp) + "'>" + flTemp + "F</span>" +
-            " (<span style='" + colorTemp(flTempC) + "'>" + flTempC + "F <img class='th_icon' src='" + baseForUi + "/img/Icons/ic_cyc.jpeg'/></span>) - ";
+            " (<span style='" + colorTemp(flTempC) + "'>" + flTempC + "F <img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/></span>) - ";
         if(isSet(theData.CAPE)) {
             returnData += "<span style=" + colorCape(theData.CAPE) + ">" + theData.CAPE + "</span> - ";
         }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 18 Mar 2018
+Updated: 21 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -20,20 +20,6 @@ function animatedArrow(thisArrow) {
         case (thisArrow === 0): return "";
     }
 }
-
-/* 
-function AuthCheck($thisPage,$thisUser) {
-	$thisUser = "%" . $thisUser . "%";
-	$thisPage = strtok($thisPage, "?");
-	global $dbpdo;
-	global $query_WebPerms;
-	$stmt = $dbpdo -> prepare($query_WebPerms);
-	$stmt -> bindParam(":PageURI", $thisPage, PDO::PARAM_STR);
-	$stmt -> bindParam(":UserCheck", $thisUser, PDO::PARAM_STR);
-	$stmt -> execute();
-	return $stmt -> rowCount();
-}
- */
 
 function autoColorScale(tData,tMax,tMin,tForcedAvg) { 
     var tAverage, tJump, tColor;
@@ -112,32 +98,22 @@ function formatDate(inDate, request) {
     return fmtDate;
 }
 
-/* Convert to JavaScript
-function getActivityType(inFile) {
-    var activ;
-    switch(substr(inFile, -1)) {
-            case "C": case "D": activ = 'Cycling'; break;
-            case "R": case "S": activ = 'Running'; break;
-    }
-    return activ;
-} 
-*/ 
-
 function getBasePath(opt) {
-    var tBase = " ";
     var base = self.location.protocol + "//" + self.location.host;
     var baseForUi = "/asWeb";
     var shortBaseForRestlet = baseForUi + "/r";
     var fullBaseForRestlet = base + shortBaseForRestlet;
     var baseForRestlet = fullBaseForRestlet;
+    var tBase = " ";
+    tBase = base.split(":")[1];
+    if(checkMobile === true) { tBase += ":8082"; }
     switch(opt) {
+        case "icon": tBase = baseForUi + "/img/Icons"; break;
+        case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
+        case "old": tBase += "/ASWebUI"; break;
+        case "tomcatOld": tBase += "/Tomcat"; break;
         case "ui": tBase = baseForUi; break;
-        case "old":
-            tBase = base.split(":")[1];
-            if(checkMobile === true) { tBase += ":8082"; }
-            tBase += "/ASWebUI";
-            break;
     }
     return tBase;
 }
@@ -155,34 +131,6 @@ function getResource(what) {
         case "Finance": return getBasePath("rest") + "/Finance";
     }
 }
-
-/* Conv to JScript
-
-function ExportCSV($input, $headers, $outFile) {
-	ob_end_clean();
-	$TempSpace = fopen('php://memory', 'w');
-	fputcsv ($TempSpace, $headers, ',');
-	foreach ($input as $line) {
-		fputcsv($TempSpace, $line, ',');
-	}
-	fseek($TempSpace, 0);
-	header('Content-Type: application/octet-stream');
-	header('Content-Type: application/csv');
-	header('Content-Disposition: attachment; filename="' . $outFile . date('Y-m-d_Hms') . '.csv";');
-	fpassthru($TempSpace);
-	exit();
-}
-
-function GetDirectorySize($path) {
-	$bytestotal = 0;
-	$path = realpath($path);
-	if($path!==false) {
-		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
-			$bytestotal += $object->getSize();
-		}
-	} return $bytestotal;
-}
-*/
 
 function iLinks3d(elems, maxW, maxH, tFact) {
 	var numElems = elems.length;
@@ -227,21 +175,104 @@ function nodeState(tNode, state) {
     }
 }
 
-function mediaPlayColor(pCount) {
-	var cPlays;
-	switch(pCount) {
-		case 0: cPlays = ""; break;
-		case 1: cPlays = "color: #999999;"; break;
-		case 2: cPlays = "color: #33ffff;"; break;
-		case 3: cPlays = "color: #0099cc;"; break;
-		case 4: cPlays = "color: #0066ff;"; break;
-		case (pCount >= 5): cPlays = "color: #ffff00;"; break;
-		default: cPlays = ""; break;
-	}
-	return cPlays;
+function searchAhead(dataArray, thisQuery, matchLimit) {
+    var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
+    itemMatchLimitHit = matchedItems = ti = 0;
+    objectBack = {};
+    var thisHint = "";
+    if(thisQuery !== "") {
+        var thisQueryLength = thisQuery.length;
+        thisQuery.forEach(function (item) {
+           if(dataArray.indexOf(thisQuery) >= 0) {
+               matchedItems++;
+               if(thisHint === "") {
+                   thisHint = dataArray[ti];
+               } else if (matchedItems > matchLimit) {
+                   itemMatchLimitHit = 1;
+                   thisHint = "";
+               } else {
+                   thisHint += dataArray[ti];
+               }
+           }
+           ti++;
+        });
+    }
+    if(isSet(thisHint)) {
+        if(isSet(itemMatchLimitHit)) {
+            noticeBack = "<div class='Notice' style='background-color: red; color: white;'>Showing " + matchLimit + " of " + matchedItems + " results!</div>";
+        } else {
+            noticeBack = "<div class='Notice'>" + matchedItems + " results found!</div>";
+            dataBack = thisHint ;
+        }
+    } else {
+        noticeBack = "</div><div class='Notice'>Unable to find anythin!</div>";
+    }
+    objectBack.noticeBack = noticeBack;
+    objectBack.dataBack = dataBack;
+    return objectBack;
+}
+
+function timeMinutes(inMin) {
+    return 1000*60*inMin;
+}
+
+function scLd(scriptName) {
+    if (!scriptName) scriptName = getBasePath("ui")+"/js/"+scriptName+".js";
+    var scripts = document.getElementsByTagName('script');
+    for (var i = scripts.length; i--;) {
+        if (scripts[i].src === scriptName) return true;
+    }
+    return false;
 }
 
 /* 
+
+function AuthCheck($thisPage,$thisUser) {
+	$thisUser = "%" . $thisUser . "%";
+	$thisPage = strtok($thisPage, "?");
+	global $dbpdo;
+	global $query_WebPerms;
+	$stmt = $dbpdo -> prepare($query_WebPerms);
+	$stmt -> bindParam(":PageURI", $thisPage, PDO::PARAM_STR);
+	$stmt -> bindParam(":UserCheck", $thisUser, PDO::PARAM_STR);
+	$stmt -> execute();
+	return $stmt -> rowCount();
+}
+                            
+function getActivityType(inFile) {
+    var activ;
+    switch(substr(inFile, -1)) {
+            case "C": case "D": activ = 'Cycling'; break;
+            case "R": case "S": activ = 'Running'; break;
+    }
+    return activ;
+} 
+                            
+function ExportCSV($input, $headers, $outFile) {
+	ob_end_clean();
+	$TempSpace = fopen('php://memory', 'w');
+	fputcsv ($TempSpace, $headers, ',');
+	foreach ($input as $line) {
+		fputcsv($TempSpace, $line, ',');
+	}
+	fseek($TempSpace, 0);
+	header('Content-Type: application/octet-stream');
+	header('Content-Type: application/csv');
+	header('Content-Disposition: attachment; filename="' . $outFile . date('Y-m-d_Hms') . '.csv";');
+	fpassthru($TempSpace);
+	exit();
+}
+
+function GetDirectorySize($path) {
+	$bytestotal = 0;
+	$path = realpath($path);
+	if($path!==false) {
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
+			$bytestotal += $object->getSize();
+		}
+	} return $bytestotal;
+}
+                            
 function ReturnWebLinks($thisMaster) {
 	global $dbpdo;
 	global $query_WebLinks;
@@ -259,15 +290,3 @@ public function compare($b, $a) { return strcmp($a->getRealpath(), $b->getRealpa
 }
                             
  */
-function timeMinutes(inMin) {
-    return 1000*60*inMin;
-}
-
-function scLd(scriptName) {
-    if (!scriptName) scriptName = getBasePath("ui")+"/js/"+scriptName+".js";
-    var scripts = document.getElementsByTagName('script');
-    for (var i = scripts.length; i--;) {
-        if (scripts[i].src === scriptName) return true;
-    }
-    return false;
-}

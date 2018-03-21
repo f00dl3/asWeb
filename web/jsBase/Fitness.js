@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 18 Feb 2018
+Updated: 21 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -123,6 +123,43 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
     dojo.byId("FitBubbleHolder").innerHTML = returnData;
 }
 
+function fitnessCalories(calQ) {
+    var foods = 1;
+    var tableRows = [ "Food", "Servings", "Today", "Serving", "Calories" ];
+    var dataBack = "<div class='UBox'>Food<div class='UBoxO'>Calorie Tracker" +
+            "<form>" +
+            "<button class='UButton' id='CalSubmitButton' type='submit' name='SubmitServings'>Nom nom nom!</button><p>";
+    var tableElement = "<table><thead><tr>";
+    for (var i=0; i < tableRows.lenght; i++) {
+        tableElement += "<th>" + tableRows[i] + "</th>";
+    }
+    tableElement += "</tr></thead><tbody>";
+    calQ.forEach(function (cDat) {
+        var servingsLast = cDat.ThisServingsLast;
+        tableElement += "<tr><input type='hidden' name='FoodID[" + foods + "]' value='" + foods + "' />" +
+                "<td><input type='hidden' name='FoodDescription[" + foods + "]' value='" + cDat.Food + "' />" +
+                "<div class='U2Pop'>" + cDat.Food + "<div class='UPopO'>Last consumed: " + cDat.Last + "</div></div></td>" +
+                "<td><input type='number' step='0.1' name='Qantity[" + foods + "]' value = '" + servingsLast + "' style='width: 34px;'/></td>" +
+                "<td>" + cDat.Serving + "</td>" +
+                "<td><input type='hidden' name='Calories[" + foods + "]' value='" + cDat.Calories + "'/>" + cDat.Calories + "</td>" +
+                "<input type='hidden' name='Fat[" + foods + "]' value='" + cDat.Fat + "' />" +
+                "<input type='hidden' name='Carbs[" + foods + "]' value='" + cDat.Carbs + "' />" +
+                "<input type='hidden' name='Protein[" + foods + "]' value='" + cDat.Protein + "' />" +
+                "<input type='hidden' name='Sodium[" + foods + "]' value='" + cDat.Sodium + "' />" +
+                "<input type='hidden' name='Cholest[" + foods + "]' value='" + cDat.Cholest + "' />" +
+                "<input type='hidden' name='Sugar[" + foods + "]' value='" + cDat.Sugar + "' />" +
+                "<input type='hidden' name='Fiber[" + foods + "]' value='" + cDat.Fiber + "' />" +
+                "<input type='hidden' name='Water[" + foods + "]' value='" + cDat.Water + "' />" +
+                "<input type='hidden' name='FruitVeggie[" + foods + "]' value='" + cDat.FruitVeggie + "' />" +
+                "</tr>";
+                foods++;
+    });
+    dataBack += tableElement + "</tbody></table>" +
+            "</form>" +
+            "</div></div>";
+    dojo.byId("Calories").innerHTML = dataBack;
+}
+
 function fitnessPlans(dataIn) {
     var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
             "<form><button class='UButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
@@ -188,9 +225,12 @@ function fitnessToday(dataIn) {
 }
 
 function getFitnessAllData() {
+    var oYear = getDate("year", 0, "yearOnly");
     var thePostData = "doWhat=getAll" +
         "&XDT1=" + getDate("day", -365, "dateOnly") +
-        "&XDT2=" + getDate("day", 0, "dateOnly");
+        "&XDT2=" + getDate("day", 0, "dateOnly") +
+        "&Bicycle=" + bicycleUsed +
+        "&year=" + oYear;
     var xhArgs = {
         preventCache: true,
         url: getResource("Fitness"),
@@ -198,191 +238,23 @@ function getFitnessAllData() {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            processFitnessAll(data);
+            processFitnessAll(data.allRecs);
+            fitnessCalories(data.calories);
+            fitnessPlans(data.plans);
+            fitnessToday(data.today);
+            fitnessBubbles(
+                data.bkStats[0],
+                data.overall[0],
+                data.tot[0],
+                data.crsm[0],
+                data.rShoe[0],
+                data.autoMpg[0],
+                data.bkInf[0],
+                data.yData[0]
+            );
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet for arg: All: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-}
-
-function getFitnessBubbleData() {
-    dojo.require("dojo.DeferredList");
-    var oYear = getDate("year", 0, "yearOnly");
-    var postAutoMpg = "doWhat=getAutoMpg";
-    var postBikeInfo = "doWhat=getBike&Bicycle=" + bicycleUsed;
-    var postBkStats = "doWhat=getBkStats&Bicycle=" + bicycleUsed;
-    var postCrsm = "doWhat=getCrsm";
-    var postOverallStats = "doWhat=getOverallStats";
-    var postRShoe = "doWhat=getRShoe";
-    var postTotalStats = "doWhat=getTot";
-    var postYears = "doWhat=getYear&year=" + oYear;
-    var argsAutoMpg = {  
-        preventCache: true,
-        url: getResource("Finance"),
-        postData: postAutoMpg,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: AutoMpg: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsBikeInfo = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postBikeInfo,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: BikeInfo: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsBkStats = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postBkStats,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: BkStats: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsCrsm = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postCrsm,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: Crsm: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsOverallStats = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postOverallStats,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: OverallStats: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsRShoe = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postRShoe,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: RShoe: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsTotalStats = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postTotalStats,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: Tot: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var argsYears = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: postYears,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: Years: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    var finAutoMpg = dojo.xhrPost(argsAutoMpg);
-    var fitBikeInfo = dojo.xhrPost(argsBikeInfo);
-    var fitBikeStats = dojo.xhrPost(argsBkStats);
-    var fitCrsm = dojo.xhrPost(argsCrsm);
-    var fitOverallStats = dojo.xhrPost(argsOverallStats);
-    var fitRShoe = dojo.xhrPost(argsRShoe);
-    var fitTotalStats = dojo.xhrPost(argsTotalStats);
-    var fitYears = dojo.xhrPost(argsYears); 
-    var dList = new dojo.DeferredList([
-        fitBikeStats,
-        fitOverallStats,
-        fitTotalStats,
-        fitCrsm,
-        fitRShoe,
-        finAutoMpg,
-        fitBikeInfo,
-        fitYears
-    ]).then(function(res) {
-        var fitBikeStats = res[0][1][0];
-        var fitOverallStats = res[1][1][0];
-        var fitTotalStats = res[2][1][0];
-        var fitCrsm = res[3][1][0];
-        var fitRShoe = res[4][1][0];
-        var finAutoMpg = res[5][1][0];
-        var fitBikeInfo = res[6][1][0];
-        var fitYears = res[7][1][0];
-        fitnessBubbles(fitBikeStats, fitOverallStats, fitTotalStats, fitCrsm, fitRShoe, finAutoMpg, fitBikeInfo, fitYears);
-    });
-}
-
-function getFitnessPlans() {
-    var thePostData = "doWhat=getPlans";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: thePostData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            fitnessPlans(data);
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: Plans: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-}
-
-function getFitnessToday() {
-    var thePostData = "doWhat=getDay";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: thePostData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            fitnessToday(data[0]);
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet for arg: Day: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            window.alert("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -399,8 +271,8 @@ function getMapLinkString(inDate, inType, inAct, commonFlag) {
         case "Cy2": longAct = "Cycling 2"; letAct = "A"; icAct = "Cyc"; break;
     }
     switch(inType) {
-        case "gpsJSON": iconBack = getBasePath("ui") + "/img/Icons/ic_" + icAct.toLowerCase() + "J.jpeg"; typeDesc = "GPS JSON"; letAct = inAct; break;
-        case "Route": iconBack = getBasePath("ui") + "/img/Icons/ic_" + icAct.toLowerCase() + ".jpeg"; typeDesc = "GeoJSON"; break;
+        case "gpsJSON": iconBack = getBasePath("icon") + "/ic_" + icAct.toLowerCase() + "J.jpeg"; typeDesc = "GPS JSON"; letAct = inAct; break;
+        case "Route": iconBack = getBasePath("icon") + "/ic_" + icAct.toLowerCase() + ".jpeg"; typeDesc = "GeoJSON"; break;
     }
     var genString = "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + inDate + "&" + inType + "=" + letAct + "' target='new'>" +
         "<div class='UPop'><img class='th_icon' src='" + iconBack + "' />" +
@@ -541,9 +413,6 @@ function populateSearchBox() {
 var init = function(event) {
     populateFitnessChart();
     populateSearchBox();
-    getFitnessBubbleData();
-    getFitnessPlans();
-    getFitnessToday();
     getFitnessAllData();
 };
 

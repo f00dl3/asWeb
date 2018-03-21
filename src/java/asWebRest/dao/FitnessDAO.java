@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 18 Mar 2018
+Updated: 21 Mar 2018
 */
 
 package asWebRest.dao;
@@ -228,7 +228,9 @@ public class FitnessDAO {
         
     public JSONArray getCalories() {
         final String query_Calories_Main = "SELECT Food, Serving, Calories, Carbs, Protein, Sugar," +
-                " Sodium, Fat, Cholest, Fiber, Water, FruitVeggie, Last, ServingsLast, ServingsLastE, LastE" +
+                " Sodium, Fat, Cholest, Fiber, Water, FruitVeggie, Last, ServingsLast, ServingsLastE, LastE," +
+                " (SELECT ServingsLast FROM Core.Fit_Calories WHERE Last=CURDATE() AND Food=Food LIMIT 1) as ThisServingsLast," +
+                " (SELECT ServingsLastE FROM Core.Fit_Calories WHERE Last=CURDATE() AND Food=Food LIMIT 1) as ThisServingsLastE" +
                 " FROM Core.Fit_Calories;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -251,24 +253,9 @@ public class FitnessDAO {
                     .put("Last", resultSet.getString("Last"))
                     .put("ServingsLast", resultSet.getDouble("ServingsLast"))
                     .put("ServingsLastE", resultSet.getDouble("ServingsLastE"))
-                    .put("LastE", resultSet.getString("LastE"));
-                tContainer.put(tObject);
-            }
-           
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getCaloriesServingsLast(List<String> qParams) {
-        final String query_Calories_ServingsLast = "SELECT ServingsLast, ServingsLastE FROM Core.Fit_Calories WHERE Last=CURDATE() AND Food=?;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_Calories_ServingsLast, qParams);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("ServingsLast", resultSet.getDouble("ServingsLast"))
-                    .put("ServingsLastE", resultSet.getDouble("ServingsLastE"));
+                    .put("LastE", resultSet.getString("LastE"))
+                    .put("ThisServingsLast", resultSet.getDouble("ServingsLast"))
+                    .put("ThisServingsLastE", resultSet.getDouble("ServingsLastE"));
                 tContainer.put(tObject);
             }
            
