@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Mar 2018
+Updated: 22 Mar 2018
 */
 
 package asWebRest.dao;
 
+import asWebRest.model.Fitness;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
 import java.util.List;
@@ -653,6 +654,19 @@ public class FitnessDAO {
             }
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
+    }
+    
+    public String setUpdateToday(List<String> qParams) {
+        String returnData = "Query has not run or failed!";
+        String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
+                " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags) VALUES" +
+                " (CURDATE(),?,?,?,?,?,?,?,?,?,?,?)" +
+                " ON DUPLICATE KEY UPDATE" +
+                " Weight=?, RunWalk=?, Shoe=?, RSMile=?," +
+		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
+		" Bicycle=?, CommonRoute=?, xTags=?;";
+        try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
     }
     
 }

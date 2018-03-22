@@ -1,15 +1,17 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Mar 2018
+Updated: 22 Mar 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
+import asWebRest.action.UpdateFitnessAction;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
+import asWebRest.shared.WebCommon;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -24,8 +26,10 @@ public class FitnessResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
+        WebCommon wc = new WebCommon();
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+        UpdateFitnessAction updateFitnessAction = new UpdateFitnessAction(new FitnessDAO());
                         
         JSONObject mergedResults = new JSONObject();
         List<String> qParams = new ArrayList<>();
@@ -81,6 +85,28 @@ public class FitnessResource extends ServerResource {
                     }
                     returnData += mergedResults.toString();
                     break;
+                    
+                case "putToday":
+                    String todayWeight = ""; if(wc.isSet(argsInForm.getFirstValue("TodayWeight"))) { todayWeight = argsInForm.getFirstValue("TodayWeight"); } qParams.add(todayWeight); 
+                    String todayRunWalk = ""; if(wc.isSet(argsInForm.getFirstValue("TodayRunWalk"))) { todayRunWalk = argsInForm.getFirstValue("TodayRunWalk"); } qParams.add(todayRunWalk);
+                    String todayShoe = ""; if(wc.isSet(argsInForm.getFirstValue("TodayShoe"))) { todayShoe = argsInForm.getFirstValue("TodayShoe"); } qParams.add(todayShoe);
+                    String todayRSMile = ""; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
+                    String todayCycling = ""; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
+                    String todayBkStudT = ""; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
+                    String todayReelMow = ""; if(wc.isSet(argsInForm.getFirstValue("TodayReelMow"))) { todayReelMow = argsInForm.getFirstValue("TodayReelMow"); } qParams.add(todayReelMow);
+                    String todayMowNotes = ""; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
+                    String todayBicycle = ""; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
+                    String todayCommonRoute = ""; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);
+                    String todayX = ""; if(wc.isSet(argsInForm.getFirstValue("TodayX"))) { todayX = argsInForm.getFirstValue("TodayX"); } qParams.add(todayX);
+                    //Do second time for the if duplicate key clause
+                    qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
+                    qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
+                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX);
+                    returnData += updateFitnessAction.setUpdateToday(qParams);
+                    break;
+                /* " Weight=?, RunWalk=?, Shoe=?, RSMile=?," +
+		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
+		" Bicycle=?, CommonRoute=?, xTags=?;"; */
                     
             }
         }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 21 Feb 2018
+Updated: 22 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -17,14 +17,18 @@ function actOnCommitRoute(event) {
     window.alert("Commit Route button pressed!");
 }
 
-function actOnMakeUpdates(event) {
+function actSearchByDateSubmit(event) {
     dojo.stopEvent(event);
-    window.alert("Make Update button pressed!");
+    var thisFormData = dojo.formToObject("SearchByDateForm");
+    var xdt1 = thisFormData.FitSearchStart;
+    var xdt2 = thisFormData.FitSearchEnd;
+    getFitnessAllData(xdt1, xdt2);
 }
 
-function actOnSearch(event) {
+function actUpdateTodaySubmit(event) {
     dojo.stopEvent(event);
-    window.alert("Search button pressed!");
+    var thisFormData = dojo.formToObject("FormUpdateToday");
+    putUpdateToday(thisFormData);
 }
 
 function colorCalories(tValue) {
@@ -222,42 +226,44 @@ function fitnessPlans(dataIn) {
 }
 
 function fitnessToday(dataIn) {
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags;
     studChecked = commonRouteChecked = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
     if(!isSet(dataIn.RSMile)) { rsMile = ""; } else { rsMile = dataIn.RSMile; }
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
+    if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
+    if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
+    if(!isSet(dataIn.xTags)) { xTags = ""; } else { xTags = dataIn.xTags; }
     if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
     if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
     var holderData = "<div class='UBox'>Today" +
             "<div class='UBoxO'>Update Today<br/>" +
-            "<form><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
+            "<form id='FormUpdateToday'><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
             "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value='" + weight + "'/></td></tr>" +
             "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value='" + runWalk + "'/></td></tr>" +
-            "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + dataIn.Shoe + "'/></td></tr>" +
+            "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + shoe + "'/></td></tr>" +
             "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value='" + rsMile + "'/></td></tr>" +
             "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value='" + cycling + "'/><br/>" +
             "S<input type='checkbox' style='width: 15px;' name='TodayBkStudT' " + studChecked + "/>" +
             "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
-            "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + dataIn.MowNotes + "/></td></tr>" +
-            "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + dataIn.xTags + "/></td></tr>" +
+            "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
+            "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
             "</tbody></table>";
     holderData += tableData +
             "</form></div></div>";
     dojo.byId("Today").innerHTML = holderData;
-    var makeUpdateButton = dojo.byId("MakeUpdates");
-    dojo.connect(makeUpdateButton, "onclick", actOnMakeUpdates);
+    var formUpdateToday = dojo.byId("FormUpdateToday");
+    dojo.connect(formUpdateToday, "onsubmit", actUpdateTodaySubmit);
 }
 
-function getFitnessAllData() {
+function getFitnessAllData(inXdt1, inXdt2) {
+    var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
-    var thePostData = "doWhat=getAll" +
-        "&XDT1=" + getDate("day", -365, "dateOnly") +
-        "&XDT2=" + getDate("day", 0, "dateOnly") +
-        "&Bicycle=" + bicycleUsed +
-        "&year=" + oYear;
+    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
+    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
+    var thePostData = "doWhat=getAll&XDT1=" + xdt1 + "&XDT2=" + xdt2 + "&Bicycle=" + bicycleUsed + "&year=" + oYear;
     var xhArgs = {
         preventCache: true,
         url: getResource("Fitness"),
@@ -268,7 +274,7 @@ function getFitnessAllData() {
             processFitnessAll(data.allRecs);
             fitnessCalories(data.calories);
             fitnessPlans(data.plans);
-            fitnessToday(data.today);
+            fitnessToday(data.today[0]);
             fitnessBubbles(
                 data.bkStats[0],
                 data.overall[0],
@@ -355,9 +361,17 @@ function processFitnessAll(dataIn) {
         if(tData.isGPSCycJSON === true) { cycMap = getMapLinkString(tData.Date, "gpsJSON", "Cyc", tData.CommonFlag); }
         var runDiv = "Wearing " + tData.Shoe;
         if(isSet(tData.RSMile)) { runDiv = tData.RSMile + " miles wearing " + tData.Shoe; }
+        if(isSet(tData.TrackedTime)) {
+            var timeMins = tData.TrackedTime/60;
+            var pace = (timeMins/tData.TrackedDist);
+            runDiv += "<br/>" + tData.TrackedDist + " mi./" + timeMins.toFixed(1) + " min." +
+                    "<br/>" + pace.toFixed(1) + " min/mile pace.";
+        }
+        runDiv += "<br/>" + Math.round(tData.RunWalk * 1508.57) + " est. steps";
+        var runMap = "";
         if(isSet(tData.RunGeoJSON) && tData.CommonRoute === 0) { runMap += getMapLinkString(tData.Date, "Route", "Run", tData.CommonFlag); }
         if(tData.isGPSRunJSON === true) { runMap = getMapLinkString(tData.Date, "gpsJSON", "Run", tData.CommonFlag); }
-        var altMap = " ";
+        var altMap = "";
         if(isSet(tData.AltGeoJSON) && tData.CommonRoute === 0) { altMap += getMapLinkString(tData.Date, "Route", "Alt", tData.CommonFlag); }
         if(tData.isGPSCyc2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Cy2", tData.CommonFlag); }
         if(tData.isGPSRun2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Ru2", tData.CommonFlag); }
@@ -429,14 +443,34 @@ function populateFitnessChart() {
 }
 
 function populateSearchBox() {
-    var tElement = "<div class='UBox'><form>" +
-            "<span><button class='UButton' id='FitSearchButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
+    var tElement = "<div class='UBox'><form id='SearchByDateForm'>" +
+            "<span><button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
             "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/> | " +
             "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
             "</form></div><br/>";
     dojo.byId("FitDateRangeSearch").innerHTML = tElement;
-    var searchButton = dojo.byId("FitSearchButton");
-    dojo.connect(searchButton, "onclick", actOnSearch);
+    var searchByDateForm = dojo.byId("SearchByDateForm");
+    dojo.connect(searchByDateForm, "onsubmit", actSearchByDateSubmit);
+}
+
+function putUpdateToday(formData) {
+    window.alert("Attempting to submit today's updates!");
+    formData.doWhat = "putToday";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            window.alert(data);
+            getFitnessAllData();
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for UpdateToday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 var init = function(event) {

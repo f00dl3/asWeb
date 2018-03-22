@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 22 Feb 2018
+Updated: 22 Mar 2018
 */
 
 package asWebRest.shared;
@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public class WebCommon {
-    
     
     public static String cryptIt(String passwordIn) throws Exception {
         byte[] hash = hashIt(passwordIn);
@@ -48,6 +47,34 @@ public class WebCommon {
         } else { return false; }
     }
     
+    public String q2do(String query, List<String> params) throws Exception {
+        String messageBack = "";
+        if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
+        MyDBConnector mdb = new MyDBConnector();
+        Connection connection = mdb.getMyConnection();
+        PreparedStatement pStatement = connection.prepareStatement(query);
+        int pit = 1;
+        if(params != null) {
+            for (String param : params) {
+                try {
+                    double paramAsDouble = Double.parseDouble(param);
+                    try {
+                        int paramAsInt = Integer.parseInt(param);
+                        pStatement.setInt(pit, paramAsInt);
+                    } catch (NumberFormatException e) {
+                        pStatement.setDouble(pit, paramAsDouble);
+                    }
+                } catch (NumberFormatException e) {
+                    pStatement.setString(pit, param);
+                }
+                pit++;
+            }
+        }
+        pStatement.execute();
+        messageBack += "Query successfull!";
+        return messageBack;
+    }
+    
     public static ResultSet q2rs(String query, List<String> params) throws Exception {
         MyDBConnector mdb = new MyDBConnector();
         Connection connection = mdb.getMyConnection();
@@ -72,5 +99,5 @@ public class WebCommon {
         ResultSet resultSet = pStatement.executeQuery();
         return resultSet;
     }
-
+      
 }

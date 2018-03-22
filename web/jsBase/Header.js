@@ -106,7 +106,8 @@ function getBasePath(opt) {
     var baseForRestlet = fullBaseForRestlet;
     var tBase = " ";
     tBase = base.split(":")[1];
-    if(checkMobile === true) { tBase += ":8082"; }
+    if(checkMobile()) { tBase += ":8082"; }
+    tBase = "https:" + tBase;
     switch(opt) {
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "media": tBase += "/MediaServ"; break;
@@ -136,9 +137,9 @@ function iLinks3d(elems, maxW, maxH, tFact) {
 	var numElems = elems.length;
         var rotation = 0;
 	var radius = Math.floor(320/(2*Math.tan(deg2rad(180/(numElems/tFact)))));
-	var genOut = "<div id='stage' style='";
-	genOut += " width: " + maxW + "px; height: " + maxH + "px;";
-	genOut += "'><div id='spinner'>";
+	var genOut = "<div id='stage' style='" +
+                " width: " + maxW + "px; height: " + maxH + "px;";
+                "'><div id='spinner'>";
 	elems.forEach(function(element) {
             var thisCSS = "style='";
             thisCSS += "transform: rotateY(" + Math.round(rotation, 0) + "deg) translateZ(" + radius + "px);";
