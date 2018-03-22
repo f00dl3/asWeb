@@ -227,10 +227,9 @@ function fitnessPlans(dataIn) {
 
 function fitnessToday(dataIn) {
     var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags;
-    studChecked = commonRouteChecked = "";
+    studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
-    if(!isSet(dataIn.RSMile)) { rsMile = ""; } else { rsMile = dataIn.RSMile; }
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }

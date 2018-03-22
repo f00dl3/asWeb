@@ -656,8 +656,29 @@ public class FitnessDAO {
         return tContainer;
     }
     
+    public String setRunPlanDoC(List<String> qParams) {
+        String returnData = "";
+        String query_Fitness_RPlanDoC = "UPDATE Core.Fitness SET CycGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=?;";
+        try { returnData = wc.q2do(query_Fitness_RPlanDoC, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setRunPlanDoM(List<String> qParams) {
+        String returnData = "";
+        String query_Fitness_RPlanDoMC = "UPDATE Core.Fit_RPlans SET Done=1 WHERE Description=?;";
+        try { returnData = wc.q2do(query_Fitness_RPlanDoMC, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setRunPlanDoR(List<String> qParams) {
+        String returnData = "";
+        String query_Fitness_RPlanDoR = "UPDATE Core.Fitness SET RunGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=?;";
+        try { returnData = wc.q2do(query_Fitness_RPlanDoR, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     public String setUpdateToday(List<String> qParams) {
-        String returnData = "Query has not run or failed!";
+        String returnData = "";
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
                 " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags) VALUES" +
                 " (CURDATE(),?,?,?,?,?,?,?,?,?,?,?)" +
@@ -666,6 +687,13 @@ public class FitnessDAO {
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 		" Bicycle=?, CommonRoute=?, xTags=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setUpdateTodayEm(List<String> qParams) {
+        String returnData = "";
+        String query_Fitness_DayIUE = "INSERT INTO Core.Fit_Em (Date, Weight, ExMin) VALUES (CURDATE(),?,?) ON DUPLICATE KEY UPDATE Weight=?, ExMin=?;";
+        try { returnData = wc.q2do(query_Fitness_DayIUE, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

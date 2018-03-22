@@ -87,17 +87,17 @@ public class FitnessResource extends ServerResource {
                     break;
                     
                 case "putToday":
-                    String todayWeight = ""; if(wc.isSet(argsInForm.getFirstValue("TodayWeight"))) { todayWeight = argsInForm.getFirstValue("TodayWeight"); } qParams.add(todayWeight); 
-                    String todayRunWalk = ""; if(wc.isSet(argsInForm.getFirstValue("TodayRunWalk"))) { todayRunWalk = argsInForm.getFirstValue("TodayRunWalk"); } qParams.add(todayRunWalk);
-                    String todayShoe = ""; if(wc.isSet(argsInForm.getFirstValue("TodayShoe"))) { todayShoe = argsInForm.getFirstValue("TodayShoe"); } qParams.add(todayShoe);
-                    String todayRSMile = ""; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
-                    String todayCycling = ""; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
-                    String todayBkStudT = ""; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
-                    String todayReelMow = ""; if(wc.isSet(argsInForm.getFirstValue("TodayReelMow"))) { todayReelMow = argsInForm.getFirstValue("TodayReelMow"); } qParams.add(todayReelMow);
-                    String todayMowNotes = ""; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
-                    String todayBicycle = ""; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
-                    String todayCommonRoute = ""; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);
-                    String todayX = ""; if(wc.isSet(argsInForm.getFirstValue("TodayX"))) { todayX = argsInForm.getFirstValue("TodayX"); } qParams.add(todayX);
+                    String todayWeight = null; if(wc.isSet(argsInForm.getFirstValue("TodayWeight"))) { todayWeight = argsInForm.getFirstValue("TodayWeight"); } qParams.add(todayWeight); 
+                    String todayRunWalk = null; if(wc.isSet(argsInForm.getFirstValue("TodayRunWalk"))) { todayRunWalk = argsInForm.getFirstValue("TodayRunWalk"); } qParams.add(todayRunWalk);
+                    String todayShoe = null; if(wc.isSet(argsInForm.getFirstValue("TodayShoe"))) { todayShoe = argsInForm.getFirstValue("TodayShoe"); } qParams.add(todayShoe);
+                    String todayRSMile = null; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
+                    String todayCycling = null; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
+                    String todayBkStudT = null; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
+                    String todayReelMow = null; if(wc.isSet(argsInForm.getFirstValue("TodayReelMow"))) { todayReelMow = argsInForm.getFirstValue("TodayReelMow"); } qParams.add(todayReelMow);
+                    String todayMowNotes = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
+                    String todayBicycle = null; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
+                    String todayCommonRoute = null; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);
+                    String todayX = null; if(wc.isSet(argsInForm.getFirstValue("TodayX"))) { todayX = argsInForm.getFirstValue("TodayX"); } qParams.add(todayX);
                     //Do second time for the if duplicate key clause
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);

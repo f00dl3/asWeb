@@ -48,30 +48,40 @@ public class WebCommon {
     }
     
     public String q2do(String query, List<String> params) throws Exception {
-        String messageBack = "";
+        String messageBack = "Query has not ran yet or failed!";
         if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
-        MyDBConnector mdb = new MyDBConnector();
-        Connection connection = mdb.getMyConnection();
-        PreparedStatement pStatement = connection.prepareStatement(query);
-        int pit = 1;
-        if(params != null) {
-            for (String param : params) {
-                try {
-                    double paramAsDouble = Double.parseDouble(param);
-                    try {
-                        int paramAsInt = Integer.parseInt(param);
-                        pStatement.setInt(pit, paramAsInt);
-                    } catch (NumberFormatException e) {
-                        pStatement.setDouble(pit, paramAsDouble);
+        try {
+            MyDBConnector mdb = new MyDBConnector();
+            Connection connection = mdb.getMyConnection();
+            PreparedStatement pStatement = connection.prepareStatement(query);
+            int pit = 1;
+            if(params != null) {
+                for (String param : params) {
+                    if(param != null) {
+                        if (param.equals("on")) { param = "1"; }
+                        if (param.equals("off")) { param = "0"; }
+                        try {
+                            double paramAsDouble = Double.parseDouble(param);
+                            try {
+                                int paramAsInt = Integer.parseInt(param);
+                                pStatement.setInt(pit, paramAsInt);
+                            } catch (NumberFormatException e) {
+                                pStatement.setDouble(pit, paramAsDouble);
+                            }
+                        } catch (NumberFormatException ex) {
+                            pStatement.setString(pit, param);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        pStatement.setString(pit, null);
                     }
-                } catch (NumberFormatException e) {
-                    pStatement.setString(pit, param);
+                    pit++;
                 }
-                pit++;
             }
-        }
-        pStatement.execute();
-        messageBack += "Query successfull!";
+            pStatement.execute();
+            messageBack = "Query ran - Success!";
+        } catch (Exception e) { e.printStackTrace(); }
         return messageBack;
     }
     

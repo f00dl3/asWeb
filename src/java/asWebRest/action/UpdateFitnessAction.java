@@ -13,6 +13,10 @@ public class UpdateFitnessAction {
     private FitnessDAO fitnessDAO;
     public UpdateFitnessAction(FitnessDAO fitnessDAO) { this.fitnessDAO = fitnessDAO; }
     
+    public String setRunPlanDoC(List qParams) { return fitnessDAO.setRunPlanDoC(qParams); }
+    public String setRunPlanDoM(List qParams) { return fitnessDAO.setRunPlanDoM(qParams); }
+    public String setRunPlanDoR(List qParams) { return fitnessDAO.setRunPlanDoR(qParams); }
     public String setUpdateToday(List qParams) { return fitnessDAO.setUpdateToday(qParams); }
+    public String setUpdateTodayEm(List qParams) { return fitnessDAO.setUpdateTodayEm(qParams); }
         
 }
