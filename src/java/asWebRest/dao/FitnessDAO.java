@@ -679,11 +679,13 @@ public class FitnessDAO {
     
     public String setUpdateToday(List<String> qParams) {
         String returnData = "";
+        String tRShoe = qParams.get(3);
+        //Figuring the logic to this out to get previous RSMile max and concat it with submitted.
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
                 " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags) VALUES" +
-                " (CURDATE(),?,?,?,?,?,?,?,?,?,?,?)" +
+                " (CURDATE(),?,?,?,(?+(SELECT MAX(RSMile) WHERE Shoe='"+tRShoe+"' AND Date != CURDATE())),?,?,?,?,?,?,?)" +
                 " ON DUPLICATE KEY UPDATE" +
-                " Weight=?, RunWalk=?, Shoe=?, RSMile=?," +
+                " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+(SELECT MAX(RSMile) WHERE Shoe='"+tRShoe+"' AND Date != CURDATE()))," +
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 		" Bicycle=?, CommonRoute=?, xTags=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
