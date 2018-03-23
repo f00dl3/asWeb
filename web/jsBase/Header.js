@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 21 Mar 2018
+Updated: 23 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -77,6 +77,17 @@ function checkMobile() {
 
 function deg2rad(degrees) {
     return degrees * Math.PI/180;
+}
+
+function doCh(type, dynVar, opts) {
+    var dBack = "";
+    switch(type) {
+        case "p": 
+            dBack += getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=" + dynVar;
+            if(isSet(opts)) { dBack += "&" + opts; }
+            break;
+    }
+    return dBack;
 }
 
 function doRefresh(period) {
@@ -176,7 +187,8 @@ function nodeState(tNode, state) {
     }
 }
 
-function searchAhead(dataArray, thisQuery, matchLimit) {
+// Move to MediaServ.js as it is dependent
+function searchAhead(dataArray, thisQuery, matchLimit) { 
     var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
     itemMatchLimitHit = matchedItems = ti = 0;
     objectBack = {};
@@ -206,7 +218,7 @@ function searchAhead(dataArray, thisQuery, matchLimit) {
             dataBack = thisHint ;
         }
     } else {
-        noticeBack = "</div><div class='Notice'>Unable to find anythin!</div>";
+        noticeBack = "</div><div class='Notice'>Unable to find anything!</div>";
     }
     objectBack.noticeBack = noticeBack;
     objectBack.dataBack = dataBack;

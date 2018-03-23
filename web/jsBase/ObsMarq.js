@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 15 Mar 2018
+Updated: 23 Mar 2018
 
  (function worker() {
     var obsUrl = "/asWeb/inc/ObsMarq.jsp";
@@ -98,16 +98,16 @@ function processMarqueeData(theData, lastData) {
             "<img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' /> " + theData.Weather + " " +
             " " + animatedArrow(diffTemperature) + Math.round(theData.Temperature) + "F (" + diffTemperature + "F/hr)" +
             " " + animatedArrow(diffDewpoint) + Math.round(theData.Dewpoint) + "F ( " + diffDewpoint + "F/hr) - " +
-            " RH: <span style='" + colorRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%</span> - ";
+            " RH: <span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%</span> - ";
         if(isSet(theData.WindSpeed)) {
             returnData += " Wind: ";
             if(isSet(theData.WindDirection)) { returnData += theData.WindDirection + " at "; }
-            returnData += "<span style='" + colorWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span> " + gust + " - ";
+            returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span> " + gust + " - ";
         }
-        returnData += " Feel: <span style='" + colorTemp(flTemp) + "'>" + flTemp + "F</span>" +
-            " (<span style='" + colorTemp(flTempC) + "'>" + flTempC + "F <img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/></span>) - ";
+        returnData += " Feel: <span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
+            " (<span style='" + styleTemp(flTempC) + "'>" + flTempC + "F <img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/></span>) - ";
         if(isSet(theData.CAPE)) {
-            returnData += "<span style=" + colorCape(theData.CAPE) + ">" + theData.CAPE + "</span> - ";
+            returnData += "<span style=" + styleCape(theData.CAPE) + ">" + theData.CAPE + "</span> - ";
         }
         returnData += " MSLP: " + animatedArrow(diffPressure) + theData.Pressure + " <span>mb</span> --- ";
         dojo.byId("disHolder").innerHTML = returnData;

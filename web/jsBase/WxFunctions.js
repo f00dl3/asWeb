@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 13 Mar 2018
+Updated: 23 Mar 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -71,26 +71,6 @@ function colorBShr(bs) {
 		case (bs < 90) && (bs >= 60): return 'KIB35';
 		case (bs >= 90): return 'KIO35';
 	}
-}
-
-function colorCape(cape) {	
-        var tc, bg;
-	switch(true) {
-		case (cape < 10): bg = "cccccc"; tc = "black"; break;
-		case (cape < 100) && (cape >= 10): bg = "99ff66"; tc = "black"; break;
-		case (cape < 250) && (cape >= 100): bg = "66ff33"; tc = "black"; break;
-		case (cape < 500) && (cape >= 250): bg = "00ff00"; tc = "black"; break; 
-		case (cape < 750) && (cape >= 500): bg = "003300"; tc = "white"; break;
-		case (cape < 1000) && (cape >= 750): bg = "cccc00"; tc = "black"; break;
-		case (cape < 1500) && (cape >= 1000): bg = "ffff00"; tc = "black"; break;
-		case (cape < 2000) && (cape >= 1500): bg = "ff9900"; tc = "black"; break;
-		case (cape < 2500) && (cape >= 2000): bg = "ff0000"; tc = "black"; break;
-		case (cape < 3000) && (cape >= 2500): bg = "990000"; tc = "white"; break;
-		case (cape < 3500) && (cape >= 3000): bg = "660000"; tc = "white"; break;
-		case (cape < 4000) && (cape >= 3500): bg = "ff00ff"; tc = "white"; break;
-		case (cape >= 4000): bg = "660099"; tc = "white"; break;
-	}
-	return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
 }
 
 function colorCin(cin) {
@@ -209,7 +189,61 @@ function colorMuvv(muvv) {
     }
 }
 
-function colorRh(rh) {
+function conv2Mph(wsKt) {
+	return round(wsKt*1.15078,0);
+}
+
+function conv2Tf(tCel) {
+    if((isset(tCel)) && (tCel < 150)) {	
+        return round((tCel * 9/5 + 32),0);
+    } else {
+        return '';
+    }
+}
+
+function relativeHumidity(tF,dF) { 
+    var tC = (5/9)*(tF-32);
+    var dC = (5/9)*(dF-32);
+    var satVapPres = 6.11 * Math.pow(10,(7.5 * tC / (237.7 + tC)));
+    var actVapPres = 6.11 * Math.pow(10,(7.5 * dC / (237.7 + dC)));
+    return round(((actVapPres/satVapPres) * 100),0);
+}
+
+function snowRatio(liqPrecip,tF) {
+    var ratio;
+    switch(tF) {
+        case (tF >= 28) && (tF <= 34): ratio = 1.0; break;
+        case (tF >= 20) && (tF < 28): ratio = 1.25; break;
+        case (tF >= 15) && (tF < 20): ratio = 1.5; break;
+        case (tF >= 10) && (tF < 15): ratio = 1.75; break;
+        case (tF >= 0) && (tF < 10): ratio = 2.0; break;
+        case (tF >= -20) && (tF < 0): ratio = 3.0; break;
+        case (tF < -20): ratio = 6.0; break;
+    }
+    return ratio;
+}
+
+function styleCape(cape) {	
+        var tc, bg;
+	switch(true) {
+		case (cape < 10): bg = "cccccc"; tc = "black"; break;
+		case (cape < 100) && (cape >= 10): bg = "99ff66"; tc = "black"; break;
+		case (cape < 250) && (cape >= 100): bg = "66ff33"; tc = "black"; break;
+		case (cape < 500) && (cape >= 250): bg = "00ff00"; tc = "black"; break; 
+		case (cape < 750) && (cape >= 500): bg = "003300"; tc = "white"; break;
+		case (cape < 1000) && (cape >= 750): bg = "cccc00"; tc = "black"; break;
+		case (cape < 1500) && (cape >= 1000): bg = "ffff00"; tc = "black"; break;
+		case (cape < 2000) && (cape >= 1500): bg = "ff9900"; tc = "black"; break;
+		case (cape < 2500) && (cape >= 2000): bg = "ff0000"; tc = "black"; break;
+		case (cape < 3000) && (cape >= 2500): bg = "990000"; tc = "white"; break;
+		case (cape < 3500) && (cape >= 3000): bg = "660000"; tc = "white"; break;
+		case (cape < 4000) && (cape >= 3500): bg = "ff00ff"; tc = "white"; break;
+		case (cape >= 4000): bg = "660099"; tc = "white"; break;
+	}
+	return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+}
+
+function styleRh(rh) {
     var bg, tc;
     switch(true) {
         case (rh <= 5): bg = "ff0000"; tc = "white"; break;
@@ -228,7 +262,7 @@ function colorRh(rh) {
     return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
 }
 
-function colorTemp(tT) {
+function styleTemp(tT) {
     var bg, tc, fw;
     tT = Math.round(tT);
     switch(true) {
@@ -277,7 +311,7 @@ function colorTemp(tT) {
     return "background-color: #" + bg + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
 }
 
-function colorWind(wMax) {
+function styleWind(wMax) {
     var bg, tc, st, fw;
     switch(true) {
         case (wMax < 5): bg = "ffffff"; tc = "black"; st = tc; fw = "normal"; break;
@@ -301,40 +335,6 @@ function colorWind(wMax) {
         default: bg = "2a2a2a"; tc = "black"; st = tc; fw = "normal"; break;
     }
     return "background-color: #" + bg + "; stroke: " + st + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
-}
-
-function conv2Mph(wsKt) {
-	return round(wsKt*1.15078,0);
-}
-
-function conv2Tf(tCel) {
-    if((isset(tCel)) && (tCel < 150)) {	
-        return round((tCel * 9/5 + 32),0);
-    } else {
-        return '';
-    }
-}
-
-function relativeHumidity(tF,dF) { 
-    var tC = (5/9)*(tF-32);
-    var dC = (5/9)*(dF-32);
-    var satVapPres = 6.11 * Math.pow(10,(7.5 * tC / (237.7 + tC)));
-    var actVapPres = 6.11 * Math.pow(10,(7.5 * dC / (237.7 + dC)));
-    return round(((actVapPres/satVapPres) * 100),0);
-}
-
-function snowRatio(liqPrecip,tF) {
-    var ratio;
-    switch(tF) {
-        case (tF >= 28) && (tF <= 34): ratio = 1.0; break;
-        case (tF >= 20) && (tF < 28): ratio = 1.25; break;
-        case (tF >= 15) && (tF < 20): ratio = 1.5; break;
-        case (tF >= 10) && (tF < 15): ratio = 1.75; break;
-        case (tF >= 0) && (tF < 10): ratio = 2.0; break;
-        case (tF >= -20) && (tF < 0): ratio = 3.0; break;
-        case (tF < -20): ratio = 6.0; break;
-    }
-    return ratio;
 }
 
 function timeDay() {

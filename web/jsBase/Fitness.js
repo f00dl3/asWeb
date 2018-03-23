@@ -408,9 +408,9 @@ function processFitnessAll(dataIn) {
         rData += "<tr>";
         rData += "<td><div class='UPop'>" + tData.Date +
                 "<div class='UPopO'>" +
-                "High: <span class='" + colorTemp(tData.High) + "'>" + tData.High + "</span><br/>" +
-                "Low: <span class='" + colorTemp(tData.Low) + "'>" + tData.Low + "</span><br/>" +
-                "Average: <span class='" + colorTemp(tData.Average) + "'>" + tData.Average + "</span>" +
+                "High: <span style='" + styleTemp(tData.High) + "'>" + tData.High + "</span><br/>" +
+                "Low: <span style='" + styleTemp(tData.Low) + "'>" + tData.Low + "</span><br/>" +
+                "Average: <span style='" + styleTemp(tData.Average) + "'>" + tData.Average + "</span>" +
                 "</div></div></td>" +
                 "<td align='center'><div class='UPop'><div class='" + colorWeight(tData.Weight) + "'>" + tData.Weight + "</div>" +
                 "<div class='UPopO'>" + bmi + "</div>" +
