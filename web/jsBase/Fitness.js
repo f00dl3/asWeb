@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 22 Feb 2018
+Updated: 24 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -9,7 +9,9 @@ var myHeight = 68;
 
 function actOnCaloriesSubmit(event) {
     dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject("CaloriesForm");
     window.alert("Calories submitted!");
+    putCalories(thisFormData);
 }
 
 function actOnCommitRoute(event) {
@@ -151,7 +153,7 @@ function fitnessCalories(calQ) {
     var foods = 1;
     var tableRows = [ "Food", "Servings", "Today", "Serving", "Calories" ];
     var dataBack = "<div class='UBox'>Food<div class='UBoxO'>Calorie Tracker" +
-            "<form>" +
+            "<form id='CaloriesForm'>" +
             "<button class='UButton' id='CalSubmitButton' type='submit' name='SubmitServings'>Nom nom nom!</button><p>";
     var tableElement = "<table><thead><tr>";
     for (var i=0; i < tableRows.lenght; i++) {
@@ -164,7 +166,7 @@ function fitnessCalories(calQ) {
         tableElement += "<tr><input type='hidden' name='FoodID[" + foods + "]' value='" + foods + "' />" +
                 "<td><input type='hidden' name='FoodDescription[" + foods + "]' value='" + cDat.Food + "' />" +
                 "<div class='U2Pop'>" + cDat.Food + "<div class='UPopO'>Last consumed: " + cDat.Last + "</div></div></td>" +
-                "<td><input type='number' step='0.1' name='Qantity[" + foods + "]' value = '" + slSet + "' style='width: 34px;'/></td>" +
+                "<td><input type='number' step='0.1' name='Quantity[" + foods + "]' value = '" + slSet + "' style='width: 34px;'/></td>" +
                 "<td>" + cDat.Serving + "</td>" +
                 "<td><input type='hidden' name='Calories[" + foods + "]' value='" + cDat.Calories + "'/>" + cDat.Calories + "</td>" +
                 "<input type='hidden' name='Fat[" + foods + "]' value='" + cDat.Fat + "' />" +
@@ -247,6 +249,7 @@ function fitnessToday(dataIn) {
             "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value='" + cycling + "'/><br/>" +
             "S<input type='checkbox' style='width: 15px;' name='TodayBkStudT' " + studChecked + "/>" +
             "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
+            "<input type='hidden' name='TodayBicycle' value='" + bicycleUsed + "'/>" +
             "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
             "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
             "</tbody></table>";
@@ -452,9 +455,8 @@ function populateSearchBox() {
     dojo.connect(searchByDateForm, "onsubmit", actSearchByDateSubmit);
 }
 
-function putUpdateToday(formData) {
-    window.alert("Attempting to submit today's updates!");
-    formData.doWhat = "putToday";
+function putCalories(formData) {
+    formData.doWhat = "putCalories";
     var xhArgs = {
         preventCache: true,
         url: getResource("Fitness"),
@@ -463,6 +465,24 @@ function putUpdateToday(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             window.alert(data);
+            getFitnessAllData();
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function putUpdateToday(formData) {
+    formData.doWhat = "putToday";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
             getFitnessAllData();
         },
         error: function(data, iostatus) {

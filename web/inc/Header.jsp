@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    15 Mar 2018
+    Updated:    24 Mar 2018
     Author     : astump
 --%>
 
@@ -61,6 +61,8 @@
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>" +
+        " <div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/></div>" +
         miniHeader;
     
     if(type.equals("full")) {

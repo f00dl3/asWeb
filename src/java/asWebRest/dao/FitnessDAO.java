@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Mar 2018
+Updated: 24 Mar 2018
 */
 
 package asWebRest.dao;
 
-import asWebRest.model.Fitness;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
 import java.util.List;
@@ -677,15 +676,34 @@ public class FitnessDAO {
         return returnData;
     }
     
+    public String setCalories(List<String> qParams) {
+        String returnData = "";
+        String query_Calories_Update = "INSERT INTO Core.Fitness " +
+                " (Date,Calories,Fat,Protein,Carbs,Cholest,Sodium,Fiber,Sugar,Water,FruitsVeggies) VALUES" +
+                " (CURDATE(),?,?,?,?,?,?,?,?,?,?)" +
+                " ON DUPLICATE KEY UPDATE Calories=?, Fat=?, Protein=?," +
+                " Carbs=?, Cholest=?, Sodium=?, Fiber=?," +
+                " Sugar=?, Water=?, FruitsVeggies=?;";
+        try { returnData = wc.q2do(query_Calories_Update, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     public String setUpdateToday(List<String> qParams) {
         String returnData = "";
         String tRShoe = qParams.get(3);
-        //Figuring the logic to this out to get previous RSMile max and concat it with submitted.
+        double tRShoeMaxMiles = 0.0;
+        final String query_Fitness_GetLastRsMileTotal = "SELECT MAX(RSMile) AS MaxRSMiles FROM Core.Fitness WHERE Shoe='" + tRShoe + "' AND Date != CURDATE();";
+        try {
+            ResultSet resultSet = wc.q2rs(query_Fitness_GetLastRsMileTotal, null);
+            while (resultSet.next()) {
+                tRShoeMaxMiles = resultSet.getDouble("MaxRSMiles");
+            }
+        } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
                 " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags) VALUES" +
-                " (CURDATE(),?,?,?,(?+(SELECT MAX(RSMile) WHERE Shoe='"+tRShoe+"' AND Date != CURDATE())),?,?,?,?,?,?,?)" +
+                " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?)" +
                 " ON DUPLICATE KEY UPDATE" +
-                " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+(SELECT MAX(RSMile) WHERE Shoe='"+tRShoe+"' AND Date != CURDATE()))," +
+                " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 		" Bicycle=?, CommonRoute=?, xTags=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }

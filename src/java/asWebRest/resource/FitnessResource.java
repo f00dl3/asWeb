@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Mar 2018
+Updated: 24 Mar 2018
  */
 
 package asWebRest.resource;
@@ -86,6 +86,23 @@ public class FitnessResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                     
+                case "putCalories":
+                    // gonna be a bitch
+                    String calAdd = null; if(wc.isSet(argsInForm.getFirstValue("Calories"))) { calAdd = argsInForm.getFirstValue("Calories"); } qParams.add(calAdd);
+                    String fatAdd = null; if(wc.isSet(argsInForm.getFirstValue("Fat"))) { fatAdd = argsInForm.getFirstValue("Fat"); } qParams.add(fatAdd);
+                    String protAdd = null; if(wc.isSet(argsInForm.getFirstValue("Protein"))) { protAdd = argsInForm.getFirstValue("Protein"); } qParams.add(protAdd);
+                    String carbsAdd = null; if(wc.isSet(argsInForm.getFirstValue("Carbs"))) { carbsAdd = argsInForm.getFirstValue("Carbs"); } qParams.add(carbsAdd);
+                    String cholestAdd = null; if(wc.isSet(argsInForm.getFirstValue("Cholest"))) { cholestAdd = argsInForm.getFirstValue("Cholest"); } qParams.add(cholestAdd);
+                    String sodiumAdd = null; if(wc.isSet(argsInForm.getFirstValue("Sodium"))) { sodiumAdd = argsInForm.getFirstValue("Sodium"); } qParams.add(sodiumAdd);
+                    String fiberAdd = null; if(wc.isSet(argsInForm.getFirstValue("Fiber"))) { fiberAdd = argsInForm.getFirstValue("Fiber"); } qParams.add(fiberAdd);
+                    String sugarAdd = null; if(wc.isSet(argsInForm.getFirstValue("Sugar"))) { sugarAdd = argsInForm.getFirstValue("Sugar"); } qParams.add(sugarAdd);
+                    String waterAdd = null; if(wc.isSet(argsInForm.getFirstValue("Water"))) { waterAdd = argsInForm.getFirstValue("Water"); } qParams.add(waterAdd);
+                    String fruitsVeggiesAdd = null; if(wc.isSet(argsInForm.getFirstValue("FruitVeggie"))) { fruitsVeggiesAdd = argsInForm.getFirstValue("FruitVeggie"); } qParams.add(fruitsVeggiesAdd);
+                    qParams.add(calAdd); qParams.add(fatAdd); qParams.add(protAdd); qParams.add(carbsAdd); qParams.add(cholestAdd);
+                    qParams.add(sodiumAdd); qParams.add(fiberAdd); qParams.add(sugarAdd); qParams.add(waterAdd); qParams.add(fruitsVeggiesAdd);
+                    returnData += updateFitnessAction.setCalories(qParams);
+                    break;
+                    
                 case "putToday":
                     String todayWeight = null; if(wc.isSet(argsInForm.getFirstValue("TodayWeight"))) { todayWeight = argsInForm.getFirstValue("TodayWeight"); } qParams.add(todayWeight); 
                     String todayRunWalk = null; if(wc.isSet(argsInForm.getFirstValue("TodayRunWalk"))) { todayRunWalk = argsInForm.getFirstValue("TodayRunWalk"); } qParams.add(todayRunWalk);
@@ -98,16 +115,11 @@ public class FitnessResource extends ServerResource {
                     String todayBicycle = null; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
                     String todayCommonRoute = null; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);
                     String todayX = null; if(wc.isSet(argsInForm.getFirstValue("TodayX"))) { todayX = argsInForm.getFirstValue("TodayX"); } qParams.add(todayX);
-                    //Do second time for the if duplicate key clause
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
                     qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX);
                     returnData += updateFitnessAction.setUpdateToday(qParams);
-                    break;
-                /* " Weight=?, RunWalk=?, Shoe=?, RSMile=?," +
-		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
-		" Bicycle=?, CommonRoute=?, xTags=?;"; */
-                    
+                    break;                    
             }
         }
         

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 23 Mar 2018
+Updated: 24 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -12,6 +12,11 @@ var cpmNoMpg = (annMaint / annMiles);
 var timeOutMilli = (60*1000);
 var hiddenFeatures = 0;
 var costPerMile = 3.50;
+
+$(window).on('load', function() {
+	var docSize = $("html").html().length;
+	$(".preload").fadeOut("slow", function() { $(this).hide(); });
+});
 
 function animatedArrow(thisArrow) {
     switch(true) {
