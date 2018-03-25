@@ -67,6 +67,7 @@
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>" +
         " <div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/></div>" +
         " <div id='NoticeHolder'></div>" +
+        " <div id='NaviHolder'></div>" +
         miniHeader;
     
     if(type.equals("full")) {

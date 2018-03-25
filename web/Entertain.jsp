@@ -5,15 +5,23 @@
     Author     : Anthony Stump
 --%>
 
+<%
+    String headerType = "full";
+    String pageTitle = "Entertainment";
+    String scriptIt = "true";
+    String authCheck = "true";
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="/inc/Header.jsp?type=full&title=Entertain&scripts=true"></jsp:include>
 
 <body>
     
-    <h3>Entertainment</h3>
+    <h1><% out.println(pageTitle); %></h1>
     
-<div id="SearchTableHolder"></div>
+    <p>
+    
     
 </body>
 

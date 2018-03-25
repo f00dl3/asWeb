@@ -144,7 +144,7 @@ public class FitnessResource extends ServerResource {
                     JSONObject returnText = new JSONObject();
                     returnText.put("ReturnData", tempReturn);
                     mergedResults
-                        //.put("returnText", returnText)
+                        .put("returnText", returnText)
                         .put("callbackData", callbackData);
                     returnData += mergedResults.toString();
                     break;

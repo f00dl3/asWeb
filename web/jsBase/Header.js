@@ -142,11 +142,90 @@ function getDate(inType, inInput, rdFormat) {
     return retDate;
 }
 
+function getRelatedLinks(page) {
+    var args = {
+        url: getResource("WebLinks"),
+        handleAs: "json",
+        postData: "master=" + page,
+        timeout: timeOutMilli,
+        load: function(data) {
+            return data;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet RelatedLinks for "+page+": FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(args);
+}
+
 function getResource(what) {
     switch(what) {
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
+        case "WebLinks": return getBasePath("rest") + "/WebLinks";
     }
+}
+
+function getWeblinks(whereTo) {
+    
+    var urlXhr1 = getBasePath("rest")+"/WebLinks";
+
+    var arXhr1 = {
+        url: urlXhr1,
+        handleAs: "json",
+        postData: "master=Anthony.php-0",
+        timeout: timeOutMilli,
+        load: function(data) {
+            var placeholder;
+            if(checkMobile() || !checkMobile()) {
+                placeholder = "<ul>";
+                for (var i = 0; i < data.length; i++) {
+                    var theData = data[i];
+                    var theLink;
+                    if(checkMobile() && isSet(theData.DesktopLink)) {
+                        theLink = theData.DesktopLink;
+                    } else {
+                        if(isSet(theData.TomcatURL)) {
+                            theLink = theData.TomcatURL;
+                        } else {
+                            theLink = theData.URL;
+                        }
+                    }
+                    placeholder += "<li><a href='"+theLink+"'>";
+                    placeholder += theData.Description;
+                    placeholder += "</a></li>";
+                }
+                placeholder += "</ul>";
+                dojo.byId(whereTo).innerHTML = placeholder;
+            }
+
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet arXhr1: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+
+    dojo.xhrPost(arXhr1);
+    
+}
+
+function getWebVersion(whereTo) {
+    var firstXhrUrl = getBasePath("rest")+"/WebVersion";
+    var xhrWebVersionArgs = {
+        url: firstXhrUrl,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            var theData = data[0];
+            var thisDiv = "<div class='UPop'>v" + theData.Version + " (Updated: " + theData.Date + ")";
+            thisDiv += "<div class='UPopO'>" + theData.Changes + "</div></div>";
+            dojo.byId(whereTo).innerHTML = thisDiv;
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrGet WebVersion: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrGet(xhrWebVersionArgs);
 }
 
 function iLinks3d(elems, maxW, maxH, tFact) {
@@ -192,42 +271,14 @@ function nodeState(tNode, state) {
     }
 }
 
-// Move to MediaServ.js as it is dependent
-function searchAhead(dataArray, thisQuery, matchLimit) { 
-    var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
-    itemMatchLimitHit = matchedItems = ti = 0;
-    objectBack = {};
-    var thisHint = "";
-    if(thisQuery !== "") {
-        var thisQueryLength = thisQuery.length;
-        thisQuery.forEach(function (item) {
-           if(dataArray.indexOf(thisQuery) >= 0) {
-               matchedItems++;
-               if(thisHint === "") {
-                   thisHint = dataArray[ti];
-               } else if (matchedItems > matchLimit) {
-                   itemMatchLimitHit = 1;
-                   thisHint = "";
-               } else {
-                   thisHint += dataArray[ti];
-               }
-           }
-           ti++;
-        });
-    }
-    if(isSet(thisHint)) {
-        if(isSet(itemMatchLimitHit)) {
-            noticeBack = "<div class='Notice' style='background-color: red; color: white;'>Showing " + matchLimit + " of " + matchedItems + " results!</div>";
-        } else {
-            noticeBack = "<div class='Notice'>" + matchedItems + " results found!</div>";
-            dataBack = thisHint ;
-        }
-    } else {
-        noticeBack = "</div><div class='Notice'>Unable to find anything!</div>";
-    }
-    objectBack.noticeBack = noticeBack;
-    objectBack.dataBack = dataBack;
-    return objectBack;
+function putNavi() {
+    var uiBasePage = getBasePath("ui") + "/Anthony.jsp";
+    var goHome = "<a href='/asWeb'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>";
+    rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
+            "<span>" + goHome + " (Logout)</span>" +
+            "<span id='naviLinks'></span>";
+    dojo.byId("NaviHolder").innerHTML = rData;
+    getWebLinks("naviLinks");
 }
 
 function timeMinutes(inMin) {
@@ -308,8 +359,14 @@ function ReturnWebLinks($thisMaster) {
 }
                             
 class SortedIterator extends SplHeap {
-public function __construct(Iterator $iterator) { foreach($iterator as $item) { $this->insert($item); } }
-public function compare($b, $a) { return strcmp($a->getRealpath(), $b->getRealpath()); }
+    public function __construct(Iterator $iterator) { foreach($iterator as $item) { $this->insert($item); } }
+    public function compare($b, $a) { return strcmp($a->getRealpath(), $b->getRealpath()); }
 }
                             
  */
+
+var init = function(event) {
+    putNavi();
+};
+
+dojo.ready(init);

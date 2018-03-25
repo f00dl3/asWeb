@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
+Updated: 25 Mar 2018
  */
 
 function genOverviewChecking(cbData) {
@@ -110,6 +111,55 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     wTable += "</tbody></table>";
     bubble += wTable + "</div></div>";
     dojo.byId("HoldWorth").innerHTML = bubble;
+}
+
+function naviButtonListener() {
+    var btnShowFBAsset = dojo.byId("ShowFBAsset");
+    dojo.connect(btnShowFBAsset, "click", putAssets);
+}
+
+function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools) {
+    var abgCols = [ "Title", "Quantity" ];
+    var dtCols = [ "Description", "UD", "Quantity", "Location", "Checked" ];
+    var dtCounter = 1;
+    var rData = "<div id='FBAssetInner'><h3>Asset Tracker</h3>";
+    var abgBubble = "<div class='UBox'>BGames<br/><span>" + qBGames.TotQty + "</span><div class='UBoxO'><table><thead><tr>";
+    for(var i = 0; i < abgCols.lenght; i++) { abgBubble += "<th>" + abgCols[i] + "</th>"; }
+    abgBubble += "</thead><tbody>";
+    bGames.forEach(function (bg) { abgBubble += "<tr><td>" + bg.Title + "</td><td>" + bg.Quantity + "</td></tr>"; });
+    abgBubble += "</tbody></table></div></div>";
+    var abkBubble = "<div class='UBox'>Books<br/><span>" + qBooks.TotQty + "</span><div class='UBoxO'><table><thead><tr>";
+    for(var i = 0; i < abgCols.length; i++) { abkBubble += "<th>" + abgCols[i] + "</th>"; }
+    abkBubble += "</thead><tbody>";
+    books.forEach(function (bk) { abkBubble += "<tr><td>" + bk.Title + "</td><td>" + bk.Quantity + "</td></tr>"; });
+    abkBubble += "</tbody></table></div></div>";
+    var adtBubble = "<div class='UBox'>DecTools<br/><span>" + qdTools.TotQty + "</span><div class='UBoxO'>" +
+            "<form id='DTUpdateForm'><input id='DTUpdateButton' type='submit' name='DTUpdate' /><p>" +
+            "<table><thead><tr>";
+    for(var i = 0; i < dtCols.length; i++) { adtBubble += "<th>" + dtCols[i] + "</td>"; }
+    adtBubble += "<tbody>";
+    dTools.forEach(function (dt) {
+        var dtAge = dt.Checked;
+        var cDtAge = "";
+        switch(true) {
+            case (dtAge >= getDate("day", -7, "dateOnly")): cDtAge = 'FBCAN'; break;
+            case (dtAge >= getDate("month", -1, "dateOnly")): cDtAge = 'FBCA1'; break;
+            case (dtAge >= getDate("month", -6, "dateOnly")): cDtAge = 'FBCA3'; break;
+            default: cDtAge = 'FBCA6'; break;
+        }
+        adtBubble += "<tr><input type='hidden' name='DTID[" + dtCounter + "]' value='" + dtCounter + "' />" +
+                "<td><input type='hidden' name='DTDescription[" + dtCounter + "]' value='" + dt.Description + "' />" + dt.Description + "</td>" +
+                "<td><input type='checkbox' name='DTSetUpdate[" + dtCounter + "]' value='Yes' /></td>" +
+                "<td><input type='number' name='DTQuantity[" + dtCounter + "]' value='" + dt.Quantity + "' style='width: 30px;' /></td>" +
+                "<td><input type='text' name='DTLocation[" + dtCounter + "]' value='" + dt.Location + "' style='width: 66px;' /></td>" +
+                "<td class='" + cDtAge + "'>" + dtAge + "</td>" +
+                "</tr>";
+        dtCounter++;
+    });
+    adtBubble += "</tbody></table></div></div>";
+    rData += abgBubble + abkBubble + adtBubble;
+    dojo.byId("FBAsset").innerHTML = rData;
+    $("#FBAsset").toggle();
 }
 
 function putBills(billData) {
@@ -311,8 +361,8 @@ function searchAheadCheckbook() {
     
 }
 
-function init(searchString) {
-    
+function initFinance() {
+    naviButtonListener();
 }
 
-dojo.ready(init);
+dojo.ready(initFinance);

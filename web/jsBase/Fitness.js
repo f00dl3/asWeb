@@ -16,7 +16,6 @@ function actOnCaloriesSubmit(event) {
 function actOnCommitRoute(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject("RoutePlanForm");
-    window.alert("Commit Route button pressed!\n" + dojo.formToJson("RoutePlanForm"));
     putRoute(thisFormData);
 }
 
@@ -513,10 +512,10 @@ function putUpdateToday(formData) {
     dojo.xhrPost(xhArgs);
 }
 
-var init = function(event) {
+var initFitness = function(event) {
     populateFitnessChart();
     populateSearchBox();
     getFitnessAllData();
 };
 
-dojo.ready(init);
+dojo.ready(initFitness);

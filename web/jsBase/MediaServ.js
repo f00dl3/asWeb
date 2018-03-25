@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 20 Mar 2018
+Updated: 25 Mar 2018
  */
 
 function getMediaOpts() {
@@ -277,9 +277,46 @@ function putSearchBox(msOverview) {
             "</div></span></form>";
 }
 
-function init() {
+function searchAhead(dataArray, thisQuery, matchLimit) { 
+    var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
+    itemMatchLimitHit = matchedItems = ti = 0;
+    objectBack = {};
+    var thisHint = "";
+    if(thisQuery !== "") {
+        var thisQueryLength = thisQuery.length;
+        thisQuery.forEach(function (item) {
+           if(dataArray.indexOf(thisQuery) >= 0) {
+               matchedItems++;
+               if(thisHint === "") {
+                   thisHint = dataArray[ti];
+               } else if (matchedItems > matchLimit) {
+                   itemMatchLimitHit = 1;
+                   thisHint = "";
+               } else {
+                   thisHint += dataArray[ti];
+               }
+           }
+           ti++;
+        });
+    }
+    if(isSet(thisHint)) {
+        if(isSet(itemMatchLimitHit)) {
+            noticeBack = "<div class='Notice' style='background-color: red; color: white;'>Showing " + matchLimit + " of " + matchedItems + " results!</div>";
+        } else {
+            noticeBack = "<div class='Notice'>" + matchedItems + " results found!</div>";
+            dataBack = thisHint ;
+        }
+    } else {
+        noticeBack = "</div><div class='Notice'>Unable to find anything!</div>";
+    }
+    objectBack.noticeBack = noticeBack;
+    objectBack.dataBack = dataBack;
+    return objectBack;
+}
+
+function initMediaServer() {
     getMediaOpts();
     putSearchBox();
 }
 
-dojo.ready(init);
+dojo.ready(initMediaServer);
