@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Mar 2018
+Updated: 25 Mar 2018
 */
 
 package asWebRest.dao;
@@ -655,29 +655,29 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public String setRunPlanDoC(List<String> qParams) {
+    public String setPlanCyc(List<String> qParams) {
         String returnData = "";
-        String query_Fitness_RPlanDoC = "UPDATE Core.Fitness SET CycGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=?;";
+        String query_Fitness_RPlanDoC = "UPDATE Core.Fitness SET CycGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=CURDATE();";
         try { returnData = wc.q2do(query_Fitness_RPlanDoC, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
-    public String setRunPlanDoM(List<String> qParams) {
+    public String setPlanMark(List<String> qParams) {
         String returnData = "";
         String query_Fitness_RPlanDoMC = "UPDATE Core.Fit_RPlans SET Done=1 WHERE Description=?;";
         try { returnData = wc.q2do(query_Fitness_RPlanDoMC, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
-    public String setRunPlanDoR(List<String> qParams) {
+    public String setPlanRun(List<String> qParams) {
         String returnData = "";
-        String query_Fitness_RPlanDoR = "UPDATE Core.Fitness SET RunGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=?;";
+        String query_Fitness_RPlanDoR = "UPDATE Core.Fitness SET RunGeoJSON=(SELECT GeoJSON FROM Core.Fit_RPlans WHERE Description=?) WHERE Date=CURDATE();";
         try { returnData = wc.q2do(query_Fitness_RPlanDoR, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
     public String setCalories(List<String> qParams) {
-        String returnData = "";
+        String returnData = "Query has not ran yet or failed!";
         String query_Calories_Update = "INSERT INTO Core.Fitness " +
                 " (Date,Calories,Fat,Protein,Carbs,Cholest,Sodium,Fiber,Sugar,Water,FruitsVeggies) VALUES" +
                 " (CURDATE(),?,?,?,?,?,?,?,?,?,?)" +
@@ -688,8 +688,22 @@ public class FitnessDAO {
         return returnData;
     }
     
+    public String setCaloriesSingle(List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        String query_Calories_SingleUpdate = "UPDATE Core.Fit_Calories SET ServingsLast=?, Last=CURDATE() WHERE Food=?;";
+        try { returnData = wc.q2do(query_Calories_SingleUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setCaloriesSingleE(List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        String query_Calories_SingleUpdate = "UPDATE Core.Fit_Calories SET ServingsLastE=?, Last=CURDATE() WHERE Food=?;";
+        try { returnData = wc.q2do(query_Calories_SingleUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     public String setUpdateToday(List<String> qParams) {
-        String returnData = "";
+        String returnData = "Query has not ran yet or failed!";
         String tRShoe = qParams.get(3);
         double tRShoeMaxMiles = 0.0;
         final String query_Fitness_GetLastRsMileTotal = "SELECT MAX(RSMile) AS MaxRSMiles FROM Core.Fitness WHERE Shoe='" + tRShoe + "' AND Date != CURDATE();";
@@ -711,7 +725,7 @@ public class FitnessDAO {
     }
     
     public String setUpdateTodayEm(List<String> qParams) {
-        String returnData = "";
+        String returnData = "Query has not ran yet or failed!";
         String query_Fitness_DayIUE = "INSERT INTO Core.Fit_Em (Date, Weight, ExMin) VALUES (CURDATE(),?,?) ON DUPLICATE KEY UPDATE Weight=?, ExMin=?;";
         try { returnData = wc.q2do(query_Fitness_DayIUE, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;

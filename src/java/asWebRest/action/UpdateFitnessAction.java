@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Mar 2018
-Updated: 24 Mar 2018
+Updated: 25 Mar 2018
  */
 
 package asWebRest.action;
@@ -15,9 +15,11 @@ public class UpdateFitnessAction {
     public UpdateFitnessAction(FitnessDAO fitnessDAO) { this.fitnessDAO = fitnessDAO; }
     
     public String setCalories(List qParams) { return fitnessDAO.setCalories(qParams); }
-    public String setRunPlanDoC(List qParams) { return fitnessDAO.setRunPlanDoC(qParams); }
-    public String setRunPlanDoM(List qParams) { return fitnessDAO.setRunPlanDoM(qParams); }
-    public String setRunPlanDoR(List qParams) { return fitnessDAO.setRunPlanDoR(qParams); }
+    public String setCaloriesSingle(List qParams) { return fitnessDAO.setCaloriesSingle(qParams); }
+    public String setCaloriesSingleE(List qParams) { return fitnessDAO.setCaloriesSingleE(qParams); }
+    public String setPlanCyc(List qParams) { return fitnessDAO.setPlanCyc(qParams); }
+    public String setPlanMark(List qParams) { return fitnessDAO.setPlanMark(qParams); }
+    public String setPlanRun(List qParams) { return fitnessDAO.setPlanRun(qParams); }
     public String setUpdateToday(List qParams) { return fitnessDAO.setUpdateToday(qParams); }
     public String setUpdateTodayEm(List qParams) { return fitnessDAO.setUpdateTodayEm(qParams); }
         

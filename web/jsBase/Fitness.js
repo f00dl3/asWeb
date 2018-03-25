@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 24 Feb 2018
+Updated: 25 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -10,13 +10,14 @@ var myHeight = 68;
 function actOnCaloriesSubmit(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject("CaloriesForm");
-    window.alert("Calories submitted!");
     putCalories(thisFormData);
 }
 
 function actOnCommitRoute(event) {
     dojo.stopEvent(event);
-    window.alert("Commit Route button pressed!");
+    var thisFormData = dojo.formToObject("RoutePlanForm");
+    window.alert("Commit Route button pressed!\n" + dojo.formToJson("RoutePlanForm"));
+    putRoute(thisFormData);
 }
 
 function actSearchByDateSubmit(event) {
@@ -191,7 +192,7 @@ function fitnessCalories(calQ) {
 
 function fitnessPlans(dataIn) {
     var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
-            "<form><button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
+            "<form id='RoutePlanForm'><button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
     var routeOptions = [ "RunGeoJSON", "CycGeoJSON" ];
     var routeId = 1;
     var routeDoneFlag;
@@ -461,14 +462,33 @@ function putCalories(formData) {
         preventCache: true,
         url: getResource("Fitness"),
         postData: formData,
-        handleAs: "text",
+        handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            window.alert(data);
+            showNotice(data.callbackData.totCal + " calories added!");
             getFitnessAllData();
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function putRoute(formData) {
+    formData.doWhat = "putRoute";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Fitness"),
+        postData: formData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice(data.routesDone[0] + " done!");
+            getFitnessAllData();
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for Route FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -483,6 +503,7 @@ function putUpdateToday(formData) {
         handleAs: "text",
         timeout: timeOutMilli,
         load: function(data) {
+            showNotice("Updated today's activites!");
             getFitnessAllData();
         },
         error: function(data, iostatus) {

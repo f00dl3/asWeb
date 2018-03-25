@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Mar 2018
+Updated: 25 Mar 2018
  */
 
 package asWebRest.resource;
@@ -87,20 +87,99 @@ public class FitnessResource extends ServerResource {
                     break;
                     
                 case "putCalories":
-                    // gonna be a bitch
-                    String calAdd = null; if(wc.isSet(argsInForm.getFirstValue("Calories"))) { calAdd = argsInForm.getFirstValue("Calories"); } qParams.add(calAdd);
-                    String fatAdd = null; if(wc.isSet(argsInForm.getFirstValue("Fat"))) { fatAdd = argsInForm.getFirstValue("Fat"); } qParams.add(fatAdd);
-                    String protAdd = null; if(wc.isSet(argsInForm.getFirstValue("Protein"))) { protAdd = argsInForm.getFirstValue("Protein"); } qParams.add(protAdd);
-                    String carbsAdd = null; if(wc.isSet(argsInForm.getFirstValue("Carbs"))) { carbsAdd = argsInForm.getFirstValue("Carbs"); } qParams.add(carbsAdd);
-                    String cholestAdd = null; if(wc.isSet(argsInForm.getFirstValue("Cholest"))) { cholestAdd = argsInForm.getFirstValue("Cholest"); } qParams.add(cholestAdd);
-                    String sodiumAdd = null; if(wc.isSet(argsInForm.getFirstValue("Sodium"))) { sodiumAdd = argsInForm.getFirstValue("Sodium"); } qParams.add(sodiumAdd);
-                    String fiberAdd = null; if(wc.isSet(argsInForm.getFirstValue("Fiber"))) { fiberAdd = argsInForm.getFirstValue("Fiber"); } qParams.add(fiberAdd);
-                    String sugarAdd = null; if(wc.isSet(argsInForm.getFirstValue("Sugar"))) { sugarAdd = argsInForm.getFirstValue("Sugar"); } qParams.add(sugarAdd);
-                    String waterAdd = null; if(wc.isSet(argsInForm.getFirstValue("Water"))) { waterAdd = argsInForm.getFirstValue("Water"); } qParams.add(waterAdd);
-                    String fruitsVeggiesAdd = null; if(wc.isSet(argsInForm.getFirstValue("FruitVeggie"))) { fruitsVeggiesAdd = argsInForm.getFirstValue("FruitVeggie"); } qParams.add(fruitsVeggiesAdd);
-                    qParams.add(calAdd); qParams.add(fatAdd); qParams.add(protAdd); qParams.add(carbsAdd); qParams.add(cholestAdd);
-                    qParams.add(sodiumAdd); qParams.add(fiberAdd); qParams.add(sugarAdd); qParams.add(waterAdd); qParams.add(fruitsVeggiesAdd);
-                    returnData += updateFitnessAction.setCalories(qParams);
+                    String tempReturn = "";
+                    JSONObject callbackData = new JSONObject();
+                    double calsTotalSub = 0;
+                    double fatTotalSub = 0;
+                    double cholestTotalSub = 0;
+                    double sodiumTotalSub = 0;
+                    double carbsTotalSub = 0;
+                    double fiberTotalSub = 0;
+                    double sugarTotalSub = 0;
+                    double proteinTotalSub = 0;
+                    double waterTotalSub = 0;
+                    double fruitVeggieTotalSub = 0;
+                    double totalLength = argsInForm.size()/13;
+                    for(int i=0; i<=totalLength; i++) {
+                        if(wc.isSet(argsInForm.getFirstValue("Quantity["+i+"]")) && Double.parseDouble(argsInForm.getFirstValue("Quantity["+i+"]")) > 0) {
+                            double thisServings = Double.parseDouble(argsInForm.getFirstValue("Quantity["+i+"]"));
+                            List<String> qParamsPre = new ArrayList<>();
+                            qParamsPre.add(argsInForm.getFirstValue("Quantity["+i+"]"));
+                            qParamsPre.add(argsInForm.getFirstValue("FoodDescription["+i+"]"));
+                            tempReturn += updateFitnessAction.setCaloriesSingle(qParamsPre) + ", ";
+                            calsTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Calories["+i+"]"));
+                            fatTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Fat["+i+"]"));
+                            cholestTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Cholest["+i+"]"));
+                            sodiumTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Sodium["+i+"]"));
+                            carbsTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Carbs["+i+"]"));
+                            fiberTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Fiber["+i+"]"));
+                            sugarTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Sugar["+i+"]"));
+                            proteinTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Protein["+i+"]"));
+                            waterTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("Water["+i+"]"));
+                            fruitVeggieTotalSub += thisServings * Double.parseDouble(argsInForm.getFirstValue("FruitVeggie["+i+"]"));
+                        }
+                    }
+                    callbackData.put("totCal", calsTotalSub);
+                    qParams.add(Double.toString(calsTotalSub));
+                    qParams.add(Double.toString(fatTotalSub));
+                    qParams.add(Double.toString(proteinTotalSub));
+                    qParams.add(Double.toString(carbsTotalSub));
+                    qParams.add(Double.toString(cholestTotalSub));
+                    qParams.add(Double.toString(sodiumTotalSub));
+                    qParams.add(Double.toString(fiberTotalSub));
+                    qParams.add(Double.toString(sugarTotalSub));
+                    qParams.add(Double.toString(waterTotalSub));
+                    qParams.add(Double.toString(fruitVeggieTotalSub));
+                    qParams.add(Double.toString(calsTotalSub));
+                    qParams.add(Double.toString(fatTotalSub));
+                    qParams.add(Double.toString(proteinTotalSub));
+                    qParams.add(Double.toString(carbsTotalSub));
+                    qParams.add(Double.toString(cholestTotalSub));
+                    qParams.add(Double.toString(sodiumTotalSub));
+                    qParams.add(Double.toString(fiberTotalSub));
+                    qParams.add(Double.toString(sugarTotalSub));
+                    qParams.add(Double.toString(waterTotalSub));
+                    qParams.add(Double.toString(fruitVeggieTotalSub));
+                    tempReturn += ", FINAL " + updateFitnessAction.setCalories(qParams);
+                    JSONObject returnText = new JSONObject();
+                    returnText.put("ReturnData", tempReturn);
+                    mergedResults
+                        //.put("returnText", returnText)
+                        .put("callbackData", callbackData);
+                    returnData += mergedResults.toString();
+                    break;
+                    
+                case "putRoute":
+                    JSONArray routeDone = new JSONArray();
+                    String queryFeedback = "";
+                    double totalRouteLength = argsInForm.size()/4;
+                    for(int i=0; i<=totalRouteLength; i++) {
+                        if(wc.isSet(argsInForm.getFirstValue("RouteSetCommit["+i+"]")) && argsInForm.getFirstValue("RouteSetCommit["+i+"]").equals("Yes")) {
+                            String activityType = argsInForm.getFirstValue("RouteType["+i+"]");
+                            String routeDescription = argsInForm.getFirstValue("RouteDescription["+i+"]");
+                            List<String> qParamA = new ArrayList<>();
+                            List<String> qParamB = new ArrayList<>();
+                            switch(activityType) {
+                                case "CycGeoJSON":
+                                    qParamA.add(routeDescription);
+                                    qParamB.add(routeDescription);
+                                    queryFeedback += updateFitnessAction.setPlanCyc(qParamA);
+                                    queryFeedback += updateFitnessAction.setPlanMark(qParamB);
+                                    break;
+                                case "RunGeoJSON":
+                                    qParamA.add(routeDescription);
+                                    qParamB.add(routeDescription);
+                                    queryFeedback += updateFitnessAction.setPlanRun(qParamA);
+                                    queryFeedback += updateFitnessAction.setPlanMark(qParamB);
+                                    break;
+                            }
+                            routeDone.put(routeDescription);
+                        }
+                    }
+                    mergedResults
+                        .put("queryFeedback", queryFeedback)
+                        .put("routesDone", routeDone);
+                    returnData += mergedResults.toString();
                     break;
                     
                 case "putToday":

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 24 Mar 2018
+Updated: 25 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -241,6 +241,11 @@ function scLd(scriptName) {
         if (scripts[i].src === scriptName) return true;
     }
     return false;
+}
+
+function showNotice(message) {
+    dojo.byId("NoticeHolder").innerHTML = "<div class='Notice'>" + message + "</notice>";
+    $('.Notice').fadeIn('slow').delay(5000).fadeOut('slow');
 }
 
 /* 
