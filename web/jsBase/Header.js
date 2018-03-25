@@ -273,7 +273,8 @@ function nodeState(tNode, state) {
 
 function putNavi() {
     var uiBasePage = getBasePath("ui") + "/Anthony.jsp";
-    var goHome = "<a href='/asWeb'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>";
+    var goHome = "<a href='" + getBasePath("ui") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
+            "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
     rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
             "<span>" + goHome + " (Logout)</span>" +
             "<span id='naviLinks'></span>";

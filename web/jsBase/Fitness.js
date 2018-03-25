@@ -359,8 +359,8 @@ function processFitnessAll(dataIn) {
                     "</div>";
         }
         cycDiv += "</div>";
-        if(isSet(tData.CycGeoJSON) && tData.CommonRoute === 0) { cycMap += getMapLinkString(tData.Date, "Route", "Cyc", tData.CommonFlag); }
-        if(tData.isGPSCycJSON === true) { cycMap = getMapLinkString(tData.Date, "gpsJSON", "Cyc", tData.CommonFlag); }
+        if(isSet(tData.CycGeoJSON) && tData.CommonRoute === 0) { cycMap += getMapLinkString(tData.Date, "Route", "Cyc", commonRouteFlag); }
+        if(tData.isGPSCycJSON === true) { cycMap = getMapLinkString(tData.Date, "gpsJSON", "Cyc", commonRouteFlag); }
         var runDiv = "Wearing " + tData.Shoe;
         if(isSet(tData.RSMile)) { runDiv = tData.RSMile + " miles wearing " + tData.Shoe; }
         if(isSet(tData.TrackedTime)) {
@@ -371,12 +371,12 @@ function processFitnessAll(dataIn) {
         }
         runDiv += "<br/>" + Math.round(tData.RunWalk * 1508.57) + " est. steps";
         var runMap = "";
-        if(isSet(tData.RunGeoJSON) && tData.CommonRoute === 0) { runMap += getMapLinkString(tData.Date, "Route", "Run", tData.CommonFlag); }
-        if(tData.isGPSRunJSON === true) { runMap = getMapLinkString(tData.Date, "gpsJSON", "Run", tData.CommonFlag); }
+        if(isSet(tData.RunGeoJSON) && tData.CommonRoute === 0) { runMap += getMapLinkString(tData.Date, "Route", "Run", commonRouteFlag); }
+        if(tData.isGPSRunJSON === true) { runMap = getMapLinkString(tData.Date, "gpsJSON", "Run", commonRouteFlag); }
         var altMap = "";
-        if(isSet(tData.AltGeoJSON) && tData.CommonRoute === 0) { altMap += getMapLinkString(tData.Date, "Route", "Alt", tData.CommonFlag); }
-        if(tData.isGPSCyc2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Cy2", tData.CommonFlag); }
-        if(tData.isGPSRun2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Ru2", tData.CommonFlag); }
+        if(isSet(tData.AltGeoJSON) && tData.CommonRoute === 0) { altMap += getMapLinkString(tData.Date, "Route", "Alt", commonRouteFlag); }
+        if(tData.isGPSCyc2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Cy2", commonRouteFlag); }
+        if(tData.isGPSRun2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Ru2", commonRouteFlag); }
         var nutriBreakdown = "Breakdown unavailable!";
         var shoeClass = "";
         if(isSet(tData.RSMile)) { shoeClass = colorShoeMile(tData.RSMile); }
@@ -446,9 +446,11 @@ function populateFitnessChart() {
 
 function populateSearchBox() {
     var tElement = "<div class='UBox'><form id='SearchByDateForm'>" +
-            "<span><button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
-            "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/> | " +
-            "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
+            "<span><a href='" + getBasePath("old") + "/Fitness.php'>Legacy</a> " +
+            "<button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
+            "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/>";
+    if(!checkMobile()) { tElement += " | "; } else { tElement += "<br/>"; }
+    tElement += "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
             "</form></div><br/>";
     dojo.byId("FitDateRangeSearch").innerHTML = tElement;
     var searchByDateForm = dojo.byId("SearchByDateForm");
