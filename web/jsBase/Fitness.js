@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 25 Feb 2018
+Updated: 26 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -228,6 +228,7 @@ function fitnessPlans(dataIn) {
 }
 
 function fitnessToday(dataIn) {
+    if(!isSet(dataIn)) { dataIn = {}; }
     var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags;
     studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }

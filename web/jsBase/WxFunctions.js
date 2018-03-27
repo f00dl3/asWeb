@@ -8,8 +8,8 @@ function color2Grad(type, direct, vals) {
     var st = "white", fc, fw, cMatcher = vals.v1;
     switch(type) {
         case "H":
-            var vStr1 = colorRh(vals.v1), vStr2 = colorRh(vals.v2);
-            if(isSet(vals.v3)) { var vStr3 = colorRh(vals.v3); }
+            var vStr1 = styleRh(vals.v1), vStr2 = styleRh(vals.v2);
+            if(isSet(vals.v3)) { var vStr3 = styleRh(vals.v3); }
             switch(cMatcher) {
                 case (cMatcher < 40): fc = "white"; fw = "normal"; break;
                 case (cMatcher <= 40) && (cMatcher > 95): fc = "black"; fw = "normal"; break;
@@ -17,16 +17,16 @@ function color2Grad(type, direct, vals) {
                 default: fc = "black"; fw = "normal"; break;
             } break;
         case "T":
-            var vStr1 = colorTemp(vals.v1), vStr2 = colorTemp(vals.v2);
-            if(isSet(vals.v3)) { var vStr3 = colorTemp(vals.v3); }
+            var vStr1 = styleTemp(vals.v1), vStr2 = styleTemp(vals.v2);
+            if(isSet(vals.v3)) { var vStr3 = styleTemp(vals.v3); }
             switch(cMatcher) {
                 case (cMatcher > -40) && (cMatcher < 25): fc = "white"; fw = "bold"; break;
                 case (cMatcher > 94): fc = "white"; fw = "bold"; break;
                 default: fc = "black"; fw = "normal"; break;
             } break;
         case "W":
-            var vStr1 = colorWind(vals.v1), vStr2 = colorWind(vals.v2);
-            if(isSet(vals.v3)) { var vStr3 = colorWind(vals.v3); }
+            var vStr1 = styleWind(vals.v1), vStr2 = styleWind(vals.v2);
+            if(isSet(vals.v3)) { var vStr3 = styleWind(vals.v3); }
             switch(cMatcher) {
                 case (cMatcher < 5): fc = "black"; st = fc; fw = "normal"; break;
                 default: fc = "black"; st = "white"; fw = "normal"; break;

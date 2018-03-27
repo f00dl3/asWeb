@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : Feb 11, 2018, 1:37:57 PM
-    Updated:    14 Mar 2018
+    Updated:    26 Mar 2018
     Author     : astump
 --%>
 
@@ -18,7 +18,7 @@
 
     <body>
         
-        <div id='MarqPH'><jsp:include page="/inc/ObsMarq.jsp"></jsp:include></div>
+        <div id='MarqPH'><div id='disHolder'></div></div>
         
         <p/>
         

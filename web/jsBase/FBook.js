@@ -1,8 +1,19 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 25 Mar 2018
+Updated: 26 Mar 2018
  */
+
+function checkTransactionAge(dtAge) {
+    var cDtAge = "";
+    switch(true) {
+        case (dtAge >= getDate("day", -14, "dateOnly")): cDtAge = 'FBCAN'; break;
+        case (dtAge >= getDate("month", -1, "dateOnly")): cDtAge = 'FBCA1'; break;
+        case (dtAge >= getDate("month", -6, "dateOnly")): cDtAge = 'FBCA3'; break;
+        default: cDtAge = 'FBCA6'; break;
+    }
+    return cDtAge;
+}
 
 function genOverviewChecking(cbData) {
     var bubble = "<div class='UBox'>Check<br/><span>$" + (cbData.Balance+367.43).toFixed(2) + "</span></div>";
@@ -118,10 +129,18 @@ function naviButtonListener() {
     dojo.connect(btnShowFBAsset, "click", putAssets);
 }
 
-function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools) {
+function onlineAssetSearch(searchTerms) {
+    var onlineSearchPrefix = "https://www.google.com/search?q=eBay+";
+    return onlineSearchPrefix + searchTerms;
+}
+
+function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, licenses, assets) {
     var abgCols = [ "Title", "Quantity" ];
     var dtCols = [ "Description", "UD", "Quantity", "Location", "Checked" ];
+    var liCols = [ "Title", "Type" ];
+    var asCols = [ "Description", "CAT", "UD", "Value", "Checked", "Notes", "DT" ];
     var dtCounter = 1;
+    var assCounter = 0;
     var rData = "<div id='FBAssetInner'><h3>Asset Tracker</h3>";
     var abgBubble = "<div class='UBox'>BGames<br/><span>" + qBGames.TotQty + "</span><div class='UBoxO'><table><thead><tr>";
     for(var i = 0; i < abgCols.lenght; i++) { abgBubble += "<th>" + abgCols[i] + "</th>"; }
@@ -140,13 +159,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools) {
     adtBubble += "<tbody>";
     dTools.forEach(function (dt) {
         var dtAge = dt.Checked;
-        var cDtAge = "";
-        switch(true) {
-            case (dtAge >= getDate("day", -7, "dateOnly")): cDtAge = 'FBCAN'; break;
-            case (dtAge >= getDate("month", -1, "dateOnly")): cDtAge = 'FBCA1'; break;
-            case (dtAge >= getDate("month", -6, "dateOnly")): cDtAge = 'FBCA3'; break;
-            default: cDtAge = 'FBCA6'; break;
-        }
+        var cDtAge = checkTransasctionAge(dtAge);
         adtBubble += "<tr><input type='hidden' name='DTID[" + dtCounter + "]' value='" + dtCounter + "' />" +
                 "<td><input type='hidden' name='DTDescription[" + dtCounter + "]' value='" + dt.Description + "' />" + dt.Description + "</td>" +
                 "<td><input type='checkbox' name='DTSetUpdate[" + dtCounter + "]' value='Yes' /></td>" +
@@ -157,7 +170,55 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools) {
         dtCounter++;
     });
     adtBubble += "</tbody></table></div></div>";
-    rData += abgBubble + abkBubble + adtBubble;
+    var aliBundle = "<div class='UBox'>Licenses<br/><span>" + qLicenses.TotQty + "</span>" +
+            "<div class='UBoxO'><table><thead><tr>";
+    for(var i = 0; i < liCols.length; i++) { aliBundle += "<th>" + liCols[i] + "</th>"; }
+    aliBundle += "</thead><tbody>";
+    licenses.forEach(function (lic) {
+        aliBundle += "<tr>" +
+                "<td>" + lic.Title + "</td>" +
+                "<td>" + lic.Type + "</td>" +
+                "</tr>";
+    });
+    aliBundle += "</tbody></table></div></div>";
+    var ameBundle = "<div class='UBox'>Media<br/><span>" + qMedia.TotQty + "</span></div>";
+    var asTable = "<div class='table'><div class='tr'>";
+    for(var i = 0; i < asCols.length; i++) { asTable += "<span class='th'>" + asCols[i] + "</span>"; }
+    asTable += "</div>"
+    assets.forEach(function (ass) {
+        var cAge = checkTransasctionAge(ass.Checked);
+        var ifDSerial, ifDUpc, ifDRelated, ifDLocation, ifDetails;
+        var upRelatedCheckbox = "N/A";
+        ifDSerial, ifDUpc, ifDRelated, ifDLocation, ifDetails = ""; 
+        if(isSet(ass.Serial)) { ifDSerial = "<strong>Serial: </strong>" + ass.Serial + "<br/>"; }
+        if(isSet(ass.UPC)) { ifDUpc = "<strong>UPC: </strong>" + ass.UPC + "<br/>"; }
+        if(isSet(ass.Related)) { 
+            ifDRelated = "<strong>Related: </strong>" + ass.Related + "<br/>";
+            upRelatedCheckbox = "<input type='checkbox' class='Check2Update' name='AssetSetUpdate[" + assCounter + "]' />";
+        }
+        if(isSet(ass.Location)) { ifDLocation = "<strong>Location: </strong>" + ass.Location + "<br/>"; }
+        var ifDetailsComb = ifDSerial + ifDUpc + ifDRelated + ifDLocation;
+        if(isSet(ifDetailsComb)) {
+            ifDetails = "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/ic_lst.jpeg'/>" +
+                "<div class='UPopO'>" + ifDetailsComb + "</div></div>";
+        }
+        var assUpForm = "<form class='tr' id='AssetUpdateForm[" + assCounter + "]'>" +
+                "<input type='hidden' name='AssetID[" + assCounter + "]' value='" + assCounter + "' />" +
+                "<span class='td'>" +
+                "<input type='hidden' name='AssetDescription[" + assCounter + "]' value='" + ass.Description + "'/>" +
+                "<a href='" + onlineAssetSearch('" + ass.Description + "') + "' target='_new_AssetSearch' />" +
+                ass.Description + "</a></span>" +
+                "<span class='td'>" + ass.Type + " - " + ass.Category + "</span>" +
+                "<span class='td'>" + upRelatedCheckbox + "</span>" +
+                "<span class='td'><input type='number' name='AssetValue[" + assCounter + "]' value='" + ass.Value + "' style='width: 75px;' /></span>" +
+                "<span class='" + cAge + "'>" + cAge + "</span>" +
+                "<span class='td><input type='text' name='AssetNotes[" + assCounter + "]' value='" + ass.Notes + "' style='width: 140px;' /><span>" +
+                "<span class='td'>" + ifDetails + "</span>" +
+                "</form>";
+        assCounter++;
+    });
+    rData += abgBubble + abkBubble + adtBubble + aliBundle + ameBundle + "<p>" +
+            asTable + "</div></div><p><em>Spaec intentionally left blank for pop-over</em>";
     dojo.byId("FBAsset").innerHTML = rData;
     $("#FBAsset").toggle();
 }
