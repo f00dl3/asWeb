@@ -71,7 +71,7 @@ function getObsDataMerged(targetDiv, displayType) {
     var dateOverrideStart = getDate("hour", -1, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var obsJson = getResource("Wx");
-    var obsJsonPostData = "doWhat=getObjsJson" +
+    var obsJsonPostData = "doWhat=getObsJsonMerged" +
         "&startTime=" + dateOverrideStart +
         "&endTime=" + dateOverrideEnd +
         "&order=DESC" +
@@ -84,8 +84,8 @@ function getObsDataMerged(targetDiv, displayType) {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            var lastData = data.wxObsM1H;
-            var theData = data.wxObsNow[0].jsonSet;
+            var lastData = JSON.parse(data.wxObsM1H);
+            var theData = JSON.parse(data.wxObsNow[0].jsonSet);
             var indoorObs = data.indoorObs;
             var lastData;
             switch(displayType) {
@@ -118,7 +118,7 @@ function processMarqueeData(theData, lastData, targetDiv) {
         returnData += "<div id='WxObsMarq'>";
         returnData += "<strong>WARNING! " + stationId + " [Marq] data unavailable!</strong>";
         returnData += "<br/>Fetch timestamp: " + getTime;
-        console.log(data);
+        console.log(theData);
     } else {
         var diffTemperature = parseInt(theData.Temperature) - parseInt(lastData.Temperature);
         var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);

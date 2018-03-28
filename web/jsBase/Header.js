@@ -26,12 +26,18 @@ function animatedArrow(thisArrow) {
     }
 }
 
-function aniPreload(type) {
-    var docSize = $("html").html().length;
-    switch(type) {
-        case "on": $(".preload").fadeIn("slow", function() { $(this).show(); dojo.byId("preloadSize").innerHTML = Math.round(docSize/1024) + " KB"; }); break;
-        case "off": $(".preload").fadeOut("slow", function() { $(this).hide(); dojo.byId("preloadSize").innerHTML = Math.round(docSize/1024) + " KB"; }); break;
+function aniPreload(turn) {
+    aniPreloadGetSize();
+    switch(turn) {
+        case "on": $(".preload").fadeIn("slow", function() { $(this).show(); }); break;
+        case "off": $(".preload").fadeOut("slow", function() { $(this).hide(); }); break;
     }
+}
+
+function aniPreloadGetSize() {
+    setInterval(function() { 
+        dojo.byId("preloadSize").innerHTML = Math.round(($("html").html().length)/1024) + " KB";
+    }, 250);
 }
 
 function autoColorScale(tData,tMax,tMin,tForcedAvg) { 
