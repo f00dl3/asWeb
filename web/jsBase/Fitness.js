@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 26 Feb 2018
+Updated: 28 Feb 2018
  */
 
 var bicycleUsed = "A16";
@@ -274,7 +274,7 @@ function getFitnessAllData(inXdt1, inXdt2) {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            processFitnessAll(data.allRecs);
+            processFitnessAll(data.allRecs, data.autoMpg[0]);
             fitnessCalories(data.calories);
             fitnessPlans(data.plans);
             fitnessToday(data.today[0]);
@@ -317,8 +317,10 @@ function getMapLinkString(inDate, inType, inAct, commonFlag) {
     return genString;
 }
 
-function processFitnessAll(dataIn) {
-        var fitTableDefs = [
+function processFitnessAll(dataIn, autoMpg) {
+    var costPerMileTco = 14000/((autoMpg.EndMiles - 47500) + 60000);
+    var costPerMile = costPerMileTco + cpmNoMpg + (autoMpg.AvgCost / ((autoMpg.EndMiles - autoMpg.StartMiles) / autoMpg.Gallons));
+    var fitTableDefs = [
         "Date",
         "Weight",
         "RunWalk",

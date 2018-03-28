@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 27 Mar 2018
+Updated: 28 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -260,7 +260,7 @@ function putNavi() {
             "<span>" + goHome + " (Logout)</span>" +
             "<span id='naviLinks'></span>";
     dojo.byId("NaviHolder").innerHTML = rData;
-    getWebLinks("naviLinks");
+    getWebLinks("Anthony.php-0", "naviLinks", null);
 }
 
 function putWebLinks(data, whereTo, a3dFlags) {

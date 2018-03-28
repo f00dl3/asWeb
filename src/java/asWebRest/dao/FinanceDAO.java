@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 18 Mar 2018
+Updated: 28 Mar 2018
 */
 
 package asWebRest.dao;
@@ -11,6 +11,7 @@ import asWebRest.secure.MortgageBeans;
 import asWebRest.shared.CommonBeans;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -260,7 +261,7 @@ public class FinanceDAO {
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("Descriptions", resultSet.getString("Description"))
+                    .put("Description", resultSet.getString("Description"))
                     .put("Quantity", resultSet.getDouble("Quantity"))
                     .put("Location", resultSet.getString("Location"))
                     .put("Checked", resultSet.getString("Checked"));
@@ -528,4 +529,11 @@ public class FinanceDAO {
         return tContainer;
     }
      
+    public String setAssetTrackUpdate(List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        String query_FBook_ATrackUp = "UPDATE FB_Assets SET Value=?, Notes=?, Checked=CURDATE() WHERE Description=?;";
+        try { returnData = wc.q2do(query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
 }
