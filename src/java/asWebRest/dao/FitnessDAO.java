@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Mar 2018
+Updated: 28 Mar 2018
 */
 
 package asWebRest.dao;
@@ -28,7 +28,7 @@ public class FitnessDAO {
                 " f.TrackedTime, f.TrackedDist," +
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
                 " f.RunSpeedAvg, f.RunSpeedMax, f.RunHeartAvg, f.RunHeartMax," +
-                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags," +
+                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags, f.Vomit," +
                 " cf6.High, cf6.Low, cf6.Average," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
@@ -85,6 +85,7 @@ public class FitnessDAO {
                     .put("GymWorkout", resultSet.getString("GymWorkout"))
                     .put("CommonRoute", resultSet.getInt("CommonRoute"))
                     .put("xTags", resultSet.getString("xTags"))
+                    .put("Vomit", resultSet.getInt("Vomit"))
                     .put("High", resultSet.getInt("High"))
                     .put("Low", resultSet.getInt("Low"))
                     .put("Average", resultSet.getInt("Average"))
@@ -352,7 +353,7 @@ public class FitnessDAO {
     }
     
     public JSONArray getDay() {
-        final String query_Fitness_Day = "SELECT Weight, RunWalk, Shoe, RSMile, Cycling, Gym, GymWorkout, TrackedTime, TrackedDist, BkStudT, ReelMow, MowNotes, CommonRoute, xTags FROM Core.Fitness WHERE Date=CURDATE();";
+        final String query_Fitness_Day = "SELECT Weight, RunWalk, Shoe, RSMile, Cycling, Gym, GymWorkout, TrackedTime, TrackedDist, BkStudT, ReelMow, MowNotes, CommonRoute, xTags, Vomit FROM Core.Fitness WHERE Date=CURDATE();";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Fitness_Day, null);
@@ -372,7 +373,8 @@ public class FitnessDAO {
                     .put("ReelMow", resultSet.getInt("ReelMow"))
                     .put("MowNotes", resultSet.getString("MowNotes"))
                     .put("CommonRoute", resultSet.getInt("CommonRoute"))
-                    .put("xTags", resultSet.getString("xTags"));
+                    .put("xTags", resultSet.getString("xTags"))
+                    .put("Vomit", resultSet.getInt("Vomit"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -714,12 +716,12 @@ public class FitnessDAO {
             }
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
-                " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags) VALUES" +
-                " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?)" +
+                " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags,Vomit) VALUES" +
+                " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?,?)" +
                 " ON DUPLICATE KEY UPDATE" +
                 " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
-		" Bicycle=?, CommonRoute=?, xTags=?;";
+		" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }

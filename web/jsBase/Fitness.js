@@ -236,7 +236,11 @@ function fitnessToday(dataIn) {
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
-    if(!isSet(dataIn.xTags)) { xTags = ""; } else { xTags = dataIn.xTags; }
+    if(!isSet(dataIn.xTags)) {
+        if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
+    } else {
+        xTags = dataIn.xTags; if(dataIn.Vomit === 1) { xTags += " VO"; }
+    }
     if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
     if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
     var holderData = "<div class='UBox'>Today" +
@@ -406,6 +410,7 @@ function processFitnessAll(dataIn, autoMpg) {
                     "</tbody></table><p>" +
                     "<strong>Liquids:</strong> " + tData.Water + "<br/>" +
                     "<strong>Fruits/Veggies:</strong> " + tData.FruitsVeggies + "<p>" +
+                    "<strong>Puked:</strong> " + tData.Vomit + "<br/>" +
                     "<em>Based off 2500 cals</em></td></tr></tbody></table>";
         }
         var extra = " ";

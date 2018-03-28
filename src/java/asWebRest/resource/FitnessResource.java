@@ -193,10 +193,20 @@ public class FitnessResource extends ServerResource {
                     String todayMowNotes = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
                     String todayBicycle = null; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
                     String todayCommonRoute = null; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);
-                    String todayX = null; if(wc.isSet(argsInForm.getFirstValue("TodayX"))) { todayX = argsInForm.getFirstValue("TodayX"); } qParams.add(todayX);
+                    String todayX = null; String todayVomit = null;
+                    if(wc.isSet(argsInForm.getFirstValue("TodayX"))) {
+                        String variableField = argsInForm.getFirstValue("TodayX");
+                        if(variableField.contains("VO")) {
+                            todayVomit = "1";
+                            todayX = variableField.replace("VO", "");
+                        } else {
+                            todayVomit = "0";
+                        }
+                    }
+                    qParams.add(todayX); qParams.add(todayVomit);
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
-                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX);
+                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit);
                     returnData += updateFitnessAction.setUpdateToday(qParams);
                     break;                    
             }
