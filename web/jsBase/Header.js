@@ -8,10 +8,11 @@ var annMaint = 910.66;
 var annMiles = 12672;
 var carOwnershipYears = (2018-2010);
 var carStartMiles = 44150;
+var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
 var timeOutMilli = (60*1000);
 var hiddenFeatures = 0;
-var costPerMile = 3.50;
+var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
 
 $(window).on('load', function() {
     aniPreload("off");

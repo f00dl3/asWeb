@@ -1,13 +1,11 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 27 Mar 2018
-
+Updated: 28 Mar 2018
  */
 
-var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
-
 function getObsData(targetDiv, displayType) {
+    aniPreload("on");
     var obsJson = getResource("Wx");
     var obsJsonLastPostData = "doWhat=getObsJsonLast";
     var arObsJsonMq = {
@@ -27,8 +25,7 @@ function getObsData(targetDiv, displayType) {
                     lastData = JSON.parse(data[0].jsonData).KOJC;
                     switch(displayType) {
                         case "marquee":
-                            processMarqueeData(theData, lastData);
-                            $(targetDiv).html(data.WxObsMarq).marquee();
+                            processMarqueeData(theData, lastData, targetDiv);
                             break;
                         case "static":
                             processObservationData(nowObsId, theData, lastData, indoorObs);
@@ -38,10 +35,12 @@ function getObsData(targetDiv, displayType) {
                 },
                 function(error) {
                     lastData = "";
-                },
+                }
             );
+            aniPreload("off");
         },
         error: function(data, iostatus) {
+            aniPreload("off");
             window.alert("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
@@ -64,7 +63,7 @@ function getObsData(targetDiv, displayType) {
     console.log(obsJsonPostData);
 }
 
-function processMarqueeData(theData, lastData) {
+function processMarqueeData(theData, lastData, targetDiv) {
     if(theData === "") { console.log("ERROR fetching ThisMarqData"); }
     if(lastData === "") { console.log("ERROR fetching LastMarqData"); }
     var returnData = "";
@@ -111,8 +110,8 @@ function processMarqueeData(theData, lastData) {
         returnData += " MSLP: " + animatedArrow(diffPressure) + theData.Pressure + " <span>mb</span> --- ";
     }
     returnData += "</div>";
-    dojo.byId("disHolder").innerHTML = returnData;
-    console.log("returnData: " + returnData);
+    dojo.byId(targetDiv).innerHTML = returnData;
+    $("#WxObsMarq").marquee();
 }
 
 function processObservationData(nowObsId, theData, lastData, indoorObs) {

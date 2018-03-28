@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    27 Mar 2018
+    Updated:    28 Mar 2018
     Author     : astump
 --%>
 
@@ -32,9 +32,9 @@
     if(scripts.equals("true")) {
         switch(title) {
             case "Anthony":
-                scripts2Load += "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>" +
-                        "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
+                scripts2Load += "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
+                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
+                        "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
                 break;
             case "Entertain":
                 scripts2Load += "<script src='"+rootPath+"/jsBase/MediaServ.js'></script>";
