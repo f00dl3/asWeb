@@ -14,8 +14,7 @@ var hiddenFeatures = 0;
 var costPerMile = 3.50;
 
 $(window).on('load', function() {
-	var docSize = $("html").html().length;
-	$(".preload").fadeOut("slow", function() { $(this).hide(); });
+    aniPreload("off");
 });
 
 function animatedArrow(thisArrow) {
@@ -23,6 +22,14 @@ function animatedArrow(thisArrow) {
         case (thisArrow > 0): return "<img class='arrow' src='"+getBasePath("ui")+"/img/Icons/ar_up.gif'/>";
         case (thisArrow < 0): return "<img class='arrow' src='"+getBasePath("ui")+"/img/Icons/ar_dn.gif'/>";
         case (thisArrow === 0): return "";
+    }
+}
+
+function aniPreload(type) {
+    var docSize = $("html").html().length;
+    switch(type) {
+        case "on": $(".preload").fadeIn("slow", function() { $(this).show(); dojo.byId("preloadSize").innerHTML = Math.round(docSize/1024) + " KB"; }); break;
+        case "off": $(".preload").fadeOut("slow", function() { $(this).hide(); dojo.byId("preloadSize").innerHTML = Math.round(docSize/1024) + " KB"; }); break;
     }
 }
 

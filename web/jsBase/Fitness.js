@@ -262,6 +262,7 @@ function fitnessToday(dataIn) {
 }
 
 function getFitnessAllData(inXdt1, inXdt2) {
+    aniPreload("on");
     var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
@@ -288,8 +289,10 @@ function getFitnessAllData(inXdt1, inXdt2) {
                 data.bkInf[0],
                 data.yData[0]
             );
+            aniPreload("off");
         },
         error: function(data, iostatus) {
+            aniPreload("off");
             window.alert("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
@@ -461,6 +464,7 @@ function populateSearchBox() {
 }
 
 function putCalories(formData) {
+    aniPreload("on");
     formData.doWhat = "putCalories";
     var xhArgs = {
         preventCache: true,
@@ -471,8 +475,10 @@ function putCalories(formData) {
         load: function(data) {
             showNotice(data.callbackData.totCal + " calories added!");
             getFitnessAllData();
+            aniPreload("off");
         },
         error: function(data, iostatus) {
+            aniPreload("off");
             window.alert("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
@@ -480,6 +486,7 @@ function putCalories(formData) {
 }
 
 function putRoute(formData) {
+    aniPreload("on");
     formData.doWhat = "putRoute";
     var xhArgs = {
         preventCache: true,
@@ -490,8 +497,10 @@ function putRoute(formData) {
         load: function(data) {
             showNotice(data.routesDone[0] + " done!");
             getFitnessAllData();
+            aniPreload("off");
         },
         error: function(data, iostatus) {
+            aniPreload("off");
             window.alert("xhrPost for Route FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
@@ -499,6 +508,7 @@ function putRoute(formData) {
 }
 
 function putUpdateToday(formData) {
+    aniPreload("on");
     formData.doWhat = "putToday";
     var xhArgs = {
         preventCache: true,
@@ -509,9 +519,11 @@ function putUpdateToday(formData) {
         load: function(data) {
             showNotice("Updated today's activites!");
             getFitnessAllData();
+            aniPreload("off");
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for UpdateToday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
         }
     };
     dojo.xhrPost(xhArgs);

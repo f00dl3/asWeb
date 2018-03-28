@@ -38,7 +38,7 @@ function getObsData(targetDiv, displayType) {
                 },
                 function(error) {
                     lastData = "";
-                }
+                },
             );
         },
         error: function(data, iostatus) {

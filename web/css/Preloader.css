@@ -1,3 +1,10 @@
+#preloadSize {
+    background: black;
+    opacity: 0.8;
+    border: 1px solid yellow;
+    color: yellow;
+}
+
 .preload {
 	position: absolute;
 	top: 50%;

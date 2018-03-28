@@ -71,7 +71,8 @@
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
         " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>" +
-        " <div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/></div>" +
+        " <div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
+        " <strong><span id='preloadSize'></span></strong></div>" +
         " <div id='NoticeHolder'></div>" +
         " <div id='NaviHolder'></div>" +
         miniHeader;

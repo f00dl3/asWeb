@@ -145,6 +145,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
 }
 
 function getFinanceData() {
+    aniPreload("on");
     var thePostData = "doWhat=getFinanceData";
     var xhArgs = {
         preventCache: true,
@@ -166,8 +167,10 @@ function getFinanceData() {
                     data.qMedia[0]
                     );
             naviButtonListener();
+            aniPreload("off");
         },
         error: function (data, iostatus) {
+            aniPreload("off");
             window.alert("xhrGet for FinanceData FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
@@ -526,6 +529,7 @@ function searchAheadCheckbook() {
 }
 
 function setAssetUpdate(formData) {
+    aniPreload("on");
     formData.doWhat = "putAssetTrackUpdate";
     var xhArgs = {
         preventCache: true,
@@ -536,8 +540,10 @@ function setAssetUpdate(formData) {
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
             getFinanceData();
+            aniPreload("off");
         },
-        error: function (data, iostatus) {
+        error: function (data, iostatus) { 
+            aniPreload("off");
             window.alert("xhrPost for AssetTrackUpdate FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
