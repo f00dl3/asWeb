@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 8 Mar 2018
+Updated: 28 Mar 2018
  */
 
 package asWebRest.resource;
@@ -11,6 +11,7 @@ import asWebRest.dao.WeatherDAO;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
@@ -23,6 +24,7 @@ public class WeatherResource extends ServerResource {
 
         List<String> qParams = new ArrayList<>();      
         List<String> inParams = new ArrayList<>();      
+        JSONObject mergedResults = new JSONObject();
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         final Form argsInForm = new Form(argsIn);
         
@@ -49,6 +51,24 @@ public class WeatherResource extends ServerResource {
                     JSONArray wxObs = getWeatherAction.getObsJson(qParams, inParams);
                     returnData = wxObs.toString();
                     break;
+                    
+                case "getObsJsonMerged":
+                    try {
+                        inParams.add(0, argsInForm.getFirstValue("startTime"));
+                        inParams.add(1, argsInForm.getFirstValue("endTime"));
+                        inParams.add(2, argsInForm.getFirstValue("order"));
+                        inParams.add(3, argsInForm.getFirstValue("limit"));
+                        inParams.add(4, argsInForm.getFirstValue("stationId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray wxObsB = getWeatherAction.getObsJsonByStation(inParams);
+                    JSONArray latestObsB = getWeatherAction.getObsJsonLast();
+                    mergedResults
+                        .put("wxObsM1H", wxObsB)
+                        .put("wxObsNow", latestObsB);
+                    returnData = mergedResults.toString();
+                    break;          
                     
                 case "getObsJsonLast":
                     JSONArray latestObs = getWeatherAction.getObsJsonLast();

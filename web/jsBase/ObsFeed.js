@@ -45,12 +45,14 @@ function getObsData(targetDiv, displayType) {
         }
     };
     
-    var dateOverrideStart = getDate("hour", -1, "full"); 
+    var dateOverrideStart = getDate("hour", -2, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var obsJsonPostData = "doWhat=getObjsJson" +
         "&startTime=" + dateOverrideStart +
         "&endTime=" + dateOverrideEnd +
-        "&limit=1";
+        "&order=DESC" +
+        "&limit=1" +
+        "&stationId=KOJC";
 
     var arObsJson = {
         preventCache: true,
@@ -61,6 +63,48 @@ function getObsData(targetDiv, displayType) {
     };
     dojo.xhrPost(arObsJsonMq);
     console.log(obsJsonPostData);
+}
+
+
+function getObsDataMerged(targetDiv, displayType) {
+    aniPreload("on");
+    var dateOverrideStart = getDate("hour", -1, "full"); 
+    var dateOverrideEnd = getDate("hour", 0, "full");
+    var obsJson = getResource("Wx");
+    var obsJsonPostData = "doWhat=getObjsJson" +
+        "&startTime=" + dateOverrideStart +
+        "&endTime=" + dateOverrideEnd +
+        "&order=DESC" +
+        "&limit=1" +
+        "&stationId=KOJC";
+    var arObsJsonMq = {
+        preventCache: true,
+        url: obsJson,
+        postData: obsJsonPostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            var lastData = data.wxObsM1H;
+            var theData = data.wxObsNow[0].jsonSet;
+            var indoorObs = data.indoorObs;
+            var lastData;
+            switch(displayType) {
+                case "marquee":
+                    processMarqueeData(theData, lastData, targetDiv);
+                    break;
+                case "static":
+                    processObservationData(theData, lastData, indoorObs);
+                    $(targetDiv).html(data.WxObs);
+                    break;
+            }
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(arObsJsonMq);
 }
 
 function processMarqueeData(theData, lastData, targetDiv) {

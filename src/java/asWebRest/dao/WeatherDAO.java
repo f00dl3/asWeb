@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 27 Feb 2018
+Updated: 28 Mar 2018
  */
 
 package asWebRest.dao;
@@ -616,12 +616,13 @@ public class WeatherDAO {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String order = inParams.get(2);
-        final String station = "$." + inParams.get(3);
+        final String limit = inParams.get(3);
+        final String station = "$." + inParams.get(4);
         final String query_ObsJSONbyStation = "SELECT ObsID, GetTime, jsonSet FROM (" +
 		" SELECT ObsID, GetTime, JSON_EXTRACT(jsonData, '"+station+"') as jsonSet FROM WxObs.StationDataIndexed WHERE GetTime BETWEEN '"+xdt1+"' AND '"+xdt2+"' UNION ALL" +
 		" SELECT ObsID, GetTime, JSON_EXTRACT(jsonData, '"+station+"') as jsonSet FROM WxObs.RapidSDI WHERE GetTime BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
                 " ) as tmpSet" +
-                " ORDER BY GetTime "+order+" LIMIT 720;";
+                " ORDER BY GetTime "+order+" LIMIT "+limit+";";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_ObsJSONbyStation, null);
