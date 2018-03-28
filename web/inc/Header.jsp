@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    26 Mar 2018
+    Updated:    27 Mar 2018
     Author     : astump
 --%>
 
@@ -41,6 +41,11 @@
                 break;
             case "Fitness":
                 scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
+                break;
+            case "WxLive":
+                scripts2Load += "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>" +
+                        "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
+                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
                 break;
         }
         scripts2Load += "<script src='"+rootPath+"/jsBase/"+title+".js'></script>";

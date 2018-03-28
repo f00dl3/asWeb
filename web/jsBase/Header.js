@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 26 Mar 2018
+Updated: 27 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -125,6 +125,8 @@ function getBasePath(opt) {
     if(checkMobile()) { tBase += ":8082"; }
     tBase = "https:" + tBase;
     switch(opt) {
+        case "g2OutOld": tBase += "/G2Out"; break;
+        case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
@@ -167,47 +169,25 @@ function getResource(what) {
     }
 }
 
-function getWeblinks(whereTo) {
-    
+function getWebLinks(master, whereTo, a3dFlags) {
     var urlXhr1 = getBasePath("rest")+"/WebLinks";
-
     var arXhr1 = {
         url: urlXhr1,
         handleAs: "json",
-        postData: "master=Anthony.php-0",
+        postData: "master=" + master,
         timeout: timeOutMilli,
         load: function(data) {
-            var placeholder;
-            if(checkMobile() || !checkMobile()) {
-                placeholder = "<ul>";
-                for (var i = 0; i < data.length; i++) {
-                    var theData = data[i];
-                    var theLink;
-                    if(checkMobile() && isSet(theData.DesktopLink)) {
-                        theLink = theData.DesktopLink;
-                    } else {
-                        if(isSet(theData.TomcatURL)) {
-                            theLink = theData.TomcatURL;
-                        } else {
-                            theLink = theData.URL;
-                        }
-                    }
-                    placeholder += "<li><a href='"+theLink+"'>";
-                    placeholder += theData.Description;
-                    placeholder += "</a></li>";
-                }
-                placeholder += "</ul>";
-                dojo.byId(whereTo).innerHTML = placeholder;
+            if(isSet(whereTo)) {
+                putWebLinks(data, whereTo, a3dFlags);
+            } else {
+                return data;
             }
-
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet arXhr1: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            window.alert("xhrGet WebLinks: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
-
     dojo.xhrPost(arXhr1);
-    
 }
 
 function getWebVersion(whereTo) {
@@ -229,7 +209,7 @@ function getWebVersion(whereTo) {
     dojo.xhrGet(xhrWebVersionArgs);
 }
 
-function iLinks3d(elems, maxW, maxH, tFact) {
+function imageLinks3d(elems, maxW, maxH, tFact) {
 	var numElems = elems.length;
         var rotation = 0;
 	var radius = Math.floor(320/(2*Math.tan(deg2rad(180/(numElems/tFact)))));
@@ -241,7 +221,7 @@ function iLinks3d(elems, maxW, maxH, tFact) {
             thisCSS += "transform: rotateY(" + Math.round(rotation, 0) + "deg) translateZ(" + radius + "px);";
             thisCSS += " padding: 4px 4px;";
             thisCSS += "'";
-            genOut += element.replace("/styleReplace/", thisCSS);
+            genOut += element.replace("styleReplace", thisCSS);
             rotation += (360 / numElems);
 	});
 	genOut += "</div></div>";
@@ -281,6 +261,28 @@ function putNavi() {
             "<span id='naviLinks'></span>";
     dojo.byId("NaviHolder").innerHTML = rData;
     getWebLinks("naviLinks");
+}
+
+function putWebLinks(data, whereTo, a3dFlags) {
+    var placeholder;
+    var numElems = data.length;
+    data.forEach(function (theData) {
+        var theLink;
+        if(checkMobile() && isSet(theData.DesktopLink)) {
+            theLink = theData.DesktopLink;
+        } else {
+            if(isSet(theData.TomcatURL)) {
+                theLink = theData.TomcatURL;
+            } else {
+                theLink = theData.URL;
+            }
+        }
+        placeholder += "<li><a href='"+theLink+"'>";
+        placeholder += theData.Description;
+        placeholder += "</a></li>";
+        placeholder += "</ul>";
+    });
+    dojo.byId(whereTo).innerHTML = placeholder;
 }
 
 function timeMinutes(inMin) {
@@ -347,17 +349,6 @@ function GetDirectorySize($path) {
 			$bytestotal += $object->getSize();
 		}
 	} return $bytestotal;
-}
-                            
-function ReturnWebLinks($thisMaster) {
-	global $dbpdo;
-	global $query_WebLinks;
-	$thisMaster = "%" . $thisMaster . "%";
-	$stmt = $dbpdo -> prepare($query_WebLinks);
-	$stmt -> bindValue(":Master", $thisMaster, PDO::PARAM_STR);
-	$stmt -> execute();
-	while ($row = $stmt -> fetch(PDO::FETCH_ASSOC)) { $rows[] = $row; }
-	return $rows;
 }
                             
 class SortedIterator extends SplHeap {

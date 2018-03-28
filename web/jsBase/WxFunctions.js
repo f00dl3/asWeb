@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 23 Mar 2018
+Updated: 27 Mar 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -199,6 +199,133 @@ function conv2Tf(tCel) {
     } else {
         return '';
     }
+}
+
+function heights2Elevations(what, order) {
+    var heights = [
+        1000,
+        975, 950, 925, 900,
+        875, 850, 825, 800,
+        775, 750, 725, 700,
+        675, 650, 625, 600,
+        575, 550, 525, 500,
+        475, 450, 425, 400,
+        375, 350, 325, 300,
+        275, 250, 225, 200,
+        175, 150, 125, 100,
+    ];
+    var h2eMap = [
+        0.4, 1.0, 1.7, 2.5, 3.2, 4.0, 4.8, 5.6, 6.4, 7.2,
+        8.1, 9.0, 9.9, 10.8, 11.8, 12.8, 13.8, 14.9, 16.0, 17.1,
+        18.2, 19.5, 20.8, 22.2, 23.6, 25.1, 26.6, 28.3, 30.1, 31.9,
+        34.0, 36.2, 38.6, 41.3, 47.7, 51.8
+    ];
+    switch(what) {
+        case "height": if(order === "t2b") { heights.reverse(); } return heights; break;
+        case "elev": if(order === "t2b") { h2eMap.reverse(); } return h2eMap; break;
+    }
+}
+
+function parseWxObs(stationData) {
+    var obsData = {
+        "TimeString": stationData.TimeString,
+        "SfcT": stationData.Temperature, "H1000T": stationData.T1000,
+        "H975T": conv2Tf(stationData.T975), "H950T": conv2Tf(stationData.T950),
+        "H925T": conv2Tf(stationData.T925), "H900T": conv2Tf(stationData.T900),
+        "H875T": conv2Tf(stationData.T975), "H850T": conv2Tf(stationData.T950),
+        "H825T": conv2Tf(stationData.T825), "H800T": conv2Tf(stationData.T800),
+        "H775T": conv2Tf(stationData.T975), "H750T": conv2Tf(stationData.T950),
+        "H725T": conv2Tf(stationData.T725), "H700T": conv2Tf(stationData.T700),
+        "H675T": conv2Tf(stationData.T975), "H650T": conv2Tf(stationData.T950),
+        "H625T": conv2Tf(stationData.T625), "H600T": conv2Tf(stationData.T600),
+        "H575T": conv2Tf(stationData.T975), "H550T": conv2Tf(stationData.T950),
+        "H525T": conv2Tf(stationData.T525), "H500T": conv2Tf(stationData.T500),
+        "H475T": conv2Tf(stationData.T975), "H450T": conv2Tf(stationData.T950),
+        "H425T": conv2Tf(stationData.T425), "H400T": conv2Tf(stationData.T400),
+        "H375T": conv2Tf(stationData.T975), "H350T": conv2Tf(stationData.T950),
+        "H325T": conv2Tf(stationData.T325), "H300T": conv2Tf(stationData.T300),
+        "H275T": conv2Tf(stationData.T975), "H250T": conv2Tf(stationData.T950),
+        "H225T": conv2Tf(stationData.T225), "H200T": conv2Tf(stationData.T200),
+        "H175T": conv2Tf(stationData.T975), "H150T": conv2Tf(stationData.T950),
+        "H125T": conv2Tf(stationData.T125), "H100T": conv2Tf(stationData.T100),
+        "SfcWS": stationData.WindSpeed, "H1000WS": conv2Mph(stationData.WS1000),
+        "H975WS": conv2Mph(stationData.WS975),"H950WS": conv2Mph(stationData.WS950),
+        "H925WS": conv2Mph(stationData.WS925), "H900WS": conv2Mph(stationData.WS900),
+        "H875WS": conv2Mph(stationData.WS875), "H850WS": conv2Mph(stationData.WS850),
+        "H825WS": conv2Mph(stationData.WS825), "H800WS": conv2Mph(stationData.WS800),
+        "H775WS": conv2Mph(stationData.WS75), "H750WS": conv2Mph(stationData.WS950),
+        "H725WS": conv2Mph(stationData.WS725), "H700WS": conv2Mph(stationData.WS700),
+        "H675WS": conv2Mph(stationData.WS675), "H650WS": conv2Mph(stationData.WS650),
+        "H625WS": conv2Mph(stationData.WS625), "H600WS": conv2Mph(stationData.WS600),
+        "H575WS": conv2Mph(stationData.WS575), "H550WS": conv2Mph(stationData.WS550),
+        "H525WS": conv2Mph(stationData.WS525), "H500WS": conv2Mph(stationData.WS500),
+        "H475WS": conv2Mph(stationData.WS475), "H450WS": conv2Mph(stationData.WS450),
+        "H425WS": conv2Mph(stationData.WS425), "H400WS": conv2Mph(stationData.WS400),
+        "H375WS": conv2Mph(stationData.WS375), "H350WS": conv2Mph(stationData.WS350),
+        "H325WS": conv2Mph(stationData.WS325), "H300WS": conv2Mph(stationData.WS300),
+        "H275WS": conv2Mph(stationData.WS275), "H250WS": conv2Mph(stationData.WS250),
+        "H225WS": conv2Mph(stationData.WS225), "H200WS": conv2Mph(stationData.WS200),
+        "H175WS": conv2Mph(stationData.WS175), "H150WS": conv2Mph(stationData.WS150),
+        "H125WS": conv2Mph(stationData.WS125), "H100WS": conv2Mph(stationData.WS100),
+        "SfcWV": windDirSvg(stationData.WindDegrees), "H1000WV": windDirSvg(stationData.WD1000),
+        "H975WV": windDirSvg(stationData.WD975), "H950WV": windDirSvg(stationData.WD950),
+        "H925WV": windDirSvg(stationData.WD925), "H900WV": windDirSvg(stationData.WD900),
+        "H875WV": windDirSvg(stationData.WD875), "H850WV": windDirSvg(stationData.WD850),
+        "H825WV": windDirSvg(stationData.WD825), "H800WV": windDirSvg(stationData.WD800),
+        "H775WV": windDirSvg(stationData.WD775), "H750WV": windDirSvg(stationData.WD750),
+        "H725WV": windDirSvg(stationData.WD725), "H700WV": windDirSvg(stationData.WD700),
+        "H675WV": windDirSvg(stationData.WD675), "H650WV": windDirSvg(stationData.WD650),
+        "H625WV": windDirSvg(stationData.WD625), "H600WV": windDirSvg(stationData.WD600),
+        "H575WV": windDirSvg(stationData.WD575), "H550WV": windDirSvg(stationData.WD550),
+        "H525WV": windDirSvg(stationData.WD525), "H500WV": windDirSvg(stationData.WD500),
+        "H475WV": windDirSvg(stationData.WD475), "H450WV": windDirSvg(stationData.WD450),
+        "H425WV": windDirSvg(stationData.WD425), "H400WV": windDirSvg(stationData.WD400),
+        "H375WV": windDirSvg(stationData.WD375), "H350WV": windDirSvg(stationData.WD350),
+        "H325WV": windDirSvg(stationData.WD325), "H300WV": windDirSvg(stationData.WD300),
+        "H275WV": windDirSvg(stationData.WD275), "H250WV": windDirSvg(stationData.WD250),
+        "H225WV": windDirSvg(stationData.WD225), "H200WV": windDirSvg(stationData.WD200),
+        "H175WV": windDirSvg(stationData.WD175), "H150WV": windDirSvg(stationData.WD150),
+        "H125WV": windDirSvg(stationData.WD125), "H100WV": windDirSvg(stationData.WD100),
+        "SfcH": relativeHumdiity(stationData.Temperature, stationData.Dewpoint), "H1000H": relativeHumidity(conv2Tf(stationData.T1000), conv2Tf(stationData.D1000)),
+        "H975H": relativeHumidity(conv2Tf(stationData.T975), conv2Tf(stationData.D975)), "H950H": relativeHumidity(conv2Tf(stationData.T950), conv2Tf(stationData.D950)),
+        "H925H": relativeHumidity(conv2Tf(stationData.T925), conv2Tf(stationData.D925)), "H900H": relativeHumidity(conv2Tf(stationData.T900), conv2Tf(stationData.D900)),
+        "H875H": relativeHumidity(conv2Tf(stationData.T875), conv2Tf(stationData.D875)), "H850H": relativeHumidity(conv2Tf(stationData.T850), conv2Tf(stationData.D850)),
+        "H825H": relativeHumidity(conv2Tf(stationData.T825), conv2Tf(stationData.D825)), "H800H": relativeHumidity(conv2Tf(stationData.T800), conv2Tf(stationData.D800)),
+        "H775H": relativeHumidity(conv2Tf(stationData.T775), conv2Tf(stationData.D775)), "H750H": relativeHumidity(conv2Tf(stationData.T750), conv2Tf(stationData.D750)),
+        "H725H": relativeHumidity(conv2Tf(stationData.T725), conv2Tf(stationData.D725)), "H700H": relativeHumidity(conv2Tf(stationData.T700), conv2Tf(stationData.D700)),
+        "H675H": relativeHumidity(conv2Tf(stationData.T675), conv2Tf(stationData.D675)), "H650H": relativeHumidity(conv2Tf(stationData.T650), conv2Tf(stationData.D650)),
+        "H625H": relativeHumidity(conv2Tf(stationData.T625), conv2Tf(stationData.D625)), "H600H": relativeHumidity(conv2Tf(stationData.T600), conv2Tf(stationData.D600)),
+        "H575H": relativeHumidity(conv2Tf(stationData.T575), conv2Tf(stationData.D575)), "H550H": relativeHumidity(conv2Tf(stationData.T550), conv2Tf(stationData.D550)),
+        "H525H": relativeHumidity(conv2Tf(stationData.T525), conv2Tf(stationData.D525)), "H500H": relativeHumidity(conv2Tf(stationData.T500), conv2Tf(stationData.D500)),
+        "H475H": relativeHumidity(conv2Tf(stationData.T475), conv2Tf(stationData.D475)), "H450H": relativeHumidity(conv2Tf(stationData.T450), conv2Tf(stationData.D450)),
+        "H425H": relativeHumidity(conv2Tf(stationData.T425), conv2Tf(stationData.D425)), "H400H": relativeHumidity(conv2Tf(stationData.T400), conv2Tf(stationData.D400)),
+        "H375H": relativeHumidity(conv2Tf(stationData.T375), conv2Tf(stationData.D375)), "H350H": relativeHumidity(conv2Tf(stationData.T350), conv2Tf(stationData.D350)),
+        "H325H": relativeHumidity(conv2Tf(stationData.T325), conv2Tf(stationData.D325)), "H300H": relativeHumidity(conv2Tf(stationData.T300), conv2Tf(stationData.D300)),
+        "H275H": relativeHumidity(conv2Tf(stationData.T275), conv2Tf(stationData.D275)), "H250H": relativeHumidity(conv2Tf(stationData.T250), conv2Tf(stationData.D250)),
+        "H225H": relativeHumidity(conv2Tf(stationData.T225), conv2Tf(stationData.D225)), "H200H": relativeHumidity(conv2Tf(stationData.T200), conv2Tf(stationData.D200)),
+        "H175H": relativeHumidity(conv2Tf(stationData.T175), conv2Tf(stationData.D175)), "H150H": relativeHumidity(conv2Tf(stationData.T150), conv2Tf(stationData.D150)),
+        "H125H": relativeHumidity(conv2Tf(stationData.T125), conv2Tf(stationData.D125)), "H100H": relativeHumidity(conv2Tf(stationData.T100), conv2Tf(stationData.D100)),
+        "SfcD": stationData.Dewpoint, "H1000D": conv2Tf(stationData.D1000),
+        "H975D": conv2Tf(stationData.D975), "H950D": conv2Tf(stationData.D950),
+        "H925D": conv2Tf(stationData.D925), "H900D": conv2Tf(stationData.D900),
+        "H875D": conv2Tf(stationData.D875), "H850D": conv2Tf(stationData.D850),
+        "H825D": conv2Tf(stationData.D825), "H800D": conv2Tf(stationData.D800),
+        "H775D": conv2Tf(stationData.D775), "H750D": conv2Tf(stationData.D750),
+        "H725D": conv2Tf(stationData.D725), "H700D": conv2Tf(stationData.D700),
+        "H675D": conv2Tf(stationData.D675), "H650D": conv2Tf(stationData.D650),
+        "H625D": conv2Tf(stationData.D625), "H600D": conv2Tf(stationData.D600),
+        "H575D": conv2Tf(stationData.D575), "H550D": conv2Tf(stationData.D550),
+        "H525D": conv2Tf(stationData.D525), "H500D": conv2Tf(stationData.D500),
+        "H475D": conv2Tf(stationData.D475), "H450D": conv2Tf(stationData.D450),
+        "H425D": conv2Tf(stationData.D425), "H400D": conv2Tf(stationData.D400),
+        "H375D": conv2Tf(stationData.D375), "H350D": conv2Tf(stationData.D350),
+        "H325D": conv2Tf(stationData.D325), "H300D": conv2Tf(stationData.D300),
+        "H275D": conv2Tf(stationData.D275), "H250D": conv2Tf(stationData.D250),
+        "H225D": conv2Tf(stationData.D225), "H200D": conv2Tf(stationData.D200),
+        "H175D": conv2Tf(stationData.D175), "H150D": conv2Tf(stationData.D150),
+        "H125D": conv2Tf(stationData.D125), "H100D": conv2Tf(stationData.D100)
+    };
+    return obsData;
 }
 
 function relativeHumidity(tF,dF) { 
@@ -600,4 +727,7 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
     }
 }
 
-        
+function wxShortTime(inString) {
+    var shortString = inString.replace(/Last\ Updated\ on\ /g, '');
+    return shortString;
+}
