@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Mar 2018
+Updated: 29 Mar 2018
 */
 
 package asWebRest.dao;
@@ -374,70 +374,26 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getQBGames() {
-        final String query_FBook_QBGames = "SELECT SUM(Quantity) AS TotQty FROM Core.BGames;";
+    public JSONArray getQMerged() {
+        final String query_FBook_QMerged = "SELECT\n" +
+                " (SELECT SUM(Quantity) FROM Core.BGames) AS qBGames," +
+                " (SELECT SUM(Quantity) FROM Core.Books) as qBooks," +
+                " (SELECT SUM(Quantity) FROM Core.DecorTools) as qDTools," +
+                " (SELECT SUM(Count) FROM Core.Licenses) as qLicenses," +
+                " (SELECT SUM(Asset) FROM Core.MediaServer WHERE Asset != 0) as qMedia" +
+                " FROM Core.BGames" +
+                " LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QBGames, null);
+            ResultSet resultSet = wc.q2rs(query_FBook_QMerged, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
-                tObject.put("TotQty", resultSet.getInt("TotQty"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getQBooks() {
-        final String query_FBook_QBooks = "SELECT SUM(Quantity) AS TotQty FROM Core.Books;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QBooks, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject.put("TotQty", resultSet.getInt("TotQty"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-   
-    public JSONArray getQDecorTools() {
-        final String query_FBook_QDecorTools = "SELECT SUM(Quantity) AS TotQty FROM Core.DecorTools;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QDecorTools, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject.put("TotQty", resultSet.getInt("TotQty"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getQLicenses() {
-        final String query_FBook_QLicenses = "SELECT SUM(Count) AS TotQty FROM Core.Licenses;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QLicenses, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject.put("TotQty", resultSet.getInt("TotQty"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getQMedia() {
-        final String query_FBook_QMedia = "SELECT SUM(Asset) AS TotQty FROM Core.MediaServer WHERE Asset != 0;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QMedia, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject.put("TotQty", resultSet.getInt("TotQty"));
+                tObject
+                    .put("qBGames", resultSet.getInt("qBGames"))
+                    .put("qBooks", resultSet.getInt("qBooks"))
+                    .put("qDTools", resultSet.getInt("qDTools"))
+                    .put("qLicenses", resultSet.getInt("qLicenses"))
+                    .put("qMedia", resultSet.getInt("qMedia"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }

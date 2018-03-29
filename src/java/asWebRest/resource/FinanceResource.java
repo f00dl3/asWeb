@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Mar 2018
+Updated: 29 Mar 2018
  */
 
 package asWebRest.resource;
@@ -57,22 +57,14 @@ public class FinanceResource extends ServerResource {
                     JSONArray books = getFinanceAction.getBooks();
                     JSONArray dTools = getFinanceAction.getDecorTools();
                     JSONArray licenses = getFinanceAction.getLicenses();
-                    JSONArray qBGames = getFinanceAction.getQBGames();
-                    JSONArray qBooks = getFinanceAction.getQBooks();
-                    JSONArray qdTools = getFinanceAction.getQDecorTools();
-                    JSONArray qLicenses = getFinanceAction.getQLicenses();
-                    JSONArray qMedia = getFinanceAction.getQMedia();
+                    JSONArray qMerged = getFinanceAction.getQMerged();
                     mergedResults
                         .put("assets", assets)
                         .put("bGames", bGames)
                         .put("books", books)
                         .put("dTools", dTools)
                         .put("licenses", licenses)
-                        .put("qBGames", qBGames)
-                        .put("qBooks", qBooks)
-                        .put("qdTools", qdTools)
-                        .put("qLicenses", qLicenses)
-                        .put("qMedia", qMedia);
+                        .put("qMerged", qMerged);
                     returnData += mergedResults.toString();
                     break;
                 

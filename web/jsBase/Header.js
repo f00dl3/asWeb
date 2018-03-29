@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 28 Mar 2018
+Updated: 29 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -27,7 +27,7 @@ function animatedArrow(thisArrow) {
 }
 
 function aniPreload(turn) {
-    aniPreloadGetSize();
+    if(!checkMobile()) { aniPreloadGetSize(); }
     switch(turn) {
         case "on": $(".preload").fadeIn("slow", function() { $(this).show(); }); break;
         case "off": $(".preload").fadeOut("slow", function() { $(this).hide(); }); break;
@@ -36,7 +36,8 @@ function aniPreload(turn) {
 
 function aniPreloadGetSize() {
     setInterval(function() { 
-        dojo.byId("preloadSize").innerHTML = Math.round(($("html").html().length)/1024) + " KB";
+        var pageLoadSizeKB = ($("html").html().length/1024);
+        dojo.byId("preloadSize").innerHTML = Math.round(pageLoadSizeKB) + " KB";
     }, 250);
 }
 
@@ -104,6 +105,9 @@ function doCh(type, dynVar, opts) {
         case "p": 
             dBack += getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=" + dynVar;
             if(isSet(opts)) { dBack += "&" + opts; }
+            break;
+        case "j":
+            window.alert("Unimplemented!");
             break;
     }
     return dBack;

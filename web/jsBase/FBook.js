@@ -155,16 +155,12 @@ function getFinanceData() {
         timeout: timeOutMilli,
         load: function (data) {
             putAssets(
-                    data.qBGames[0],
+                    data.qMerged[0],
                     data.bGames,
-                    data.qBooks[0],
                     data.books,
-                    data.qdTools[0],
                     data.dTools,
-                    data.qLicenses[0],
                     data.licenses,
-                    data.assets,
-                    data.qMedia[0]
+                    data.assets
                     );
             naviButtonListener();
             aniPreload("off");
@@ -187,7 +183,7 @@ function onlineAssetSearch(searchTerms) {
     return onlineSearchPrefix + searchTerms;
 }
 
-function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, licenses, assets, qMedia) {
+function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
     var abgCols = ["Title", "Quantity"];
     var dtCols = ["Description", "UD", "Quantity", "Location", "Checked"];
     var liCols = ["Title", "Type"];
@@ -195,7 +191,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
     var dtCounter = 1;
     var assCounter = 0;
     var rData = "<div id='FBAssetInner'><h3>Asset Tracker</h3>";
-    var abgBubble = "<div class='UBox'>BGames<br/><span>" + qBGames.TotQty + "</span><div class='UBoxO'><table><thead><tr>";
+    var abgBubble = "<div class='UBox'>BGames<br/><span>" + qMerged.qBGames + "</span><div class='UBoxO'><table><thead><tr>";
     for (var i = 0; i < abgCols.lenght; i++) {
         abgBubble += "<th>" + abgCols[i] + "</th>";
     }
@@ -204,7 +200,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
         abgBubble += "<tr><td>" + bg.Title + "</td><td>" + bg.Quantity + "</td></tr>";
     });
     abgBubble += "</tbody></table></div></div>";
-    var abkBubble = "<div class='UBox'>Books<br/><span>" + qBooks.TotQty + "</span><div class='UBoxO'><table><thead><tr>";
+    var abkBubble = "<div class='UBox'>Books<br/><span>" + qMerged.qBooks + "</span><div class='UBoxO'><table><thead><tr>";
     for (var i = 0; i < abgCols.length; i++) {
         abkBubble += "<th>" + abgCols[i] + "</th>";
     }
@@ -213,7 +209,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
         abkBubble += "<tr><td>" + bk.Title + "</td><td>" + bk.Quantity + "</td></tr>";
     });
     abkBubble += "</tbody></table></div></div>";
-    var adtBubble = "<div class='UBox'>DecTools<br/><span>" + qdTools.TotQty + "</span><div class='UBoxO'>" +
+    var adtBubble = "<div class='UBox'>DecTools<br/><span>" + qMerged.qDTools + "</span><div class='UBoxO'>" +
             "<form id='DTUpdateForm'><input id='DTUpdateButton' type='submit' name='DTUpdate' /><p>" +
             "<table><thead><tr>";
     for (var i = 0; i < dtCols.length; i++) {
@@ -233,7 +229,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
         dtCounter++;
     });
     adtBubble += "</tbody></table></div></div>";
-    var aliBundle = "<div class='UBox'>Licenses<br/><span>" + qLicenses.TotQty + "</span>" +
+    var aliBundle = "<div class='UBox'>Licenses<br/><span>" + qMerged.qLicenses + "</span>" +
             "<div class='UBoxO'><table><thead><tr>";
     for (var i = 0; i < liCols.length; i++) {
         aliBundle += "<th>" + liCols[i] + "</th>";
@@ -246,7 +242,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
                 "</tr>";
     });
     aliBundle += "</tbody></table></div></div>";
-    var ameBundle = "<div class='UBox'>Media<br/><span>" + qMedia.TotQty + "</span></div>";
+    var ameBundle = "<div class='UBox'>Media<br/><span>" + qMerged.qMedia + "</span></div>";
     var asTable = "<div class='table'><div class='tr'>";
     for (var i = 0; i < asCols.length; i++) {
         asTable += "<span class='td'><strong>" + asCols[i] + "</strong></span>";
@@ -293,7 +289,7 @@ function putAssets(qBGames, bGames, qBooks, books, qdTools, dTools, qLicenses, l
     rData += abgBubble + abkBubble + adtBubble + aliBundle + ameBundle + "<p>" +
             asTable + "</div></div><p><em>Space intentionally left blank for pop-over</em>";
     dojo.byId("FBAsset").innerHTML = rData;
-    dojo.query(".Check2UpdateAssets").connect("onclick", actOnAssetUpdate);
+    dojo.query(".Check2UpdateAssets").connect("onchange", actOnAssetUpdate);
 }
 
 function putBills(billData) {

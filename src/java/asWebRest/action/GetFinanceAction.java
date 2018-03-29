@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Mar 2018
+Updated: 29 Mar 2018
  */
 
 package asWebRest.action;
@@ -30,11 +30,7 @@ public class GetFinanceAction {
     public JSONArray getLicenses() { return financeDAO.getLicenses(); }
     public JSONArray getMort() { return financeDAO.getMort(); }
     public JSONArray getNwga() { return financeDAO.getNwga(); }
-    public JSONArray getQBGames() { return financeDAO.getQBGames(); }
-    public JSONArray getQBooks() { return financeDAO.getQBooks(); }
-    public JSONArray getQDecorTools() { return financeDAO.getQDecorTools(); }
-    public JSONArray getQLicenses() { return financeDAO.getQLicenses(); }
-    public JSONArray getQMedia() { return financeDAO.getQMedia(); }
+    public JSONArray getQMerged() { return financeDAO.getQMerged(); }
     public JSONArray getSaving() { return financeDAO.getSaving(); }
     public JSONArray getSettingC() { return financeDAO.getSettingC(); }
     public JSONArray getSettingH() { return financeDAO.getSettingH(); }
