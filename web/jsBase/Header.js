@@ -182,6 +182,7 @@ function getResource(what) {
     switch(what) {
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
+        case "Pto": return getBasePath("rest") + "/PTO";
         case "WebLinks": return getBasePath("rest") + "/WebLinks";
         case "Wx": return getBasePath("rest") + "/Wx";
     }

@@ -491,5 +491,14 @@ public class FinanceDAO {
         try { returnData = wc.q2do(query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
+     
+    public String setDecorToolsUpdate(List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        String query_FBook_DecorToolsUpdate = "UPDATE DecorTools SET Quantity=?, Location=?, Checked=CURDATE() WHERE Description=?;";
+        try { returnData = wc.q2do(query_FBook_DecorToolsUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    
     
 }

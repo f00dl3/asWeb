@@ -80,6 +80,12 @@ public class FinanceResource extends ServerResource {
                     returnData += updateFinanceAction.setAssetTrackUpdate(qParams);
                     break;
                     
+                case "putDecorToolsUpdate":
+                    qParams.add(argsInForm.getFirstValue("DTQuantity"));
+                    qParams.add(argsInForm.getFirstValue("DTLocation"));
+                    qParams.add(argsInForm.getFirstValue("DTDescription"));
+                    returnData += updateFinanceAction.setDecorToolsUpdate(qParams);
+                    break;
             }
         }
     

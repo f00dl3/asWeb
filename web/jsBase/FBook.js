@@ -1,13 +1,19 @@
 /* 
  by Anthony Stump
  Created: 23 Mar 2018
- Updated: 28 Mar 2018
+ Updated: 29 Mar 2018
  */
 
 function actOnAssetUpdate(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     setAssetUpdate(thisFormData);
+}
+
+function actOnDecorToolsUpdate(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    setDecorToolsUpdate(thisFormData);
 }
 
 function checkTransactionAge(dtAge) {
@@ -23,6 +29,11 @@ function checkTransactionAge(dtAge) {
 
 function displayAssets() {
     $("#FBAsset").toggle();
+}
+
+function displayWorkPTO() {
+    getWorkPTO();
+    $("#FBWorkPTO").toggle();
 }
 
 function genOverviewChecking(cbData) {
@@ -173,9 +184,32 @@ function getFinanceData() {
     dojo.xhrPost(xhArgs);
 }
 
+function getWorkPTO() {
+    aniPreload("on");
+    var thePostData = "doWhat=getWorkPTO";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Pto"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putWorkPTO(data);
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for WorkPTO FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
 function naviButtonListener() {
     var btnShowFBAsset = dojo.byId("ShowFBAsset");
+    var btnShowFBWorkPTO = dojo.byId("ShowFBWorkPTO");
     dojo.connect(btnShowFBAsset, "click", displayAssets);
+    dojo.connect(btnShowFBWorkPTO, "click", displayWorkPTO);
 }
 
 function onlineAssetSearch(searchTerms) {
@@ -210,25 +244,25 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
     });
     abkBubble += "</tbody></table></div></div>";
     var adtBubble = "<div class='UBox'>DecTools<br/><span>" + qMerged.qDTools + "</span><div class='UBoxO'>" +
-            "<form id='DTUpdateForm'><input id='DTUpdateButton' type='submit' name='DTUpdate' /><p>" +
-            "<table><thead><tr>";
+            "<form id='DTUpdateForm'>" +
+            "<div class='table'><div class='tr'>";
     for (var i = 0; i < dtCols.length; i++) {
-        adtBubble += "<th>" + dtCols[i] + "</td>";
+        adtBubble += "<span class='td'><strong>" + dtCols[i] + "</strong></span>";
     }
-    adtBubble += "<tbody>";
+    adtBubble += "</div>";
     dTools.forEach(function (dt) {
         var dtAge = dt.Checked;
         var cDtAge = checkTransactionAge(dtAge);
-        adtBubble += "<tr><input type='hidden' name='DTID[" + dtCounter + "]' value='" + dtCounter + "' />" +
-                "<td><input type='hidden' name='DTDescription[" + dtCounter + "]' value='" + dt.Description + "' />" + dt.Description + "</td>" +
-                "<td><input type='checkbox' name='DTSetUpdate[" + dtCounter + "]' value='Yes' /></td>" +
-                "<td><input type='number' name='DTQuantity[" + dtCounter + "]' value='" + dt.Quantity + "' style='width: 30px;' /></td>" +
-                "<td><input type='text' name='DTLocation[" + dtCounter + "]' value='" + dt.Location + "' style='width: 66px;' /></td>" +
-                "<td class='" + cDtAge + "'>" + dtAge + "</td>" +
-                "</tr>";
+        adtBubble += "<form class='tr dtUpdateForm'><input type='hidden' name='DTID' value='" + dtCounter + "' />" +
+                "<span class='td'><input type='hidden' name='DTDescription' value='" + dt.Description + "' />" + dt.Description + "</span>" +
+                "<span class='td'><input type='checkbox' class='Check2UpdateDT' name='DTSetUpdate' value='Yes' /></span>" +
+                "<span class='td'><input type='number' name='DTQuantity' value='" + dt.Quantity + "' style='width: 30px;' /></span>" +
+                "<span class='td'><input type='text' name='DTLocation' value='" + dt.Location + "' style='width: 66px;' /></span>" +
+                "<span class='td " + cDtAge + "'>" + dtAge + "</span>" +
+                "</form>";
         dtCounter++;
     });
-    adtBubble += "</tbody></table></div></div>";
+    adtBubble += "</div></div></div>";
     var aliBundle = "<div class='UBox'>Licenses<br/><span>" + qMerged.qLicenses + "</span>" +
             "<div class='UBoxO'><table><thead><tr>";
     for (var i = 0; i < liCols.length; i++) {
@@ -290,6 +324,7 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
             asTable + "</div></div><p><em>Space intentionally left blank for pop-over</em>";
     dojo.byId("FBAsset").innerHTML = rData;
     dojo.query(".Check2UpdateAssets").connect("onchange", actOnAssetUpdate);
+    dojo.query(".Check2UpdateDT").connect("onchange", actOnDecorToolsUpdate);
 }
 
 function putBills(billData) {
@@ -541,6 +576,28 @@ function setAssetUpdate(formData) {
         error: function (data, iostatus) { 
             aniPreload("off");
             window.alert("xhrPost for AssetTrackUpdate FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function setDecorToolsUpdate(formData) {
+    aniPreload("on");
+    formData.doWhat = "putDecorToolsUpdate";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function (data) {
+            showNotice(formData.AssetDescription + " updated!");
+            getFinanceData();
+            aniPreload("off");
+        },
+        error: function (data, iostatus) { 
+            aniPreload("off");
+            window.alert("xhrPost for DecorToolsUpdate FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
     dojo.xhrPost(xhArgs);
