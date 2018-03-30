@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    28 Mar 2018
+    Updated:    30 Mar 2018
     Author     : astump
 --%>
 
@@ -11,6 +11,7 @@
     
     String rootPath = "/asWeb";
     String title = request.getParameter("title");
+    String fullTitle = title;
     String type = request.getParameter("type");
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
@@ -29,23 +30,44 @@
         "<script src='"+rootPath+"/jsBase/CookieMgmt.js'></script>";
     }
     
+    String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
+        " <strong><span id='preloadSize'>Loading...</span></strong></div>";
+    
+    String cssFiles = "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
+        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>";
+    
+    String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
+                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
+                        "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
+    
+    String mapHelperScripts = "<script src='"+rootPath+"/jsBase/MapInit.js'></script>";
+    
     if(scripts.equals("true")) {
         switch(title) {
             case "Anthony":
-                scripts2Load += "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
+                scripts2Load += wxScriptPack;
+                break;
+            case "Cams":
+                scripts2Load += wxScriptPack;
                 break;
             case "Entertain":
+                fullTitle = "Entertainment";
                 scripts2Load += "<script src='"+rootPath+"/jsBase/MediaServ.js'></script>";
+                break;
+            case "FBook":
+                fullTitle = "Finance Book";
                 break;
             case "Fitness":
                 scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
                 break;
+            case "OutMap":
+                fullTitle = "Maps";
+                scripts2Load += mapHelperScripts;
             case "WxLive":
-                scripts2Load += "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>" +
-                        "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
+                fullTitle = "Weather Live";
+                scripts2Load += wxScriptPack;
                 break;
         }
         scripts2Load += "<script src='"+rootPath+"/jsBase/"+title+".js'></script>";
@@ -53,6 +75,7 @@
 
     String theHeader = "";
     String miniHeader = "";
+    
     
     miniHeader += scripts2Load;
     
@@ -64,15 +87,10 @@
     
     String fullHeader = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>" +
         " <html xmlns='http://www.w3.org/1999/xhtml'>" +    
-        " <head><title>asWeb " + title + "</title>" +
+        " <head><title>asWeb " + fullTitle + "</title>" +
         " <meta charset='UTF-8'>" +
         " <meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>" +
-        " <div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
-        " <strong><span id='preloadSize'></span></strong></div>" +
+        " " + cssFiles + " " + preloadElement +
         " <div id='NoticeHolder'></div>" +
         " <div id='NaviHolder'></div>" +
         miniHeader;

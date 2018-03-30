@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 29 Mar 2018
+Updated: 30 Mar 2018
  */
 
 var annMaint = 910.66;
@@ -74,11 +74,11 @@ function autoFontScale(tPercent) {
 function autoUnits(tVal) {
     var tSuffix = "";
     if (tVal < 0) { tVal = ""; tSuffix = "Error!"; }
-    if (tVal > 1000) { tVal = round(tVal/1000,1); tSuffix = "K"; }
-    if (tVal > 1000) { tVal = round(tVal/1000,1); tSuffix = "M"; }
-    if (tVal > 1000) { tVal = round(tVal/1000,1); tSuffix = "G"; } 
-    if (tVal > 1000) { tVal = round(tVal/1000,1); tSuffix = "T"; } 
-    if (tVal > 1000) { tVal = round(tVal/1000,1); tSuffix = "P"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "K"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "M"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "G"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "T"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "P"; } 
     var formatting = tVal + tSuffix;
     return formatting;
 }
@@ -127,6 +127,7 @@ function formatDate(inDate, request) {
         case "dateOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd", selector: "date"}); break;
         case "full": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
         case "js": fmtDate = inDate; break;
+        case "timestamp": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMMddHHmmSS", selector: "date" }); break;
         case "yearOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy", selector: "date"}); break;
     }
     return fmtDate;
@@ -149,6 +150,7 @@ function getBasePath(opt) {
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
         case "old": tBase += "/ASWebUI"; break;
+        case "osmTiles": tBase += "/osm_tiles/"; break;
         case "tomcatOld": tBase += "/Tomcat"; break;
         case "ui": tBase = baseForUi; break;
     }
@@ -182,6 +184,7 @@ function getResource(what) {
     switch(what) {
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
+        case "Logs": return getBasePath("rest") + "/Logs";
         case "Pto": return getBasePath("rest") + "/PTO";
         case "WebLinks": return getBasePath("rest") + "/WebLinks";
         case "Wx": return getBasePath("rest") + "/Wx";
@@ -254,6 +257,12 @@ function inRange(value, low, high) {
 
 function isSet(varIn) {
     if(typeof varIn !== 'undefined' && varIn) {
+        return true;
+    } else { return false; }
+}
+
+function isSetAllowZero(varIn) {
+    if(typeof varIn !== 'undefined' && varIn && varIn === 0) {
         return true;
     } else { return false; }
 }

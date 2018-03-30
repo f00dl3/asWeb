@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 26 Feb 2018
+Updated: 30 Mar 2018
 */
 
 package asWebRest.dao;
@@ -84,7 +84,7 @@ public class LogsDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Date", resultSet.getString("Date"))
-                    .put("Type", resultSet.getString("Typpe"))
+                    .put("Type", resultSet.getString("Type"))
                     .put("Errors", resultSet.getString("Errors"))
                     .put("Time", resultSet.getInt("Time"))
                     .put("GB_Used", resultSet.getInt("GB_Used"))

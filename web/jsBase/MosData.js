@@ -83,11 +83,19 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         ) {
             var tAutoCounter = 0;
             var tAuto0TF = 0;
-            if(isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
-            /// finish!
+            if(isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) {
+                var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++;
+            }
+            tAuto0TF = Math.round(tAuto0TF/tAutoCounter);
+            tAutoCounter = 0;
+            var tAuto900TF = 0;
+                       
+            
+            
         }
     }); 
     return rData;
 }
+
 
 

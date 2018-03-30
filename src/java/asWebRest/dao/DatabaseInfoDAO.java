@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 20 Feb 2018
+Updated: 30 Mar 2018
 */
 
 package asWebRest.dao;
@@ -37,7 +37,7 @@ public class DatabaseInfoDAO {
         return dbInfo;
     }
     
-    public JSONArray getDbInfo2() {
+    public JSONArray getDbInfoByTable() {
         final String query_Logs_DBInfo2 = "SELECT" +
         " isT.table_schema AS `Database`," +
         " isT.table_name AS `Table`," +

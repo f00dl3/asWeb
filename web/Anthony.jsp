@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : Feb 11, 2018, 1:37:57 PM
-    Updated:    26 Mar 2018
+    Updated:    30 Mar 2018
     Author     : astump
 --%>
 
@@ -25,9 +25,12 @@
         <p/>
         
         <h1><% out.println(pageTitle); %></h1>
-        <div id="versionPlaceholder"></div><button id='Sh_inLogs' class='UButton'>Logs</button>
+            
+        <span id="versionPlaceholder"></span><button id='Sh_inLogs' class='UButton'>Logs</button><p>
     
-        <div id='linkList'></div>
+        <div id='linkList'></div><p>
+        
+        <div id="inLogs"></div>
              
     </body>
 

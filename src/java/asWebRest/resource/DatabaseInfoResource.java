@@ -16,7 +16,7 @@ public class DatabaseInfoResource extends ServerResource {
     @Get
     public String represent() {
         GetDatabaseInfoAction getDatabaseInfoAction = new GetDatabaseInfoAction(new DatabaseInfoDAO());
-        JSONArray dbInfo2 = getDatabaseInfoAction.getDatabaseInfo2();  
+        JSONArray dbInfo2 = getDatabaseInfoAction.getDatabaseInfoByTable();  
         return dbInfo2.toString();
     }
     
