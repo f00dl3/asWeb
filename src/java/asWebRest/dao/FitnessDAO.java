@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Mar 2018
+Updated: 31 Mar 2018
 */
 
 package asWebRest.dao;
@@ -132,11 +132,13 @@ public class FitnessDAO {
     }
 
     public JSONArray getAllRoutes() {
+        final String commonRouteCheck = "(CommonRoute = 0 OR CommonRoute IS NULL)";
         final String query_Fitness_AllRoutes = "SELECT" +
                 " Date, Type, GeoJSON FROM (" +
-                " SELECT Date, 'R' AS Type, RunGeoJSON as GeoJSON FROM Core.Fitness WHERE RunGeoJSON IS NOT NULL AND CommonRoute=0 UNION ALL" +
-                " SELECT Date, 'C' AS Type, CycGeoJSON as GeoJSON FROM Core.Fitness WHERE CycGeoJSON IS NOT NULL AND CommonRoute=0 UNION ALL" +
-                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND CommonRoute=0) as tmp;";
+                " SELECT Date, 'R' AS Type, RunGeoJSON as GeoJSON FROM Core.Fitness WHERE RunGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
+                " SELECT Date, 'C' AS Type, CycGeoJSON as GeoJSON FROM Core.Fitness WHERE CycGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
+                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND " + commonRouteCheck + " as tmp" +
+                " ORDER BY Date DESC";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Fitness_AllRoutes, null);
@@ -706,7 +708,7 @@ public class FitnessDAO {
     
     public String setUpdateToday(List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
-        String tRShoe = qParams.get(3);
+        String tRShoe = qParams.get(2);
         double tRShoeMaxMiles = 0.0;
         final String query_Fitness_GetLastRsMileTotal = "SELECT MAX(RSMile) AS MaxRSMiles FROM Core.Fitness WHERE Shoe='" + tRShoe + "' AND Date != CURDATE();";
         try {
@@ -723,6 +725,7 @@ public class FitnessDAO {
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 		" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
+        returnData += "\n ***DEBUG: \n part1 : " + query_Fitness_GetLastRsMileTotal + "\n part2 : " + query_Fitness_DayIU;
         return returnData;
     }
     
