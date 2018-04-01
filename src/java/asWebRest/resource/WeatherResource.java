@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 28 Mar 2018
+Updated: 1 Apr 2018
  */
 
 package asWebRest.resource;
@@ -39,6 +39,7 @@ public class WeatherResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
+                
                 case "getObjsJson":
                     inParams.add(0, "DESC");
                     try {
@@ -74,6 +75,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray latestObs = getWeatherAction.getObsJsonLast();
                     returnData = latestObs.toString();
                     break;
+                    
             }
         } else {
             returnData = "ERROR: NO POST DATA!";

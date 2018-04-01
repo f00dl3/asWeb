@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 28 Mar 2018
+Updated: 1 Apr 2018
  */
 
 package asWebRest.dao;
@@ -622,6 +622,7 @@ public class WeatherDAO {
 		" SELECT ObsID, GetTime, JSON_EXTRACT(jsonData, '"+station+"') as jsonSet FROM WxObs.StationDataIndexed WHERE GetTime BETWEEN '"+xdt1+"' AND '"+xdt2+"' UNION ALL" +
 		" SELECT ObsID, GetTime, JSON_EXTRACT(jsonData, '"+station+"') as jsonSet FROM WxObs.RapidSDI WHERE GetTime BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
                 " ) as tmpSet" +
+                " WHERE jsonSet IS NOT NULL" +
                 " ORDER BY GetTime "+order+" LIMIT "+limit+";";
         JSONArray tContainer = new JSONArray();
         try {

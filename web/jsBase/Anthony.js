@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 30 Mar 2018
+Updated: 1 Apr 2018
 */
 
 function actOnHiddenToggle() {
@@ -146,8 +146,7 @@ function logButtonListener() {
 }
 
 var initAnthony = function(event) {
-    getObsData("disHolder", "marquee");
-    //getObsDataMerged("disHolder", "marquee");
+    getObsDataMerged("disHolder", "marquee");
     getWebLinks("Anthony.php-0", "linkList", null);
     getWebVersion("versionPlaceholder");
     logButtonListener();

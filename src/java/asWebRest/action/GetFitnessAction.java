@@ -15,7 +15,7 @@ public class GetFitnessAction {
     private FitnessDAO fitnessDAO;
     public GetFitnessAction(FitnessDAO fitnessDAO) { this.fitnessDAO = fitnessDAO; }
     
-    public JSONArray getAll(List qParams, String order) { return fitnessDAO.getAll(qParams, order); }
+    public JSONArray getAll(List qParams) { return fitnessDAO.getAll(qParams); }
     public JSONArray getAllE() { return fitnessDAO.getAllE(); }
     public JSONArray getAllRoutes() { return fitnessDAO.getAllRoutes(); }
     public JSONArray getBike(String bike) { return fitnessDAO.getBike(bike); }    

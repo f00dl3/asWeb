@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 28 Mar 2018
+Updated: 1 Apr 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -84,7 +84,7 @@ function getObsDataMerged(targetDiv, displayType) {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            var lastData = JSON.parse(data.wxObsM1H);
+            var lastData = JSON.parse(data.wxObsM1H[0].jsonSet);
             var theData = JSON.parse(data.wxObsNow[0].jsonSet);
             var indoorObs = data.indoorObs;
             var lastData;

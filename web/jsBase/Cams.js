@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
+Updated: 1 Apr 2018
  */
 
 function popCamHolder() {
@@ -15,7 +16,7 @@ function popCamHolder() {
 }
 
 function init() {
-    getObsData("disHolderCAMS", "marquee");
+    getObsDataMerged("disHolderCAMS", "marquee");
     popCamHolder();
     // popSnmpHolder();
 }

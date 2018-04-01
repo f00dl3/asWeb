@@ -55,7 +55,7 @@ public class FitnessResource extends ServerResource {
                     if(xdt1 != null && xdt2 != null && bike != null && year != null) {
                         qParams.add(xdt1);
                         qParams.add(xdt2);
-                        JSONArray allRecs = getFitnessAction.getAll(qParams, "DESC");
+                        JSONArray allRecs = getFitnessAction.getAll(qParams);
                         JSONArray calories = getFitnessAction.getCalories();
                         JSONArray plans = getFitnessAction.getRPlans();
                         JSONArray today = getFitnessAction.getDay();

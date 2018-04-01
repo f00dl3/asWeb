@@ -5,7 +5,7 @@ https://www.tutorialspoint.com/jfreechart/jfreechart_line_chart.htm
 
  */
 
-package asWebRest.charter;
+package asWebRest.hookers;
 
 import asWebRest.shared.CommonBeans;
 import java.io.*;
