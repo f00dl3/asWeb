@@ -1,7 +1,38 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
+Updated: 1 Apr 2018
  */
+
+function actOnShowFeed() {
+    $("#wxFeeds").toggle();
+}
+
+function actOnShowLive() {
+    getObsDataMerged("ObsCurrent", "static");
+    //popLiveLinks3d();
+    //popLiveLinksList();
+    $("#wxObsFcst").toggle();
+}
+
+function actOnShowNews() {
+    $("#wxNewsEmail").toggle();
+}
+
+function actOnShowQuakes() {
+    $("#wxEarthquakes").toggle();
+}
+
+function buttonListeners() {
+    var showLiveButton = dojo.byId("SwxLive");
+    var showFeedButton = dojo.byId("SwxFeeds");
+    var showQuakesButton = dojo.byId("SwxQuakes");
+    var showNewsButton = dojo.byId("SwxNews");
+    dojo.connect(showLiveButton, "onclick", actOnShowLive);
+    dojo.connect(showFeedButton, "onclick", actOnShowFeed);
+    dojo.connect(showQuakesButton, "onclick", actOnShowQuakes);
+    dojo.connect(showNewsButton, "onclick", actOnShowNews);
+}
 
 function popEarthquakes() {
     var rData = "<strong>See Weather Map for lie and historical / archived data!</strong><p>" +
@@ -105,9 +136,8 @@ function popNewsEmail(newsEmailFeeds) {
 }
 
 function init() {
-    getObsData("ObsCurrent", "static");
-    popLiveLinks3d();
-    popLiveLinksList();
+    actOnShowLive();
+    buttonListeners();
     popFeeds();
     popEarthquakes();
     popNewsEmail();

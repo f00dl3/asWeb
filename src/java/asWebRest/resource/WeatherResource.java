@@ -6,7 +6,9 @@ Updated: 1 Apr 2018
 
 package asWebRest.resource;
 
+import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class WeatherResource extends ServerResource {
         List<String> inParams = new ArrayList<>();      
         JSONObject mergedResults = new JSONObject();
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+        GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
         final Form argsInForm = new Form(argsIn);
         
         String doWhat = null;
@@ -65,9 +68,11 @@ public class WeatherResource extends ServerResource {
                     }
                     JSONArray wxObsB = getWeatherAction.getObsJsonByStation(inParams);
                     JSONArray latestObsB = getWeatherAction.getObsJsonLast();
+                    JSONArray indorObs = getSnmpAction.getMergedLastTemp();
                     mergedResults
                         .put("wxObsM1H", wxObsB)
-                        .put("wxObsNow", latestObsB);
+                        .put("wxObsNow", latestObsB)
+                        .put("indoorObs", indorObs);
                     returnData = mergedResults.toString();
                     break;          
                     

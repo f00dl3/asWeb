@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 18 Mar 2018
+Updated: 1 Apr 2018
  */
 
 package asWebRest.dao;
@@ -283,8 +283,8 @@ public class SnmpDAO {
         return tContainer;
     }
             
-    public JSONArray getMainLastCaseTemp() {
-        final String query_SNMP_Main_LastCaseTemp = "SELECT WalkTime, TempCase, SSHClientIP FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1;";
+    public JSONArray getMainLastSSH() {
+        final String query_SNMP_Main_LastCaseTemp = "SELECT WalkTime, SSSHClientIP FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Main_LastCaseTemp, null);
@@ -292,7 +292,6 @@ public class SnmpDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("WalkTime", resultSet.getString("WalkTime"))
-                    .put("TempCase", resultSet.getInt("TempCase"))
                     .put("SSHClientIP", resultSet.getString("SSHClientIP"));
                 tContainer.put(tObject);
             }
@@ -300,6 +299,28 @@ public class SnmpDAO {
         return tContainer;
     }
 
+    public JSONArray getMergedLastTemp() {
+        final String query_SNMP_MergedTemps = "SELECT Description, WalkTime, ExtTemp FROM (" +
+                " (SELECT 'RaspberryPi' as Description, WalkTime, ExtTemp FROM net_snmp.RaspberryPi ORDER BY WalkTime DESC LIMIT 1) UNION ALL" +
+                " (SELECT 'RaspberryPi2' as Description, WalkTime, ExtTemp FROM net_snmp.RaspberryPi2 ORDER BY WalkTime DESC LIMIT 1) UNION ALL" +
+                " (SELECT 'Desktop' AS Description, WalkTime, TempCase as ExtTemp FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1)" +
+                " ) as tmp" +
+                " ORDER BY Description ASC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_SNMP_MergedTemps, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Description", resultSet.getString("Description"))
+                    .put("WalkTime", resultSet.getString("WalkTime"))
+                    .put("ExtTemp", resultSet.getInt("ExtTemp"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getNote3(List qParams) {
         final String query_SNMP_Note3 = "(SELECT * FROM (" +
                 " SELECT @row := @row+1 AS rownum, WalkTime," +
@@ -468,22 +489,6 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
-    public JSONArray getPiLastTemp() {
-        final String query_SNMP_Main_LastPiTemp = "SELECT WalkTime, ExtTemp FROM net_snmp.RaspberryPi ORDER BY WalkTime DESC LIMIT 1;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_Main_LastPiTemp, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("WalkTime", resultSet.getString("WalkTime"))
-                    .put("ExtTemp", resultSet.getInt("ExtTemp"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
     
     public JSONArray getPi2(List qParams) {
         final String query_SNMP_Pi2 = "(SELECT * FROM (" +
@@ -565,22 +570,6 @@ public class SnmpDAO {
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("GPSCoords", resultSet.getInt("GPSCoords"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getPi2LastTemp() {
-        final String query_SNMP_Main_LastPi2Temp = "SELECT WalkTime, ExtTemp FROM net_snmp.RaspberryPi2 ORDER BY WalkTime DESC LIMIT 1;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_Main_LastPi2Temp, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("WalkTime", resultSet.getString("WalkTime"))
-                    .put("ExtTemp", resultSet.getInt("ExtTemp"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }

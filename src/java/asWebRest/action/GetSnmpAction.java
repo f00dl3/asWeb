@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 25 Feb 2018
+Updated: 1 Apr 2018
  */
 
 package asWebRest.action;
@@ -19,18 +19,17 @@ public class GetSnmpAction {
     public JSONArray getEmS4GeoHistory() { return snmpDAO.getEmS4GeoHistory(); }
     public JSONArray getLastWalk() { return snmpDAO.getLastWalk(); }
     public JSONArray getMain(List qParams) { return snmpDAO.getMain(qParams); }
-    public JSONArray getMainLastCaseTemp() { return snmpDAO.getMainLastCaseTemp(); }
+    public JSONArray getMainLastSSH() { return snmpDAO.getMainLastSSH(); }
+    public JSONArray getMergedLastTemp() { return snmpDAO.getMergedLastTemp(); }
     public JSONArray getNote3(List qParams) { return snmpDAO.getNote3(qParams); }
     public JSONArray getNote3Geo() { return snmpDAO.getNote3Geo(); }
     public JSONArray getNote3GeoHistory() { return snmpDAO.getNote3GeoHistory(); }
     public JSONArray getNote3RapidGeoHistory() { return snmpDAO.getNote3RapidGeoHistory(); }
     public JSONArray getNote3Sensors(List qParams) { return snmpDAO.getNote3Sensors(qParams); }
     public JSONArray getPi(List qParams) { return snmpDAO.getPi(qParams); }
-    public JSONArray getPiLastTemp() { return snmpDAO.getPiLastTemp(); }
     public JSONArray getPi2(List qParams) { return snmpDAO.getPi2(qParams); }
     public JSONArray getPi2Geo() { return snmpDAO.getPi2Geo(); }
     public JSONArray getPi2GeoHistory() { return snmpDAO.getPi2GeoHistory(); }
-    public JSONArray getPi2LastTemp() { return snmpDAO.getPi2LastTemp(); }
     public JSONArray getRouter(List qParams) { return snmpDAO.getRouter(qParams); }
     
 }

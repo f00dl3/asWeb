@@ -598,7 +598,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getObsJsonLast() {
-        final String query_ObsJSON_Last = "SELECT JSON_EXTRACT(jsonData, '$.KOJC') as jsonSet" +
+        final String query_ObsJSON_Last = "SELECT ObsID, JSON_EXTRACT(jsonData, '$.KOJC') as jsonSet" +
                 " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID)-1 FROM WxObs.StationDataIndexed);";
         JSONArray tContainer = new JSONArray();
         try {

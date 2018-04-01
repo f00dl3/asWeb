@@ -18,7 +18,6 @@ function getObsData(targetDiv, displayType) {
             var theData = JSON.parse(data[0].jsonSet);
             var nowObsId = data[0].ObsID;
             var indoorObs = data.indoorObs;
-            var lastData;
             var subXhr = dojo.xhrPost(arObsJson);
             subXhr.then(
                 function(data) {
@@ -87,13 +86,13 @@ function getObsDataMerged(targetDiv, displayType) {
             var lastData = JSON.parse(data.wxObsM1H[0].jsonSet);
             var theData = JSON.parse(data.wxObsNow[0].jsonSet);
             var indoorObs = data.indoorObs;
-            var lastData;
+            var nowObsId = data.wxObsM1H[0].ObsID;
             switch(displayType) {
                 case "marquee":
                     processMarqueeData(theData, lastData, targetDiv);
                     break;
                 case "static":
-                    processObservationData(theData, lastData, indoorObs);
+                    processObservationData(nowObsId, theData, lastData, indoorObs, targetDiv);
                     $(targetDiv).html(data.WxObs);
                     break;
             }
@@ -158,16 +157,16 @@ function processMarqueeData(theData, lastData, targetDiv) {
     $("#WxObsMarq").marquee();
 }
 
-function processObservationData(nowObsId, theData, lastData, indoorObs) {
+function processObservationData(nowObsId, theData, lastData, indoorObs, targetDiv) {
     if(theData === "") { console.log("ERROR fetching ThisObsData"); }
     if(lastData === "") { console.log("ERROR fetching LastObsData"); }
     var returnData = "";
     var theTemperature = theData.Temperature;
     var stationId = theData.Station;
     var getTime = theData.GetTime;
-    var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs.TempCase/1000));
-    var indoorPiTemp = Math.round(indoorObs.PiExtTemp);
-    var indoorPi2Temp = Math.round(indoorObs.Pi2ExtTemp);
+    var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs[0].ExtTemp/1000));
+    var indoorPiTemp = Math.round(indoorObs[1].ExtTemp);
+    var indoorPi2Temp = Math.round(indoorObs[2].ExtTemp);
     if(!isSet(theTemperature)) {
         returnData += "<div id='LWObs'>";
         returnData += "<strong>WARNING! " + stationId + " [Obs] data unavailable!</strong>";
@@ -191,38 +190,40 @@ function processObservationData(nowObsId, theData, lastData, indoorObs) {
         returnData += "<div id='LWObs' style='" + oDivStyle + "'>" +
             "<div class='UPopNM'><strong>" + shortTime + "</strong>" +
             "<div class='UPopNMO'>" +
-            "<a href='" + getBasePath("old") + "/WxStation.php' target='new'>XML JSON</a><br/>" +
+            "<a href='" + getBasePath("ui") + "/WxStation.jsp' target='new'>JSON</a><br/>" +
             "Obs #: " + nowObsId + " station " + stationId + "<br/>" +
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
             "<br/><div class='UPopNM'>" +
-            "<img class='ic_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
-            processUpperAirData(null, theData, stationId) + "</div><br/>" +
+            "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
+            processUpperAirData(null, theData) + "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +
             "<div class='UPopO'>" +
             "Visibility: " + theData.Visibility + " mi.<br/>" +
             "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb." +
             "</div></div><br/>" +
-            "<div class='UPop'>" + animatedArrow(diffTemperature) + Math.round(theData.Temperature) + "F" +
+            "<div class='UPop'>" + animatedArrow(diffTemperature) + 
+            "<span style='" + styleTemp(theData.Temperature) + "'>" + Math.round(theData.Temperature) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/hr)</div></div>/" +
-            "<div class='UPop'>" + animatedArrow(diffDewpoint) + Math.round(theData.Dewpoint) + "F +( " + diffDewpoint + "F/hr - " +
-            "<div class='UPopO'>(" + diffDewpoint + "F/hr) "
+            "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
+            "<span style='" + styleTemp(theData.Dewpoint) + "'>" + Math.round(theData.Dewpoint) + "F</span>" +
+            "<div class='UPopO'>(" + diffDewpoint + "F/hr)</div></div>" +
             "<br/>RH: <span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%</span>" +
-            "</div></div> (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
+            " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
-            "<button style='" + styleTemp(indoorTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_home.gif'/>" + indoorTemp + "F</button>" +
-            "<button style='" + styleTemp(indoorPiTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png'/>" + indoorPiTemp + "F</button>" +
-            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button>" +
-            "<button style='" + styleTemp(flTempR) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_run.jpeg'/>" + flTempR + "F</button>" +
-            "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button>" +
-            "<br/>As of: " + indoorObs.WalkTime + "</div></div>)<br/>"; 
+            "<button style='" + styleTemp(indoorTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_home.gif'/>" + indoorTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPiTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png'/>" + indoorPiTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button><br/>" +
+            "<button style='" + styleTemp(flTempR) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_run.jpeg'/>" + flTempR + "F</button><br/>" +
+            "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button><br/>" +
+            "<br/>As of: " + indoorObs[0].WalkTime + "</div></div>)<br/>"; 
         if(isSet(theData.WindSpeed)) {
             returnData += "Wind: "; if(isSet(theData.WindDirection)) { returnData += theData.WindDirection + " at "; }
-            returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph<br/>" + gustLine + "<br/>";
+            returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine + "<br/>";
         }
         if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CAPE) + ">" + theData.CAPE + "</span><br/>"; }
     }
     returnData += "</div>";        
-    dojo.byId("obsHolder").innerHTML = returnData;
+    dojo.byId(targetDiv).innerHTML = returnData;
     console.log("returnData: " + returnData);
 }
 
@@ -280,7 +281,7 @@ function processUpperAirData(baseEle, stationData) {
             var hA950 = [ obsData.H900H, obsData.H925H, obsData.H950H ]; var wA950 = [ obsData.H900WS, obsData.H925WS, obsData.H950WS ];
             var tA1000 = [ obsData.H950T, obsData.H975T, obsData.H1000T ]; var dA1000 = [ obsData.H950D, obsData.H975D, obsData.H1000D ];
             var hA1000 = [ obsData.H950H, obsData.H975H, obsData.H1000H ]; var wA1000 = [ obsData.H950WS, obsData.H975WS, obsData.H1000WS ];
-            for(var i = 0; i < h2eMap.length; i += 2) {
+            for(var i = h2eMap.length; i >= 0; i -= 2) {
                 if(isSet(baseEle) || baseEle >= heights[i]) {
                     var dht = "H" + heights[i] + "T";
                     var dhd = "H" + heights[i] + "D";
@@ -328,6 +329,7 @@ function processUpperAirData(baseEle, stationData) {
     } else {
         doSounding = "<div class='UPopNMO'>DATA ERROR FOR HOUR</div>";
     }
+    return doSounding;
 }
 
 function shAtParAdd(longName, sType, styling, dataIn, stId, param) {

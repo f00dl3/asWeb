@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 27 Mar 2018
+Updated: 1 Apr 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -190,12 +190,12 @@ function colorMuvv(muvv) {
 }
 
 function conv2Mph(wsKt) {
-	return round(wsKt*1.15078,0);
+	return Math.round(wsKt*1.15078);
 }
 
 function conv2Tf(tCel) {
-    if((isset(tCel)) && (tCel < 150)) {	
-        return round((tCel * 9/5 + 32),0);
+    if((isSet(tCel)) && (tCel < 150)) {	
+        return Math.round(tCel * 9/5 + 32);
     } else {
         return '';
     }
@@ -232,28 +232,28 @@ function parseWxObs(stationData) {
         "SfcT": stationData.Temperature, "H1000T": stationData.T1000,
         "H975T": conv2Tf(stationData.T975), "H950T": conv2Tf(stationData.T950),
         "H925T": conv2Tf(stationData.T925), "H900T": conv2Tf(stationData.T900),
-        "H875T": conv2Tf(stationData.T975), "H850T": conv2Tf(stationData.T950),
+        "H875T": conv2Tf(stationData.T875), "H850T": conv2Tf(stationData.T850),
         "H825T": conv2Tf(stationData.T825), "H800T": conv2Tf(stationData.T800),
-        "H775T": conv2Tf(stationData.T975), "H750T": conv2Tf(stationData.T950),
+        "H775T": conv2Tf(stationData.T775), "H750T": conv2Tf(stationData.T750),
         "H725T": conv2Tf(stationData.T725), "H700T": conv2Tf(stationData.T700),
-        "H675T": conv2Tf(stationData.T975), "H650T": conv2Tf(stationData.T950),
+        "H675T": conv2Tf(stationData.T675), "H650T": conv2Tf(stationData.T650),
         "H625T": conv2Tf(stationData.T625), "H600T": conv2Tf(stationData.T600),
-        "H575T": conv2Tf(stationData.T975), "H550T": conv2Tf(stationData.T950),
+        "H575T": conv2Tf(stationData.T575), "H550T": conv2Tf(stationData.T550),
         "H525T": conv2Tf(stationData.T525), "H500T": conv2Tf(stationData.T500),
-        "H475T": conv2Tf(stationData.T975), "H450T": conv2Tf(stationData.T950),
+        "H475T": conv2Tf(stationData.T475), "H450T": conv2Tf(stationData.T450),
         "H425T": conv2Tf(stationData.T425), "H400T": conv2Tf(stationData.T400),
-        "H375T": conv2Tf(stationData.T975), "H350T": conv2Tf(stationData.T950),
+        "H375T": conv2Tf(stationData.T375), "H350T": conv2Tf(stationData.T350),
         "H325T": conv2Tf(stationData.T325), "H300T": conv2Tf(stationData.T300),
-        "H275T": conv2Tf(stationData.T975), "H250T": conv2Tf(stationData.T950),
+        "H275T": conv2Tf(stationData.T275), "H250T": conv2Tf(stationData.T250),
         "H225T": conv2Tf(stationData.T225), "H200T": conv2Tf(stationData.T200),
-        "H175T": conv2Tf(stationData.T975), "H150T": conv2Tf(stationData.T950),
+        "H175T": conv2Tf(stationData.T175), "H150T": conv2Tf(stationData.T150),
         "H125T": conv2Tf(stationData.T125), "H100T": conv2Tf(stationData.T100),
         "SfcWS": stationData.WindSpeed, "H1000WS": conv2Mph(stationData.WS1000),
         "H975WS": conv2Mph(stationData.WS975),"H950WS": conv2Mph(stationData.WS950),
         "H925WS": conv2Mph(stationData.WS925), "H900WS": conv2Mph(stationData.WS900),
         "H875WS": conv2Mph(stationData.WS875), "H850WS": conv2Mph(stationData.WS850),
         "H825WS": conv2Mph(stationData.WS825), "H800WS": conv2Mph(stationData.WS800),
-        "H775WS": conv2Mph(stationData.WS75), "H750WS": conv2Mph(stationData.WS950),
+        "H775WS": conv2Mph(stationData.WS775), "H750WS": conv2Mph(stationData.WS750),
         "H725WS": conv2Mph(stationData.WS725), "H700WS": conv2Mph(stationData.WS700),
         "H675WS": conv2Mph(stationData.WS675), "H650WS": conv2Mph(stationData.WS650),
         "H625WS": conv2Mph(stationData.WS625), "H600WS": conv2Mph(stationData.WS600),
@@ -286,7 +286,7 @@ function parseWxObs(stationData) {
         "H225WV": windDirSvg(stationData.WD225), "H200WV": windDirSvg(stationData.WD200),
         "H175WV": windDirSvg(stationData.WD175), "H150WV": windDirSvg(stationData.WD150),
         "H125WV": windDirSvg(stationData.WD125), "H100WV": windDirSvg(stationData.WD100),
-        "SfcH": relativeHumdiity(stationData.Temperature, stationData.Dewpoint), "H1000H": relativeHumidity(conv2Tf(stationData.T1000), conv2Tf(stationData.D1000)),
+        "SfcH": relativeHumidity(stationData.Temperature, stationData.Dewpoint), "H1000H": relativeHumidity(conv2Tf(stationData.T1000), conv2Tf(stationData.D1000)),
         "H975H": relativeHumidity(conv2Tf(stationData.T975), conv2Tf(stationData.D975)), "H950H": relativeHumidity(conv2Tf(stationData.T950), conv2Tf(stationData.D950)),
         "H925H": relativeHumidity(conv2Tf(stationData.T925), conv2Tf(stationData.D925)), "H900H": relativeHumidity(conv2Tf(stationData.T900), conv2Tf(stationData.D900)),
         "H875H": relativeHumidity(conv2Tf(stationData.T875), conv2Tf(stationData.D875)), "H850H": relativeHumidity(conv2Tf(stationData.T850), conv2Tf(stationData.D850)),
@@ -333,7 +333,7 @@ function relativeHumidity(tF,dF) {
     var dC = (5/9)*(dF-32);
     var satVapPres = 6.11 * Math.pow(10,(7.5 * tC / (237.7 + tC)));
     var actVapPres = 6.11 * Math.pow(10,(7.5 * dC / (237.7 + dC)));
-    return round(((actVapPres/satVapPres) * 100),0);
+    return Math.round((actVapPres/satVapPres) * 100);
 }
 
 function snowRatio(liqPrecip,tF) {

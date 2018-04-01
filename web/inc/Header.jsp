@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    30 Mar 2018
+    Updated:    1 Apr 2018
     Author     : astump
 --%>
 
@@ -23,7 +23,7 @@
     
     if(type.equals("full")) { 
         scripts2Load += "<script src='"+rootPath+"/jsLib/dojo/dojo/dojo.js'></script>" +
-        "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.2.1.min.js'></script>" +
+        "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.3.1.min.js'></script>" +
         "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
         "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
         "<script src='"+rootPath+"/jsBase/comSec.js'></script>" +
