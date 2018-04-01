@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 30 Mar 2018
+Updated: 1 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -107,7 +107,7 @@ function doCh(type, dynVar, opts) {
             if(isSet(opts)) { dBack += "&" + opts; }
             break;
         case "j":
-            window.alert("Unimplemented!");
+            window.alert("Use XHR?");
             break;
     }
     return dBack;
@@ -144,6 +144,7 @@ function getBasePath(opt) {
     if(checkMobile()) { tBase += ":8082"; }
     tBase = "https:" + tBase;
     switch(opt) {
+        case "chartCache": tBase = base + "/chartCache"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
         case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
@@ -182,6 +183,7 @@ function getRelatedLinks(page) {
 
 function getResource(what) {
     switch(what) {
+        case "Chart": return getBasePath("rest") + "/Chart";
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
         case "Logs": return getBasePath("rest") + "/Logs";

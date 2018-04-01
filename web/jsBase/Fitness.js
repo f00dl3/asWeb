@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 28 Feb 2018
+Updated: 1 Apr 2018
  */
 
 var bicycleUsed = "A16";
@@ -324,6 +324,32 @@ function getMapLinkString(inDate, inType, inAct, commonFlag) {
     return genString;
 }
 
+function getWeightChart(inXdt1, inXdt2, chartContainer) {
+    aniPreload("on");
+    var xdt1, xdt2;
+    var oYear = getDate("year", 0, "yearOnly");
+    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
+    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
+    var thePostData = "doWhat=WeightRange&XDT1=" + xdt1 + "&XDT2=" + xdt2;
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Chart"),
+        postData: thePostData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            populateFitnessChart("jFree");
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for WeightChart FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+
 function processFitnessAll(dataIn, autoMpg) {
     var costPerMileTco = 14000/((autoMpg.EndMiles - 47500) + 60000);
     var costPerMile = costPerMileTco + cpmNoMpg + (autoMpg.AvgCost / ((autoMpg.EndMiles - autoMpg.StartMiles) / autoMpg.Gallons));
@@ -442,16 +468,34 @@ function processFitnessAll(dataIn, autoMpg) {
     dojo.byId("fitnessTable").innerHTML = rData;
 }
 
-function populateFitnessChart() {
-    var tElement = "<div class='trafcam'>" +
-            "<div class='UPopNM'>" +
-            "<img class='ch_large' src='" + getBasePath("old") + "/pChart/ch_Dynamic.php?Thumb=1&DynVar=FitWeight'/>" +
-            "<div class='UPopNMO'>" +
-            "<strong>Chart Type</strong><br/>" +
-            "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeight' target='pChart'><button class='UButton'>Range</button></a>" +
-            "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
-            "</div></div>" +
-            "</div>";
+function populateFitnessChart(chartSource) {
+    var tElement = "";
+    switch(chartSource) {
+        
+        case "pChart":
+            tElement = "<div class='trafcam'>" +
+                    "<div class='UPopNM'>" +
+                    "<img class='ch_large' src='" + getBasePath("old") + "/pChart/ch_Dynamic.php?Thumb=1&DynVar=FitWeight'/>" +
+                    "<div class='UPopNMO'>" +
+                    "<strong>Chart Type</strong><br/>" +
+                    "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeight' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
+                    "</div></div>" +
+                    "</div>";
+            break;
+            
+        case "jFree":
+            tElement = "<div class='trafcam'>" +
+                    "<div class='UPopNM'>" +
+                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.jpeg'/>" +
+                    "<div class='UPopNMO'>" +
+                    "<strong>Chart Type</strong><br/>" +
+                    "<a href='" + getBasePath("chartCache") + "/WeightRange.jpeg' target='pChart'><button class='UButton'>Range</button></a>" +
+                    //"<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
+                    "</div></div>" +
+                    "</div>";
+    }
+    
     dojo.byId("WeightChartHolder").innerHTML = tElement;
 }
 
@@ -535,7 +579,8 @@ function putUpdateToday(formData) {
 }
 
 var initFitness = function(event) {
-    populateFitnessChart();
+    // populateFitnessChart("pChart");
+    getWeightChart();
     populateSearchBox();
     getFitnessAllData();
 };

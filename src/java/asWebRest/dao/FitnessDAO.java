@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 31 Mar 2018
+Updated: 1 Apr 2018
 */
 
 package asWebRest.dao;
@@ -16,7 +16,8 @@ public class FitnessDAO {
     
     WebCommon wc = new WebCommon();
     
-    public JSONArray getAll(List<String> qParams) {
+    public JSONArray getAll(List<String> qParams, String order) {
+        if(!wc.isSet(order)) { order = "DESC"; }
         final String query_Fitness_All = "SELECT" +
                 " f.Date, f.Weight, f.RunWalk, f.Shoe, f.RSMile," +
                 " f.Bicycle, f.Cycling, f.BkStudT," +
@@ -37,7 +38,7 @@ public class FitnessDAO {
                 " FROM Core.Fitness f" +
                 " LEFT OUTER JOIN WxObs.CF6MCI cf6 ON f.Date = cf6.Date" +
                 " WHERE f.Date BETWEEN ? AND ? " +
-                " ORDER BY f.Date DESC LIMIT 0, 365;";
+                " ORDER BY f.Date " + order + " LIMIT 0, 365;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Fitness_All, qParams);

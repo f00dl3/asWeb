@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Mar 2018
+Updated: 1 Apr 2018
  */
 
 package asWebRest.resource;
@@ -55,7 +55,7 @@ public class FitnessResource extends ServerResource {
                     if(xdt1 != null && xdt2 != null && bike != null && year != null) {
                         qParams.add(xdt1);
                         qParams.add(xdt2);
-                        JSONArray allRecs = getFitnessAction.getAll(qParams);
+                        JSONArray allRecs = getFitnessAction.getAll(qParams, "DESC");
                         JSONArray calories = getFitnessAction.getCalories();
                         JSONArray plans = getFitnessAction.getRPlans();
                         JSONArray today = getFitnessAction.getDay();
