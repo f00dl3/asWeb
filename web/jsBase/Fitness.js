@@ -4,7 +4,6 @@ Created: 14 Feb 2018
 Updated: 1 Apr 2018
  */
 
-var bicycleUsed = "A16";
 var myHeight = 68;
 
 function actOnCaloriesSubmit(event) {

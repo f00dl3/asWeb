@@ -1,11 +1,12 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 Apr 2018
+Updated: 2 Apr 2018
  */
 
 var annMaint = 910.66;
 var annMiles = 12672;
+var bicycleUsed = "A16";
 var carOwnershipYears = (2018-2010);
 var carStartMiles = 44150;
 var costPerMile = 3.50;
@@ -165,6 +166,22 @@ function getDate(inType, inInput, rdFormat) {
     return retDate;
 }
 
+function getGetParams() {
+    var $_GET = {};
+    if(document.location.toString().indexOf('?') !== -1) {
+        var query = document.location
+                .toString()
+                .replace(/^.*?\?/, "")
+                .replace(/#.*$/, "")
+                .split("&");
+        for(var i = 0; i < query.length; i++) {
+            var aux = decodeURIComponent(query[i].split("="));
+            $_GET[aux[0]] = aux[1];
+        }
+    }
+    return $_GET;
+}
+
 function getRelatedLinks(page) {
     var args = {
         url: getResource("WebLinks"),
@@ -191,6 +208,12 @@ function getResource(what) {
         case "WebLinks": return getBasePath("rest") + "/WebLinks";
         case "Wx": return getBasePath("rest") + "/Wx";
     }
+}
+
+function getSum(numbers) {
+    return numbers.reduce(function (a, b) {
+        return a + b;
+    });
 }
 
 function getWebLinks(master, whereTo, a3dFlags) {
