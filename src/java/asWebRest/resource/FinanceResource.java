@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 29 Mar 2018
+Updated: 4 Apr 2018
  */
 
 package asWebRest.resource;
@@ -51,7 +51,7 @@ public class FinanceResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
                 
-                case "getFinanceData":
+                case "getAssetData":
                     JSONArray assets = getFinanceAction.getAssetTrack();
                     JSONArray bGames = getFinanceAction.getBGames();
                     JSONArray books = getFinanceAction.getBooks();
@@ -68,9 +68,22 @@ public class FinanceResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                 
-                case "getAutoMpg":
+                case "getAuto":
                     JSONArray autoMpg = getFinanceAction.getAutoMpg();
-                    returnData += autoMpg.toString();
+                    JSONArray autoMpgAvg = getFinanceAction.getAutoMpgAverage();
+                    JSONArray billSum = getFinanceAction.getAutoBillSum();
+                    JSONArray autoMaint = getFinanceAction.getAutoMaint();
+                    mergedResults
+                        .put("autoMpg", autoMpg)
+                        .put("autoMpgAvg", autoMpgAvg)
+                        .put("billSum", billSum)
+                        .put("amrData", autoMaint);
+                    returnData += mergedResults.toString();
+                    break;
+                    
+                case "getBills":
+                    JSONArray bills = getFinanceAction.getBills();
+                    returnData += bills.toString();
                     break;
                     
                 case "putAssetTrackUpdate":

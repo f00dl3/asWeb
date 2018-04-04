@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 29 Mar 2018
+Updated: 4 Apr 2018
 */
 
 package asWebRest.dao;
@@ -40,13 +40,11 @@ public class FinanceDAO {
     }
     
     public JSONArray getAmSch() {
-        
         final String query_AmSch = "SELECT" +
             " DueDate, "+mb.getMortPayment()+" AS Payment, Extra, Planned," +
             " CAST((@runtot * (("+mb.getMortRate()+"/12)/100)) AS DECIMAL(5,2)) AS Interest," +
             " CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + Planned + )) AS DECIMAL(10,2)) AS Balance" +
             " FROM Core.FB_WFLM35;";
-        
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
         try {
@@ -66,10 +64,64 @@ public class FinanceDAO {
         return tContainer;
     }
     
+    public JSONArray getAutoBillSum() {
+        final String query_AutoBillSum = "SELECT SUM(Bill) AS BillSum from Core.AutoMaint_MAZ6;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_AutoBillSum, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("BillSum", resultSet.getDouble("BillSum"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }   
+    
+    public JSONArray getAutoMaint() {
+        final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
+                " FROM Core.AutoMaint_MAZ6 ORDER BY Date DESC LIMIT 10;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_AutoMaint, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Invoice", resultSet.getInt("Invoice"))
+                    .put("Miles", resultSet.getInt("Miles"))
+                    .put("Date", resultSet.getString("Date"))
+                    .put("Location", resultSet.getString("Location"))
+                    .put("Services", resultSet.getString("Services"))
+                    .put("Bill", resultSet.getDouble("Bill"))
+                    .put("OilCh", resultSet.getInt("OilCh"))
+                    .put("TireRotate", resultSet.getInt("TireRotate"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }   
+    
     public JSONArray getAutoMpg() {
-        
+        final String query_AutoMPG = "SELECT Date, TotMiles, CostPG, Gallons FROM Auto_MPG ORDER BY Date DESC LIMIT 10;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_AutoMPG, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("TotMiles", resultSet.getInt("TotMiles"))
+                    .put("Gallons", resultSet.getDouble("Gallons"))
+                    .put("CostPG", resultSet.getDouble("CostPG"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }    
+    
+    public JSONArray getAutoMpgAverage() {
         final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, AVG(CostPG) AS AvgCost FROM Core.Auto_MPG;";
-        
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_AutoMPG_Average, null);
@@ -87,15 +139,12 @@ public class FinanceDAO {
     }    
     
     public JSONArray getAssetTrack() {
-
         final String query_FBook_ATrackPrep1 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.BGames), Checked=CURDATE() WHERE Related='BGames';";
         final String query_FBook_ATrackPrep2 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.Books), Checked=CURDATE() WHERE Related='Books';";
         final String query_FBook_ATrackPrep3 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.DecorTools), Checked=CURDATE() WHERE Related='DecorTools';";
         final String query_FBook_ATrackPrep4 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Count)*7 FROM Core.Licenses), Checked=CURDATE() WHERE Related='Licenses';";
-
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked," +
                 " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
-
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs(query_FBook_ATrackPrep1, null); } catch (Exception e) { e.printStackTrace(); }
         try { ResultSet rsB = wc.q2rs(query_FBook_ATrackPrep2, null); } catch (Exception e) { e.printStackTrace(); }

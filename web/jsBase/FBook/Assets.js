@@ -17,6 +17,7 @@ function actOnDecorToolsUpdate(event) {
 }
 
 function displayAssets() {
+    getAssetData();
     $("#FBAsset").toggle();
 }
 
@@ -132,6 +133,34 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     wTable += "</tbody></table>";
     bubble += wTable + "</div></div>";
     dojo.byId("HoldWorth").innerHTML = bubble;
+}
+
+function getAssetData() {
+    aniPreload("on");
+    var thePostData = "doWhat=getAssetData";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putAssets(
+                    data.qMerged[0],
+                    data.bGames,
+                    data.books,
+                    data.dTools,
+                    data.licenses,
+                    data.assets
+                    );
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for FinanceData FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function onlineAssetSearch(searchTerms) {

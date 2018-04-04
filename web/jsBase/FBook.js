@@ -15,40 +15,15 @@ function checkTransactionAge(dtAge) {
     return cDtAge;
 }
 
-function getFinanceData() {
-    aniPreload("on");
-    var thePostData = "doWhat=getFinanceData";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Finance"),
-        postData: thePostData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function (data) {
-            putAssets(
-                    data.qMerged[0],
-                    data.bGames,
-                    data.books,
-                    data.dTools,
-                    data.licenses,
-                    data.assets
-                    );
-            naviButtonListener();
-            aniPreload("off");
-        },
-        error: function (data, iostatus) {
-            aniPreload("off");
-            window.alert("xhrGet for FinanceData FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-}
-
 function naviButtonListener() {
-    var btnShowFBAsset = dojo.byId("ShowFBAsset");
-    var btnShowFBWorkPTO = dojo.byId("ShowFBWorkPTO");
-    dojo.connect(btnShowFBAsset, "click", displayAssets);
-    dojo.connect(btnShowFBWorkPTO, "click", displayWorkPTO);
+    var btnShowAsset = dojo.byId("ShowFBAsset");
+    var btnShowAuto = dojo.byId("ShowFBAuto");
+    var btnShowBills = dojo.byId("ShowFBBills");
+    var btnShowPto = dojo.byId("ShowFBWorkPTO");
+    dojo.connect(btnShowAsset, "click", displayAssets);
+    dojo.connect(btnShowAuto, "click", displayAuto);
+    dojo.connect(btnShowBills, "click", displayBills);
+    dojo.connect(btnShowPto, "click", displayWorkPTO);
 }
 
 function putOverview(finGlob) { // Get from db and maybe call in get not separate function
@@ -68,7 +43,7 @@ function putOverview(finGlob) { // Get from db and maybe call in get not separat
 }
 
 function initFinance() {
-    getFinanceData();
+    naviButtonListener();
 }
 
 dojo.ready(initFinance);

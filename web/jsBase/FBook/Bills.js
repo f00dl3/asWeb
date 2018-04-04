@@ -4,6 +4,32 @@ FBook.js Created: 23 Mar 2018
 FBook/Bills.js Split: 4 Apr 2018
  */
 
+function displayBills() {
+    getBills();
+    $("#FBBills").toggle();
+}
+
+function getBills() {
+    aniPreload("on");
+    var thePostData = "doWhat=getBills";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putBills(data);
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for Bills FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
 function putBills(billData) {
     var rData = "<h3>Bills</h3>";
     var bCols = ["Month", "ELE", "GAS", "WAT", "SWR", "TRA", "WEB", "PHO", "Total"];

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 29 Mar 2018
+Updated: 4 Apr 2018
  */
 
 package asWebRest.action;
@@ -17,7 +17,10 @@ public class GetFinanceAction {
     public JSONArray get3NetWorth() { return financeDAO.get3NetWorth(); }
     public JSONArray getAmSch() { return financeDAO.getAmSch(); }
     public JSONArray getAssetTrack() { return financeDAO.getAssetTrack(); }
+    public JSONArray getAutoBillSum() { return financeDAO.getAutoBillSum(); }
+    public JSONArray getAutoMaint() { return financeDAO.getAutoMaint(); }
     public JSONArray getAutoMpg() { return financeDAO.getAutoMpg(); }
+    public JSONArray getAutoMpgAverage() { return financeDAO.getAutoMpgAverage(); }
     public JSONArray getBGames() { return financeDAO.getBGames(); }
     public JSONArray getBills() { return financeDAO.getBills(); }
     public JSONArray getBooks() { return financeDAO.getBooks(); }

@@ -16,6 +16,10 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
+    String[] finScripts = { "Assets", "Auto", "Bills", "Blue", "CkBk", "Pto" };
+    String[] fitScripts = { "Plans", "Calories", "Today" };
+    String[] wxScripts = { "WxFunctions", "ObsFeed" };
+    String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };
     
     if(title == null) { title = "asWeb"; }
     if(type == null) { type = "full"; }
@@ -33,24 +37,25 @@
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
             " <strong><span id='preloadSize'>Loading...</span></strong></div>";
     
-    String cssFiles = "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
-            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
-            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
-            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>";
+    String cssFiles = "";
+    for(int i=0; i < css2do.length; i++) {
+        cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
+    }
     
-    String fbScriptPack = "<script src='"+rootPath+"/jsBase/FBook/Assets.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/FBook/Bills.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/FBook/Blue.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/FBook/CkBk.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/FBook/Pto.js'></script>";
+    String fbScriptPack = "";
+    for(int i=0; i < finScripts.length; i++) {
+        fbScriptPack += "<script src='"+rootPath+"/jsBase/FBook/"+finScripts[i]+".js'></script>";
+    }
     
-    String fitScriptPack = "<script src='"+rootPath+"/jsBase/Fitness/Plans.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/Fitness/Calories.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/Fitness/Today.js'></script>";
+    String fitScriptPack = "";
+    for(int i=0; i < fitScripts.length; i++) {
+        fitScriptPack += "<script src='"+rootPath+"/jsBase/Fitness/"+fitScripts[i]+".js'></script>";
+    }
     
-    String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
-            " <script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
+    String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";
+    for(int i=0; i < wxScripts.length; i++) {
+        wxScriptPack += "<script src='"+rootPath+"/jsBase/"+wxScripts[i]+".js'></script>";
+    }
 
     String mapHelperScripts = "<script src='"+rootPath+"/jsBase/MapInit.js'></script>";
     
