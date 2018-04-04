@@ -4,6 +4,33 @@ FBook.js Created: 23 Mar 2018
 FBook/Blue.js Split: 4 Apr 2018
  */
 
+function displayBlue() {
+    getBlue("Upper");
+    $("#FBBlue").toggle();
+}
+
+function getBlue(level) {
+    aniPreload("on");
+    var thePostData = "doWhat=getMeasure" +
+            "&level="+level;
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Home"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putBlueprint(data);
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for WorkPTO FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
 function putBlueprint(blueData) {
     var scale = 2, width = 1280, height = 800;
     var rData = "<h3>House diagrams</h3>" +

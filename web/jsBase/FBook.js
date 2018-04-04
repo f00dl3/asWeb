@@ -19,10 +19,12 @@ function naviButtonListener() {
     var btnShowAsset = dojo.byId("ShowFBAsset");
     var btnShowAuto = dojo.byId("ShowFBAuto");
     var btnShowBills = dojo.byId("ShowFBBills");
+    var btnShowBlue = dojo.byId("ShowFBBlue");
     var btnShowPto = dojo.byId("ShowFBWorkPTO");
     dojo.connect(btnShowAsset, "click", displayAssets);
     dojo.connect(btnShowAuto, "click", displayAuto);
     dojo.connect(btnShowBills, "click", displayBills);
+    dojo.connect(btnShowBlue, "click", displayBlue);
     dojo.connect(btnShowPto, "click", displayWorkPTO);
 }
 
