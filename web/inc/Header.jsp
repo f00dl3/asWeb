@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    1 Apr 2018
+    Updated:    4 Apr 2018
     Author     : astump
 --%>
 
@@ -23,25 +23,35 @@
     
     if(type.equals("full")) { 
         scripts2Load += "<script src='"+rootPath+"/jsLib/dojo/dojo/dojo.js'></script>" +
-        "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.3.1.min.js'></script>" +
-        "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
-        "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
-        "<script src='"+rootPath+"/jsBase/comSec.js'></script>" +
-        "<script src='"+rootPath+"/jsBase/CookieMgmt.js'></script>";
+                "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.3.1.min.js'></script>" +
+                "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/comSec.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/CookieMgmt.js'></script>";
     }
     
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
-        " <strong><span id='preloadSize'>Loading...</span></strong></div>";
+            " <strong><span id='preloadSize'>Loading...</span></strong></div>";
     
     String cssFiles = "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Master.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
-        " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>";
+            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Colors.css'/>" +
+            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/3DTransforms.css'/>" +
+            " <link rel='stylesheet' type='text/css' href='"+rootPath+"/css/Preloader.css'/>";
+    
+    String fbScriptPack = "<script src='"+rootPath+"/jsBase/FBook/Assets.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/FBook/Bills.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/FBook/Blue.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/FBook/CkBk.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/FBook/Pto.js'></script>";
+    
+    String fitScriptPack = "<script src='"+rootPath+"/jsBase/Fitness/Plans.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/Fitness/Calories.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/Fitness/Today.js'></script>";
     
     String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
-                        "<script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
-    
+            " <script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
+            " <script src='"+rootPath+"/jsBase/ObsFeed.js'></script>";
+
     String mapHelperScripts = "<script src='"+rootPath+"/jsBase/MapInit.js'></script>";
     
     if(scripts.equals("true")) {
@@ -58,9 +68,11 @@
                 break;
             case "FBook":
                 fullTitle = "Finance Book";
+                scripts2Load += fbScriptPack;
                 break;
             case "Fitness":
-                scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>";
+                scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
+                        fitScriptPack;
                 break;
             case "OutMap":
                 fullTitle = "Maps";

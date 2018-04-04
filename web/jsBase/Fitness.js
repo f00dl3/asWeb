@@ -1,22 +1,10 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 1 Apr 2018
+Updated: 4 Apr 2018
  */
 
 var myHeight = 68;
-
-function actOnCaloriesSubmit(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject("CaloriesForm");
-    putCalories(thisFormData);
-}
-
-function actOnCommitRoute(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject("RoutePlanForm");
-    putRoute(thisFormData);
-}
 
 function actSearchByDateSubmit(event) {
     dojo.stopEvent(event);
@@ -24,12 +12,6 @@ function actSearchByDateSubmit(event) {
     var xdt1 = thisFormData.FitSearchStart;
     var xdt2 = thisFormData.FitSearchEnd;
     getFitnessAllData(xdt1, xdt2);
-}
-
-function actUpdateTodaySubmit(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject("FormUpdateToday");
-    putUpdateToday(thisFormData);
 }
 
 function colorCalories(tValue) {
@@ -148,122 +130,6 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
     dojo.byId("FitBubbleHolder").innerHTML = returnData;
 }
 
-function fitnessCalories(calQ) {
-    var foods = 1;
-    var tableRows = [ "Food", "Servings", "Today", "Serving", "Calories" ];
-    var dataBack = "<div class='UBox'>Food<div class='UBoxO'>Calorie Tracker" +
-            "<form id='CaloriesForm'>" +
-            "<button class='UButton' id='CalSubmitButton' type='submit' name='SubmitServings'>Nom nom nom!</button><p>";
-    var tableElement = "<table><thead><tr>";
-    for (var i=0; i < tableRows.lenght; i++) {
-        tableElement += "<th>" + tableRows[i] + "</th>";
-    }
-    tableElement += "</tr></thead><tbody>";
-    calQ.forEach(function (cDat) {
-        var slSet = "";
-        if(isSet(cDat.ThisServingsLast)) { slSet = cDat.ThisServingsLast; }
-        tableElement += "<tr><input type='hidden' name='FoodID[" + foods + "]' value='" + foods + "' />" +
-                "<td><input type='hidden' name='FoodDescription[" + foods + "]' value='" + cDat.Food + "' />" +
-                "<div class='U2Pop'>" + cDat.Food + "<div class='UPopO'>Last consumed: " + cDat.Last + "</div></div></td>" +
-                "<td><input type='number' step='0.1' name='Quantity[" + foods + "]' value = '" + slSet + "' style='width: 34px;'/></td>" +
-                "<td>" + cDat.Serving + "</td>" +
-                "<td><input type='hidden' name='Calories[" + foods + "]' value='" + cDat.Calories + "'/>" + cDat.Calories + "</td>" +
-                "<input type='hidden' name='Fat[" + foods + "]' value='" + cDat.Fat + "' />" +
-                "<input type='hidden' name='Carbs[" + foods + "]' value='" + cDat.Carbs + "' />" +
-                "<input type='hidden' name='Protein[" + foods + "]' value='" + cDat.Protein + "' />" +
-                "<input type='hidden' name='Sodium[" + foods + "]' value='" + cDat.Sodium + "' />" +
-                "<input type='hidden' name='Cholest[" + foods + "]' value='" + cDat.Cholest + "' />" +
-                "<input type='hidden' name='Sugar[" + foods + "]' value='" + cDat.Sugar + "' />" +
-                "<input type='hidden' name='Fiber[" + foods + "]' value='" + cDat.Fiber + "' />" +
-                "<input type='hidden' name='Water[" + foods + "]' value='" + cDat.Water + "' />" +
-                "<input type='hidden' name='FruitVeggie[" + foods + "]' value='" + cDat.FruitVeggie + "' />" +
-                "</tr>";
-                foods++;
-    });
-    dataBack += tableElement + "</tbody></table>" +
-            "</form>" +
-            "</div></div>";
-    dojo.byId("Calories").innerHTML = dataBack;
-    var calSubmitButton = dojo.byId("CalSubmitButton");
-    dojo.connect(calSubmitButton, "onclick", actOnCaloriesSubmit);
-}
-
-function fitnessPlans(dataIn) {
-    var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
-            "<form id='RoutePlanForm'><button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
-    var routeOptions = [ "RunGeoJSON", "CycGeoJSON" ];
-    var routeId = 1;
-    var routeDoneFlag;
-    var tableData = "<table><thead><tr>";
-    var tableDefs = [ "Do", "Description", "Link", "Type", "Done", "Dist" ];
-    tableDefs.forEach(function(def) {
-        tableData += "<th>" + def + "</th>";
-    });
-    tableData += "</tr></thead><tbody>";
-    dataIn.forEach(function(tData) {
-        var routeDistMi = (tData.DistKm * 0.621371).toFixed(1);
-        var pRoute = tData.GeoJSON;
-        var rpMap = "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tData.Description + "&Route=" + pRoute + "&KML=true'>Mapped</a>";
-        if(tData.Done === 1) { routeDoneFlag = "Yes"; } else { routeDoneFlag = "No"; }
-        tableData += "<tr><input type='hidden' name='RouteID[" + routeId + "]' value=" + routeId + ">" +
-                "<td><input type='checkbox' name='RouteSetCommit[" + routeId + "]' value='Yes'/></td>" +
-                "<td><input type='hidden' name='RouteDescription[" + routeId + "]' value='" + tData.Description + "'/>" + tData.Description + "</td>" +
-                "<td>" + rpMap + "</td>" +
-                "<td><select name='RouteType[" + routeId + "]'>";
-        routeOptions.forEach(function(tType) {
-            tableData += "<option value='" + tType + "'>" + tType.substring(0, 3) + "</option>";
-        });
-        tableData += "</select></td>" +
-                "<td>" + routeDoneFlag + "</td>" +
-                "<td>" + routeDistMi + "</td>" +
-                "</tr>";
-        routeId++;
-    });
-    tableData += "</tbody></table>";
-    container += tableData + "</form></div></div>";
-    dojo.byId("Plans").innerHTML = container;
-    var commitRouteButton = dojo.byId("CommitRouteButton");
-    dojo.connect(commitRouteButton, "onclick", actOnCommitRoute);
-}
-
-function fitnessToday(dataIn) {
-    if(!isSet(dataIn)) { dataIn = {}; }
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags;
-    studChecked = commonRouteChecked = rsMile = "";
-    if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
-    if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
-    if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
-    if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
-    if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
-    if(!isSet(dataIn.xTags)) {
-        if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
-    } else {
-        xTags = dataIn.xTags; if(dataIn.Vomit === 1) { xTags += " VO"; }
-    }
-    if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
-    if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
-    var holderData = "<div class='UBox'>Today" +
-            "<div class='UBoxO'>Update Today<br/>" +
-            "<form id='FormUpdateToday'><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
-    var tableData = "<table><tbody>" +
-            "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value='" + weight + "'/></td></tr>" +
-            "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value='" + runWalk + "'/></td></tr>" +
-            "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + shoe + "'/></td></tr>" +
-            "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value='" + rsMile + "'/></td></tr>" +
-            "<tr><td>Cycling</td><td><input type='number' step='0.1' name='TodayCycling' value='" + cycling + "'/><br/>" +
-            "S<input type='checkbox' style='width: 15px;' name='TodayBkStudT' " + studChecked + "/>" +
-            "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
-            "<input type='hidden' name='TodayBicycle' value='" + bicycleUsed + "'/>" +
-            "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
-            "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
-            "</tbody></table>";
-    holderData += tableData +
-            "</form></div></div>";
-    dojo.byId("Today").innerHTML = holderData;
-    var formUpdateToday = dojo.byId("FormUpdateToday");
-    dojo.connect(formUpdateToday, "onsubmit", actUpdateTodaySubmit);
-}
-
 function getFitnessAllData(inXdt1, inXdt2) {
     aniPreload("on");
     var xdt1, xdt2;
@@ -347,7 +213,6 @@ function getWeightChart(inXdt1, inXdt2, chartContainer) {
     };
     dojo.xhrPost(xhArgs);
 }
-
 
 function processFitnessAll(dataIn, autoMpg) {
     var costPerMileTco = 14000/((autoMpg.EndMiles - 47500) + 60000);
@@ -511,27 +376,6 @@ function populateSearchBox() {
     dojo.connect(searchByDateForm, "onsubmit", actSearchByDateSubmit);
 }
 
-function putCalories(formData) {
-    aniPreload("on");
-    formData.doWhat = "putCalories";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: formData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            showNotice(data.callbackData.totCal + " calories added!");
-            getFitnessAllData();
-            aniPreload("off");
-        },
-        error: function(data, iostatus) {
-            aniPreload("off");
-            window.alert("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-}
 
 function putRoute(formData) {
     aniPreload("on");
@@ -550,28 +394,6 @@ function putRoute(formData) {
         error: function(data, iostatus) {
             aniPreload("off");
             window.alert("xhrPost for Route FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-}
-
-function putUpdateToday(formData) {
-    aniPreload("on");
-    formData.doWhat = "putToday";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: formData,
-        handleAs: "text",
-        timeout: timeOutMilli,
-        load: function(data) {
-            showNotice("Updated today's activites!");
-            getFitnessAllData();
-            aniPreload("off");
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrPost for UpdateToday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-            aniPreload("off");
         }
     };
     dojo.xhrPost(xhArgs);
