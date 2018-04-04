@@ -16,8 +16,8 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
-    String[] finScripts = { "Assets", "Auto", "Bills", "Blue", "CkBk", "Pto" };
-    String[] fitScripts = { "Plans", "Calories", "Today" };
+    String[] finScripts = { "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
+    String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
     String[] wxScripts = { "WxFunctions", "ObsFeed" };
     String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };
     
@@ -44,12 +44,12 @@
     
     String fbScriptPack = "";
     for(int i=0; i < finScripts.length; i++) {
-        fbScriptPack += "<script src='"+rootPath+"/jsBase/FBook/"+finScripts[i]+".js'></script>";
+        fbScriptPack += "<script src='"+rootPath+"/jsBase/"+finScripts[i]+".js'></script>";
     }
     
     String fitScriptPack = "";
     for(int i=0; i < fitScripts.length; i++) {
-        fitScriptPack += "<script src='"+rootPath+"/jsBase/Fitness/"+fitScripts[i]+".js'></script>";
+        fitScriptPack += "<script src='"+rootPath+"/jsBase/"+fitScripts[i]+".js'></script>";
     }
     
     String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";

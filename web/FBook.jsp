@@ -26,7 +26,7 @@
             <button class="UButton" id="ShowFBBlue">BP</button>
             <button class="UButton" id="ShowFBCheck">CK</button>
             <button class="UButton" id="ShowFBWorkPTO">TO</button>
-            <button class="UButton" id="ShoFBUtUse">UT</button>
+            <button class="UButton" id="ShowFBUUse">UT</button>
         </div>
     
         <div id="FinOverview">
@@ -42,7 +42,7 @@
         <div id="FBBlue"></div>
         <div id="FBCheck"></div>
         <div id="FBWorkPTO"></div>
-        <div id="FBUtilUse"></div>
+        <div id="FBUUse"></div>
              
     </body>
 

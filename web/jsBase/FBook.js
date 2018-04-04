@@ -21,11 +21,13 @@ function naviButtonListener() {
     var btnShowBills = dojo.byId("ShowFBBills");
     var btnShowBlue = dojo.byId("ShowFBBlue");
     var btnShowPto = dojo.byId("ShowFBWorkPTO");
+    var btnShowUtils = dojo.byId("ShowFBUUse");
     dojo.connect(btnShowAsset, "click", displayAssets);
     dojo.connect(btnShowAuto, "click", displayAuto);
     dojo.connect(btnShowBills, "click", displayBills);
     dojo.connect(btnShowBlue, "click", displayBlue);
     dojo.connect(btnShowPto, "click", displayWorkPTO);
+    dojo.connect(btnShowUtils, "click", displayUtils);
 }
 
 function putOverview(finGlob) { // Get from db and maybe call in get not separate function

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Feb 2018
+Updated: 4 Apr 2018
  */
 
 package asWebRest.resource;
@@ -21,5 +21,7 @@ public class UtilityUseResource extends ServerResource {
         JSONArray callMe = getUtilityUseAction.getUsePhone(agMonV);  
         return callMe.toString();
     }
+    
+    // figure out agMonV w/o billions of queries!
     
 }

@@ -129,6 +129,7 @@ function formatDate(inDate, request) {
         case "full": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
         case "js": fmtDate = inDate; break;
         case "timestamp": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMMddHHmmSS", selector: "date" }); break;
+        case "yearMonth": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMM", selector: "date"}); break;
         case "yearOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy", selector: "date"}); break;
     }
     return fmtDate;

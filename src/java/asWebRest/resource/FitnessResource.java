@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 1 Apr 2018
+Updated: 4 Apr 2018
  */
 
 package asWebRest.resource;
@@ -66,7 +66,7 @@ public class FitnessResource extends ServerResource {
                         JSONArray rShoe = getFitnessAction.getRShoe();
                         JSONArray tot = getFitnessAction.getTot();
                         JSONArray yData = getFitnessAction.getYear(year);
-                        JSONArray autoMpg = getFinanceAction.getAutoMpg();
+                        JSONArray autoMpg = getFinanceAction.getAutoMpgAverage();
                         mergedResults
                             .put("allRecs", allRecs)
                             .put("calories", calories)
