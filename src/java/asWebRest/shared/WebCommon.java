@@ -1,12 +1,18 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 22 Mar 2018
+Updated: 5 Apr 2018
 */
 
 package asWebRest.shared;
 
 import asWebRest.shared.MyDBConnector;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
@@ -108,6 +114,12 @@ public class WebCommon {
         }
         ResultSet resultSet = pStatement.executeQuery();
         return resultSet;
+    }
+    
+    public static void varToFile(String thisVar, File outFile, boolean appendFlag) throws FileNotFoundException {
+        try ( PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile, appendFlag))) ) {
+                out.println(thisVar);
+        } catch (IOException io) { io.printStackTrace(); }
     }
     
 }
