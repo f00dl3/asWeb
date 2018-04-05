@@ -2,13 +2,13 @@
 by Anthony Stump
 from old ASWebUI
 Created: Unknown
-Updated: 1 Apr 2018
+Updated: 5 Apr 2018
 */
 
 #Blueprint { background-color: #000066; color: white; }
 #CF6Results, #FitResults, #ObsResults {}
 #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit { display: none; }
-#FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBSprintPTO, #FBUtUse { display: none; }
+#FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse { display: none; }
 #wxObsFcst, #wxFeeds, #wxNewsEmail, #wxEarthquakes { display: none; }
 #FitLayoutTop { border: hidden; }
 #FitLayoutTop td { background-color: black; border: hidden; color: white; width: auto; }

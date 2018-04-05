@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 4 Apr 2018
+Updated: 5 Apr 2018
  */
 
 package asWebRest.application;
 
 import asWebRest.resource.ChartResource;
+import asWebRest.resource.CongressResource;
 import asWebRest.resource.CookingResource;
 import asWebRest.resource.DatabaseInfoResource;
 import asWebRest.resource.EntertainmentResource;
@@ -53,6 +54,7 @@ public class AnthonyRestlet extends Application {
     public synchronized Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/Chart", ChartResource.class);
+        router.attach("/Congress", CongressResource.class);
         router.attach("/Cooking", CookingResource.class);
         router.attach("/DatabaseInfo", DatabaseInfoResource.class);
         router.attach("/Entertainment", EntertainmentResource.class);
