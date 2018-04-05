@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    4 Apr 2018
+    Updated:    5 Apr 2018
     Author     : astump
 --%>
 
@@ -18,7 +18,7 @@
     String refresh = request.getParameter("refresh");
     String[] finScripts = { "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
     String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
-    String[] wxScripts = { "WxFunctions", "ObsFeed" };
+    String[] wxScripts = { "Weather/WxFunctions", "Weather/ObsFeed" };
     String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };
     
     if(title == null) { title = "asWeb"; }
@@ -57,7 +57,7 @@
         wxScriptPack += "<script src='"+rootPath+"/jsBase/"+wxScripts[i]+".js'></script>";
     }
 
-    String mapHelperScripts = "<script src='"+rootPath+"/jsBase/MapInit.js'></script>";
+    String mapHelperScripts = "<script src='"+rootPath+"/jsBase/MapFunc/MapInit.js'></script>";
     
     if(scripts.equals("true")) {
         switch(title) {
