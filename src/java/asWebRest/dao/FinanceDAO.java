@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 4 Apr 2018
+Updated: 5 Apr 2018
 */
 
 package asWebRest.dao;
@@ -190,8 +190,8 @@ public class FinanceDAO {
     public JSONArray getBills() {
     
         final String query_FBook_Bills = "SELECT" +
-            " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO," +
-            " (ELE+GAS+WAT+SWR+TRA+WEB+PHO) as Total" +
+            " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO, Gym, Other" +
+            " (ELE+GAS+WAT+SWR+TRA+WEB+PHO+Gym+Other) as Total" +
             " FROM Core.Bills" +
             " ORDER BY Month DESC;";
     
@@ -209,6 +209,8 @@ public class FinanceDAO {
                     .put("TRA", resultSet.getDouble("TRA"))
                     .put("WEB", resultSet.getDouble("WEB"))
                     .put("PHO", resultSet.getDouble("PHO"))
+                    .put("Gym", resultSet.getDouble("Gym"))
+                    .put("Other", resultSet.getDouble("Other"))
                     .put("Total", resultSet.getDouble("Total"));
                 tContainer.put(tObject);
             }

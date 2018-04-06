@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    5 Apr 2018
+    Updated:    6 Apr 2018
     Author     : astump
 --%>
 
@@ -31,7 +31,7 @@
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/comSec.js'></script>" +
-                "<script src='"+rootPath+"/jsBase/CookieMgmt.js'></script>";
+                "<script src='"+rootPath+"/jsBase/Tools/CookieMgmt.js'></script>";
     }
     
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
@@ -76,7 +76,7 @@
                 scripts2Load += fbScriptPack;
                 break;
             case "Fitness":
-                scripts2Load += "<script src='"+rootPath+"/jsBase/WxFunctions.js'></script>" +
+                scripts2Load += "<script src='"+rootPath+"/jsBase/Weather/WxFunctions.js'></script>" +
                         fitScriptPack;
                 break;
             case "OutMap":

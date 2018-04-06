@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 4 Apr 2018
+Updated: 6 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -147,9 +147,11 @@ function getBasePath(opt) {
     tBase = "https:" + tBase;
     switch(opt) {
         case "chartCache": tBase = base + "/chartCache"; break;
+        case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
         case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
+        case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
         case "old": tBase += "/ASWebUI"; break;
@@ -202,6 +204,7 @@ function getRelatedLinks(page) {
 function getResource(what) {
     switch(what) {
         case "Chart": return getBasePath("rest") + "/Chart";
+        case "Congress": return getBasePath("rest") + "/Congress";
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
         case "Home": return getBasePath("rest") + "/Home";
