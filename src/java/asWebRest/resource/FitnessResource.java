@@ -201,6 +201,7 @@ public class FitnessResource extends ServerResource {
                             todayX = variableField.replace("VO", "");
                         } else {
                             todayVomit = "0";
+                            todayX = variableField;
                         }
                     }
                     qParams.add(todayX); qParams.add(todayVomit);

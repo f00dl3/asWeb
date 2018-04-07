@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Apr 2018
+Updated: 7 Apr 2018
  */
 
 function getCongress() {
