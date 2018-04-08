@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Apr 2018
+Updated: 8 Apr 2018
 */
 
 package asWebRest.dao;
 
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,14 +67,33 @@ public class UtilityUseDAO {
         return tContainer;
     }
     
-    public JSONArray getUseGas(String month) {
-        final String query_FBook_UU_G = "SELECT TotalMCF FROM Core.UseGas WHERE Month LIKE "+month+";";
+    public JSONArray getCombinedUtilityUseByMonth(Connection dbc, String month) {
+        final String query_FBook_UU_Comb = "SELECT" +
+                " (SELECT TotalMCF FROM Core.UseGas WHERE Month LIKE '%"+month+"%') AS TotalMCF," +
+                " (SELECT FORMAT((kWh_AVG),1) FROM (" +
+                "   SELECT kWh_AVG FROM Core.UseElecM WHERE Month LIKE '%"+month+"%' UNION ALL" +
+                "   SELECT AVG(kWh) FROM Core.UseElecD WHERE Date LIKE '%"+month+"%') as tmp" +
+                " ) AS kWh_Avg," +
+                " (SELECT SUM(MBUpload+MBDown) FROM Core.UseInternet WHERE Month LIKE '%"+month+"%') as WData," +
+                " (SELECT (A.Minutes+E.Minutes_L500+E.Minutes_Free) FROM Core.UseSprintA A LEFT OUTER JOIN Core.UseSprintE E on A.Bill = E.Bill WHERE A.Bill LIKE '%"+month+"%') AS Minutes," +
+                " (SELECT (A.Texts+E.Texts) FROM Core.UseSprintA A LEFT OUTER JOIN Core.UseSprintE E on A.Bill = E.Bill WHERE A.Bill LIKE '%"+month+"%') AS Texts," +
+                " (SELECT (A.MMS+E.MMS) FROM Core.UseSprintA A LEFT OUTER JOIN Core.UseSprintE E on A.Bill = E.Bill WHERE A.Bill LIKE '%"+month+"%') AS MMS," +
+                " (SELECT (A.MBData+E.MBData) FROM Core.UseSprintA A LEFT OUTER JOIN Core.UseSprintE E on A.Bill = E.Bill WHERE A.Bill LIKE '%"+month+"%') AS CData" +
+                " FROM Core.UseGas" +
+                " LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_UU_G, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_UU_Comb, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("TotalMCF", resultSet.getDouble("TotalMCF"));
+                tObject
+                    .put("TotalMCF", resultSet.getDouble("TotalMCF"))
+                    .put("kWh_Avg", resultSet.getDouble("kWh_Avg"))
+                    .put("WData", resultSet.getLong("WData"))
+                    .put("Minutes", resultSet.getInt("Minutes"))
+                    .put("MMS", resultSet.getInt("MMS"))
+                    .put("Texts", resultSet.getInt("Texts"))
+                    .put("CData", resultSet.getInt("CData"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -81,46 +101,14 @@ public class UtilityUseDAO {
         return tContainer;
     }
     
-    public JSONArray getUseElectricity(String month) {
-        final String query_FBook_UU_E = "SELECT FORMAT((kWh_AVG),1) AS kWh_AVG FROM" +
-        " (SELECT kWh_AVG FROM UseElecM WHERE Month LIKE "+month+" UNION ALL" +
-        " SELECT AVG(kWh) FROM UseElecD WHERE Date LIKE "+month+") AS tmp;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_UU_E, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject.put("kWh_AVG", resultSet.getDouble("kWh_AVG"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-       
-    public JSONArray getUseInternet(String month) {
-        final String query_FBook_UU_W = "SELECT SUM(MBUpload+MBDown) AS MBData FROM Core.UseInternet WHERE Month LIKE "+month+";";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_UU_W, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject.put("MBData", resultSet.getInt("MBData"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getUsePhone(String month) {
+    public JSONArray getUsePhone(Connection dbc, String month) {
         final String query_FBook_UU_P = "SELECT (A.Minutes+E.Minutes_L500+E.Minutes_Free) AS Minutes," +
                 " (A.Texts+E.Texts) AS Texts, (A.MMS+E.MMS) as MMS, (A.MBData+E.MBData) AS MBData" +
                 " FROM Core.UseSprintA A LEFT OUTER JOIN Core.UseSprintE E ON A.Bill = E.Bill" +
                 " WHERE A.Bill LIKE "+month+";";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_UU_P, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_UU_P, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

@@ -7,9 +7,11 @@ Updated: 8 Apr 2018
 package asWebRest.resource;
 
 import asWebRest.action.GetFinanceAction;
+import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWebLinkAction;
 import asWebRest.action.UpdateFinanceAction;
 import asWebRest.dao.FinanceDAO;
+import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
@@ -32,6 +34,7 @@ public class FinanceResource extends ServerResource {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+        GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
         UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
                         
@@ -111,14 +114,16 @@ public class FinanceResource extends ServerResource {
                     
                 case "getUtils":
                     qParams.add(0, "FBook.php-UU");
+                    String month = "2018-01";
                     JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, qParams);
                     JSONArray settingC = getFinanceAction.getSettingC(dbc);
                     JSONArray settingH = getFinanceAction.getSettingH(dbc);
+                    JSONArray uuData = getUtilityUseAction.getCombinedUtilityUseByMonth(dbc, month);
                     mergedResults
                         .put("uuRel", uuRel)
                         .put("settingC", settingC)
-                        .put("settingH", settingH);
-                        //.put("uuData", uuData);
+                        .put("settingH", settingH)
+                        .put("uuData", uuData);
                     returnData += mergedResults.toString();
                     break;
                     
