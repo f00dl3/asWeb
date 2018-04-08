@@ -1,6 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
+    Updated: 8 Apr 2018
     Author     : astump
 --%>
 
@@ -27,14 +28,14 @@
             <button class="UButton" id="ShowFBCheck">CK</button>
             <button class="UButton" id="ShowFBWorkPTO">TO</button>
             <button class="UButton" id="ShowFBUUse">UT</button>
-        </div>
+        </div><p>
     
         <div id="FinOverview">
             <div id="HoldChecking"></div>
             <div id="HoldSavings"></div>
             <div id="HoldMortgage"></div>
             <div id="HoldWorth"></div>
-        </div>
+        </div><p>
     
         <div id="FBAsset"></div>
         <div id="FBAuto"></div>

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 5 Apr 2018
+Updated: 8 Apr 2018
 */
 
 package asWebRest.shared;
@@ -90,10 +90,69 @@ public class WebCommon {
         } catch (Exception e) { e.printStackTrace(); }
         return messageBack;
     }
+        
+    public String q2do1c(Connection connection, String query, List<String> params) throws Exception {
+        String messageBack = "Query has not ran yet or failed!";
+        if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
+        try {
+            PreparedStatement pStatement = connection.prepareStatement(query);
+            int pit = 1;
+            if(params != null) {
+                for (String param : params) {
+                    if(param != null) {
+                        if (param.equals("on")) { param = "1"; }
+                        if (param.equals("off")) { param = "0"; }
+                        try {
+                            double paramAsDouble = Double.parseDouble(param);
+                            try {
+                                int paramAsInt = Integer.parseInt(param);
+                                pStatement.setInt(pit, paramAsInt);
+                            } catch (NumberFormatException e) {
+                                pStatement.setDouble(pit, paramAsDouble);
+                            }
+                        } catch (NumberFormatException ex) {
+                            pStatement.setString(pit, param);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        pStatement.setString(pit, null);
+                    }
+                    pit++;
+                }
+            }
+            pStatement.execute();
+            messageBack = "Query ran - Success!";
+        } catch (Exception e) { e.printStackTrace(); }
+        return messageBack;
+    }
     
     public static ResultSet q2rs(String query, List<String> params) throws Exception {
         MyDBConnector mdb = new MyDBConnector();
         Connection connection = mdb.getMyConnection();
+        PreparedStatement pStatement = connection.prepareStatement(query);
+        int pit = 1;
+        if(params != null) {
+            for (String param : params) {
+                try {
+                    double paramAsDouble = Double.parseDouble(param);
+                    try {
+                        int paramAsInt = Integer.parseInt(param);
+                        pStatement.setInt(pit, paramAsInt);
+                    } catch (NumberFormatException e) {
+                        pStatement.setDouble(pit, paramAsDouble);
+                    }
+                } catch (NumberFormatException e) {
+                    pStatement.setString(pit, param);
+                }
+                pit++;
+            }
+        }
+        ResultSet resultSet = pStatement.executeQuery();
+        return resultSet;
+    }
+    
+    public static ResultSet q2rs1c(Connection connection, String query, List<String> params) throws Exception {
         PreparedStatement pStatement = connection.prepareStatement(query);
         int pit = 1;
         if(params != null) {

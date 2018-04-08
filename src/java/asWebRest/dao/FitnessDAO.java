@@ -8,6 +8,7 @@ package asWebRest.dao;
 
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ public class FitnessDAO {
     
     WebCommon wc = new WebCommon();
     
-    public JSONArray getAll(List<String> qParams) {
+    public JSONArray getAll(Connection dbc, List<String> qParams) {
         final String query_Fitness_All = "SELECT" +
                 " f.Date, f.Weight, f.RunWalk, f.Shoe, f.RSMile," +
                 " f.Bicycle, f.Cycling, f.BkStudT," +
@@ -40,7 +41,7 @@ public class FitnessDAO {
                 " ORDER BY f.Date DESC LIMIT 0, 365;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_All, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_All, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -156,13 +157,13 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getBike(String bike) {
+    public JSONArray getBike(Connection dbc, String bike) {
         
         final String query_Fitness_Bike = "SELECT Description, Who, Purchased, PurchPrice FROM Core.Fit_Bike WHERE Code='" + bike +"'";
         
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_Bike, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_Bike, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -178,7 +179,7 @@ public class FitnessDAO {
         
     }
     
-    public JSONArray getBkStats(String bike) {
+    public JSONArray getBkStats(Connection dbc, String bike) {
         final String query_Fitness_BkStats = "SELECT" +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain=1 AND Bicycle='"+bike+"') AS LastChain," +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkCln=1 AND Bicycle='"+bike+"') AS LastCleaned," +
@@ -202,7 +203,7 @@ public class FitnessDAO {
                 " FROM Core.Fitness LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_BkStats, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_BkStats, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -232,7 +233,7 @@ public class FitnessDAO {
         return tContainer;
     }
         
-    public JSONArray getCalories() {
+    public JSONArray getCalories(Connection dbc) {
         final String query_Calories_Main = "SELECT c.Food, c.Serving, c.Calories, c.Carbs, c.Protein, c.Sugar," +
         " c.Sodium, c.Fat, c.Cholest, c.Fiber, c.Water, c.FruitVeggie, c.Last, c.ServingsLast, c.ServingsLastE, c.LastE," +
         " sla.ServingsLast as ThisServingsLast," +
@@ -242,7 +243,7 @@ public class FitnessDAO {
         " LEFT JOIN (SELECT ServingsLastE, LastE, Food FROM Core.Fit_Calories WHERE LastE=CURDATE()) AS sle ON sle.LastE = c.LastE AND sla.Food = c.Food;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Calories_Main, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Calories_Main, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -343,11 +344,11 @@ public class FitnessDAO {
         return tContainer;
     }
      
-    public JSONArray getCrsm() {
+    public JSONArray getCrsm(Connection dbc) {
         final String query_Fitness_CRSM = "SELECT MAX(RSMile) AS CRSM FROM Core.Fitness WHERE Shoe = (SELECT MAX(Shoe) FROM Core.Fitness WHERE Shoe LIKE 'R%');";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_CRSM, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_CRSM, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("CRSM", resultSet.getDouble("CRSM"));
@@ -358,11 +359,11 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getDay() {
+    public JSONArray getDay(Connection dbc) {
         final String query_Fitness_Day = "SELECT Weight, RunWalk, Shoe, RSMile, Cycling, Gym, GymWorkout, TrackedTime, TrackedDist, BkStudT, ReelMow, MowNotes, CommonRoute, xTags, Vomit FROM Core.Fitness WHERE Date=CURDATE();";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_Day, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_Day, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -388,11 +389,11 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getDayE() {
+    public JSONArray getDayE(Connection dbc) {
         final String query_Fitness_DayE = "SELECT Weight, ExMin FROM Core.Fit_Em WHERE Date=CURDATE();";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_DayE, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_DayE, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -465,7 +466,7 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getOverallStats() {
+    public JSONArray getOverallStats(Connection dbc) {
         final String query_Fitness_OverallStats = "SELECT" +
                 " SUM(TrackedTime/60) AS TT," +
                 " SUM(TrackedDist) AS TD," + 
@@ -477,7 +478,7 @@ public class FitnessDAO {
                 " WHERE TrackedDist IS NOT NULL AND TrackedDist != 0";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_OverallStats, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_OverallStats, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -553,11 +554,11 @@ public class FitnessDAO {
         return tContainer;
     }
       
-    public JSONArray getRPlans() {
+    public JSONArray getRPlans(Connection dbc) {
         final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans ORDER BY Description DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_RPlans, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RPlans, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -572,11 +573,11 @@ public class FitnessDAO {
         return tContainer;
     }
         
-    public JSONArray getRShoe() {
+    public JSONArray getRShoe(Connection dbc) {
         final String query_Fitness_RShoe = "SELECT MAX(Shoe) AS Pair FROM Core.Fitness WHERE Shoe LIKE 'R%';";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_RShoe, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RShoe, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("Pair", resultSet.getString("Pair"));
@@ -602,7 +603,7 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getTot() {
+    public JSONArray getTot(Connection dbc) {
         final String query_Fitness_TOT = "SELECT" +
                 " COUNT(Date) AS TOTDY," +
                 " SUM(RunWalk) AS TOTRW," +
@@ -611,7 +612,7 @@ public class FitnessDAO {
                 " FROM Core.Fitness";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_TOT, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_TOT, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -626,7 +627,7 @@ public class FitnessDAO {
         return tContainer;
     }  
     
-    public JSONArray getYear(String yearIn) {
+    public JSONArray getYear(Connection dbc, String yearIn) {
         int yearInt = Integer.parseInt(yearIn);
         int yb1 = yearInt-1;
         int yb2 = yearInt-2;
@@ -651,7 +652,7 @@ public class FitnessDAO {
                 " FROM Core.Fitness LIMIT 1";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_Year, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_Year, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -698,7 +699,7 @@ public class FitnessDAO {
         return returnData;
     }
     
-    public String setCalories(List<String> qParams) {
+    public String setCalories(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
         String query_Calories_Update = "INSERT INTO Core.Fitness " +
                 " (Date,Calories,Fat,Protein,Carbs,Cholest,Sodium,Fiber,Sugar,Water,FruitsVeggies) VALUES" +
@@ -706,7 +707,7 @@ public class FitnessDAO {
                 " ON DUPLICATE KEY UPDATE Calories=?, Fat=?, Protein=?," +
                 " Carbs=?, Cholest=?, Sodium=?, Fiber=?," +
                 " Sugar=?, Water=?, FruitsVeggies=?;";
-        try { returnData = wc.q2do(query_Calories_Update, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_Calories_Update, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

@@ -30,23 +30,8 @@ function naviButtonListener() {
     dojo.connect(btnShowUtils, "click", displayUtils);
 }
 
-function putOverview(finGlob) { // Get from db and maybe call in get not separate function
-    var amSch = finGlob.amSch;
-    var cbData = finGlob.checking[0];
-    var svData = finGlob.saving[0];
-    var svBk = finGlob.svBk;
-    var mortData = finGlob.mort;
-    var enw = finGlob.enw;
-    var x3nw = finGlob.x3nw;
-    var nwga = finGlob.nwga;
-    var enwt = finGlob.enwt;
-    genOverviewChecking(cbData)
-    genOverviewSavings(svData, svBk);
-    genOverviewMortgage(mortData, amSch);
-    genOverviewWorth(enw, mortData, x3nw, nwga, enwt);
-}
-
 function initFinance() {
+    getOverviewData();
     naviButtonListener();
 }
 

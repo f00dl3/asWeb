@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    6 Apr 2018
+    Updated:    8 Apr 2018
     Author     : astump
 --%>
 
@@ -16,7 +16,7 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
-    String[] finScripts = { "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
+    String[] finScripts = { "FBook/Overview", "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
     String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
     String[] wxScripts = { "Weather/WxFunctions", "Weather/ObsFeed" };
     String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Apr 2018
+Updated: 8 Apr 2018
 */
 
 package asWebRest.dao;
@@ -11,6 +11,7 @@ import asWebRest.secure.MortgageBeans;
 import asWebRest.shared.CommonBeans;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,16 +41,16 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getAmSch() {
+    public JSONArray getAmSch(Connection dbc) {
         final String query_AmSch = "SELECT" +
             " DueDate, "+mb.getMortPayment()+" AS Payment, Extra, Planned," +
             " CAST((@runtot * (("+mb.getMortRate()+"/12)/100)) AS DECIMAL(5,2)) AS Interest," +
             " CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + Planned + )) AS DECIMAL(10,2)) AS Balance" +
             " FROM Core.FB_WFLM35;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_AmSch, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AmSch, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -66,11 +67,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getAutoBillSum() {
+    public JSONArray getAutoBillSum(Connection dbc) {
         final String query_AutoBillSum = "SELECT SUM(Bill) AS BillSum from Core.AutoMaint_MAZ6;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AutoBillSum, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoBillSum, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -82,12 +83,12 @@ public class FinanceDAO {
         return tContainer;
     }   
     
-    public JSONArray getAutoMaint() {
+    public JSONArray getAutoMaint(Connection dbc) {
         final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
                 " FROM Core.AutoMaint_MAZ6 ORDER BY Date DESC LIMIT 10;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AutoMaint, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -106,11 +107,11 @@ public class FinanceDAO {
         return tContainer;
     }   
     
-    public JSONArray getAutoMpg() {
+    public JSONArray getAutoMpg(Connection dbc) {
         final String query_AutoMPG = "SELECT Date, TotMiles, CostPG, Gallons FROM Auto_MPG ORDER BY Date DESC LIMIT 10;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AutoMPG, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -125,11 +126,11 @@ public class FinanceDAO {
         return tContainer;
     }    
     
-    public JSONArray getAutoMpgAverage() {
+    public JSONArray getAutoMpgAverage(Connection dbc) {
         final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, AVG(CostPG) AS AvgCost FROM Core.Auto_MPG;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AutoMPG_Average, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG_Average, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -144,7 +145,7 @@ public class FinanceDAO {
         return tContainer;
     }    
     
-    public JSONArray getAssetTrack() {
+    public JSONArray getAssetTrack(Connection dbc) {
         final String query_FBook_ATrackPrep1 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.BGames), Checked=CURDATE() WHERE Related='BGames';";
         final String query_FBook_ATrackPrep2 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.Books), Checked=CURDATE() WHERE Related='Books';";
         final String query_FBook_ATrackPrep3 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.DecorTools), Checked=CURDATE() WHERE Related='DecorTools';";
@@ -152,12 +153,12 @@ public class FinanceDAO {
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked," +
                 " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(query_FBook_ATrackPrep1, null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsB = wc.q2rs(query_FBook_ATrackPrep2, null); rsB.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsC = wc.q2rs(query_FBook_ATrackPrep3, null); rsC.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsD = wc.q2rs(query_FBook_ATrackPrep4, null); rsD.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, query_FBook_ATrackPrep1, null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsB = wc.q2rs1c(dbc, query_FBook_ATrackPrep2, null); rsB.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsC = wc.q2rs1c(dbc, query_FBook_ATrackPrep3, null); rsC.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsD = wc.q2rs1c(dbc, query_FBook_ATrackPrep4, null); rsD.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_ATrack, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ATrack, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -178,11 +179,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getBGames() {
+    public JSONArray getBGames(Connection dbc) {
         final String query_FBook_BGames = "SELECT Title, Quantity FROM Core.BGames ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_BGames, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_BGames, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -195,7 +196,7 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getBills() {
+    public JSONArray getBills(Connection dbc) {
         final String query_FBook_Bills = "SELECT" +
             " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO, Gym, Other" +
             " (ELE+GAS+WAT+SWR+TRA+WEB+PHO+Gym+Other) as Total" +
@@ -203,7 +204,7 @@ public class FinanceDAO {
             " ORDER BY Month DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_Bills, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Bills, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -225,11 +226,11 @@ public class FinanceDAO {
         return tContainer;
     }
    
-    public JSONArray getBooks() {
+    public JSONArray getBooks(Connection dbc) {
         final String query_FBook_Books = "SELECT Title, Quantity FROM Core.Books ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_Books, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Books, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -242,11 +243,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getChecking() { 
+    public JSONArray getChecking(Connection dbc) { 
         final String query_FBook_Checking = "SELECT FORMAT((SUM(Credit-Debit)),2) AS Balance FROM Core.FB_CFCK01 WHERE Date <= current_date;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_Checking, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Checking, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject.put("Balance", resultSet.getDouble("Balance"));
@@ -313,11 +314,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getDecorTools() {
+    public JSONArray getDecorTools(Connection dbc) {
         final String query_FBook_DecorTools = "SELECT Description, Quantity, Location, Checked FROM Core.DecorTools ORDER BY Description;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_DecorTools, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_DecorTools, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -386,11 +387,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getLicenses() {
+    public JSONArray getLicenses(Connection dbc) {
         final String query_FBook_Licenses = "SELECT Title, Type FROM Core.Licenses ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_Licenses, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Licenses, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -403,16 +404,16 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getMort() {
+    public JSONArray getMort(Connection dbc) {
         final String query_Mort = "SELECT" +
             " min(@runtot := @runtot + (@runtot * ("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS MBal" +
             " FROM Core.FB_WFML35" +
             " WHERE DueDate < current_date + interval '30' day;";
         
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_Mort, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Mort, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject.put("MBal", resultSet.getDouble("MBal"));
@@ -438,7 +439,7 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getQMerged() {
+    public JSONArray getQMerged(Connection dbc) {
         final String query_FBook_QMerged = "SELECT\n" +
                 " (SELECT SUM(Quantity) FROM Core.BGames) AS qBGames," +
                 " (SELECT SUM(Quantity) FROM Core.Books) as qBooks," +
@@ -449,7 +450,7 @@ public class FinanceDAO {
                 " LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_QMerged, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_QMerged, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -465,11 +466,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getSaving() {
+    public JSONArray getSaving(Connection dbc) {
         final String query_FBook_Saving = "SELECT FORMAT((SUM(Credit-Debit)), 0) AS SBal FROM Core.FB_CFSV59 WHERE Date <= current_date;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_Saving, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Saving, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject.put("SBal", resultSet.getDouble("SBal"));
@@ -516,7 +517,7 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getSvBk() {
+    public JSONArray getSvBk(Connection dbc) {
         final String query_FBook_SvBk = "SELECT" +
                 " STID, Date, Description, Debit, Credit" +
                 " FORM Core.FB_CFSV59" +
@@ -524,7 +525,7 @@ public class FinanceDAO {
                 " ORDER BY Date DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_SvBk, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_SvBk, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -555,17 +556,17 @@ public class FinanceDAO {
         return tContainer;
     }
      
-    public String setAssetTrackUpdate(List<String> qParams) {
+    public String setAssetTrackUpdate(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
         String query_FBook_ATrackUp = "UPDATE FB_Assets SET Value=?, Notes=?, Checked=CURDATE() WHERE Description=?;";
-        try { returnData = wc.q2do(query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
      
-    public String setDecorToolsUpdate(List<String> qParams) {
+    public String setDecorToolsUpdate(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
         String query_FBook_DecorToolsUpdate = "UPDATE DecorTools SET Quantity=?, Location=?, Checked=CURDATE() WHERE Description=?;";
-        try { returnData = wc.q2do(query_FBook_DecorToolsUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_FBook_DecorToolsUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

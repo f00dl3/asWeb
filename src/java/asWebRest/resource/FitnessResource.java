@@ -11,7 +11,9 @@ import asWebRest.action.GetFitnessAction;
 import asWebRest.action.UpdateFitnessAction;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -25,6 +27,10 @@ public class FitnessResource extends ServerResource {
     
     @Post
     public String doPost(Representation argsIn) {
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         WebCommon wc = new WebCommon();
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
@@ -55,18 +61,18 @@ public class FitnessResource extends ServerResource {
                     if(xdt1 != null && xdt2 != null && bike != null && year != null) {
                         qParams.add(xdt1);
                         qParams.add(xdt2);
-                        JSONArray allRecs = getFitnessAction.getAll(qParams);
-                        JSONArray calories = getFitnessAction.getCalories();
-                        JSONArray plans = getFitnessAction.getRPlans();
-                        JSONArray today = getFitnessAction.getDay();
-                        JSONArray bkInf = getFitnessAction.getBike(bike);
-                        JSONArray bkStats = getFitnessAction.getBkStats(bike);
-                        JSONArray overall = getFitnessAction.getOverallStats();
-                        JSONArray crsm = getFitnessAction.getCrsm();
-                        JSONArray rShoe = getFitnessAction.getRShoe();
-                        JSONArray tot = getFitnessAction.getTot();
-                        JSONArray yData = getFitnessAction.getYear(year);
-                        JSONArray autoMpg = getFinanceAction.getAutoMpgAverage();
+                        JSONArray allRecs = getFitnessAction.getAll(dbc, qParams);
+                        JSONArray calories = getFitnessAction.getCalories(dbc);
+                        JSONArray plans = getFitnessAction.getRPlans(dbc);
+                        JSONArray today = getFitnessAction.getDay(dbc);
+                        JSONArray bkInf = getFitnessAction.getBike(dbc, bike);
+                        JSONArray bkStats = getFitnessAction.getBkStats(dbc, bike);
+                        JSONArray overall = getFitnessAction.getOverallStats(dbc);
+                        JSONArray crsm = getFitnessAction.getCrsm(dbc);
+                        JSONArray rShoe = getFitnessAction.getRShoe(dbc);
+                        JSONArray tot = getFitnessAction.getTot(dbc);
+                        JSONArray yData = getFitnessAction.getYear(dbc, year);
+                        JSONArray autoMpg = getFinanceAction.getAutoMpgAverage(dbc);
                         mergedResults
                             .put("allRecs", allRecs)
                             .put("calories", calories)
@@ -140,7 +146,7 @@ public class FitnessResource extends ServerResource {
                     qParams.add(Double.toString(sugarTotalSub));
                     qParams.add(Double.toString(waterTotalSub));
                     qParams.add(Double.toString(fruitVeggieTotalSub));
-                    tempReturn += ", FINAL " + updateFitnessAction.setCalories(qParams);
+                    tempReturn += ", FINAL " + updateFitnessAction.setCalories(dbc, qParams);
                     JSONObject returnText = new JSONObject();
                     returnText.put("ReturnData", tempReturn);
                     mergedResults
@@ -212,6 +218,8 @@ public class FitnessResource extends ServerResource {
                     break;                    
             }
         }
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
         
