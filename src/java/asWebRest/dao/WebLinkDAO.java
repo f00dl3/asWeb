@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 7 Apr 2018
+Updated: 8 Apr 2018
 */
 
 package asWebRest.dao;
 
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -16,13 +17,13 @@ public class WebLinkDAO {
     
     WebCommon wc = new WebCommon(); 
     
-    public JSONArray getWebLinks(List<String> qParams) {
+    public JSONArray getWebLinks(Connection dbc, List<String> qParams) {
         final String query_WebLinks = "SELECT Bubble, Description, URL, DescriptionL," +
-                "GeoPlot, TCSystem, AsOf, DesktopLink, TomcatURL FROM Core.WebLinks" +
+                " GeoPlot, TCSystem, AsOf, DesktopLink, TomcatURL FROM Core.WebLinks" +
                 " WHERE Master LIKE ? AND Active=1 ORDER BY Description ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_WebLinks, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_WebLinks, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

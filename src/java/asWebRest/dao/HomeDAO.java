@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 7 Apr 2018
+Updated: 8 Apr 2018
 */
 
 package asWebRest.dao;
 
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -18,13 +19,13 @@ public class HomeDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
     
-    public JSONArray getMeasure(List<String> qParams) {
+    public JSONArray getMeasure(Connection dbc, List<String> qParams) {
         final String query_Blueprint_HMM_xL = "SELECT x1, y1, x2, y2, Height, Width," +
                 " Level, Description, Type, OffFloor" +
                 " FROM Core.HM_Measure WHERE Level=?;";
         JSONArray tContainer = new JSONArray();
         try {            
-            ResultSet resultSet = wc.q2rs(query_Blueprint_HMM_xL, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Blueprint_HMM_xL, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

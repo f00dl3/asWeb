@@ -7,8 +7,10 @@ Updated: 8 Apr 2018
 package asWebRest.resource;
 
 import asWebRest.action.GetFinanceAction;
+import asWebRest.action.GetWebLinkAction;
 import asWebRest.action.UpdateFinanceAction;
 import asWebRest.dao.FinanceDAO;
+import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class FinanceResource extends ServerResource {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+        GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
         UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
                         
         JSONObject mergedResults = new JSONObject();
@@ -103,6 +106,19 @@ public class FinanceResource extends ServerResource {
                         .put("x3nw", x3nw)
                         .put("nwga", nwga)
                         .put("enwt", enwt);
+                    returnData += mergedResults.toString();
+                    break;
+                    
+                case "getUtils":
+                    qParams.add(0, "FBook.php-UU");
+                    JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, qParams);
+                    JSONArray settingC = getFinanceAction.getSettingC(dbc);
+                    JSONArray settingH = getFinanceAction.getSettingH(dbc);
+                    mergedResults
+                        .put("uuRel", uuRel)
+                        .put("settingC", settingC)
+                        .put("settingH", settingH);
+                        //.put("uuData", uuData);
                     returnData += mergedResults.toString();
                     break;
                     

@@ -26,8 +26,8 @@ public class GetFinanceAction {
     public JSONArray getBills(Connection dbc) { return financeDAO.getBills(dbc); }
     public JSONArray getBooks(Connection dbc) { return financeDAO.getBooks(dbc); }
     public JSONArray getChecking(Connection dbc) { return financeDAO.getChecking(dbc); }
-    public JSONArray getCkBk() { return financeDAO.getCkBk(); }
-    public JSONArray getCkBkRange() { return financeDAO.getCkBkRange(); }
+    public JSONArray getCkBk(Connection dbc) { return financeDAO.getCkBk(dbc); }
+    public JSONArray getCkBkRange(Connection dbc) { return financeDAO.getCkBkRange(dbc); }
     public JSONArray getDecorTools(Connection dbc) { return financeDAO.getDecorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return financeDAO.getEnw(dbc); }
     public JSONArray getEnwt(Connection dbc) { return financeDAO.getEnwt(dbc); }
@@ -36,9 +36,8 @@ public class GetFinanceAction {
     public JSONArray getNwga(Connection dbc) { return financeDAO.getNwga(dbc); }
     public JSONArray getQMerged(Connection dbc) { return financeDAO.getQMerged(dbc); }
     public JSONArray getSaving(Connection dbc) { return financeDAO.getSaving(dbc); }
-    public JSONArray getSettingC() { return financeDAO.getSettingC(); }
-    public JSONArray getSettingH() { return financeDAO.getSettingH(); }
+    public JSONArray getSettingC(Connection dbc) { return financeDAO.getSettingC(dbc); }
+    public JSONArray getSettingH(Connection dbc) { return financeDAO.getSettingH(dbc); }
     public JSONArray getSvBk(Connection dbc) { return financeDAO.getSvBk(dbc); }
-    public JSONArray getUURel() { return financeDAO.getUURel(); }
     
 }

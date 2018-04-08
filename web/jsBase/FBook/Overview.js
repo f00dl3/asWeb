@@ -34,7 +34,7 @@ function genOverviewMortgage(mortData, amSch) {
 
 function genOverviewSavings(svData, svBk) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
-    var bubble = "<div class='UBox'>Savings<br/><span>$" + svData.SBal + "</span>" +
+    var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Savings</strong><p>" +
             "<a href='" + doCh("p", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("p", "FinSavings", "Thumb=1") + "'/></a>";

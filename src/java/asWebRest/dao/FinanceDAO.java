@@ -198,8 +198,8 @@ public class FinanceDAO {
     
     public JSONArray getBills(Connection dbc) {
         final String query_FBook_Bills = "SELECT" +
-            " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO, Gym, Other" +
-            " (ELE+GAS+WAT+SWR+TRA+WEB+PHO+Gym+Other) as Total" +
+            " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO, Gym, Other," +
+            " (ELE+GAS+WAT+SWR+TRA+WEB+PHO+Gym+Other) AS Total" +
             " FROM Core.Bills" +
             " ORDER BY Month DESC;";
         JSONArray tContainer = new JSONArray();
@@ -257,7 +257,7 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getCkBk() {
+    public JSONArray getCkBk(Connection dbc) {
         final String query_FBook_CkBk = "SELECT" + 
                 " CTID, Bank, Date, Description, Debit, Credit," +
                 " (@runtot := @runtot - Debit + Credit) AS Balance" +
@@ -265,9 +265,9 @@ public class FinanceDAO {
                 " WHERE Date >= " + ckBkBeans.getCkBkEomDate() +
                 " ORDER BY Date, CTID";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(ckBkBeans.getCkBkPrep(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, ckBkBeans.getCkBkPrep(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_CkBk, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_CkBk, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -285,7 +285,7 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getCkBkRange() {
+    public JSONArray getCkBkRange(Connection dbc) {
         final String query_FBook_CkBkRange = "SELECT" +
                 " Card, CTID, Bank, Date, Description, Debit, Credit FROM (" +
                 " SELECT 'Checking Check Book' AS Card, CTID, Bank, Date, Description, Debit, Credit FROM Core.FB_CFCK01 UNION ALL" +
@@ -296,7 +296,7 @@ public class FinanceDAO {
                 " ORDER BY Date, CTID DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_CkBkRange, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_CkBkRange, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -477,11 +477,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getSettingC() {
+    public JSONArray getSettingC(Connection dbc) {
         final String query_FBook_SettingC = "SELECT Day, Time, Temp FROM Core.TH_Cool;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_SettingC, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_SettingC, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -495,11 +495,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getSettingH() {
+    public JSONArray getSettingH(Connection dbc) {
         final String query_FBook_SettingH = "SELECT Day, Time, Temp FROM Core.TH_Heat;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_SettingH, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_SettingH, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -530,21 +530,6 @@ public class FinanceDAO {
                     .put("Description", resultSet.getString("Description"))
                     .put("Debit", resultSet.getDouble("Debit"))
                     .put("Credit", resultSet.getDouble("Credit"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    public JSONArray getUURel() {
-        final String query_FBook_UURel = "SELECT URL FROM Core.WebLinks WHERE Master='FBook.php-UU';";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_FBook_UURel, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject.put("URL", resultSet.getString("URL"));
                 tContainer.put(tObject);
             }
             resultSet.close();

@@ -9,8 +9,28 @@ function displayUtils() {
 }
 
 function getUtils() {
+    aniPreload("on");
     var uuMonthLast = getDate("day", 0, "yearMonth");
-    putUtils();
+    var thePostData = "doWhat=getUtils";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putUtils(
+                data.uuRel,
+                data.settingC
+            );
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for Overview FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function putUtils(uuRelations, settingC, settingH, uuData) {

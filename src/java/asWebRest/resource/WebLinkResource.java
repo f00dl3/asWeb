@@ -1,13 +1,15 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 7 Mar 2018
+Updated: 8 Apr 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetWebLinkAction;
 import asWebRest.dao.WebLinkDAO;
+import asWebRest.shared.MyDBConnector;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -33,9 +35,14 @@ public class WebLinkResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        
         final Form argsInForm = new Form(argsIn);
         
         String master = null;
+        String returnData = "";
          
         try {
             master = argsInForm.getFirstValue("master");
@@ -47,11 +54,16 @@ public class WebLinkResource extends ServerResource {
             List<String> qParams = new ArrayList<>();
             qParams.add(0, master);
             GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
-            JSONArray webLinks = getWebLinkAction.getWebLinks(qParams);
-            return webLinks.toString();
+            JSONArray webLinks = getWebLinkAction.getWebLinks(dbc, qParams);
+            returnData += webLinks.toString();
         } else {
-            return "ERROR: NO POST DATA!";
+            returnData += "ERROR: NO POST DATA!";
         }        
+    
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
+        return returnData;
+        
     }
     
         
