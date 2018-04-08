@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 22 Feb 2018
+Updated: 7 Apr 2018
  */
 
 package asWebRest.dao;
@@ -26,6 +26,7 @@ public class MediaServerDAO {
                 tObject.put("GeoData", resultSet.getString("GeoData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -68,6 +69,7 @@ public class MediaServerDAO {
                     .put("TrackListingASON",resultSet.getString("TrackListingASON"));                    
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -87,6 +89,7 @@ public class MediaServerDAO {
                     .put("TotalBlocks", resultSet.getLong("TotalBlocks"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -111,6 +114,7 @@ public class MediaServerDAO {
                     .put("MediaServer", resultSet.getInt("MediaServer"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -142,6 +146,7 @@ public class MediaServerDAO {
                     .put("Media", resultSet.getString("Media"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -160,6 +165,7 @@ public class MediaServerDAO {
                     .put("TotalBlocks", resultSet.getLong("TotalBlocks"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } */
         return "placeholder for query" + query_MediaServer_LastPlayed;
     }

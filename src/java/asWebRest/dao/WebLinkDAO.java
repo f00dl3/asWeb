@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 26 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -37,6 +37,7 @@ public class WebLinkDAO {
                     .put("TomcatURL", resultSet.getString("TomcatURL"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 5 Apr 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -35,6 +35,7 @@ public class FinanceDAO {
                 tObject.put("Worth", resultSet.getString("Worth"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -46,7 +47,7 @@ public class FinanceDAO {
             " CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + Planned + )) AS DECIMAL(10,2)) AS Balance" +
             " FROM Core.FB_WFLM35;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_AmSch, null);
             while (resultSet.next()) { 
@@ -60,6 +61,7 @@ public class FinanceDAO {
                     .put("Balance", resultSet.getDouble("Balance"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -75,6 +77,7 @@ public class FinanceDAO {
                     .put("BillSum", resultSet.getDouble("BillSum"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }   
@@ -98,6 +101,7 @@ public class FinanceDAO {
                     .put("TireRotate", resultSet.getInt("TireRotate"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }   
@@ -116,6 +120,7 @@ public class FinanceDAO {
                     .put("CostPG", resultSet.getDouble("CostPG"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }    
@@ -134,6 +139,7 @@ public class FinanceDAO {
                     .put("AvgCost", resultSet.getDouble("AvgCost"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }    
@@ -146,10 +152,10 @@ public class FinanceDAO {
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked," +
                 " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(query_FBook_ATrackPrep1, null); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsB = wc.q2rs(query_FBook_ATrackPrep2, null); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsC = wc.q2rs(query_FBook_ATrackPrep3, null); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsD = wc.q2rs(query_FBook_ATrackPrep4, null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(query_FBook_ATrackPrep1, null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsB = wc.q2rs(query_FBook_ATrackPrep2, null); rsB.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsC = wc.q2rs(query_FBook_ATrackPrep3, null); rsC.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsD = wc.q2rs(query_FBook_ATrackPrep4, null); rsD.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_FBook_ATrack, null);
             while (resultSet.next()) { 
@@ -167,6 +173,7 @@ public class FinanceDAO {
                     .put("Notes", resultSet.getString("Notes"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -183,18 +190,17 @@ public class FinanceDAO {
                     .put("Quantity", resultSet.getDouble("Quantity"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
     
     public JSONArray getBills() {
-    
         final String query_FBook_Bills = "SELECT" +
             " Month, ELE, GAS, WAT, SWR, TRA, WEB, PHO, Gym, Other" +
             " (ELE+GAS+WAT+SWR+TRA+WEB+PHO+Gym+Other) as Total" +
             " FROM Core.Bills" +
             " ORDER BY Month DESC;";
-    
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_FBook_Bills, null);
@@ -214,12 +220,12 @@ public class FinanceDAO {
                     .put("Total", resultSet.getDouble("Total"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
    
     public JSONArray getBooks() {
-        
         final String query_FBook_Books = "SELECT Title, Quantity FROM Core.Books ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -231,6 +237,7 @@ public class FinanceDAO {
                     .put("Quantity", resultSet.getDouble("Quantity"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -257,7 +264,7 @@ public class FinanceDAO {
                 " WHERE Date >= " + ckBkBeans.getCkBkEomDate() +
                 " ORDER BY Date, CTID";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(ckBkBeans.getCkBkPrep(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(ckBkBeans.getCkBkPrep(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_FBook_CkBk, null);
             while (resultSet.next()) { 
@@ -272,6 +279,7 @@ public class FinanceDAO {
                     .put("Balance", resultSet.getDouble("Balance"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -300,6 +308,7 @@ public class FinanceDAO {
                     .put("Balance", resultSet.getDouble("Balance"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -318,6 +327,7 @@ public class FinanceDAO {
                     .put("Checked", resultSet.getString("Checked"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -331,7 +341,7 @@ public class FinanceDAO {
                 " SELECT sum(Credit-Debit) AS Assets FROM Core.FB_CFSV59 WHERE Date <= current_date) as tmp;";
         
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_FBook_ENW, null);
             while (resultSet.next()) {
@@ -341,7 +351,7 @@ public class FinanceDAO {
                     .put("Balance", resultSet.getDouble("Balance"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -371,7 +381,7 @@ public class FinanceDAO {
                     .put("Growth", resultSet.getDouble("Growth"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -388,6 +398,7 @@ public class FinanceDAO {
                     .put("Type", resultSet.getString("Type"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -407,6 +418,7 @@ public class FinanceDAO {
                 tObject.put("MBal", resultSet.getDouble("MBal"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -421,6 +433,7 @@ public class FinanceDAO {
                 tObject.put("GrowthAvg", resultSet.getDouble("GrowthAvg"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -447,6 +460,7 @@ public class FinanceDAO {
                     .put("qMedia", resultSet.getInt("qMedia"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -461,6 +475,7 @@ public class FinanceDAO {
                 tObject.put("SBal", resultSet.getDouble("SBal"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -478,6 +493,7 @@ public class FinanceDAO {
                     .put("Temp", resultSet.getInt("Temp"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -495,6 +511,7 @@ public class FinanceDAO {
                     .put("Temp", resultSet.getInt("Temp"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -518,6 +535,7 @@ public class FinanceDAO {
                     .put("Credit", resultSet.getDouble("Credit"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -532,6 +550,7 @@ public class FinanceDAO {
                 tObject.put("URL", resultSet.getString("URL"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

@@ -1,22 +1,19 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 20 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AddressBookDAO {
     
-    
+    WebCommon wc = new WebCommon();
     
     public JSONArray getAddressBook() {
         final String query_AddressBook = "SELECT Business, LastName, FirstName,"
@@ -27,9 +24,7 @@ public class AddressBookDAO {
             + " DESC;";
         JSONArray addressBook = new JSONArray();
         try {
-            Connection connection = MyDBConnector.getMyConnection();
-            PreparedStatement pStatement = connection.prepareStatement(query_AddressBook);
-            ResultSet resultSet = pStatement.executeQuery();
+            ResultSet resultSet = wc.q2rs(query_AddressBook, null);
             while (resultSet.next()) {
                 JSONObject tAddressBook = new JSONObject();
                 tAddressBook
@@ -53,12 +48,8 @@ public class AddressBookDAO {
                     .put("Website", resultSet.getString("Website"));
                 addressBook.put(tAddressBook);
             }
-           
-        } catch (SQLException sx) {
-            sx.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
         return addressBook;
     }
     

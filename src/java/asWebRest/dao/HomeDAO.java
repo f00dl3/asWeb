@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Apr 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -39,7 +40,7 @@ public class HomeDAO {
                     .put("Level", resultSet.getString("Level"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

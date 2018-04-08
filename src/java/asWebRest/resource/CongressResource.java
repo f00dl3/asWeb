@@ -12,8 +12,6 @@ import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
@@ -42,8 +40,6 @@ public class CongressResource extends ServerResource {
     public String doPost(Representation argsIn) {
         
         GetCongressAction getCongressAction = new GetCongressAction(new CongressDAO());
-                        
-        List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
         
         String doWhat = null;

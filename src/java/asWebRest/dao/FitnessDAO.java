@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 1 Apr 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -95,6 +95,7 @@ public class FitnessDAO {
                     .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -126,7 +127,7 @@ public class FitnessDAO {
                     .put("FruitsVeggies", resultSet.getDouble("FruitsVeggies"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -150,7 +151,7 @@ public class FitnessDAO {
                     .put("GeoJSON", resultSet.getString("GeoJSON"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -171,6 +172,7 @@ public class FitnessDAO {
                     .put("PurchPrice", resultSet.getDouble("PurchPrice"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
         
@@ -225,6 +227,7 @@ public class FitnessDAO {
                     .put("MilesWheelRear", resultSet.getDouble("MilesWheelRear"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -263,7 +266,7 @@ public class FitnessDAO {
                     .put("ThisServingsLastE", resultSet.getDouble("ThisServingsLastE"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -284,7 +287,7 @@ public class FitnessDAO {
                     .put("Carbs", resultSet.getInt("Carbs"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -301,7 +304,7 @@ public class FitnessDAO {
                     .put("Weight", resultSet.getDouble("Weight"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -318,7 +321,7 @@ public class FitnessDAO {
                     .put("Weight", resultSet.getDouble("Weight"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -335,7 +338,7 @@ public class FitnessDAO {
                     .put("Weight", resultSet.getDouble("Weight"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -350,6 +353,7 @@ public class FitnessDAO {
                 tObject.put("CRSM", resultSet.getDouble("CRSM"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -379,6 +383,7 @@ public class FitnessDAO {
                     .put("Vomit", resultSet.getInt("Vomit"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -395,6 +400,7 @@ public class FitnessDAO {
                     .put("ExMin", resultSet.getInt("ExMin"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -409,6 +415,7 @@ public class FitnessDAO {
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -423,6 +430,7 @@ public class FitnessDAO {
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -437,6 +445,7 @@ public class FitnessDAO {
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -451,6 +460,7 @@ public class FitnessDAO {
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -479,6 +489,7 @@ public class FitnessDAO {
                     .put("MaxCycSpeedMax", resultSet.getDouble("MaxCycSpeedMax"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -515,6 +526,7 @@ public class FitnessDAO {
                     .put("MaxRunHeartAvg", resultSet.getDouble("MaxRunHeartAvg"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -536,6 +548,7 @@ public class FitnessDAO {
                     .put("WarDeploy", resultSet.getInt("WarDeploy"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -554,6 +567,7 @@ public class FitnessDAO {
                     .put("DistKm", resultSet.getDouble("DistKm"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -568,6 +582,7 @@ public class FitnessDAO {
                 tObject.put("Pair", resultSet.getString("Pair"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -582,6 +597,7 @@ public class FitnessDAO {
                 tObject.put("LastMax", resultSet.getDouble("LastMax"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -605,6 +621,7 @@ public class FitnessDAO {
                     .put("TOTOA", resultSet.getDouble("TOTOA"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
@@ -655,6 +672,7 @@ public class FitnessDAO {
                     .put("yb4oa", resultSet.getDouble("yb4oa"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -716,6 +734,7 @@ public class FitnessDAO {
             while (resultSet.next()) {
                 tRShoeMaxMiles = resultSet.getDouble("MaxRSMiles");
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
                 " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags,Vomit) VALUES" +

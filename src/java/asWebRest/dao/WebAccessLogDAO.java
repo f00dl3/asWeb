@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 4 Mar 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -34,6 +34,7 @@ public class WebAccessLogDAO {
                     .put("User", resultSet.getString("User"));
                 webAccessLogs.put(webAccessLog);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return webAccessLogs;
     }

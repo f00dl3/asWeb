@@ -2,6 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Assets.js Split: 4 Apr 2018
+Updated: 7 Apr 2018
  */
 
 function actOnAssetUpdate(event) {
@@ -289,7 +290,7 @@ function setAssetUpdate(formData) {
         timeout: timeOutMilli,
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
-            getFinanceData();
+            getAssetData();
             aniPreload("off");
         },
         error: function (data, iostatus) { 
@@ -311,7 +312,7 @@ function setDecorToolsUpdate(formData) {
         timeout: timeOutMilli,
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
-            getFinanceData();
+            getAssetData();
             aniPreload("off");
         },
         error: function (data, iostatus) { 

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 30 Mar 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -31,6 +31,7 @@ public class LogsDAO {
                     .put("MP4Size", resultSet.getInt("MP4Size"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -50,6 +51,7 @@ public class LogsDAO {
                     .put("Note", resultSet.getString("Note"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -70,6 +72,7 @@ public class LogsDAO {
                     .put("ZIPSize", resultSet.getInt("ZIPSize"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -93,9 +96,9 @@ public class LogsDAO {
                     .put("rsyncDiff", resultSet.getInt("rsyncDiff"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-   
     
 }

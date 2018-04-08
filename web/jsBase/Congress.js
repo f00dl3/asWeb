@@ -32,74 +32,75 @@ function showCongress(conData) {
     for(var i = 0; i < conCols.length; i++) { conTable += "<span class='td'><strong>" + conCols[i] + "</strong></span>"; }
     conTable += "</div>";
     conData.forEach(function (cHak) {
-        var tFlags, tHome, tCamp, tPwb;
+        var tFlags, tHome, tCamp, tPwb, xTerm;
         tHome = tCamp = tFlags = tPwb = "";
-        var thisImage = getBasePath("congress") + "/" + cHak.last + "_" + cHak.first + ".jpg";
+        var thisImage = getBasePath("congress") + "/" + cHak.Last + "_" + cHak.First + ".jpg";
         conTable += "<div class='tr'>" +
                 "<span class='td'>" +
                 "<a href='" + thisImage + "' target='image'>" +
                 "<img src='" + thisImage + "' class='th_icon'/></a>" +
                 "</span>" +
-                "<span class='td'><div class='UPop'>" + cHak.last + ", " + cHak.first +
+                "<span class='td'><div class='UPop'>" + cHak.Last + ", " + cHak.First +
                 "<div class='UPopO'><img src='" + thisImage + "' class='th_medium'/><br/>" +
-                "<strong>Nickname:</strong> " + cHak.nickname + "</div></div></span>" +
-                "<span class='td'><div class='UPop'>" + cHak.state;
-        if(cHak.district !== 0) { conTable += "<div class='UPopO'>" + cHak.district + "</div>"; }
+                "<strong>Nickname:</strong> " + cHak.Nickname + "</div></div></span>" +
+                "<span class='td'><div class='UPop'>" + cHak.State;
+        if(cHak.district !== 0) { conTable += "<div class='UPopO'>" + cHak.District + "</div>"; }
+        if(isSet(cHak.Term)) { xTerm = cHak.Term; } else { xTerm = "?"; }
         conTable += "</div></span>";
-        if(isSet(cHak.religion)) { tFlags += "<strong>Religion</strong>: " + cHak.religion + "<br/>"; }
-        if(isSet(cHak.maritalStatus)) { tFlags += "<strong>Marital Status</strong>: " + cHak.maritalStatus + "<br/>"; }
-        if(isSet(cHak.spouse)) { tFlags += "<strong>Spouse</strong>: " + cHak.spouse + "<br/>"; }
-        if(isSet(cHak.agriculture)) { tFlags += "Agriculture<br/>"; }
-        if(isSet(cHak.appropriations)) { tFlags += "Appropriations<br/>"; }
-        if(isSet(cHak.appropsCardinals)) { tFlags += "Approps. Cardinals<br/>"; }
-        if(isSet(cHak.armedServices)) { tFlags += "Armed Services<br/>"; }
-        if(isSet(cHak.blDogs)) { tFlags += "Blue Dogs<br/>"; }
-        if(isSet(cHak.board)) { tFlags += "Board<br/>"; }
-        if(isSet(cHak.budget)) { tFlags += "Budget<br/>"; }
+        if(isSet(cHak.Religion)) { tFlags += "<strong>Religion</strong>: " + cHak.Religion + "<br/>"; }
+        if(isSet(cHak.Marital_Status)) { tFlags += "<strong>Marital Status</strong>: " + cHak.Marital_Status + "<br/>"; }
+        if(isSet(cHak.Spouse)) { tFlags += "<strong>Spouse</strong>: " + cHak.Spouse + "<br/>"; }
+        if(isSet(cHak.Agriculture)) { tFlags += "Agriculture<br/>"; }
+        if(isSet(cHak.Appropriations)) { tFlags += "Appropriations<br/>"; }
+        if(isSet(cHak.Approps_Cardinals)) { tFlags += "Approps. Cardinals<br/>"; }
+        if(isSet(cHak.Armed_Services)) { tFlags += "Armed Services<br/>"; }
+        if(isSet(cHak.Bl_Dogs)) { tFlags += "Blue Dogs<br/>"; }
+        if(isSet(cHak.Board)) { tFlags += "Board<br/>"; }
+        if(isSet(cHak.Budget)) { tFlags += "Budget<br/>"; }
         if(isSet(cHak.CBC)) { tFlags += "CBC<br/>"; }
         if(isSet(cHak.CHAPAC)) { tFlags += "CHAPAC<br/>"; }
         if(isSet(cHak.CHC)) { tFlags += "CHC<br/>"; }
-        if(isSet(cHak.educationWorkforce)) { tFlags += "Education/Workforce<br/>"; }
-        if(isSet(cHak.energyCommerce)) { tFlags += "Energy/Commerce<br/>"; }
-        if(isSet(cHak.ethicsSoOC)) { tFlags += "Ethics SoOC<br/>"; }
-        if(isSet(cHak.freshman)) { tFlags += "Freshman<br/>"; }
-        if(isSet(cHak.frontline)) { tFlags += "Frontline<br/>"; }
-        if(isSet(cHak.foreignAffairsIR)) { tFlags += "Foreign Affairs/IR<br/>"; }
-        if(isSet(cHak.homelandSecurity)) { tFlags += "Homeland Security<br/>"; }
-        if(isSet(cHak.houseLeadership)) { tFlags += "House Leadership<br/>"; }
-        if(isSet(cHak.houseAdministration)) { tFlags += "House Administration<br/>"; }
-        if(isSet(cHak.judiciary)) { tFlags += "Judiciary<br/>"; }
-        if(isSet(cHak.mentors)) { tFlags += "Mentors<br/>"; }
-        if(isSet(cHak.naturalResources)) { tFlags += "Natural Resources<br/>"; }
+        if(isSet(cHak.Education_Workforce)) { tFlags += "Education/Workforce<br/>"; }
+        if(isSet(cHak.Energy_Commerce)) { tFlags += "Energy/Commerce<br/>"; }
+        if(isSet(cHak.Ethics_SoOC)) { tFlags += "Ethics SoOC<br/>"; }
+        if(isSet(cHak.Freshman)) { tFlags += "Freshman<br/>"; }
+        if(isSet(cHak.Frontline)) { tFlags += "Frontline<br/>"; }
+        if(isSet(cHak.Foreign_Affairs_IR)) { tFlags += "Foreign Affairs/IR<br/>"; }
+        if(isSet(cHak.Homeland_Security)) { tFlags += "Homeland Security<br/>"; }
+        if(isSet(cHak.House_Leadership)) { tFlags += "House Leadership<br/>"; }
+        if(isSet(cHak.House_Administration)) { tFlags += "House Administration<br/>"; }
+        if(isSet(cHak.Judiciary)) { tFlags += "Judiciary<br/>"; }
+        if(isSet(cHak.Mentors)) { tFlags += "Mentors<br/>"; }
+        if(isSet(cHak.Natural_Resources)) { tFlags += "Natural Resources<br/>"; }
         if(isSet(cHak.NDC)) { tFlags += "NDC<br/>"; }
-        if(isSet(cHak.nonSpeciality)) { tFlags += "Non-Specialty<br/>"; }
-        if(isSet(cHak.oversightGovtReform)) { tFlags += "Oversight Government Reform<br/>"; }
-        if(isSet(cHak.proDem)) { tFlags += "Pro-Dem<br/>"; }
-        if(isSet(cHak.rankingMember)) { tFlags += "Ranking Member<br/>"; }
-        if(isSet(cHak.rules)) { tFlags += "Rules<br/>"; }
-        if(isSet(cHak.science)) { tFlags += "Science<br/>"; }
+        if(isSet(cHak.Non_Speciality)) { tFlags += "Non-Specialty<br/>"; }
+        if(isSet(cHak.Oversight_Govt_Reform)) { tFlags += "Oversight Government Reform<br/>"; }
+        if(isSet(cHak.Pro_Dem)) { tFlags += "Pro-Dem<br/>"; }
+        if(isSet(cHak.Ranking_Member)) { tFlags += "Ranking Member<br/>"; }
+        if(isSet(cHak.Rules)) { tFlags += "Rules<br/>"; }
+        if(isSet(cHak.Science)) { tFlags += "Science<br/>"; }
         if(isSet(cHak.SEEC)) { tFlags += "SEEC<br/>"; }
-        if(isSet(cHak.selectIntelligence)) { tFlags += "Select Intelligence<br/>"; }
-        if(isSet(cHak.smallBusiness)) { tFlags += "Small Business<br/>"; }
-        if(isSet(cHak.TEAMBuilders)) { tFlags += "TEAM Builders<br/>"; }
+        if(isSet(cHak.Select_Intelligence)) { tFlags += "Select Intelligence<br/>"; }
+        if(isSet(cHak.Small_Business)) { tFlags += "Small Business<br/>"; }
+        if(isSet(cHak.TEAM_Builders)) { tFlags += "TEAM Builders<br/>"; }
         if(isSet(cHak.TI)) { tFlags += "TI<br/>"; }
         if(isSet(cHak.VA)) { tFlags += "Veterans Affairs<br/>"; }
-        if(isSet(cHak.waysMeans)) { tFlags += "Ways/Means<br/>"; }
-        if(isSet(cHak.women)) { tFlags += "Women<br/>"; }
-        if(isSet(cHak.memberCell)) { tHome += "<strong>Cell: </strong>" + cHak.memberCell + "<br/>"; }
-        if(isSet(cHak.memberEmail)) { tHome += "<strong>Email: </strong>" + cHak.memberEmail + "<br/>"; }
-        if(isSet(cHak.memberOtherPhone)) { tHome += "<strong>Other phone: </strong>" + cHak.memberOtherPhone + "<br/>"; }
-        if(isSet(cHak.primaryHomeAddress)) { tHome += "<strong>Home Address: </strong>" + cHak.primaryHomeAddress + "<br/>"; }
-        if(isSet(cHak.primaryHomePhone)) { tHome += "<strong>Home Phone: </strong>" + cHak.primaryHomePhone + "<br/>"; }
-        if(isSet(cHak.campaignContact)) { tCamp += "<strong>Contact: </strong>" + cHak.campaignContact + "<br/>"; }
-        if(isSet(cHak.campaignContactTitle)) { tCamp += "<strong>Contact Title: </strong>" + cHak.campaignContactTitle + "<br/>"; }
-        if(isSet(cHak.campContactEmail)) { tCamp += "<strong>Email: </strong>" + cHak.campContactEmail + "<br/>"; }
-        if(isSet(cHak.campContactPhone)) { tCamp += "<strong>Phone: </strong>" + cHak.campContactPhone + "<br/>"; }
-        if(isSet(cHak.campOfficeFax)) { tCamp += "<strong>Fax: </strong>" + cHak.campOfficeFax + "<br/>"; }
-        if(isSet(cHak.campOfficeAddress)) { tCamp += "<strong>Address: </strong>" + cHak.campOfficeAddress + "<br/>"; }
-        if(isSet(cHak.PACWkBkUser)) { tPwb += "<strong>U: </strong>" + cHak.PACWkBkUser + "<br/>"; }
-        if(isSet(cHak.PACWkBkPass)) { tPwb += "<strong>U: </strong>" + cHak.PACWkBkPass + "<br/>"; }
-        conTable += "<span class='td'>" + cHak.term + "</span>" +
+        if(isSet(cHak.Ways_Means)) { tFlags += "Ways/Means<br/>"; }
+        if(isSet(cHak.Women)) { tFlags += "Women<br/>"; }
+        if(isSet(cHak.Member_Cell)) { tHome += "<strong>Cell: </strong>" + cHak.Member_Cell + "<br/>"; }
+        if(isSet(cHak.Member_Email)) { tHome += "<strong>Email: </strong>" + cHak.Member_Email + "<br/>"; }
+        if(isSet(cHak.Member_Other_Phone)) { tHome += "<strong>Other phone: </strong>" + cHak.Member_Other_Phone + "<br/>"; }
+        if(isSet(cHak.Primary_Home_Address)) { tHome += "<strong>Home Address: </strong>" + cHak.Primary_Home_Address + "<br/>"; }
+        if(isSet(cHak.Primary_Home_Phone)) { tHome += "<strong>Home Phone: </strong>" + cHak.Primary_Home_Phone + "<br/>"; }
+        if(isSet(cHak.Campaign_Contact)) { tCamp += "<strong>Contact: </strong>" + cHak.Campaign_Contact + "<br/>"; }
+        if(isSet(cHak.Campaign_Contact_Title)) { tCamp += "<strong>Contact Title: </strong>" + cHak.Campaign_Contact_Title + "<br/>"; }
+        if(isSet(cHak.Camp_Contact_Email)) { tCamp += "<strong>Email: </strong>" + cHak.Camp_Contact_Email + "<br/>"; }
+        if(isSet(cHak.Camp_Contact_Phone)) { tCamp += "<strong>Phone: </strong>" + cHak.Camp_Contact_Phone + "<br/>"; }
+        if(isSet(cHak.Camp_Office_Fax)) { tCamp += "<strong>Fax: </strong>" + cHak.Camp_Office_Fax + "<br/>"; }
+        if(isSet(cHak.Camp_Office_Address)) { tCamp += "<strong>Address: </strong>" + cHak.Camp_Office_Address + "<br/>"; }
+        if(isSet(cHak.PACWkBk_User)) { tPwb += "<strong>U: </strong>" + cHak.PACWkBk_User + "<br/>"; }
+        if(isSet(cHak.PACWkBk_Pass)) { tPwb += "<strong>U: </strong>" + cHak.PACWkBk_Pass + "<br/>"; }
+        conTable += "<span class='td'>" + xTerm + "</span>" +
                 "<span class='td'>";
         if(isSet(tFlags)) { conTable += "<div class='UPop'> <img src='" + getBasePath("icon") + "/ic_lst.jpeg' class='th_icon'><div class='UPopO'>" + tFlags + "</div></div>"; }
         if(isSet(tHome)) { conTable += "<div class='UPop'> <img src='" + getBasePath("icon") + "/ic_hom.gif' class='th_icon'><div class='UPopO'>" + tHome + "</div></div>"; }
@@ -108,6 +109,7 @@ function showCongress(conData) {
         conTable += "</span></div>";
     });
     conTable += "</div>";
+    rData += conTable;
     dojo.byId("CongressHolder").innerHTML = rData;
 }
 

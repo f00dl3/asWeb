@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -28,7 +29,7 @@ public class WebCalDAO {
                     .put("CLID", resultSet.getInt("CLID"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

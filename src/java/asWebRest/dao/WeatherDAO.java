@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 1 Apr 2018
+Updated: 7 Apr 2018
  */
 
 package asWebRest.dao;
@@ -112,6 +112,7 @@ public class WeatherDAO {
                     .put("LDay", resultSet.getString("LDay"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -126,6 +127,7 @@ public class WeatherDAO {
                 tObject.put("HiR", resultSet.getInt("HiR"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -140,6 +142,7 @@ public class WeatherDAO {
                 tObject.put("LiR", resultSet.getInt("LiR"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer; 
     }  
@@ -154,6 +157,7 @@ public class WeatherDAO {
                 tObject.put("ThisWx", resultSet.getInt("ThisWx"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }    
@@ -168,6 +172,7 @@ public class WeatherDAO {
                 tObject.put("Station", resultSet.getString("Station"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -184,6 +189,7 @@ public class WeatherDAO {
                     .put("Duration", resultSet.getInt("Duration"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -208,6 +214,7 @@ public class WeatherDAO {
                     .put("SRFN", resultSet.getInt("SRFN"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -222,6 +229,7 @@ public class WeatherDAO {
                 tObject.put("HeightMb", resultSet.getInt("HeightMb"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -236,6 +244,7 @@ public class WeatherDAO {
                 tObject.put("HeightMb", resultSet.getInt("HeightMb"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -251,6 +260,7 @@ public class WeatherDAO {
                 tObject.put("StormID", resultSet.getString("StormID"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -274,6 +284,7 @@ public class WeatherDAO {
                     .put("ASON", resultSet.getString("ASON"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -299,6 +310,7 @@ public class WeatherDAO {
                     .put("SRFN", resultSet.getString("SRFN"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -313,6 +325,7 @@ public class WeatherDAO {
                 tObject.put("RunString", resultSet.getString("RunString"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -327,6 +340,7 @@ public class WeatherDAO {
                 tObject.put("RunString", resultSet.getString("RunString"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -383,6 +397,7 @@ public class WeatherDAO {
                     .put("State", resultSet.getString("State"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -455,6 +470,7 @@ public class WeatherDAO {
                     .put("cap12vtec", resultSet.getString("cap12vtec"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -477,6 +493,7 @@ public class WeatherDAO {
                     .put("coords", resultSet.getString("coords"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -497,6 +514,7 @@ public class WeatherDAO {
                     .put("coords", resultSet.getString("coords"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -537,6 +555,7 @@ public class WeatherDAO {
                     .put("ShortWID", resultSet.getString("ShortWID"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -553,6 +572,7 @@ public class WeatherDAO {
                     .put("Duration", resultSet.getLong("Duration"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }   
@@ -573,6 +593,7 @@ public class WeatherDAO {
                     .put("jsonData", resultSet.getString("jsonData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -593,6 +614,7 @@ public class WeatherDAO {
                     .put("jsonData", resultSet.getString("jsonData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -608,6 +630,7 @@ public class WeatherDAO {
                 tObject.put("jsonSet", resultSet.getString("jsonSet"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -635,6 +658,7 @@ public class WeatherDAO {
                     .put("jsonSet", resultSet.getString("jsonSet"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -663,6 +687,7 @@ public class WeatherDAO {
                     .put("Description", resultSet.getString("Description"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -690,6 +715,7 @@ public class WeatherDAO {
                     .put("Description", resultSet.getString("Description"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }   
@@ -706,6 +732,7 @@ public class WeatherDAO {
                     .put("Description", resultSet.getString("Description"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -722,6 +749,7 @@ public class WeatherDAO {
                     .put("BoundsNSEW", resultSet.getString("BoundsNSEW"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -746,6 +774,7 @@ public class WeatherDAO {
                     .put("raKOJCx", resultSet.getString("raKOJCx"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -768,6 +797,7 @@ public class WeatherDAO {
                     .put("description", resultSet.getString("description"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -862,6 +892,7 @@ public class WeatherDAO {
                     .put("State", resultSet.getString("State"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
@@ -876,6 +907,7 @@ public class WeatherDAO {
                 tObject.put("ATF", resultSet.getDouble("ATF"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

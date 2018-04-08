@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 26 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -35,6 +35,7 @@ public class NewsFeedDAO {
                     .put("GetTime", resultSet.getString("GetTime"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -55,6 +56,7 @@ public class NewsFeedDAO {
                     .put("GetTime", resultSet.getString("GetTime"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

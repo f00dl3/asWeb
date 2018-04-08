@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 30 Mar 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -33,6 +33,7 @@ public class DatabaseInfoDAO {
                     .put("DBRows", resultSet.getLong("DBRows"));
                 dbInfo.put(tDbInfo);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return dbInfo;
     }
@@ -58,6 +59,7 @@ public class DatabaseInfoDAO {
                     .put("Rows", resultSet.getLong("Rows"));
                 dbInfo2.put(tDbInfo2);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return dbInfo2;
     }

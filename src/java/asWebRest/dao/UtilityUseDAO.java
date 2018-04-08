@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -27,6 +27,7 @@ public class UtilityUseDAO {
                     .put("kWh", resultSet.getDouble("kWh"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -43,6 +44,7 @@ public class UtilityUseDAO {
                     .put("TotalMCF", resultSet.getDouble("TotalMCF"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -59,6 +61,7 @@ public class UtilityUseDAO {
                     .put("MBData", resultSet.getDouble("MBData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -73,6 +76,7 @@ public class UtilityUseDAO {
                 tObject.put("TotalMCF", resultSet.getDouble("TotalMCF"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -89,6 +93,7 @@ public class UtilityUseDAO {
                 tObject.put("kWh_AVG", resultSet.getDouble("kWh_AVG"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -103,6 +108,7 @@ public class UtilityUseDAO {
                 tObject.put("MBData", resultSet.getInt("MBData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -124,6 +130,7 @@ public class UtilityUseDAO {
                     .put("MBData", resultSet.getInt("MBData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

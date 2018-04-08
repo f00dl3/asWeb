@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 20 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -28,6 +28,7 @@ public class WebVersionDAO {
                     .put("Date", resultSet.getString("Date"));
                 webVersions.put(webVersion);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return webVersions;
     }
@@ -46,6 +47,7 @@ public class WebVersionDAO {
                     .put("Changes", resultSet.getString("Changes"));
                 webVersions.put(webVersion);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return webVersions;
     }

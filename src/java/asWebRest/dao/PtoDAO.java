@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 29 Mar 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -22,7 +22,7 @@ public class PtoDAO {
                 " (@runtot := @runtot + CarryOver + New - Taken - Save) AS Balance, Notes" +
                 " FROM Core.SprintPTO WHERE Month BETWEEN '2017-04' AND '2019-03';";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {            
             ResultSet resultSet = wc.q2rs(query_PTO, null);
             while (resultSet.next()) {
@@ -36,7 +36,7 @@ public class PtoDAO {
                     .put("Notes", resultSet.getString("Notes"));
                 tContainer.put(tObject);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

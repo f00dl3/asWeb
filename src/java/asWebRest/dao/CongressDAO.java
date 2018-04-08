@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Refactored: 5 Apr 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -259,6 +260,7 @@ public class CongressDAO {
                     .put("Zip", resultSet.getInt("Zip"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 1 Apr 2018
+Updated: 7 Apr 2018
  */
 
 package asWebRest.dao;
@@ -18,6 +18,22 @@ public class SnmpDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
     
+    public JSONArray getActSqlConns() {
+        final String query_MySQL_Active = "show status where `variable_name` = 'Threads_connected';";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs(query_MySQL_Active, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Threads_connected", resultSet.getString("Threads_connected"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getEmS4Geo() {
         final String query_SNMP_EmS4_Geo = "SELECT WalkTime, Location, BattLevel, BattTemp FROM net_snmp.EmS4 ORDER BY WalkTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
@@ -32,6 +48,7 @@ public class SnmpDAO {
                     .put("BattTemp", resultSet.getInt("BattTemp"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -46,6 +63,7 @@ public class SnmpDAO {
                 tObject.put("Location", resultSet.getString("Location"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -73,6 +91,7 @@ public class SnmpDAO {
                     .put("Asus3200", resultSet.getString("Asus3200"));                    
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -144,7 +163,7 @@ public class SnmpDAO {
                 " ORDER BY WalkTime DESC" +
                 " LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();     
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Main, qParams);
             while (resultSet.next()) {
@@ -279,6 +298,7 @@ public class SnmpDAO {
                     .put("dtExpandedJSONData", resultSet.getString("dtExpandedJSONData"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -295,6 +315,7 @@ public class SnmpDAO {
                     .put("SSHClientIP", resultSet.getString("SSHClientIP"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -317,6 +338,7 @@ public class SnmpDAO {
                     .put("ExtTemp", resultSet.getInt("ExtTemp"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -334,7 +356,7 @@ public class SnmpDAO {
                 " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + //DateTest, Date
                 " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Note3, qParams);
             while (resultSet.next()) {
@@ -368,6 +390,7 @@ public class SnmpDAO {
                     .put("SigStrLTE", resultSet.getInt("SigStrLTE"));                    
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -386,6 +409,7 @@ public class SnmpDAO {
                     .put("BattTemp", resultSet.getInt("BattTemp"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -400,6 +424,7 @@ public class SnmpDAO {
                 tObject.put("Location", resultSet.getString("Location"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -414,6 +439,7 @@ public class SnmpDAO {
                 tObject.put("Location", resultSet.getString("Location"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -424,7 +450,7 @@ public class SnmpDAO {
                 " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
                 " ORDER BY WalkTime DESC LIMIT 180) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Note3_Sensors, qParams);
             while (resultSet.next()) {
@@ -434,6 +460,7 @@ public class SnmpDAO {
                     .put("SensorsRapid", resultSet.getString("SensorsRapid"));                    
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -451,7 +478,7 @@ public class SnmpDAO {
                 " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
                 " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Pi, qParams);
             while (resultSet.next()) {
@@ -486,6 +513,7 @@ public class SnmpDAO {
                     .put("UptimeSec", resultSet.getLong("UptimeSec"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -504,7 +532,7 @@ public class SnmpDAO {
                 " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
                 " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Pi2, qParams);
             while (resultSet.next()) {
@@ -542,6 +570,7 @@ public class SnmpDAO {
                     .put("GPSAltiCm", resultSet.getInt("GPSAltiCM"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -558,6 +587,7 @@ public class SnmpDAO {
                     .put("GPSCoords", resultSet.getInt("GPSCoords"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -572,6 +602,7 @@ public class SnmpDAO {
                 tObject.put("GPSCoords", resultSet.getInt("GPSCoords"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -588,7 +619,7 @@ public class SnmpDAO {
         " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
         " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Pi2, qParams);
             while (resultSet.next()) {
@@ -625,6 +656,7 @@ public class SnmpDAO {
                     .put("br0Tx", resultSet.getLong("br0Tx"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

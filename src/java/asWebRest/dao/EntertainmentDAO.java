@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 27 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -40,6 +40,7 @@ public class EntertainmentDAO {
                     .put("Seals", resultSet.getInt("Seals"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -58,6 +59,7 @@ public class EntertainmentDAO {
                     .put("Active", resultSet.getInt("Active"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -76,6 +78,7 @@ public class EntertainmentDAO {
                     .put("Active", resultSet.getInt("Active"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -90,6 +93,7 @@ public class EntertainmentDAO {
                 tObject.put("TotalHours", resultSet.getDouble("TotalHours"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -113,6 +117,7 @@ public class EntertainmentDAO {
                     .put("PendingBurn", resultSet.getInt("PendingBurn"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
@@ -136,6 +141,7 @@ public class EntertainmentDAO {
                     .put("pdf", resultSet.getInt("pdf"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
@@ -163,6 +169,7 @@ public class EntertainmentDAO {
                     .put("ImgDown", resultSet.getInt("ImgDown"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
@@ -190,6 +197,7 @@ public class EntertainmentDAO {
                     .put("ViewersM", resultSet.getDouble("ViewersM"));                       
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
@@ -208,7 +216,7 @@ public class EntertainmentDAO {
                     .put("TagVer", resultSet.getInt("TagVer"));
                 xTags.put(tXTag);
             }
-           
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return xTags;
     }

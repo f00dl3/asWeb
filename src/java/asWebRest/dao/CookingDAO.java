@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 22 Feb 2018
+Updated: 7 Apr 2018
  */
 
 package asWebRest.dao;
@@ -31,6 +31,7 @@ public class CookingDAO {
                     .put("CookTime", resultSet.getInt("CookTime"));
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }

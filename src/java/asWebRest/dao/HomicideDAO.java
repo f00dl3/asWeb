@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
+Updated: 7 Apr 2018
 */
 
 package asWebRest.dao;
@@ -31,6 +32,7 @@ public class HomicideDAO {
                     .put("Victim", resultSet.getString("Victim"));                        
                 tContainer.put(tObject);
             }
+            resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
