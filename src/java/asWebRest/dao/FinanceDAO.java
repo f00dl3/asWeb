@@ -23,14 +23,14 @@ public class FinanceDAO {
     WebCommon wc = new WebCommon();
     MortgageBeans mb = new MortgageBeans();
     
-    public JSONArray get3NetWorth() {
+    public JSONArray get3NetWorth(Connection dbc) {
         final String query_FBook_3NW = "SELECT" +
-        " ((AsLiq + AsFix + Life + Credits) - Debits) AS Worth" +
+        " ((AsLiq + AsFix + Life + Credits) - Debts) AS Worth" +
         " FROM Core.FB_ENWT" +
         " WHERE AsOf = (SELECT max(AsOf) FROM Core.FB_ENWT);";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_3NW, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_3NW, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("Worth", resultSet.getString("Worth"));
@@ -45,8 +45,8 @@ public class FinanceDAO {
         final String query_AmSch = "SELECT" +
             " DueDate, "+mb.getMortPayment()+" AS Payment, Extra, Planned," +
             " CAST((@runtot * (("+mb.getMortRate()+"/12)/100)) AS DECIMAL(5,2)) AS Interest," +
-            " CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + Planned + )) AS DECIMAL(10,2)) AS Balance" +
-            " FROM Core.FB_WFLM35;";
+            " CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + Planned + "+mb.getMortPayment()+")) AS DECIMAL(10,2)) AS Balance" +
+            " FROM Core.FB_WFML35;";
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
@@ -333,23 +333,20 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getEnw() {
-        
-        final String query_FBook_ENW = "SELECT" +
-                " SUM(Assets) AS NetWorth FROM Core.FB_Assets UNION ALL" +
-                " SELECT -(min(CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS DECIMAL(10, 1)))) AS Balance FROM Core.FB_WFML35 WHERE DueDate < current_date + interval '30' day UNION ALL" +
-                " SELECT sum(Credit-Debit) AS Assets FROM Core.FB_CFCK01 WHERE Date <= current_date UNION ALL" +
-                " SELECT sum(Credit-Debit) AS Assets FROM Core.FB_CFSV59 WHERE Date <= current_date) as tmp;";
-        
+    public JSONArray getEnw(Connection dbc) {
+        final String query_FBook_ENW = "SELECT SUM(Assets) AS NetWorth FROM (" +
+                " SELECT SUM(Value) AS Assets FROM Core.FB_Assets UNION ALL" +
+                " SELECT -(min(CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS DECIMAL(10, 1)))) AS Assets FROM Core.FB_WFML35 WHERE DueDate < current_date + interval '30' day UNION ALL" +
+                " SELECT SUM(Credit-Debit) AS Assets FROM Core.FB_CFCK01 WHERE Date <= current_date UNION ALL" +
+                " SELECT SUM(Credit-Debit) AS Assets FROM Core.FB_CFSV59 WHERE Date <= current_date" +
+                ") as tmp;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_ENW, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ENW, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Assets", resultSet.getDouble("Assets"))
-                    .put("Balance", resultSet.getDouble("Balance"));
+                tObject.put("NetWorth", resultSet.getDouble("NetWorth"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -357,18 +354,18 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getEnwt() {
+    public JSONArray getEnwt(Connection dbc) {
         final String query_FBook_ENWT = "SELECT" +
-                " AsOf, ((AsLiq + AsFix + Life + Credits) - Debits) AS Worth," +
-                " AsLiq, AsFix, Life, Credits, Debits, Growth" +
+                " AsOf, ((AsLiq + AsFix + Life + Credits) - Debts) AS Worth," +
+                " AsLiq, AsFix, Life, Credits, Debts, Growth" +
                 " FROM Core.FB_ENWT" +
                 " WHERE" +
-                " AsOf > CURRENT_DATE - INTERVAL '365' day'" +
-                " (AsOf LIKE '%03-01%' OR AsOf LIKE '%06-01%' OR AsOf LIKE '%09-01%' OR AsOf LIKE '%12-01%')" +
+                " AsOf > CURRENT_DATE - INTERVAL '365' day" +
+                " AND (AsOf LIKE '%03-01%' OR AsOf LIKE '%06-01%' OR AsOf LIKE '%09-01%' OR AsOf LIKE '%12-01%')" +
                 " ORDER BY AsOf DESC LIMIT 20;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_ENWT, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ENWT, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -378,7 +375,7 @@ public class FinanceDAO {
                     .put("AsFix", resultSet.getDouble("AsFix"))
                     .put("Life", resultSet.getDouble("Life"))
                     .put("Credits", resultSet.getDouble("Credits"))
-                    .put("Debits", resultSet.getDouble("Debits"))
+                    .put("Debts", resultSet.getDouble("Debts"))
                     .put("Growth", resultSet.getDouble("Growth"));
                 tContainer.put(tObject);
             }
@@ -406,12 +403,11 @@ public class FinanceDAO {
     
     public JSONArray getMort(Connection dbc) {
         final String query_Mort = "SELECT" +
-            " min(@runtot := @runtot + (@runtot * ("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS MBal" +
+            " MIN(@runtot := @runtot + (@runtot * ("+mb.getMortRate()+"/12)/100) - (Extra + "+mb.getMortPayment()+")) AS MBal" +
             " FROM Core.FB_WFML35" +
             " WHERE DueDate < current_date + interval '30' day;";
-        
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Mort, null);
             while (resultSet.next()) { 
@@ -424,11 +420,11 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getNwga() {
+    public JSONArray getNwga(Connection dbc) {
         final String query_FBook_NWGA = "SELECT FORMAT((AVG(Growth)),2) AS GrowthAvg FROM Core.FB_ENWT;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FBook_NWGA, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_NWGA, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject.put("GrowthAvg", resultSet.getDouble("GrowthAvg"));
@@ -440,7 +436,7 @@ public class FinanceDAO {
     }
     
     public JSONArray getQMerged(Connection dbc) {
-        final String query_FBook_QMerged = "SELECT\n" +
+        final String query_FBook_QMerged = "SELECT" +
                 " (SELECT SUM(Quantity) FROM Core.BGames) AS qBGames," +
                 " (SELECT SUM(Quantity) FROM Core.Books) as qBooks," +
                 " (SELECT SUM(Quantity) FROM Core.DecorTools) as qDTools," +
@@ -467,7 +463,7 @@ public class FinanceDAO {
     }
     
     public JSONArray getSaving(Connection dbc) {
-        final String query_FBook_Saving = "SELECT FORMAT((SUM(Credit-Debit)), 0) AS SBal FROM Core.FB_CFSV59 WHERE Date <= current_date;";
+        final String query_FBook_Saving = "SELECT (SUM(Credit-Debit)) AS SBal FROM Core.FB_CFSV59 WHERE Date <= current_date;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Saving, null);
@@ -520,9 +516,9 @@ public class FinanceDAO {
     public JSONArray getSvBk(Connection dbc) {
         final String query_FBook_SvBk = "SELECT" +
                 " STID, Date, Description, Debit, Credit" +
-                " FORM Core.FB_CFSV59" +
-                " WHERE Date BETWEEN CURDATE()-interval 180 day AND CURDATE()" +
-                " ORDER BY Date DESC;";
+                " FROM Core.FB_CFSV59" +
+                " WHERE Date BETWEEN (current_date - interval '180' day) AND current_date" +
+                " ORDER BY Date DESC, STID DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_SvBk, null);

@@ -7,7 +7,7 @@ FBook/Overview.js Split: 8 Apr 2018
 function genOverviewMortgage(mortData, amSch) {
     var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
     var masDate = getDate("day", 0, "dateOnly");
-    var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData.MBal / 1000).toFixed(1) + "K</span>" +
+    var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</span>" +
             "<div class='UBoxO'><strong>Amortization</strong><br/>" +
             "<em>Payments after today(" + masDate + ")</em><br/>";
     var bTable = "<table><thead><tr>";
@@ -70,8 +70,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     var cnw1d = (enw.NetWorth / 1000).toFixed(1);
     var mlb1d = (mort.MBal / 1000).toFixed(1);
     var nwci = x3nw.Worth;
-    var nwga = nwga.GrowthAvg;
-    var nwgm = 1 + (nwga / 100);
+    var nwgm = 1 + (nwga.GrowthAvg / 100);
     var pro03m = nwci * nwgm;
     var pro01y = nwci * Math.pow(nwgm, (4 * 1));
     var pro05y = nwci * Math.pow(nwgm, (4 * 5));
@@ -83,16 +82,16 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     var bubble = "<div class='UBox'>EWorth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
             "<p><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%" +
-            "<p>em>Projections (starting from last period.)</em>";
+            "<p><em>Projections (starting from last period.)</em>";
     var pTable = "<table><thead><tr>";
     for (var i = 0; i < proCols.length; i++) {
         pTable += "<th>" + proCols[i] + "</th>";
     }
-    pTable += "</tr></thead><tbody>";
+    pTable += "</tr></thead><tbody><tr>";
     for (var i = 0; i < projections.length; i++) {
-        pTable += "<tr><td>" + projections[i].toFixed(1) + "</td></tr>";
+        pTable += "<td>" + projections[i].toFixed(1) + "</td>";
     }
-    pTable += "</tbody></table>";
+    pTable += "</tr></tbody></table>";
     bubble += pTable +
             "<p><a href='" + doCh("p", "FinENW", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("p", "FinENW", "Thumb=1") + "' /></a><p>";
@@ -139,15 +138,15 @@ function getOverviewData() {
     dojo.xhrPost(xhArgs);
 }
 
-function putOverview(finGlob) { // Get from db and maybe call in get not separate function
+function putOverview(finGlob) {
     var amSch = finGlob.amSch;
     var cbData = finGlob.checking[0];
     var svData = finGlob.saving[0];
     var svBk = finGlob.svBk;
     var mortData = finGlob.mort;
-    var enw = finGlob.enw;
-    var x3nw = finGlob.x3nw;
-    var nwga = finGlob.nwga;
+    var enw = finGlob.enw[0];
+    var x3nw = finGlob.x3nw[0];
+    var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
     genOverviewChecking(cbData)
     genOverviewSavings(svData, svBk);

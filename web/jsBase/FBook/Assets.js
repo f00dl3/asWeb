@@ -177,6 +177,7 @@ function setAssetUpdate(formData) {
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
             getAssetData();
+            getOverviewData();
             aniPreload("off");
         },
         error: function (data, iostatus) { 
@@ -199,6 +200,7 @@ function setDecorToolsUpdate(formData) {
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
             getAssetData();
+            getOverviewData();
             aniPreload("off");
         },
         error: function (data, iostatus) { 

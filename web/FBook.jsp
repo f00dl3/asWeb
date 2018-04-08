@@ -31,10 +31,10 @@
         </div><p>
     
         <div id="FinOverview">
-            <div id="HoldChecking"></div>
-            <div id="HoldSavings"></div>
-            <div id="HoldMortgage"></div>
-            <div id="HoldWorth"></div>
+            <span id="HoldChecking"></span>
+            <span id="HoldSavings"></span>
+            <span id="HoldMortgage"></span>
+            <span id="HoldWorth"></span>
         </div><p>
     
         <div id="FBAsset"></div>

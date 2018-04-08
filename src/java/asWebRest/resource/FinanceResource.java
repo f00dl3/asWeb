@@ -89,12 +89,20 @@ public class FinanceResource extends ServerResource {
                     JSONArray saving = getFinanceAction.getSaving(dbc);
                     JSONArray svBk = getFinanceAction.getSvBk(dbc);
                     JSONArray mort = getFinanceAction.getMort(dbc);
+                    JSONArray enw = getFinanceAction.getEnw(dbc);
+                    JSONArray x3nw = getFinanceAction.get3NetWorth(dbc);
+                    JSONArray nwga = getFinanceAction.getNwga(dbc);
+                    JSONArray enwt = getFinanceAction.getEnwt(dbc);
                     mergedResults
                         .put("amSch", amSch)
                         .put("checking", checking)
                         .put("saving", saving)
                         .put("svBk", svBk)
-                        .put("mort", mort);
+                        .put("mort", mort)
+                        .put("enw", enw)
+                        .put("x3nw", x3nw)
+                        .put("nwga", nwga)
+                        .put("enwt", enwt);
                     returnData += mergedResults.toString();
                     break;
                     

@@ -7,6 +7,7 @@ Updated: 7 Apr 2018
 package asWebRest.dao;
 
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -577,14 +578,14 @@ public class WeatherDAO {
         return tContainer;
     }   
     
-    public JSONArray getObsJson(List<String> qParams, List<String> inParams) {
+    public JSONArray getObsJson(Connection dbc, List<String> qParams, List<String> inParams) {
         final String order = inParams.get(0);
         final String xmlBindTheRest = xmlBindTheRest(order);
         final String query_ObsJSON = "SELECT ObsID, GetTime, jsonData" +
                 " FROM WxObs.StationDataIndexed" + xmlBindTheRest;
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsJSON, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -598,14 +599,14 @@ public class WeatherDAO {
         return tContainer;
     }
      
-    public JSONArray getObsJsonRapid(List<String> qParams, List<String> inParams) {
+    public JSONArray getObsJsonRapid(Connection dbc, List<String> qParams, List<String> inParams) {
         final String order = inParams.get(0);
         final String xmlBindTheRest = xmlBindTheRest(order);
         final String query_ObsJSON = "SELECT ObsID, GetTime, jsonData" +
                 " FROM WxObs.RapidSDI" + xmlBindTheRest;
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsJSON, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -619,12 +620,12 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getObsJsonLast() {
+    public JSONArray getObsJsonLast(Connection dbc) {
         final String query_ObsJSON_Last = "SELECT ObsID, JSON_EXTRACT(jsonData, '$.KOJC') as jsonSet" +
                 " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID)-1 FROM WxObs.StationDataIndexed);";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsJSON_Last, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Last, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("jsonSet", resultSet.getString("jsonSet"));
@@ -635,7 +636,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getObsJsonByStation(List<String> inParams) {
+    public JSONArray getObsJsonByStation(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String order = inParams.get(2);
@@ -649,7 +650,7 @@ public class WeatherDAO {
                 " ORDER BY GetTime "+order+" LIMIT "+limit+";";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsJSONbyStation, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONbyStation, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -663,7 +664,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getObsJsonStations(List<String> qParams) {
+    public JSONArray getObsJsonStations(Connection dbc, List<String> qParams) {
         final String query_ObsJSON_Stations = "SELECT " +
                 " st.Station as Station, st.Point as Point, st.City as City, st.State as State," +
                 " st.SfcMB as SfcMB, st.Priority as Priority, st.Region as Region, cs.Description as Description" +
@@ -673,7 +674,7 @@ public class WeatherDAO {
                 " GROUP BY st.Station;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsJSON_Stations, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Stations, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -692,7 +693,7 @@ public class WeatherDAO {
         return tContainer;
     }
         
-    public JSONArray getObsXmlGeo() {
+    public JSONArray getObsXmlGeo(Connection dbc) {
         final String query_ObsXML_Geo = "SELECT" +
                 " st.Station as Station, st.Point as Point, st.City as City, st.State as State," +
                 " st.SfcMB as SfcMB, st.Priority as Priority, st.Region as Region, cs.Description as Description" +
@@ -701,7 +702,7 @@ public class WeatherDAO {
                 " WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsXML_Geo, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsXML_Geo, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -720,11 +721,11 @@ public class WeatherDAO {
         return tContainer;
     }   
     
-    public JSONArray getObsXmlReg() {
+    public JSONArray getObsXmlReg(Connection dbc) {
         final String query_ObsXML_Reg = "SELECT Code, Description FROM WxObs.Regions ORDER BY Code ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ObsXML_Reg, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsXML_Reg, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

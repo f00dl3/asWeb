@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 27 Feb 2018
+Updated: 8 Apr 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.WeatherDAO;
+import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 
@@ -35,13 +36,13 @@ public class GetWeatherAction {
     public JSONArray getLiveWarningsSameBounds(List qParams) { return weatherDAO.getLiveWarningsSameBounds(qParams); }
     public JSONArray getLiveWatches(List inParams) { return weatherDAO.getLiveWatches(inParams); }
     public JSONArray getLogsXmlWxObs() { return weatherDAO.getLogsXmlWxObs(); }
-    public JSONArray getObsJson(List qParams, List inParams) { return weatherDAO.getObsJson(qParams, inParams); }
-    public JSONArray getObsJsonRapid(List qParams, List inParams) { return weatherDAO.getObsJsonRapid(qParams, inParams); }
-    public JSONArray getObsJsonLast() { return weatherDAO.getObsJsonLast(); }
-    public JSONArray getObsJsonByStation(List inParams) { return weatherDAO.getObsJsonByStation(inParams); }
-    public JSONArray getObsJsonStations(List qParams) { return weatherDAO.getObsJsonStations(qParams); }
-    public JSONArray getObsXmlGeo() { return weatherDAO.getObsXmlGeo(); }
-    public JSONArray getObsXmlReg() { return weatherDAO.getObsXmlReg(); }
+    public JSONArray getObsJson(Connection dbc, List qParams, List inParams) { return weatherDAO.getObsJson(dbc, qParams, inParams); }
+    public JSONArray getObsJsonRapid(Connection dbc, List qParams, List inParams) { return weatherDAO.getObsJsonRapid(dbc, qParams, inParams); }
+    public JSONArray getObsJsonLast(Connection dbc) { return weatherDAO.getObsJsonLast(dbc); }
+    public JSONArray getObsJsonByStation(Connection dbc, List inParams) { return weatherDAO.getObsJsonByStation(dbc, inParams); }
+    public JSONArray getObsJsonStations(Connection dbc, List qParams) { return weatherDAO.getObsJsonStations(dbc, qParams); }
+    public JSONArray getObsXmlGeo(Connection dbc) { return weatherDAO.getObsXmlGeo(dbc); }
+    public JSONArray getObsXmlReg(Connection dbc) { return weatherDAO.getObsXmlReg(dbc); }
     public JSONArray getRadarList() { return weatherDAO.getRadarList(); }
     public JSONArray getReanalysis(List qParams) { return weatherDAO.getReanalysis(qParams); }
     public JSONArray getSpcLive(List qParams) { return weatherDAO.getSpcLive(qParams); }

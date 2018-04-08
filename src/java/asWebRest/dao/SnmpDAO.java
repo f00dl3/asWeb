@@ -8,6 +8,7 @@ package asWebRest.dao;
 
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -320,7 +321,7 @@ public class SnmpDAO {
         return tContainer;
     }
 
-    public JSONArray getMergedLastTemp() {
+    public JSONArray getMergedLastTemp(Connection dbc) {
         final String query_SNMP_MergedTemps = "SELECT Description, WalkTime, ExtTemp FROM (" +
                 " (SELECT 'RaspberryPi' as Description, WalkTime, ExtTemp FROM net_snmp.RaspberryPi ORDER BY WalkTime DESC LIMIT 1) UNION ALL" +
                 " (SELECT 'RaspberryPi2' as Description, WalkTime, ExtTemp FROM net_snmp.RaspberryPi2 ORDER BY WalkTime DESC LIMIT 1) UNION ALL" +
@@ -329,7 +330,7 @@ public class SnmpDAO {
                 " ORDER BY Description ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_MergedTemps, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_MergedTemps, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

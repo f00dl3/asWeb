@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 1 Apr 2018
+Updated: 8 Apr 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.SnmpDAO;
+import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 
@@ -20,7 +21,7 @@ public class GetSnmpAction {
     public JSONArray getLastWalk() { return snmpDAO.getLastWalk(); }
     public JSONArray getMain(List qParams) { return snmpDAO.getMain(qParams); }
     public JSONArray getMainLastSSH() { return snmpDAO.getMainLastSSH(); }
-    public JSONArray getMergedLastTemp() { return snmpDAO.getMergedLastTemp(); }
+    public JSONArray getMergedLastTemp(Connection dbc) { return snmpDAO.getMergedLastTemp(dbc); }
     public JSONArray getNote3(List qParams) { return snmpDAO.getNote3(qParams); }
     public JSONArray getNote3Geo() { return snmpDAO.getNote3Geo(); }
     public JSONArray getNote3GeoHistory() { return snmpDAO.getNote3GeoHistory(); }

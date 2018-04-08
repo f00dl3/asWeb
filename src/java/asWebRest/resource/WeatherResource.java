@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 1 Apr 2018
+Updated: 8 Apr 2018
  */
 
 package asWebRest.resource;
@@ -10,6 +10,8 @@ import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
+import asWebRest.shared.MyDBConnector;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -23,6 +25,10 @@ public class WeatherResource extends ServerResource {
     
     @Post
     public String represent(Representation argsIn) {
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
 
         List<String> qParams = new ArrayList<>();      
         List<String> inParams = new ArrayList<>();      
@@ -52,7 +58,7 @@ public class WeatherResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    JSONArray wxObs = getWeatherAction.getObsJson(qParams, inParams);
+                    JSONArray wxObs = getWeatherAction.getObsJson(dbc, qParams, inParams);
                     returnData = wxObs.toString();
                     break;
                     
@@ -66,9 +72,9 @@ public class WeatherResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    JSONArray wxObsB = getWeatherAction.getObsJsonByStation(inParams);
-                    JSONArray latestObsB = getWeatherAction.getObsJsonLast();
-                    JSONArray indorObs = getSnmpAction.getMergedLastTemp();
+                    JSONArray wxObsB = getWeatherAction.getObsJsonByStation(dbc, inParams);
+                    JSONArray latestObsB = getWeatherAction.getObsJsonLast(dbc);
+                    JSONArray indorObs = getSnmpAction.getMergedLastTemp(dbc);
                     mergedResults
                         .put("wxObsM1H", wxObsB)
                         .put("wxObsNow", latestObsB)
@@ -77,7 +83,7 @@ public class WeatherResource extends ServerResource {
                     break;          
                     
                 case "getObsJsonLast":
-                    JSONArray latestObs = getWeatherAction.getObsJsonLast();
+                    JSONArray latestObs = getWeatherAction.getObsJsonLast(dbc);
                     returnData = latestObs.toString();
                     break;
                     
@@ -85,6 +91,8 @@ public class WeatherResource extends ServerResource {
         } else {
             returnData = "ERROR: NO POST DATA!";
         }        
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
         
