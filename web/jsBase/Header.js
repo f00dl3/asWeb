@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 6 Apr 2018
+Updated: 8 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -11,6 +11,7 @@ var carOwnershipYears = (2018-2010);
 var carStartMiles = 44150;
 var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
+var elecCost = 0.14;
 var timeOutMilli = (60*1000);
 var hiddenFeatures = 0;
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";

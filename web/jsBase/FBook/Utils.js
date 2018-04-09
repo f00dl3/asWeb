@@ -21,7 +21,9 @@ function getUtils() {
         load: function (data) {
             putUtils(
                 data.uuRel,
-                data.settingC
+                data.settingC,
+                data.settingH,
+                data.uuData
             );
             aniPreload("off");
         },

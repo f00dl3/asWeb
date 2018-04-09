@@ -9,6 +9,9 @@ package asWebRest.dao;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -68,6 +71,9 @@ public class UtilityUseDAO {
     }
     
     public JSONArray getCombinedUtilityUseByMonth(Connection dbc, String month) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM");
+        DateTime baseTime = dtf.parseDateTime(month);
+        // Create (joda?) datetime object and loop through going back 24 months from Month
         final String query_FBook_UU_Comb = "SELECT" +
                 " (SELECT TotalMCF FROM Core.UseGas WHERE Month LIKE '%"+month+"%') AS TotalMCF," +
                 " (SELECT FORMAT((kWh_AVG),1) FROM (" +
