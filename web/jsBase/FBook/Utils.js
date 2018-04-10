@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
+Updated: 9 Apr 2018
  */
 
 function displayUtils() {
@@ -10,8 +11,8 @@ function displayUtils() {
 
 function getUtils() {
     aniPreload("on");
-    var uuMonthLast = getDate("day", 0, "yearMonth");
-    var thePostData = "doWhat=getUtils";
+    var uuMonthLast = getDate("day", 0, "yyyy-MM");
+    var thePostData = "doWhat=getUtils&tMonth="+uuMonthLast;
     var xhArgs = {
         preventCache: true,
         url: getResource("Finance"),
@@ -74,18 +75,19 @@ function putUtils(uuRelations, settingC, settingH, uuData) {
             "<th><span class='UChart'>Cell<br/>Data<div class='UChartO'><a href='" + doCh("p", "CellData", null) + "'><img class='ch_large' src='" + doCh("p", "CellData", "Thumb=1") + "' /></a></div></span></th>" +
             "<th><span class='UChart'>Web<br/>Data<div class='UChartO'><a href='" + doCh("p", "WebData", null) + "'><img class='ch_large' src='" + doCh("p", "WebData", "Thumb=1") + "' /></a></div></span></th>" +
             "</tr></thead><tbody>";
-    uuData.forEach(function (uu) {
-        var dayEleCost = (uu.kwhAvg * elecCost);
+    Object.keys(uuData).sort().reverse().forEach(function (mo) {
+        var dayEleCost = (uuData[mo].kWh_Avg * elecCost);
         rTable += "<tr>" +
-                "<td><div class='UPop'>" + uu.Month + "<div class='UPopO'>Average temperature: " + uu.ATF + " F</div></div></td>" +
-                "<td><div class='UPop'>" + uu.kwhAvg + "<div class='UPopO'>" +
+                "<td><div class='UPop'>" + mo + "<div class='UPopO'>Avg. temperature: " + (uuData[mo].wxAvgTF).toFixed(1) + " F</div></div></td>" +
+                "<td><div class='UPop'>" + uuData[mo].kWh_Avg + "<div class='UPopO'>" +
                 "<strong>Est. cost per-day:</strong> $" + dayEleCost.toFixed(2) + "<br/>" +
                 "<strong>Est. 30 day bill:</strong> $" + (dayEleCost*30).toFixed(2) + "</div></div></td>" +
-                "<td>" + uu.TotalMcf + "</td>" +
-                "<td>" + uu.CMin + "</td>" +
-                "<td>" + uu.CTxt + "</td>" + 
-                "<td>" + autoUnits(uu.CData*1000000) + "</td>" +
-                "<td>" + autoUnits(uu.WData*1000000) + "</td>" +
+                "<td>" + uuData[mo].TotalMCF + "</td>" +
+                "<td>" + uuData[mo].Minutes + "</td>" +
+                "<td>" + uuData[mo].Texts + "</td>" + 
+                "<td>" + uuData[mo].MMS + "</td>" + 
+                "<td>" + autoUnits(uuData[mo].CData*1000000) + "</td>" +
+                "<td>" + autoUnits(uuData[mo].WData*1000000) + "</td>" +
                 "</tr>";
     });
     rTable += "</tbody></table>";

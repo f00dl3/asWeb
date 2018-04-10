@@ -1,7 +1,7 @@
 /* 
  by Anthony Stump
  Created: 23 Mar 2018
- Updated: 4 Apr 2018
+ Updated: 9 Apr 2018
  */
 
 function checkTransactionAge(dtAge) {
@@ -20,12 +20,14 @@ function naviButtonListener() {
     var btnShowAuto = dojo.byId("ShowFBAuto");
     var btnShowBills = dojo.byId("ShowFBBills");
     var btnShowBlue = dojo.byId("ShowFBBlue");
+    var btnShowCheck = dojo.byId("ShowFBCheck");
     var btnShowPto = dojo.byId("ShowFBWorkPTO");
     var btnShowUtils = dojo.byId("ShowFBUUse");
     dojo.connect(btnShowAsset, "click", displayAssets);
     dojo.connect(btnShowAuto, "click", displayAuto);
     dojo.connect(btnShowBills, "click", displayBills);
     dojo.connect(btnShowBlue, "click", displayBlue);
+    dojo.connect(btnShowCheck, "click", displayCheckbook);
     dojo.connect(btnShowPto, "click", displayWorkPTO);
     dojo.connect(btnShowUtils, "click", displayUtils);
 }

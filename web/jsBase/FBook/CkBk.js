@@ -2,11 +2,38 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
+Updated: 9 Apr 2018
  */
+
+function displayCheckbook() {
+    getCheckbook();
+    $("#FBCheck").toggle();
+}
 
 function genOverviewChecking(cbData) {
     var bubble = "<div class='UBox'>Check<br/><span>$" + (cbData.Balance + 367.43).toFixed(2) + "</span></div>";
     dojo.byId("HoldChecking").innerHTML = bubble;
+}
+
+function getCheckbook() {
+    aniPreload("on");
+    var thePostData = "doWhat=getChecking";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: thePostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function (data) {
+            putCheckbook(data);
+            aniPreload("off");
+        },
+        error: function (data, iostatus) {
+            aniPreload("off");
+            window.alert("xhrGet for Checkbook FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function putCheckbook(ckBkData) {
@@ -22,14 +49,8 @@ function putCheckbook(ckBkData) {
     ckBkData.forEach(function (ckBk) {
         results++;
         var shortDesc = (ckBk.Description).replace("DBT PURCHASE ON ", "").substring(0, 32);
-        var fbcr = ckBk.Credit;
-        var fbdb = ckBk.Debit;
-        if (!isSet(fbcr)) {
-            fbcr = "";
-        }
-        if (!isSet(fbdb)) {
-            fbdb = "";
-        }
+        var fbcr = ckBk.Credit; if (!isSet(fbcr)) { fbcr = ""; }
+        var fbdb = ckBk.Debit; if (!isSet(fbdb)) { fbdb = ""; }
         cbResults += "<div class='tr'>";
         if (isSet(ckBk.Bank) && ckBk.Bank !== "0000-00-00") {
             cbResults += "<span class='td'> </span>" +
@@ -40,8 +61,7 @@ function putCheckbook(ckBkData) {
                     "</span>" +
                     "<span class='td'>" + fbdb + "</span>" +
                     "<span class='td'>" + fbcr + "</span>" +
-                    "<span class='td'>" + ckBk.Balance + "</span>" +
-                    "</div>";
+                    "<span class='td'>" + ckBk.Balance + "</span>";
         } else {
             cbResults += "<span class='td'><input class='C2UCBook' type='checkbox' name='CkSetUpdate[" + ckBk.CTID + "]' value='Yes' /></span>" +
                     "<span class='td'><input type='date' name='CkBkBank[" + ckBk.CTID + "]' value='" + ckBk.Bank + "' style='width: 80px;' /></span>" +

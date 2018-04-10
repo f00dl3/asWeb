@@ -262,7 +262,7 @@ public class FinanceDAO {
                 " CTID, Bank, Date, Description, Debit, Credit," +
                 " (@runtot := @runtot - Debit + Credit) AS Balance" +
                 " FROM Core.FB_CFCK01" +
-                " WHERE Date >= " + ckBkBeans.getCkBkEomDate() +
+                " WHERE Date >= '" + ckBkBeans.getCkBkEomDate() + "'" +
                 " ORDER BY Date, CTID";
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs1c(dbc, ckBkBeans.getCkBkPrep(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }

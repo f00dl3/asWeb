@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 8 Apr 2018
+Updated: 9 Apr 2018
  */
 
 package asWebRest.resource;
@@ -89,6 +89,11 @@ public class FinanceResource extends ServerResource {
                     returnData += bills.toString();
                     break;
                     
+                case "getChecking":
+                    JSONArray ckbk = getFinanceAction.getCkBk(dbc);
+                    returnData += ckbk.toString();
+                    break;
+                    
                 case "getOverview":
                     JSONArray amSch = getFinanceAction.getAmSch(dbc);
                     JSONArray checking = getFinanceAction.getChecking(dbc);
@@ -114,11 +119,11 @@ public class FinanceResource extends ServerResource {
                     
                 case "getUtils":
                     qParams.add(0, "FBook.php-UU");
-                    String month = "2018-01";
+                    String month = argsInForm.getFirstValue("tMonth");
                     JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, qParams);
                     JSONArray settingC = getFinanceAction.getSettingC(dbc);
                     JSONArray settingH = getFinanceAction.getSettingH(dbc);
-                    JSONArray uuData = getUtilityUseAction.getCombinedUtilityUseByMonth(dbc, month);
+                    JSONObject uuData = getUtilityUseAction.getCombinedUtilityUseByMonth(dbc, month);
                     mergedResults
                         .put("uuRel", uuRel)
                         .put("settingC", settingC)
