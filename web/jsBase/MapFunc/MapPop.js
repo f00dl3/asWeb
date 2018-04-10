@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 2 Apr 2018
-Updated: 3 Apr 2018
+Updated: 9 Apr 2018
  */
 
 function getFadGpsJson(pParams) {
@@ -332,7 +332,12 @@ function onRadarModelData(mrsLast, hours, xmlGeo) {
             "<form id='MapLowLeftSearchForm'>" +
             "<table><thead><th align='center' colspan=2>Data Range -" +
             " <a href='" + getBasePath("old") + "/WxStation.php' target='new'>" + /* stations.length */ + "<br/>";
-    // ^ LEFT OFF HERE ON 4/3/18!
-    rData += topDrop + mapLowRight;
+            "<tr><td>Start</td><td><input type='text' name='XDT1' value='" + /* session XDT1 */ + "' /></td></tr>" +
+            "<tr><td>End</td><td><input type='text' name='XDT2' value='" + /* session XDT2 */ + "'/></td></tr>" +
+            "<input type='hidden' name='DoObsSearch' value='Yes'/>" +       
+            "<tr><td align='center' colspan=2><input type='submit' id='XMLRangeButton' name='DoObsSearchBtn'/></td></tr>" +
+            "</table></form>" +
+            "</div></div>";
+    rData += topDrop + mapLowRight + mapLowLeft;
     return rData;
 }
