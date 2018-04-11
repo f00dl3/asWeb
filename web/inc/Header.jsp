@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    10 Apr 2018
+    Updated:    11 Apr 2018
     Author     : astump
 --%>
 
@@ -31,7 +31,7 @@
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.3.1.min.js'></script>" +
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
-                "<script src='"+rootPath+"/jsBase/comSec.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/Tools/comSec.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Tools/CookieMgmt.js'></script>";
     }
     

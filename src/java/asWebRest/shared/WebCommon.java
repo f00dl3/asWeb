@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 8 Apr 2018
+Updated: 11 Apr 2018
 */
 
 package asWebRest.shared;
@@ -52,7 +52,11 @@ public class WebCommon {
             return true;
         } else { return false; }
     }
-    
+            
+    public static String basicInputFilter(String inString) {
+        return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
+    }
+
     public String q2do(String query, List<String> params) throws Exception {
         String messageBack = "Query has not ran yet or failed!";
         if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }

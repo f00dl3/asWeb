@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Apr 2018
+Updated: 11 Apr 2018
  */
 
 package asWebRest.resource;
@@ -14,6 +14,7 @@ import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class FinanceResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
+        WebCommon wc = new WebCommon();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
@@ -134,15 +136,46 @@ public class FinanceResource extends ServerResource {
                     
                 case "putAssetTrackUpdate":
                     qParams.add(argsInForm.getFirstValue("AssetValue"));
-                    qParams.add(argsInForm.getFirstValue("AssetNotes"));
-                    qParams.add(argsInForm.getFirstValue("AssetDescription"));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("AssetNotes")));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("AssetDescription")));
                     returnData += updateFinanceAction.setAssetTrackUpdate(dbc, qParams);
+                    break;
+                    
+                case "putCheckbookAdd":
+                    String ACkBank = "0000-00-00";
+                    String ACkCredit = "0.00";
+                    String ACkDebit = "0.00";
+                    if(wc.isSet(argsInForm.getFirstValue("ACkBank"))) { ACkBank = argsInForm.getFirstValue("ACkBank"); }
+                    if(wc.isSet(argsInForm.getFirstValue("ACkCred"))) { ACkCredit = argsInForm.getFirstValue("ACkCred"); }
+                    if(wc.isSet(argsInForm.getFirstValue("ACkDebi"))) { ACkDebit = argsInForm.getFirstValue("ACkDebi"); }
+                    qParams.add(ACkBank);
+                    qParams.add(argsInForm.getFirstValue("ACkDate"));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("ACkDesc")));
+                    qParams.add(ACkDebit);
+                    qParams.add(ACkCredit);
+                    returnData += updateFinanceAction.setCheckbookAdd(dbc, qParams);
+                    break;
+                    
+                case "putCheckbookUpdate":
+                    String CkBkBank = "0000-00-00";
+                    String CkBkCredit = "0.00";
+                    String CkBkDebit = "0.00";
+                    if(wc.isSet(argsInForm.getFirstValue("CkBkBank"))) { CkBkCredit = argsInForm.getFirstValue("CkBkBank"); }
+                    if(wc.isSet(argsInForm.getFirstValue("CkBkCred"))) { CkBkBank = argsInForm.getFirstValue("CkBkCred"); }
+                    if(wc.isSet(argsInForm.getFirstValue("CkBkDebi"))) { CkBkDebit = argsInForm.getFirstValue("CkBkDebi"); }
+                    qParams.add(CkBkBank);
+                    qParams.add(argsInForm.getFirstValue("CkBkDate"));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("CkBkDesc")));
+                    qParams.add(CkBkDebit);
+                    qParams.add(CkBkCredit);
+                    qParams.add(argsInForm.getFirstValue("CkBkID"));
+                    returnData += updateFinanceAction.setCheckbookUpdate(dbc, qParams);
                     break;
                     
                 case "putDecorToolsUpdate":
                     qParams.add(argsInForm.getFirstValue("DTQuantity"));
-                    qParams.add(argsInForm.getFirstValue("DTLocation"));
-                    qParams.add(argsInForm.getFirstValue("DTDescription"));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("DTLocation")));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("DTDescription")));
                     returnData += updateFinanceAction.setDecorToolsUpdate(dbc, qParams);
                     break;
             }

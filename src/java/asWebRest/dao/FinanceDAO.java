@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 8 Apr 2018
+Updated: 11 Apr 2018
 */
 
 package asWebRest.dao;
@@ -275,7 +275,7 @@ public class FinanceDAO {
                     .put("Bank", resultSet.getString("Bank"))
                     .put("Date", resultSet.getString("Date"))
                     .put("Description", resultSet.getString("Description"))
-                    .put("Deibt", resultSet.getDouble("Debit"))
+                    .put("Debit", resultSet.getDouble("Debit"))
                     .put("Credit", resultSet.getDouble("Credit"))
                     .put("Balance", resultSet.getDouble("Balance"));
                 tContainer.put(tObject);
@@ -538,14 +538,28 @@ public class FinanceDAO {
     }
      
     public String setAssetTrackUpdate(Connection dbc, List<String> qParams) {
-        String returnData = "Query has not ran yet or failed!";
+        String returnData = wcb.getDefaultNotRanYet();
         String query_FBook_ATrackUp = "UPDATE FB_Assets SET Value=?, Notes=?, Checked=CURDATE() WHERE Description=?;";
         try { returnData = wc.q2do1c(dbc, query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
+    
+    public String setCheckbookAdd(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_FBook_CkBkAdd = "INSERT INTO FB_CFCK01 VALUES (Null,?,?,?,?,?);";
+        try { returnData = wc.q2do1c(dbc, query_FBook_CkBkAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setCheckbookUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_FBook_CkBkUpdate = "UPDATE FB_CFCK01 SET Bank=?, Date=?, Description=?, Debit=?, Credit=? where CTID=?;";
+        try { returnData = wc.q2do1c(dbc, query_FBook_CkBkUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
      
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) {
-        String returnData = "Query has not ran yet or failed!";
+        String returnData = wcb.getDefaultNotRanYet();
         String query_FBook_DecorToolsUpdate = "UPDATE DecorTools SET Quantity=?, Location=?, Checked=CURDATE() WHERE Description=?;";
         try { returnData = wc.q2do1c(dbc, query_FBook_DecorToolsUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;

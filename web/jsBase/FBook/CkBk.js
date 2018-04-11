@@ -2,11 +2,20 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 10 Apr 2018
+Updated: 11 Apr 2018
  */
 
-function actOnCheckbookFormSubmit() {
-    window.alert("Submit #CheckbookForm");
+function actOnCheckbookFormSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    if(isSet(thisFormData.Action)) {
+        switch(thisFormData.Action) {
+            case "Add": setCheckbookAdd(thisFormData); break;
+            case "Update": setCheckbookUpdate(thisFormData); break;
+            default: window.alert("No action set!");
+        }
+    }
 }
 
 function displayCheckbook() {
@@ -48,17 +57,16 @@ function putCheckbook(ckBkData) {
             "<span class='td'><strong>Search</strong></span>" +
             "</form></div><p>";
     var cbRange = "<div class='table' id='cbSearchResults'></div><p>";
-    var cbResults = "<div class='table HideOnSearch'>" +
-            "<form id='CheckbookForm'>";
+    var cbResults = "<div class='table HideOnSearch'>";
     ckBkData.forEach(function (ckBk) {
         results++;
         var shortDesc = "";
         var replacePattern = "DBT PURCHASE ON ";
         if((ckBk.Description).includes(replacePattern)) { shortDesc = (ckBk.Description).replace(replacePattern, ""); } else { shortDesc = ckBk.Description; }
         shortDesc = shortDesc.substring(0, 32);
-        var fbcr = ckBk.Credit; if (!isSet(fbcr)) { fbcr = ""; }
-        var fbdb = ckBk.Debit; if (!isSet(fbdb)) { fbdb = ""; }
-        cbResults += "<div class='tr'>";
+        var fbcr = (ckBk.Credit).toFixed(2); if (!isSet(fbcr) || fbcr == 0.00) { fbcr = ""; }
+        var fbdb = (ckBk.Debit).toFixed(2); if (!isSet(fbdb) || fbdb == 0.00) { fbdb = ""; }
+        cbResults += "<form class='tr cbAddUpdateForm'>";
         if (isSet(ckBk.Bank) && ckBk.Bank !== "0000-00-00") {
             cbResults += "<span class='td'> </span>" +
                     "<span class='td'>" + ckBk.Bank + "</span>" +
@@ -68,32 +76,31 @@ function putCheckbook(ckBkData) {
                     "</span>" +
                     "<span class='td'>" + fbdb + "</span>" +
                     "<span class='td'>" + fbcr + "</span>" +
-                    "<span class='td'>" + ckBk.Balance + "</span>";
+                    "<span class='td'>" + (ckBk.Balance).toFixed(2) + "</span>";
         } else {
-            cbResults += "<span class='td'><input class='C2UCBook' type='checkbox' name='CkSetUpdate[" + ckBk.CTID + "]' value='Yes' /></span>" +
-                    "<span class='td'><input type='date' name='CkBkBank[" + ckBk.CTID + "]' value='" + ckBk.Bank + "' style='width: 80px;' /></span>" +
-                    "<span class='td'><input type='date' name='CkBkDate[" + ckBk.CTID + "]' value='" + ckBk.Date + "' style='width: 80px;' /></span>" +
-                    "<span class='td UPop'><input type='text' name='CkBkDesc[" + ckBk.CTID + "]' value='" + ckBk.Description + "' />" +
-                    "<span class='UPopO'><input type='hidden' name='CkBkID[" + ckBk.CTID + "]' value='" + ckBk.CTID + "' />" +
+            cbResults += "<span class='td'><input class='C2UCBook' type='checkbox' name='Action' value='Update' /></span>" +
+                    "<span class='td'><input type='date' name='CkBkBank' value='" + ckBk.Bank + "' style='width: 80px;' /></span>" +
+                    "<span class='td'><input type='date' name='CkBkDate' value='" + ckBk.Date + "' style='width: 80px;' /></span>" +
+                    "<span class='td UPop'><input type='text' name='CkBkDesc' value='" + ckBk.Description + "' />" +
+                    "<span class='UPopO'><input type='hidden' name='CkBkID' value='" + ckBk.CTID + "' />" +
                     "<strong>CTID:</strong> " + ckBk.CTID + "</span></span>" +
-                    "<span class='td'><input type='number' step='0.1' name='CkBkDebi[" + ckBk.CTID + "]' value='" + fbdb + "' style='width: 70px;' /></span>" +
-                    "<span class='td'><input type='number' step='0.1' name='CkBkCred[" + ckBk.CTID + "]' value='" + fbcr + "' style='width: 70px;' /></span>" +
-                    "<span class='td'>" + ckBk.Balance + "</span>";
+                    "<span class='td'><input type='number' step='0.01' name='CkBkDebi' value='" + fbdb + "' style='width: 70px;' /></span>" +
+                    "<span class='td'><input type='number' step='0.01' name='CkBkCred' value='" + fbcr + "' style='width: 70px;' /></span>" +
+                    "<span class='td'>" + (ckBk.Balance).toFixed(2) + "</span>";
         }
-        cbResults += "</div>";
+        cbResults += "</form>";
     });
-    cbResults += "<div class='tr'>" +
-            "<span class='td'><input class='C2UCBook' type='checkbox' name='CkSetAdd' value='Yes' /></span>" +
+    cbResults += "<form class='tr ckAddUpdateForm'>" +
+            "<span class='td'><input class='C2UCBook' type='checkbox' name='Action' value='Add' /></span>" +
             "<span class='td'><input type='date' name='ACkBank' style='width: 80px;' /></span>" +
             "<span class='td'><input type='date' name='ACkDate' style='width: 80px;' /></span>" +
             "<span class='td'><input type='text' name='ACkDesc' /></span>" +
             "<span class='td'><input type='number' step='0.1' name='ACkDebi' style='width: 70px;' /></span>" +
             "<span class='td'><input type='number' step='0.1' name='ACkCred' style='width: 70px;' /></span>" +
             "<span class='td'>(N/A)</span>" +
-            "</div>";
+            "</form></div>";
     rData += cbSearch + cbRange + cbResults + "Results returned: " + results +
-            "<p><em>Blank space for pop-over</em>" +
-            "</div>";
+            "<p><em>Blank space for pop-over</em>";
     dojo.byId("FBCheck").innerHTML = rData;
     dojo.query(".C2UCBook").connect("onchange", actOnCheckbookFormSubmit);
 }
@@ -148,4 +155,48 @@ function putCheckbookRange(ckBkRange) {
 
 function searchAheadCheckbook() {
 
+}
+
+function setCheckbookAdd(formData) {
+    aniPreload("on");
+    formData.doWhat = "putCheckbookAdd";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Checkbook ledger added!");
+            getCheckbook();
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for CheckbookAdd FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function setCheckbookUpdate(formData) {
+    aniPreload("on");
+    formData.doWhat = "putCheckbookUpdate";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Checkbook ledger updated!");
+            getCheckbook();
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for CheckbookUpdate FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
