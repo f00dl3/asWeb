@@ -565,6 +565,11 @@ public class FinanceDAO {
         return returnData;
     }
     
-    
+    public String setSavingsAdd(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_FBook_SvBkAdd = "INSERT INTO FB_CFSV59 VALUES (Null,?,?,?,?);";
+        try { returnData = wc.q2do1c(dbc, query_FBook_SvBkAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
     
 }

@@ -19,5 +19,6 @@ public class UpdateFinanceAction {
     public String setCheckbookAdd(Connection dbc, List qParams) { return financeDAO.setCheckbookAdd(dbc, qParams); }
     public String setCheckbookUpdate(Connection dbc, List qParams) { return financeDAO.setCheckbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List qParams) { return financeDAO.setDecorToolsUpdate(dbc, qParams); }
+    public String setSavingsAdd(Connection dbc, List qParams) { return financeDAO.setSavingsAdd(dbc, qParams); }
 
 }

@@ -178,6 +178,19 @@ public class FinanceResource extends ServerResource {
                     qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("DTDescription")));
                     returnData += updateFinanceAction.setDecorToolsUpdate(dbc, qParams);
                     break;
+                                        
+                case "putSavingsAdd":
+                    String ASvCredit = "0.00";
+                    String ASvDebit = "0.00";
+                    if(wc.isSet(argsInForm.getFirstValue("ASvCred"))) { ASvCredit = argsInForm.getFirstValue("ASvCred"); }
+                    if(wc.isSet(argsInForm.getFirstValue("ASvDebi"))) { ASvDebit = argsInForm.getFirstValue("ASvDebi"); }
+                    qParams.add(argsInForm.getFirstValue("ASvDate"));
+                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("ASvDesc")));
+                    qParams.add(ASvDebit);
+                    qParams.add(ASvCredit);
+                    returnData += updateFinanceAction.setSavingsAdd(dbc, qParams);
+                    break;
+                
             }
         }
     
