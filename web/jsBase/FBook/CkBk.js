@@ -49,34 +49,38 @@ function getCheckbook() {
     dojo.xhrPost(xhArgs);
 }
 
-function getCheckbookCombinedQuery() {
+function getCheckbookDeep() {
     aniPreload("on");
-    var formData = "doWhat=getCheckComb";
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Finance"),
-        postData: formData,
-        handleAs: "text",
-        timeout: timeOutMilli,
-        load: function(data) {
-            console.log(data);
-            aniPreload("off");
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrPost for CheckbookCombined FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-            aniPreload("off");
-        }
-    };
-    dojo.xhrPost(xhArgs);
+    var thePostData = { "doWhat": "getCheckingDeep" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Finance"), {
+                data: thePostData
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putCheckbookSearchBox(data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Deep Checkbook FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function putCheckbookSearchBox(searchableData) {
+    //console.log(searchableData);
+    var cbSearchInner = "<div class='table'><form class='tr' id='CkBkSearch'>" +
+            "<span class='td'><input type='text' id='SearchBoxText' name='CBSearchField' onKeyUp='searchAheadCheckbook(this.value)'/></span>" +
+            "<span class='td'><strong>Search</strong></span>" +
+            "</form></div><p>";
+    dojo.byId("cbSearchHolder").innerHTML = cbSearchInner;
 }
 
 function putCheckbook(ckBkData) {
     var results = 0;
     var rData = "<h3>Checkbook</h3>";
-    var cbSearch = "<div class='table'><form class='tr' id='CkBkSearch'>" +
-            "<span class='td'><input type='text' id='SearchBoxText' name='CBSearchField' onKeyUp='searchAheadCheckbook(this.value)'/></span>" +
-            "<span class='td'><strong>Search</strong></span>" +
-            "</form></div><p>";
+    var cbSearch = "<div id='cbSearchHolder'></div>";
     var cbRange = "<div class='table' id='cbSearchResults'></div><p>";
     var cbResults = "<div class='table HideOnSearch'>";
     ckBkData.forEach(function (ckBk) {
@@ -124,6 +128,7 @@ function putCheckbook(ckBkData) {
             "<p><em>Blank space for pop-over</em>";
     dojo.byId("FBCheck").innerHTML = rData;
     dojo.query(".C2UCBook").connect("onchange", actOnCheckbookFormSubmit);
+    getCheckbookDeep();
 }
 
 function putCheckbookRange(ckBkRange) {
@@ -177,7 +182,6 @@ function putCheckbookRange(ckBkRange) {
 function searchAheadCheckbook(value) {
     if(value.length > 2) {
         console.log(value);
-        if(value.length === 3) { getCheckbookCombinedQuery(); }
     }
 }
 

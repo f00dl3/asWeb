@@ -96,9 +96,9 @@ public class FinanceResource extends ServerResource {
                     returnData += ckbk.toString();
                     break;
                     
-                case "getCheckComb":
-                    JSONArray cbc = getFinanceAction.getCkBkComb(dbc);
-                    returnData += cbc.toString();
+                case "getCheckingDeep":
+                    JSONArray deep = getFinanceAction.getCkBkComb(dbc);
+                    returnData += deep.toString();
                     break;
                     
                 case "getOverview":
