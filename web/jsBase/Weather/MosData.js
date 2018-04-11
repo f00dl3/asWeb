@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
+Updated: 10 Apr 2018
  */
 
 function processMosData(last, heights, hours, runs, jsonModelData) {
@@ -89,9 +90,6 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
             tAuto0TF = Math.round(tAuto0TF/tAutoCounter);
             tAutoCounter = 0;
             var tAuto900TF = 0;
-                       
-            
-            
         }
     }); 
     return rData;

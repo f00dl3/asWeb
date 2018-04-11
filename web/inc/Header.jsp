@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    8 Apr 2018
+    Updated:    10 Apr 2018
     Author     : astump
 --%>
 
@@ -16,6 +16,7 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
+    String[] etScripts = { "Entertain/Cooking", "Entertain/Games", "Entertain/MediaServ" };
     String[] finScripts = { "FBook/Overview", "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
     String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
     String[] wxScripts = { "Weather/WxFunctions", "Weather/ObsFeed" };
@@ -40,6 +41,11 @@
     String cssFiles = "";
     for(int i=0; i < css2do.length; i++) {
         cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
+    }
+    
+    String etScriptPack = "";
+    for(int i=0; i < etScripts.length; i++) {
+        etScriptPack += "<script src='"+rootPath+"/jsBase/"+etScripts[i]+".js'></script>";
     }
     
     String fbScriptPack = "";
@@ -69,7 +75,7 @@
                 break;
             case "Entertain":
                 fullTitle = "Entertainment";
-                scripts2Load += "<script src='"+rootPath+"/jsBase/MediaServ.js'></script>";
+                scripts2Load += etScriptPack;
                 break;
             case "FBook":
                 fullTitle = "Finance Book";

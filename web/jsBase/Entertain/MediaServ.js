@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 25 Mar 2018
+Updated: 10 Apr 2018
  */
 
 function getMediaOpts() {
