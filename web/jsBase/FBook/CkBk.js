@@ -49,6 +49,27 @@ function getCheckbook() {
     dojo.xhrPost(xhArgs);
 }
 
+function getCheckbookCombinedQuery() {
+    aniPreload("on");
+    var formData = "doWhat=getCheckComb";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            console.log(data);
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for CheckbookCombined FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
 function putCheckbook(ckBkData) {
     var results = 0;
     var rData = "<h3>Checkbook</h3>";
@@ -153,8 +174,11 @@ function putCheckbookRange(ckBkRange) {
     dojo.byId("cbSearchResults").innerHTML = rData;
 }
 
-function searchAheadCheckbook() {
-
+function searchAheadCheckbook(value) {
+    if(value.length > 2) {
+        console.log(value);
+        if(value.length === 3) { getCheckbookCombinedQuery(); }
+    }
 }
 
 function setCheckbookAdd(formData) {

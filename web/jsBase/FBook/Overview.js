@@ -2,7 +2,14 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
+Updated: 11 Apr 2018
  */
+
+function actOnSavingsSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    setSavingsAdd(thisFormData);
+}
 
 function genOverviewMortgage(mortData, amSch) {
     var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
@@ -45,7 +52,7 @@ function genOverviewSavings(svData, svBk) {
         bForm += "<th>" + svBkCols[i] + "</th>";
     }
     bForm += "</tr></thead><tbody><tr>" +
-            "<td>Add:</td><td><input type='date' name='ASvDate' style='width: 80px;'/></td>" +
+            "<td>Add:</td><td><input type='text' name='ASvDate' style='width: 80px;'/></td>" +
             "<td><input type='text' name='ASvDesc' style='width: 180px;'/></td>" +
             "<td><input type='number' step='0.1' name='ASvDebi' style='width: 70px;'/></td>" +
             "<td><input type='number' step='0.1' name='ASvCred' style='width: 70px;'/></td>" +
@@ -62,6 +69,8 @@ function genOverviewSavings(svData, svBk) {
     bubble += bForm + "</tbody></table>" +
             "</form></div></div>";
     dojo.byId("HoldSavings").innerHTML = bubble;
+    var svButton = dojo.byId("SvBkAddButton");
+    dojo.connect(svButton, "onclick", actOnSavingsSubmit);
 }
 
 function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
@@ -152,4 +161,26 @@ function putOverview(finGlob) {
     genOverviewSavings(svData, svBk);
     genOverviewMortgage(mortData, amSch);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt);
+}
+
+function setSavingsAdd(formData) {
+    aniPreload("on");
+    formData.doWhat = "putSavingsAdd";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Finance"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Savings ledger added!");
+            getOverviewData();
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for SavingsAdd FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }

@@ -143,7 +143,7 @@ function getBasePath(opt) {
     var shortBaseForRestlet = baseForUi + "/r";
     var fullBaseForRestlet = base + shortBaseForRestlet;
     var baseForRestlet = fullBaseForRestlet;
-    var tBase = " ";
+    var tBase = "";
     tBase = base.split(":")[1];
     if(checkMobile()) { tBase += ":8082"; }
     tBase = "https:" + tBase;

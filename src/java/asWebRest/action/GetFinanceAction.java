@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 8 Apr 2018
+Updated: 11 Apr 2018
  */
 
 package asWebRest.action;
@@ -27,7 +27,7 @@ public class GetFinanceAction {
     public JSONArray getBooks(Connection dbc) { return financeDAO.getBooks(dbc); }
     public JSONArray getChecking(Connection dbc) { return financeDAO.getChecking(dbc); }
     public JSONArray getCkBk(Connection dbc) { return financeDAO.getCkBk(dbc); }
-    public JSONArray getCkBkRange(Connection dbc) { return financeDAO.getCkBkRange(dbc); }
+    public JSONArray getCkBkComb(Connection dbc) { return financeDAO.getCkBkComb(dbc); }
     public JSONArray getDecorTools(Connection dbc) { return financeDAO.getDecorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return financeDAO.getEnw(dbc); }
     public JSONArray getEnwt(Connection dbc) { return financeDAO.getEnwt(dbc); }

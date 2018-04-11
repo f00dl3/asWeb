@@ -285,8 +285,8 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    public JSONArray getCkBkRange(Connection dbc) {
-        final String query_FBook_CkBkRange = "SELECT" +
+    public JSONArray getCkBkComb(Connection dbc) {
+        final String query_FBook_CkBkComb = "SELECT" +
                 " Card, CTID, Bank, Date, Description, Debit, Credit FROM (" +
                 " SELECT 'Checking Check Book' AS Card, CTID, Bank, Date, Description, Debit, Credit FROM Core.FB_CFCK01 UNION ALL" +
                 " SELECT 'Savings' AS Card, CONCAT('S', STID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Core.FB_CFSV59 UNION ALL" +
@@ -296,17 +296,17 @@ public class FinanceDAO {
                 " ORDER BY Date, CTID DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_CkBkRange, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_CkBkComb, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("CTID", resultSet.getInt("CTID"))
+                    .put("CTID", resultSet.getString("CTID"))
+                    .put("Card", resultSet.getString("Card"))
                     .put("Bank", resultSet.getString("Bank"))
                     .put("Date", resultSet.getString("Date"))
                     .put("Description", resultSet.getString("Description"))
                     .put("Deibt", resultSet.getDouble("Debit"))
-                    .put("Credit", resultSet.getDouble("Credit"))
-                    .put("Balance", resultSet.getDouble("Balance"));
+                    .put("Credit", resultSet.getDouble("Credit"));
                 tContainer.put(tObject);
             }
             resultSet.close();
