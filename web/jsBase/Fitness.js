@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 4 Apr 2018
+Updated: 10 Apr 2018
  */
 
 var myHeight = 68;
@@ -16,13 +16,13 @@ function actSearchByDateSubmit(event) {
 
 function colorCalories(tValue) {
     switch(tValue) {
-        case inRange(tValue, 0, 1799): return 'FtCL2000';
-        case inRange(tValue, 1800, 1999): return 'FtCL2200';
-        case inRange(tValue, 2000, 2199): return 'FtCL2400';
-        case inRange(tValue, 2200, 2399): return 'FtCL2600';
-        case inRange(tValue, 2400, 2599): return 'FtCL2800';
-        case inRange(tValue, 2600, 2799): return 'FtCL3000';
-        case inRange(tValue, 2800, 9999): return 'FtCG3000';
+        case inRange(tValue, 0, 1799.9): return 'FtCL2000';
+        case inRange(tValue, 1800, 1999.9): return 'FtCL2200';
+        case inRange(tValue, 2000, 2199.9): return 'FtCL2400';
+        case inRange(tValue, 2200, 2399.9): return 'FtCL2600';
+        case inRange(tValue, 2400, 2599.9): return 'FtCL2800';
+        case inRange(tValue, 2600, 2799.9): return 'FtCL3000';
+        case inRange(tValue, 2800, 9999.9): return 'FtCG3000';
     }
 }
 

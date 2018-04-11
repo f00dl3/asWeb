@@ -2,8 +2,12 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 9 Apr 2018
+Updated: 10 Apr 2018
  */
+
+function actOnCheckbookFormSubmit() {
+    window.alert("Submit #CheckbookForm");
+}
 
 function displayCheckbook() {
     getCheckbook();
@@ -48,7 +52,10 @@ function putCheckbook(ckBkData) {
             "<form id='CheckbookForm'>";
     ckBkData.forEach(function (ckBk) {
         results++;
-        var shortDesc = (ckBk.Description).replace("DBT PURCHASE ON ", "").substring(0, 32);
+        var shortDesc = "";
+        var replacePattern = "DBT PURCHASE ON ";
+        if((ckBk.Description).includes(replacePattern)) { shortDesc = (ckBk.Description).replace(replacePattern, ""); } else { shortDesc = ckBk.Description; }
+        shortDesc = shortDesc.substring(0, 32);
         var fbcr = ckBk.Credit; if (!isSet(fbcr)) { fbcr = ""; }
         var fbdb = ckBk.Debit; if (!isSet(fbdb)) { fbdb = ""; }
         cbResults += "<div class='tr'>";
@@ -88,7 +95,7 @@ function putCheckbook(ckBkData) {
             "<p><em>Blank space for pop-over</em>" +
             "</div>";
     dojo.byId("FBCheck").innerHTML = rData;
-    // on done bind putCheckbookRange
+    dojo.query(".C2UCBook").connect("onchange", actOnCheckbookFormSubmit);
 }
 
 function putCheckbookRange(ckBkRange) {
