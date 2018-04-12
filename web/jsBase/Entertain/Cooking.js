@@ -2,7 +2,25 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off: 10 Apr 2018
+Updated: 12 Apr 2018
  */
+
+function getCooking() {
+    aniPreload("on");
+    require(["dojo/request"], function(request) {
+        request
+            .get(getResource("Cooking").then(
+                function(data) {
+                    aniPreload("off");
+                    putCooking(cookingData)
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Cooking FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                })
+            );
+    });
+}
 
 function putCooking(cookingData) {
     var recCols = [ "Recipie", "Guide" ];
