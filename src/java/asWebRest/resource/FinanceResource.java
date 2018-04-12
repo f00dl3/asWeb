@@ -125,9 +125,8 @@ public class FinanceResource extends ServerResource {
                     break;
                     
                 case "getUtils":
-                    qParams.add(0, "FBook.php-UU");
                     String month = argsInForm.getFirstValue("tMonth");
-                    JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, qParams);
+                    JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, "FBook.php-UU");
                     JSONArray settingC = getFinanceAction.getSettingC(dbc);
                     JSONArray settingH = getFinanceAction.getSettingH(dbc);
                     JSONObject uuData = getUtilityUseAction.getCombinedUtilityUseByMonth(dbc, month);

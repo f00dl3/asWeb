@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 7 Apr 2018
+Updated: 12 Apr 2018
 */
 
 package asWebRest.dao;
 
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,13 +16,13 @@ public class EntertainmentDAO {
     
     WebCommon wc = new WebCommon();
     
-    public JSONArray getFfxivQuests() {
+    public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
                 " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals" +
                 " FROM FFXIV_Quests ORDER BY MinLevel, QuestOrder;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_FFXIV_Quests, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIV_Quests, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -45,11 +46,11 @@ public class EntertainmentDAO {
         return tContainer;
     }
         
-    public JSONArray getGameHours() {
+    public JSONArray getGameHours(Connection dbc) {
         final String query_GameHours = "SELECT Name, CAST(Hours AS DECIMAL(5,0)) AS Hours, Last, Active FROM Core.GameHours ORDER BY Hours DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GameHours, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GameHours, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -64,11 +65,11 @@ public class EntertainmentDAO {
         return tContainer;
     }
    
-    public JSONArray getGameHoursLatest() {
+    public JSONArray getGameHoursLatest(Connection dbc) {
         final String query_GameHoursLatest = "SELECT Name, CAST(Hours AS DECIMAL(5,0)) AS Hours, Last, Active FROM Core.GameHours ORDER BY Last DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GameHoursLatest, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GameHoursLatest, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -83,11 +84,11 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
-    public JSONArray getGameHoursTotal() {
+    public JSONArray getGameHoursTotal(Connection dbc) {
         final String query_GameHoursTotal = "SELECT FORMAT((SUM(Hours)), 0) AS TotalHours FROM Core.GameHours;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GameHoursTotal, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GameHoursTotal, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("TotalHours", resultSet.getDouble("TotalHours"));
@@ -98,12 +99,12 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
-    public JSONArray getGameIndex() {
+    public JSONArray getGameIndex(Connection dbc) {
         final String query_GameIndex = "SELECT GameName, FoF, SizeG, LinuxTested, Volume," +
                 "BurnDate, LastUpdate, PendingBurn FROM Core.GamesIndex ORDER BY GameName ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GameIndex, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GameIndex, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -122,12 +123,12 @@ public class EntertainmentDAO {
         return tContainer;
     }
   
-    public JSONArray getGoosebumpsBooks() {
+    public JSONArray getGoosebumpsBooks(Connection dbc) {
         final String query_GoosebumpsBooks = "SELECT Code, Title, PublishDate, Pages, ISBN, Plot, CoverImageType, pdf" +
                 " FROM Core.GoosebumpsBooks ORDER BY PublishDate ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GoosebumpsBooks, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GoosebumpsBooks, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -146,12 +147,12 @@ public class EntertainmentDAO {
         return tContainer;
     }  
     
-    public JSONArray getLego() {
+    public JSONArray getLego(Connection dbc) {
         final String query_Lego = "SELECT SetID, Number, Variant, Theme, Subtheme, Year, Name, Minifigs," +
                 "Pieces, USPrice, ImageURL, ImgDown FROM Core.Lego ORDER BY SetID;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Lego, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Lego, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -174,14 +175,14 @@ public class EntertainmentDAO {
         return tContainer;
     }  
     
-    public JSONArray getStarTrek() {
+    public JSONArray getStarTrek(Connection dbc) {
         final String query_StarTrek = "SELECT" +
                 " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
                 " Title, Synopsis, MediaServer, StarDate, ViewersM" +
                 " FROM Core.StarTrek ORDER BY StarDate DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_StarTrek, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_StarTrek, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -202,11 +203,11 @@ public class EntertainmentDAO {
         return tContainer;
     }  
     
-    public JSONArray getXTags() {
+    public JSONArray getXTags(Connection dbc) {
         final String query_XTags = "SELECT Tag, Description, Detail, TagVer FROM Core.AO_Tags;";
         JSONArray xTags = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_XTags, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_XTags, null);
             while (resultSet.next()) {
                 JSONObject tXTag = new JSONObject();
                 tXTag

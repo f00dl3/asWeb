@@ -33,6 +33,7 @@ function naviButtonListener() {
 }
 
 function initFinance() {
+    getWebLinks("FBook.php-0", "rLinkHolder", null);
     getOverviewData();
     naviButtonListener();
 }

@@ -5,20 +5,24 @@ Split off: 10 Apr 2018
 Updated: 12 Apr 2018
  */
 
+function displayCooking() {
+    getCooking();
+    $("#ETCooking").toggle();
+}
+
 function getCooking() {
     aniPreload("on");
     require(["dojo/request"], function(request) {
         request
-            .get(getResource("Cooking").then(
+            .get(getResource("Cooking")).then(
                 function(data) {
                     aniPreload("off");
-                    putCooking(cookingData)
+                    putCooking(JSON.parse(data));
                 },
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for Cooking FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                })
-            );
+                });
     });
 }
 

@@ -2,7 +2,36 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
+Updated: 12 Apr 2018
  */
+
+function displayGames() {
+    
+    $("#ETGameAll").toggle();
+}
+
+function getGameData() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getGameData" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putGameHours(
+                        data.gameHoursTotal,
+                        data.gameHoursLatest,
+                        data.gameHours
+                    );
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Game Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
 
 function putFfxivQuests(ffxivQuests) {
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
@@ -109,4 +138,3 @@ function putGameIndex(gameIndex) {
     });
     giTable += "</div>";
 }
-

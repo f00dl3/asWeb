@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 8 Apr 2018
+Updated: 12 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -207,6 +207,8 @@ function getResource(what) {
     switch(what) {
         case "Chart": return getBasePath("rest") + "/Chart";
         case "Congress": return getBasePath("rest") + "/Congress";
+        case "Cooking": return getBasePath("rest") + "/Cooking";
+        case "Entertainment": return getBasePath("rest") + "/Entertainment";
         case "Fitness": return getBasePath("rest") + "/Fitness";
         case "Finance": return getBasePath("rest") + "/Finance";
         case "Home": return getBasePath("rest") + "/Home";
@@ -224,9 +226,8 @@ function getSum(numbers) {
 }
 
 function getWebLinks(master, whereTo, a3dFlags) {
-    var urlXhr1 = getBasePath("rest")+"/WebLinks";
     var arXhr1 = {
-        url: urlXhr1,
+        url: getResource("WebLinks"),
         handleAs: "json",
         postData: "master=" + master,
         timeout: timeOutMilli,

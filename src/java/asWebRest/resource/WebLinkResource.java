@@ -51,10 +51,8 @@ public class WebLinkResource extends ServerResource {
         }
         
         if(master != null) {
-            List<String> qParams = new ArrayList<>();
-            qParams.add(0, master);
             GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
-            JSONArray webLinks = getWebLinkAction.getWebLinks(dbc, qParams);
+            JSONArray webLinks = getWebLinkAction.getWebLinks(dbc, master);
             returnData += webLinks.toString();
         } else {
             returnData += "ERROR: NO POST DATA!";

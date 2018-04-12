@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 8 Apr 2018
+Updated: 12 Apr 2018
 */
 
 package asWebRest.dao;
@@ -9,7 +9,6 @@ package asWebRest.dao;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,13 +16,13 @@ public class WebLinkDAO {
     
     WebCommon wc = new WebCommon(); 
     
-    public JSONArray getWebLinks(Connection dbc, List<String> qParams) {
+    public JSONArray getWebLinks(Connection dbc, String toMatch) {
         final String query_WebLinks = "SELECT Bubble, Description, URL, DescriptionL," +
                 " GeoPlot, TCSystem, AsOf, DesktopLink, TomcatURL FROM Core.WebLinks" +
-                " WHERE Master LIKE ? AND Active=1 ORDER BY Description ASC;";
+                " WHERE Master LIKE '%"+toMatch+"%' AND Active=1 ORDER BY Description ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_WebLinks, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_WebLinks, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

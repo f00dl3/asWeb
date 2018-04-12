@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
-    Updated: 8 Apr 2018
+    Updated: 12 Apr 2018
     Author     : astump
 --%>
 
@@ -20,6 +20,8 @@
         
         <h1><% out.println(pageTitle); %></h1>
 
+        <div id="rLinkHolder"></div><p>
+        
         <div id="ButtonNavi">
             <button class="UButton" id="ShowFBAsset">AS</button>
             <button class="UButton" id="ShowFBAuto">AU</button>
