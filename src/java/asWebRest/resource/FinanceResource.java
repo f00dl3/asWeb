@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 11 Apr 2018
+Updated: 12 Apr 2018
  */
 
 package asWebRest.resource;
@@ -153,11 +153,11 @@ public class FinanceResource extends ServerResource {
                     if(wc.isSet(argsInForm.getFirstValue("ACkBank"))) { ACkBank = argsInForm.getFirstValue("ACkBank"); }
                     if(wc.isSet(argsInForm.getFirstValue("ACkCred"))) { ACkCredit = argsInForm.getFirstValue("ACkCred"); }
                     if(wc.isSet(argsInForm.getFirstValue("ACkDebi"))) { ACkDebit = argsInForm.getFirstValue("ACkDebi"); }
-                    qParams.add(ACkBank);
-                    qParams.add(argsInForm.getFirstValue("ACkDate"));
-                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("ACkDesc")));
-                    qParams.add(ACkDebit);
-                    qParams.add(ACkCredit);
+                    qParams.add(0, ACkBank);
+                    qParams.add(1, argsInForm.getFirstValue("ACkDate"));
+                    qParams.add(2, wc.basicInputFilter(argsInForm.getFirstValue("ACkDesc")));
+                    qParams.add(3, ACkDebit);
+                    qParams.add(4, ACkCredit);
                     returnData += updateFinanceAction.setCheckbookAdd(dbc, qParams);
                     break;
                     
@@ -165,15 +165,15 @@ public class FinanceResource extends ServerResource {
                     String CkBkBank = "0000-00-00";
                     String CkBkCredit = "0.00";
                     String CkBkDebit = "0.00";
-                    if(wc.isSet(argsInForm.getFirstValue("CkBkBank"))) { CkBkCredit = argsInForm.getFirstValue("CkBkBank"); }
-                    if(wc.isSet(argsInForm.getFirstValue("CkBkCred"))) { CkBkBank = argsInForm.getFirstValue("CkBkCred"); }
+                    if(wc.isSet(argsInForm.getFirstValue("CkBkBank"))) { CkBkBank = argsInForm.getFirstValue("CkBkBank"); }
+                    if(wc.isSet(argsInForm.getFirstValue("CkBkCred"))) { CkBkCredit = argsInForm.getFirstValue("CkBkCred"); }
                     if(wc.isSet(argsInForm.getFirstValue("CkBkDebi"))) { CkBkDebit = argsInForm.getFirstValue("CkBkDebi"); }
-                    qParams.add(CkBkBank);
-                    qParams.add(argsInForm.getFirstValue("CkBkDate"));
-                    qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("CkBkDesc")));
-                    qParams.add(CkBkDebit);
-                    qParams.add(CkBkCredit);
-                    qParams.add(argsInForm.getFirstValue("CkBkID"));
+                    qParams.add(0, CkBkBank);
+                    qParams.add(1, argsInForm.getFirstValue("CkBkDate"));
+                    qParams.add(2, wc.basicInputFilter(argsInForm.getFirstValue("CkBkDesc")));
+                    qParams.add(3, CkBkDebit);
+                    qParams.add(4, CkBkCredit);
+                    qParams.add(5, argsInForm.getFirstValue("CkBkID"));
                     returnData += updateFinanceAction.setCheckbookUpdate(dbc, qParams);
                     break;
                     

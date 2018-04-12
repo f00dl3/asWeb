@@ -546,7 +546,7 @@ public class FinanceDAO {
     
     public String setCheckbookAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_FBook_CkBkAdd = "INSERT INTO FB_CFCK01 VALUES (Null,?,?,?,?,?);";
+        String query_FBook_CkBkAdd = "INSERT INTO FB_CFCK01 (CTID, Bank, Date, Description, Debit, Credit) VALUES (Null,?,?,?,?,?);";
         try { returnData = wc.q2do1c(dbc, query_FBook_CkBkAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
