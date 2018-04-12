@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 11 Apr 2018
+Updated: 12 Apr 2018
  */
 
 function actOnSavingsSubmit(event) {
@@ -58,12 +58,15 @@ function genOverviewSavings(svData, svBk) {
             "<td><input type='number' step='0.1' name='ASvCred' style='width: 70px;'/></td>" +
             "</tr>";
     svBk.forEach(function (tSvBk) {
+        var sCredit, sDebit;
+        if(isSet(tSvBk.Credit)) { sCredit = tSvBk.Credit.toFixed(2); } else { sCredit = ""; }
+        if(isSet(tSvBk.Debit)) { sDebit = tSvBk.Debit.toFixed(2); } else { sDebit = ""; }
         bForm += "<tr>" +
                 "<td>" + tSvBk.STID + "</td>" +
                 "<td>" + tSvBk.Date + "</td>" +
                 "<td>" + tSvBk.Description + "</td>" +
-                "<td>" + tSvBk.Debit + "</td>" +
-                "<td>" + tSvBk.Credit + "</td>" +
+                "<td>" + sDebit + "</td>" +
+                "<td>" + sCredit + "</td>" +
                 "</tr>";
     });
     bubble += bForm + "</tbody></table>" +
