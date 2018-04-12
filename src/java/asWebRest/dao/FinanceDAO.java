@@ -288,10 +288,10 @@ public class FinanceDAO {
     public JSONArray getCkBkComb(Connection dbc) {
         final String query_FBook_CkBkComb = "SELECT" +
                 " Card, CTID, Bank, Date, Description, Debit, Credit FROM (" +
-                " SELECT 'Checking Check Book' AS Card, CTID, Bank, Date, Description, Debit, Credit FROM Core.FB_CFCK01 UNION ALL" +
+                " SELECT 'Checking' AS Card, CTID, Bank, Date, Description, Debit, Credit FROM Core.FB_CFCK01 UNION ALL" +
                 " SELECT 'Savings' AS Card, CONCAT('S', STID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Core.FB_CFSV59 UNION ALL" +
                 " SELECT 'Discover' AS Card, CONCAT('D', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Core.FB_DICC45 UNION ALL" +
-                " SELECT 'Old Navy' AS Card, CONCAT('O', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Core.FB_ONCCXX" +
+                " SELECT 'OldNavy' AS Card, CONCAT('O', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Core.FB_ONCCXX" +
                 " ) as tmp" +
                 " ORDER BY Date, CTID DESC;";
         JSONArray tContainer = new JSONArray();
@@ -305,7 +305,7 @@ public class FinanceDAO {
                     .put("Bank", resultSet.getString("Bank"))
                     .put("Date", resultSet.getString("Date"))
                     .put("Description", resultSet.getString("Description"))
-                    .put("Deibt", resultSet.getDouble("Debit"))
+                    .put("Debit", resultSet.getDouble("Debit"))
                     .put("Credit", resultSet.getDouble("Credit"));
                 tContainer.put(tObject);
             }

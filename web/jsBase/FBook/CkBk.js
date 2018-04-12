@@ -2,8 +2,10 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 11 Apr 2018
+Updated: 12 Apr 2018
  */
+
+var searchableData;
 
 function actOnCheckbookFormSubmit(event) {
     dojo.stopEvent(event);
@@ -50,6 +52,7 @@ function getCheckbook() {
 }
 
 function getCheckbookDeep() {
+    dojo.byId("cbSearchHolder").innerHTML = "LOADING DATA...";
     aniPreload("on");
     var thePostData = { "doWhat": "getCheckingDeep" };
     require(["dojo/request"], function(request) {
@@ -59,7 +62,8 @@ function getCheckbookDeep() {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    putCheckbookSearchBox(data);
+                    searchableData = JSON.parse(data);
+                    putCheckbookSearchBox();
                 },
                 function(error) { 
                     aniPreload("off");
@@ -68,8 +72,7 @@ function getCheckbookDeep() {
     });
 }
 
-function putCheckbookSearchBox(searchableData) {
-    //console.log(searchableData);
+function putCheckbookSearchBox() {
     var cbSearchInner = "<div class='table'><form class='tr' id='CkBkSearch'>" +
             "<span class='td'><input type='text' id='SearchBoxText' name='CBSearchField' onKeyUp='searchAheadCheckbook(this.value)'/></span>" +
             "<span class='td'><strong>Search</strong></span>" +
@@ -131,13 +134,11 @@ function putCheckbook(ckBkData) {
     getCheckbookDeep();
 }
 
-function putCheckbookRange(ckBkRange) {
-    // NEEDS ALOT OF WORK!
+function putCheckbookSearchResults(matchingRows) {
     var rData = "";
-    var items, itemsTable, tDebits, tDebitsAmt, tCredits, tCreditsAmt;
-    items = itemsTable = [];
+    var tDebits, tDebitsAmt, tCredits, tCreditsAmt;
     tDebits = tDebitsAmt = tCredits = tCreditsAmt = 0;
-    ckBkRange.forEach(function (ckBk) {
+    matchingRows.forEach(function (ckBk) {
         var difference = ckBk.Credit - ckBk.Debit;
         if (ckBk.Debit !== 0) {
             tDebits++;
@@ -147,10 +148,6 @@ function putCheckbookRange(ckBkRange) {
             tCredits++;
             tCreditsAmt += ckBk.Credit;
         }
-        var iPushString = (ckBk.Card).toUppercase() + " " +
-                ckBk.CTID + " " + ckBk.Bank + " " + ckBk.Date + " " +
-                (ckBk.Description).toUppercase();
-        items.push(iPushString);
         var scFBC = "";
         if (ckBk.Credit === 0) {
             scFBC = "FBCRZero";
@@ -163,7 +160,7 @@ function putCheckbookRange(ckBkRange) {
         var cbResult = "<div class='tr'>" +
                 "<span class='td'>" + ckBk.Date + "</span>" +
                 "<span class='td UPop' style='width: 250px;'>" + shortDesc +
-                "<span class-'UPopO'>" + ckBk.Description +
+                "<span class='UPopO'>" + ckBk.Description +
                 "<br/><strong>CTID: </strong>" + ckBk.CTID + "</span>" +
                 "</span>" +
                 "<span class='td'>";
@@ -174,14 +171,27 @@ function putCheckbookRange(ckBkRange) {
         }
         cbResult += difference + "</span></span>" +
                 "</div>";
-        itemsTable.push(cbResult);
+        rData += cbResult;;
     });
     dojo.byId("cbSearchResults").innerHTML = rData;
+    $(".HideOnSearch").hide();
 }
 
 function searchAheadCheckbook(value) {
     if(value.length > 2) {
-        console.log(value);
+        var matchingRows = [];
+        searchableData.forEach(function (sr) {
+            if(
+                (isSet(sr.Card) && (sr.Card).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.CTID) && (sr.CTID).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Bank) && (sr.Bank).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Date) && (sr.Date).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase()))
+            ) { 
+                matchingRows.push(sr);
+            }
+        });
+        putCheckbookSearchResults(matchingRows);
     }
 }
 
