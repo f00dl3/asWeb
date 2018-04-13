@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Apr 2018
+Updated: 12 Apr 2018
  */
 
 package asWebRest.resource;
@@ -195,7 +195,7 @@ public class FitnessResource extends ServerResource {
                     String todayRSMile = null; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
                     String todayCycling = null; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
                     String todayBkStudT = null; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
-                    String todayReelMow = null; if(wc.isSet(argsInForm.getFirstValue("TodayReelMow"))) { todayReelMow = argsInForm.getFirstValue("TodayReelMow"); } qParams.add(todayReelMow);
+                    String todayReelMow = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayReelMow = "1"; } qParams.add(todayReelMow);
                     String todayMowNotes = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
                     String todayBicycle = null; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
                     String todayCommonRoute = null; if(wc.isSet(argsInForm.getFirstValue("TodayCommonRoute"))) { todayCommonRoute = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todayCommonRoute);

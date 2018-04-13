@@ -58,11 +58,12 @@ function getCheckbookDeep() {
     require(["dojo/request"], function(request) {
         request
             .post(getResource("Finance"), {
-                data: thePostData
+                data: thePostData,
+                handleAs: "json"
             }).then(
                 function(data) {
                     aniPreload("off");
-                    searchableData = JSON.parse(data);
+                    searchableData = data;
                     putCheckbookSearchBox();
                 },
                 function(error) { 

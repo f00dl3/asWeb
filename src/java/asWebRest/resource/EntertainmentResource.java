@@ -55,6 +55,7 @@ public class EntertainmentResource extends ServerResource {
                         .put("gameHoursTotal", ghTotal)
                         .put("gameHoursLatest", ghLatest)
                         .put("gameHours", gh);
+                    returnData = mergedResults.toString();
                     break;
                     
             }

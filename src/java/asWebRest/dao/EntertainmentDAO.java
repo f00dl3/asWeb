@@ -85,7 +85,7 @@ public class EntertainmentDAO {
     }
     
     public JSONArray getGameHoursTotal(Connection dbc) {
-        final String query_GameHoursTotal = "SELECT FORMAT((SUM(Hours)), 0) AS TotalHours FROM Core.GameHours;";
+        final String query_GameHoursTotal = "SELECT SUM(Hours) AS TotalHours FROM Core.GameHours;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GameHoursTotal, null);

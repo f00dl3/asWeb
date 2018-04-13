@@ -171,6 +171,10 @@ function getDate(inType, inInput, rdFormat) {
     return retDate;
 }
 
+function getDivLoadingMessage(target) {
+    dojo.byId(target).innerHTML = "Loading content...";
+}
+
 function getGetParams() {
     var $_GET = {};
     if(document.location.toString().indexOf('?') !== -1) {

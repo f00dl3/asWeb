@@ -6,23 +6,31 @@ Updated: 12 Apr 2018
  */
 
 function displayGames() {
-    
+    gameButtonListeners();
     $("#ETGameAll").toggle();
 }
 
-function getGameData() {
+function displayGameHours() {
+    var target = "ETGHours";
+    getGameData(target);
+    $("#"+target).toggle();
+}
+
+function getGameData(target) {
+    getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = { "doWhat": "getGameData" };
     require(["dojo/request"], function(request) {
         request
             .post(getResource("Entertainment"), {
-                data: thePostData
+                data: thePostData,
+                handleAs: "json"
             }).then(
                 function(data) {
                     aniPreload("off");
                     putGameHours(
-                        data.gameHoursTotal,
-                        data.gameHoursLatest,
+                        data.gameHoursTotal[0],
+                        data.gameHoursLatest[0],
                         data.gameHours
                     );
                 },
@@ -75,33 +83,32 @@ function putFfxivQuests(ffxivQuests) {
     dojo.byId("FFXIVQuests").putHTML = rData;
 }
 
-function putGameHours(gameHoursTotal, gameHoursLatest, gameHours) {
+function putGameHours(gameHoursTotal, latest, gameHours) {
     var thCols = [ "Name", "Hours" ];
     var ghe, gheA;
     ghe = gheA = "<div class='table'><div class='tr'>";
-    var totalHoursDiv = "<div class='UPop'>Total Hours<br/><span>" + gameHoursTotal.TotalHours + "</span></div>";
+    var totalHoursDiv = "<div class='UBox'>Total Hours<br/><span>" + (gameHoursTotal.TotalHours).toFixed(1) + "</span></div>";
     var rData = totalHoursDiv +
             "<strong>" +
-            "<a href='" + getBasePath("old") + "/Download/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
+            " <a href='" + getBasePath("old") + "/Download/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
             "<span class='UPopNM'>" +
             "<p>Most recent:</b>";
     
     for (var i = 0; i < thCols.length; i++) {
-        ghe += "<span class='th'>" + thCols[i] + "</span>";
-        gheA += "<span class='th'>" + thCols[i] + "</span>";
+        ghe += "<span class='td'><strong>" + thCols[i] + "</strong></span>";
+        gheA += "<span class='td'><strong>" + thCols[i] + "</strong></span>";
     }
     ghe += "</div>";
-    gameHoursLatest.forEach(function (latest) {
-        var playing = "";
-        if(latest.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
-        ghe += "<div class='tr'>" +
-                "<span class='td'>" + latest.Name + playing + "</span>" +
-                "<span class='td'><div class='UPop'>" + latest.Hours +
-                "<div class='UPopO'>Last played: " + latest.Last +
-                "</div></div></span>" +
-                "</div>";
-    });
-    rData += ghe + "<div class='UPopNMO'><p>All:";
+    gheA += "</div>";
+    var playing = "";
+    if(latest.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
+    ghe += "<div class='tr'>" +
+            "<span class='td'>" + latest.Name + playing + "</span>" +
+            "<span class='td'><div class='UPop'>" + latest.Hours +
+            "<div class='UPopO'>Last played: " + latest.Last +
+            "</div></div></span>" +
+            "</div>";
+    rData += ghe + "<div class='UPopNMO'>";
     gameHours.forEach(function (game) {
         var playing = "";
         if(game.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
@@ -114,7 +121,7 @@ function putGameHours(gameHoursTotal, gameHoursLatest, gameHours) {
     });
     gheA += "</div>";
     rData += gheA + "</div></div></span>";
-    dojo.byId("GameHours").innerHTML = rData;
+    dojo.byId("ETGHours").innerHTML = rData;
 }
 
 function putGameIndex(gameIndex) {
@@ -137,4 +144,11 @@ function putGameIndex(gameIndex) {
                 "</div>";
     });
     giTable += "</div>";
+}
+
+function gameButtonListeners() {
+    var btnShowHours = dojo.byId("ShETGHours");
+    var btnShowIndex = dojo.byId("ShETGIndex");
+    var btnShowFF14Q = dojo.byId("ShETFFXIVQ");
+    dojo.connect(btnShowHours, "click", displayGameHours);
 }

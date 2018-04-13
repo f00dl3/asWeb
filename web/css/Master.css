@@ -2,23 +2,35 @@
 by Anthony Stump
 from old ASWebUI
 Created: Unknown
-Updated: 5 Apr 2018
+Updated: 12 Apr 2018
 */
 
+/* Hidden DIVs */
+#CF6Results, #FitResults, #ObsResults,
+    #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit,
+    #ETGHours, #ETGIndex, #ETFF14Q,
+    #FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse,
+    #wxObsFcst, #wxFeeds, #wxNewsEmail, #wxEarthquakes,
+    #inLogs, #loadWait
+    { display: none; }
+
+/* Icons */
+.th_large { height: 256px; width: 256px; }
+.th_medium { height: 208px; width: 208px; }
+.th_sm_med { height: 156px; width: 156px; }
+.th_small { height: 56px; width: 56px; }
+.th_icon { height: 20px; width: 20px; }
+
+/* All the rest */
+
 #Blueprint { background-color: #000066; color: white; }
-#CF6Results, #FitResults, #ObsResults {}
-#ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit { display: none; }
-#FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse { display: none; }
-#wxObsFcst, #wxFeeds, #wxNewsEmail, #wxEarthquakes { display: none; }
 #FitLayoutTop { border: hidden; }
 #FitLayoutTop td { background-color: black; border: hidden; color: white; width: auto; }
 #ForecastIO { background-color: #000000; border: 4px solid gray; border-radius: 25px; color: #ffff33; height: 142px; width: 256px; }
 #handiv { width: 500px; }
-#inLogs { display: none; }
 #linker { font-size: 24px; text-align: left; } 
 #LWObs { align: left; border-radius: 6px; font-size: 14px; width: 268px; }
 #mapHolder { height: 100%; z-index: -1; }
-#LoadWait { display: none; }
 #WD_Live, #WDCF6MCI, #WDModel, #WDCF6MCIResu, #WDCF6MCIAlm, #WDOJCObs, #WDImage { display: none; }
 #WxObsMarq { border-radius: 6px; overflow: hidden; width: 268px; }
 #WxTableT, #WxTableH, #WxTableW { font-size: 50%; }
@@ -98,7 +110,6 @@ Updated: 5 Apr 2018
 	text-align: center; 
 	z-index: 9998 ! important; 
 }
-
 
 .MapLowLeftPop {
 	filter: alpha(opacity=80);
@@ -181,6 +192,7 @@ Updated: 5 Apr 2018
 	width: 100%;
 	z-index: 99 ! important;
 }
+
 .PlayPop {
 	background: #333333;
 	bottom: 0px;
@@ -192,6 +204,14 @@ Updated: 5 Apr 2018
 	overflow: auto;
 	max-height: 80px;
 	z-index: 99 ! important;
+}
+
+.SButton { border: 3px solid #2A2A2A; border-radius: 10px; background-color: aqua; color: black; } 
+
+.SButton:hover { 
+	background-color: blue;
+	color: white;
+	transform: scaleX(1.025) scaleY(1.025);
 }
 
 .U2Pop { clear: both; display: inline; }
@@ -216,12 +236,8 @@ Updated: 5 Apr 2018
 }
 
 .U2PopO { display: none;  height: auto; }
+
 .td strong { color: red; }
-.th_large { height: 256px; width: 256px; }
-.th_medium { height: 208px; width: 208px; }
-.th_sm_med { height: 156px; width: 156px; }
-.th_small { height: 56px; width: 56px; }
-.th_icon { height: 20px; width: 20px; }
 
 .UBox {
 	background-color: #2A2A2A;
