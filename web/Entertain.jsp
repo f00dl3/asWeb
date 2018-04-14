@@ -39,7 +39,11 @@
             <div id="ETGFF14Q"></div>
         </div>
         <div id="ETLego"></div>
-        <div id="ETStream"></div>
+        <div id="ETStream">
+            <div id="MSSearch"></div>
+            <div id="MSResults"></div>
+            <div id="PlayerHolder"></div>
+        </div>
         <div id="ETReddit"></div>
         
 </body>

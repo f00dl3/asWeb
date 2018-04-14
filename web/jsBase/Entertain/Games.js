@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 12 Apr 2018
+Updated: 13 Apr 2018
  */
 
 function displayGames() {
@@ -10,9 +10,21 @@ function displayGames() {
     $("#ETGameAll").toggle();
 }
 
+function displayGameFf14q() {
+    var target = "ETGFF14Q";
+    getFfxivQuests(target);
+    $("#"+target).toggle();
+}
+
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
+    $("#"+target).toggle();
+}
+
+function displayGameIndex() {
+    var target = "ETGIndex";
+    getGameIndex(target);
     $("#"+target).toggle();
 }
 
@@ -37,6 +49,48 @@ function getGameData(target) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for Game Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getGameFf14q(target) {
+    getDivLoadingMessage(target);
+    aniPreload("on");
+    var thePostData = { "doWhat": "getFfxivQuests" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putFfxivQuests(data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getGameIndex(target) {
+    getDivLoadingMessage(target);
+    aniPreload("on");
+    var thePostData = { "doWhat": "getGameIndex" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putGameIndex(data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Game Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

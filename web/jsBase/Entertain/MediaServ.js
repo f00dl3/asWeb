@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 10 Apr 2018
+Updated: 13 Apr 2018
  */
 
 function getMediaOpts() {
@@ -54,7 +54,7 @@ function playMediaFile(lastPlayedQuery, whatFile, fileExt) {
             break;
     }
     mpo += "</div>";
-    return mpo;
+    dojo.byId("PlayerHolder").innerHTML = mpo;
 }
 
 function populateDbx(dbxData) {
@@ -90,7 +90,7 @@ function populateDbx(dbxData) {
         dbxContent += tdo;
     });
     dbxContent += "</div>";
-    return dbxContent;s
+    return dbxContent;
 }
 
 function populateGoosebumps(gbQ) {
@@ -275,9 +275,11 @@ function putSearchBox(msOverview) {
             "Media, Path, File, Description, ContentDate, AlbumArt, XTags, and TrackListingASON" +
             " from the Media Server database.</div>" +
             "</div></span></form>";
+    var rData = mainTableElement + liveSearchField;
+    dojo.byId("MSSearh").innerHTML = rData;
 }
 
-function searchAhead(dataArray, thisQuery, matchLimit) { 
+function searchAheadOld(dataArray, thisQuery, matchLimit) { 
     var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
     itemMatchLimitHit = matchedItems = ti = 0;
     objectBack = {};
@@ -318,5 +320,3 @@ function initMediaServer() {
     getMediaOpts();
     putSearchBox();
 }
-
-dojo.ready(initMediaServer);
