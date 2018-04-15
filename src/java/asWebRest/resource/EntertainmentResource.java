@@ -72,6 +72,11 @@ public class EntertainmentResource extends ServerResource {
                     returnData += goose.toString();
                     break;
                     
+                case "getLego":
+                    JSONArray lego = getEntertainmentAction.getLego(dbc);
+                    returnData += lego.toString();
+                    break;
+                    
             }
         }
         

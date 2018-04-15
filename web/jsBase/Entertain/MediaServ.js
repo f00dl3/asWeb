@@ -33,9 +33,13 @@ function displayMediaServer() {
 function getIndex(target) {
     var isMobile = "no";
     var aContent = 0;
-    dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>Desktop: est. 4-6 MB JSON.<br/>Mobile: est. 3-4 MB JSON.";
+    var estimatedLoadSize = "Desktop client estimated JSON size 4-6 MBs.";
+    if(checkMobile()) {
+        isMobile = "yes";
+        estimatedLoadSize = "Mobile client estimated JSON size 3-4 MBs.";
+    }
+    dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize;
     aniPreload("on");
-    if(checkMobile()) { isMobile = "yes"; }
     if(isSet(hiddenFeatures)) { aContent = 1; }
     var thePostData = {
         "doWhat": "getIndexed",
@@ -68,7 +72,7 @@ function mediaOpts() {
         "Goosebumps",
         "PowerRangers",
         "StarTrek",
-        "X-Files"
+        "XFiles"
     ];
     if(isSet(hiddenFeatures)) {
         hMediaOpts.forEach(function(tOpt) {
@@ -82,17 +86,16 @@ function mediaOpts() {
 }
 
 function mediaPlayColor(pCount) {
-    var cPlays = "";
+    var cPlays = "#000000";
     switch(pCount) {
-        case 0: cPlays = ""; break;
-        case 1: cPlays = "color: #999999;"; break;
-        case 2: cPlays = "color: #33ffff;"; break;
-        case 3: cPlays = "color: #0099cc;"; break;
-        case 4: cPlays = "color: #0066ff;"; break;
-        case (pCount >= 5): cPlays = "color: #ffff00;"; break;
-        default: cPlays = ""; break;
+        case "0": cPlays = "#ffffff"; break;
+        case "1": cPlays = "#999999;"; break;
+        case "2": cPlays = "#33ffff;"; break;
+        case "3": cPlays = "#0099cc;"; break;
+        case "4": cPlays = "#0066ff;"; break;
+        default: cPlays = "#ffff00"; break;
     }
-    return cPlays;
+    return "color: " + cPlays + ";";
 }
 
 function playMediaFile(whatFile) {
@@ -123,6 +126,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             "<span class='td'><strong>File</strong></span>" +
             "</div>";
     msData.forEach(function (tm) {
+        var spanColorVal = mediaPlayColor(tm.PlayCount);
         var dbDipInfo = "", thisAddCheckbox = "";
         var fileProps = (tm.File).split(".");
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
@@ -204,12 +208,13 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         if(!isSet(tm.File)) {
             thisMsInfoString += "<span class='td' style='width: 80%; color: #ff3300;'>";
         } else {
-            thisMsInfoString += "<span class='td' style='" + mediaPlayColor(tm.PlayCount) + "' width=80%;'>";
+            thisMsInfoString += "<span class='td' style='" + spanColorVal + "' width=80%;'>";
         }
         if(mediaType === "MP4") { forceMediaType = "m4v"; }
         thisMsInfoString += "<input type='hidden' name='MediaType' value = '" + forceMediaType + "' />" +
                 "<div class='UPop'>" +
                 "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File +
+                " <tt>(" + tm.PlayCount + ")</tt> " +
                 "<img class='th_th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
@@ -293,7 +298,7 @@ function searchAheadMediaServer(value) {
                 (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 24) {
+                if(matchingRows.length < 49) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;

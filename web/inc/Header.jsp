@@ -16,8 +16,14 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
-    String[] etScripts = { "Entertain/Cooking", "Entertain/Games", "Entertain/Lego", "Entertain/MediaServ", "Entertain/Goosebumps", "Entertain/Dbx" };
-    String[] finScripts = { "FBook/Overview", "FBook/Assets", "FBook/Auto", "FBook/Bills", "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils" };
+    String[] etScripts = {
+        "Entertain/Cooking", "Entertain/Games", "Entertain/Lego", "Entertain/MediaServ",
+        "Entertain/Goosebumps", "Entertain/Dbx", "Entertain/Reddit"
+    };
+    String[] finScripts = {
+        "FBook/Overview", "FBook/Assets", "FBook/Auto", "FBook/Bills",
+        "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils"
+    };
     String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
     String[] wxScripts = { "Weather/WxFunctions", "Weather/ObsFeed" };
     String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };
