@@ -1,19 +1,74 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 13 Apr 2018
+Updated: 15 Apr 2018
  */
 
-function getMediaOpts() {
+var msIndex;
+
+function actOnNonMedia(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormJson = dojo.formToJson(this.form);
+    switch(thisFormData.Genre) {
+        case "AO_DBX": getDbx(); break;
+        case "Goosebumps": getGoosebumps(); break;
+        default: window.alert("Invalid / unbuilt option! (" + thisFormData.Genre + ")"); break;
+    }
+}
+
+function actOnPlayMedia(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    setPlayMedia(thisFormData);
+    playMediaFile(thisFormData.FilePath);
+}
+
+function displayMediaServer() {
+    var target = "ETSSearch";
+    getIndex(target);
+    $("#ETStream").toggle();
+}
+
+function getIndex(target) {
+    var isMobile = "no";
+    var aContent = 0;
+    dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>Desktop: est. 4-6 MB JSON.<br/>Mobile: est. 3-4 MB JSON.";
+    aniPreload("on");
+    if(checkMobile()) { isMobile = "yes"; }
+    if(isSet(hiddenFeatures)) { aContent = 1; }
+    var thePostData = {
+        "doWhat": "getIndexed",
+        "isMobile": isMobile,
+        "aContent": aContent
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("MediaServer"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    msIndex = data.Index;
+                    putSearchBox(target, data.Overview[0]);
+                    dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items.";
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Media Server Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function mediaOpts() {
     var tElement = "";
-    var hMediaOpts = [ "AO DBX", "AO TP" ];
+    var hMediaOpts = [ "AO_DBX" /* , "AO_TP" << requires Gallery rebuild, which is not used anymore in past year or so. */ ];
     var mediaOpts = [
-        "Photos",
-        "Weather",
-        "ZX Goosebumps",
-        "ZX Power Rangers",
-        "ZX StarTrek",
-        "ZX X-Files"
+        "Goosebumps",
+        "PowerRangers",
+        "StarTrek",
+        "X-Files"
     ];
     if(isSet(hiddenFeatures)) {
         hMediaOpts.forEach(function(tOpt) {
@@ -27,106 +82,40 @@ function getMediaOpts() {
 }
 
 function mediaPlayColor(pCount) {
-	var cPlays;
-	switch(pCount) {
-		case 0: cPlays = ""; break;
-		case 1: cPlays = "color: #999999;"; break;
-		case 2: cPlays = "color: #33ffff;"; break;
-		case 3: cPlays = "color: #0099cc;"; break;
-		case 4: cPlays = "color: #0066ff;"; break;
-		case (pCount >= 5): cPlays = "color: #ffff00;"; break;
-		default: cPlays = ""; break;
-	}
-	return cPlays;
+    var cPlays = "";
+    switch(pCount) {
+        case 0: cPlays = ""; break;
+        case 1: cPlays = "color: #999999;"; break;
+        case 2: cPlays = "color: #33ffff;"; break;
+        case 3: cPlays = "color: #0099cc;"; break;
+        case 4: cPlays = "color: #0066ff;"; break;
+        case (pCount >= 5): cPlays = "color: #ffff00;"; break;
+        default: cPlays = ""; break;
+    }
+    return cPlays;
 }
 
-function playMediaFile(lastPlayedQuery, whatFile, fileExt) {
+function playMediaFile(whatFile) {
+    var wfa = whatFile.split(".");
+    var mediaType = wfa[wfa.length-1].toLowerCase();
     var mpo, mediaMime, mediaType;
     mpo = mediaMime = "";
-    mediaType = "audio";
-    if(checkMobile()) { mpo += "<div class='PlayPop'>" } else { mpo += "<div>"; }
-    switch(mediaType) { // fileExt
-        case "audio": // mp3
+    if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
+    switch(mediaType) {
+        case "mp3":
             mediaMime = "audio/mpeg";
             mpo += "<audio controls autoplay loop>" +
-                    "<source src='" + whatFile + "' type='" + mediaMime + "'>" +
+                    "<source src='" + getBasePath("oldRoot") + whatFile + "' type='" + mediaMime + "'>" +
                     "</audio>";
             break;
     }
     mpo += "</div>";
-    dojo.byId("PlayerHolder").innerHTML = mpo;
+    dojo.byId("ETSPlayer").innerHTML = mpo;
 }
 
-function populateDbx(dbxData) {
-    var dbxDoGif, dbxLocation;
-    dbxDoGif = dbxLocation = "";
-    var dbxContent = "<h3>DBX Index</h3>" +
-            "<div class='table'>" +
-            "<div class='tr'>" +
-            "<div clsas='th'>ZIP</div>" +
-            "<div class='th'>File</div>" +
-            "</div>";
-    dbxData.forEach(function (tDbx) {
-        var dAlbumArt = (tDbx.AlbumArt).substr((tDbx.AlbumArt).length - 4);
-        if(isSet(tDbx.GIFVer)) {
-            dbxDoGif = "<img src='" + getBasePath("tomcatOld") + "/AlbumArt/" + dbxData.AlbumArt + ".pnx' class='th_large' />";
-        } else { dbxDoGif = "Review first!"; }
-        if(tDbx.Burned === 1) {
-            dbxLocation = tDbx.Media + " (" + tDbx.BDate + ")";
-        } else { dbxLocation = "Local"; }
-        var tdo = "<div class='tr'>" +
-                "<span class='td'><div class='UPop'>" + dAlbumArt +
-                "<div class='UPopO'>" + dbxDoGif + "</div></div></span>" +
-                "<span class='td' style='" + mediaPlayColor(tDbx.PlayCount) + " width: 80%;'>" +
-                "<div class='UPop'>" + tDbx.File + "<div class='UPopO'>" +
-                "<strong>Size:</strong> " + (tDbx.Size/1024).toFixed(1) + " MB<br/>" +
-                "<strong>Duration:</strong> " + (tDbx.DurSec/60).toFixed(1) + " min<br/>" +
-                "<strong>Location:</strong> " + dbxLocation + "<br/>";
-        if(isSet(tDbx.Artist)) { tdo += "<strong>Source/Artist:</strong> " + tDbx.Artist + "<br/>"; }
-        if(isSet(tDbx.XTags)) { tdo += "<strong>Tags:</strong> " + tDbx.XTags + "<br/>"; }
-        if(isSet(tDbx.Description)) { tdo += tDbx.Description + "<br/>"; }
-        tdo += "</div></div></span>" +
-                "</div>";
-        dbxContent += tdo;
-    });
-    dbxContent += "</div>";
-    return dbxContent;
-}
-
-function populateGoosebumps(gbQ) {
-    var rData = "<h3>Goosebumps Books</h3>" +
-            "<div class='table'>" +
-            "<div class='tr'>" +
-            "<span class='th'>Art</span>" +
-            "<span class='th'>Code</span>" + 
-            "<span class='th'>Title</span>" +
-            "<span class='th>>PDF</span>" +
-            "</div>";
-    gbQ.forEach(function (gbData) {
-        var imageLocation = getBasePath("tomcatOld") + "/Goosebumps/Thumbs/" + gbQ.Code + "." + gbQ.CoverImageType;
-        var imageThumbLocation = imageLocation.replace("/Thumbs", "");
-        rData += "<div class='tr'>" +
-                "<span class='td'><a href='" + imageLocation + "' target='new'><img src='" + imageThumbLocation + "'/></a></span>" +
-                "<span class='td'>" + gbQ.Code + "</span>" +
-                "<span class='td'><div class='UPop'>" + gbQ.Title +
-                "<div class='UPopO'>" + gbQ.Plot + "</div></div></span>" +
-                "<span class='td'><div class='UPop'>";
-        if(gbQ.pdf === 1) { rData += "<a href='" + getBasePath("media") + "/Docs/Goosebumps/" + gbQ.Code + ".pdf' target='new'>"; } else { rData += "N/A"; }
-        rData += "<div class='UPopO'>" +
-                "Published: " + gbQ.PublishDate + "<br/>" +
-                "Pages: " + gbQ.Pages + "<br/>" +
-                "ISBN: " + gbQ.ISBN + "</div></div></span>" +
-                "</div>";
-    });
-    rData += "</div></div>";
-    return rData;
-}
-
-function putFileResults(msData) {
-    var thumbSize, mediaCount, mediaCountA, items, itemsTable;
-    mediaCount = mediaCountA = 1;
-    items = "";
-    itemsTable = [];
+function putFileResults(msData, hitCount, matchLimitHit) {
+    var noticeMessage = "";
+    var thumbSize = "";
     if(checkMobile()) { thumbSize = "th_small"; } else { thumbSize = "th_sm_med"; }
     var fileTable = "<div class='table id='FileTable'>" +
             "<div class='tr'>" +
@@ -134,14 +123,10 @@ function putFileResults(msData) {
             "<span class='td'><strong>File</strong></span>" +
             "</div>";
     msData.forEach(function (tm) {
-        var dbDipInfo, thisAddCheckbox, forceMediaType;
-        dbDipInfo = thisAddCheckbox = "";
-        var mediaType = (tm.File).substr((tm.File).length - 3).toUpperCase();
-        items += (
-               tm.Path + " " + tm.Media + " " + tm.File + " " +
-               tm.DescriptionLimited + " " + tm.Artist + " " + tm.AlbumArt + " " +
-               tm.XTags + " " + tm.TrackListingASON + " "
-        ).toUppercase();
+        var dbDipInfo = "", thisAddCheckbox = "";
+        var fileProps = (tm.File).split(".");
+        var mediaType = fileProps[fileProps.length-1].toUpperCase();
+        var forceMediaType = mediaType;
         if(isSet(tm.Description)) {
             if(isSet(tm.AlbumArt)) {
                 if(
@@ -203,7 +188,7 @@ function putFileResults(msData) {
                     }
                     break;
                 default:
-                    thisAddCheckbox += "<input class='PlaySong' type='checkbox' name='FilePlay[" + mediaCount + "]' value='Yes' />";
+                    thisAddCheckbox += "<input class='PlaySong' type='checkbox' name='FilePlay' value='Yes' />";
                     break;
             }
             thisAddCheckbox += "</div>";
@@ -211,64 +196,74 @@ function putFileResults(msData) {
             thisAddCheckbox += "<div class='UPopNM'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_lck.jpeg'/>" +
                     "<div class='UPopNMO'>" +
-                    "Viewed: <input class='PlaySong' type='checkbox' name='FilePlay[" + mediaCount + "]' value='Yes'/>" +
+                    "Viewed: <input class='PlaySong' type='checkbox' name='FilePlay' value='Yes'/>" +
                     "</div></div>";
         }
-        var thisMsInfoString = "<form class='tr' id='SearchSongForm[" + mediaCount + "]'>" +
+        var thisMsInfoString = "<form class='tr'>" +
                 "<span class='td' style='width: 10%;'>" + thisAddCheckbox + "</span>";
-        if(isSet(tm.File)) {
+        if(!isSet(tm.File)) {
             thisMsInfoString += "<span class='td' style='width: 80%; color: #ff3300;'>";
         } else {
-            thisMsInfoString += "<span class='td' style='" + mediaPlayColor(tm.PlayCount) + " width=80%;'>";
+            thisMsInfoString += "<span class='td' style='" + mediaPlayColor(tm.PlayCount) + "' width=80%;'>";
         }
-        if(mediaType === "MP4") { forceMediaType = "m4v"; } else { forceMediaType = mediaType; }
-        thisMsInfoString += "<input type='hidden' name='MediaType[" + mediaCount + "]' value = '" + forceMediaType + "' />" +
+        if(mediaType === "MP4") { forceMediaType = "m4v"; }
+        thisMsInfoString += "<input type='hidden' name='MediaType' value = '" + forceMediaType + "' />" +
                 "<div class='UPop'>" +
-                "<input type='hidden' name='FileName[" + mediaCount + "]' value='" + tm.File + "'/>" + tm.File +
+                "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File +
                 "<img class='th_th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
         }
         thisMsInfoString += "<div class='UPopO'>" +
-                "<input type='hidden' name='FilePath[" + mediaCount + "]' value='/MediaServ" + tm.Path + "/" + tm.File + "'/>" +
+                "<input type='hidden' name='FilePath' value='/MediaServ" + tm.Path + "/" + tm.File + "'/>" +
                 dbDipInfo +
                 "</div></div>";
         if(isSet(tm.TrackListingASON)) {
-            var trackListingArray = (tm.TrackListingASON).split("],[").substring(2, (tm.TrackListingASON).length - 2);
+            var subAson = (tm.TrackListingASON).replace("[[", "").replace("]]", "").split("],[");
             thisMsInfoString += "<div class='UPop'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_lst.jpeg'/>" +
                     "<div class='UPopO'>";
-            trackListingArray.forEach(function (tTrack) {
-               var tTrackArray = tTrack.split(",");
-               thisMsInfoString += tTrackArray[0] + ": " + tTrackArray[1] + "<br/>";
-            });
+            for (var i = 0; i < subAson.length; i++) {
+                var tTrackArray = subAson[i].split(",");
+                thisMsInfoString += tTrackArray[0] + ": " + tTrackArray[1] + "<br/>";
+            }
             thisMsInfoString += "</div></div>";
         }
         thisMsInfoString += "</span></form>";
-        itemsTable.push(thisMsInfoString);
         fileTable += thisMsInfoString;
     });
     fileTable += "</div>";
-    if(checkMobile()) { fileTable += "<p>Space for player pop-up<p>More space!"; }
-    return fileTable;
+    if(matchLimitHit === 0) {
+        noticeMessage = "<div class='Notice'>" + hitCount + " results found!</div>";
+    } else {
+        noticeMessage = "<div class='Notice' style='background-color: red; color: white;'>Showing 25 of " + hitCount + " results!</div>";
+    }
+    if(checkMobile()) { fileTable += "<p>Space for player pop-up<p>More space!" + noticeMessage; }
+    dojo.byId("ETSResults").innerHTML = fileTable;
+    dojo.query(".PlaySong").connect("onchange", actOnPlayMedia);
 }
 
-function putSearchBox(msOverview) {
+function putSearchBox(target, msOverview) {
     var subTableData = "<div class='table'>" +
-        "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</div></div>" +
-        "<div class='tr'><span class='td'>Plays</span><span class='td'>" + msOverview.TotalPlays + "</div></div>" +
+        "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</span></div>" +
+        "<div class='tr'><span class='td'>Plays</span><span class='td'>" + msOverview.PlayCount + "</span></div>" +
         "<div class='tr'><span class='td'>Hours</span><span class='td'>" + ((msOverview.TotalDurSec / 60) / 60).toFixed(1) + "</span></div>" +
-        "<div class='tr'><span class='td'>Size GB</span><span class='td'>" + ((msOverview.TotalBlocks / 1024) / 1024).toFixed(1) + "</span></div>";
+        "<div class='tr'><span class='td'>Size GB</span><span class='td'>" + ((msOverview.TotalBlocks / 1024) / 1024).toFixed(1) + "</span></div>" +
+        "</div>";
     var mainTableElement = "<div class='table'>" +
             "<div class='tr'>" +
-            "<span class='td'><form id='GenreSelectForm'><select name='Genre' id='GenreSelect'>" + getMediaOpts() + "</select></form></span>" +
+            "<span class='td'><form id='GenreSelectForm'>" +
+            "<select name='Genre' id='GenreSelect'>" +
+            "<option value=''>Select...</option>" +
+            mediaOpts() +
+            "</select></form></span>" +
             "<span class='td'>" +
             "<div class='UPop'><img src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg' class='th_icon'/>" +
-            "<div class='UPopO'>" + subTableData + "</div>" + 
+            "<div class='UPopO'>" + subTableData + "</div></div></span>" + 
             "</div>";
     var liveSearchField = "<form class='tr'>" +
-            "<span class='td'><input type='text' class='msSearchBox' name'MediaSearch' onKeyUp='msShowHint(this.value)' /></span>" +
+            "<span class='td'><input type='text' class='msSearchBox' name'MediaSearch' onKeyUp='searchAheadMediaServer(this.value)' /></span>" +
             "<span class='td'>" +
             "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_map.jpeg' />" +
             "<div class='UPopO'><storng>Searches on: </strong>" +
@@ -276,47 +271,55 @@ function putSearchBox(msOverview) {
             " from the Media Server database.</div>" +
             "</div></span></form>";
     var rData = mainTableElement + liveSearchField;
-    dojo.byId("MSSearh").innerHTML = rData;
+    dojo.byId(target).innerHTML = rData;
+    var genreSelect = dojo.byId("GenreSelect");
+    dojo.connect(genreSelect, "onchange", actOnNonMedia);
 }
 
-function searchAheadOld(dataArray, thisQuery, matchLimit) { 
-    var itemMatchLimitHit, matchedItems, ti, dataBack, noticeBack, objectBack;
-    itemMatchLimitHit = matchedItems = ti = 0;
-    objectBack = {};
-    var thisHint = "";
-    if(thisQuery !== "") {
-        var thisQueryLength = thisQuery.length;
-        thisQuery.forEach(function (item) {
-           if(dataArray.indexOf(thisQuery) >= 0) {
-               matchedItems++;
-               if(thisHint === "") {
-                   thisHint = dataArray[ti];
-               } else if (matchedItems > matchLimit) {
-                   itemMatchLimitHit = 1;
-                   thisHint = "";
-               } else {
-                   thisHint += dataArray[ti];
-               }
-           }
-           ti++;
+function searchAheadMediaServer(value) {
+    var noticeMessage;
+    var matchLimitHit = 0;
+    var hitCount = 0;
+    if(value.length > 2) {
+        var matchingRows = [];
+        msIndex.forEach(function (sr) {
+            if(
+                (isSet(sr.File) && (sr.File).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Path) && (sr.Path).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Media) && (sr.Media).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.DescriptionLimited) && (sr.DescriptionLimited).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.ContentDate) && (sr.ContentDate).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase()))
+            ) { 
+                hitCount++;
+                if(matchingRows.length < 24) {
+                    matchingRows.push(sr);
+                } else {
+                   matchLimitHit = 1;
+                }
+            }
         });
+        putFileResults(matchingRows, hitCount, matchLimitHit);    
     }
-    if(isSet(thisHint)) {
-        if(isSet(itemMatchLimitHit)) {
-            noticeBack = "<div class='Notice' style='background-color: red; color: white;'>Showing " + matchLimit + " of " + matchedItems + " results!</div>";
-        } else {
-            noticeBack = "<div class='Notice'>" + matchedItems + " results found!</div>";
-            dataBack = thisHint ;
-        }
-    } else {
-        noticeBack = "</div><div class='Notice'>Unable to find anything!</div>";
-    }
-    objectBack.noticeBack = noticeBack;
-    objectBack.dataBack = dataBack;
-    return objectBack;
 }
 
-function initMediaServer() {
-    getMediaOpts();
-    putSearchBox();
+function setPlayMedia(formData) {
+    aniPreload("on");
+    formData.doWhat = "setPlayed";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("MediaServer"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }

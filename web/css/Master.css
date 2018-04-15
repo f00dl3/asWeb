@@ -1,13 +1,13 @@
 /* { font-family: Garineldo; } 
 by Anthony Stump
-from old ASWebUI
+Adapted from old ASWebUI
 Created: Unknown
-Updated: 12 Apr 2018
+Updated: 15 Apr 2018
 */
 
 /* Hidden DIVs */
 #CF6Results, #FitResults, #ObsResults,
-    #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit,
+    #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit, #HShowETReddit,
     #ETGHours, #ETGIndex, #ETFF14Q,
     #FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse,
     #wxObsFcst, #wxFeeds, #wxNewsEmail, #wxEarthquakes,

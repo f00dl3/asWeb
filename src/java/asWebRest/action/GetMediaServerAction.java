@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 22 Feb 2018
+Updated: 15 Apr 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.MediaServerDAO;
+import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 
@@ -15,10 +16,10 @@ public class GetMediaServerAction {
     private MediaServerDAO mediaServerDAO;
     public GetMediaServerAction(MediaServerDAO mediaServerDAO) { this.mediaServerDAO = mediaServerDAO; }
     
-    public JSONArray getGeoData() { return mediaServerDAO.getGeoData(); }
-    public JSONArray getIndexed(List qParams) { return mediaServerDAO.getIndexed(qParams); }
-    public JSONArray getOverview() { return mediaServerDAO.getOverview(); }
-    public JSONArray getPowerRangers() { return mediaServerDAO.getPowerRangers(); }
-    public JSONArray getXFiles() { return mediaServerDAO.getXFiles(); }
+    public JSONArray getGeoData(Connection dbc) { return mediaServerDAO.getGeoData(dbc); }
+    public JSONArray getIndexed(Connection dbc, List qParams, String isMobile) { return mediaServerDAO.getIndexed(dbc, qParams, isMobile); }
+    public JSONArray getOverview(Connection dbc) { return mediaServerDAO.getOverview(dbc); }
+    public JSONArray getPowerRangers(Connection dbc) { return mediaServerDAO.getPowerRangers(dbc); }
+    public JSONArray getXFiles(Connection dbc) { return mediaServerDAO.getXFiles(dbc); }
         
 }

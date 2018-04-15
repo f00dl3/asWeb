@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 12 Apr 2018
+Updated: 15 Apr 2018
  */
 
 package asWebRest.resource;
@@ -21,7 +21,6 @@ import org.restlet.resource.ServerResource;
 
 public class EntertainmentResource extends ServerResource {
     
-
     @Post
     public String doPost(Representation argsIn) {
         
@@ -47,6 +46,11 @@ public class EntertainmentResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
                 
+                case "getFfxivQuests":
+                    JSONArray ffxivQ = getEntertainmentAction.getFfxivQuests(dbc);
+                    returnData += ffxivQ.toString();
+                    break;
+                
                 case "getGameData":
                     JSONArray ghTotal = getEntertainmentAction.getGameHoursTotal(dbc);
                     JSONArray ghLatest = getEntertainmentAction.getGameHoursLatest(dbc);
@@ -55,7 +59,17 @@ public class EntertainmentResource extends ServerResource {
                         .put("gameHoursTotal", ghTotal)
                         .put("gameHoursLatest", ghLatest)
                         .put("gameHours", gh);
-                    returnData = mergedResults.toString();
+                    returnData += mergedResults.toString();
+                    break;
+                    
+                case "getGameIndex":
+                    JSONArray gInd = getEntertainmentAction.getGameIndex(dbc);
+                    returnData += gInd.toString();
+                    break;
+                    
+                case "getGoosebumps":
+                    JSONArray goose = getEntertainmentAction.getGoosebumpsBooks(dbc);
+                    returnData += goose.toString();
                     break;
                     
             }

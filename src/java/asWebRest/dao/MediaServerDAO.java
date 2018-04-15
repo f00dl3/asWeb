@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 7 Apr 2018
+Updated: 15 Apr 2018
  */
 
 package asWebRest.dao;
 
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -16,11 +17,11 @@ public class MediaServerDAO {
 
     WebCommon wc = new WebCommon();
     
-    public JSONArray getGeoData() {
+    public JSONArray getGeoData(Connection dbc) {
         final String query_MediaServer_GeoData = "SELECT DISTINCT GeoData FROM MediaServer WHERE GeoData IS NOT NULL;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_GeoData, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_GeoData, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("GeoData", resultSet.getString("GeoData"));
@@ -31,10 +32,10 @@ public class MediaServerDAO {
         return tContainer;
     }
     
-    public JSONArray getIndexed(List qParams) {
+    public JSONArray getIndexed(Connection dbc, List qParams, String isMobile) {
         final String query_MediaServer_Indexed = "SELECT" +
                 " Path, Size, DurSec, File, Description, ContentDate, Artist, AlbumArt," +
-                " SUBSTRING(Description,1,128) AS DescriptionLimited," +
+                " SUBSTRING(Description,1,20) AS DescriptionLimited," +
                 " LastSelected, PlayCount, Burned, BDate, Media, Working, OffDisk, Archived," +
                 " BitRate, Hz, Channels, Resolution, Pages, MPAA, MPAAContent, XTags, XTagVer, GeoData, GIFVer," +
                 " WarDeploy, DateIndexed, TrackListingASON" +
@@ -43,16 +44,20 @@ public class MediaServerDAO {
                 " AND (1=? OR Path LIKE ?);"; // TestPath, Test
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_Indexed, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_Indexed, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
+                if(isMobile.equals("yes")) {
+                    tObject.put("Description", resultSet.getString("DescriptionLimited"));
+                } else {
+                    tObject.put("Description", resultSet.getString("Description"));
+                }
                 tObject
                     .put("Path", resultSet.getString("Path"))
                     .put("Size", resultSet.getLong("Size"))
                     .put("DurSec", resultSet.getInt("DurSec"))
                     .put("File", resultSet.getString("File"))
                     .put("ContentDate", resultSet.getString("ContentDate"))
-                    .put("Description", resultSet.getString("Description"))
                     .put("Artist", resultSet.getString("Artist"))
                     .put("AlbumArt", resultSet.getString("AlbumArt"))
                     .put("DescriptionLimited", resultSet.getString("DescriptionLimited"))
@@ -63,7 +68,18 @@ public class MediaServerDAO {
                     .put("Media", resultSet.getString("Media"))
                     .put("Working", resultSet.getInt("Working"))
                     .put("OffDisk", resultSet.getInt("OffDisk"))
-                    .put("Archived", resultSet.getInt("Archived"))
+                    .put("Archived", resultSet.getString("Archived"))
+                    .put("BitRate", resultSet.getInt("BitRate"))
+                    .put("Hz", resultSet.getInt("Hz"))
+                    .put("Channels", resultSet.getInt("Channels"))
+                    .put("Resolution", resultSet.getString("Resolution"))
+                    .put("Pages", resultSet.getInt("Pages"))
+                    .put("MPAA", resultSet.getString("MPAA"))
+                    .put("MPAAContent", resultSet.getString("MPAAContent"))
+                    .put("XTags", resultSet.getString("XTags"))
+                    .put("XTagVer", resultSet.getInt("XTagVer"))
+                    .put("GeoData", resultSet.getString("GeoData"))
+                    .put("GIFVer", resultSet.getInt("GIFVer"))
                     .put("WarDeploy", resultSet.getInt("WarDeploy"))
                     .put("DateIndexed", resultSet.getString("DateIndexed"))
                     .put("TrackListingASON",resultSet.getString("TrackListingASON"));                    
@@ -74,12 +90,12 @@ public class MediaServerDAO {
         return tContainer;
     }
       
-    public JSONArray getOverview() {
+    public JSONArray getOverview(Connection dbc) {
         final String query_MediaServer_Overview = "SELECT COUNT(File) AS TotalRecords, SUM(PlayCount) AS TotalPlays," +
                 " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks FROM Core.MediaServer;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_Overview, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_Overview, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -94,12 +110,12 @@ public class MediaServerDAO {
         return tContainer;
     }
     
-    public JSONArray getPowerRangers() {
+    public JSONArray getPowerRangers(Connection dbc) {
         final String query_MediaServer_PowerRangers = "SELECT Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
                 " Title, Synopsis, MediaServer FROM Core.PowerRangers ORDER BY SeriesEp DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_PowerRangers, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_PowerRangers, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -119,7 +135,7 @@ public class MediaServerDAO {
         return tContainer;
     }
         
-    public JSONArray getXFiles() {
+    public JSONArray getXFiles(Connection dbc) {
         final String query_MediaServer_XFiles = "SELECT" +
         " Path, Size, DurSec," +
         " File, Description, AlbumArt," +
@@ -129,7 +145,7 @@ public class MediaServerDAO {
         " ORDER BY ContentDate DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_XFiles, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_XFiles, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -151,23 +167,12 @@ public class MediaServerDAO {
         return tContainer;
     }
 
-    public String setLastPlayed() {
+    public String setLastPlayed(Connection dbc, List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
         final String query_MediaServer_LastPlayed = "UPDATE Core.MediaServer" +
-                " SET LastSelected=CURDATE(), PlayCount=PlayCount+1 WHERE File LIKE ?;";
-        /* try {
-            ResultSet resultSet = wc.q2rs(query_MediaServer_Overview, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("TotalRecords", resultSet.getInt("TotalRecords"))
-                    .put("PlayCount", resultSet.getInt("TotalPlays"))
-                    .put("TotalDurSec", resultSet.getLong("TotalDurSec"))
-                    .put("TotalBlocks", resultSet.getLong("TotalBlocks"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); } */
-        return "placeholder for query" + query_MediaServer_LastPlayed;
+                " SET LastSelected=CURDATE(), PlayCount=PlayCount+1 WHERE File = ?;";
+        try { returnData = wc.q2do1c(dbc, query_MediaServer_LastPlayed, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
     }
     
 }

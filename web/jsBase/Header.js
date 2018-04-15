@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 12 Apr 2018
+Updated: 15 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -157,8 +157,9 @@ function getBasePath(opt) {
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
         case "old": tBase += "/ASWebUI"; break;
+        case "oldRoot": tBase = tBase; break;
         case "osmTiles": tBase += "/osm_tiles/"; break;
-        case "tomcatOld": tBase += "/Tomcat"; break;
+        case "tomcatOld": tBase += "/ASWebUI/Tomcat"; break;
         case "ui": tBase = baseForUi; break;
     }
     return tBase;
@@ -209,17 +210,18 @@ function getRelatedLinks(page) {
 
 function getResource(what) {
     switch(what) {
-        case "Chart": return getBasePath("rest") + "/Chart";
-        case "Congress": return getBasePath("rest") + "/Congress";
-        case "Cooking": return getBasePath("rest") + "/Cooking";
-        case "Entertainment": return getBasePath("rest") + "/Entertainment";
-        case "Fitness": return getBasePath("rest") + "/Fitness";
-        case "Finance": return getBasePath("rest") + "/Finance";
-        case "Home": return getBasePath("rest") + "/Home";
-        case "Logs": return getBasePath("rest") + "/Logs";
-        case "Pto": return getBasePath("rest") + "/PTO";
-        case "WebLinks": return getBasePath("rest") + "/WebLinks";
-        case "Wx": return getBasePath("rest") + "/Wx";
+        case "Chart": return getBasePath("rest") + "/Chart"; break;
+        case "Congress": return getBasePath("rest") + "/Congress"; break;
+        case "Cooking": return getBasePath("rest") + "/Cooking"; break;
+        case "Entertainment": return getBasePath("rest") + "/Entertainment"; break;
+        case "Fitness": return getBasePath("rest") + "/Fitness"; break;
+        case "Finance": return getBasePath("rest") + "/Finance"; break;
+        case "Home": return getBasePath("rest") + "/Home"; break;
+        case "Logs": return getBasePath("rest") + "/Logs"; break;
+        case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
+        case "Pto": return getBasePath("rest") + "/PTO"; break;
+        case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
+        case "Wx": return getBasePath("rest") + "/Wx"; break;
     }
 }
 

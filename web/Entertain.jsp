@@ -1,7 +1,7 @@
 <%-- 
     Document   : MediaServ
     Created on : Mar 19, 2018, 7:35:15 AM
-    Updated: 12 Apr 2018
+    Updated: 15 Apr 2018
     Author     : Anthony Stump
 --%>
 
@@ -25,7 +25,7 @@
             <button class="UButton" id="ShowETGameAll">Games</button>
             <button class="UButton" id="ShowETLego">Lego</button>
             <button class="UButton" id="ShowETStream">Media</button>
-            <!-- if not hidden <button class="UButton" id="ShowETReddit">Reddit</button> -->
+            <button class="UButton" id="HShowETReddit">Reddit</button>
         </div><p>
 
         <div id="ETCooking"></div>
@@ -40,9 +40,9 @@
         </div>
         <div id="ETLego"></div>
         <div id="ETStream">
-            <div id="MSSearch"></div>
-            <div id="MSResults"></div>
-            <div id="PlayerHolder"></div>
+            <div id="ETSSearch"></div><br/>
+            <div id="ETSResults"></div><br/>
+            <div id="ETSPlayer"></div>
         </div>
         <div id="ETReddit"></div>
         

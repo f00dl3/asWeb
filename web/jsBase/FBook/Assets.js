@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Assets.js Split: 4 Apr 2018
-Updated: 8 Apr 2018
+Updated: 15 Apr 2018
  */
 
 function actOnAssetUpdate(event) {
@@ -18,11 +18,12 @@ function actOnDecorToolsUpdate(event) {
 }
 
 function displayAssets() {
-    getAssetData();
-    $("#FBAsset").toggle();
+    var target = "FBAsset";
+    getAssetData(target);
 }
 
-function getAssetData() {
+function getAssetData(target) {
+    getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = "doWhat=getAssetData";
     var xhArgs = {
@@ -41,6 +42,7 @@ function getAssetData() {
                     data.assets
             );
             aniPreload("off");
+            $("#"+target).toggle();
         },
         error: function (data, iostatus) {
             aniPreload("off");

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 13 Apr 2018
+Updated: 15 Apr 2018
  */
 
 function displayGames() {
@@ -12,20 +12,17 @@ function displayGames() {
 
 function displayGameFf14q() {
     var target = "ETGFF14Q";
-    getFfxivQuests(target);
-    $("#"+target).toggle();
+    getGameFf14q(target);
 }
 
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
-    $("#"+target).toggle();
 }
 
 function displayGameIndex() {
     var target = "ETGIndex";
     getGameIndex(target);
-    $("#"+target).toggle();
 }
 
 function getGameData(target) {
@@ -41,10 +38,12 @@ function getGameData(target) {
                 function(data) {
                     aniPreload("off");
                     putGameHours(
+                        target,
                         data.gameHoursTotal[0],
                         data.gameHoursLatest[0],
                         data.gameHours
                     );
+                    $("#"+target).toggle();
                 },
                 function(error) { 
                     aniPreload("off");
@@ -65,7 +64,8 @@ function getGameFf14q(target) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    putFfxivQuests(data);
+                    putFfxivQuests(target, data);
+                    $("#"+target).toggle();
                 },
                 function(error) { 
                     aniPreload("off");
@@ -86,7 +86,8 @@ function getGameIndex(target) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    putGameIndex(data);
+                    putGameIndex(target, data);
+                    $("#"+target).toggle();
                 },
                 function(error) { 
                     aniPreload("off");
@@ -95,20 +96,20 @@ function getGameIndex(target) {
     });
 }
 
-function putFfxivQuests(ffxivQuests) {
+function putFfxivQuests(target, ffxivQuests) {
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var qCount = ffxivQuests.length;
     var qCols = [ "Up", "Name", "LV" ];
     var rData = "<a href='" + charProfLink + "' target='new'>Foodle Faddle</a>" +
             "<h3>Quests</h3><strong>Indexed quests: " + qCount + 
             "<p><div class='table'><div class='tr'>";
-    for (var i = 0; i < qCols.length; i++) { rData += "<span class='th'>" + qCols[i] + "</span>"; }
+    for (var i = 0; i < qCols.length; i++) { rData += "<span class='td'><strong>" + qCols[i] + "</strong></span>"; }
     rData += "</div>";
     ffxivQuests.forEach(function (ff14q) {
         var qComplete = "No";
         var fontColor = "White";
         var tdsStyle = "style='color: " + fontColor + ";'";
-        var updateCheckbox = "<input class='ffxivQuestDone' type='checkbo' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";
+        var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";
         if(ff14q.Completed === 1) {
             qComplete = "Yes";
             fontColor = "Gray";
@@ -134,10 +135,10 @@ function putFfxivQuests(ffxivQuests) {
                 "</form>";
     });
     rData += "</div>";
-    dojo.byId("FFXIVQuests").putHTML = rData;
+    dojo.byId(target).innerHTML = rData;
 }
 
-function putGameHours(gameHoursTotal, latest, gameHours) {
+function putGameHours(target, gameHoursTotal, latest, gameHours) {
     var thCols = [ "Name", "Hours" ];
     var ghe, gheA;
     ghe = gheA = "<div class='table'><div class='tr'>";
@@ -146,8 +147,7 @@ function putGameHours(gameHoursTotal, latest, gameHours) {
             "<strong>" +
             " <a href='" + getBasePath("old") + "/Download/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
             "<span class='UPopNM'>" +
-            "<p>Most recent:</b>";
-    
+            "<p>Most recent:</b>";    
     for (var i = 0; i < thCols.length; i++) {
         ghe += "<span class='td'><strong>" + thCols[i] + "</strong></span>";
         gheA += "<span class='td'><strong>" + thCols[i] + "</strong></span>";
@@ -175,13 +175,14 @@ function putGameHours(gameHoursTotal, latest, gameHours) {
     });
     gheA += "</div>";
     rData += gheA + "</div></div></span>";
-    dojo.byId("ETGHours").innerHTML = rData;
+    dojo.byId(target).innerHTML = rData;
 }
 
-function putGameIndex(gameIndex) {
+function putGameIndex(target, gameIndex) {
+    var rData = "";
     var giCols = [ "Title", "Size<br/>GiB", "Linux<br/>Tested" ];
     var giTable = "<div class='table'><div class='tr'>";
-    for(var i = 0; i < giCols.length; i++) { giTable += "<span class='th'>" + giCols[i] + "</span>"; }
+    for(var i = 0; i < giCols.length; i++) { giTable += "<span class='td'><strong>" + giCols[i] + "</strong></span>"; }
     giTable += "</div>";
     gameIndex.forEach(function (gix) {
         giTable += "<div class='tr'>" +
@@ -198,11 +199,15 @@ function putGameIndex(gameIndex) {
                 "</div>";
     });
     giTable += "</div>";
+    rData += giTable;
+    dojo.byId(target).innerHTML = rData;
 }
 
 function gameButtonListeners() {
     var btnShowHours = dojo.byId("ShETGHours");
     var btnShowIndex = dojo.byId("ShETGIndex");
-    var btnShowFF14Q = dojo.byId("ShETFFXIVQ");
+    var btnShowFF14Q = dojo.byId("ShETGFF14Q");
     dojo.connect(btnShowHours, "click", displayGameHours);
+    dojo.connect(btnShowIndex, "click", displayGameIndex);
+    dojo.connect(btnShowFF14Q, "click", displayGameFf14q);
 }
