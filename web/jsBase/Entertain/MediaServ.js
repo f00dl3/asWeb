@@ -26,19 +26,19 @@ function actOnPlayMedia(event) {
 
 function displayMediaServer() {
     var target = "ETSSearch";
-    getIndex(target);
+    getIndex(target, false);
     $("#ETStream").toggle();
 }
 
-function getIndex(target) {
+function getIndex(target, updateFlag) {
     var isMobile = "no";
     var aContent = 0;
-    var estimatedLoadSize = "Desktop client estimated JSON size 4-6 MBs.";
+    var estimatedLoadSize = "Desktop client estimated JSON size 3.8 to 5.6 MBs.";
     if(checkMobile()) {
         isMobile = "yes";
-        estimatedLoadSize = "Mobile client estimated JSON size 3-4 MBs.";
+        estimatedLoadSize = "Mobile client estimated JSON size 3.7 to 4.2 MBs.";
     }
-    dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize;
+    if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize; }
     aniPreload("on");
     if(isSet(hiddenFeatures)) { aContent = 1; }
     var thePostData = {
@@ -54,8 +54,8 @@ function getIndex(target) {
             }).then(
                 function(data) {
                     msIndex = data.Index;
-                    putSearchBox(target, data.Overview[0]);
-                    dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items.";
+                    putSearchBox(target, data.Overview[0], updateFlag);
+                    if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items."; }
                     aniPreload("off");
                 },
                 function(error) { 
@@ -213,9 +213,9 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         if(mediaType === "MP4") { forceMediaType = "m4v"; }
         thisMsInfoString += "<input type='hidden' name='MediaType' value = '" + forceMediaType + "' />" +
                 "<div class='UPop'>" +
-                "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File +
-                " <tt>(" + tm.PlayCount + ")</tt> " +
-                "<img class='th_th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
+                "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File;
+        if(tm.PlayCount > 1) { thisMsInfoString += " <tt>(" + tm.PlayCount + ")</tt> "; }
+        thisMsInfoString += "<img class='th_th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
@@ -249,7 +249,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
     dojo.query(".PlaySong").connect("onchange", actOnPlayMedia);
 }
 
-function putSearchBox(target, msOverview) {
+function putSearchBox(target, msOverview, updateFlag) {
     var subTableData = "<div class='table'>" +
         "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</span></div>" +
         "<div class='tr'><span class='td'>Plays</span><span class='td'>" + msOverview.PlayCount + "</span></div>" +
@@ -276,9 +276,11 @@ function putSearchBox(target, msOverview) {
             " from the Media Server database.</div>" +
             "</div></span></form>";
     var rData = mainTableElement + liveSearchField;
-    dojo.byId(target).innerHTML = rData;
-    var genreSelect = dojo.byId("GenreSelect");
-    dojo.connect(genreSelect, "onchange", actOnNonMedia);
+    if(!updateFlag) {
+        dojo.byId(target).innerHTML = rData;
+        var genreSelect = dojo.byId("GenreSelect");
+        dojo.connect(genreSelect, "onchange", actOnNonMedia);
+    }
 }
 
 function searchAheadMediaServer(value) {
@@ -292,10 +294,11 @@ function searchAheadMediaServer(value) {
                 (isSet(sr.File) && (sr.File).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Path) && (sr.Path).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Media) && (sr.Media).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.DescriptionLimited) && (sr.DescriptionLimited).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.ContentDate) && (sr.ContentDate).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase()))
+                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
                 if(matchingRows.length < 49) {
@@ -320,6 +323,7 @@ function setPlayMedia(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
+            getIndex("ETSSearch", true);
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");

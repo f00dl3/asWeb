@@ -150,6 +150,7 @@ function getBasePath(opt) {
     switch(opt) {
         case "chartCache": tBase = base + "/chartCache"; break;
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
+        case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
         case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;

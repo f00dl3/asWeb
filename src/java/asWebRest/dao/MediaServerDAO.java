@@ -35,7 +35,7 @@ public class MediaServerDAO {
     public JSONArray getIndexed(Connection dbc, List qParams, String isMobile) {
         final String query_MediaServer_Indexed = "SELECT" +
                 " Path, Size, DurSec, File, Description, ContentDate, Artist, AlbumArt," +
-                " SUBSTRING(Description,1,20) AS DescriptionLimited," +
+                " SUBSTRING(Description,1,48) AS DescriptionLimited," +
                 " LastSelected, PlayCount, Burned, BDate, Media, Working, OffDisk, Archived," +
                 " BitRate, Hz, Channels, Resolution, Pages, MPAA, MPAAContent, XTags, XTagVer, GeoData, GIFVer," +
                 " WarDeploy, DateIndexed, TrackListingASON" +
@@ -60,7 +60,7 @@ public class MediaServerDAO {
                     .put("ContentDate", resultSet.getString("ContentDate"))
                     .put("Artist", resultSet.getString("Artist"))
                     .put("AlbumArt", resultSet.getString("AlbumArt"))
-                    .put("DescriptionLimited", resultSet.getString("DescriptionLimited"))
+                    .put("Description", resultSet.getString("Description"))
                     .put("LastSelected", resultSet.getString("LastSelected"))
                     .put("PlayCount", resultSet.getString("PlayCount"))
                     .put("Burned", resultSet.getInt("Burned"))

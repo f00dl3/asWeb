@@ -145,7 +145,7 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
     var totalHoursDiv = "<div class='UBox'>Total Hours<br/><span>" + (gameHoursTotal.TotalHours).toFixed(1) + "</span></div>";
     var rData = totalHoursDiv +
             "<strong>" +
-            " <a href='" + getBasePath("old") + "/Download/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
+            " <a href='" + getBasePath("downloads") + "/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
             "<span class='UPopNM'>" +
             "<p>Most recent:</b>";    
     for (var i = 0; i < thCols.length; i++) {
