@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 12 Apr 2018
+Updated: 16 Apr 2018
 */
 
 package asWebRest.dao;
@@ -174,7 +174,7 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
-    
+       
     public JSONArray getStarTrek(Connection dbc) {
         final String query_StarTrek = "SELECT" +
                 " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
@@ -202,6 +202,66 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
+     
+    public JSONArray getPowerRangers(Connection dbc) {
+        final String query_MediaServer_PowerRangers = "SELECT" +
+                " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
+                " Title, Synopsis, MediaServer" +
+                " FROM Core.PowerRangers ORDER BY SeriesEp DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_PowerRangers, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Series", resultSet.getInt("Series"))
+                    .put("Season", resultSet.getInt("Season"))
+                    .put("SeasonEp", resultSet.getInt("SeasonEp"))
+                    .put("SeriesEp", resultSet.getInt("SeriesEp"))
+                    .put("ProdCode", resultSet.getString("ProdCode"))
+                    .put("AirDate", resultSet.getString("AirDate"))
+                    .put("Title", resultSet.getString("Title"))
+                    .put("Synopsis", resultSet.getString("Synopsis"))
+                    .put("MediaServer", resultSet.getInt("MediaServer"));                       
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }  
+    
+    public JSONArray getXFiles(Connection dbc) {
+        final String query_MediaServer_XFiles = "SELECT" +
+                " Path, Size, DurSec," +
+                " File, Description, AlbumArt," +
+                " LastSelected, PlayCount," +
+                " Burned, BDate, Media" +
+                " FROM Core.MediaServer" +
+                " WHERE Description LIKE '%XFilesTV%'" +
+                " ORDER BY ContentDate DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_XFiles, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Path", resultSet.getString("Path"))
+                    .put("Size", resultSet.getInt("Size"))
+                    .put("DurSec", resultSet.getInt("DurSec"))
+                    .put("File", resultSet.getString("File"))
+                    .put("Description", resultSet.getString("Description"))
+                    .put("AlbumArt", resultSet.getString("AlbumArt"))
+                    .put("LastSelected", resultSet.getString("LastSelected"))
+                    .put("PlayCount", resultSet.getInt("PlayCount"))
+                    .put("Burned", resultSet.getString("Burned"))
+                    .put("BDate", resultSet.getString("BDate"))
+                    .put("Media", resultSet.getString("Media"));                       
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     public JSONArray getXTags(Connection dbc) {
         final String query_XTags = "SELECT Tag, Description, Detail, TagVer FROM Core.AO_Tags;";

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 15 Apr 2018
+Updated: 16 Apr 2018
  */
 
 package asWebRest.resource;
@@ -75,6 +75,21 @@ public class EntertainmentResource extends ServerResource {
                 case "getLego":
                     JSONArray lego = getEntertainmentAction.getLego(dbc);
                     returnData += lego.toString();
+                    break;
+                    
+                case "getPowerRangers":
+                    JSONArray pr = getEntertainmentAction.getPowerRangers(dbc);
+                    returnData += pr.toString();
+                    break;
+                    
+                case "getStarTrek":
+                    JSONArray st = getEntertainmentAction.getStarTrek(dbc);
+                    returnData += st.toString();
+                    break;
+                    
+                case "getXFiles":
+                    JSONArray xf = getEntertainmentAction.getXFiles(dbc);
+                    returnData += xf.toString();
                     break;
                     
             }

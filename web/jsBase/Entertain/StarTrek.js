@@ -3,6 +3,26 @@ by Anthony Stump
 Created: 16 Apr 2018
  */
 
+function getStarTrek(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getStarTrek" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateStarTrek(target, data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for StarTrek FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function populateStarTrek(target, stEps) {
     var cols = [ "SDate", "Title" ];
     var rData = "<h3>StarTrek</h3>" +

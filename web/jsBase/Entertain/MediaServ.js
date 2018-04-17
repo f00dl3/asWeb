@@ -7,12 +7,16 @@ Updated: 16 Apr 2018
 var msIndex;
 
 function actOnNonMedia(event) {
+    var target = "ETSResults";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
     switch(thisFormData.Genre) {
-        case "AO_DBX": getDbx(); break;
-        case "Goosebumps": getGoosebumps(); break;
+        case "AO_DBX": getDbx(target); break;
+        case "Goosebumps": getGoosebumps(target); break;
+        case "PowerRangers": getPowerRangers(target); break;
+        case "StarTrek": getStarTrek(target); break;
+        case "XFiles": getXFiles(target); break;
         default: window.alert("Invalid / unbuilt option! (" + thisFormData.Genre + ")"); break;
     }
 }

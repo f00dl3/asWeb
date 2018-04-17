@@ -4,7 +4,7 @@ Created: 19 Mar 2018
 Split to Dbx.js: 15 Apr 2018
  */
 
-function getDbx() {
+function getDbx(target) {
     var isMobile = "no";
     aniPreload("on");
     if(checkMobile()) { isMobile = "yes"; }
@@ -16,7 +16,7 @@ function getDbx() {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    populateDbx(data);
+                    populateDbx(target, data);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -26,7 +26,7 @@ function getDbx() {
     });
 }
 
-function populateDbx(dbxData) {
+function populateDbx(target, dbxData) {
     var cols = [ "ZIP", "File" ];
     var dbxDoGif, dbxLocation;
     dbxDoGif = dbxLocation = "";
@@ -59,7 +59,7 @@ function populateDbx(dbxData) {
         dbxContent += tdo;
     });
     dbxContent += "</div>";
-    dojo.byId("ETSResults").innerHTML = dbxContent;
+    dojo.byId(target).innerHTML = dbxContent;
 }
 
 

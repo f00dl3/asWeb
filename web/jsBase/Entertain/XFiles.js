@@ -3,6 +3,26 @@ by Anthony Stump
 Created: 16 Apr 2018
  */
 
+function getXFiles(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getXFiles" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateXFiles(target, data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for XFiles FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function populateXFiles(target, xfData) {
     var cols = [ "Num", "IC", "Title", "*" ];
     var rData = "<h3>X-Files (TV)</h3>" +
@@ -12,8 +32,8 @@ function populateXFiles(target, xfData) {
     xfData.forEach(function (xf) {
         var mythEp = "";
         var epNo = (xf.AlbumArt).replace("XFiles/", "");
-        var epTitleRaw = (xf.File).replace("/.*-/",""); // may need adjustment for pattern regex
-        var epTitle = epTitleRaw.substring(0,(epTitleRaw.length-4));
+        var epTitleRaw = (xf.File).split("."); 
+        var epTitle = epTitleRaw[0];
         var thisAlbumArtImage = getBasePath("tomcatOld") + "/AlbumArt/" + xf.AlbumArt + ".jpg";
         if((xf.Description).includes("XFilesTV Myth")) {
             mythEp = "<img src='" + getBasePath("tomcatOld") + "/AlbumArt/XFiles/x.gif' class='th_icon'/>";
@@ -23,7 +43,7 @@ function populateXFiles(target, xfData) {
                 "<span class='td'><div class='UPop'><img class='th_icon' src='" + thisAlbumArtImage + "'/>" +
                 "<div class='UPopO'><img src='" + thisAlbumArtImage + "'/></div>" +
                 "</div></span>" +
-                "<span class='td' style='" + mediaPlayColor(xf.PlayCount) + "'><div class='UPopO'>" + epTitle +
+                "<span class='td' style='" + mediaPlayColor(xf.PlayCount) + "'><div class='UPop'>" + epTitle +
                 "<div class='UPopO'>" + xf.Description + "</div></div></span>" +
                 "<span class='td'>" + mythEp + "</span>" +
                 "</div>";

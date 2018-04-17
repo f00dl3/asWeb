@@ -4,7 +4,7 @@ Created: 19 Mar 2018
 Split to Goosebumps.js: 15 Apr 2018
  */
 
-function getGoosebumps() {
+function getGoosebumps(target) {
     aniPreload("on");
     var thePostData = { "doWhat": "getGoosebumps" };
     require(["dojo/request"], function(request) {
@@ -14,7 +14,7 @@ function getGoosebumps() {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    populateGoosebumps(data);
+                    populateGoosebumps(target, data);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -24,7 +24,7 @@ function getGoosebumps() {
     });
 }
 
-function populateGoosebumps(gbQ) {
+function populateGoosebumps(target, gbQ) {
     var cols = [ "Art", "Code", "Title", "PDF" ];
     var rData = "<h3>Goosebumps Books</h3>" +
             "<div class='table'>" +
@@ -48,5 +48,5 @@ function populateGoosebumps(gbQ) {
                 "</div>";
     });
     rData += "</div></div>";
-    dojo.byId("ETSResults").innerHTML = rData;
+    dojo.byId(target).innerHTML = rData;
 }

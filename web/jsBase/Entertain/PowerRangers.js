@@ -3,6 +3,26 @@ by Anthony Stump
 Created: 16 Apr 2018
  */
 
+function getPowerRangers(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getPowerRangers" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateRangers(target, data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for PowerRangers FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function populateRangers(target, prData) {
     var cols = [ "SSE", "Title", "Link", "Overall" ];
     var rData = "<h3>Power Rangers (TV)</h3>" +
