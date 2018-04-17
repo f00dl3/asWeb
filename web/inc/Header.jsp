@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    15 Apr 2018
+    Updated:    16 Apr 2018
     Author     : astump
 --%>
 
@@ -16,17 +16,49 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
+    
     String[] etScripts = {
-        "Entertain/Cooking", "Entertain/Games", "Entertain/Lego", "Entertain/MediaServ",
-        "Entertain/Goosebumps", "Entertain/Dbx", "Entertain/Reddit"
+        "Entertain/Cooking",
+        "Entertain/Dbx",
+        "Entertain/Games",
+        "Entertain/Gallery",
+        "Entertain/Goosebumps",
+        "Entertain/Lego",
+        "Entertain/MediaServ",
+        "Entertain/PowerRangers",
+        "Entertain/Reddit",
+        "Entertain/StarTrek",
+        "Entertain/XFiles"
     };
+    
     String[] finScripts = {
-        "FBook/Overview", "FBook/Assets", "FBook/Auto", "FBook/Bills",
-        "FBook/Blue", "FBook/CkBk", "FBook/Pto", "FBook/Utils"
+        "FBook/Overview",
+        "FBook/Assets",
+        "FBook/Auto",
+        "FBook/Bills",
+        "FBook/Blue",
+        "FBook/CkBk",
+        "FBook/Pto",
+        "FBook/Utils"
     };
-    String[] fitScripts = { "Fitness/Plans", "Fitness/Calories", "Fitness/Today" };
-    String[] wxScripts = { "Weather/WxFunctions", "Weather/ObsFeed" };
-    String[] css2do = { "Master", "Colors", "3DTransforms", "Preloader" };
+    
+    String[] fitScripts = {
+        "Fitness/Calories",
+        "Fitness/Plans",
+        "Fitness/Today"
+    };
+    
+    String[] wxScripts = {
+        "Weather/WxFunctions",
+        "Weather/ObsFeed"
+    };
+    
+    String[] css2do = {
+        "Master",
+        "Colors",
+        "3DTransforms",
+        "Preloader"
+    };
     
     if(title == null) { title = "asWeb"; }
     if(type == null) { type = "full"; }

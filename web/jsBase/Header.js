@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 15 Apr 2018
+Updated: 16 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -221,6 +221,7 @@ function getResource(what) {
         case "Logs": return getBasePath("rest") + "/Logs"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
+        case "TP": return getBasePath("rest") + "/TP"; break;
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
         case "Wx": return getBasePath("rest") + "/Wx"; break;
     }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 15 Apr 2018
+Updated: 16 Apr 2018
  */
 
 var msIndex;
@@ -67,8 +67,9 @@ function getIndex(target, updateFlag) {
 
 function mediaOpts() {
     var tElement = "";
-    var hMediaOpts = [ "AO_DBX" /* , "AO_TP" << requires Gallery rebuild, which is not used anymore in past year or so. */ ];
+    var hMediaOpts = [ "AO_DBX" , "AO_TP" ];
     var mediaOpts = [
+        "Photos",
         "Goosebumps",
         "PowerRangers",
         "StarTrek",
