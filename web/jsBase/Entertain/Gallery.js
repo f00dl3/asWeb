@@ -4,7 +4,6 @@ Created: 16 Apr 2018
 Updated: 18 Apr 2018
  */
 
-var fileList;
 var tppCallbackData;
 var lastWarYear = 2007;
 
@@ -26,11 +25,12 @@ function getFolderListing(argsIn) {
         request
             .post(getResource("MediaServer"), {
                 data: thePostData,
-                handleAs: "text"
+                handleAs: "json"
             }).then(
                 function(data) {
-                    // Expect full file/path name, short file name, image size, image resolution
-                    //generateGallery(argsIn, data);
+                    if(argsIn.args2Pass === "archive") {
+                        populateArchiveHolder(argsIn, data);
+                    }
                     aniPreload("off");
                 },
                 function(error) { 
@@ -139,10 +139,27 @@ function initGallery(flagsIn, firstArgIn) {
     }
 }
 
-function populateGallery(target) {
+function populateArchiveHolder(varsToPass, fileList) {
+    var rData = "";
     var fileCount = 0;
-    var productPath = getServerPath("old") + "/Images/Memories/Archived";
     var linkArray = [];
+    Object.keys(fileList).forEach(function (tFile) {
+        fileCount++;
+        var fileName = tFile;
+        var thisFullPath = fileList[tFile].Path;
+        var thisFileSizeFriendly = (fileList[tFile].Size/1024/1024).toFixed(1);
+        var thisLinkString = "<a href='" + varsToPass.relativeUrlPath + "/" + fileName + "' target='new'>" + fileName + "</a> (" + thisFileSizeFriendly + " MBs)";
+        rData += "<br/>" + thisLinkString;
+    });
+    dojo.byId("ArchiveHolder").innerHTML = rData;
+}
+
+function populateGallery(target) {
+    var varsToPass = {};
+    var subPath = "/Images/Memories/Archived";
+    varsToPass.thisPath = getServerPath("old") + subPath;
+    varsToPass.relativeUrlPath = getBasePath("old") + subPath;
+    varsToPass.args2Pass = "archive";
     var rData = "<h4>Photos</h4>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhotoGeo=true' target='photoGeo'>Map GeoCoded Photos</a><p>" +
             "<strong>Select Year:</strong>" +
@@ -155,23 +172,12 @@ function populateGallery(target) {
     }
     rData += "</select></form><p>" +
             "<div id='Photos'>";
-    var varsToPass = {};
-    varsToPass.thisPath = productPath;
-    getFolderListing(varsToPass);
-    /* var folderListing = {}; // loop through files, list them out, with sizes.
-    folderListing.forEach(function (tFile) {
-        fileCount++;
-        var thisFullPath = tFile.FullPath;
-        var thisFileSizeFriendly = (tFile.Size/1024/1024).toFixed(1);
-        var thisLinkString = "<a href='" + productPath + "/" + tFile.FileName + "' target='new'>" + tFile.FileName + "</a> (" + thisFileSizeFriendly + ")";
-        linkArray.push(thisLinkString);
-    }); */
-    rData += "<h4>Archives</h4>";
-    for (var i = 0; i < linkArray.length; i++) {
-        rData += "<br/>" + linkArray[i];
-    }
-    rData += "</div>";
+    
+    rData += "<h4>Archives</h4>" +
+            "<div id='ArchiveHolder'></div>" +
+            "</div>";
     dojo.byId(target).innerHTML = rData;
     var yearPickerSelector = dojo.byId("YearPicker");
+    getFolderListing(varsToPass);
     dojo.connect(yearPickerSelector, "onchange", actOnYearPicker);
 }

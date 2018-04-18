@@ -11,10 +11,13 @@ import asWebRest.action.UpdateMediaServerAction;
 import asWebRest.dao.MediaServerDAO;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.restlet.data.Form;
@@ -66,11 +69,28 @@ public class MediaServerResource extends ServerResource {
                     File folderToList = new File(argsInForm.getFirstValue("folderPath"));
                     File[] folderListing = wc.getFolderListing(folderToList);
                     for (File file : folderListing) {
-                        String fileName = file.getName();
-                        long fileSize = file.length();
+                        String name = file.getName();
+                        String extension = wc.getFileExtension(file);
+                        String path = file.getPath();
+                        long size = file.length();
                         JSONObject thisObject = new JSONObject();
-                        thisObject.put("Size", fileSize);
-                        mergedResults.put(fileName, thisObject);
+                        thisObject
+                            .put("Path", path)
+                            .put("Size", size)
+                            .put("Type", extension);
+                        if(extension.equals("jpg")) {
+                            try {
+                                BufferedImage bimg = ImageIO.read(file);
+                                int iHeight = bimg.getHeight();
+                                int iWidth = bimg.getWidth();
+                                thisObject
+                                    .put("Height", iHeight)
+                                    .put("Width", iWidth);
+                            } catch (IOException ix) {
+                                ix.printStackTrace();
+                            }
+                        }
+                        mergedResults.put(name, thisObject);
                     }
                     returnData += mergedResults.toString();                    
                     break;

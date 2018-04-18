@@ -21,6 +21,10 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public class WebCommon {
+            
+    public static String basicInputFilter(String inString) {
+        return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
+    }
     
     public static String cryptIt(String passwordIn) throws Exception {
         byte[] hash = hashIt(passwordIn);
@@ -31,6 +35,15 @@ public class WebCommon {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+        
+    public static String getFileExtension(File thisFile) {
+        String fileString = thisFile.toString();
+        String fileExtension = null;
+        int i = fileString.lastIndexOf('.');
+        int p = Math.max(fileString.lastIndexOf('/'), fileString.lastIndexOf("\\"));
+        if (i > p) { fileExtension = fileString.substring(i+1); }
+        return fileExtension;
     }
     
     public static File[] getFolderListing(File inFolder) {
@@ -57,10 +70,6 @@ public class WebCommon {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
-    }
-            
-    public static String basicInputFilter(String inString) {
-        return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
     }
 
     public String q2do(String query, List<String> params) throws Exception {
