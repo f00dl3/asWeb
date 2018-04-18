@@ -1,13 +1,16 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 17 Apr 2018
+Updated: 18 Apr 2018
 For support of non-RESTful API calls
 */
 
 package asWeb.servlet;
 
-import asWeb.customActions.SessionActions;
+import asWebRest.action.GetWebAccessLogAction;
+import asWebRest.action.GetWebUIserAuthAction;
+import asWebRest.dao.WebAccessLogDAO;
+import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.shared.WebCommon;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Controller extends HttpServlet {
@@ -46,22 +50,40 @@ public class Controller extends HttpServlet {
         String action = uri.substring(lastIndex + 1);
         String dispatchUrl = null;
         
-        session.setAttribute("SessionInitiated", "true");
+        session.setAttribute("sessionInitiated", "true");
         
         switch(action) {
            
             case "Session":
                 dispatchUrl = "/Session.jsp";
-                String hiddenFeatures;
                 if(wc.isSet(request.getParameter("paramName")) && wc.isSet(request.getParameter("paramValue"))) {
                     switch(request.getParameter("paramName")) {
+                        
                         case "hiddenFeatures":
+                            String hiddenFeatures;
                             hiddenFeatures = request.getParameter("paramValue");
                             if(hiddenFeatures.equals("Disabled")) { hiddenFeatures = null; }
                             session.setAttribute("hiddenFeatures", hiddenFeatures);
                             break;
+                            
+                        case "userAndPass":
+                            GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
+                            GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
+                            boolean loginCheck = false;
+                            String[] loginCredentials;
+                            loginCredentials = request.getParameter("paramValue").split("::");
+                            String userName = loginCredentials[0];
+                            String pass = loginCredentials[1];
+                            String hashWord = "";
+                            try { hashWord = wc.cryptIt(pass); } catch (Exception e) { e.printStackTrace(); }
+                            String webUIserAuth = getWebUIserAuthAction.getWebUIserAuth(userName);
+                            if(webUIserAuth.equals(hashWord) && WebCommon.isSet(hashWord)) { loginCheck = true; }
+                            JSONArray webAccessLogs = getWebAccessLogAction.getWebAccessLogs();
+                            session.setAttribute("userName", userName);
+                            session.setAttribute("loggedIn", loginCheck);
+                            break;
+                            
                     }
-                    
                 }
                 JSONObject sessionVariables = new JSONObject();
                 Enumeration keys = session.getAttributeNames();
@@ -75,16 +97,6 @@ public class Controller extends HttpServlet {
 
             default:
                 dispatchUrl = "/login.jsp";
-                /* try { userName = request.getParameter("asUser"); } catch (Exception e) { e.printStackTrace(); }
-                if(WebCommon.isSet(hashWord)) { try { hashWord = WebCommon.cryptIt(request.getParameter("asPass")); } catch (Exception e) { e.printStackTrace(); } }
-                GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
-                GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
-                String webUIserAuth = getWebUIserAuthAction.getWebUIserAuth(userName);
-                if(webUIserAuth.equals(hashWord) && WebCommon.isSet(hashWord)) { loginCheck = true; }
-                JSONArray webAccessLogs = getWebAccessLogAction.getWebAccessLogs();
-                request.setAttribute("webAccessLogs", webAccessLogs.toString());               
-                request.setAttribute("loginCheck", loginCheck);
-                request.setAttribute("userCrypt", hashWord); */
                 break;
 
         }

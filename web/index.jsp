@@ -9,7 +9,7 @@
 
 <%
     String headerType = "full";
-    String pageTitle = "asWeb (Java)";
+    String pageTitle = "asWeb (Java REST)";
     String scriptIt = "true";
 %>
 
@@ -18,7 +18,7 @@
 <jsp:include page="/inc/Header.jsp?type=full&title=Landing&scripts=true"></jsp:include>
 
     <body>
-        <script>isLoggedIn("Anthony");</script>
+        <script>isLoggedIn("f00dl3");</script>
         <h1><% out.println(pageTitle); %></h1>
         
         <% 
@@ -26,13 +26,7 @@
             String userAgent = request.getHeader("user-agent");
         %>
         
-        <form id="loginForm" method="post">
-            <div class="table">
-                <div class="tr"><span class="td">User</span><span class="td"><input type="text" name="asUser"></input></span></div>
-                <div class="tr"><span class="td">Password</span><span class="td"><input type="password" name="asPass"></input></span></div>
-            </div>
-            <p><button class="UButton" id="btnLogin" type="submit">Login!</button>
-        </form>
+        <div id="loginPlaceholder"></div>
         
         <strong>Version: </strong><span id="webVersion"></span><br/>
         <strong>Your IP: </strong><% out.println(remoteIpAddr); %><br/>

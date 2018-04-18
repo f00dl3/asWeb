@@ -45,6 +45,15 @@ function getSessionVariables() {
     });
 }
 
+function isLoggedIn(userName) {
+    if(sessionVars.loggedIn === true) {
+        window.location.href = getResource(userName);
+    } else {
+        window.alert("Not logged in. Please log in!");
+        //window.location.href = getResource(userName);
+    }
+}
+
 function setCookie(attrib, value) {
     var d = new Date();
     d.setTime(d.getTime() + (3 * 60 * 60 * 1000));
@@ -68,6 +77,11 @@ function setSessionVariable(varName, varValue) {
                     aniPreload("off");
                     window.localStorage.setItem("sessionVars", data);
                     console.log("Session variable [ " + varName + " set to " + varValue + " ]\n" + data);
+                    switch(varName) {
+                        case "userAndPass":
+                            isLoggedIn(sessionVars.userName);
+                            break;
+                    }
                 },
                 function(error) { 
                     aniPreload("off");

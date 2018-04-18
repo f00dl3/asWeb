@@ -1,15 +1,18 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 17 Apr 2018
-
-  $(window).width or $(window).height for JS
- @media (width) @media (height) for CSS window props
- 
+Updated: 18 Apr 2018 
  **/
 
 var loggedIn = false;
 
+function actOnLogin(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var concattedUserAndPass = thisFormData.User + "::" + thisFormData.Pass;
+    setSessionVariable("userAndPass", concattedUserAndPass);
+}
+    
 function getWebLogs() {
     var xhrLogArgs = {
         url: getResource("Landing"),
@@ -47,44 +50,24 @@ function getWebVersion() {
     dojo.xhrGet(xhrWebVersionArgs);
 }
 
-function isLoggedIn(userName) {
-    if(getCookie("ValidLogin") === true) {
-        window.location.href = "/asWeb/"+userName+".jsp";
-    } else {
-        window.alert("Not logged in. Please log in!\nAttempt redirect to ["+getBasePath("rest")+"/"+userName+".jsp]");
-        window.location.href = "/asWeb/"+userName+".jsp";
-    }
-}
-
-function sendLogin() {
-    var loginForm = dojo.byId('loginForm');
-    dojo.connect(loginForm, "onsubmit", loginSend);
-    function loginSend(event) {
-        dojo.stopEvent(event);
-        var xhrArgs = {
-            form: dojo.byId('loginForm'),
-            url: getBasePath("rest")+"/Login",
-            timeout: timeOutMilli,
-            handleAs: "json",
-            load: function(data) {
-                window.alert("Login form xhrPost: OK!\nValid?: "+data.isValidLogin);
-                setCookie("ValidLogin", data.isValidLogin);
-                console.log("Cookies After Login.js loginSend(): \n" + listCookies());
-            },
-            error: function(data) {
-                window.alert("Login form xhrPost: FAIL!");
-            }
-        };
-        window.alert("Login form xhrPost: LOADING...");
-        var deferred = dojo.xhrPost(xhrArgs);
-    }   
+function populateLogin() {
+    var rData = "<form id='loginForm'>" +
+            "<div class='table'>" +
+            "<div class='tr'><span class='td'>User</span><span class='td'><input type='text' name='User'></input></span></div>" +
+            "<div class='tr'><span class='td'>Password</span><span class='td'><input type='password' name='Pass'></input></span></div>" +
+            "</div>" +
+            "<p><button class='UButton' id='btnLogin' type='submit'>Login!</button>" +
+            "</form>";
+    dojo.byId("loginPlaceholder").innerHTML = rData;
+    var btnLogin = dojo.byId('btnLogin');
+    dojo.connect(btnLogin, "click", actOnLogin);
 }
 
 var init = function(event) {
     getWebLogs();
     getWebVersion();
-    sendLogin();
     getSessionVariables();
+    populateLogin();
 };
 
 dojo.ready(init);

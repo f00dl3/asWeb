@@ -217,6 +217,7 @@ function getRelatedLinks(page) {
 
 function getResource(what) {
     switch(what) {
+        case "Anthony": case "f00dl3": return getBasePath("ui") + "/Anthony.jsp"; break;
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
