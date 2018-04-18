@@ -1,11 +1,20 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
+Updated: 17 Apr 2018
  */
 
 var fileList;
 var tppCallbackData;
 var lastWarYear = 2007;
+
+function actOnYearPicker(event) {
+    var target = "GalleryHolder";
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    window.alert(thisFormDataJ);
+}
 
 function getFileListing(argsIn) {
     // IN DEV
@@ -104,13 +113,6 @@ function generateGallery(argsIn, data) {
     rData += "<p><strong>Total photo count: </strong>" + photoCount;
 }
 
-function generateYearDropdown() {
-    for (var i = new Date().getFullYear(); i >= 2005; i--) {
-        var yDropString = "<option value='" + i + "'>" + i + "</option>";
-        dojo.byId("YearPicker").innerHTML += yDropString;
-    }
-}
-
 function initGallery(flagsIn, firstArgIn) {
     var rData, thisPath, path;
     rData = thisPath = path = "";
@@ -140,10 +142,35 @@ function initGallery(flagsIn, firstArgIn) {
 }
 
 function populateGallery() {
+    var fileCount = 0;
+    var productPath = getBasePath("old") + "/Images/Memories/Archived";
+    var linkArray = [];
     var rData = "<h4>Photos</h4>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhotoGeo=true' target='photoGeo'>Map GeoCoded Photos</a><p>" +
             "<strong>Select Year:</strong>" +
             "<form id='PicForm'>" +
-            "<select "; // left off here 4-16-18
+            "<select name='YearPicker' id='YearPicker'>" +
+            "<option value=''>Select...</option>";
+    if(isSet(hiddenFeatures)) { rData += "<option value='Unsorted'>X</option>"; }
+    for (var i = new Date().getFullYear(); i >= 2005; i--) {
+        rData += "<option value='" + i + "'>" + i + "</option>";
+    }
+    rData += "</select></form><p>" +
+            "<div id='Photos'>";
+    var folderListing = {}; // loop through files, list them out, with sizes.
+    folderListing.forEach(function (tFile) {
+        fileCount++;
+        var thisFullPath = tFile.FullPath;
+        var thisFileSizeFriendly = (tFile.Size/1024/1024).toFixed(1);
+        var thisLinkString = "<a href='" + productPath + "/" + tFile.FileName + "' target='new'>" + tFile.FileName + "</a> (" + thisFileSizeFriendly + ")";
+        linkArray.push(thisLinkString);
+    });
+    rData += "<h4>Archives</h4>";
+    for (var i = 0; i < linkArray.length; i++) {
+        rData += "<br/>" + linkArray[i];
+    }
+    rData += "</div>";
     dojo.byId("GalleryHolder").innerHTML = rData;
+    var yearPickerSelector = dojo.byId("YearPicker");
+    dojo.connect(yearPickerSelector, "onchange", actOnYearPicker);
 }

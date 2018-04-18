@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    16 Apr 2018
+    Updated:    17 Apr 2018
     Author     : astump
 --%>
 
@@ -46,6 +46,10 @@
         "Fitness/Calories",
         "Fitness/Plans",
         "Fitness/Today"
+    };
+    
+    String[] tpScripts = {
+        "Entertain/Gallery"
     };
     
     String[] wxScripts = {
@@ -96,6 +100,11 @@
         fitScriptPack += "<script src='"+rootPath+"/jsBase/"+fitScripts[i]+".js'></script>";
     }
     
+    String tpScriptPack = "";
+    for(int i=0; i < tpScripts.length; i++) {
+        tpScriptPack += "<script src='"+rootPath+"/jsBase/"+tpScripts[i]+".js'></script>";
+    }
+    
     String wxScriptPack = "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";
     for(int i=0; i < wxScripts.length; i++) {
         wxScriptPack += "<script src='"+rootPath+"/jsBase/"+wxScripts[i]+".js'></script>";
@@ -126,6 +135,11 @@
             case "OutMap":
                 fullTitle = "Maps";
                 scripts2Load += mapHelperScripts;
+                break;
+            case "TPGallery":
+                fullTitle = "TP Gallery";
+                scripts2Load += tpScriptPack;
+                break;
             case "WxLive":
                 fullTitle = "Weather Live";
                 scripts2Load += wxScriptPack;
