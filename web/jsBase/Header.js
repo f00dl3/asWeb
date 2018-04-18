@@ -250,6 +250,7 @@ function getResource(what) {
 function getServerPath(what) {
     switch(what) {
         case "old": return "/var/www/ASWebUI"; break;
+        case "tomcatOld": return "/var/lib/tomcat8/webapps"; break;
         case "ui": window.alert("Unknown where new server ends up!"); break;
     }
 }

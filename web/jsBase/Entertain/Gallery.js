@@ -4,8 +4,8 @@ Created: 16 Apr 2018
 Updated: 18 Apr 2018
  */
 
-var tppCallbackData;
-var lastWarYear = 2007;
+var tppCallback;
+var lastWarYear = 2017;
 
 function actOnYearPicker(event) {
     var target = "GalleryHolder";
@@ -13,6 +13,7 @@ function actOnYearPicker(event) {
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
     window.alert(thisFormDataJ);
+    initGallery("photo", thisFormData.YearPicker);
 }
 
 function getFolderListing(argsIn) {
@@ -30,6 +31,8 @@ function getFolderListing(argsIn) {
                 function(data) {
                     if(argsIn.args2Pass === "archive") {
                         populateArchiveHolder(argsIn, data);
+                    } else {
+                        generateGallery(argsIn, data);
                     }
                     aniPreload("off");
                 },
@@ -64,33 +67,38 @@ function getTpPicsCallback(ffn) {
     });
 }
 
-function generateGallery(argsIn, data) {
+function generateGallery(argsIn, fileList) {
     var thisFFN;
     var rData = argsIn.rData;
     var photoCount = 0;
     var imgBorder = "red";
-    fileList.forEach(function (fiData) {
+    var iWidth = 1920;
+    var iHeight = 768;
+    Object.keys(fileList).forEach(function (tFile) {
         photoCount++;
-        var fileName = fiData.FileName;
-        var fullPath = fiData.FullPath;
+        var fileName = tFile;
+        var fullPath = fileList[tFile].Path;
         var relativePath = "";
-        switch(argsIn.flag) {
+        switch(argsIn.flagOut) {
             case "tp":
                 relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM");
                 thisFFN = argsIn.params + "/" + fileName;
                 getTpPicsCallback(thisFFN);
                 // wait for it
-                if(isSet(tppCallback.XTags)) { imgBorder = "green"; }
+                if(isSet(tppCallback) && isSet(tppCallback.XTags)) { imgBorder = "green"; }
                 break;
             case "tc":
-                relativePath = fullPath.replace("/var/lib/tomcat8/webapps/ASWebUI#Tomcat#", "/ASWebUI/Tomcat");
+                relativePath = getBasePath("old") + fullPath.replace("/var/lib/tomcat8/webapps/ASWebUI#Tomcat#", "/Tomcat/");
                 break;
             default:
-                relativePath = fullPath.replace("/var/www", "");
+                relativePath = getBasePath("old") + fullPath.replace("/var/www", "");
                 break;
         }
-        var imageSize = (fiData.Resolution).split("x");
-        var iWidth = imageSize[0], iHeight = imageSize[1];
+        if(isSet(fileList[tFile].Resolution)) {
+            var imageSize = (fileList[tFile].Resolution).split("x");
+            iWidth = imageSize[0];
+            iHeight = imageSize[1];
+        }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
         rData += "<div class='UPop'>" +
@@ -103,44 +111,48 @@ function generateGallery(argsIn, data) {
         }
         rData += "</a><div class='UPopO'>" +
                 "<strong>File: </strong>" + fileName + "<br/>" +
-                "<strong>Size: </strong>" + (fiData.SizeBytes / 1024).toFixed(1) + "<br/>" +
-                "<strong>Path: </strong>" + fiData.FullPath + "<br/>";
-        if(isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
+                "<strong>Size: </strong>" + (fileList[tFile].Size / 1024).toFixed(1) + "<br/>" +
+                "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>";
+        if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
         rData += "</div></div>";
     });
     rData += "<p><strong>Total photo count: </strong>" + photoCount;
+    dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
 function initGallery(flagsIn, firstArgIn) {
+    var flagsOut;
     var rData, thisPath, path;
     rData = thisPath = path = "";
     var showListOnly = 1;
     if(flagsIn === "photo" && isSet(firstArgIn)) {
         rData = "<h4>Photos from " + firstArgIn + "</h4>";
-        if(firstArgIn <= lastWarYear) { flagsIn = "tc"; } else { flagsIn = "none"; }
+        if(firstArgIn.valueOf() <= lastWarYear) { flagsOut = "tc"; } else { flagsOut = "none"; }
         showListOnly = 0;
         path = "/Pics/" + firstArgIn;
     }
-    switch(flagsIn) {
-        case "tc": thisPath = getBasePath("tomcatOld") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(1, firstArgIn.length) + "/full/"; break;
-        case "tp": thisPath = getBasePath("tomcatOld") + "/TPM#" + firstArgIn + "/full/"; break;
+    switch(flagsOut) {
+        case "tc": thisPath = getServerPath("tomcatOld") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
+        case "tp": thisPath = getServerPath("tomcatOld") + "/TPM#" + firstArgIn + "/full/"; break;
         case "none": thisPath = getBasePath("old") + "/Images/Memories/" + firstArgIn + "/full/"; break;
         default: window.alert("No flags in!"); break;
     }
     var varToPass = {
         "rData" : rData,
         "flag" : flagsIn,
+        "flagOut": flagsOut,
         "thisPath" : thisPath,
         "arg2Pass" : firstArgIn,
         "showListOnly" : showListOnly
     };
-    if(isSet(thisPath)) { // call Tomcat to get files in folder objects via REST call based on thisPath;
-        getFileListing(varToPass);
+    if(isSet(thisPath)) {
+        getFolderListing(varToPass);
     }
+    dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
 function populateArchiveHolder(varsToPass, fileList) {
-    var rData = "";
+    var rData = "<h4>Archives</h4>";
     var fileCount = 0;
     var linkArray = [];
     Object.keys(fileList).forEach(function (tFile) {
@@ -149,9 +161,9 @@ function populateArchiveHolder(varsToPass, fileList) {
         var thisFullPath = fileList[tFile].Path;
         var thisFileSizeFriendly = (fileList[tFile].Size/1024/1024).toFixed(1);
         var thisLinkString = "<a href='" + varsToPass.relativeUrlPath + "/" + fileName + "' target='new'>" + fileName + "</a> (" + thisFileSizeFriendly + " MBs)";
-        rData += "<br/>" + thisLinkString;
+        rData += thisLinkString + "<br/>";
     });
-    dojo.byId("ArchiveHolder").innerHTML = rData;
+    dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
 function populateGallery(target) {
@@ -173,8 +185,8 @@ function populateGallery(target) {
     rData += "</select></form><p>" +
             "<div id='Photos'>";
     
-    rData += "<h4>Archives</h4>" +
-            "<div id='ArchiveHolder'></div>" +
+    rData += 
+            "<div id='GalleryHolderInside'></div>" +
             "</div>";
     dojo.byId(target).innerHTML = rData;
     var yearPickerSelector = dojo.byId("YearPicker");

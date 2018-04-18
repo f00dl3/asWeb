@@ -78,7 +78,7 @@ public class MediaServerResource extends ServerResource {
                             .put("Path", path)
                             .put("Size", size)
                             .put("Type", extension);
-                        if(extension.equals("jpg")) {
+                        /* if(extension.equals("jpg")) {
                             try {
                                 BufferedImage bimg = ImageIO.read(file);
                                 int iHeight = bimg.getHeight();
@@ -89,7 +89,7 @@ public class MediaServerResource extends ServerResource {
                             } catch (IOException ix) {
                                 ix.printStackTrace();
                             }
-                        }
+                        } */
                         mergedResults.put(name, thisObject);
                     }
                     returnData += mergedResults.toString();                    
