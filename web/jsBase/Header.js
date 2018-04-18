@@ -1,8 +1,10 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 17 Apr 2018
+Updated: 18 Apr 2018
  */
+
+var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars"));
 
 var annMaint = 910.66;
 var annMiles = 12672;
@@ -13,7 +15,7 @@ var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
 var elecCost = 0.14;
 var timeOutMilli = (60*1000);
-var hiddenFeatures = 0;
+var hiddenFeatures = sessionVars.hiddenFeatures;
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
 
 $(window).on('load', function() {
@@ -195,19 +197,22 @@ function getGetParams() {
 }
 
 function getRelatedLinks(page) {
-    var args = {
-        url: getResource("WebLinks"),
-        handleAs: "json",
-        postData: "master=" + page,
-        timeout: timeOutMilli,
-        load: function(data) {
-            return data;
-        },
-        error: function(data, iostatus) {
-            window.alert("xhrGet RelatedLinks for "+page+": FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(args);
+    aniPreload("on");
+    var thePostData = { "master": page };
+    require(["dojo/request"], function(request) {
+        request
+            .get(getResource("WebLinks"), {
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    return(data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for RelatedLinks / " + page + " FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function getResource(what) {

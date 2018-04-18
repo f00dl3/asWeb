@@ -53,8 +53,15 @@ public class Controller extends HttpServlet {
             case "Session":
                 dispatchUrl = "/Session.jsp";
                 String hiddenFeatures;
-                if(wc.isSet(request.getParameter("hiddenFeatures"))) {
-                    hiddenFeatures = request.getParameter("hiddenFeatures");
+                if(wc.isSet(request.getParameter("paramName")) && wc.isSet(request.getParameter("paramValue"))) {
+                    switch(request.getParameter("paramName")) {
+                        case "hiddenFeatures":
+                            hiddenFeatures = request.getParameter("paramValue");
+                            if(hiddenFeatures.equals("Disabled")) { hiddenFeatures = null; }
+                            session.setAttribute("hiddenFeatures", hiddenFeatures);
+                            break;
+                    }
+                    
                 }
                 JSONObject sessionVariables = new JSONObject();
                 Enumeration keys = session.getAttributeNames();

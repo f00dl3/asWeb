@@ -1,11 +1,15 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 Apr 2018
+Updated: 18 Apr 2018
 */
 
-function actOnHiddenToggle() {
-    window.alert("Hidden features toggled!");
+console.log(sessionVars);
+
+function actOnHiddenToggle(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    setSessionVariable("hiddenFeatures", thisFormData.Hidden);
 }
 
 function getAnthonyOverviewData() {
@@ -123,11 +127,11 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     bubbleHolder += databaseInfoBubble + webVersionBubble + sduBubble + camLogBubble + backupLogBubble;
     rData += toolHolder + bubbleHolder + "<br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?Title=Default&Point=" + getHomeGeo("geoJSON") + "' target='new'>Geo Point Click Map</a><p>";
-    var newHiddenValue = "Enable";
+    var newHiddenValue = "Enabled";
     if(isSet(hiddenFeatures) && hiddenFeatures === "Enabled") { newHiddenValue = "Disabled"; }
     var hiddenFeaturesToggler = "<div class='UBox' id='HiddenStuff'>" +
             "<form id='HiddenForm'><span>Hidden Features</span><br/>" +
-            "<input type='checkbox' name='Hidden' value='" + newHiddenValue + "'>" + newHiddenValue + "</input><br/>" +
+            "<input type='checkbox' id='HiddenCheckbox' name='Hidden' value='" + newHiddenValue + "'>" + newHiddenValue + "</input><br/>" +
             "<noscript><input id='HiddenButton' type='submit' name='DoShowHidden' /></noscript>" +
             "</form></div>";
     rData += hiddenFeaturesToggler + "<p>";
@@ -135,8 +139,8 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             "<input type='button' id='setFontGo' value='Do it!' /></p>";
     rData += javaScriptSchit + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
-    var hiddenForm = dojo.byId("HiddenForm");
-    dojo.connect(hiddenForm, "onsubmit", actOnHiddenToggle);
+    var hiddenCheckbox = dojo.byId("HiddenCheckbox");
+    dojo.connect(hiddenCheckbox, "onchange", actOnHiddenToggle);
     $("#inLogs").toggle();
 }
 
