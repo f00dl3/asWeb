@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 15 Mar 2018
+Updated: 17 Apr 2018
 
   $(window).width or $(window).height for JS
  @media (width) @media (height) for CSS window props
@@ -12,7 +12,7 @@ var loggedIn = false;
 
 function getWebLogs() {
     var xhrLogArgs = {
-        url: getBasePath("rest")+"/Login",
+        url: getResource("Landing"),
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
@@ -29,7 +29,7 @@ function getWebLogs() {
 }
 
 function getWebVersion() {
-    var firstXhrUrl = getBasePath("rest")+"/WebVersion";
+    var firstXhrUrl = getResource("WebVersion");
     var xhrWebVersionArgs = {
         url: firstXhrUrl,
         handleAs: "json",
@@ -84,6 +84,7 @@ var init = function(event) {
     getWebLogs();
     getWebVersion();
     sendLogin();
+    getSessionVariables();
 };
 
 dojo.ready(init);

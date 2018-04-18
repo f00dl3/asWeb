@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 16 Apr 2018
+Updated: 17 Apr 2018
  */
 
 var annMaint = 910.66;
@@ -141,8 +141,8 @@ function getBasePath(opt) {
     var base = self.location.protocol + "//" + self.location.host;
     var baseForUi = "/asWeb";
     var shortBaseForRestlet = baseForUi + "/r";
-    var fullBaseForRestlet = base + shortBaseForRestlet;
-    var baseForRestlet = fullBaseForRestlet;
+    var baseForRestlet = base + baseForUi + "/r";
+    var baseForServlet = base + baseForUi + "/s";
     var tBase = "";
     tBase = base.split(":")[1];
     if(checkMobile()) { tBase += ":8082"; }
@@ -157,6 +157,7 @@ function getBasePath(opt) {
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
+        case "serv": tBase = baseForServlet; break;
         case "old": tBase += "/ASWebUI"; break;
         case "oldRoot": tBase = tBase; break;
         case "osmTiles": tBase += "/osm_tiles/"; break;
@@ -218,11 +219,14 @@ function getResource(what) {
         case "Fitness": return getBasePath("rest") + "/Fitness"; break;
         case "Finance": return getBasePath("rest") + "/Finance"; break;
         case "Home": return getBasePath("rest") + "/Home"; break;
+        case "Landing": return getBasePath("ui"); break;
         case "Logs": return getBasePath("rest") + "/Logs"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
+        case "Session": return getBasePath("serv") + "/Session"; break;
         case "TP": return getBasePath("rest") + "/TP"; break;
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
+        case "WebVersion": return getBasePath("rest") + "/WebVersion"; break;
         case "Wx": return getBasePath("rest") + "/Wx"; break;
     }
 }

@@ -1,7 +1,7 @@
 <%-- 
-    Document   : login
+    Document   : index.jsp
     Created on : Feb 10, 2018, 1:09:23 PM
-    Updated:    4 Mar 2018
+    Updated:    17 Apr 2018
     Author     : astump
 
 
@@ -15,7 +15,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/inc/Header.jsp?type=full&title=Login&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full&title=Landing&scripts=true"></jsp:include>
 
     <body>
         <script>isLoggedIn("Anthony");</script>

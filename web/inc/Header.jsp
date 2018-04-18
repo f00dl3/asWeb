@@ -1,5 +1,5 @@
 <%-- 
-    Document   : Header
+    Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
     Updated:    17 Apr 2018
     Author     : astump
@@ -74,7 +74,7 @@
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Tools/comSec.js'></script>" +
-                "<script src='"+rootPath+"/jsBase/Tools/CookieMgmt.js'></script>";
+                "<script src='"+rootPath+"/jsBase/Tools/Session.js'></script>";
     }
     
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +

@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Feb 2018
+Updated: 17 Apr 2018
  */
 
 function add2Cookie(attrib, value) {
@@ -24,6 +25,25 @@ function getCookie(attrib) {
     return "";
 }
 
+function getSessionVariables() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getSessionVariables" };
+    require(["dojo/request"], function(request) {
+        request
+            .get(getResource("Session"), {
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    console.log(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Session Variables FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function setCookie(attrib, value) {
     var d = new Date();
     d.setTime(d.getTime() + (3 * 60 * 60 * 1000));
@@ -42,4 +62,3 @@ function listCookies() {
 
 setCookie("CookieExists", "true");
 console.log("Cookies from CookieMgmt.js: \n" + listCookies());
-

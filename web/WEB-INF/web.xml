@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -33,15 +35,27 @@
         <param-value>10</param-value>
       </init-param>
     </filter>
+    
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <welcome-file-list> 
+    
+    <!-- <welcome-file-list> 
         <welcome-file>/login.jsp</welcome-file>
-    </welcome-file-list>
+    </welcome-file-list> -->
     
     <display-name>asWeb</display-name>
+    
+    <servlet>
+        <servlet-name>asWebUi</servlet-name>
+        <servlet-class>asWeb.servlet.Controller</servlet-class>
+    </servlet> 
+    <servlet-mapping>
+        <servlet-name>asWebUi</servlet-name>
+        <url-pattern>/s/*</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>asWebRest</servlet-name>
         <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
@@ -54,6 +68,7 @@
         <servlet-name>asWebRest</servlet-name>
         <url-pattern>/r/*</url-pattern>
     </servlet-mapping>
+    
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>asWeb</web-resource-name>
@@ -63,14 +78,5 @@
             <transport-gaurantee>CONFIDENTIAL</transport-gaurantee>
         </user-data-constraint>
     </security-constraint>
-    <!--
-    <servlet>
-        <servlet-name>asWeb</servlet-name>
-        <servlet-class>asWeb.servlet.Controller</servlet-class>
-    </servlet> 
-    <servlet-mapping>
-        <servlet-name>asWeb</servlet-name>
-        <url-pattern>/ui/*</url-pattern>
-    </servlet-mapping>
-    -->
+    
 </web-app>
