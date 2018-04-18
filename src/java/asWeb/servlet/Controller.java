@@ -50,7 +50,7 @@ public class Controller extends HttpServlet {
         String action = uri.substring(lastIndex + 1);
         String dispatchUrl = null;
         
-        session.setAttribute("sessionInitiated", "true");
+        session.setAttribute("sessionInitiated", true);
         
         switch(action) {
            
@@ -64,6 +64,11 @@ public class Controller extends HttpServlet {
                             hiddenFeatures = request.getParameter("paramValue");
                             if(hiddenFeatures.equals("Disabled")) { hiddenFeatures = null; }
                             session.setAttribute("hiddenFeatures", hiddenFeatures);
+                            break;
+                            
+                        case "loggedIn":
+                            boolean loggedIn = Boolean.parseBoolean(request.getParameter("paramValue"));
+                            session.setAttribute("loggedIn", loggedIn);
                             break;
                             
                         case "userAndPass":

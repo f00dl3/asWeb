@@ -4,7 +4,7 @@ Created: 4 Mar 2018
 Updated: 18 Apr 2018
  */
 
-var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars"));
+if(isSet(window.localStorage.getItem("sessionVars"))) { var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars")); }
 
 var annMaint = 910.66;
 var annMiles = 12672;
@@ -21,6 +21,12 @@ var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png
 $(window).on('load', function() {
     aniPreload("off");
 });
+
+function actOnLogout(event) {
+    dojo.stopEvent(event);
+    setSessionVariable("loggedIn", false);
+    window.location.href = getResource("Landing");
+}
 
 function animatedArrow(thisArrow) {
     switch(true) {
@@ -335,16 +341,18 @@ function putNavi() {
     var uiBasePage = getBasePath("ui") + "/Anthony.jsp";
     var goHome = "<a href='" + getBasePath("ui") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
             "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
-    rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
-            "<span>" + goHome + " (Logout)</span>" +
+    var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
+            "<span>" + goHome + " <span id='LogoutSpan'>(Logout)</span></span>" +
             "<span id='naviLinks'></span>";
     dojo.byId("NaviHolder").innerHTML = rData;
     getWebLinks("Anthony.php-0", "naviLinks", null);
+    var logoutSpan = dojo.byId("LogoutSpan");
+    dojo.connect(logoutSpan, "click", actOnLogout);
 }
 
 function putWebLinks(data, whereTo, a3dFlags) {
-    var placeholder;
-    var numElems = data.length;
+    var placeholder = "";
+    //var numElems = data.length;
     data.forEach(function (theData) {
         var theLink;
         if(checkMobile() && isSet(theData.DesktopLink)) {

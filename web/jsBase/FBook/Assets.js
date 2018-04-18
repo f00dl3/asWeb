@@ -23,7 +23,7 @@ function displayAssets() {
 }
 
 function getAssetData(target) {
-    getDivLoadingMessage(target);
+    if(isSet(target)) { getDivLoadingMessage(target); }
     aniPreload("on");
     var thePostData = "doWhat=getAssetData";
     var xhArgs = {
@@ -42,7 +42,7 @@ function getAssetData(target) {
                     data.assets
             );
             aniPreload("off");
-            $("#"+target).toggle();
+            if(isSet(target)) { $("#" + target).toggle(); }
         },
         error: function (data, iostatus) {
             aniPreload("off");
