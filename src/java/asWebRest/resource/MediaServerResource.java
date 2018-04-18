@@ -66,31 +66,38 @@ public class MediaServerResource extends ServerResource {
                     break;
                     
                 case "getFileListing":
-                    File folderToList = new File(argsInForm.getFirstValue("folderPath"));
-                    File[] folderListing = wc.getFolderListing(folderToList);
-                    for (File file : folderListing) {
-                        String name = file.getName();
-                        String extension = wc.getFileExtension(file);
-                        String path = file.getPath();
-                        long size = file.length();
-                        JSONObject thisObject = new JSONObject();
-                        thisObject
-                            .put("Path", path)
-                            .put("Size", size)
-                            .put("Type", extension);
-                        /* if(extension.equals("jpg")) {
-                            try {
-                                BufferedImage bimg = ImageIO.read(file);
-                                int iHeight = bimg.getHeight();
-                                int iWidth = bimg.getWidth();
-                                thisObject
-                                    .put("Height", iHeight)
-                                    .put("Width", iWidth);
-                            } catch (IOException ix) {
-                                ix.printStackTrace();
+                    if(wc.isSet(argsInForm.getFirstValue("folderPath"))) {
+                        File folderToList = new File(argsInForm.getFirstValue("folderPath"));
+                        ArrayList<File> folderListing = new ArrayList<>();
+                        wc.getFolderListing(folderToList.toString(), folderListing);
+                        folderListing.forEach((file) -> {
+                            String name = file.getName();
+                            String extension = wc.getFileExtension(file);
+                            String path = file.getPath();
+                            long size = file.length();
+                            JSONObject thisObject = new JSONObject();
+                            thisObject
+                                    .put("Path", path)
+                                    .put("Size", size)
+                                    .put("Type", extension);
+                            if(wc.isSet(extension) && extension.equals("jpg")) {
+                                try {
+                                    BufferedImage bimg = ImageIO.read(file);
+                                    int iHeight = bimg.getHeight();
+                                    int iWidth = bimg.getWidth();
+                                    thisObject
+                                            .put("Height", iHeight)
+                                            .put("Width", iWidth);
+                                } catch (IOException ix) {
+                                    ix.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } */
-                        mergedResults.put(name, thisObject);
+                            mergedResults.put(name, thisObject);
+                        });
+                    } else {
+                        mergedResults.put("Status", "Error! No folder found with that name!");
                     }
                     returnData += mergedResults.toString();                    
                     break;

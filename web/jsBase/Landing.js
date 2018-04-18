@@ -15,7 +15,7 @@ function actOnLogin(event) {
     
 function getWebLogs() {
     var xhrLogArgs = {
-        url: getResource("Landing"),
+        url: getResource("Login"),
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {

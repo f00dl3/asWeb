@@ -11,8 +11,6 @@ function actOnYearPicker(event) {
     var target = "GalleryHolder";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToJson(this.form);
-    window.alert(thisFormDataJ);
     initGallery("photo", thisFormData.YearPicker);
 }
 
@@ -73,7 +71,7 @@ function generateGallery(argsIn, fileList) {
     var photoCount = 0;
     var imgBorder = "red";
     var iWidth = 1920;
-    var iHeight = 768;
+    var iHeight = 1280;
     Object.keys(fileList).forEach(function (tFile) {
         photoCount++;
         var fileName = tFile;
@@ -81,7 +79,7 @@ function generateGallery(argsIn, fileList) {
         var relativePath = "";
         switch(argsIn.flagOut) {
             case "tp":
-                relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM");
+                relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM/");
                 thisFFN = argsIn.params + "/" + fileName;
                 getTpPicsCallback(thisFFN);
                 // wait for it
@@ -94,10 +92,9 @@ function generateGallery(argsIn, fileList) {
                 relativePath = getBasePath("old") + fullPath.replace("/var/www", "");
                 break;
         }
-        if(isSet(fileList[tFile].Resolution)) {
-            var imageSize = (fileList[tFile].Resolution).split("x");
-            iWidth = imageSize[0];
-            iHeight = imageSize[1];
+        if(isSet(fileList[tFile].Width) && isSet(fileList[tFile].Height)) {
+            iWidth = fileList[tFile].Width;
+            iHeight = fileList[tFile].Height;
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }

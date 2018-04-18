@@ -236,6 +236,7 @@ function getResource(what) {
         case "Finance": return getBasePath("rest") + "/Finance"; break;
         case "Home": return getBasePath("rest") + "/Home"; break;
         case "Landing": return getBasePath("ui"); break;
+        case "Login": return getBasePath("rest") + "/Login"; break;
         case "Logs": return getBasePath("rest") + "/Logs"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
@@ -456,8 +457,9 @@ class SortedIterator extends SplHeap {
                             
  */
 
-var init = function(event) {
+function init() {
+    getSessionVariables();
     putNavi();
-};
+}
 
 dojo.ready(init);

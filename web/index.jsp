@@ -18,7 +18,6 @@
 <jsp:include page="/inc/Header.jsp?type=full&title=Landing&scripts=true"></jsp:include>
 
     <body>
-        <script>isLoggedIn("f00dl3");</script>
         <h1><% out.println(pageTitle); %></h1>
         
         <% 

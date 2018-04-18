@@ -151,7 +151,6 @@
     String theHeader = "";
     String miniHeader = "";
     
-    
     miniHeader += scripts2Load;
     
     if(refresh != null) {
@@ -179,4 +178,3 @@
     out.println(theHeader);
     
 %>
-

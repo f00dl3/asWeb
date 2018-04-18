@@ -67,14 +67,14 @@ public class Controller extends HttpServlet {
                             break;
                             
                         case "loggedIn":
-                            boolean loggedIn = Boolean.parseBoolean(request.getParameter("paramValue"));
+                            String loggedIn = request.getParameter("paramValue");
                             session.setAttribute("loggedIn", loggedIn);
                             break;
                             
                         case "userAndPass":
                             GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
                             GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
-                            boolean loginCheck = false;
+                            String loginCheck = "false";
                             String[] loginCredentials;
                             loginCredentials = request.getParameter("paramValue").split("::");
                             String userName = loginCredentials[0];
@@ -82,7 +82,7 @@ public class Controller extends HttpServlet {
                             String hashWord = "";
                             try { hashWord = wc.cryptIt(pass); } catch (Exception e) { e.printStackTrace(); }
                             String webUIserAuth = getWebUIserAuthAction.getWebUIserAuth(userName);
-                            if(webUIserAuth.equals(hashWord) && WebCommon.isSet(hashWord)) { loginCheck = true; }
+                            if(webUIserAuth.equals(hashWord) && WebCommon.isSet(hashWord)) { loginCheck = "true"; }
                             JSONArray webAccessLogs = getWebAccessLogAction.getWebAccessLogs();
                             session.setAttribute("userName", userName);
                             session.setAttribute("loggedIn", loginCheck);

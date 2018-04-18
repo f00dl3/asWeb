@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WebCommon {
@@ -46,10 +47,20 @@ public class WebCommon {
         return fileExtension;
     }
     
-    public static File[] getFolderListing(File inFolder) {
-        File f = inFolder;
-        File[] listing = f.listFiles();
-        return listing;
+    public void getFolderListing(String directoryName, ArrayList<File> files) {
+        File directory = new File(directoryName);
+        File[] fList = directory.listFiles();
+        for (File file : fList) {
+            if (file.isFile()) {
+                try {
+                    files.add(file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (file.isDirectory()) {
+                getFolderListing(file.getAbsolutePath(), files);
+            }
+        }
     }
 
     public static byte[] hashIt(String passwordIn) throws Exception {

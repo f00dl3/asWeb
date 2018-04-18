@@ -36,6 +36,7 @@ function getSessionVariables() {
                 function(data) {
                     console.log(data);
                     window.localStorage.setItem("sessionVars", data);
+                    isLoggedIn();
                     aniPreload("off");
                 },
                 function(error) { 
@@ -45,12 +46,17 @@ function getSessionVariables() {
     });
 }
 
-function isLoggedIn(userName) {
-    if(sessionVars.loggedIn === true) {
-        window.location.href = getResource(userName);
+function isLoggedIn() {
+    console.log(window.location.pathname);
+    if(sessionVars.loggedIn === "true" && isSet(sessionVars.userName)) {
+        if(window.location.pathname === "/asWeb/") {
+            window.location.href = getResource(sessionVars.userName);
+        }
     } else {
-        window.alert("Not logged in. Please log in!");
-        //window.location.href = getResource(userName);
+        console.log("Not logged in. Please log in!");
+        if(window.location.pathname !== "/asWeb/") {
+            window.location.href = getResource("Landing");
+        }
     }
 }
 
@@ -76,12 +82,8 @@ function setSessionVariable(varName, varValue) {
                 function(data) {
                     aniPreload("off");
                     window.localStorage.setItem("sessionVars", data);
-                    console.log("Session variable [ " + varName + " set to " + varValue + " ]\n" + data);
-                    switch(varName) {
-                        case "userAndPass":
-                            isLoggedIn(sessionVars.userName);
-                            break;
-                    }
+                    window.alert("Session variable [ " + varName + " set to " + varValue + " ]\n" + data);
+                    getSessionVariables();
                 },
                 function(error) { 
                     aniPreload("off");
