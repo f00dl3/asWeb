@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 16 Apr 2018
+Updated: 18 Apr 2018
  */
 
 var msIndex;
@@ -14,6 +14,7 @@ function actOnNonMedia(event) {
     switch(thisFormData.Genre) {
         case "AO_DBX": getDbx(target); break;
         case "Goosebumps": getGoosebumps(target); break;
+        case "Photos": populateGallery(target); break;
         case "PowerRangers": getPowerRangers(target); break;
         case "StarTrek": getStarTrek(target); break;
         case "XFiles": getXFiles(target); break;

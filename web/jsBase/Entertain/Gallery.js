@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 17 Apr 2018
+Updated: 18 Apr 2018
  */
 
 var fileList;
@@ -16,9 +16,7 @@ function actOnYearPicker(event) {
     window.alert(thisFormDataJ);
 }
 
-function getFileListing(argsIn) {
-    // IN DEV
-    // passin [ showListOnly ]
+function getFolderListing(argsIn) {
     aniPreload("on");
     var thePostData = {
         "doWhat": "getFileListing",
@@ -28,16 +26,16 @@ function getFileListing(argsIn) {
         request
             .post(getResource("MediaServer"), {
                 data: thePostData,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
-                    // Expect full file/path name, short file name, image size, image resolution 
-                    generateGallery(argsIn, data);
+                    // Expect full file/path name, short file name, image size, image resolution
+                    //generateGallery(argsIn, data);
                     aniPreload("off");
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for Picture Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request for File Listing FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
@@ -141,9 +139,9 @@ function initGallery(flagsIn, firstArgIn) {
     }
 }
 
-function populateGallery() {
+function populateGallery(target) {
     var fileCount = 0;
-    var productPath = getBasePath("old") + "/Images/Memories/Archived";
+    var productPath = getServerPath("old") + "/Images/Memories/Archived";
     var linkArray = [];
     var rData = "<h4>Photos</h4>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhotoGeo=true' target='photoGeo'>Map GeoCoded Photos</a><p>" +
@@ -157,20 +155,23 @@ function populateGallery() {
     }
     rData += "</select></form><p>" +
             "<div id='Photos'>";
-    var folderListing = {}; // loop through files, list them out, with sizes.
+    var varsToPass = {};
+    varsToPass.thisPath = productPath;
+    getFolderListing(varsToPass);
+    /* var folderListing = {}; // loop through files, list them out, with sizes.
     folderListing.forEach(function (tFile) {
         fileCount++;
         var thisFullPath = tFile.FullPath;
         var thisFileSizeFriendly = (tFile.Size/1024/1024).toFixed(1);
         var thisLinkString = "<a href='" + productPath + "/" + tFile.FileName + "' target='new'>" + tFile.FileName + "</a> (" + thisFileSizeFriendly + ")";
         linkArray.push(thisLinkString);
-    });
+    }); */
     rData += "<h4>Archives</h4>";
     for (var i = 0; i < linkArray.length; i++) {
         rData += "<br/>" + linkArray[i];
     }
     rData += "</div>";
-    dojo.byId("GalleryHolder").innerHTML = rData;
+    dojo.byId(target).innerHTML = rData;
     var yearPickerSelector = dojo.byId("YearPicker");
     dojo.connect(yearPickerSelector, "onchange", actOnYearPicker);
 }

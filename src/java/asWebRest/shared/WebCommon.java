@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 11 Apr 2018
+Updated: 18 Apr 2018
 */
 
 package asWebRest.shared;
@@ -31,6 +31,12 @@ public class WebCommon {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+    
+    public static File[] getFolderListing(File inFolder) {
+        File f = inFolder;
+        File[] listing = f.listFiles();
+        return listing;
     }
 
     public static byte[] hashIt(String passwordIn) throws Exception {

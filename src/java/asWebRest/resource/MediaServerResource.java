@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 15 Apr 2018
+Updated: 18 Apr 2018
  */
 
 package asWebRest.resource;
@@ -10,6 +10,8 @@ import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.UpdateMediaServerAction;
 import asWebRest.dao.MediaServerDAO;
 import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
+import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ public class MediaServerResource extends ServerResource {
     
     @Post
     public String doPost(Representation argsIn) {
+        
+        WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -56,6 +60,19 @@ public class MediaServerResource extends ServerResource {
                     qParams.add(3, "/DBX/%");
                     JSONArray msx = getMediaServerAction.getIndexed(dbc, qParams, xsMobile);
                     returnData += msx.toString();
+                    break;
+                    
+                case "getFileListing":
+                    File folderToList = new File(argsInForm.getFirstValue("folderPath"));
+                    File[] folderListing = wc.getFolderListing(folderToList);
+                    for (File file : folderListing) {
+                        String fileName = file.getName();
+                        long fileSize = file.length();
+                        JSONObject thisObject = new JSONObject();
+                        thisObject.put("Size", fileSize);
+                        mergedResults.put(fileName, thisObject);
+                    }
+                    returnData += mergedResults.toString();                    
                     break;
                     
                 case "getIndexed":

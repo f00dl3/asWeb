@@ -4,7 +4,6 @@ Created: 4 Mar 2018
 Updated: 18 Apr 2018
  */
 
-if(isSet(window.localStorage.getItem("sessionVars"))) { var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars")); }
 
 var annMaint = 910.66;
 var annMiles = 12672;
@@ -14,9 +13,14 @@ var carStartMiles = 44150;
 var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
 var elecCost = 0.14;
+var hiddenFeatures = 0;
 var timeOutMilli = (60*1000);
-var hiddenFeatures = sessionVars.hiddenFeatures;
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
+
+if(isSet(window.localStorage.getItem("sessionVars"))) {
+    var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars"));
+    hiddenFeatures = sessionVars.hiddenFeatures;
+}
 
 $(window).on('load', function() {
     aniPreload("off");
@@ -243,6 +247,12 @@ function getResource(what) {
     }
 }
 
+function getServerPath(what) {
+    switch(what) {
+        case "old": return "/var/www/ASWebUI"; break;
+        case "ui": window.alert("Unknown where new server ends up!"); break;
+    }
+}
 function getSum(numbers) {
     return numbers.reduce(function (a, b) {
         return a + b;
