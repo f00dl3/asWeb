@@ -82,8 +82,6 @@ function setSessionVariable(varName, varValue) {
                 function(data) {
                     aniPreload("off");
                     window.localStorage.setItem("sessionVars", data);
-                    window.alert("Session variable [ " + varName + " set to " + varValue + " ]\n" + data);
-                    getSessionVariables();
                 },
                 function(error) { 
                     aniPreload("off");

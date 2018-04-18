@@ -28,7 +28,8 @@ $(window).on('load', function() {
 
 function actOnLogout(event) {
     dojo.stopEvent(event);
-    setSessionVariable("loggedIn", false);
+    setSessionVariable("loggedIn", "false");
+    window.alert("Attempted logout!");
     window.location.href = getResource("Landing");
 }
 

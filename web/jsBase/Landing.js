@@ -11,6 +11,8 @@ function actOnLogin(event) {
     var thisFormData = dojo.formToObject(this.form);
     var concattedUserAndPass = thisFormData.User + "::" + thisFormData.Pass;
     setSessionVariable("userAndPass", concattedUserAndPass);
+    window.alert("Attempted login!");
+    window.location.href = getResource(sessionVars.userName);
 }
     
 function getWebLogs() {
@@ -66,7 +68,6 @@ function populateLogin() {
 var init = function(event) {
     getWebLogs();
     getWebVersion();
-    getSessionVariables();
     populateLogin();
 };
 
