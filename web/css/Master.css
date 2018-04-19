@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 18 Apr 2018
+Updated: 19 Apr 2018
 */
 
 /* Hidden DIVs */
@@ -215,6 +215,32 @@ Updated: 18 Apr 2018
 	color: white;
 	transform: scaleX(1.025) scaleY(1.025);
 }
+
+.SplashPop {
+	clear: both;
+	display: inline;
+}
+
+.SplashPop:hover .SplashPopO {
+	background-color: #2A2A2A;
+	border: 2px solid blue;
+	border-radius: 3px;
+	color: white;
+	clear: both;
+	display: block;
+	height: 80%;
+	position: fixed;
+	margin-left: 0px;
+	margin-top: 0px;
+	overflow: scroll;
+	padding: 6px;
+	top: 0px;
+	left: 0px;
+	width: 80%;
+	z-index: 99;
+}
+
+.SplashPopO { display: none;  height: auto; }
 
 .U2Pop { clear: both; display: inline; }
 

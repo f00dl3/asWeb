@@ -87,6 +87,13 @@ public class WeatherResource extends ServerResource {
                     returnData = latestObs.toString();
                     break;
                     
+                case "getSpcFeed":
+                    qParams.add(0, "%");
+                    qParams.add(1, "%");
+                    JSONArray spcFeed = getWeatherAction.getSpcLive(dbc, qParams);
+                    returnData = spcFeed.toString();
+                    break;
+                    
             }
         } else {
             returnData = "ERROR: NO POST DATA!";

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 8 Apr 2018
+Updated: 19 Apr 2018
  */
 
 package asWebRest.action;
@@ -45,7 +45,7 @@ public class GetWeatherAction {
     public JSONArray getObsXmlReg(Connection dbc) { return weatherDAO.getObsXmlReg(dbc); }
     public JSONArray getRadarList() { return weatherDAO.getRadarList(); }
     public JSONArray getReanalysis(List qParams) { return weatherDAO.getReanalysis(qParams); }
-    public JSONArray getSpcLive(List qParams) { return weatherDAO.getSpcLive(qParams); }
+    public JSONArray getSpcLive(Connection dbc, List qParams) { return weatherDAO.getSpcLive(dbc, qParams); }
     public JSONArray getStormReportsByDate(List inParams) { return weatherDAO.getStormReportsByDate(inParams); }
     public JSONArray getUuT(List qParams) { return weatherDAO.getUuT(qParams); }
     

@@ -1,11 +1,11 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 18 Apr 2018
+Updated: 19 Apr 2018
  */
 
 function actOnShowFeed() {
-    $("#WxFeeds").toggle();
+    getSpcFeeds();
 }
 
 function actOnShowLive() {
@@ -35,24 +35,46 @@ function buttonListeners() {
     dojo.connect(showNewsButton, "click", actOnShowNews);
 }
 
+function getSpcFeeds() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getSpcFeed" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    popFeeds(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for SPC Feeds FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function popEarthquakes() {
     var rData = "<h4>Earthquakes</h4>" +
             "<strong>See Weather Map for live and historical / archived data!</strong><p>" +
             "<span id='qLinkHolder'></span>";
-    dojo.byId("Quakes").innerHTML = rData;
+    dojo.byId("WxQuakes").innerHTML = rData;
     getWebLinks("Weather.php-EQuake", "qLinkHolder", null);
 }
 
 function popFeeds(spcFeedData) {
-    var rData = "<h4>Weather Feeds</h4>" +
-            "<ul>";
+    var rData = "<h4>Weather Feeds</h4><ul>";
     spcFeedData.forEach(function (spc) {
-        var spcLinkThis = getBasePath("old") + "/Include/SPCFeed.php?Type=" + spc.Type + "&Time=" + spc.GetTime;
-        rData += "<li><a href='" + spcLinkThis + "' target='new'>" +
-                spc.title + "</a></li>";
+        rData += "<li><div class='SplashPop'>" + spc.title +
+                "<div class='SplashPopO'>" +
+                "<h1>" + spc.title + "</h1>" +
+                spc.description +
+                "</div></div></li>";
     });
     rData += "</ul>";
-    dojo.byId("Feeds").innerHTML = rData;
+    dojo.byId("WxFeeds").innerHTML = rData;
+    $("#WxFeeds").toggle();
 }
 
 function popLiveLinks3d() {

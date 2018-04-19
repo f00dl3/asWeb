@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 7 Apr 2018
+Updated: 19 Apr 2018
  */
 
 package asWebRest.dao;
@@ -780,7 +780,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getSpcLive(List<String> qParams) {
+    public JSONArray getSpcLive(Connection dbc, List<String> qParams) {
         final String query_SPCLive = "SELECT GetTime, Type, title, description FROM (" +
                 " SELECT GetTime, 'HN' AS Type, title, description FROM WxObs.NHCFeeds UNION ALL" +
                 " SELECT GetTime, 'MD' AS Type, title, description FROM WxObs.SPCMesoscale UNION ALL" +
@@ -789,7 +789,7 @@ public class WeatherDAO {
                 ") as tmp WHERE GetTime LIKE ? AND Type LIKE ? ORDER BY GetTime DESC LIMIT 20;"; //TimeQuery, TypeQuery
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_SPCLive, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SPCLive, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

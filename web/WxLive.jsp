@@ -24,7 +24,7 @@
             <button class="UButton" id="ShNEmail">News</button>
         </div><p>
         
-        <div id="WxObs">
+        <div id="WxLive">
             <h4>Observations/Forecasts</h4>
             <div id="LiveWarnings"></div><p>
             <div id="ObsCurrent"></div>
@@ -32,9 +32,9 @@
             <div id="ObsLinksList"></div>
         </div>
             
-        <div id="Feeds"></div>
-        <div id="Quakes"></div>
-        <div id="News"></div>
+        <div id="WxFeeds"></div>
+        <div id="WxQuakes"></div>
+        <div id="WxNews"></div>
             
     </div>
              
