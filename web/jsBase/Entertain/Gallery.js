@@ -66,6 +66,7 @@ function getTpPicsCallback(ffn) {
 }
 
 function generateGallery(argsIn, fileList) {
+    console.log(argsIn + ", " + fileList);
     var thisFFN;
     var rData = argsIn.rData;
     var photoCount = 0;
@@ -77,6 +78,7 @@ function generateGallery(argsIn, fileList) {
         var fileName = tFile;
         var fullPath = fileList[tFile].Path;
         var relativePath = "";
+        console.log(argsIn.flagOut);
         switch(argsIn.flagOut) {
             case "tp":
                 relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM/");
@@ -127,6 +129,8 @@ function initGallery(flagsIn, firstArgIn) {
         if(firstArgIn.valueOf() <= lastWarYear) { flagsOut = "tc"; } else { flagsOut = "none"; }
         showListOnly = 0;
         path = "/Pics/" + firstArgIn;
+    } else if (flagsIn === "tp") {
+        flagsOut = "tp";
     }
     switch(flagsOut) {
         case "tc": thisPath = getServerPath("tomcat") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;

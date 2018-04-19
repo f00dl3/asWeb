@@ -18,9 +18,7 @@ function actOnTpSelect(event) {
     var target = "TPGalleryHolderPElement";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormJson = dojo.formToJson(this.form);
-    window.alert(thisFormJson);
-    generateGallery("tp", thisFormData.HashPath);
+    initGallery("tp", thisFormData.TPHash);
 }
 
 function getSearchableData() {
@@ -71,7 +69,7 @@ function getQueueSize() {
 }
 
 function populateImageTagUpdater(target, xTags, tpPic) {
-    var imageFile = "" //?
+    var imageFile = ""; //?
     var rData = "<div class='table'>" +
             "<form class='tr' name='TPUpForm'>" +
             "<span class='td'>" + imageFile + "</span>" +
@@ -89,10 +87,10 @@ function populateImageTagUpdater(target, xTags, tpPic) {
     dojo.connect(doXTag, "click", actOnDoXTag);
 }
 
-function populateGalleryHolder(tpIndexed, tpImgTotal) {
-    var percentIndexed = ((tpIndexed.Files/tpImgTotal)*100).toFixed(2);
-    var rData = "<em>" + tpIndexed.Files + " of " + tpImgTotal + " indexed. (" + percentIndexed + "% done)</em>" +
-            "<p id='TPGalleryHolderPElement'></p>";
+function populateGalleryHolder(/* tpIndexed, tpImgTotal */) {
+    /* var percentIndexed = ((tpIndexed.Files/tpImgTotal)*100).toFixed(2); */
+    var rData = /* "<em>" + tpIndexed.Files + " of " + tpImgTotal + " indexed. (" + percentIndexed + "% done)</em>" + */
+            "<p id='GalleryHolderInside'></p>";
     dojo.byId("TPGalleryHolder").innerHTML = rData;
 }
 
@@ -117,36 +115,39 @@ function populateSearchPopup(searchableData) {
     for (var i = 0; i < cols.length; i++) { hosTable += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
     hosTable += "</div>";
     searchableData.forEach(function (tpData) {
-        /* tpMatcher.forEach(function (tpMatch) {
-            if(tpMatch.HashPath === tpData.HashPath) {
-                done = tpMatch.Indexed;
-                percentDone = Math.round((done/tpData.FinalCount)*100);
-            } else {
-                done = 0;
-                percentDone = 0;
-            }
-        }); */
-        if(percentDone === 0) { fColor = "gray"; } else { fColor = autoColorScale(percentDone, 100, 0, null); }
         tpGallery++;
-        tpImageTotal += (tpImageTotal + tpData.FinalCount);
-        hosTable += "<form id='TPFormGallery' class='tr'>" +
-                "<span class='td'>";
-        if(tpData.OffDisc === 0) { hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>"; } else { hosTable += "N/A"; }
-        hosTable += "</span>" +
-                "<span class='td'><div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet +
-                "<div class='UPopO'>" +
-                "<strong>Submitted: </strong>" + tpData.AddedOn + "<br/>" +
-                "<strong>Hash Path: </strong>" + tpData.HashPath + "<br/>" +
-                "<strong>Description: </strong>" + tpData.Description + "<br/>" + 
-                "<strong>Tags: </strong> " + tpData.Tags + "<br/>" +
-                "</div></div></span>" +
-                "<span class='td'><div class='UPop'>" + tpData.FinalCount +
-                "<div class='UPopO'>" +
-                "<strong>Original: </strong>" + tpData.ImageCount + "<br/>" +
-                "<strong>Indexed: </strong>" + done + "<br/>" +
-                "</div></div></span>" +
-                "</form>";
+        if(tpGallery <= 50) {
+            /* tpMatcher.forEach(function (tpMatch) {
+                if(tpMatch.HashPath === tpData.HashPath) {
+                    done = tpMatch.Indexed;
+                    percentDone = Math.round((done/tpData.FinalCount)*100);
+                } else {
+                    done = 0;
+                    percentDone = 0;
+                }
+            }); */
+            if(percentDone === 0) { fColor = "gray"; } else { fColor = autoColorScale(percentDone, 100, 0, null); }
+            tpImageTotal += (tpImageTotal + tpData.FinalCount);
+            hosTable += "<form id='TPFormGallery' class='tr'>" +
+                    "<span class='td'>";
+            if(tpData.OffDisc === 0) { hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>"; } else { hosTable += "N/A"; }
+            hosTable += "</span>" +
+                    "<span class='td'><div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet +
+                    "<div class='UPopO'>" +
+                    "<strong>Submitted: </strong>" + tpData.AddedOn + "<br/>" +
+                    "<strong>Hash Path: </strong>" + tpData.HashPath + "<br/>" +
+                    "<strong>Description: </strong>" + tpData.Description + "<br/>" + 
+                    "<strong>Tags: </strong> " + tpData.Tags + "<br/>" +
+                    "</div></div></span>" +
+                    "<span class='td'><div class='UPop'>" + tpData.FinalCount +
+                    "<div class='UPopO'>" +
+                    "<strong>Original: </strong>" + tpData.ImageCount + "<br/>" +
+                    "<strong>Indexed: </strong>" + done + "<br/>" +
+                    "</div></div></span>" +
+                    "</form>";
+        }
     });
+    if(tpGallery <= 50) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying 50 of " + tpGallery + " results!"); }
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
     dojo.query(".TPSelect").connect("onchange", actOnTpSelect);
@@ -164,7 +165,8 @@ function tpShowHint(value) {
                 (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Tags) && (sr.Tags).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Categories) && (sr.Categories).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.HashPath) && (sr.HashPath).toLowerCase().includes(value.toLowerCase()))
+                (isSet(sr.HashPath) && (sr.HashPath).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.AddedOn) && (sr.AddedOn).includes(value.toLowerCase()))
             ) { 
                 hitCount++;
                 if(matchingRows.length < 99) {
@@ -181,6 +183,7 @@ function tpShowHint(value) {
 function init() {
     getSearchableData();
     getQueueSize();
+    populateGalleryHolder();
 }
 
 dojo.ready(init);
