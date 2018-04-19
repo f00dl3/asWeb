@@ -251,9 +251,8 @@ function getResource(what) {
 
 function getServerPath(what) {
     switch(what) {
-        case "old": return "/var/www/ASWebUI"; break;
-        case "tomcatOld": return "/var/lib/tomcat8/webapps"; break;
-        case "ui": window.alert("Unknown where new server ends up!"); break;
+        case "apache2": return "/var/www"; break;
+        case "tomcat": return "/var/lib/tomcat8/webapps"; break;
     }
 }
 function getSum(numbers) {
@@ -355,7 +354,8 @@ function putNavi() {
     var goHome = "<a href='" + getBasePath("ui") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
             "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
     var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
-            "<span>" + goHome + " <span id='LogoutSpan'>(Logout)</span></span>" +
+            "<span>" + goHome + " <button class='SButton' id='LogoutSpan'>Logout</button></span>" +
+            "<span id='naviSshLinks'></span>" +
             "<span id='naviLinks'></span>";
     dojo.byId("NaviHolder").innerHTML = rData;
     getWebLinks("Anthony.php-0", "naviLinks", null);

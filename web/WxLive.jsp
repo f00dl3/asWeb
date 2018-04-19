@@ -16,20 +16,27 @@
 <jsp:include page="/inc/Header.jsp?type=full&title=WxLive&scripts=true"></jsp:include>
 
     <body>
+              
+        <div id="ButtonNavi">
+            <button class="UButton" id="ShWxObs">Live</button>
+            <button class="UButton" id="ShFeeds">Feeds</button>
+            <button class="UButton" id="ShQuake">Quakes</button>
+            <button class="UButton" id="ShNEmail">News</button>
+        </div><p>
         
-        <div class="jqAcc">
+        <div id="WxObs">
             <h4>Observations/Forecasts</h4>
-                <div id="LiveWarnings"></div><p>
-                <div id="ObsCurrent"></div>
-                <div id="ObsLinks3D"></div>
-                <div id="ObsLinksList"></div>
-            <h4>Weather Feeds</h4>
-                <div id="WeatherFeeds"></div>
-            <h4>Earthquakes</h4>
-                <div id="Earthquakes"></div>
-            <h4>News & Email</h4>
-                <div id="NewsEmail"></div>
+            <div id="LiveWarnings"></div><p>
+            <div id="ObsCurrent"></div>
+            <div id="ObsLinks3D"></div>
+            <div id="ObsLinksList"></div>
         </div>
+            
+        <div id="Feeds"></div>
+        <div id="Quakes"></div>
+        <div id="News"></div>
+            
+    </div>
              
     </body>
 

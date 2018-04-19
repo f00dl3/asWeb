@@ -12,7 +12,7 @@ function actOnLogin(event) {
     var concattedUserAndPass = thisFormData.User + "::" + thisFormData.Pass;
     setSessionVariable("userAndPass", concattedUserAndPass);
     window.alert("Attempted login!");
-    window.location.href = getResource(sessionVars.userName);
+    window.location.href = getResource("Landing");
 }
     
 function getWebLogs() {

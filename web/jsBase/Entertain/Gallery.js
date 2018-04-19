@@ -89,7 +89,7 @@ function generateGallery(argsIn, fileList) {
                 relativePath = getBasePath("old") + fullPath.replace("/var/lib/tomcat8/webapps/ASWebUI#Tomcat#", "/Tomcat/");
                 break;
             default:
-                relativePath = getBasePath("old") + fullPath.replace("/var/www", "");
+                relativePath = getBasePath("old") + fullPath.replace("/var/www/ASWebUI", "");
                 break;
         }
         if(isSet(fileList[tFile].Width) && isSet(fileList[tFile].Height)) {
@@ -129,9 +129,9 @@ function initGallery(flagsIn, firstArgIn) {
         path = "/Pics/" + firstArgIn;
     }
     switch(flagsOut) {
-        case "tc": thisPath = getServerPath("tomcatOld") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
-        case "tp": thisPath = getServerPath("tomcatOld") + "/TPM#" + firstArgIn + "/full/"; break;
-        case "none": thisPath = getBasePath("old") + "/Images/Memories/" + firstArgIn + "/full/"; break;
+        case "tc": thisPath = getServerPath("tomcat") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
+        case "tp": thisPath = getServerPath("tomcat") + "/TPM#" + firstArgIn + "/full/"; break;
+        case "none": thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/"; break;
         default: window.alert("No flags in!"); break;
     }
     var varToPass = {
@@ -166,7 +166,7 @@ function populateArchiveHolder(varsToPass, fileList) {
 function populateGallery(target) {
     var varsToPass = {};
     var subPath = "/Images/Memories/Archived";
-    varsToPass.thisPath = getServerPath("old") + subPath;
+    varsToPass.thisPath = getServerPath("apache2") + "/ASWebUI" + subPath;
     varsToPass.relativeUrlPath = getBasePath("old") + subPath;
     varsToPass.args2Pass = "archive";
     var rData = "<h4>Photos</h4>" +

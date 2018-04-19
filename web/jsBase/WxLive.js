@@ -1,59 +1,58 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 1 Apr 2018
+Updated: 18 Apr 2018
  */
 
 function actOnShowFeed() {
-    $("#wxFeeds").toggle();
+    $("#WxFeeds").toggle();
 }
 
 function actOnShowLive() {
     getObsDataMerged("ObsCurrent", "static");
     //popLiveLinks3d();
     //popLiveLinksList();
-    $("#wxObsFcst").toggle();
+    $("#WxLive").toggle();
 }
 
 function actOnShowNews() {
-    $("#wxNewsEmail").toggle();
+    $("#WxNews").toggle();
 }
 
 function actOnShowQuakes() {
-    $("#wxEarthquakes").toggle();
+    popEarthquakes();
+    $("#WxQuakes").toggle();
 }
 
 function buttonListeners() {
-    var showLiveButton = dojo.byId("SwxLive");
-    var showFeedButton = dojo.byId("SwxFeeds");
-    var showQuakesButton = dojo.byId("SwxQuakes");
-    var showNewsButton = dojo.byId("SwxNews");
-    dojo.connect(showLiveButton, "onclick", actOnShowLive);
-    dojo.connect(showFeedButton, "onclick", actOnShowFeed);
-    dojo.connect(showQuakesButton, "onclick", actOnShowQuakes);
-    dojo.connect(showNewsButton, "onclick", actOnShowNews);
+    var showLiveButton = dojo.byId("ShWxObs");
+    var showFeedButton = dojo.byId("ShFeeds");
+    var showQuakesButton = dojo.byId("ShQuake");
+    var showNewsButton = dojo.byId("ShNEmail");
+    dojo.connect(showLiveButton, "click", actOnShowLive);
+    dojo.connect(showFeedButton, "click", actOnShowFeed);
+    dojo.connect(showQuakesButton, "click", actOnShowQuakes);
+    dojo.connect(showNewsButton, "click", actOnShowNews);
 }
 
 function popEarthquakes() {
-    var rData = "<strong>See Weather Map for lie and historical / archived data!</strong><p>" +
-            "<ul>";
-    var eqData = getWebLinks("Weather.php-EQuake", null, null);
-    eqData.forEach(function (quake) {
-        rData += "<li><a href='" + quake.URL + "' target='new'>" + quake.Description + "</a></li>";
-    });
-    rData += "</ul>";
-    dojo.byId("Earthquakes").innerHTML = rData;
+    var rData = "<h4>Earthquakes</h4>" +
+            "<strong>See Weather Map for live and historical / archived data!</strong><p>" +
+            "<span id='qLinkHolder'></span>";
+    dojo.byId("Quakes").innerHTML = rData;
+    getWebLinks("Weather.php-EQuake", "qLinkHolder", null);
 }
 
 function popFeeds(spcFeedData) {
-    var rData = "<ul>";
+    var rData = "<h4>Weather Feeds</h4>" +
+            "<ul>";
     spcFeedData.forEach(function (spc) {
         var spcLinkThis = getBasePath("old") + "/Include/SPCFeed.php?Type=" + spc.Type + "&Time=" + spc.GetTime;
         rData += "<li><a href='" + spcLinkThis + "' target='new'>" +
                 spc.title + "</a></li>";
     });
     rData += "</ul>";
-    dojo.byId("WeatherFeeds").innerHTML = rData;
+    dojo.byId("Feeds").innerHTML = rData;
 }
 
 function popLiveLinks3d() {
@@ -115,7 +114,8 @@ function putLiveWarnings(liveWarnings) {
 }
 
 function popNewsEmail(newsEmailFeeds) {
-    var rData = "<ul>";
+    var rData = "<h4>News & Email</h4>" +
+            "<ul>";
     var radioLinks = getWebLinks("WxLive.php-Radio", null, null);
     radioLinks.forEach(function (radio) {
         rData += "<li><a href='" + radio.URL + "' target='new'>" + radio.Description + "</a></li>";
@@ -132,15 +132,12 @@ function popNewsEmail(newsEmailFeeds) {
                 "</div>";
     });
     rData += "</div>";
-    dojo.byId("NewsEmail").innerHTML = rData;
+    dojo.byId("News").innerHTML = rData;
 }
 
 function init() {
-    actOnShowLive();
     buttonListeners();
-    popFeeds();
-    popEarthquakes();
-    popNewsEmail();
+    actOnShowLive();
 }
 
 dojo.ready(init);
