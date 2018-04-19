@@ -36,6 +36,7 @@ function getSearchableData() {
                     tpSearchableData = data.Searchable;
                     tpIndexedImages = data.IndexedImages;
                     populateSearchBox();
+                    populateSearchPopup(data.Searchable);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -100,40 +101,23 @@ function populateQueueSizeHolder(tpQSize) {
     dojo.byId("TPQueueSizeHolder").innerHTML = rData;
 }
 
-function populateSearchBox(/* xTags */) {
+function populateSearchBox() {
     var rData = "<form class='tr' id='TPSearchForm'>" +
             "<span class='td'><input type='text' class='TPSearchBox' name='TPSearchInput' onKeyUp='tpShowHint(this.value)'/></span>" +
-            "<span class='td'><strong><div class='UPopNM'>Search" +
-            "<div class='UPopNMO'>" +
-            "<strong>Tags: </strong><br/>" +
-            "<div class='table'>";
-    /* xTags.forEach(function (xt) {
-        var xtMatches = 0;
-        tpImages.forEach(function (tpi) {
-            if((tpi.XTags).includes(xt.Tag)) {
-                xtMatches++;
-            }
-        });
-        rData += "<div class='tr'>" +
-                "<span class='td'>" + xTags.Tag + "</span>" +
-                "<span class='td'>" + xTags.Description + "</span>" +
-                "<span class='td'>" + xtMatches + "</span>" +
-                "</div>";
-    }); */
-    rData += "</div></div></div></strong></span></form>";
+            "<span class='td'><strong>Search</strong></span></form>";
     dojo.byId("TPSearchBoxHolder").innerHTML = rData;
 }
 
 function populateSearchPopup(searchableData) {
-    if(!isSet(searchableData)) { searchableData = tpSearchableData; }
     var done, percentDone, fColor;
     var tpGallery = 0;
     var tpImageTotal = 0;
     var cols = [ "Do", "Image Set", "Count" ];
     var hosTable = "<div class='table HideOnSearch'><div class='tr'>";
     for (var i = 0; i < cols.length; i++) { hosTable += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
+    hosTable += "</div>";
     searchableData.forEach(function (tpData) {
-        tpMatcher.forEach(function (tpMatch) {
+        /* tpMatcher.forEach(function (tpMatch) {
             if(tpMatch.HashPath === tpData.HashPath) {
                 done = tpMatch.Indexed;
                 percentDone = Math.round((done/tpData.FinalCount)*100);
@@ -141,13 +125,13 @@ function populateSearchPopup(searchableData) {
                 done = 0;
                 percentDone = 0;
             }
-        });
+        }); */
         if(percentDone === 0) { fColor = "gray"; } else { fColor = autoColorScale(percentDone, 100, 0, null); }
         tpGallery++;
         tpImageTotal += (tpImageTotal + tpData.FinalCount);
         hosTable += "<form id='TPFormGallery' class='tr'>" +
                 "<span class='td'>";
-        if(tpData.OffDisc === 0) { hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>"; } else { rData += "N/A"; }
+        if(tpData.OffDisc === 0) { hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>"; } else { hosTable += "N/A"; }
         hosTable += "</span>" +
                 "<span class='td'><div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet +
                 "<div class='UPopO'>" +
@@ -165,14 +149,14 @@ function populateSearchPopup(searchableData) {
     });
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
-    dojo.query(".TPSelect").connect("onchange", actOnTpSubmit);
+    dojo.query(".TPSelect").connect("onchange", actOnTpSelect);
 }
 
 function tpShowHint(value) {
-    var noticeMessage;
     var matchLimitHit = 0;
     var hitCount = 0;
-    if(value.length < 2) {
+    if(value.length > 2) {
+        console.log(value);
         var matchingRows = [];
         tpSearchableData.forEach(function (sr) {
             if(
@@ -180,8 +164,7 @@ function tpShowHint(value) {
                 (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Tags) && (sr.Tags).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Categories) && (sr.Categories).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.HashPath) && (sr.HashPath).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.AddedOn) && (sr.AddedOn).toLowerCase().includes(value.toLowerCase()))
+                (isSet(sr.HashPath) && (sr.HashPath).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
                 if(matchingRows.length < 99) {
