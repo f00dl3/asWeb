@@ -228,7 +228,7 @@ Updated: 19 Apr 2018
 	color: white;
 	clear: both;
 	display: block;
-	height: 80%;
+	height: 85%;
 	position: fixed;
 	margin-left: 0px;
 	margin-top: 0px;
@@ -236,7 +236,7 @@ Updated: 19 Apr 2018
 	padding: 6px;
 	top: 0px;
 	left: 0px;
-	width: 80%;
+	width: 100%;
 	z-index: 99;
 }
 

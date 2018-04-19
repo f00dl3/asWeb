@@ -61,7 +61,6 @@ function getObsData(targetDiv, displayType) {
         timeout: timeOutMilli
     };
     dojo.xhrPost(arObsJsonMq);
-    console.log(obsJsonPostData);
 }
 
 
@@ -117,12 +116,10 @@ function processMarqueeData(theData, lastData, targetDiv) {
         returnData += "<div id='WxObsMarq'>";
         returnData += "<strong>WARNING! " + stationId + " [Marq] data unavailable!</strong>";
         returnData += "<br/>Fetch timestamp: " + getTime;
-        console.log(theData);
     } else {
         var diffTemperature = parseInt(theData.Temperature) - parseInt(lastData.Temperature);
         var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
         var diffPressure = parseInt(theData.Pressure) - parseInt(lastData.Pressure);
-        console.log(diffTemperature + " " + diffPressure + " " + diffDewpoint);
         var gust = "";
         var shortTime = wxShortTime(theData.TimeString);
         if(!isSet(theData.Dewpoint)) { theData.Dewpoint = theData.Temperature; }
@@ -171,7 +168,6 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
         returnData += "<div id='LWObs'>";
         returnData += "<strong>WARNING! " + stationId + " [Obs] data unavailable!</strong>";
         returnData += "<br/>Fetch timestamp: " + getTime;
-        console.log(data);
     } else {
         var diffTemperature = parseInt(theData.Temperature) - parseInt(lastData.Temperature);
         var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
@@ -224,7 +220,6 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;
-    console.log("returnData: " + returnData);
 }
 
 function processUpperAirData(baseEle, stationData) {

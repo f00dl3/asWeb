@@ -51,7 +51,8 @@ function getSpcFeeds() {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for SPC Feeds FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
+                }),
+                $("#WxFeeds").toggle();;
     });
 }
 
@@ -74,7 +75,6 @@ function popFeeds(spcFeedData) {
     });
     rData += "</ul>";
     dojo.byId("WxFeeds").innerHTML = rData;
-    $("#WxFeeds").toggle();
 }
 
 function popLiveLinks3d() {
