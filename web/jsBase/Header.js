@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 18 Apr 2018
+Updated: 19 Apr 2018
  */
 
 
@@ -350,8 +350,9 @@ function nodeState(tNode, state) {
 }
 
 function putNavi() {
-    var uiBasePage = getBasePath("ui") + "/Anthony.jsp";
-    var goHome = "<a href='" + getBasePath("ui") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
+    var uiBasePage = getBasePath("ui");
+    if(isSet(sessionVars.userName)) { uiBasePage = getResource(sessionVars.userName); }
+    var goHome = "<a href='" + uiBasePage + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
             "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
     var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
             "<span>" + goHome + " <button class='SButton' id='LogoutSpan'>Logout</button></span>" +

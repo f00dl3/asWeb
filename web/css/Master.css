@@ -2,10 +2,11 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 15 Apr 2018
+Updated: 18 Apr 2018
 */
 
 /* Hidden DIVs */
+
 #CF6Results, #FitResults, #ObsResults,
     #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit, #HShowETReddit,
     #ETGHours, #ETGIndex, #ETFF14Q,
@@ -15,6 +16,7 @@ Updated: 15 Apr 2018
     { display: none; }
 
 /* Icons */
+
 .th_large { height: 256px; width: 256px; }
 .th_medium { height: 208px; width: 208px; }
 .th_sm_med { height: 156px; width: 156px; }

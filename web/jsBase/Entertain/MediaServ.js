@@ -12,6 +12,7 @@ function actOnNonMedia(event) {
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
     switch(thisFormData.Genre) {
+        case "AO_TP": window.location.href = getBasePath("ui") + "/TPGallery.jsp"; break;
         case "AO_DBX": getDbx(target); break;
         case "Goosebumps": getGoosebumps(target); break;
         case "Photos": populateGallery(target); break;

@@ -1,9 +1,10 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
+Updated: 19 Apr 2018
  */
 
-var tpSearchableData, tpMatcher;
+var tpSearchableData, tpIndexedImages, tpMatcher;
 
 function actOnDoXTag(event) {
     var target = "?";
@@ -20,6 +21,52 @@ function actOnTpSelect(event) {
     var thisFormJson = dojo.formToJson(this.form);
     window.alert(thisFormJson);
     generateGallery("tp", thisFormData.HashPath);
+}
+
+function getSearchableData() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getTpIndex" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("TP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    tpSearchableData = data.Searchable;
+                    tpIndexedImages = data.IndexedImages;
+                    populateSearchBox();
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for TP Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getQueueSize() {
+    getDivLoadingMessage("TPSearchBoxHolder");
+    aniPreload("on");
+    var thePostData = { "doWhat": "getQueueSizeCombined" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("TP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    var regularQueue = data.regular.length;
+                    var archiveQueue = data.archive.length;
+                    var combinedLength = regularQueue + archiveQueue;
+                    populateQueueSizeHolder(combinedLength);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Queue Size FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function populateImageTagUpdater(target, xTags, tpPic) {
@@ -49,18 +96,18 @@ function populateGalleryHolder(tpIndexed, tpImgTotal) {
 }
 
 function populateQueueSizeHolder(tpQSize) {
-    var rData = "Queue size: <strong>" + tpQSize.ToDo + "</strong>";
+    var rData = "Queue size: <strong>" + tpQSize + "</strong>";
     dojo.byId("TPQueueSizeHolder").innerHTML = rData;
 }
 
-function populateSearchBox(xTags, tpImages) {
+function populateSearchBox(/* xTags */) {
     var rData = "<form class='tr' id='TPSearchForm'>" +
             "<span class='td'><input type='text' class='TPSearchBox' name='TPSearchInput' onKeyUp='tpShowHint(this.value)'/></span>" +
             "<span class='td'><strong><div class='UPopNM'>Search" +
             "<div class='UPopNMO'>" +
             "<strong>Tags: </strong><br/>" +
             "<div class='table'>";
-    xTags.forEach(function (xt) {
+    /* xTags.forEach(function (xt) {
         var xtMatches = 0;
         tpImages.forEach(function (tpi) {
             if((tpi.XTags).includes(xt.Tag)) {
@@ -72,7 +119,7 @@ function populateSearchBox(xTags, tpImages) {
                 "<span class='td'>" + xTags.Description + "</span>" +
                 "<span class='td'>" + xtMatches + "</span>" +
                 "</div>";
-    });
+    }); */
     rData += "</div></div></div></strong></span></form>";
     dojo.byId("TPSearchBoxHolder").innerHTML = rData;
 }
@@ -149,7 +196,8 @@ function tpShowHint(value) {
 }
 
 function init() {
-    
+    getSearchableData();
+    getQueueSize();
 }
 
 dojo.ready(init);

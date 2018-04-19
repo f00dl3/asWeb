@@ -1,15 +1,21 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 18 Apr 2018
+Updated: 19 Apr 2018
 */
 
 console.log(sessionVars);
 
 function actOnHiddenToggle(event) {
     dojo.stopEvent(event);
+    if(isSet(sessionVars.hiddenFeatures) && sessionVars.hiddenFeatures === "Enabled") {
+        showNotice("Hidden features disabled!");
+    } else {
+        showNotice("Hidden features enabled!");
+    }
     var thisFormData = dojo.formToObject(this.form);
     setSessionVariable("hiddenFeatures", thisFormData.Hidden);
+    getAnthonyOverviewData();
 }
 
 function getAnthonyOverviewData() {
