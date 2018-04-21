@@ -1,20 +1,19 @@
 <%-- 
-    Document   : Anthony.jsp
-    Created on : Feb 11, 2018, 1:37:57 PM
-    Updated:    20 Apr 2018
+    Document   : Emily.jsp
+    Created on : 20 Apr 2018
     Author     : astump
 --%>
 
 <%
     String headerType = "full";
-    String pageTitle = "Anthony's REST UI";
+    String pageTitle = "Emliy Home";
     String scriptIt = "true";
     String authCheck = "true";
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/inc/Header.jsp?type=full&title=Anthony&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full&title=Emily&scripts=true"></jsp:include>
 
     <body>
         

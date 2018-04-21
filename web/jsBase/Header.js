@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 19 Apr 2018
+Updated: 20 Apr 2018
  */
 
 
@@ -168,7 +168,7 @@ function getBasePath(opt) {
         case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
-        case "media": tBase += "/MediaServ"; break;
+        case "media": tBase += "/MediaServ"; break; // update when migrated to alt disk.
         case "rest": tBase = baseForRestlet; break;
         case "serv": tBase = baseForServlet; break;
         case "old": tBase += "/ASWebUI"; break;
@@ -229,9 +229,11 @@ function getRelatedLinks(page) {
 function getResource(what) {
     switch(what) {
         case "Anthony": case "f00dl3": return getBasePath("ui") + "/Anthony.jsp"; break;
+        case "Cams": return getBasePath("ui") + "/Cams.jsp"; break;
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
+        case "Emily": return getBasePath("ui") + "/Emily.jsp"; break;
         case "Entertainment": return getBasePath("rest") + "/Entertainment"; break;
         case "Fitness": return getBasePath("rest") + "/Fitness"; break;
         case "Finance": return getBasePath("rest") + "/Finance"; break;
@@ -261,7 +263,7 @@ function getSum(numbers) {
     });
 }
 
-function getWebLinks(master, whereTo, a3dFlags) {
+function getWebLinks(master, whereTo, outputType) {
     var arXhr1 = {
         url: getResource("WebLinks"),
         handleAs: "json",
@@ -269,7 +271,7 @@ function getWebLinks(master, whereTo, a3dFlags) {
         timeout: timeOutMilli,
         load: function(data) {
             if(isSet(whereTo)) {
-                putWebLinks(data, whereTo, a3dFlags);
+                putWebLinks(data, whereTo, outputType);
             } else {
                 return data;
             }
@@ -289,7 +291,7 @@ function getWebVersion(whereTo) {
         timeout: timeOutMilli,
         load: function(data) {
             var theData = data[0];
-            var thisDiv = "<div class='UPop'>v" + theData.Version + " (Updated: " + theData.Date + ")";
+            var thisDiv = "<div class='UPop'>v" + theData.Version + " (" + theData.Date + ")";
             thisDiv += "<div class='UPopO'>" + theData.Changes + "</div></div>";
             dojo.byId(whereTo).innerHTML = thisDiv;
         },
@@ -351,20 +353,34 @@ function nodeState(tNode, state) {
 
 function putNavi() {
     var uiBasePage = getBasePath("ui");
-    if(isSet(sessionVars.userName)) { uiBasePage = getResource(sessionVars.userName); }
-    var goHome = "<a href='" + uiBasePage + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
-            "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
-    var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
-            "<span>" + goHome + " <button class='SButton' id='LogoutSpan'>Logout</button></span>" +
-            "<span id='naviSshLinks'></span>" +
-            "<span id='naviLinks'></span>";
-    dojo.byId("NaviHolder").innerHTML = rData;
-    getWebLinks("Anthony.php-0", "naviLinks", null);
+    var overwriteUsername = "";
+    if(isSet(sessionVars.userName)) {
+        uiBasePage = getResource(sessionVars.userName);
+        if(sessionVars.userName === "f00dl3") {
+            overwriteUsername = "Anthony";
+        } else {
+            overwriteUsername = sessionVars.userName;
+        }
+        var goHome = "<a href='" + uiBasePage + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
+                "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
+        var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
+                "<span>" + goHome + "</span>" +
+                "<span id='naviSshLinks'></span><br/>" +
+                "<span id='naviLinks'></span><br/>" +
+                "<button class='SButton' id='LogoutSpan'>Logout</button>";
+        dojo.byId("NaviHolder").innerHTML = rData;
+        getWebLinks(overwriteUsername + ".php-0", "naviLinks", "list");
+        if(overwriteUsername === "Anthony") {
+            getWebLinks(overwriteUsername + ".php-SSH", "naviSshLinks", "bubble");
+        }
+    } else {
+        dojo.byId("NaviHolder").innerHTML = "<button class='SButton' id='LogoutSpan'>Login</button>";
+    }
     var logoutSpan = dojo.byId("LogoutSpan");
     dojo.connect(logoutSpan, "click", actOnLogout);
 }
 
-function putWebLinks(data, whereTo, a3dFlags) {
+function putWebLinks(data, whereTo, outputType) {
     var placeholder = "";
     //var numElems = data.length;
     data.forEach(function (theData) {
@@ -378,10 +394,15 @@ function putWebLinks(data, whereTo, a3dFlags) {
                 theLink = theData.URL;
             }
         }
-        placeholder += "<li><a href='"+theLink+"'>";
-        placeholder += theData.Description;
-        placeholder += "</a></li>";
-        placeholder += "</ul>";
+        if(!isSet(outputType) || outputType === "list") {
+            placeholder += "<li><a href='" + theLink + "'>" + theData.Description + "</a></li>";
+        } else {
+            switch(outputType) {
+                case "bubble":
+                    placeholder += "<button class='UButton'><a href='" + theLink + "' target='new'>" + theData.Bubble + "</a></button> ";
+                    break;
+            }
+        }
     });
     dojo.byId(whereTo).innerHTML = placeholder;
 }

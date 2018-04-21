@@ -1,10 +1,17 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 19 Apr 2018
+Updated: 20 Apr 2018
 */
 
 console.log(sessionVars);
+
+function actOnCalendarSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    window.alert(thisFormDataJ);
+}
 
 function actOnHiddenToggle(event) {
     dojo.stopEvent(event);
@@ -16,6 +23,48 @@ function actOnHiddenToggle(event) {
     var thisFormData = dojo.formToObject(this.form);
     setSessionVariable("hiddenFeatures", thisFormData.Hidden);
     getAnthonyOverviewData();
+}
+
+function generteLinkSpinner(links) {
+    var rData = "";
+    var cubeRes = "width=128 height=128";
+    var numElements = links.length;
+    var elementListX = [];
+    var i = 0;
+    links.forEach(function (link) {
+        var thisElement = "<a styleReplace href='";
+        if(!checkMobile() && isSet(link.DesktopLink)) { thisElement += link.DesktopLink; } else { thisElement += link.URL; }
+        thisElement += " target='newWindow" + i + "'>" +
+                "<img " + cubeRes + " src='" + getBasePath("pageSnaps") + "/" + link.Bubble + ".png' alt='" + link.Description + "'></a>";
+        elementListX.push(thisElement);
+    });
+    rData += "<div style='min-height: 24px;'></div>" +
+            imageLinks3d(elementListX, 25, 208, 2.25);
+    dojo.byId("linkList").innerHTML = rData;
+}
+
+function get3dLinkList() {   
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "get3dLinkList",
+        "master1": "Anthony.php-0"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("WebLinks"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    generteLinkSpinner(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for 3D Link List FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                }),
+                $("#WxNews").toggle();;
+    });
 }
 
 function getAnthonyOverviewData() {
@@ -146,7 +195,9 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     rData += javaScriptSchit + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
+    var quickCalButton = dojo.byId("QuickCalendar");
     dojo.connect(hiddenCheckbox, "onchange", actOnHiddenToggle);
+    dojo.connect(quickCalBtn, "click", actOnCalendarSubmit);
     $("#inLogs").toggle();
 }
 
@@ -155,9 +206,18 @@ function logButtonListener() {
     dojo.connect(logButton, "onclick", getAnthonyOverviewData);
 }
 
+function popLinkList() {
+    if(checkMobile()) {
+        getWebLinks("Anthony.php-0", "linkList", "list");
+    } else {
+        get3dLinkList();
+    }
+}
+
 var initAnthony = function(event) {
     getObsDataMerged("disHolder", "marquee");
-    getWebLinks("Anthony.php-0", "linkList", null);
+    getWebLinks("Anthony.php-SSH", "sshLinks", "bubble");
+    popLinkList();
     getWebVersion("versionPlaceholder");
     logButtonListener();
 };

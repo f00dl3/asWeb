@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 19 Apr 2018
+Updated: 20 Apr 2018
  */
 
 function actOnShowFeed() {
@@ -10,13 +10,13 @@ function actOnShowFeed() {
 
 function actOnShowLive() {
     getObsDataMerged("ObsCurrent", "static");
-    //popLiveLinks3d();
-    //popLiveLinksList();
+    getLiveLinks3d();
+    popLiveLinksList();
     $("#WxLive").toggle();
 }
 
 function actOnShowNews() {
-    $("#WxNews").toggle();
+    getNewsEmail();
 }
 
 function actOnShowQuakes() {
@@ -33,6 +33,55 @@ function buttonListeners() {
     dojo.connect(showFeedButton, "click", actOnShowFeed);
     dojo.connect(showQuakesButton, "click", actOnShowQuakes);
     dojo.connect(showNewsButton, "click", actOnShowNews);
+}
+
+function getLiveLinks3d() {   
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getLiveLinks",
+        "master1": "Weather.php-IRS",
+        "master2": "Weather.php-7Day"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("WebLinks"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    popLiveLinks3d(
+                        data.irsLinks,
+                        data.df7Links
+                    );
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for 3D Weather Links FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                }),
+                $("#WxNews").toggle();;
+    });
+}
+
+function getNewsEmail() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getNewsEmail" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    popNewsEmail(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for News/Email FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                }),
+                $("#WxNews").toggle();;
+    });
 }
 
 function getSpcFeeds() {
@@ -77,17 +126,15 @@ function popFeeds(spcFeedData) {
     dojo.byId("WxFeeds").innerHTML = rData;
 }
 
-function popLiveLinks3d() {
+function popLiveLinks3d(irsLinks, df7Links) {
     var cubeRes = "class='th_sm_med'";
     var elementListWx1 = [];
-    var irsLinks = getWebLinks("Weather.php-IRS", null, null);
     var irsElems = irsLinks.length;
     irsLinks.forEach(function (irs) {
         var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
                 "<img " + cubeRes + " src='" + irs.URL + "/></a>";
         elementListWx1.push(tElem);
     });
-    var df7Links = getWebLinks("Weather.php-7Day", null, null);
     var df7Elems = df7Links.length;
     df7Links.forEach(function (df7) {
         var tElem = "<a styleReplace hrf='" + df7.URL + "' target='new'>" +
@@ -102,26 +149,14 @@ function popLiveLinks3d() {
 }
 
 function popLiveLinksList() {
-    var rData = "<ul>";
-    var codLi = "<li>CoDP Radars: ";
-    var codLinks = getWebLinks("Weather.php-RadSat-CDRad", null, null);
-    codLinks.forEach(function (cod) {
-        codLi += "<a href='" + cod.URL + "' target='new'><button class='UButton'>" + cod.Bubble + "</button></a>";
-    });
-    codLi += "</li>";
-    var modelLi = "<li>Models: ";
-    var modelLinks = getWebLinks("Weather.php-FModel", null, null);
-    modelLinks.forEach(function (model) {
-        modelLi += "<a href='" + model.URL + "' target='new'><button class='UButton'>" + model.Bubble + "</bubble></a>";
-    });
-    modelLi += "</li>";
-    rData += codLi + modelLi;
-    var obsLinks = getWebLinks("Weather.php-Observations", null, null);
-    obsLinks.forEach(function (obs) {
-        rData += "<li><a href='" + obs.URL + "' target='new'>" + obs.Description + "</a></li>";
-    });
-    rData += "</ul>";
+    var codLi = "<li>CoDP Radars: <span id='codBubbles'></span>";
+    var modelLi = "<li>Models: <span id='modelBubbles'></span>";
+    var obsLinks = "<ul><span id='obsLinks'></span></ul>";
+    var rData = codLi + modelLi + obsLinks;
     dojo.byId("ObsLinksList").innerHTML = rData;
+    getWebLinks("Weather.php-RadSat-CDRad", "codBubbles", "bubble");
+    getWebLinks("Weather.php-FModel", "modelBubbles", "bubble");
+    getWebLinks("Weather.php-Observations", "obsLinks", "list");
 }
 
 function putLiveWarnings(liveWarnings) {
@@ -137,12 +172,7 @@ function putLiveWarnings(liveWarnings) {
 
 function popNewsEmail(newsEmailFeeds) {
     var rData = "<h4>News & Email</h4>" +
-            "<ul>";
-    var radioLinks = getWebLinks("WxLive.php-Radio", null, null);
-    radioLinks.forEach(function (radio) {
-        rData += "<li><a href='" + radio.URL + "' target='new'>" + radio.Description + "</a></li>";
-    });
-    rData += "</ul><p>" +
+            "<ul><span id='radioLinks'></span></ul><p>" +
             "<div class='table'>";
     newsEmailFeeds.forEach(function (nem) {
         rData += "<div class='tr'>" +
@@ -155,6 +185,7 @@ function popNewsEmail(newsEmailFeeds) {
     });
     rData += "</div>";
     dojo.byId("News").innerHTML = rData;
+    getWebLinks("WxLive.php-Radio", "radioLinks", "list");
 }
 
 function init() {

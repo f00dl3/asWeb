@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 15 Apr 2018
+Updated: 19 Apr 2018
  */
 
 package asWebRest.dao;
@@ -38,7 +38,7 @@ public class MediaServerDAO {
                 " SUBSTRING(Description,1,48) AS DescriptionLimited," +
                 " LastSelected, PlayCount, Burned, BDate, Media, Working, OffDisk, Archived," +
                 " BitRate, Hz, Channels, Resolution, Pages, MPAA, MPAAContent, XTags, XTagVer, GeoData, GIFVer," +
-                " WarDeploy, DateIndexed, TrackListingASON" +
+                " WarDeploy, DateIndexed, TrackListingASON, AltDisk" +
                 " FROM Core.MediaServer" +
                 " WHERE (1=? OR Adult=?)" + // AdultTest, Adult
                 " AND (1=? OR Path LIKE ?);"; // TestPath, Test
@@ -82,7 +82,8 @@ public class MediaServerDAO {
                     .put("GIFVer", resultSet.getInt("GIFVer"))
                     .put("WarDeploy", resultSet.getInt("WarDeploy"))
                     .put("DateIndexed", resultSet.getString("DateIndexed"))
-                    .put("TrackListingASON",resultSet.getString("TrackListingASON"));                    
+                    .put("TrackListingASON",resultSet.getString("TrackListingASON"))
+                    .put("AltDisk", resultSet.getInt("AltDisk"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();

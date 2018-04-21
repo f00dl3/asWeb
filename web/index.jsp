@@ -1,9 +1,10 @@
 <%-- 
     Document   : index.jsp
     Created on : Feb 10, 2018, 1:09:23 PM
-    Updated:    18 Apr 2018
+    Updated:    19 Apr 2018
     Author     : astump
 
+    Notes: Consider building for alt deployment location i.e. Raspberry Pi
 
 --%>
 

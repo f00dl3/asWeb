@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
+Updated: 19 Apr 2018
 
 Applies to tables:
     Core.MediaServer
@@ -13,6 +14,7 @@ public class MediaServer {
     
     private int adult;
     private String albumArt;
+    private int altDisk;
     private String archived;
     private String artist;
     private int asset;
@@ -47,6 +49,7 @@ public class MediaServer {
     
     public int getAdult() { return adult; }
     public String getAlbumArt() { return albumArt; }
+    public int getAltDisk() { return altDisk; }
     public String getArchived() { return archived; }
     public String getArtist() { return artist; }
     public int getAsset() { return asset; }
@@ -81,6 +84,7 @@ public class MediaServer {
     
     public void setAdult(int adult) { this.adult = adult; }
     public void setAlbumArt(String albumArt) { this.albumArt = albumArt; }
+    public void setAltDisk(int altDisk) { this.altDisk = altDisk; }
     public void setArchived(String archived) { this.archived = archived; }
     public void setArtist(String artist) { this.artist = artist; }
     public void setAsset(int asset) { this.asset = asset; }
