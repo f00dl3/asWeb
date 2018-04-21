@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 20 Apr 2018
+Updated: 21 Apr 2018
 */
 
 console.log(sessionVars);
@@ -196,7 +196,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
     var quickCalButton = dojo.byId("QuickCalendar");
     dojo.connect(hiddenCheckbox, "onchange", actOnHiddenToggle);
-    dojo.connect(quickCalBtn, "click", actOnCalendarSubmit);
+    dojo.connect(quickCalButton, "click", actOnCalendarSubmit);
     $("#inLogs").toggle();
 }
 

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 8 Apr 2018
+Updated: 20 Apr 2018
  */
 
 package asWebRest.resource;
@@ -10,8 +10,6 @@ import asWebRest.action.GetWebLinkAction;
 import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
@@ -42,10 +40,17 @@ public class WebLinkResource extends ServerResource {
         final Form argsInForm = new Form(argsIn);
         
         String master = null;
+        String doWhat = null;
         String returnData = "";
          
         try {
             master = argsInForm.getFirstValue("master");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        try {
+            doWhat = argsInForm.getFirstValue("doWhat");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,6 +60,13 @@ public class WebLinkResource extends ServerResource {
             JSONArray webLinks = getWebLinkAction.getWebLinks(dbc, master);
             returnData += webLinks.toString();
         } else {
+            if(doWhat != null) {
+                
+                switch(doWhat) {
+                    // Build out!
+                }
+                
+            }
             returnData += "ERROR: NO POST DATA!";
         }        
     
