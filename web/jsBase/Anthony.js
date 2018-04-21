@@ -46,8 +46,7 @@ function generteLinkSpinner(links) {
 function get3dLinkList() {   
     aniPreload("on");
     var thePostData = {
-        "doWhat": "get3dLinkList",
-        "master1": "Anthony.php-0"
+        "master": "Anthony.php-0"
     };
     require(["dojo/request"], function(request) {
         request
@@ -207,10 +206,11 @@ function logButtonListener() {
 }
 
 function popLinkList() {
-    if(checkMobile()) {
+    if(!checkMobile() || checkMobile()) {
         getWebLinks("Anthony.php-0", "linkList", "list");
     } else {
-        get3dLinkList();
+        //get3dLinkList();
+        console.log("Disabled as it doesn't work!");
     }
 }
 

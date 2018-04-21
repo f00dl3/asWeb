@@ -365,9 +365,9 @@ function putNavi() {
                 "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
         var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
                 "<span>" + goHome + "</span>" +
+                "<button class='SButton' id='LogoutSpan'>Logout</button><br/>" +
                 "<span id='naviSshLinks'></span><br/>" +
-                "<span id='naviLinks'></span><br/>" +
-                "<button class='SButton' id='LogoutSpan'>Logout</button>";
+                "<span id='naviLinks'></span>";
         dojo.byId("NaviHolder").innerHTML = rData;
         getWebLinks(overwriteUsername + ".php-0", "naviLinks", "list");
         if(overwriteUsername === "Anthony") {
@@ -394,14 +394,13 @@ function putWebLinks(data, whereTo, outputType) {
                 theLink = theData.URL;
             }
         }
-        if(!isSet(outputType) || outputType === "list") {
-            placeholder += "<li><a href='" + theLink + "'>" + theData.Description + "</a></li>";
-        } else {
-            switch(outputType) {
-                case "bubble":
-                    placeholder += "<button class='UButton'><a href='" + theLink + "' target='new'>" + theData.Bubble + "</a></button> ";
+        switch(outputType) {
+            case "bubble":
+                    placeholder += "<a href='" + theLink + "' target='new'><button class='UButton'>" + theData.Bubble + "</button></a>";
                     break;
-            }
+            case "list": default: 
+                placeholder += "<li><a href='" + theLink + "'>" + theData.Description + "</a></li>";
+                break;
         }
     });
     dojo.byId(whereTo).innerHTML = placeholder;

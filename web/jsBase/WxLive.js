@@ -35,7 +35,7 @@ function buttonListeners() {
     dojo.connect(showNewsButton, "click", actOnShowNews);
 }
 
-function getLiveLinks3d() {   
+function getLiveLinks3d() {  // build it! 
     aniPreload("on");
     var thePostData = {
         "doWhat": "getLiveLinks",

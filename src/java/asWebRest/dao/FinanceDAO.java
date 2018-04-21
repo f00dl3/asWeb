@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 11 Apr 2018
+Updated: 20 Apr 2018
 */
 
 package asWebRest.dao;
@@ -244,7 +244,7 @@ public class FinanceDAO {
     }
     
     public JSONArray getChecking(Connection dbc) { 
-        final String query_FBook_Checking = "SELECT FORMAT((SUM(Credit-Debit)),2) AS Balance FROM Core.FB_CFCK01 WHERE Date <= current_date;";
+        final String query_FBook_Checking = "SELECT SUM(Credit-Debit) AS Balance FROM Core.FB_CFCK01 WHERE Date <= current_date;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Checking, null);

@@ -28,7 +28,7 @@
         <div id="WxLive">
             <h4>Observations/Forecasts</h4>
             <div id="LiveWarnings"></div><p>
-            <div id="ObsCurrent"></div>
+            <div id="ObsCurrent"></div><p>
             <div id="ObsLinks3D"></div>
             <div id="ObsLinksList"></div>
         </div>

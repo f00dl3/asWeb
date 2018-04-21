@@ -160,7 +160,7 @@ function putOverview(finGlob) {
     var x3nw = finGlob.x3nw[0];
     var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
-    genOverviewChecking(cbData)
+    genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
     genOverviewMortgage(mortData, amSch);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt);
