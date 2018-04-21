@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 20 Apr 2018
+Updated: 21 Apr 2018
  */
 
 
@@ -168,7 +168,7 @@ function getBasePath(opt) {
         case "getOld": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
-        case "media": tBase += "/MediaServ"; break; // update when migrated to alt disk.
+        case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
         case "serv": tBase = baseForServlet; break;
         case "old": tBase += "/ASWebUI"; break;
@@ -245,6 +245,7 @@ function getResource(what) {
         case "Pto": return getBasePath("rest") + "/PTO"; break;
         case "Session": return getBasePath("serv") + "/Session"; break;
         case "TP": return getBasePath("rest") + "/TP"; break;
+        case "WebCal": return getBasePath("rest") + "/WebCal"; break;
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
         case "WebVersion": return getBasePath("rest") + "/WebVersion"; break;
         case "Wx": return getBasePath("rest") + "/Wx"; break;

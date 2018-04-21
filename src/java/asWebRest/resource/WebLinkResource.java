@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 20 Apr 2018
+Updated: 21 Apr 2018
  */
 
 package asWebRest.resource;
@@ -11,6 +11,7 @@ import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -37,6 +38,9 @@ public class WebLinkResource extends ServerResource {
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
+        GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
+        JSONObject mergedResults = new JSONObject();   
+        
         final Form argsInForm = new Form(argsIn);
         
         String master = null;
@@ -56,14 +60,22 @@ public class WebLinkResource extends ServerResource {
         }
         
         if(master != null) {
-            GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
             JSONArray webLinks = getWebLinkAction.getWebLinks(dbc, master);
             returnData += webLinks.toString();
         } else {
             if(doWhat != null) {
                 
                 switch(doWhat) {
-                    // Build out!
+                    
+                    case "getLiveLinks":
+                        JSONArray irsLinks = getWebLinkAction.getWebLinks(dbc, argsInForm.getFirstValue("master1"));
+                        JSONArray df7Links = getWebLinkAction.getWebLinks(dbc, argsInForm.getFirstValue("master2"));
+                        mergedResults
+                            .put("irsLinks", irsLinks)
+                            .put("df7Links", df7Links);
+                        returnData = mergedResults.toString();
+                        break;
+                        
                 }
                 
             }
