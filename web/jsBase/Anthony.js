@@ -33,7 +33,7 @@ function generteLinkSpinner(links) {
     links.forEach(function (link) {
         var thisElement = "<a styleReplace href='";
         if(!checkMobile() && isSet(link.DesktopLink)) { thisElement += link.DesktopLink; } else { thisElement += link.URL; }
-        thisElement += " target='newWindow" + i + "'>" +
+        thisElement += "' target='newWindow" + i + "'>" +
                 "<img " + cubeRes + " src='" + getBasePath("pageSnaps") + "/" + link.Bubble + ".png' alt='" + link.Description + "'></a>";
         elementListX.push(thisElement);
     });

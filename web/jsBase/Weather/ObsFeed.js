@@ -82,10 +82,11 @@ function getObsDataMerged(targetDiv, displayType) {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
-            var lastData = JSON.parse(data.wxObsM1H[0].jsonSet);
+            var lastData;
             var theData = JSON.parse(data.wxObsNow[0].jsonSet);
+            if(isSet(data.wxObsM1H[0])) { lastData = JSON.parse(data.wxObsM1H[0].jsonSet); } else { lastData = theData; }
             var indoorObs = data.indoorObs;
-            var nowObsId = data.wxObsM1H[0].ObsID;
+            var nowObsId = lastData.ObsID;
             switch(displayType) {
                 case "marquee":
                     processMarqueeData(theData, lastData, targetDiv);

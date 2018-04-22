@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 7 Apr 2018
+Updated: 22 Apr 2018
  */
 
 package asWebRest.application;
@@ -22,6 +22,7 @@ import asWebRest.resource.NewsFeedResource;
 import asWebRest.resource.SnmpResource;
 import asWebRest.resource.PtoResource;
 import asWebRest.resource.SessionResource;
+import asWebRest.resource.TestResource;
 import asWebRest.resource.TpResource;
 import asWebRest.resource.UtilityUseResource;
 import asWebRest.resource.WeatherResource;
@@ -70,6 +71,7 @@ public class AnthonyRestlet extends Application {
         router.attach("/SessionVars", SessionResource.class);
         router.attach("/SNMP", SnmpResource.class);
         router.attach("/PTO", PtoResource.class);
+        router.attach("/Test", TestResource.class);
         router.attach("/TP", TpResource.class);
         router.attach("/UtilityUse", UtilityUseResource.class);
         router.attach("/Wx", WeatherResource.class);
