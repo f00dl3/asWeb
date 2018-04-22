@@ -174,6 +174,7 @@ function getBasePath(opt) {
         case "old": tBase += "/ASWebUI"; break;
         case "oldRoot": tBase = tBase; break;
         case "osmTiles": tBase += "/osm_tiles/"; break;
+        case "pageSnaps": tBase = baseForUi + "/img/PageSnaps"; break;
         case "tomcatOld": tBase = baseForUi + "/x"; break;
         case "ui": tBase = baseForUi; break;
     }
@@ -308,7 +309,7 @@ function imageLinks3d(elems, maxW, maxH, tFact) {
         var rotation = 0;
 	var radius = Math.floor(320/(2*Math.tan(deg2rad(180/(numElems/tFact)))));
 	var genOut = "<div id='stage' style='" +
-                " width: " + maxW + "px; height: " + maxH + "px;";
+                " width: " + maxW + "px; height: " + maxH + "px;" +
                 "'><div id='spinner'>";
 	elems.forEach(function(element) {
             var thisCSS = "style='";

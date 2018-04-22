@@ -79,7 +79,7 @@ public class WebLinkResource extends ServerResource {
                 }
                 
             }
-            returnData += "ERROR: NO POST DATA!";
+            
         }        
     
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }

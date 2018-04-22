@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 20 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function actOnShowFeed() {
@@ -132,7 +132,7 @@ function popLiveLinks3d(irsLinks, df7Links) {
     var irsElems = irsLinks.length;
     irsLinks.forEach(function (irs) {
         var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
-                "<img " + cubeRes + " src='" + irs.URL + "/></a>";
+                "<img " + cubeRes + " src='" + irs.URL + "'/></a>";
         elementListWx1.push(tElem);
     });
     var df7Elems = df7Links.length;

@@ -13,6 +13,10 @@ import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.restlet.data.Form;
@@ -32,7 +36,7 @@ public class WebCalResource extends ServerResource {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetWebCalAction getWebCalAction = new GetWebCalAction(new WebCalDAO());
-        JSONArray llid = getWebCalAction.getLastLogId(dbc);  
+        JSONObject llid = getWebCalAction.getLastLogId(dbc);  
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         
@@ -64,13 +68,45 @@ public class WebCalResource extends ServerResource {
         }
         
         if(doWhat != null) {
-            
             switch(doWhat) {
                 
-                case "QuickCalEntry":
-                    JSONArray llid = getWebCalAction.getLastLogId(dbc);
-                    returnData += "Kicked off!\n";
-                    returnData += llid.toString();
+                case "setQuickCalEntry":
+                    List<String> qParams2 = new ArrayList<>();
+                    List<String> qParams3 = new ArrayList<>();
+                    JSONObject log = getWebCalAction.getLastLogId(dbc);
+                    String timeInString = argsInForm.getFirstValue("QuickStart");
+                    String eventTitle = argsInForm.getFirstValue("QuickTitle");
+                    DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+                    DateTimeFormatter formatDate = DateTimeFormat.forPattern("yyyyMMdd");
+                    DateTimeFormatter formatTime = DateTimeFormat.forPattern("HHmmss");
+                    DateTime inputtedTime = inputFormat.parseDateTime(timeInString);                    
+                    LocalDateTime currentDateTime = new LocalDateTime();
+                    int nextCEID = (log.getInt("CEID")) + 1;
+                    int nextCLID = (log.getInt("CLID")) + 1;
+                    int duration = 0;
+                    String date_Ymd = formatDate.print(currentDateTime);
+                    String date_His = formatTime.print(currentDateTime);
+                    String start_Ymd = formatDate.print(inputtedTime);
+                    String start_His = formatTime.print(inputtedTime);
+                    qParams.add(0, Integer.toString(nextCEID));
+                    qParams2.add(0, Integer.toString(nextCLID));
+                    qParams2.add(1, Integer.toString(nextCEID));
+                    qParams2.add(2, date_Ymd);
+                    qParams2.add(3, date_His);
+                    qParams3.add(0, Integer.toString(nextCEID));
+                    qParams3.add(1, start_Ymd);
+                    qParams3.add(2, start_His);
+                    qParams3.add(3, date_Ymd);
+                    qParams3.add(4, date_His);
+                    qParams3.add(5, Integer.toString(duration));
+                    qParams3.add(6, start_Ymd);
+                    qParams3.add(7, start_His);
+                    qParams3.add(8, eventTitle);
+                    qParams3.add(9, eventTitle);
+                    returnData += "Attempting entry " + nextCEID + "\n" +
+                            updateWebCalAction.setAddEntryUser(dbc, qParams) + "\n" +
+                            updateWebCalAction.setAddEntryLog(dbc, qParams2) + "\n" +
+                            updateWebCalAction.setAddEntry(dbc, qParams3);
                     break;
             
             }

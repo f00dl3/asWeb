@@ -8,12 +8,12 @@ package asWebRest.action;
 
 import asWebRest.dao.WebCalDAO;
 import java.sql.Connection;
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GetWebCalAction {
     
     private WebCalDAO webCalDAO;
     public GetWebCalAction(WebCalDAO webCalDAO) { this.webCalDAO = webCalDAO; }
-    public JSONArray getLastLogId(Connection dbc) { return webCalDAO.getLastLogId(dbc); }
+    public JSONObject getLastLogId(Connection dbc) { return webCalDAO.getLastLogId(dbc); }
     
 }

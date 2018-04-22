@@ -8,9 +8,8 @@ console.log(sessionVars);
 
 function actOnCalendarSubmit(event) {
     dojo.stopEvent(event);
-    var thisFormDataJ = dojo.formToJson(this.form);
-    putQuickCalendarEntry(thisFormDataJ);
-    window.alert(thisFormDataJ);
+    var thisFormData = dojo.formToObject(this.form);
+    putQuickCalendarEntry(thisFormData);
 }
 
 function actOnHiddenToggle(event) {
@@ -102,7 +101,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             "<div class='table'><form class='tr' id='QuickCalFormTr'>" +
             "<span class='td'><input name='QuickStart' type='text' value='YYYY-MM-DD HH:II' style='width: 100px;'/></span>" +
             "<span class='td'><input name='QuickTitle' type='text' value='' style='width: 100px;' />" +
-            "<input name='doWhat' type='hidden' value='QuickCalEntry'/>" +
+            "<input name='doWhat' type='hidden' value='setQuickCalEntry'/>" +
             "<button id='QuickCalBtn' name='QuickCalendar' class='UButton'>Go</button>" +
             "</span></form></div></div>";
     toolHolder += quickWebCalEntryForm;
@@ -207,30 +206,33 @@ function logButtonListener() {
 }
 
 function popLinkList() {
-    if(!checkMobile() || checkMobile()) {
+    if(checkMobile()) {
         getWebLinks("Anthony.php-0", "linkList", "list");
     } else {
-        //get3dLinkList();
-        console.log("3D Link List Disabled as it doesn't work!");
+        get3dLinkList();
     }
 }
 
-function putQuickCalendarEntry(formDataJson) {
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("WebCal"), {
-                data: formDataJson,
-                handleAs: "text"
-            }).then(
-                function(data) {
-                    aniPreload("off");
-                },
-                function(error) { 
-                    aniPreload("off");
-                    window.alert("request for Quick WebCal Entry FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });
+function putQuickCalendarEntry(formData) {
+    aniPreload("on");
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("WebCal"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            window.alert(data);
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            aniPreload("off");
+            window.alert("request for Quick WebCal Entry FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
+
 var initAnthony = function(event) {
     getObsDataMerged("disHolder", "marquee");
     getWebLinks("Anthony.php-SSH", "sshLinks", "bubble");
