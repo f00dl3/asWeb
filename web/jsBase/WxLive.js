@@ -6,6 +6,9 @@ Updated: 22 Apr 2018
 
 function actOnShowFeed() {
     getSpcFeeds();
+    $("#WxLive").hide();
+    $("#WxQuakes").hide();
+    $("#WxNews").hide();
 }
 
 function actOnShowLive() {
@@ -13,14 +16,23 @@ function actOnShowLive() {
     getLiveLinks3d();
     popLiveLinksList();
     $("#WxLive").toggle();
+    $("#WxFeeds").hide();
+    $("#WxQuakes").hide();
+    $("#WxNews").hide();
 }
 
 function actOnShowNews() {
     getNewsEmail();
+    $("#WxFeeds").hide();
+    $("#WxQuakes").hide();
+    $("#WxLive").hide();
 }
 
 function actOnShowQuakes() {
     popEarthquakes();
+    $("#WxFeeds").hide();
+    $("#WxLive").hide();
+    $("#WxNews").hide();
     $("#WxQuakes").toggle();
 }
 
@@ -175,16 +187,18 @@ function popNewsEmail(newsEmailFeeds) {
             "<ul><span id='radioLinks'></span></ul><p>" +
             "<div class='table'>";
     newsEmailFeeds.forEach(function (nem) {
-        rData += "<div class='tr'>" +
+        if(isSet(nem.description)) {
+            rData += "<div class='tr'>" +
                 "<span class='td'>" + nem.pubDate + "</span>" +
                 "<span class='td'><div class='UPop'>" + nem.title +
-                "<div class='UPopO'>" + stripTags(nem.Description) + "</div>" +
+                "<div class='UPopO'>" + basicInputFilter(nem.description) + "</div>" +
                 "</div></span>" +
                 "<span class='td'><a href='" + nem.link + "' target='new'>" + nem.Source + "</a></span>" +
                 "</div>";
+        }
     });
     rData += "</div>";
-    dojo.byId("News").innerHTML = rData;
+    dojo.byId("WxNews").innerHTML = rData;
     getWebLinks("WxLive.php-Radio", "radioLinks", "list");
 }
 

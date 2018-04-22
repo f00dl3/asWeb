@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 12 Apr 2018
+Updated: 22 Apr 2018
  */
 
 var searchableData;
@@ -23,6 +23,12 @@ function actOnCheckbookFormSubmit(event) {
 function displayCheckbook() {
     getCheckbook();
     $("#FBCheck").toggle();
+    $("#FBAuto").hide();
+    $("#FBBills").hide();
+    $("#FBBlue").hide();
+    $("#FBAsset").hide();
+    $("#FBWorkPTO").hide();
+    $("#FBUUse").hide();
 }
 
 function genOverviewChecking(cbData) {

@@ -2,27 +2,37 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 15 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function displayGames() {
     gameButtonListeners();
     $("#ETGameAll").toggle();
+    $("#ETLego").hide();
+    $("#ETReddit").hide();
+    $("#ETCooking").hide();
+    $("#ETStream").hide();
 }
 
 function displayGameFf14q() {
     var target = "ETGFF14Q";
     getGameFf14q(target);
+    $("#ETGHours").hide();
+    $("#ETGIndex").hide();
 }
 
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
+    $("#ETGFF14Q").hide();
+    $("#ETGIndex").hide();
 }
 
 function displayGameIndex() {
     var target = "ETGIndex";
     getGameIndex(target);
+    $("#ETGFF14Q").hide();
+    $("#ETGHours").hide();
 }
 
 function getGameData(target) {

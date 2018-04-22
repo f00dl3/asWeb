@@ -1,6 +1,7 @@
 /* 
  * by Anthony Stump
  * Created: 15 Apr 2018
+ * Updated: 22 Apr 2018
  */
 
 var legoData;
@@ -11,6 +12,10 @@ function displayLego() {
     putBrixSearchBox(target);
     getLego("LegoPopup");
     $("#"+target).toggle();
+    $("#ETCooking").hide();
+    $("#ETReddit").hide();
+    $("#ETGameAll").hide();
+    $("#ETStream").hide();
 }
 
 function getLego(legoHolder) {
@@ -44,8 +49,6 @@ function legoHint(value) {
         legoData.forEach(function (sr) {
             if(
                 (isSet(sr.Number) && (sr.Number).toLowerCase().includes(value.toLowerCase())) ||
-                //Errors out - still to debug!
-                (isSet(sr.Year) && (sr.Year).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Variant) && (sr.Variant).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Theme) && (sr.Theme).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Subtheme) && (sr.Subtheme).toLowerCase().includes(value.toLowerCase())) ||
@@ -96,4 +99,5 @@ function returnBrixResults(legoData, hitCount, matchLimitHit) {
                 "<span class='td'>" + lego.Pieces + "</span>" +
                 "</div>";
     });
+    dojo.byId("LegoPopup").innerHTML = rData;
 }

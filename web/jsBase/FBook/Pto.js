@@ -2,11 +2,18 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Pto.js Split: 4 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function displayWorkPTO() {
     getWorkPTO();
     $("#FBWorkPTO").toggle();
+    $("#FBAuto").hide();
+    $("#FBBills").hide();
+    $("#FBBlue").hide();
+    $("#FBCheck").hide();
+    $("#FBAsset").hide();
+    $("#FBUUse").hide();
 }
 
 function getWorkPTO() {

@@ -1,11 +1,18 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function displayAuto() {
     getAuto();
     $("#FBAuto").toggle();
+    $("#FBAsset").hide();
+    $("#FBBills").hide();
+    $("#FBBlue").hide();
+    $("#FBCheck").hide();
+    $("#FBWorkPTO").hide();
+    $("#FBUUse").hide();
 }
 
 function getAuto() {

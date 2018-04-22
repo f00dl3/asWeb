@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
+Updated: 22 Apr 2018
  */
     
 function externalLink(station) {

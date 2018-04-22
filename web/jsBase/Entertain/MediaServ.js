@@ -34,6 +34,10 @@ function displayMediaServer() {
     var target = "ETSSearch";
     getIndex(target, false);
     $("#ETStream").toggle();
+    $("#ETCooking").hide();
+    $("#ETLego").hide();
+    $("#ETReddit").hide();
+    $("#ETGameAll").hide();
 }
 
 function getIndex(target, updateFlag) {

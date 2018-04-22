@@ -1,13 +1,15 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 8 Apr 2018
+Updated: 22 Apr 2018
  */
 
 package asWebRest.resource;
 
+import asWebRest.action.GetNewsFeedAction;
 import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.shared.MyDBConnector;
@@ -33,6 +35,8 @@ public class WeatherResource extends ServerResource {
         List<String> qParams = new ArrayList<>();      
         List<String> inParams = new ArrayList<>();      
         JSONObject mergedResults = new JSONObject();
+        
+        GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
         final Form argsInForm = new Form(argsIn);
@@ -49,6 +53,11 @@ public class WeatherResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
+                case "getNewsEmail":
+                    JSONArray newsFeeds = getNewsFeedAction.getNewsFeed(dbc);
+                    returnData = newsFeeds.toString();
+                    break;
+                    
                 case "getObjsJson":
                     inParams.add(0, "DESC");
                     try {
@@ -76,8 +85,8 @@ public class WeatherResource extends ServerResource {
                     JSONArray latestObsB = getWeatherAction.getObsJsonLast(dbc);
                     JSONArray indorObs = getSnmpAction.getMergedLastTemp(dbc);
                     mergedResults
-                        .put("wxObsM1H", wxObsB)
-                        .put("wxObsNow", latestObsB)
+                        .put("wxObsM1H", latestObsB)
+                        .put("wxObsNow", wxObsB)
                         .put("indoorObs", indorObs);
                     returnData = mergedResults.toString();
                     break;          

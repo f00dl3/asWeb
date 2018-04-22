@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 18 Apr 2018
+Updated: 22 Apr 2018
 */
 
 package asWebRest.shared;
@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.jsoup.Jsoup;
 
 public class WebCommon {
             
@@ -69,6 +70,10 @@ public class WebCommon {
         byte[] encodedHash = digest.digest(passwordIn.getBytes(StandardCharsets.UTF_8));
         return encodedHash;
         
+    }
+    
+    public static String htmlStripTease(String stringIn) {
+        return Jsoup.parse(stringIn).text();
     }
     
     public static boolean isSet(String tStr) {

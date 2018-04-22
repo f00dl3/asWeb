@@ -42,6 +42,12 @@ function generteLinkSpinner(links) {
     dojo.byId("linkList").innerHTML = rData;
 }
 
+function changeH1Font() {
+	var newFont = document.getElementById("newH1Font").value;
+	document.getElementById("mainH1").style.fontFamily='" + newFont + "';
+	//eval(newFontCSS);
+}
+
 function get3dLinkList() {   
     aniPreload("on");
     var thePostData = {
@@ -190,13 +196,15 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             "</form></div>";
     rData += hiddenFeaturesToggler + "<p>";
     var javaScriptSchit = "<input type='text' id='newH1Font' placeholder='H1 Font'/>" +
-            "<input type='button' id='setFontGo' value='Do it!' /></p>";
+            " <input type='button' id='setFontGo' value='Do it!' /></p>";
     rData += javaScriptSchit + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
     var quickCalButton = dojo.byId("QuickCalBtn");
+    var changeFontButton = dojo.byId("setFontGo");
     dojo.connect(hiddenCheckbox, "onchange", actOnHiddenToggle);
     dojo.connect(quickCalButton, "click", actOnCalendarSubmit);
+    dojo.connect(changeFontButton, "click", changeH1Font);
     $("#inLogs").toggle();
 }
 

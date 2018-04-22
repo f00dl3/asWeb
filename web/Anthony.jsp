@@ -24,7 +24,7 @@
         
         <p/>
         
-        <h1><% out.println(pageTitle); %></h1>
+        <h1 id="mainH1"><% out.println(pageTitle); %></h1>
             
         <span id="versionPlaceholder"></span> <button id='Sh_inLogs' class='UButton'>Logs</button><p>
     
