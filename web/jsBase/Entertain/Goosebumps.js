@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 19 Mar 2018
 Split to Goosebumps.js: 15 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function getGoosebumps(target) {
@@ -32,7 +33,7 @@ function populateGoosebumps(target, gbQ) {
     for(var i = 0; i < cols.length; i++) { rData += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
     rData += "</div>";
     gbQ.forEach(function (gbData) {
-        var imageThumbLocation = getBasePath("tomcatOld") + "/Goosebumps/Thumbs/" + gbData.Code + "." + gbData.CoverImageType;
+        var imageThumbLocation = getBasePath("image") + "/Goosebumps/Thumbs/" + gbData.Code + "." + gbData.CoverImageType;
         var imageLocation = imageThumbLocation.replace("/Thumbs", "");
         rData += "<div class='tr'>" +
                 "<span class='td'><a href='" + imageLocation + "' target='new'><img class='th_icon' src='" + imageThumbLocation + "'/></a></span>" +

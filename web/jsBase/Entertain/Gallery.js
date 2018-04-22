@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 18 Apr 2018
+Updated: 22 Apr 2018
  */
 
 var tppCallback;
@@ -88,7 +88,7 @@ function generateGallery(argsIn, fileList) {
                 if(isSet(tppCallback) && isSet(tppCallback.XTags)) { imgBorder = "green"; }
                 break;
             case "tc":
-                relativePath = getBasePath("old") + fullPath.replace("/var/lib/tomcat8/webapps/ASWebUI#Tomcat#", "/Tomcat/");
+                relativePath = getBasePath("ui") + fullPath.replace("/var/lib/tomcat8/webapps/asWeb#x#", "/x/");
                 break;
             default:
                 relativePath = getBasePath("old") + fullPath.replace("/var/www/ASWebUI", "");
@@ -101,8 +101,9 @@ function generateGallery(argsIn, fileList) {
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
         rData += "<div class='UPop'>" +
-                "<a href='" + getBasePath("old") + "/OutMap.php?" +
-                "Image=Gallery&IW=" + iWidth + "&IH=" + iHeight + "&PicPath=" + relativePath + "' target='new'>";
+                /* "<a href='" + getBasePath("old") + "/OutMap.php?" +
+                "Image=Gallery&IW=" + iWidth + "&IH=" + iHeight + "&PicPath=" + relativePath + "' target='new'>"; */
+                "<a href='" + relativePath + "' target='new'>";
         if(checkMobile()) {
             rData += "<img class='th_small' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         } else {
@@ -133,7 +134,7 @@ function initGallery(flagsIn, firstArgIn) {
         flagsOut = "tp";
     }
     switch(flagsOut) {
-        case "tc": thisPath = getServerPath("tomcat") + "/ASWebUI#Tomcat#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
+        case "tc": thisPath = getServerPath("tomcat") + "/asWeb#x#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
         case "tp": thisPath = getServerPath("tomcat") + "/TPM#" + firstArgIn + "/full/"; break;
         case "none": thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/"; break;
         default: window.alert("No flags in!"); break;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 21 Apr 2018
+Updated: 22 Apr 2018
 */
 
 console.log(sessionVars);
@@ -9,7 +9,7 @@ console.log(sessionVars);
 function actOnCalendarSubmit(event) {
     dojo.stopEvent(event);
     var thisFormDataJ = dojo.formToJson(this.form);
-    //putQuickCalendarEntry(thisFormDataJ);
+    putQuickCalendarEntry(thisFormDataJ);
     window.alert(thisFormDataJ);
 }
 
@@ -102,6 +102,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             "<div class='table'><form class='tr' id='QuickCalFormTr'>" +
             "<span class='td'><input name='QuickStart' type='text' value='YYYY-MM-DD HH:II' style='width: 100px;'/></span>" +
             "<span class='td'><input name='QuickTitle' type='text' value='' style='width: 100px;' />" +
+            "<input name='doWhat' type='hidden' value='QuickCalEntry'/>" +
             "<button id='QuickCalBtn' name='QuickCalendar' class='UButton'>Go</button>" +
             "</span></form></div></div>";
     toolHolder += quickWebCalEntryForm;
@@ -214,16 +215,14 @@ function popLinkList() {
     }
 }
 
-function putQuickCalEntry(formDataJson) {
-    formDataJson.doWhat = "QuickCalEntry";
+function putQuickCalendarEntry(formDataJson) {
     require(["dojo/request"], function(request) {
         request
             .post(getResource("WebCal"), {
                 data: formDataJson,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
-                    window.alert(data);
                     aniPreload("off");
                 },
                 function(error) { 

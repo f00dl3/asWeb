@@ -38,7 +38,7 @@ function populateDbx(target, dbxData) {
     dbxData.forEach(function (tDbx) {
         var dAlbumArt = (tDbx.AlbumArt).substr((tDbx.AlbumArt).length - 4);
         if(isSet(tDbx.GIFVer)) {
-            dbxDoGif = "<img src='" + getBasePath("tomcatOld") + "/AlbumArt/" + tDbx.AlbumArt + ".pnx' class='th_large' />";
+            dbxDoGif = "<img src='" + getBasePath("image") + "/AlbumArt/" + tDbx.AlbumArt + ".pnx' class='th_large' />";
         } else { dbxDoGif = "Review first!"; }
         if(tDbx.Burned === 1) {
             dbxLocation = tDbx.Media + " (" + tDbx.BDate + ")";

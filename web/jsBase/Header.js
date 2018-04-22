@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 21 Apr 2018
+Updated: 22 Apr 2018
  */
 
 
@@ -174,7 +174,7 @@ function getBasePath(opt) {
         case "old": tBase += "/ASWebUI"; break;
         case "oldRoot": tBase = tBase; break;
         case "osmTiles": tBase += "/osm_tiles/"; break;
-        case "tomcatOld": tBase += "/ASWebUI/Tomcat"; break;
+        case "tomcatOld": tBase = baseForUi + "/x"; break;
         case "ui": tBase = baseForUi; break;
     }
     return tBase;

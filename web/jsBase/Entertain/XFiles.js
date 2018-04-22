@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
+Updated: 22 Apr 2018
  */
 
 function getXFiles(target) {
@@ -34,9 +35,9 @@ function populateXFiles(target, xfData) {
         var epNo = (xf.AlbumArt).replace("XFiles/", "");
         var epTitleRaw = (xf.File).split("."); 
         var epTitle = epTitleRaw[0];
-        var thisAlbumArtImage = getBasePath("tomcatOld") + "/AlbumArt/" + xf.AlbumArt + ".jpg";
+        var thisAlbumArtImage = getBasePath("image") + "/AlbumArt/" + xf.AlbumArt + ".jpg";
         if((xf.Description).includes("XFilesTV Myth")) {
-            mythEp = "<img src='" + getBasePath("tomcatOld") + "/AlbumArt/XFiles/x.gif' class='th_icon'/>";
+            mythEp = "<img src='" + getBasePath("image") + "/AlbumArt/XFiles/x.gif' class='th_icon'/>";
         }
         rData += "<div class='tr'>" +
                 "<span class='td'>" + epNo + "</span>" +

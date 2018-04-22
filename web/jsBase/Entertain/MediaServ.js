@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 18 Apr 2018
+Updated: 22 Apr 2018
  */
 
 var msIndex;
@@ -144,9 +144,9 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                     (tm.Path).substr(0, 4) === "/DBX" ||
                     tm.Path === "/Adult/Export" ||
                     tm.Path === "/Adult/Other") {
-                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("tomcatOld") + "/AlbumArt/" + tm.AlbumArt + ".pnx'/><br/>";
+                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".pnx'/><br/>";
                 } else {
-                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("tomcatOld") + "/AlbumArt/" + tm.AlbumArt + ".jpg'/><br/>";
+                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".jpg'/><br/>";
                 }
             }
             if(isSet(tm.Burned)) { if(tm.Burned === 1) { dbDipInfo += "Burned to " + tm.Media + " on " + tm.BDate + "<br/>"; } }
@@ -186,8 +186,9 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                         var imageWidthHeightAttribs = "IW=" + imageWidth + "&IH=" + imageHeight + "&";
                         if(tm.WarDeploy === 1) {
                             var thisYear = (tm.Path).substr((tm.Path).length - 2);
-                            thisAddCheckbox += "<a href='" + getBasePath("old") + "/OutMap.php?Image=Gallery&" + imageWidthHeightAttribs +
-                                    "PicPath=Tomcat/PicsL" + thisYear + "/full/" + tm.File + "' target='photoPop'>" +
+                            thisAddCheckbox += /* "<a href='" + getBasePath("old") + "/OutMap.php?Image=Gallery&" + imageWidthHeightAttribs +
+                                    "PicPath=Tomcat/PicsL" + thisYear + "/full/" + tm.File + "' target='photoPop'>" + */
+                                    "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" +
                                     "<img class='th_icon' src='" + getBasePath("tomcatOld") + "/PicsL" + thisYear + "/thumb/" + tm.File + "'/>";
                         } else {
                             var thisYear = (tm.Path).substr((tm.Path).length - 4);
