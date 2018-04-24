@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 19 Apr 2018
+Updated: 23 Apr 2018
 */
 
 /* Hidden DIVs */
@@ -11,7 +11,7 @@ Updated: 19 Apr 2018
     #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit, #HShowETReddit,
     #ETGHours, #ETGIndex, #ETFF14Q,
     #FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse,
-    #WxFeed, #WxLive, #WxNews, #WxQuakes,
+    #WxFeed, #WxLive, #WxNews, #WxQuakes, #WxLiveContainer, #WxLocalModel, #WxCf6, #WxArchive,
     #inLogs, #loadWait
     { display: none; }
 

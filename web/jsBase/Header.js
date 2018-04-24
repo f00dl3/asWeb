@@ -79,6 +79,7 @@ function autoColorScale(tData,tMax,tMin,tForcedAvg) {
 }
 
 function autoFontScale(tPercent) {
+    var fntColor = "gray";
     switch(true) {
         case (tPercent <= 28): fntColor = "white"; break;
         default: fntColor = "black"; break;
@@ -324,6 +325,7 @@ function imageLinks3d(elems, maxW, maxH, tFact) {
 }     
 
 function inRange(value, low, high) {
+        if (low > high) { var nHigh = low; var nLow = high; high = nHigh; low = nLow; }
 	if (value > low && value <= high) { return value; }
 	else { return !value; }
 }

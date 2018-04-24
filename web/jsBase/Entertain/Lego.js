@@ -42,7 +42,6 @@ function getLego(legoHolder) {
 
 function legoHint(value) {
     if(value.length > 2) {
-        console.log(value);
         var hitCount = 0;
         var matchLimitHit = 0;
         var matchingRows = [];

@@ -1,12 +1,52 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
+Updated: 23 Apr 2018
  */
+
+function displayCf6() {
+    generateCf6Layout();
+    $("#WxLiveContainer").hide();
+    $("#WxLocalModel").hide();
+    $("#WxArchive").hide();
+    $("#WxCf6").toggle();
+}
+
+function generateCf6Layout() {
+    var rData = "<h1>CF6 KMCI/CPC Data</h1>" +
+            "<div id='cf6SearchHolder'></div><br/>" +
+            "<div id='cf6ResultHolder'></div>";
+    dojo.byId("WxCf6").innerHTML = rData;
+    var cf6SearchHolder = dojo.byId("cf6SearchHolder");
+    getInitialCf6Data();
+}
 
 function getCf6Data(dateInStart, dateInEnd) {
     var dateStart, dateEnd;
     if(isSet(dateInStart)) { dateStart = dateInStart; } else { dateStart = getDate("day", -365, "dateOnly"); }
     if(isSet(dateInEnd)) { dateEnd = dateInEnd; } else { dateEnd = getDate("day", 0, "dateOnly"); }
+}
+
+function getInitialCf6Data(target) {
+    getDivLoadingMessage("cf6SearchHolder");
+    aniPreload("on");
+    var thePostData = { "doWhat": "getCf6Initial" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    popCf6Search(data.almanac);
+                    popStatData(data.almanac);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for CF6 Initial FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function hfWxIconStr(icref, desc) {
@@ -52,7 +92,7 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
                 "</div></div></td>" +
                 "<td><div style='" + styleTemp(cf6.High) + "'>" + cf6.High + "</div></td>" +
                 "<td><div style='" + styleTemp(cf6.Low) + "'>" + cf6.Low + "</div></td>" +
-                "<td><div class='UPop'><span style='" + /* styleTDiff(cf6.DFNorm) */ + "'>" + cf6.DFNorm + "</span>" + // BUILD OUT styleTDiff
+                "<td><div class='UPop'><span class='" + colorTempDiff(cf6.DFNorm) + "'>" + cf6.DFNorm + "</span>" +
                 "<div class='UPopO'>" +
                 "<strong>Average:</strong><span style='" + styleTemp(cf6.Average) + "'>" + cf6.Average + "</span><br/>" +
                 "<strong>Spread:</strong><span style='" + styleWind(spread) + "'>" + spread + "</span>" +
@@ -63,21 +103,21 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
             default: cf6Table += "<td><div class='UPop'>None"; break;
         }
         cf6Table += "<div class='UPopO'><strong>Electricity Use: </strong>" + cf6.kWh + "</div></div></td>" +
-                "<td style='" + /* styleLiquid(cf6.Liquid) */ + "'>" + cf6.Liquid; // BUILD OUT styleLiquid
+                "<td style='" + styleLiquid(cf6.Liquid) + "'>" + cf6.Liquid;
         if(isSet(cf6.HomePrecip)) {
             cf6Table += "<div class='UPOp'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/>" + 
-                    "<div class='UPopO'>Home Liquid Precip: <span style='" + /* styleLiquid(cf6.HomePrecip) */ + "'>" + 
+                    "<div class='UPopO'>Home Liquid Precip: <span style='" + styleLiquid(cf6.HomePrecip) + "'>" + 
                     cf6.HomePrecip +
                     "</div></div>";
         }
         cf6Table += "</td>" +
-                "<td><div class='" + /* styleSnow(cf6.Snow) */ + "'>" + cf6.Snow + "</div></td>" +
-                "<td><div class='" + /* styleSnow(cf6.SDepth) */ + "'>" + cf6.SDepth + "</div></td>" +
+                "<td><div class='" + colorSnow(cf6.Snow) + "'>" + cf6.Snow + "</div></td>" +
+                "<td><div class='" + colorSnow(cf6.SDepth) + "'>" + cf6.SDepth + "</div></td>" +
                 "<td style='" + styleWind(cf6.WMax) + "'><div class='UPop'>" + cf6.WMax +
                 "<div class='UPopO'><strong>Average:</strong><span style='" + styleWind(cf6.WAvg) + "'>" + cf6.WAvg + "</span></div>" +
                 "</div></td>" +
-                "<td><div style='" + /* styleClouds(cf6.Clouds) */ + "'>" + cf6.Clouds + "</div></td>" +
+                "<td><div class='" + colorClouds(cf6.Clouds) + "'>" + cf6.Clouds + "</div></td>" +
                 "<td class='C6WXTY'>" + newWx + "</td>" +
                 "</tr>";
     });
@@ -110,7 +150,7 @@ function popLastYearGraphed() {
 }
 
 function popStatTable(alm) {
-    var wxArr = { // Move this server side?
+    var wxArr = {
         "Fog/Mist":{"FG":"1"},
         "Dense Fog":{"FD":"2"},
         "Thunder":{"TH":"3"},
@@ -122,7 +162,8 @@ function popStatTable(alm) {
         "Blowing Snow":{"BS":"9"},
         "Tornado":{"FC":"X"}
     };
-    var rData = "<h4>Statistics</h4>";
+    var rData = "Last year graphed:<br/><div id='cf6OverviewGraphs'></div>" +
+            "<h4>Statistics</h4>";
     var rTable = "<table><tbody>" +
             "<tr><td>Average temperature: " + alm.TAvg_Avg + "F" +
             "<br/>Average high temperature: " + alm.High_Avg + "F" +
@@ -183,7 +224,8 @@ function popStatTable(alm) {
             "<br/>Data from Jan 1934 to Oct 1972 is from Kansas City Downtown Airport" + 
             "<br/>Data from Jan 1900 to Jan 1934 is from Kansas City.";
     rData += rTable + dataDisclaimer;
-    dojo.byId("statHolder").innerHTML = rData;                    
+    dojo.byId("statHolder").innerHTML = rData;               
+    popLastYearGraphed();
 }
 
 function popTempDistTable(trDat) {
@@ -198,9 +240,3 @@ function popTempDistTable(trDat) {
     tempDistTable += "</tr></tbody></table>";
     dojo.byId("tempDistHolder").innerHTML = rData;
 }
-
-function init() {
-    
-}
-
-dojo.ready(init);

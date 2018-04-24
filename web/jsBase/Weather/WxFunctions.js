@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 1 Apr 2018
+Updated: 23 Apr 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -85,6 +85,23 @@ function colorCin(cin) {
 		case (cin == 0): return 'EHIOXX';
 		default: return 'EHIL10';
 	}
+}
+
+function colorClouds(ccText) {
+    var cc = ccText.valueOf();
+    switch(cc) {
+        case 0: return "C6C10";
+        case 1: return "C6C09";
+        case 2: return "C6C08";
+        case 3: return "C6C07";
+        case 4: return "C6C06";
+        case 5: return "C6C05";
+        case 6: return "C6C04";
+        case 7: return "C6C03";
+        case 8: return "C6C02";
+        case 9: return "C6C01";
+        case 10: return "C6C10";
+    }
 }
 
 function colorEhi(ehi) {
@@ -189,8 +206,45 @@ function colorMuvv(muvv) {
     }
 }
 
+function colorTempDiff(tDiffText) {
+    var tDiff = tDiffText.valueOf();
+    switch(true) {
+        case inRange(tDiff, 999, -35): return "C6DB35";
+        case inRange(tDiff, -34, -30): return "C6DB30B34";
+        case inRange(tDiff, -29, -25): return "C6DB25B29";
+        case inRange(tDiff, -24, -20): return "C6DB20B24";
+        case inRange(tDiff, -19, -15): return "C6DB15B19";
+        case inRange(tDiff, -14, -10): return "C6DB10B14";
+        case inRange(tDiff, -9, -5): return "C6DB05B09";
+        case inRange(tDiff, -4, -1): return "C6DB01B04";
+        case 0: return "C6DNone";
+        case inRange(tDiff, 1, 4): return "C6D004001";
+        case inRange(tDiff, 5, 9): return "C6D009005";
+        case inRange(tDiff, 10, 14): return "C6D014010";
+        case inRange(tDiff, 15, 19): return "C6D019015";
+        case inRange(tDiff, 24, 20): return "C6D024020";
+        case inRange(tDiff, 29, 25): return "C6D029025";
+        case inRange(tDiff, 34, 30): return "C6D034030";
+        case inRange(tDiff, 35, 999): return "C6D035";
+    }
+}
+
 function conv2Mph(wsKt) {
 	return Math.round(wsKt*1.15078);
+}
+
+function colorSnow(snText) {
+    var sn = snText.valueOf();
+    switch(sn) {
+        case 0.1: return "C6STRA";
+        case inRange(sn, 0.2, 0.4): return "C6SG02";
+        case inRange(sn, 0.5, 0.9): return "C6SG05";
+        case inRange(sn, 1.0, 2.9): return "C6SG10";
+        case inRange(sn, 3.0, 4.9): return "C6SG30";
+        case inRange(sn, 5.0, 7.9): return "C6SG50";
+        case inRange(sn, 8.0, 99.9): return "CSG80";
+        default: return "C6ZERO";
+    }
 }
 
 function conv2Tf(tCel) {
@@ -212,13 +266,19 @@ function heights2Elevations(what, order) {
         475, 450, 425, 400,
         375, 350, 325, 300,
         275, 250, 225, 200,
-        175, 150, 125, 100,
+        175, 150, 125, 100
     ];
     var h2eMap = [
-        0.4, 1.0, 1.7, 2.5, 3.2, 4.0, 4.8, 5.6, 6.4, 7.2,
-        8.1, 9.0, 9.9, 10.8, 11.8, 12.8, 13.8, 14.9, 16.0, 17.1,
-        18.2, 19.5, 20.8, 22.2, 23.6, 25.1, 26.6, 28.3, 30.1, 31.9,
-        34.0, 36.2, 38.6, 41.3, 47.7, 51.8
+        0.4,
+        1.0, 1.7, 2.5, 3.2,
+        4.0, 4.8, 5.6, 6.4,
+        7.2, 8.1, 9.0, 9.9,
+        10.8, 11.8, 12.8, 13.8,
+        14.9, 16.0, 17.1, 18.2,
+        19.5, 20.8, 22.2, 23.6,
+        25.1, 26.6, 28.3, 30.1,
+        31.9, 34.0, 36.2, 38.6,
+        41.3, 44.3, 47.7, 51.8
     ];
     switch(what) {
         case "height": if(order === "t2b") { heights.reverse(); } return heights; break;
@@ -436,6 +496,21 @@ function styleTemp(tT) {
         case (tT >= 115): bg = "ffffff"; tc = "black"; fw = "bold"; break;
     }
     return "background-color: #" + bg + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
+}
+
+function styleLiquid(liqText) {
+    var liq = liqText.valueOf();
+    var bg, tc;
+    switch(liq) {
+        case inRange(liq, 0.02, 0.09): bg = "99ff99"; tc = "black"; break;
+        case inRange(liq, 0.10, 0.24): bg = "00ff00"; tc = "black"; break;
+        case inRange(liq, 0.25, 0.49): bg = "00dd00"; tc = "black"; break;
+        case inRange(liq, 0.50, 0.99): bg = "00cc00"; tc = "black"; break;
+        case inRange(liq, 1.00, 1.99): bg = "008800"; tc = "white"; break;
+        case inRange(liq, 2.00, 99.99): bg = "004400"; tc = "white"; break;
+        default: bg = "363636"; tc = "black"; break;
+    }
+    return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
 }
 
 function styleWind(wMax) {

@@ -1,6 +1,7 @@
 <%-- 
     Document   : Address.jsp
     Created on : 22 Apr 2018
+    Updated: 23 Apr 2018
     Author     : astump
 --%>
 
@@ -17,9 +18,12 @@
 
     <body>
               
+        <h1>Address Book</h1>
         
-            
-    </div>
+        <div id="HeadHolder"></div><br/>
+        <div id="SearchHolder"></div><p>
+        <div class='table' id="ResultHolder"></div><br/>
+        <div id="CountHolder"></div>
              
     </body>
 

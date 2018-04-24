@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 27 Mar 2018
-    Updated: 20 Apr 2018
+    Updated: 23 Apr 2018
     Author     : astump
 --%>
 
@@ -18,24 +18,17 @@
 
     <body>
               
-        <div id="ButtonNavi">
-            <button class="UButton" id="ShWxObs">Live</button>
-            <button class="UButton" id="ShFeeds">Feeds</button>
-            <button class="UButton" id="ShQuake">Quakes</button>
-            <button class="UButton" id="ShNEmail">News</button>
-        </div><p>
-        
-        <div id="WxLive">
-            <h4>Observations/Forecasts</h4>
-            <div id="LiveWarnings"></div><p>
-            <div id="ObsCurrent"></div><p>
-            <div id="ObsLinks3D"></div>
-            <div id="ObsLinksList"></div>
+        <div id="WxButtonNavi">
+            <button class="UButton" id="ShWxLiveContainer">Live</button>
+            <button class="UButton" id="ShWxLocalModel">Model</button>
+            <button class="UButton" id="ShWxCf6">CF6</button>
+            <button class="UButton" id="ShWxArchive">Arch</button>
         </div>
-            
-        <div id="WxFeeds"></div>
-        <div id="WxQuakes"></div>
-        <div id="WxNews"></div>
+        
+        <div id="WxLiveContainer"></div>
+        <div id="WxLocalModel"></div>
+        <div id="WxCf6"></div>
+        <div id="WxArchive"></div>
             
     </div>
              
