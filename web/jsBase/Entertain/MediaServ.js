@@ -27,15 +27,11 @@ function actOnPlayMedia(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
-    //setPlayMedia(thisFormData);
+    setPlayMedia(thisFormData);
     if(isSet(thisFormData.dbxRawFile)) {
-        window.alert(thisFormData.FilePath);
-        console.log(thisFormDataJ);
-        //playDbxFile(thisFormData);
+        playDbxFile(thisFormData);
     } else {
-        window.alert(thisFormData.FilePath, "\nNON DBX!");
-        console.log(thisFormDataJ);
-        //playMediaFile(thisFormData.FilePath);
+        playMediaFile(thisFormData.FilePath);
     }
 }
 
@@ -183,11 +179,11 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var fileProps = (tm.File).split(".");
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
-        dbDipInfo += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
+        thisAddCheckbox += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
         if(isSet(tm.AlbumArt)) {
             if(aaTag === "/DBX") {
-                var albumArtStripped = (tm.AlbumArt).split("/");
-                dbDipInfo += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped[1] + ".raw'/>" +
+                var albumArtStripped = (tm.AlbumArt).split("/")[1];
+                thisAddCheckbox += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped + ".raw'/>" +
                         "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
             }
             if(
@@ -294,7 +290,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             }
             thisMsInfoString += "</div></div>";
         }
-        thisMsInfoString += "</span></form>";
+        thisMsInfoString += "</span><span class='td'>" + albumArtStripped + "</span></form>";
         fileTable += thisMsInfoString;
     });
     fileTable += "</div>";
