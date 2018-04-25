@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 27 Mar 2018
-    Updated: 23 Apr 2018
+    Updated: 25 Apr 2018
     Author     : astump
 --%>
 
@@ -17,6 +17,8 @@
 <jsp:include page="/inc/Header.jsp?type=full&title=WxLive&scripts=true"></jsp:include>
 
     <body>
+        
+        <h1><% out.println(pageTitle); %></h1>
               
         <div id="WxButtonNavi">
             <button class="UButton" id="ShWxLiveContainer">Live</button>
