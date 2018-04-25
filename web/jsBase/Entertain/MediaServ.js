@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 22 Apr 2018
+Updated: 24 Apr 2018
  */
 
 var msIndex;
@@ -129,10 +129,10 @@ function playMediaFile(whatFile) {
             break;
         case "mp4": case "m4v":
             mediaMime = "video/mp4";
-            mpo += "<video controls autoplay loop width=100% height=100%>" +
-                    "<src src='" + getBasePath("ui") + "/.cache/" + whatFile + "' type='" + mediaMime + "'>" +
-                    "</video>";
-            //window.location.href = getBasePath("ui") + "/.cache/" + whatFile;
+            /* mpo += "<video controls autoplay loop width=100% height=100%>" +
+                    "<src src='" + getBasePath("chartCache") + "/" + whatFile + "' type='" + mediaMime + "'>" +
+                    "</video>"; */
+            window.location.href = getBasePath("ui") + "/cache/" + whatFile;
             break;
     }
     mpo += "</div>";
@@ -181,7 +181,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 if((tm.Path).substr(0, 4) === "/DBX") {
                     var albumArtStripped = (tm.AlbumArt).split("/");
                     dbDipInfo += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped[1] + ".raw'/>" +
-                            "<input type='hidden' name='unpackedDestination' value='/MediaServ/.cache/" + tm.File + "'/>";
+                            "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
                 }
                 if(
                     (tm.Path).substr(0, 4) === "/DBX" ||

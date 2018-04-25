@@ -128,7 +128,7 @@ public class MediaServerResource extends ServerResource {
                     
                 case "viewDbx":
                     final File fileToUnpack = new File(cb.getPathMediaServer()+argsInForm.getFirstValue("rawFilePath"));
-                    final File pathToUnpackTo = new File(cb.getPathMediaServer()+"/.cache");
+                    final File pathToUnpackTo = new File(cb.getPathChartCache());
                     if(!pathToUnpackTo.exists()) { pathToUnpackTo.mkdirs(); }
                     if(fileToUnpack.exists()) {
                         wc.unzipFile(fileToUnpack.toString(), pathToUnpackTo.toString());

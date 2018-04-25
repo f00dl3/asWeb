@@ -162,7 +162,7 @@ function getBasePath(opt) {
     if(checkMobile()) { tBase += ":8082"; }
     tBase = "https:" + tBase;
     switch(opt) {
-        case "chartCache": tBase = base + "/chartCache"; break;
+        case "chartCache": tBase = "/asWebCache"; break;
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
