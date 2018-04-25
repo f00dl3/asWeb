@@ -1,11 +1,15 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 23 Apr 2018
+Updated: 24 Apr 2018
  */
 
-function actOnShowWxLive() {
-    displayWxLive();
+function actOnShowArchive() {
+    displayArchive();
+}
+
+function actOnShowCf6() {
+    displayCf6();
 }
 
 function actOnShowLocalModel() {
@@ -15,8 +19,8 @@ function actOnShowLocalModel() {
     $("#WxCf6").hide();
 }
 
-function actOnShowCf6() {
-    displayCf6();
+function actOnShowWxLive() {
+    displayWxLive();
 }
 
 function buttonListeners() {
