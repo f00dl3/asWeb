@@ -130,8 +130,9 @@ function playMediaFile(whatFile) {
         case "mp4": case "m4v":
             mediaMime = "video/mp4";
             mpo += "<video controls autoplay loop width=100% height=100%>" +
-                    "<src src='" + getBasePath("oldRoot") + whatFile + "' type='" + mediaMime + "'>" +
+                    "<src src='" + getBasePath("ui") + "/.cache/" + whatFile + "' type='" + mediaMime + "'>" +
                     "</video>";
+            //window.location.href = getBasePath("ui") + "/.cache/" + whatFile;
             break;
     }
     mpo += "</div>";
