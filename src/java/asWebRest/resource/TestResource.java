@@ -24,11 +24,13 @@ public class TestResource extends ServerResource {
             "1.3.6.1.4.1.7950.2.10.31.3"
         };
         
-        String snmpTest = "UNEXEC!";
+        String snmpTest1 = "";
+        String snmpTest2 = "";
         
         try {
             SnmpWalk snmpWalk = new SnmpWalk();
-            snmpTest = snmpWalk.getSnmpWalk(snmpArgs);
+            snmpTest1 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
+            snmpTest2 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0");
         } catch (IOException io) { io.printStackTrace(); }
         
         String test1 = getRequest().getRootRef().toString();
@@ -36,7 +38,8 @@ public class TestResource extends ServerResource {
         
         String testData = "test1: " + test1 + "\n" +
                 "test 2: " + test2 + "\n\n" +
-                "snmpTest: " + snmpTest;
+                "snmpTest1: " + snmpTest1 + "\n" +
+                "snmpTest2: " + snmpTest2 + "\n";
         return testData;
         
     }    

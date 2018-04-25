@@ -7,10 +7,10 @@ Updated: 25 Apr 2018
 package asWebRest.hookers;
 
 import asWebRest.secure.SNMPBeans;
+import asWebRest.shared.WebCommon;
 import java.io.IOException;
-import java.util.List;
-import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
+import org.snmp4j.ScopedPDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.TransportMapping;
 import org.snmp4j.UserTarget;
@@ -32,9 +32,6 @@ import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-import org.snmp4j.util.DefaultPDUFactory;
-import org.snmp4j.util.TreeEvent;
-import org.snmp4j.util.TreeUtils;
 
 public class SnmpWalk {
     
@@ -54,9 +51,12 @@ public class SnmpWalk {
         usage = "Usage: snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid";
     }
     
-    private String execSnmpWalk(String oidRequest) throws IOException {
+    private String execSnmpWalk(String requestString) throws IOException {
     
+        SnmpOidConversions stringToOid = new SnmpOidConversions();
         SNMPBeans snmpBeans = new SNMPBeans();
+        
+        String oidRequest = stringToOid.translate(requestString);
         
         String returnData = "";
         TransportMapping<? extends Address> transport = new DefaultUdpTransportMapping();
@@ -86,21 +86,20 @@ public class SnmpWalk {
 
         transport.listen();
         
-        PDU pdu = new PDU();
+        PDU pdu = new ScopedPDU();
         pdu.add(new VariableBinding(new OID(oidRequest)));
         pdu.setType(PDU.GET);
         pdu.setRequestID(new Integer32(1));
 
-        ResponseEvent response = snmp.get(pdu, target); // errors here!
+        ResponseEvent response = snmp.get(pdu, target);
         if(response != null) {
-            returnData += "Got response from Agent!";
             PDU responsePDU = response.getResponse();
             if(responsePDU != null) {
                 int errorStatus = responsePDU.getErrorStatus();
                 int errorIndex = responsePDU.getErrorIndex();
                 String errorStatusText = responsePDU.getErrorStatusText();
                 if(errorStatus == PDU.noError) {
-                    returnData += "\nSnmp v3 Get response = " + responsePDU.getVariableBindings();
+                    returnData += "SUCCESS " + responsePDU.getVariableBindings();
                 } else {
                     returnData += "\nError: request failed" +
                             "\nError status: " + errorStatus +
@@ -120,66 +119,23 @@ public class SnmpWalk {
         
     }
     
-    private String translateNameToOID(String oidStr) {
-        switch (oidStr) {
-            case "mib-2": oidStr = ".1.3.6.1.2.1"; break;
-            case "mib2": oidStr = ".1.3.6.1.2.1"; break;
-            case "system": oidStr = ".1.3.6.1.2.1.1"; break;
-            case "interfaces": oidStr = ".1.3.6.1.2.1.2"; break;
-            case "at": oidStr = ".1.3.6.1.2.1.3"; break;
-            case "ip": oidStr = ".1.3.6.1.2.1.4"; break;
-            case "icmp": oidStr = ".1.3.6.1.2.1.5"; break;
-            case "tcp": oidStr = ".1.3.6.1.2.1.6"; break;
-            case "udp": oidStr = ".1.3.6.1.2.1.7"; break;
-            case "egp": oidStr = ".1.3.6.1.2.1.8"; break;
-            case "transmission": oidStr = ".1.3.6.1.2.1.10"; break;
-            case "snmp": oidStr = ".1.3.6.1.2.1.11"; break;
-        }
-        return oidStr;
-    }
-
-    private void setArgs(String[] args) {
-        
-        if(args.length < 2) {
-            System.err.println(usage);
-            System.exit(1);
-        }
-
-        for (int i=0; i<args.length; i++) {
-            if("-c".equals(args[i])) {
-                commStr = args[++i];
-            }
-            else if ("-v".equals(args[i])) {
-                switch(args[++i]) {
-                    case "1": snmpVersion = SnmpConstants.version1;
-                    case "2": snmpVersion = SnmpConstants.version2c;
-                    case "3": snmpVersion = SnmpConstants.version3;
-                }
-            }
-            else if ("-p".equals(args[i])) {
-                portNum = args[++i];
-            }
-            else{
-                targetAddr = args[i++];
-                oidStr = args[i];
-            }
-        }
-        if(targetAddr == null || oidStr == null) {
-            System.err.println(usage);
-            System.exit(1);
-        }
-    }
-    
-    public String getSnmpWalk(String[] args) {
+    public String get(String requestString) {
+        WebCommon wc = new WebCommon();
         String snmpBack = "SnmpWalk did not run yet or failed to run!";
+        String snmpBackTmp = "";
         try{
             SnmpWalk snmpwalk = new SnmpWalk();
-            snmpwalk.setArgs(args);
-            snmpBack = snmpwalk.execSnmpWalk(".1.3.6.1.2.1.1.1.0");
+            snmpBackTmp = snmpwalk.execSnmpWalk(requestString);
         }
         catch(Exception e) {
-            snmpBack = "----- An Exception happened as follows. Please confirm the usage etc. -----\n" + e.getMessage();
+            snmpBackTmp = "----- An Exception happened as follows. Please confirm the usage etc. -----\n" + e.getMessage();
             e.printStackTrace();
+        }
+        if(wc.isSet(snmpBackTmp) && snmpBackTmp.contains(" = ")) {
+            String[] snmpBackArray = snmpBackTmp.replace(" = ", ",").split(",");
+            snmpBack = snmpBackArray[1].replace("]","");
+        } else {
+            snmpBack = snmpBackTmp;
         }
         return snmpBack;
     }

@@ -247,6 +247,7 @@ function getResource(what) {
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
         case "Session": return getBasePath("serv") + "/Session"; break;
+        case "SNMP": return getBasePath("rest") + "/SNMP"; break;
         case "TP": return getBasePath("rest") + "/TP"; break;
         case "WebCal": return getBasePath("rest") + "/WebCal"; break;
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;

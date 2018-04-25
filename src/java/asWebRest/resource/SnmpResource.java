@@ -8,6 +8,9 @@ package asWebRest.resource;
 
 import asWebRest.action.GetSnmpAction;
 import asWebRest.dao.SnmpDAO;
+import asWebRest.hookers.SnmpWalk;
+import asWebRest.shared.WebCommon;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -35,6 +38,8 @@ public class SnmpResource extends ServerResource {
     @Post
     public String represent(Representation argsIn) {
 
+        WebCommon wc = new WebCommon();
+        
         List<String> qParams = new ArrayList<>();      
         List<String> inParams = new ArrayList<>();      
         JSONObject mergedResults = new JSONObject();
@@ -52,8 +57,42 @@ public class SnmpResource extends ServerResource {
     
         if(doWhat != null) {
             switch (doWhat) {
-                case "rapidSnmpUpdates":
+                
+                case "RapidSNMP":
+                    String cpu1Load = "";
+                    String cpu2Load = "";
+                    String cpu3Load = "";
+                    String cpu4Load = "";
+                    String cpu5Load = "";
+                    String cpu6Load = "";
+                    String cpu7Load = "";
+                    String cpu8Load = "";
+                    try { 
+                        SnmpWalk snmpWalk = new SnmpWalk();
+                        cpu1Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196608");
+                        cpu2Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196609");
+                        cpu3Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196610");
+                        cpu4Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196611");
+                        cpu5Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196612");
+                        cpu6Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196613");
+                        cpu7Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196614");
+                        cpu8Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196615");
+                    } catch (IOException ix) {
+                        ix.printStackTrace();
+                    }
+                    JSONObject snmpData = new JSONObject();
+                    snmpData
+                        .put("CPU1Load", cpu1Load)
+                        .put("CPU2Load", cpu2Load)
+                        .put("CPU3Load", cpu3Load)
+                        .put("CPU4Load", cpu4Load)
+                        .put("CPU5Load", cpu5Load)
+                        .put("CPU6Load", cpu6Load)
+                        .put("CPU7Load", cpu7Load)
+                        .put("CPU8Load", cpu8Load);
+                    returnData = snmpData.toString();
                     break;
+                    
             }
         }
         

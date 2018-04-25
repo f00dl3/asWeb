@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    23 Apr 2018
+    Updated:    25 Apr 2018
     Author     : astump
 --%>
 
@@ -46,6 +46,10 @@
         "Fitness/Calories",
         "Fitness/Plans",
         "Fitness/Today"
+    };
+    
+    String[] snmpScripts = {
+        "SNMP/SnmpData"
     };
     
     String[] tpScripts = {
@@ -101,6 +105,11 @@
     for(int i=0; i < fitScripts.length; i++) {
         fitScriptPack += "<script src='"+rootPath+"/jsBase/"+fitScripts[i]+".js'></script>";
     }
+        
+    String snmpScriptPack = "";
+    for(int i=0; i < snmpScripts.length; i++) {
+        snmpScriptPack += "<script src='"+rootPath+"/jsBase/"+snmpScripts[i]+".js'></script>";
+    }
     
     String tpScriptPack = "";
     for(int i=0; i < tpScripts.length; i++) {
@@ -120,7 +129,7 @@
                 scripts2Load += wxScriptPack;
                 break;
             case "Cams":
-                scripts2Load += wxScriptPack;
+                scripts2Load += wxScriptPack + snmpScriptPack;
                 break;
             case "Entertain":
                 fullTitle = "Entertainment";
