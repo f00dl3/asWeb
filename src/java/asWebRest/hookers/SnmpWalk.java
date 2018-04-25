@@ -1,19 +1,33 @@
 /*
 by Anthony Stump
-adapted from GitHub "Akirad"
 Created: 22 Apr 2018
+Updated: 25 Apr 2018
  */
 
 package asWebRest.hookers;
 
+import asWebRest.secure.SNMPBeans;
 import java.io.IOException;
 import java.util.List;
 import org.snmp4j.CommunityTarget;
+import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.TransportMapping;
+import org.snmp4j.UserTarget;
+import org.snmp4j.event.ResponseEvent;
+import org.snmp4j.mp.MPv3;
 import org.snmp4j.mp.SnmpConstants;
+import org.snmp4j.security.AuthMD5;
+import org.snmp4j.security.PrivDES;
+import org.snmp4j.security.SecurityLevel;
+import org.snmp4j.security.SecurityModels;
+import org.snmp4j.security.SecurityProtocols;
+import org.snmp4j.security.TSM;
+import org.snmp4j.security.USM;
+import org.snmp4j.security.UsmUser;
 import org.snmp4j.smi.Address;
 import org.snmp4j.smi.GenericAddress;
+import org.snmp4j.smi.Integer32;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
@@ -40,52 +54,64 @@ public class SnmpWalk {
         usage = "Usage: snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid";
     }
     
-    private String execSnmpWalk() throws IOException {
+    private String execSnmpWalk(String oidRequest) throws IOException {
+    
+        SNMPBeans snmpBeans = new SNMPBeans();
         
         String returnData = "";
-        Address targetAddress = GenericAddress.parse("udp:" + targetAddr + "/" + portNum);
         TransportMapping<? extends Address> transport = new DefaultUdpTransportMapping();
+        Address targetAddress = GenericAddress.parse("udp:" + targetAddr + "/" + portNum);
         Snmp snmp = new Snmp(transport);
-        transport.listen();
         
-        CommunityTarget target = new CommunityTarget();
-        target.setCommunity(new OctetString(commStr));
+        OctetString localEngineId = new OctetString(MPv3.createLocalEngineID());
+        USM usm = new USM(SecurityProtocols.getInstance(), localEngineId, 0);
+        SecurityModels.getInstance().addSecurityModel(usm);
+        
+        OctetString securityName = new OctetString(snmpBeans.getSnmpUser());
+        OID authProtocol = AuthMD5.ID;
+        OID privProtocol = PrivDES.ID;
+        OctetString authPassphrase = new OctetString(snmpBeans.getSnmpPass());
+        OctetString privPassphrase = new OctetString(snmpBeans.getSnmpPass());
+        
+        snmp.getUSM().addUser(securityName, new UsmUser(securityName, authProtocol, authPassphrase, privProtocol, privPassphrase));
+        SecurityModels.getInstance().addSecurityModel(new TSM(localEngineId, false));
+        
+        UserTarget target = new UserTarget();
+        target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
+        target.setSecurityName(securityName);
         target.setAddress(targetAddress);
         target.setRetries(3);
         target.setTimeout(1000 * 3);
         target.setVersion(snmpVersion);
-        OID oid;
-        try {
-            oid = new OID(translateNameToOID(oidStr));
-        } catch (Exception e) {
-            System.err.println("Failed to understand the OID or object name.");
-            throw e;
-        }
+
+        transport.listen();
         
-        TreeUtils treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
-        List<TreeEvent> events = treeUtils.getSubtree(target, oid);
-        if(events == null || events.size() == 0) {
-            returnData += "No results returned.";
-            System.exit(1);
-        }
-        
-        for (TreeEvent event : events) {
-            
-            if (event == null) { continue; }
-            if (event.isError()) {
-                returnData += "oid [" + oid + "] " + event.getErrorMessage();
-                continue;
+        PDU pdu = new PDU();
+        pdu.add(new VariableBinding(new OID(oidRequest)));
+        pdu.setType(PDU.GET);
+        pdu.setRequestID(new Integer32(1));
+
+        ResponseEvent response = snmp.get(pdu, target); // errors here!
+        if(response != null) {
+            returnData += "Got response from Agent!";
+            PDU responsePDU = response.getResponse();
+            if(responsePDU != null) {
+                int errorStatus = responsePDU.getErrorStatus();
+                int errorIndex = responsePDU.getErrorIndex();
+                String errorStatusText = responsePDU.getErrorStatusText();
+                if(errorStatus == PDU.noError) {
+                    returnData += "\nSnmp v3 Get response = " + responsePDU.getVariableBindings();
+                } else {
+                    returnData += "\nError: request failed" +
+                            "\nError status: " + errorStatus +
+                            "\nError index: " + errorIndex +
+                            "\nError text: " + errorStatusText;
+                }
+            } else {
+                returnData += "\nError: Response PDU is null!";
             }
-            
-            VariableBinding[] varBindings = event.getVariableBindings();
-            if(varBindings == null || varBindings.length == 0) { continue; }
-            for(VariableBinding varBinding : varBindings) {
-                if (varBinding == null) { continue; }
-                returnData += varBinding.getOid() + " : " +
-                        varBinding.getVariable().getSyntaxString() + " : " +
-                        varBinding.getVariable();
-            }
-            
+        } else {
+            returnData += "\nAgent timeout...";
         }
         
         snmp.close();
@@ -149,7 +175,7 @@ public class SnmpWalk {
         try{
             SnmpWalk snmpwalk = new SnmpWalk();
             snmpwalk.setArgs(args);
-            snmpBack = snmpwalk.execSnmpWalk();
+            snmpBack = snmpwalk.execSnmpWalk(".1.3.6.1.2.1.1.1.0");
         }
         catch(Exception e) {
             snmpBack = "----- An Exception happened as follows. Please confirm the usage etc. -----\n" + e.getMessage();
