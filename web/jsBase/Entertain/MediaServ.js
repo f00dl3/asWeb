@@ -114,25 +114,26 @@ function mediaPlayColor(pCount) {
     return "color: " + cPlays + ";";
 }
 
-function playMediaFile(whatFile) {
+function playMediaFile(whatFile, dbxFlag) {
     var wfa = whatFile.split(".");
     var mediaType = wfa[wfa.length-1].toLowerCase();
-    var mpo, mediaMime, mediaType;
+    var mpo, mediaMime, mediaType, filePath;
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
+    if(isSet(dbxFlag)) { 
+        filePath = getBasePath("ui") + "Cache/" + whatFile;
+    } else {
+        filePath = getBasePath("oldRoot") + whatFile;
+    }
     switch(mediaType) {
         case "mp3":
             mediaMime = "audio/mpeg";
             mpo += "<audio controls autoplay loop>" +
-                    "<source src='" + getBasePath("oldRoot") + whatFile + "' type='" + mediaMime + "'>" +
+                    "<source src='" + filePath + "' type='" + mediaMime + "'>" +
                     "</audio>";
             break;
-        case "mp4": case "m4v":
-            mediaMime = "video/mp4";
-            /* mpo += "<video controls autoplay loop width=100% height=100%>" +
-                    "<src src='" + getBasePath("chartCache") + "/" + whatFile + "' type='" + mediaMime + "'>" +
-                    "</video>"; */
-            window.location.href = getBasePath("ui") + "/cache/" + whatFile;
+        default:
+            window.location.href = filePath;
             break;
     }
     mpo += "</div>";
@@ -151,7 +152,7 @@ function playDbxFile(formData) {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    playMediaFile(formData.unpackedDestination);
+                    playMediaFile(formData.unpackedDestination, true);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -286,7 +287,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             }
             thisMsInfoString += "</div></div>";
         }
-        thisMsInfoString += "</span></form>";
+        thisMsInfoString += "</span>" +
+                "<span class='td'>" + (tm.Path).substr(0, 4) + "</span></form>";
         fileTable += thisMsInfoString;
     });
     fileTable += "</div>";
