@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 18 Apr 2018
+Updated: 24 Apr 2018
  */
 
 package asWebRest.resource;
@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.UpdateMediaServerAction;
 import asWebRest.dao.MediaServerDAO;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.awt.image.BufferedImage;
@@ -30,6 +31,7 @@ public class MediaServerResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
+        CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
@@ -122,6 +124,18 @@ public class MediaServerResource extends ServerResource {
                 case "setPlayed":
                     qParams.add(0, argsInForm.getFirstValue("FileName"));
                     returnData += updateMediaServerAction.setLastPlayed(dbc, qParams);
+                    break;
+                    
+                case "viewDbx":
+                    final File fileToUnpack = new File(cb.getPathMediaServer()+argsInForm.getFirstValue("rawFilePath"));
+                    final File pathToUnpackTo = new File(cb.getPathMediaServer()+"/.cache");
+                    if(!pathToUnpackTo.exists()) { pathToUnpackTo.mkdirs(); }
+                    if(fileToUnpack.exists()) {
+                        wc.unzipFile(fileToUnpack.toString(), pathToUnpackTo.toString());
+                        returnData += "File unpacked! - " + fileToUnpack.toString() + " to " + pathToUnpackTo.toString();
+                    } else {
+                        returnData += "File not found! - " + fileToUnpack.toString();
+                    }
                     break;
                     
             }

@@ -1,15 +1,18 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 22 Apr 2018
+Updated: 24 Apr 2018
 */
 
 package asWebRest.shared;
 
 import asWebRest.shared.MyDBConnector;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import org.jsoup.Jsoup;
 
 public class WebCommon {
@@ -210,6 +215,32 @@ public class WebCommon {
         return resultSet;
     }
     
+    public static String unzipFile(String zipFile, String outputFolder) {
+        String resultsBack = "";
+        byte[] buffer = new byte[4096];
+        try {
+            File folder = new File(outputFolder);
+            if(!folder.exists()) { folder.mkdirs(); }
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)));
+            ZipEntry ze = zis.getNextEntry();
+            while(ze != null) {
+                String fileName = ze.getName();
+                File newFile = new File(outputFolder+File.separator+fileName);
+                resultsBack += "Unzip : " + newFile.getAbsoluteFile() + "\n";
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+                int len;
+                while ((len = zis.read(buffer)) > 0) { fos.write(buffer, 0, len); }
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+            zis.closeEntry();
+            zis.close();
+            resultsBack += "Done!";
+        } catch (IOException ex) { ex.printStackTrace(); }
+        return resultsBack;
+    }
+
     public static void varToFile(String thisVar, File outFile, boolean appendFlag) throws FileNotFoundException {
         try ( PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile, appendFlag))) ) {
                 out.println(thisVar);

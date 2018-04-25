@@ -26,8 +26,13 @@ function actOnNonMedia(event) {
 function actOnPlayMedia(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    setPlayMedia(thisFormData);
-    playMediaFile(thisFormData.FilePath);
+    
+    if(isSet(thisFormData.dbxRawFile)) {
+        playDbxFile(thisFormData);
+    } else {
+        setPlayMedia(thisFormData);
+        playMediaFile(thisFormData.FilePath);
+    }
 }
 
 function displayMediaServer() {
@@ -122,9 +127,37 @@ function playMediaFile(whatFile) {
                     "<source src='" + getBasePath("oldRoot") + whatFile + "' type='" + mediaMime + "'>" +
                     "</audio>";
             break;
+        case "mp4": case "m4v":
+            mediaMime = "video/mp4";
+            mpo += "<video controls autoplay loop width=100% height=100%>" +
+                    "<src src='" + getBasePath("oldRoot") + whatFile + "' type='" + mediaMime + "'>" +
+                    "</video>";
+            break;
     }
     mpo += "</div>";
     dojo.byId("ETSPlayer").innerHTML = mpo;
+}
+
+function playDbxFile(formData) {
+    var thePostData = {
+        "doWhat": "viewDbx",
+        "rawFilePath": formData.dbxRawFile
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("MediaServer"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    playMediaFile(formData.unpackedDestination);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for viewDbx FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function putFileResults(msData, hitCount, matchLimitHit) {
@@ -144,6 +177,11 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var forceMediaType = mediaType;
         if(isSet(tm.Description)) {
             if(isSet(tm.AlbumArt)) {
+                if((tm.Path).substr(0, 4) === "/DBX") {
+                    var albumArtStripped = (tm.AlbumArt).split("/");
+                    dbDipInfo += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped[1] + ".raw'/>" +
+                            "<input type='hidden' name='unpackedDestination' value='/MediaServ/.cache/" + tm.File + "'/>";
+                }
                 if(
                     (tm.Path).substr(0, 4) === "/DBX" ||
                     tm.Path === "/Adult/Export" ||
