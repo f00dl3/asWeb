@@ -59,6 +59,7 @@ public class SnmpResource extends ServerResource {
             switch (doWhat) {
                 
                 case "RapidSNMP":
+                    String loadIndex = ""; String runningProcs = ""; String uptime = "";
                     String cpu1Load = ""; String cpu2Load = ""; String cpu3Load = ""; String cpu4Load = "";
                     String cpu5Load = ""; String cpu6Load = ""; String cpu7Load = ""; String cpu8Load = "";
                     String memPhysSize = ""; String memPhysUsed = ""; String memBuffUsed = ""; String memCachUsed = "";
@@ -67,6 +68,7 @@ public class SnmpResource extends ServerResource {
                     String tempCase = ""; String tempCPU = "";
                     try { 
                         SnmpWalk snmpWalk = new SnmpWalk();
+                        loadIndex = snmpWalk.get("UCD-SNMP-MIB::laLoad.1");
                         cpu1Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196608");
                         cpu2Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196609");
                         cpu3Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196610");
@@ -85,13 +87,16 @@ public class SnmpResource extends ServerResource {
                         diskIoTx = snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0");
                         tempCase = snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22");
                         tempCPU = snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35");
+                        runningProcs = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0");
+                        uptime = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
                     } catch (IOException ix) {
                         ix.printStackTrace();
                     }
                     JSONObject snmpData = new JSONObject();
                     snmpData
-                        .put("CPU1Load", cpu1Load).put("CPU2Load", cpu2Load).put("CPU3Load", cpu3Load).put("CPU4Load", cpu4Load)
-                        .put("CPU5Load", cpu5Load).put("CPU6Load", cpu6Load).put("CPU7Load", cpu7Load).put("CPU8Load", cpu8Load)
+                        .put("loadIndex", loadIndex).put("runningProcs", runningProcs).put("uptime", uptime)
+                        .put("cpu1Load", cpu1Load).put("cpu2Load", cpu2Load).put("cpu3Load", cpu3Load).put("cpu4Load", cpu4Load)
+                        .put("cpu5Load", cpu5Load).put("cpu6Load", cpu6Load).put("cpu7Load", cpu7Load).put("cpu8Load", cpu8Load)
                         .put("memPhysSize", memPhysSize).put("memPhysUsed", memPhysUsed).put("memBuffUsed", memBuffUsed).put("memCachUsed", memCachUsed)
                         .put("hdd0Used", hdd0Used).put("hdd1Used", hdd1Used)
                         .put("diskIoRx", diskIoRx).put("diskIoTx", diskIoTx)

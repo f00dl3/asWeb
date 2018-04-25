@@ -18,7 +18,7 @@ function popCamHolder() {
 function init() {
     getObsDataMerged("disHolderCAMS", "marquee");
     popCamHolder();
-    snmpRapid();
+    snmpRapid("snmpHolder");
     // popSnmpHolder();
 }
 
