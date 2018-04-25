@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 24 Apr 2018
+Updated: 25 Apr 2018
 */
 
 package asWebRest.shared;
@@ -42,6 +42,14 @@ public class WebCommon {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+        
+    public static void deleteDir(File file) {
+            File[] contents = file.listFiles();
+            if (contents != null) {
+                    for (File f : contents) { deleteDir(f); }
+            }
+            file.delete();
     }
         
     public static String getFileExtension(File thisFile) {

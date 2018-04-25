@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 24 Apr 2018
+Updated: 25 Apr 2018
  */
 
 var msIndex;
@@ -26,12 +26,16 @@ function actOnNonMedia(event) {
 function actOnPlayMedia(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    
+    var thisFormDataJ = dojo.formToJson(this.form);
+    //setPlayMedia(thisFormData);
     if(isSet(thisFormData.dbxRawFile)) {
-        playDbxFile(thisFormData);
+        window.alert(thisFormData.FilePath);
+        console.log(thisFormDataJ);
+        //playDbxFile(thisFormData);
     } else {
-        setPlayMedia(thisFormData);
-        playMediaFile(thisFormData.FilePath);
+        window.alert(thisFormData.FilePath, "\nNON DBX!");
+        console.log(thisFormDataJ);
+        //playMediaFile(thisFormData.FilePath);
     }
 }
 
@@ -172,27 +176,30 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             "<span class='td'><strong>File</strong></span>" +
             "</div>";
     msData.forEach(function (tm) {
+        var aaTag = (tm.Path).substr(0, 4);
         var spanColorVal = mediaPlayColor(tm.PlayCount);
-        var dbDipInfo = "", thisAddCheckbox = "";
+        var dbDipInfo = "",
+            thisAddCheckbox = "";
         var fileProps = (tm.File).split(".");
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
-        if(isSet(tm.Description)) {
-            if(isSet(tm.AlbumArt)) {
-                if((tm.Path).substr(0, 4) === "/DBX") {
-                    var albumArtStripped = (tm.AlbumArt).split("/");
-                    dbDipInfo += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped[1] + ".raw'/>" +
-                            "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
-                }
-                if(
-                    (tm.Path).substr(0, 4) === "/DBX" ||
-                    tm.Path === "/Adult/Export" ||
-                    tm.Path === "/Adult/Other") {
-                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".pnx'/><br/>";
-                } else {
-                    dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".jpg'/><br/>";
-                }
+        dbDipInfo += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
+        if(isSet(tm.AlbumArt)) {
+            if(aaTag === "/DBX") {
+                var albumArtStripped = (tm.AlbumArt).split("/");
+                dbDipInfo += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped[1] + ".raw'/>" +
+                        "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
             }
+            if(
+                aaTag === "/DBX" ||
+                tm.Path === "/Adult/Export" ||
+                tm.Path === "/Adult/Other") {
+                dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".pnx'/><br/>";
+            } else {
+                dbDipInfo += "<img class='" + thumbSize + "' src='" + getBasePath("image") + "/AlbumArt/" + tm.AlbumArt + ".jpg'/><br/>";
+            }
+        }
+        if(isSet(tm.Description)) {            
             if(isSet(tm.Burned)) { if(tm.Burned === 1) { dbDipInfo += "Burned to " + tm.Media + " on " + tm.BDate + "<br/>"; } }
             if(isSet(tm.ContentDate)) { dbDipInfo += "Created/Released: " + tm.ContentDate + "<br/>"; }
             if(isSet(tm.Artist)) { dbDipInfo += "Artist: " + tm.Artist + "<br/>"; }
@@ -287,8 +294,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             }
             thisMsInfoString += "</div></div>";
         }
-        thisMsInfoString += "</span>" +
-                "<span class='td'>" + (tm.Path).substr(0, 4) + "</span></form>";
+        thisMsInfoString += "</span></form>";
         fileTable += thisMsInfoString;
     });
     fileTable += "</div>";

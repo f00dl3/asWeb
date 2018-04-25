@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 18 Apr 2018
+Updated: 25 Apr 2018
 For support of non-RESTful API calls
 */
 
@@ -11,7 +11,9 @@ import asWebRest.action.GetWebAccessLogAction;
 import asWebRest.action.GetWebUIserAuthAction;
 import asWebRest.dao.WebAccessLogDAO;
 import asWebRest.dao.WebUIserAuthDAO;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
+import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
@@ -41,6 +43,7 @@ public class Controller extends HttpServlet {
 
     private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
         
         String uri = request.getRequestURI();
@@ -72,6 +75,8 @@ public class Controller extends HttpServlet {
                             break;
                             
                         case "userAndPass":
+                            final File cachePath = new File(cb.getPathChartCache());
+                            wc.deleteDir(cachePath);
                             GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
                             GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
                             String loginCheck = "false";

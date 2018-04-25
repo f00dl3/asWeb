@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 7 Apr 2018
+Updated: 25 Apr 2018
 */
 
 package asWebRest.dao;
 
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +16,7 @@ public class AddressBookDAO {
     
     WebCommon wc = new WebCommon();
     
-    public JSONArray getAddressBook() {
+    public JSONArray getAddressBook(Connection dbc) {
         final String query_AddressBook = "SELECT Business, LastName, FirstName,"
             + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2,"
             + " EMail, AsOf, Holiday2014, Birthday, Point, Website"
@@ -24,7 +25,7 @@ public class AddressBookDAO {
             + " DESC;";
         JSONArray addressBook = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AddressBook, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AddressBook, null);
             while (resultSet.next()) {
                 JSONObject tAddressBook = new JSONObject();
                 tAddressBook

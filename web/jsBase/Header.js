@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 22 Apr 2018
+Updated: 25 Apr 2018
  */
 
 
@@ -230,6 +230,7 @@ function getRelatedLinks(page) {
 
 function getResource(what) {
     switch(what) {
+        case "Addresses": return getBasePath("rest") + "/Addresses"; break;
         case "Anthony": case "f00dl3": return getBasePath("ui") + "/Anthony.jsp"; break;
         case "Cams": return getBasePath("ui") + "/Cams.jsp"; break;
         case "Chart": return getBasePath("rest") + "/Chart"; break;
