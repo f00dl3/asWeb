@@ -59,35 +59,35 @@ public class SnmpResource extends ServerResource {
             switch (doWhat) {
                 
                 case "RapidSNMP":
-                    String loadIndex = ""; String runningProcs = ""; String uptime = "";
-                    String cpu1Load = ""; String cpu2Load = ""; String cpu3Load = ""; String cpu4Load = "";
-                    String cpu5Load = ""; String cpu6Load = ""; String cpu7Load = ""; String cpu8Load = "";
-                    String memPhysSize = ""; String memPhysUsed = ""; String memBuffUsed = ""; String memCachUsed = "";
-                    String hdd0Used = ""; String hdd1Used = "";
-                    String diskIoRx = ""; String diskIoTx = "";
-                    String tempCase = ""; String tempCPU = "";
+                    double loadIndex = 0.00; int runningProcs = 0; String uptime = "";
+                    int cpu1Load = 0; int cpu2Load = 0; int cpu3Load = 0; int cpu4Load = 0;
+                    int cpu5Load = 0; int cpu6Load = 0; int cpu7Load = 0; int cpu8Load = 0;
+                    long memPhysSize = 0; long memPhysUsed = 0; long memBuffUsed = 0; long memCachUsed = 0;
+                    long hdd0Used = 0; long hdd1Used = 0;
+                    long diskIoRx = 0; long diskIoTx = 0;
+                    int tempCase = 0; int tempCPU = 0;
                     try { 
                         SnmpWalk snmpWalk = new SnmpWalk();
-                        loadIndex = snmpWalk.get("UCD-SNMP-MIB::laLoad.1");
-                        cpu1Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196608");
-                        cpu2Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196609");
-                        cpu3Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196610");
-                        cpu4Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196611");
-                        cpu5Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196612");
-                        cpu6Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196613");
-                        cpu7Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196614");
-                        cpu8Load = snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196615");
-                        memPhysSize = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageSize.1");
-                        memPhysUsed = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.1");
-                        memBuffUsed = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.6");
-                        memCachUsed = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.7");
-                        hdd0Used = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.31");
-                        hdd1Used = snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.68");
-                        diskIoRx = snmpWalk.get("UCD-SNMP-MIB::ssIORawReceived.0");
-                        diskIoTx = snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0");
-                        tempCase = snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22");
-                        tempCPU = snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35");
-                        runningProcs = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0");
+                        try { loadIndex = Double.parseDouble(snmpWalk.get("UCD-SNMP-MIB::laLoad.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu1Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196608")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu2Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196609")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu3Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196610")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu4Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196611")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu5Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196612")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu6Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196613")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu7Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196614")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu8Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196615")); } catch (Exception e) { e.printStackTrace(); }
+                        memPhysSize = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageSize.1"));
+                        memPhysUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.1"));
+                        memBuffUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.6"));
+                        memCachUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.7"));
+                        hdd0Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.31"));
+                        hdd1Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.68"));
+                        diskIoRx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawReceived.0"));
+                        diskIoTx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0"));
+                        tempCase = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22"));
+                        tempCPU = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35"));
+                        try { runningProcs = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0")); } catch (Exception e) { e.printStackTrace(); }
                         uptime = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
                     } catch (IOException ix) {
                         ix.printStackTrace();
