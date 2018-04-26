@@ -4,6 +4,13 @@ Created: 30 Mar 2018
 Updated: 25 Apr 2018
  */
 
+var testCounter = 0;
+var diskIoLastRead = 0;
+var diskIoLastWrite = 0;
+var eth0LastIn = 0;
+var eth0LastOut = 0;
+var lastNotableEthUse = 0;
+
 function checkIfSnmpIsUp(state) {
     switch(state) {
         case true: doSnmpWidget(); break;
@@ -12,6 +19,9 @@ function checkIfSnmpIsUp(state) {
 }
 
 function processSnmpData(snmp, target) {
+    var checkInt = 0.5;
+    if(checkMobile()) { checkInt = 1; }
+    testCounter++;
     var cpuLoads = [
         snmp.cpu1Load,
         snmp.cpu2Load,
@@ -39,19 +49,26 @@ function processSnmpData(snmp, target) {
     var usedStorage2 = ((snmp.hdd1Used * 4096) / 1024 / 1024 / 1024);
     var usedStorageComb = usedStorage + usedStorage2;
     var loadIndex = snmp.loadIndex;
-    if(isSet(snmp.diskIoTx) && isSet(snmp.diskIoRx)) {
-        // build
-    }
+    var thisDiskIoRead = snmp.diskIoRx;
+    var thisDiskIoWrite = snmp.diskIoTx;
+    var thisDiskIoReadDiff = 0;
+    var thisDiskIoWriteDiff = 0;
+    if(isSet(diskIoLastRead)) { thisDiskIoReadDiff = thisDiskIoRead - diskIoLastRead; }
+    if(isSet(diskIoLastWrite)) { thisDiskIoWriteDiff = thisDiskIoWrite - diskIoLastWrite; }
+    diskIoLastRead = thisDiskIoRead;
+    diskIoLastWrite = thisDiskIoWrite;
+    var thisDiskIo = (thisDiskIoReadDiff + thisDiskIoWriteDiff)/checkInt;
     var avgCPUColor = autoColorScale(cpuAvgLoad, 100, 0, null);
     var procsColor = autoColorScale(runningProcesses, 500, 0, null);
     var diskSpanColor = autoColorScale((usedStorage/1700)*100, 100, 0, null);
     var disk2SpanColor = autoColorScale((usedStorage2/4400)*100, 100, 0, null);
-    //var diskIOColor = autoColorScale(thisDiskIO, 200000, 0, null);
+    var diskIOColor = autoColorScale(thisDiskIo, 200000, 0, null);
     var loadIndexColor = autoColorScale(loadIndex, 8, 0, null);
     var memChartColor = autoColorScale(usedMemory, memPhysSize, 0, null);
     var tempCase = (0.93*(conv2Tf(snmp.tempCase/1000))).toFixed(1);
     var tempCPU = (0.93*(conv2Tf(snmp.tempCPU/1000))).toFixed(1);
-    var thisDiskIO = "NA";
+    var diskPopIn = " ";
+    if(thisDiskIo !== 0) { diskPopIn = " +" + autoUnits(thisDiskIo); }
     if (snmp.loadIndex >= 4) { loadCond += " Load @ " + loadCond; }
     rData += "Uptime: " + snmp.uptime +
             " / Amb: <span style='" + styleTemp(tempCase) + "'>" + tempCase + "F</span>" +
@@ -73,38 +90,54 @@ function processSnmpData(snmp, target) {
     }
     rData += "<br/>" +
             "<svg width='" + (svgMult*75) + "' style='border: 1px solid #333333; padding: 1px; background-color: #666666;' height='16'><g>" +
-            "<rect x='0' y='0' width='" + ((75*svgMult)*(usedMemory/memPhysSize)) + "' height='16' fill: " + memChartColor + ";'/>" +
+            "<rect x='0' y='0' width='" + ((75*svgMult)*(usedMemory/memPhysSize)) + "' height='16' style='fill: " + memChartColor + ";'/>" +
             "<text x='0' y='10' fill='" + autoFontScale((usedMemory/memPhysSize)*100) + "' alignment-baseline='middle'>" + "Mem: " + Math.round(usedMemory/1024/1024) + "G/" + Math.round(eUsedMemory/1024/1024) + "G</text>" +
             "</g></svg>" +
             "<svg width='" + (svgMult*75) + "' style='border: 1px solid #333333; padding: 1px; background-color: #666666;' height='16'><g>" +
             "<rect x='0' y='0' width='" + ((75*svgMult)*(usedStorage/1700)) + "' height='16' style='fill: " + diskSpanColor + ";'/>" +
-            "<text x='0' y='10' fill='" + autoFontScale((usedStorage/1700)*100) + "' alignment-baseline='middle'>" + Math.round(usedStorage) + "G/" + autoUnits(thisDiskIO) + "</text>" +
+            "<text x='0' y='10' fill='" + autoFontScale((usedStorage/1700)*100) + "' alignment-baseline='middle'>" + Math.round(usedStorage) + "G" + diskPopIn + "</text>" +
             "</g></svg>" +
             "<svg width='" + (svgMult*75) + "' style='border: 1px solid #333333; padding: 1px; background-color: #666666;' height='16'><g>" +
             "<rect x='0' y='0' width='" + ((75*svgMult)*(usedStorage2/4400)) + "' height='16' style='fill: " + disk2SpanColor + ";'/>" +
             "<text x='0' y='10' fill='" + autoFontScale((usedStorage2/4400)*100) + "' alignment-baseline='middle'>" + Math.round(usedStorage2) + "G</text>" +
             "</g></svg>";
-    // Build network part!
+    var thisEth0In = snmp.eth0In;
+    var thisEth0Out = snmp.eth0Out;
+    var thisEth0InDiff = 0;
+    var thisEth0OutDiff = 0;
+    if(eth0LastIn !== 0) { thisEth0InDiff = thisEth0In - eth0LastIn; }
+    if(eth0LastOut !== 0) { thisEth0OutDiff = thisEth0Out - eth0LastOut; }
+    eth0LastIn = thisEth0In;
+    eth0LastOut = thisEth0Out;
+    var thisEth0IntDiff = (thisEth0OutDiff + thisEth0InDiff)/checkInt;
+    if(thisEth0IntDiff !== 0) { lastNotableEthUse = thisEth0IntDiff; }
+    var xBps = autoUnits(lastNotableEthUse);
+    var eth0Use = (lastNotableEthUse/100000000)*(svgMult*100);
+    var eth0Color = autoColorScale(eth0Use, 100, 0, null);
+    rData += "<svg width='" + (svgMult*75) + "' style='border: 1px solid #333333; padding: 1px; background-color: #666666;' height='16'><g>" +
+            "<rect x='0' y='0' width='" + eth0Use + "' height='16' style='fill: " + eth0Color + ";'/>" +
+            "<text x='0' y='10' fill='" + autoFontScale(eth0Use) + "' alignment-baseline='middle'>e0: " + xBps + "</text>" +
+            "</g></svg><br/>" +
+            "<strong>SNMPv3 Poll Counter: " + testCounter;
     dojo.byId(target).innerHTML = rData;
 }
 
 function snmpRapid(target) {
     var timeout = 500;
     if(checkMobile()) { timeout = 1500; }
-    setInterval(function () {
-        var thePostData = { "doWhat": "RapidSNMP" };
-        require(["dojo/request"], function(request) {
-            request
-                .post(getResource("SNMP"), {
-                    data: thePostData,
-                    handleAs: "json"
-                }).then(
-                    function(data) {
-                        processSnmpData(data, target);
-                    },
-                    function(error) { 
-                        console.log("request for Rapid SNMP FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                    });
-        });
-    }, timeout);
+    var thePostData = { "doWhat": "RapidSNMP" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("SNMP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    processSnmpData(data, target);
+                },
+                function(error) { 
+                    console.log("request for Rapid SNMP FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    setTimeout(function () { snmpRapid(target); }, timeout);
 }

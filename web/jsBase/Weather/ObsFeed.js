@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 1 Apr 2018
+Updated: 25 Apr 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -65,6 +65,7 @@ function getObsData(targetDiv, displayType) {
 
 
 function getObsDataMerged(targetDiv, displayType) {
+    var timeout = 5*60*1000;
     aniPreload("on");
     var dateOverrideStart = getDate("hour", -1, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
@@ -104,6 +105,7 @@ function getObsDataMerged(targetDiv, displayType) {
         }
     };
     dojo.xhrPost(arObsJsonMq);
+    setTimeout(function() { getObsDataMerged(targetDiv, displayType); }, timeout);
 }
 
 function processMarqueeData(theData, lastData, targetDiv) {

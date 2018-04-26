@@ -132,7 +132,7 @@ public class SnmpWalk {
             e.printStackTrace();
         }
         if(wc.isSet(snmpBackTmp) && snmpBackTmp.contains(" = ")) {
-            String[] snmpBackArray = snmpBackTmp.replace(" = ", ",").split(",");
+            String[] snmpBackArray = snmpBackTmp.replace(" = ", ";").split(";");
             snmpBack = snmpBackArray[1].replace("]","");
         } else {
             snmpBack = snmpBackTmp;

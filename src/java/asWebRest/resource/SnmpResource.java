@@ -66,6 +66,7 @@ public class SnmpResource extends ServerResource {
                     long hdd0Used = 0; long hdd1Used = 0;
                     long diskIoRx = 0; long diskIoTx = 0;
                     int tempCase = 0; int tempCPU = 0;
+                    long eth0In = 0; long eth0Out = 0;
                     try { 
                         SnmpWalk snmpWalk = new SnmpWalk();
                         try { loadIndex = Double.parseDouble(snmpWalk.get("UCD-SNMP-MIB::laLoad.1")); } catch (Exception e) { e.printStackTrace(); }
@@ -77,18 +78,20 @@ public class SnmpResource extends ServerResource {
                         try { cpu6Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196613")); } catch (Exception e) { e.printStackTrace(); }
                         try { cpu7Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196614")); } catch (Exception e) { e.printStackTrace(); }
                         try { cpu8Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196615")); } catch (Exception e) { e.printStackTrace(); }
-                        memPhysSize = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageSize.1"));
-                        memPhysUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.1"));
-                        memBuffUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.6"));
-                        memCachUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.7"));
-                        hdd0Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.31"));
-                        hdd1Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.68"));
-                        diskIoRx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawReceived.0"));
-                        diskIoTx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0"));
-                        tempCase = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22"));
-                        tempCPU = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35"));
+                        try { memPhysSize = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageSize.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memPhysUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memBuffUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.6")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memCachUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.7")); } catch (Exception e) { e.printStackTrace(); }
+                        try { hdd0Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.31")); } catch (Exception e) { e.printStackTrace(); }
+                        try { hdd1Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.68")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoRx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawReceived.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoTx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { eth0In = Long.parseLong(snmpWalk.get("IF-MIB::ifInOctets.2")); } catch (Exception e) { e.printStackTrace(); }
+                        try { eth0Out = Long.parseLong(snmpWalk.get("IF-MIB::ifOutOctets.2")); } catch (Exception e) { e.printStackTrace(); }
+                        try { tempCase = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22")); } catch (Exception e) { e.printStackTrace(); }
+                        try { tempCPU = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35")); } catch (Exception e) { e.printStackTrace(); }
                         try { runningProcs = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0")); } catch (Exception e) { e.printStackTrace(); }
-                        uptime = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
+                        try { uptime = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0"); } catch (Exception e) { e.printStackTrace(); }
                     } catch (IOException ix) {
                         ix.printStackTrace();
                     }
@@ -100,7 +103,8 @@ public class SnmpResource extends ServerResource {
                         .put("memPhysSize", memPhysSize).put("memPhysUsed", memPhysUsed).put("memBuffUsed", memBuffUsed).put("memCachUsed", memCachUsed)
                         .put("hdd0Used", hdd0Used).put("hdd1Used", hdd1Used)
                         .put("diskIoRx", diskIoRx).put("diskIoTx", diskIoTx)
-                        .put("tempCase", tempCase).put("tempCPU", tempCPU);
+                        .put("tempCase", tempCase).put("tempCPU", tempCPU)
+                        .put("eth0In", eth0In).put("eth0Out", eth0Out);
                     returnData = snmpData.toString();
                     break;
                     
