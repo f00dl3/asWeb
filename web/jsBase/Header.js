@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 25 Apr 2018
+Updated: 26 Apr 2018
  */
 
 
@@ -166,7 +166,7 @@ function getBasePath(opt) {
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
-        case "getOld": tBase += "/Get"; break;
+        case "getOld": case "getOldGet": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase += "/MediaServ"; break;

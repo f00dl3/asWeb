@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 1 Apr 2018
+Updated: 26 Apr 2018
  */
 
 package asWebRest.resource;
@@ -58,53 +58,123 @@ public class SnmpResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
-                case "RapidSNMP":
-                    double loadIndex = 0.00; int runningProcs = 0; String uptime = "";
-                    int cpu1Load = 0; int cpu2Load = 0; int cpu3Load = 0; int cpu4Load = 0;
-                    int cpu5Load = 0; int cpu6Load = 0; int cpu7Load = 0; int cpu8Load = 0;
-                    long memPhysSize = 0; long memPhysUsed = 0; long memBuffUsed = 0; long memCachUsed = 0;
-                    long hdd0Used = 0; long hdd1Used = 0;
-                    long diskIoRx = 0; long diskIoTx = 0;
-                    int tempCase = 0; int tempCPU = 0;
-                    long eth0In = 0; long eth0Out = 0;
+                case "snmpWalk":
+                    int cpu1Load = 0;
+                    int cpu2Load = 0;
+                    int cpu3Load = 0;
+                    int cpu4Load = 0;
+                    int cpu5Load = 0;
+                    int cpu6Load = 0;
+                    int cpu7Load = 0;
+                    int cpu8Load = 0;
+                    int diskIoNode = 0;
+                    long diskIoRx = 0;
+                    long diskIoTx = 0;
+                    long eth0In = 0;
+                    long eth0Out = 0;
+                    long hdd0Used = 0;
+                    long hdd1Used = 0;
+                    double loadIndex = 0.00;
+                    double loadIndex5 = 0.00;
+                    double loadIndex15 = 0.00;
+                    long memBuffSize = 0;
+                    long memBuffUsed = 0;
+                    long memCachSize = 0;
+                    long memCachUsed = 0;
+                    int memIoNode = 0;
+                    long memPhysSize = 0;
+                    long memPhysUsed = 0;
+                    long memVirtSize = 0;
+                    long memVirtUsed = 0;
+                    long myDelete = 0;
+                    long myInsert = 0;
+                    long myReplace = 0;
+                    long mySelect = 0;
+                    long myUpdate = 0;
+                    int runningProcs = 0;
+                    int tempCase = 0;
+                    int tempCPU = 0;
+                    String uptime = "";
                     try { 
                         SnmpWalk snmpWalk = new SnmpWalk();
-                        try { loadIndex = Double.parseDouble(snmpWalk.get("UCD-SNMP-MIB::laLoad.1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu1Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196608")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu2Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196609")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu3Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196610")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu4Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196611")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu5Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196612")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu6Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196613")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu7Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196614")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu8Load = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrProcessorLoad.196615")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memPhysSize = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageSize.1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memPhysUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memBuffUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.6")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memCachUsed = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.7")); } catch (Exception e) { e.printStackTrace(); }
-                        try { hdd0Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.31")); } catch (Exception e) { e.printStackTrace(); }
-                        try { hdd1Used = Long.parseLong(snmpWalk.get("HOST-RESOURCES-MIB::hrStorageUsed.68")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoRx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawReceived.0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoTx = Long.parseLong(snmpWalk.get("UCD-SNMP-MIB::ssIORawSent.0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { eth0In = Long.parseLong(snmpWalk.get("IF-MIB::ifInOctets.2")); } catch (Exception e) { e.printStackTrace(); }
-                        try { eth0Out = Long.parseLong(snmpWalk.get("IF-MIB::ifOutOctets.2")); } catch (Exception e) { e.printStackTrace(); }
-                        try { tempCase = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.22")); } catch (Exception e) { e.printStackTrace(); }
-                        try { tempCPU = Integer.parseInt(snmpWalk.get("LM-SENSORS-MIB::lmTempSensorsValue.35")); } catch (Exception e) { e.printStackTrace(); }
-                        try { runningProcs = Integer.parseInt(snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { uptime = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0"); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu1Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196608")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu2Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196609")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu3Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196610")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu4Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196611")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu5Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196612")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu6Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196613")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu7Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196614")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu8Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196615")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoNode = Integer.parseInt(snmpWalk.get("diskPercentNode.3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoRx = Long.parseLong(snmpWalk.get("ssIORawReceived.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoTx = Long.parseLong(snmpWalk.get("ssIORawSent.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { eth0In = Long.parseLong(snmpWalk.get("ifInOctets.2")); } catch (Exception e) { e.printStackTrace(); }
+                        try { eth0Out = Long.parseLong(snmpWalk.get("ifOutOctets.2")); } catch (Exception e) { e.printStackTrace(); }
+                        try { hdd0Used = Long.parseLong(snmpWalk.get("hrStorageUsed.31")); } catch (Exception e) { e.printStackTrace(); }
+                        try { hdd1Used = Long.parseLong(snmpWalk.get("hrStorageUsed.68")); } catch (Exception e) { e.printStackTrace(); }
+                        try { loadIndex = Double.parseDouble(snmpWalk.get("laLoad.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { loadIndex5 = Double.parseDouble(snmpWalk.get("laLoad.2")); } catch (Exception e) { e.printStackTrace(); }
+                        try { loadIndex15 = Double.parseDouble(snmpWalk.get("laLoad.3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memBuffSize = Long.parseLong(snmpWalk.get("hrStorageSize.6")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memBuffUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.6")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memCachSize = Long.parseLong(snmpWalk.get("hrStorageSize.7")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memCachUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.7")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memIoNode = Integer.parseInt(snmpWalk.get("diskPercentNode.5")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memPhysSize = Long.parseLong(snmpWalk.get("hrStorageSize.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memPhysUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.1")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memVirtSize = Long.parseLong(snmpWalk.get("hrStorageSize.3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memVirtUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { myDelete = Long.parseLong(snmpWalk.get("myComDelete.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { myInsert = Long.parseLong(snmpWalk.get("myComInsert.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { myReplace = Long.parseLong(snmpWalk.get("myComReplace.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { mySelect = Long.parseLong(snmpWalk.get("myComSelect.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { myUpdate = Long.parseLong(snmpWalk.get("myComUpdate.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { runningProcs = Integer.parseInt(snmpWalk.get("hrSystemProcesses.0")); } catch (Exception e) { e.printStackTrace(); }
+                        try { tempCase = Integer.parseInt(snmpWalk.get("lmTempSensorsValue.22")); } catch (Exception e) { e.printStackTrace(); }
+                        try { tempCPU = Integer.parseInt(snmpWalk.get("lmTempSensorsValue.35")); } catch (Exception e) { e.printStackTrace(); }
+                        try { uptime = snmpWalk.get("hrSystemUptime.0"); } catch (Exception e) { e.printStackTrace(); }
                     } catch (IOException ix) {
                         ix.printStackTrace();
                     }
                     JSONObject snmpData = new JSONObject();
                     snmpData
-                        .put("loadIndex", loadIndex).put("runningProcs", runningProcs).put("uptime", uptime)
-                        .put("cpu1Load", cpu1Load).put("cpu2Load", cpu2Load).put("cpu3Load", cpu3Load).put("cpu4Load", cpu4Load)
-                        .put("cpu5Load", cpu5Load).put("cpu6Load", cpu6Load).put("cpu7Load", cpu7Load).put("cpu8Load", cpu8Load)
-                        .put("memPhysSize", memPhysSize).put("memPhysUsed", memPhysUsed).put("memBuffUsed", memBuffUsed).put("memCachUsed", memCachUsed)
-                        .put("hdd0Used", hdd0Used).put("hdd1Used", hdd1Used)
-                        .put("diskIoRx", diskIoRx).put("diskIoTx", diskIoTx)
-                        .put("tempCase", tempCase).put("tempCPU", tempCPU)
-                        .put("eth0In", eth0In).put("eth0Out", eth0Out);
+                        .put("cpu1Load", cpu1Load)
+                        .put("cpu2Load", cpu2Load)
+                        .put("cpu3Load", cpu3Load)
+                        .put("cpu4Load", cpu4Load)
+                        .put("cpu5Load", cpu5Load)
+                        .put("cpu6Load", cpu6Load)
+                        .put("cpu7Load", cpu7Load)
+                        .put("cpu8Load", cpu8Load)
+                        .put("diskIoNode", diskIoNode)
+                        .put("diskIoRx", diskIoRx)
+                        .put("diskIoTx", diskIoTx)
+                        .put("eth0In", eth0In)
+                        .put("eth0Out", eth0Out)
+                        .put("hdd0Used", hdd0Used)
+                        .put("hdd1Used", hdd1Used)
+                        .put("loadIndex", loadIndex)
+                        .put("loadIndex5", loadIndex5)
+                        .put("loadIndex15", loadIndex15)
+                        .put("memBuffSize", memBuffSize)
+                        .put("memBuffUsed", memBuffUsed)
+                        .put("memCachSize", memCachSize)
+                        .put("memCachUsed", memCachUsed)
+                        .put("memIoNode", memIoNode)
+                        .put("memPhysSize", memPhysSize)
+                        .put("memPhysUsed", memPhysUsed)
+                        .put("memVirtSize", memVirtSize)
+                        .put("memVirtUsed", memVirtUsed)
+                        .put("myDelete", myDelete)
+                        .put("myInsert", myInsert)
+                        .put("myReplace", myReplace)
+                        .put("mySelect", mySelect)
+                        .put("myUpdate", myUpdate)
+                        .put("runningProcs", runningProcs)
+                        .put("tempCase", tempCase)
+                        .put("tempCPU", tempCPU)
+                        .put("uptime", uptime);
+                        
                     returnData = snmpData.toString();
                     break;
                     

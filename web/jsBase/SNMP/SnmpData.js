@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 25 Apr 2018
+Updated: 26 Apr 2018
  */
 
 var testCounter = 0;
@@ -71,8 +71,8 @@ function processSnmpData(snmp, target) {
     if(thisDiskIo !== 0) { diskPopIn = " +" + autoUnits(thisDiskIo); }
     if (snmp.loadIndex >= 4) { loadCond += " Load @ " + loadCond; }
     rData += "Uptime: " + snmp.uptime +
-            " / Amb: <span style='" + styleTemp(tempCase) + "'>" + tempCase + "F</span>" +
-            " / CPU: <span style='" + styleTemp(tempCPU) + "'>" + tempCPU + "F</span>" +
+            " / Amb: <span style='" + styleTemp(tempCase) + "'>" + Math.round(tempCase) + "F</span>" +
+            " / CPU: <span style='" + styleTemp(tempCPU) + "'>" + Math.round(tempCPU) + "F</span>" +
             "<br/>" +
             "CPU --" +
             " Avg: <span style='background-color: " + avgCPUColor + "; color: " + autoFontScale(cpuAvgLoad) + ";'>" + cpuAvgLoad + "%</span> " +
@@ -112,11 +112,11 @@ function processSnmpData(snmp, target) {
     var thisEth0IntDiff = (thisEth0OutDiff + thisEth0InDiff)/checkInt;
     if(thisEth0IntDiff !== 0) { lastNotableEthUse = thisEth0IntDiff; }
     var xBps = autoUnits(lastNotableEthUse);
-    var eth0Use = (lastNotableEthUse/100000000)*(svgMult*100);
+    var eth0Use = (lastNotableEthUse/1000000000)*(svgMult*100);
     var eth0Color = autoColorScale(eth0Use, 100, 0, null);
     rData += "<svg width='" + (svgMult*75) + "' style='border: 1px solid #333333; padding: 1px; background-color: #666666;' height='16'><g>" +
             "<rect x='0' y='0' width='" + eth0Use + "' height='16' style='fill: " + eth0Color + ";'/>" +
-            "<text x='0' y='10' fill='" + autoFontScale(eth0Use) + "' alignment-baseline='middle'>e0: " + xBps + "</text>" +
+            "<text x='0' y='10' fill='" + autoFontScale(eth0Use) + "' alignment-baseline='middle'>e0: " + xBps + "b</text>" +
             "</g></svg><br/>" +
             "<strong>SNMPv3 Poll Counter: " + testCounter;
     dojo.byId(target).innerHTML = rData;
@@ -125,7 +125,7 @@ function processSnmpData(snmp, target) {
 function snmpRapid(target) {
     var timeout = 500;
     if(checkMobile()) { timeout = 1500; }
-    var thePostData = { "doWhat": "RapidSNMP" };
+    var thePostData = { "doWhat": "snmpWalk" };
     require(["dojo/request"], function(request) {
         request
             .post(getResource("SNMP"), {

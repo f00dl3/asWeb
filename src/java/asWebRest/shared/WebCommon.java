@@ -21,14 +21,33 @@ import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.json.JSONArray;
 import org.jsoup.Jsoup;
 
 public class WebCommon {
-            
+    
+    public static double[] arrayDoubleFromJson(JSONArray inJsonArray) {
+        double[] newArray = new double[inJsonArray.length()];
+        DecimalFormat df = new DecimalFormat("#.0");
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            try { newArray[i] = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+        }
+        return newArray;
+    }
+    
+    public static String[] arrayStringFromJson(JSONArray inJsonArray) {
+        String[] newArray = new String[inJsonArray.length()];
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            try { newArray[i] = inJsonArray.getString(i); } catch (Exception e) { e.printStackTrace(); }
+        }
+        return newArray;
+    }
+    
     public static String basicInputFilter(String inString) {
         return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
     }

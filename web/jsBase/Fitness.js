@@ -351,10 +351,10 @@ function populateFitnessChart(chartSource) {
         case "jFree":
             tElement = "<div class='trafcam'>" +
                     "<div class='UPopNM'>" +
-                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.jpeg'/>" +
+                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.png'/>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
-                    "<a href='" + getBasePath("chartCache") + "/WeightRange.jpeg' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href='" + getBasePath("chartCache") + "/WeightRange.png' target='pChart'><button class='UButton'>Range</button></a>" +
                     //"<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
                     "</div></div>" +
                     "</div>";

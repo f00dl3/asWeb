@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
+Updated: 26 Apr 2018
  */
 
 function actOnShowFeed() {
@@ -12,9 +13,6 @@ function actOnShowFeed() {
 }
 
 function actOnShowLive() {
-    getObsDataMerged("ObsCurrent", "static");
-    getLiveLinks3d();
-    popLiveLinksList();
     $("#WxLive").toggle();
     $("#WxFeeds").hide();
     $("#WxQuakes").hide();
@@ -165,6 +163,9 @@ function popLiveContainer() {
             "<div id='WxNews'></div>";
     dojo.byId("WxLiveContainer").innerHTML = rData;
     popLiveButtonNavi();
+    popLiveLinksList();
+    getLiveLinks3d();
+    getObsDataMerged("ObsCurrent", "static");
 }
 
 function popLiveLinks3d(irsLinks, df7Links) {
@@ -182,7 +183,7 @@ function popLiveLinks3d(irsLinks, df7Links) {
                 "<img " + cubeRes + " src='" + df7.URL + "'/></a>";
         elementListWx1.push(tElem);
     });
-    var elementPopper1 = "<a styleReplace href='" + getBasePath("old") + "/Cams.php' target='new'>" +
+    var elementPopper1 = "<a styleReplace href='" + getBasePath("ui") + "/Cams.jsp' target='new'>" +
             "<img " + cubeRes + " src='" + getBasePath("getOld") + "/Cams/_Latest.jpeg' alt='Cams'></a>";
     elementListWx1.push(elementPopper1);
     var rData = imageLinks3d(elementListWx1, 25, 200, 1.53);
