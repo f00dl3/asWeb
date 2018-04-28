@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 26 Apr 2018
+Updated: 27 Apr 2018
  */
 
 package asWebRest.resource;
@@ -105,7 +105,7 @@ public class SnmpResource extends ServerResource {
                         try { cpu6Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196613")); } catch (Exception e) { e.printStackTrace(); }
                         try { cpu7Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196614")); } catch (Exception e) { e.printStackTrace(); }
                         try { cpu8Load = Integer.parseInt(snmpWalk.get("hrProcessorLoad.196615")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoNode = Integer.parseInt(snmpWalk.get("diskPercentNode.3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { diskIoNode = Integer.parseInt(snmpWalk.get("dskPercentNode.3")); } catch (Exception e) { e.printStackTrace(); }
                         try { diskIoRx = Long.parseLong(snmpWalk.get("ssIORawReceived.0")); } catch (Exception e) { e.printStackTrace(); }
                         try { diskIoTx = Long.parseLong(snmpWalk.get("ssIORawSent.0")); } catch (Exception e) { e.printStackTrace(); }
                         try { eth0In = Long.parseLong(snmpWalk.get("ifInOctets.2")); } catch (Exception e) { e.printStackTrace(); }
@@ -119,7 +119,7 @@ public class SnmpResource extends ServerResource {
                         try { memBuffUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.6")); } catch (Exception e) { e.printStackTrace(); }
                         try { memCachSize = Long.parseLong(snmpWalk.get("hrStorageSize.7")); } catch (Exception e) { e.printStackTrace(); }
                         try { memCachUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.7")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memIoNode = Integer.parseInt(snmpWalk.get("diskPercentNode.5")); } catch (Exception e) { e.printStackTrace(); }
+                        try { memIoNode = Integer.parseInt(snmpWalk.get("dskPercentNode.5")); } catch (Exception e) { e.printStackTrace(); }
                         try { memPhysSize = Long.parseLong(snmpWalk.get("hrStorageSize.1")); } catch (Exception e) { e.printStackTrace(); }
                         try { memPhysUsed = Long.parseLong(snmpWalk.get("hrStorageUsed.1")); } catch (Exception e) { e.printStackTrace(); }
                         try { memVirtSize = Long.parseLong(snmpWalk.get("hrStorageSize.3")); } catch (Exception e) { e.printStackTrace(); }

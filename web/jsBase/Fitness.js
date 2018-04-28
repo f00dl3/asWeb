@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 10 Apr 2018
+Updated: 27 Apr 2018
  */
 
 var myHeight = 68;
@@ -189,7 +189,34 @@ function getMapLinkString(inDate, inType, inAct, commonFlag) {
     return genString;
 }
 
-function getWeightChart(inXdt1, inXdt2, chartContainer) {
+function getCalorieChart(inXdt1, inXdt2) {
+    aniPreload("on");
+    var xdt1, xdt2;
+    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
+    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
+    var thePostData = {
+        "doWhat": "CalorieRange",
+        "XDT1": xdt1,
+        "XDT2": xdt2
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    populateCalorieChart();
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Calorie Chart FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getWeightChart(inXdt1, inXdt2) {
     aniPreload("on");
     var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
@@ -227,7 +254,11 @@ function processFitnessAll(dataIn, autoMpg) {
     ];
     var rData = "<tr>";
     fitTableDefs.forEach(function(thisDef) {
-       rData += "<th>" + thisDef + "</th>";
+        if(thisDef === "Cals") {
+            rData += "<th><div class='UPop'>" + thisDef + "<div class='UPopO'><div id='CalorieChartHolder'></div></div></th>";
+        } else {
+            rData += "<th>" + thisDef + "</th>";
+        }
     });
     rData += "</tr>";
     for(var i=0; i<dataIn.length; i++) {
@@ -330,6 +361,12 @@ function processFitnessAll(dataIn, autoMpg) {
         rData += "</td></tr>";
     }
     dojo.byId("fitnessTable").innerHTML = rData;
+    getCalorieChart();
+}
+
+function populateCalorieChart() {
+    var rData = "<a href='" + getBasePath("chartCache") + "/CalorieRange.png' target='pChart'><img class='ch_large' src='" + getBasePath("chartCache") + "/th_CalorieRange.png'/></a>";
+    dojo.byId("CalorieChartHolder").innerHTML = rData;
 }
 
 function populateFitnessChart(chartSource) {

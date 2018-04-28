@@ -22,10 +22,14 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 public class DynChartX {
     
-    public static void LineChart(JSONArray jsonLabelArray, JSONArray jsonDataArray, JSONObject jsonProps) throws Exception {
+    public static void LineChart(JSONObject jsonGlobIn) throws Exception {
         
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
+        
+        JSONObject jsonProps = jsonGlobIn.getJSONObject("props");
+        JSONArray jsonLabelArray = jsonGlobIn.getJSONArray("labels");
+        JSONArray jsonDataArray = jsonGlobIn.getJSONArray("data");
         
         File chartCachePath = new File(cb.getPathChartCache());
         if(!chartCachePath.exists()) { chartCachePath.mkdirs(); }
@@ -57,7 +61,7 @@ public class DynChartX {
         chart.getStyler().setPlotGridLinesVisible(false);
         XYSeries series = chart.addSeries("y(x)", null, yData);
         series.setMarker(SeriesMarkers.NONE);
-        series.setLineColor(XChartSeriesColors.RED);
+        series.setLineColor(XChartSeriesColors.YELLOW);
         BitmapEncoder.saveBitmap(chart, fullChart.toString(), BitmapFormat.PNG);
         
         // Then the thumbnail chart!
@@ -73,7 +77,7 @@ public class DynChartX {
         thChart.getStyler().setPlotGridLinesVisible(false);
         XYSeries thSeries = thChart.addSeries("y(x)", null, yData);
         thSeries.setMarker(SeriesMarkers.NONE);
-        thSeries.setLineColor(XChartSeriesColors.RED);
+        thSeries.setLineColor(XChartSeriesColors.YELLOW);
         BitmapEncoder.saveBitmap(thChart, thumbChart.toString(), BitmapFormat.PNG);
         
     }

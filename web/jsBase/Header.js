@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 26 Apr 2018
+Updated: 27 Apr 2018
  */
 
 
@@ -162,7 +162,7 @@ function getBasePath(opt) {
     if(checkMobile()) { tBase += ":8082"; }
     tBase = "https:" + tBase;
     switch(opt) {
-        case "chartCache": tBase = "/asWebCache"; break;
+        case "chartCache": tBase = baseForUi + "/cache"; break;
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
