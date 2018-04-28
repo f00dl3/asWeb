@@ -4,7 +4,9 @@ Created: 20 Apr 2018
 Updated: 28 Apr 2018
 */
 
+var dateSelect = getDate("day", 0, "yyyyMMdd");
 var lastWalks;
+var step;
 
 function actOnAlarmFilterSelect(event) {
     dojo.stopEvent(event);
@@ -16,6 +18,52 @@ function actOnAlarmFilterSelect(event) {
 
 function alarmSeverityButton(bgColor, textColor, text) {
     return "<button class='UButton' style='width: 60px; background-color: " + bgColor + "; color: " + textColor + ";'>" + text + "</button>"
+}
+
+function getCharts(chartArray) {
+    if(!isSet(step)) { step = 1; }
+    var timeout = 5*60*1000;
+    var thePostData = {
+        "doWhat": "getSysMonCharts",
+        "step": step,
+        "date": dateSelect
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("SNMP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateEDiscovery(data);
+                },
+                function(error) { 
+                    console.log("request for SysMonCharts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    for(var i = 0; i < chartArray.length; i++) {
+        dojo.byId("CHART_" + chartArray[i]).innerHTML = chartArray[i] + " ";
+    }
+    setTimeout(function () { getCharts(chartArray); }, timeout);
+}
+
+function getEDiscovery(target) {
+    var timeout = 90*1000;
+    var thePostData = { "doWhat": "getLastSSH" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("SNMP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateEDiscovery(data);
+                },
+                function(error) { 
+                    console.log("request for LastSSH FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    setTimeout(function () { getLastWalk(target); }, timeout);
 }
 
 function getLastWalk(target) {
@@ -38,6 +86,7 @@ function getLastWalk(target) {
 }
 
 function getSnmpOverviewData() {
+    // set Timeout to 5 mins unless it can be optimized, then 90 seconds.
     //.then
     //lastWalks = lastWalks;
     //populateStatusHolder(indoorTemp, garageTemp);
@@ -88,8 +137,8 @@ function populateAlarmTable(alarmData) {
 }
 
 function populateCharts() {
-    // stepIn = get Step post var
-    // dateIn = get Date post var
+    var stepIn = 1; //get Step post var
+    var dateIn = ""; //  get Date post var
     var chartDefs = "Step=" + stepIn +
             "&Date=" + dateIn;
     var rData = "";
@@ -123,20 +172,26 @@ function populateCharts() {
     ];
     var numElements = chartList1.length;
     var numElements2 = chartList2.length;
-    if(checkMobile()) {
-        for (var i = 0; i < numElements.length; i++) {
+    if(1 === 1) {
+        var allElements = chartList1.concat(chartList2);
+        for (var i = 0; i < allElements.length; i++) {
+            rData += "<div id='CHART_" + allElements[i] + "'></div>";
+        }
+        /* for (var i = 0; i < numElements.length; i++) {
             rData += "<a href='" + doCh("p", chartList1[i], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList1[i], "Thumb=1&" + chartDefs) + "'/></a>";
+                    "<img class='th_small' src='" + doCh("p", chartList1[i], "Thumb=1&" + chartDefs) + "'/></a>X";
         }
         for (var j = 0; j < numElements2.length; j++) {
             rData += "<a href='" + doCh("p", chartList2[j], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList2[j], "Thumb=1&" + chartDefs) + "'/></a>";
+                    "<img class='th_small' src='" + doCh("p", chartList2[j], "Thumb=1&" + chartDefs) + "'/></a>X";
         }
         rData += "<a href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
                 "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
                 "<a href='" + getResource("Cams") + "' target='nChartC'>" +
-                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>";
+                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 
+                */
     } else {
+        // 3D elements move below later
         var elementList1 = [];
         var elementList2 = [];
         for (var i = 0; i < numElements.length; i++) {
@@ -159,10 +214,18 @@ function populateCharts() {
         rData += "<p>" + imageLinks3d(elementList1, 25, 100, 2.15) + "<p>" +
                 "<div style='min-height: 64px;'></div>" + imageLinks3d(elementList2, 25, 100, 2.15);
     }
+    dojo.byId("chartPlacement").innerHTML = rData;
+    if(1 === 1) {
+        getCharts(allElements);
+    }
 }
 
-function populateEDiscovery(obsIndoor) {
-    var rData = "<strong>SSH Client</strong>: " + obsIndoor.SSHClientIP + "<p>";
+function populateEDiscovery(lastSsh) {
+    var rData = "<strong>SSH Clients</strong>: ";
+    lastSsh.forEach(function (ssh) {
+        rData += ssh.SSHClientIP + " ";
+    });
+    rData += "<p>";
     dojo.byId("eDiscoveryHolder").innerHTML = rData;
 }
 
@@ -229,6 +292,8 @@ function populateStatusHolder(target, stateData) {
 function initSysMon() {
     //snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
+    populateCharts();
+    getEDiscovery();
 };
 
 dojo.ready(initSysMon);

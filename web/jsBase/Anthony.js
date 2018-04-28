@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 22 Apr 2018
+Updated: 28 Apr 2018
 */
 
 console.log(sessionVars);
@@ -189,12 +189,14 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             "<a href='" + getBasePath("old") + "/OutMap.php?Title=Default&Point=" + getHomeGeo("geoJSON") + "' target='new'>Geo Point Click Map</a><p>";
     var newHiddenValue = "Enabled";
     if(isSet(hiddenFeatures) && hiddenFeatures === "Enabled") { newHiddenValue = "Disabled"; }
-    var hiddenFeaturesToggler = "<div class='UBox' id='HiddenStuff'>" +
-            "<form id='HiddenForm'><span>Hidden Features</span><br/>" +
-            "<input type='checkbox' id='HiddenCheckbox' name='Hidden' value='" + newHiddenValue + "'>" + newHiddenValue + "</input><br/>" +
-            "<noscript><input id='HiddenButton' type='submit' name='DoShowHidden' /></noscript>" +
-            "</form></div>";
-    rData += hiddenFeaturesToggler + "<p>";
+    if(userName === "f00dl3") {
+        var hiddenFeaturesToggler = "<div class='UBox' id='HiddenStuff'>" +
+                "<form id='HiddenForm'><span>Hidden Features</span><br/>" +
+                "<input type='checkbox' id='HiddenCheckbox' name='Hidden' value='" + newHiddenValue + "'>" + newHiddenValue + "</input><br/>" +
+                "<noscript><input id='HiddenButton' type='submit' name='DoShowHidden' /></noscript>" +
+                "</form></div>";
+        rData += hiddenFeaturesToggler + "<p>";
+    }
     var javaScriptSchit = "<input type='text' id='newH1Font' placeholder='H1 Font'/>" +
             " <input type='button' id='setFontGo' value='Do it!' /></p>";
     rData += javaScriptSchit + "</div>";

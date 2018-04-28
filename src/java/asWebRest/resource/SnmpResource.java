@@ -183,6 +183,11 @@ public class SnmpResource extends ServerResource {
                     returnData = snmpData.toString();
                     break;
                     
+                case "getLastSSH":
+                    JSONArray lastSsh = getSnmpAction.getMainLastSSH(dbc);
+                    returnData = lastSsh.toString();
+                    break;
+                    
                 case "getLastWalk":
                     JSONArray lastWalk = getSnmpAction.getLastWalk(dbc);
                     JSONArray mergedTemps = getSnmpAction.getMergedLastTemp(dbc);

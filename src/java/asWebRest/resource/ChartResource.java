@@ -1,14 +1,18 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 27 Apr 2018
+Updated: 28 Apr 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetFitnessAction;
+import asWebRest.action.GetSnmpAction;
 import asWebRest.dao.FitnessDAO;
+import asWebRest.dao.SnmpDAO;
 import asWebRest.hookers.DynChartX;
+import asWebRest.shared.MyDBConnector;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -24,8 +28,12 @@ public class ChartResource extends ServerResource {
     public String doPost(Representation argsIn) {
 
         DynChartX dynChart = new DynChartX();
-
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
+        GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         String doWhat = null;
         String returnData = "";      
@@ -91,6 +99,15 @@ public class ChartResource extends ServerResource {
                         .put("yLabel", "Weight");
                     break;
                     
+                case "getSysMonCharts":
+                    qParams.add(0, "1"); //Test
+                    qParams.add(1, doWhat = argsInForm.getFirstValue("step"));; //Step
+                    qParams.add(2, "1"); //DateTest
+                    qParams.add(3, doWhat = argsInForm.getFirstValue("date")); //Date
+                    JSONArray chartGlob = getSnmpAction.getMain(dbc, qParams);
+                    returnData = chartGlob.toString();
+                    break;
+                    
             }
             
             jsonGlob
@@ -105,6 +122,9 @@ public class ChartResource extends ServerResource {
             returnData += data.toString();
             
         }
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+       
         
         return returnData;
     

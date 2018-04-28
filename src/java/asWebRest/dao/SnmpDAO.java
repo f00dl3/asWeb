@@ -97,7 +97,7 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getMain(List qParams) {
+    public JSONArray getMain(Connection dbc, List qParams) {
         final String query_SNMP_Main = "(SELECT * FROM ( SELECT " +
                 " @row := @row+1 AS rownum, " +
                 " dt.WalkTime as WalkTime, dt.NumUsers as dtNumUsers, " +
@@ -164,9 +164,9 @@ public class SnmpDAO {
                 " ORDER BY WalkTime DESC" +
                 " LIMIT 720) ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();     
-        try { ResultSet rsA = wc.q2rs(wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_Main, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Main, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -304,11 +304,11 @@ public class SnmpDAO {
         return tContainer;
     }
             
-    public JSONArray getMainLastSSH() {
-        final String query_SNMP_Main_LastCaseTemp = "SELECT WalkTime, SSSHClientIP FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1;";
+    public JSONArray getMainLastSSH(Connection dbc) {
+        final String query_SNMP_Main_LastCaseTemp = "SELECT WalkTime, SSHClientIP FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_Main_LastCaseTemp, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Main_LastCaseTemp, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

@@ -19,8 +19,8 @@ public class GetSnmpAction {
     public JSONArray getEmS4Geo() { return snmpDAO.getEmS4Geo(); }
     public JSONArray getEmS4GeoHistory() { return snmpDAO.getEmS4GeoHistory(); }
     public JSONArray getLastWalk(Connection dbc) { return snmpDAO.getLastWalk(dbc); }
-    public JSONArray getMain(List qParams) { return snmpDAO.getMain(qParams); }
-    public JSONArray getMainLastSSH() { return snmpDAO.getMainLastSSH(); }
+    public JSONArray getMain(Connection dbc, List qParams) { return snmpDAO.getMain(dbc, qParams); }
+    public JSONArray getMainLastSSH(Connection dbc) { return snmpDAO.getMainLastSSH(dbc); }
     public JSONArray getMergedLastTemp(Connection dbc) { return snmpDAO.getMergedLastTemp(dbc); }
     public JSONArray getNote3(List qParams) { return snmpDAO.getNote3(qParams); }
     public JSONArray getNote3Geo() { return snmpDAO.getNote3Geo(); }
