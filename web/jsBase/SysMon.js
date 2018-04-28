@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
+Updated: 28 Apr 2018
 */
 
 var lastWalks;
@@ -158,7 +159,7 @@ function populateReliaStump() {
     dojo.connect(alarmFilterSelector, "change", actOnAlarmFilterSelect);
 }
 
-function populateStatusHolder(indoorTemp, garageTemp) {
+function populateStatusHolder(stateData, indoorTemp, garageTemp) {
     var intervals = {
         "1": "2 min* (Day)",
         "2": "4 min",
@@ -192,12 +193,12 @@ function populateStatusHolder(indoorTemp, garageTemp) {
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
-    for (var i = 0; i < nodes.length; i++) { rData += onCheck(nodes[i]); }
+    for (var i = 0; i < nodes.length; i++) { rData += onCheck(stateData, nodes[i]); }
     dojo.byId("snmpStatusHolder").innerHTML = rData;
 }
 
 function initSysMon() {
-    
+    snmpRapid("snmpDataRapidHolder");
 };
 
 dojo.ready(initSysMon);

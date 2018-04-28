@@ -120,6 +120,53 @@ public class DynChartX {
             XYSeries thSeries4 = thChart.addSeries(jp.getString("s4Name"), null, yData4); thSeries4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
         } } catch (Exception e) { }
     
+        try { if(wc.isSet(jp.getString("s5Name")) && wc.isSet(jp.getString("s5Color"))) {
+            JSONArray jsonData5Array = jsonGlobIn.getJSONArray("data5");
+            double[] yData5 = wc.arrayDoubleFromJson(jsonData5Array);
+            Color s5Color = getSeriesColor(jp.getString("s5Color"));
+            XYSeries series5 = chart.addSeries(jp.getString("s5Name"), null, yData5); series5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
+            XYSeries thSeries5 = thChart.addSeries(jp.getString("s5Name"), null, yData5); thSeries5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
+        } } catch (Exception e) { }
+    
+        try { if(wc.isSet(jp.getString("s6Name")) && wc.isSet(jp.getString("s6Color"))) {
+            JSONArray jsonData6Array = jsonGlobIn.getJSONArray("data6");
+            double[] yData6 = wc.arrayDoubleFromJson(jsonData6Array);
+            Color s6Color = getSeriesColor(jp.getString("s6Color"));
+            XYSeries series6 = chart.addSeries(jp.getString("s6Name"), null, yData6); series6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
+            XYSeries thSeries6 = thChart.addSeries(jp.getString("s6Name"), null, yData6); thSeries6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
+        } } catch (Exception e) { }
+        
+        try { if(wc.isSet(jp.getString("s7Name")) && wc.isSet(jp.getString("s7Color"))) {
+            JSONArray jsonData7Array = jsonGlobIn.getJSONArray("data7");
+            double[] yData7 = wc.arrayDoubleFromJson(jsonData7Array);
+            Color s7Color = getSeriesColor(jp.getString("s7Color"));
+            XYSeries series7 = chart.addSeries(jp.getString("s7Name"), null, yData7); series7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
+            XYSeries thSeries7 = thChart.addSeries(jp.getString("s7Name"), null, yData7); thSeries7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
+        } } catch (Exception e) { }
+        
+        try { if(wc.isSet(jp.getString("s8Name")) && wc.isSet(jp.getString("s8Color"))) {
+            JSONArray jsonData8Array = jsonGlobIn.getJSONArray("data8");
+            double[] yData8 = wc.arrayDoubleFromJson(jsonData8Array);
+            Color s8Color = getSeriesColor(jp.getString("s8Color"));
+            XYSeries series8 = chart.addSeries(jp.getString("s8Name"), null, yData8); series8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
+            XYSeries thSeries8 = thChart.addSeries(jp.getString("s8Name"), null, yData8); thSeries8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
+        } } catch (Exception e) { }
+        
+        try { if(wc.isSet(jp.getString("s9Name")) && wc.isSet(jp.getString("s9Color"))) {
+            JSONArray jsonData9Array = jsonGlobIn.getJSONArray("data9");
+            double[] yData9 = wc.arrayDoubleFromJson(jsonData9Array);
+            Color s9Color = getSeriesColor(jp.getString("s9Color"));
+            XYSeries series9 = chart.addSeries(jp.getString("s9Name"), null, yData9); series9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
+            XYSeries thSeries9 = thChart.addSeries(jp.getString("s9Name"), null, yData9); thSeries9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
+        } } catch (Exception e) { }
+            
+        try { if(wc.isSet(jp.getString("s10Name")) && wc.isSet(jp.getString("s10Color"))) {
+            JSONArray jsonData10Array = jsonGlobIn.getJSONArray("data10");
+            double[] yData10 = wc.arrayDoubleFromJson(jsonData10Array);
+            Color s10Color = getSeriesColor(jp.getString("s10Color"));
+            XYSeries series10 = chart.addSeries(jp.getString("s10Name"), null, yData10); series10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
+            XYSeries thSeries10 = thChart.addSeries(jp.getString("s10Name"), null, yData10); thSeries10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
+        } } catch (Exception e) { }
     
         BitmapEncoder.saveBitmap(chart, fullChart.toString(), BitmapFormat.PNG);
         BitmapEncoder.saveBitmap(thChart, thumbChart.toString(), BitmapFormat.PNG);

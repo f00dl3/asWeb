@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    25 Apr 2018
+    Updated:    28 Apr 2018
     Author     : astump
 --%>
 
@@ -49,7 +49,8 @@
     };
     
     String[] snmpScripts = {
-        "SNMP/SnmpData"
+        "SNMP/SnmpData",
+        "Weather/WxFunctions"
     };
     
     String[] tpScripts = {
@@ -146,6 +147,10 @@
             case "OutMap":
                 fullTitle = "Maps";
                 scripts2Load += mapHelperScripts;
+                break;
+            case "SysMon":
+                fullTitle = "SNMP+ Tools";
+                scripts2Load += snmpScriptPack;
                 break;
             case "TPGallery":
                 fullTitle = "TP Gallery";

@@ -174,8 +174,10 @@ public class SnmpResource extends ServerResource {
                         .put("tempCase", tempCase)
                         .put("tempCPU", tempCPU)
                         .put("uptime", uptime);
-                        
                     returnData = snmpData.toString();
+                    break;
+                    
+                case "getLastWalk":
                     break;
                     
             }

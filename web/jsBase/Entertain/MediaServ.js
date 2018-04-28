@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 25 Apr 2018
+Updated: 28 Apr 2018
  */
 
 var msIndex;
@@ -121,7 +121,7 @@ function playMediaFile(whatFile, dbxFlag) {
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     if(isSet(dbxFlag)) { 
-        filePath = getBasePath("ui") + "Cache/" + whatFile;
+        filePath = getBasePath("chartCache") + "/" + whatFile;
     } else {
         filePath = getBasePath("oldRoot") + whatFile;
     }
@@ -290,7 +290,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             }
             thisMsInfoString += "</div></div>";
         }
-        thisMsInfoString += "</span><span class='td'>" + albumArtStripped + "</span></form>";
+        thisMsInfoString += "</span></form>";
         fileTable += thisMsInfoString;
     });
     fileTable += "</div>";
