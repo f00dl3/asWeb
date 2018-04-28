@@ -36,6 +36,9 @@ public class ChartResource extends ServerResource {
         JSONObject props = new JSONObject();
         JSONArray labels = new JSONArray();
         JSONArray data = new JSONArray();
+        JSONArray data2 = new JSONArray();
+        JSONArray data3 = new JSONArray();
+        JSONArray data4 = new JSONArray();
          
         try {
             doWhat = argsInForm.getFirstValue("doWhat");
@@ -46,7 +49,7 @@ public class ChartResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                  
-                case "CalorieRange":
+                case "FitnessCalorieRange":
                     String fcnCalories = "Calorie Range: " + argsInForm.getFirstValue("XDT1") + " to " + argsInForm.getFirstValue("XDT2");
                     qParams.add(argsInForm.getFirstValue("XDT1"));
                     qParams.add(argsInForm.getFirstValue("XDT2"));
@@ -54,16 +57,23 @@ public class ChartResource extends ServerResource {
                     for (int i = 0; i < jraCalorieRange.length(); i++) {
                         JSONObject thisObject = jraCalorieRange.getJSONObject(i);
                         labels.put(thisObject.getString("Date"));
-                        data.put(thisObject.getDouble("Calories"));
+                        data.put(thisObject.getInt("Calories"));
+                        data2.put(9 * thisObject.getInt("Fat"));
+                        data3.put(4 * thisObject.getInt("Protein"));
+                        data4.put(4 * thisObject.getInt("Carbs"));
                     }
                     props
                         .put("chartName", fcnCalories)
                         .put("chartFileName", "CalorieRange")
+                        .put("sName", "Calories").put("sColor", "White")
+                        .put("s2Color", "Red").put("s2Name", "Fat")
+                        .put("s3Color", "Green").put("s3Name", "Protein")
+                        .put("s4Color", "Yellow").put("s4Name", "Carbs")
                         .put("xLabel", "Date")
                         .put("yLabel", "Calories");
                     break;
                                    
-                case "WeightRange":
+                case "FitnessWeightRange":
                     String fullChartName = "Weight Range: " + argsInForm.getFirstValue("XDT1") + " to " + argsInForm.getFirstValue("XDT2");
                     qParams.add(argsInForm.getFirstValue("XDT1"));
                     qParams.add(argsInForm.getFirstValue("XDT2"));
@@ -76,6 +86,7 @@ public class ChartResource extends ServerResource {
                     props
                         .put("chartName", fullChartName)
                         .put("chartFileName", "WeightRange")
+                        .put("sName", "Calories").put("sColor", "Yellow")
                         .put("xLabel", "Date")
                         .put("yLabel", "Weight");
                     break;
@@ -86,6 +97,9 @@ public class ChartResource extends ServerResource {
                 .put("labels", labels)
                 .put("data", data)
                 .put("props", props);
+            if(data2.length() != 0) { jsonGlob.put("data2", data2); }
+            if(data3.length() != 0) { jsonGlob.put("data3", data3); }
+            if(data4.length() != 0) { jsonGlob.put("data4", data4); }
             try { dynChart.LineChart(jsonGlob); } catch (Exception e) { e.printStackTrace(); }
             returnData = "Line chart generated!\n";
             returnData += data.toString();

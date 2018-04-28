@@ -195,7 +195,7 @@ function getCalorieChart(inXdt1, inXdt2) {
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
     var thePostData = {
-        "doWhat": "CalorieRange",
+        "doWhat": "FitnessCalorieRange",
         "XDT1": xdt1,
         "XDT2": xdt2
     };
@@ -222,7 +222,7 @@ function getWeightChart(inXdt1, inXdt2) {
     var oYear = getDate("year", 0, "yearOnly");
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
-    var thePostData = "doWhat=WeightRange&XDT1=" + xdt1 + "&XDT2=" + xdt2;
+    var thePostData = "doWhat=FitnessWeightRange&XDT1=" + xdt1 + "&XDT2=" + xdt2;
     var xhArgs = {
         preventCache: true,
         url: getResource("Chart"),
