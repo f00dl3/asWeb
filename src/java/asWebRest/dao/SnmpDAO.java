@@ -71,12 +71,12 @@ public class SnmpDAO {
 
     public JSONArray getLastWalk(Connection dbc) {
         final String query_SNMP_LastWalk = "SELECT" +
-                " (SELECT MAX(WalkTime) FROM net_snmp.EmS4 ORDER BY WalkTime ASC) AS EmS4," +
+                " (SELECT MAX(WalkTime) FROM net_snmp.EmS4 ORDER BY WalkTime ASC) AS PhoneE," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.Main ORDER BY WalkTime ASC) AS Main," +
-                " (SELECT MAX(WalkTime) FROM net_snmp.Note3 ORDER BY WalkTime ASC) AS Note3," +
+                " (SELECT MAX(WalkTime) FROM net_snmp.Note3 ORDER BY WalkTime ASC) AS Phone," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.RaspberryPi ORDER BY WalkTime ASC) AS Pi," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.RaspberryPi2 ORDER BY WalkTime ASC) AS Pi2," +
-                " (SELECT MAX(WalkTime) FROM net_snmp.Asus3200 ORDER BY WalkTime ASC) AS Asus3200" +
+                " (SELECT MAX(WalkTime) FROM net_snmp.Asus3200 ORDER BY WalkTime ASC) AS Router" +
                 " FROM net_snmp.Main LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -84,12 +84,12 @@ public class SnmpDAO {
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("EmS4", resultSet.getString("EmS4"))
+                    .put("PhoneE", resultSet.getString("PhoneE"))
                     .put("Main", resultSet.getString("Main"))
-                    .put("Note3", resultSet.getString("Note3"))
+                    .put("Phone", resultSet.getString("Phone"))
                     .put("Pi", resultSet.getString("Pi"))
                     .put("Pi2", resultSet.getString("Pi2"))
-                    .put("Asus3200", resultSet.getString("Asus3200"));                    
+                    .put("Router", resultSet.getString("Router"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();

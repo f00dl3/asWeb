@@ -46,23 +46,23 @@ function getSnmpOverviewData() {
 function nodeState(state, label) {
     var btn = "";
     switch(state) {
-        case "on": btn = "<button class='UButton' style='background-color: yellow;'>" + label + "</button>";
-        case "off": btn = "<button class='UButton'>" + label + "</button>";
+        case "on": btn = "<button style='background-color: yellow; color: black;'>" + label + "</button>"; break;
+        case "off": btn = "<button style='background-color: #666666; color: white;'>" + label + "</button>"; break;
     }
     return btn;
 }
 
-function onCheck(node, timestamp) {
-    // if time stamp less than 2 minutes then node = on, else node is off.
-    
-    var state = "on";
+function onCheck(timestamp, node) {
+    var staleTime = getDate("minute", -3, "timestamp"); 
+    var state = "off";
+    if(isSet(timestamp) && staleTime.valueOf() <= timestamp.valueOf()) { state = "on"; }
     switch(node) {
-        case "Main": nodeState(state, "D"); break;
-        case "Router": nodeState(state, "R"); break;
-        case "Pi": nodeState(state, "I"); break;
-        case "Pi2": nodeState(state, "J"); break;
-        case "Phone": nodeState(state, "P"); break;
-        case "PhoneE": nodeState(state, "E"); break;
+        case "Main": return nodeState(state, "D"); break;
+        case "Router": return nodeState(state, "R"); break;
+        case "Pi": return nodeState(state, "I"); break;
+        case "Pi2": return nodeState(state, "J"); break;
+        case "Phone": return nodeState(state, "P"); break;
+        case "PhoneE": return nodeState(state, "E"); break;
     }
 }
 
@@ -218,7 +218,11 @@ function populateStatusHolder(target, stateData) {
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
-    for (var i = 0; i < nodes.length; i++) { rData += onCheck(stateData, nodes[i]); }
+    for (var i = 0; i < nodes.length; i++) {
+        var entityToCheck = nodes[i];
+        var timestampToCheck = stateData.lastWalk[0][nodes[i]];
+        rData += onCheck(timestampToCheck, entityToCheck);
+    }
     dojo.byId(target).innerHTML = rData;
 }
 

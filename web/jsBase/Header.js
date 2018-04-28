@@ -182,9 +182,12 @@ function getBasePath(opt) {
     return tBase;
 }
 
-function getDate(inType, inInput, rdFormat) {
+function getDate(inType, inInput, rdFormat, initialDate) {
     dojo.require("dojo.date");
     var initDate = new Date();
+    if(isSet(initialDate)) {
+        initDate = formatDate(initialDate, rdFormat);
+    }
     var retDate = formatDate(dojo.date.add(initDate, inType, inInput), rdFormat);
     return retDate;
 }
