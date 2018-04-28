@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 7 Apr 2018
+Updated: 28 Apr 2018
  */
 
 package asWebRest.dao;
@@ -69,7 +69,7 @@ public class SnmpDAO {
         return tContainer;
     }
 
-    public JSONArray getLastWalk() {
+    public JSONArray getLastWalk(Connection dbc) {
         final String query_SNMP_LastWalk = "SELECT" +
                 " (SELECT MAX(WalkTime) FROM net_snmp.EmS4 ORDER BY WalkTime ASC) AS EmS4," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.Main ORDER BY WalkTime ASC) AS Main," +
@@ -80,7 +80,7 @@ public class SnmpDAO {
                 " FROM net_snmp.Main LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_LastWalk, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_LastWalk, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

@@ -51,7 +51,7 @@ public class SnmpWalk {
         usage = "Usage: snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid";
     }
     
-    private String execSnmpWalk(String requestString) throws IOException {
+    private String execSnmpWalk(String node, String requestString) throws IOException {
     
         SnmpOidConversions stringToOid = new SnmpOidConversions();
         SNMPBeans snmpBeans = new SNMPBeans();
@@ -63,15 +63,28 @@ public class SnmpWalk {
         Address targetAddress = GenericAddress.parse("udp:" + targetAddr + "/" + portNum);
         Snmp snmp = new Snmp(transport);
         
+        String tSecName = "";
+        String tSecPass = "";
+        
+        switch (node) {
+            
+            case "desktop": default:
+                targetAddr = "127.0.0.1";
+                tSecName = snmpBeans.getSnmpUser();
+                tSecPass = snmpBeans.getSnmpPass();
+                break;
+                
+        }
+        
         OctetString localEngineId = new OctetString(MPv3.createLocalEngineID());
         USM usm = new USM(SecurityProtocols.getInstance(), localEngineId, 0);
         SecurityModels.getInstance().addSecurityModel(usm);
         
-        OctetString securityName = new OctetString(snmpBeans.getSnmpUser());
+        OctetString securityName = new OctetString(tSecName);
         OID authProtocol = AuthMD5.ID;
         OID privProtocol = PrivDES.ID;
-        OctetString authPassphrase = new OctetString(snmpBeans.getSnmpPass());
-        OctetString privPassphrase = new OctetString(snmpBeans.getSnmpPass());
+        OctetString authPassphrase = new OctetString(tSecPass);
+        OctetString privPassphrase = new OctetString(tSecPass);
         
         snmp.getUSM().addUser(securityName, new UsmUser(securityName, authProtocol, authPassphrase, privProtocol, privPassphrase));
         SecurityModels.getInstance().addSecurityModel(new TSM(localEngineId, false));
@@ -119,13 +132,13 @@ public class SnmpWalk {
         
     }
     
-    public String get(String requestString) {
+    public String get(String node, String requestString) {
         WebCommon wc = new WebCommon();
         String snmpBack = "SnmpWalk did not run yet or failed to run!";
         String snmpBackTmp = "";
         try{
             SnmpWalk snmpwalk = new SnmpWalk();
-            snmpBackTmp = snmpwalk.execSnmpWalk(requestString);
+            snmpBackTmp = snmpwalk.execSnmpWalk(node, requestString);
         }
         catch(Exception e) {
             snmpBackTmp = "----- An Exception happened as follows. Please confirm the usage etc. -----\n" + e.getMessage();

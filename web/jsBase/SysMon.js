@@ -18,6 +18,25 @@ function alarmSeverityButton(bgColor, textColor, text) {
     return "<button class='UButton' style='width: 60px; background-color: " + bgColor + "; color: " + textColor + ";'>" + text + "</button>"
 }
 
+function getLastWalk(target) {
+    var timeout = 90*1000;
+    var thePostData = { "doWhat": "getLastWalk" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("SNMP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateStatusHolder(target, data);
+                },
+                function(error) { 
+                    console.log("request for LastWalk FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    setTimeout(function () { getLastWalk(target); }, timeout);
+}
+
 function getSnmpOverviewData() {
     //.then
     //lastWalks = lastWalks;
@@ -33,8 +52,10 @@ function nodeState(state, label) {
     return btn;
 }
 
-function onCheck(node, state) {
+function onCheck(node, timestamp) {
     // if time stamp less than 2 minutes then node = on, else node is off.
+    
+    var state = "on";
     switch(node) {
         case "Main": nodeState(state, "D"); break;
         case "Router": nodeState(state, "R"); break;
@@ -159,7 +180,9 @@ function populateReliaStump() {
     dojo.connect(alarmFilterSelector, "change", actOnAlarmFilterSelect);
 }
 
-function populateStatusHolder(stateData, indoorTemp, garageTemp) {
+function populateStatusHolder(target, stateData) {
+    var indoorTemp = Math.round(0.93 * conv2Tf(stateData.mergedTemps[0].ExtTemp/1000));
+    var garageTemp = Math.round(stateData.mergedTemps[1].ExtTemp);
     var intervals = {
         "1": "2 min* (Day)",
         "2": "4 min",
@@ -176,17 +199,19 @@ function populateStatusHolder(stateData, indoorTemp, garageTemp) {
     var rData = "<div class='UPopNM'>" +
             "<button style='" + styleTemp(indoorTemp) + "'>" + indoorTemp + "F</button>" +
             "<button style='" + styleTemp(garageTemp) + "'>" + garageTemp + "G</button>" +
-            "<div class='UPopNMO'><div class='tr'><span class='td'>Interval</span>" +
-            "<span class='td'><form id='StepForm'>" +
-            "<select name='chStep' id='chartStepForm'><option value='1'>Select...</option>";
-    Object(intervals).keys.forEach(function (int) { rData += "<option value='" + int + "'>" + intervals["int"] + "</option>"; });
-    rData += "</select></form></div>" +
-            "<div class='tr'>" +
-            "<span class='td'>Date</span>" +
+            "<div class='UPopNMO'>" +
+            "<div class='table'>" +
+            "<form class='tr' id='StepForm'>" +
+            "<span class='td'>Interval</span>" +
             "<span class='td'>" +
-            "<form id='chDateForm'>" +
-            "<input name='chDate' type='date' style='width: 75px;'/>" +
-            "</form></span></div></div><br/>" +
+            "<select name='chStep' id='chartStepForm'><option value='1'>Select...</option>";
+    for(var key in intervals) { rData += "<option value='" + key + "'>" + intervals[key] + "</option>"; };
+    rData += "</select></span>" +
+            "</form>" +
+            "<form id='chDateForm' class='tr'>" +
+            "<span class='td'>Date</span>" +
+            "<span class='td'><input name='chDate' type='date' style='width: 75px;'/></span>" +
+            "</form></div><br/>" +
             "<a href='" + getBasePath("ui") + "/Images/Topology.jpg'>Topology Map</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3Rapid'>Phone: Note 3 (Rapid!)</a><br/>" +
@@ -194,11 +219,12 @@ function populateStatusHolder(stateData, indoorTemp, garageTemp) {
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
     for (var i = 0; i < nodes.length; i++) { rData += onCheck(stateData, nodes[i]); }
-    dojo.byId("snmpStatusHolder").innerHTML = rData;
+    dojo.byId(target).innerHTML = rData;
 }
 
 function initSysMon() {
-    snmpRapid("snmpDataRapidHolder");
+    //snmpRapid("snmpDataRapidHolder");
+    getLastWalk("snmpStatusHolder");
 };
 
 dojo.ready(initSysMon);

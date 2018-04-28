@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
+Updated: 28 Apr 2018
  */
 
 package asWebRest.resource;
@@ -29,8 +30,8 @@ public class TestResource extends ServerResource {
         
         try {
             SnmpWalk snmpWalk = new SnmpWalk();
-            snmpTest1 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
-            snmpTest2 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0");
+            //snmpTest1 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemUptime.0");
+            //snmpTest2 = snmpWalk.get("HOST-RESOURCES-MIB::hrSystemProcesses.0");
         } catch (IOException io) { io.printStackTrace(); }
         
         String test1 = getRequest().getRootRef().toString();
