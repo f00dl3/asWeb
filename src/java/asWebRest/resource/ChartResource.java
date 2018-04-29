@@ -106,7 +106,7 @@ public class ChartResource extends ServerResource {
                     
                     genericCharts = false;
                     
-                    qParams.add(0, "1"); //Test
+                    qParams.add(0, "0"); //Test
                     qParams.add(1, doWhat = argsInForm.getFirstValue("step"));; //Step
                     qParams.add(2, "1"); //DateTest
                     qParams.add(3, doWhat = argsInForm.getFirstValue("date")); //Date

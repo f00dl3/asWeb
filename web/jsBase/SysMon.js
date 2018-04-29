@@ -148,8 +148,8 @@ function populateChartHolders(chartArray) {
 }
 
 function populateCharts() {
-    var stepIn = 90; //get Step post var
-    var dateIn = ""; //  get Date post var
+    var stepIn = 90; //get Step post var TO-DO
+    var dateIn = ""; //  get Date post var TO-DO
     var chartDefs = "Step=" + stepIn +
             "&Date=" + dateIn;
     var rData = "";
