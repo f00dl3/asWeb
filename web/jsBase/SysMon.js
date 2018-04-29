@@ -20,7 +20,7 @@ function alarmSeverityButton(bgColor, textColor, text) {
     return "<button class='UButton' style='width: 60px; background-color: " + bgColor + "; color: " + textColor + ";'>" + text + "</button>"
 }
 
-function getCharts(chartArray) {
+function getCharts(chartArray, step) {
     aniPreload("on");
     if(!isSet(step)) { step = 1; }
     var timeout = 5*60*1000;
@@ -148,7 +148,7 @@ function populateChartHolders(chartArray) {
 }
 
 function populateCharts() {
-    var stepIn = 1; //get Step post var
+    var stepIn = 90; //get Step post var
     var dateIn = ""; //  get Date post var
     var chartDefs = "Step=" + stepIn +
             "&Date=" + dateIn;
@@ -179,7 +179,8 @@ function populateCharts() {
         "mPiAmp",
         "mPiCPU",
         "mPiMemory",
-        "mPiTemp"
+        "mPiTemp",
+        "mJavaCodeLines" // done 4/29
     ];
     var numElements = chartList1.length;
     var numElements2 = chartList2.length;
@@ -218,7 +219,7 @@ function populateCharts() {
     }
     dojo.byId("chartPlacement").innerHTML = rData;
     if(1 === 1) {
-        getCharts(allElements);
+        getCharts(allElements, stepIn);
     }
 }
 

@@ -121,6 +121,13 @@ public class ChartResource extends ServerResource {
                     JSONArray pi2Glob = getSnmpAction.getPi2(dbc, qParams);
                     JSONArray routerGlob = getSnmpAction.getRouter(dbc, qParams);
                     
+                    String mJavaCodeLines_ChartName = "Lines of Code - Java Projects";
+                    JSONObject mJavaCodeLines_Glob = new JSONObject();
+                    JSONObject mJavaCodeLines_Props = new JSONObject();
+                    JSONArray mJavaCodeLines_Labels = new JSONArray();
+                    JSONArray mJavaCodeLines_Data = new JSONArray();
+                    JSONArray mJavaCodeLines_Data2 = new JSONArray();
+                    
                     String mSysCPU_ChartName = "Desktop CPU Load";
                     JSONObject mSysCPU_Glob = new JSONObject();
                     JSONObject mSysCPU_Props = new JSONObject();
@@ -226,6 +233,12 @@ public class ChartResource extends ServerResource {
                     JSONArray mSysTemp_Data5 = new JSONArray();
                     JSONArray mSysTemp_Data6 = new JSONArray();
                     
+                    mJavaCodeLines_Props
+                            .put("chartName", mJavaCodeLines_ChartName).put("chartFileName", "mJavaCodeLines")
+                            .put("sName", "asUtils/java").put("sColor", "Blue")
+                            .put("s2Name", "asWeb/TOTAL").put("s2Color", "Red")
+                            .put("xLabel", "WalkTime").put("yLabel", "Lines");
+                    
                     mSysCPU_Props
                             .put("chartName", mSysCPU_ChartName).put("chartFileName", "mSysCPU")
                             .put("sName", "Avg CPU").put("sColor", "White")
@@ -313,6 +326,16 @@ public class ChartResource extends ServerResource {
                     for(int i = 0; i < mainGlob.length(); i++) {
                         JSONObject thisObject = mainGlob.getJSONObject(i);
                         JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
+                        
+                        long mJavaCodeLines_asWebTotal = (
+                                thisExpanded.getLong("LOC_aswjJs") +
+                                thisExpanded.getLong("LOC_aswjJava") +
+                                thisExpanded.getLong("LOC_aswjCss") +
+                                thisExpanded.getLong("LOC_aswjJsp")
+                        );
+                        mJavaCodeLines_Labels.put(thisObject.getString("WalkTime"));
+                        mJavaCodeLines_Data.put(thisExpanded.getLong("LOC_asUtilsJava"));
+                        mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
                         
                         float mSysCPU_LoadAverage = 0.00f;
                         try {
@@ -457,6 +480,7 @@ public class ChartResource extends ServerResource {
                         
                     }
                     
+                    mJavaCodeLines_Glob.put("labels", mJavaCodeLines_Labels).put("data", mJavaCodeLines_Data).put("data2", mJavaCodeLines_Data2).put("props", mJavaCodeLines_Props);
                     mSysCPU_Glob.put("labels", mSysCPU_Labels).put("data", mSysCPU_Data).put("data2", mSysCPU_Data2).put("data3", mSysCPU_Data3).put("data4", mSysCPU_Data4).put("data5", mSysCPU_Data5).put("data6", mSysCPU_Data6).put("data7", mSysCPU_Data7).put("data8", mSysCPU_Data8).put("data9", mSysCPU_Data9).put("props", mSysCPU_Props);
                     mSysLoad_Glob.put("labels", mSysLoad_Labels).put("data", mSysLoad_Data).put("data2", mSysLoad_Data2).put("data3", mSysLoad_Data3).put("props", mSysLoad_Props);
                     mSysMemory_Glob.put("labels", mSysMemory_Labels).put("data", mSysMemory_Data).put("data2", mSysMemory_Data2).put("data3", mSysMemory_Data3).put("data4", mSysMemory_Data4).put("props", mSysMemory_Props);
@@ -467,6 +491,7 @@ public class ChartResource extends ServerResource {
                     mSysDiskIO_Glob.put("labels", mSysDiskIO_Labels).put("data", mSysDiskIO_Data).put("data2", mSysDiskIO_Data2).put("data3", mSysDiskIO_Data3).put("props", mSysDiskIO_Props);
                     mSysTemp_Glob.put("labels", mSysTemp_Labels).put("data", mSysTemp_Data).put("data2", mSysTemp_Data2).put("data3", mSysTemp_Data3).put("data4", mSysTemp_Data4).put("data5", mSysTemp_Data5).put("data6", mSysTemp_Data6).put("props", mSysTemp_Props);
                     
+                    try { dynChart.LineChart(mJavaCodeLines_Glob); returnData += "Chart generated - mJavaCodeLines!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysLoad_Glob); returnData += "Chart generated - mSysLoad!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysCPU_Glob); returnData += "Chart generated - mSysCPU!\n"; } catch (Exception e) { e.printStackTrace(); }  
                     try { dynChart.LineChart(mSysDiskIO_Glob); returnData += "Chart generated - mSysDiskIO!\n"; } catch (Exception e) { e.printStackTrace(); }
