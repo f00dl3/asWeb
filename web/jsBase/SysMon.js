@@ -160,8 +160,8 @@ function populateCharts() {
         "mSysMemory", // done 4/29
         "mSysStorage", // done 4/29
         "mSysDiskIO", // done 4/29
-        "mSysNet",
-        "mSysMySQLSize",
+        "mSysNet", // done 4/29
+        "mSysMySQLSize", // mostly-done 4/29
         "mSysNumUsers",
         "mSysFans",
         "mSysUPSLoad",
@@ -224,8 +224,12 @@ function populateCharts() {
 
 function populateEDiscovery(lastSsh) {
     var rData = "<strong>SSH Clients</strong>: ";
-    for (var i = 0; i < lastSsh.length; i++) {
-        rData += lastSsh[i].SSHClientIP;
+    if(isSet(lastSsh)) {
+        for (var i = 0; i < lastSsh.length; i++) {
+            rData += lastSsh[i].SSHClientIP;
+        }
+    } else {
+        rData += "ERROR FETCHING FROM DATABASE!";
     }
     rData += "<p>";
     dojo.byId("eDiscoveryHolder").innerHTML = rData;

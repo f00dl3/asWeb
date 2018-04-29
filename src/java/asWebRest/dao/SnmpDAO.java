@@ -339,7 +339,7 @@ public class SnmpDAO {
                     .put("piOctetsIn", resultSet.getLong("piOctetsIn"))
                     .put("pi2OctetsIn", resultSet.getLong("pi2OctetsIn"))
                     .put("piOctetsOut", resultSet.getLong("piOctetsOut"))
-                    .put("Pi2OctetsOut", resultSet.getLong("pi2OctetsOut"))
+                    .put("pi2OctetsOut", resultSet.getLong("pi2OctetsOut"))
                     .put("piWifiIn", resultSet.getLong("piWifiIn"))
                     .put("pi2WifiIn", resultSet.getLong("pi2WifiIn"))
                     .put("piWifiOut", resultSet.getLong("piWifiOut"))
