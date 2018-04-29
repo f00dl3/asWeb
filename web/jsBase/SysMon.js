@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 28 Apr 2018
+Updated: 29 Apr 2018
 */
 
 var dateSelect = getDate("day", 0, "yyyyMMdd");
@@ -21,23 +21,27 @@ function alarmSeverityButton(bgColor, textColor, text) {
 }
 
 function getCharts(chartArray) {
+    aniPreload("on");
     if(!isSet(step)) { step = 1; }
     var timeout = 5*60*1000;
     var thePostData = {
-        "doWhat": "getSysMonCharts",
+        "doWhat": "SysMonCharts",
         "step": step,
         "date": dateSelect
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("SNMP"), {
+            .post(getResource("Chart"), {
                 data: thePostData,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
                     populateEDiscovery(data);
+                    populateChartHolders(chartArray);
+                    aniPreload("off");
                 },
                 function(error) { 
+                    aniPreload("off");
                     console.log("request for SysMonCharts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
@@ -136,6 +140,13 @@ function populateAlarmTable(alarmData) {
     dojo.byId("AlarmTableHolder").innerHTML = rData;
 }
 
+function populateChartHolders(chartArray) {
+    for(var i = 0; i < chartArray.length; i++) {
+        var thisChartObject = "<a href='" + getBasePath("chartCache") + "/" + chartArray[i] + ".png' target='xChart'><img class='th_small' src='" + getBasePath("chartCache") + "/th_" + chartArray[i] + ".png'/></a>";
+        dojo.byId("CHART_"+chartArray[i]).innerHTML = thisChartObject;
+    }
+}
+
 function populateCharts() {
     var stepIn = 1; //get Step post var
     var dateIn = ""; //  get Date post var
@@ -143,11 +154,11 @@ function populateCharts() {
             "&Date=" + dateIn;
     var rData = "";
     var chartList1 = [
-        "mSysLoad",
-        "mSysCPU",
-        "mSysTemp",
-        "mSysMemory",
-        "mSysStorage",
+        "mSysLoad", // done 4/29
+        "mSysCPU", // done 4/29
+        "mSysTemp", // done 4/29
+        "mSysMemory", // done 4/29
+        "mSysStorage", // done 4/29
         "mSysDiskIO",
         "mSysNet",
         "mSysMySQLSize",
@@ -175,21 +186,12 @@ function populateCharts() {
     if(1 === 1) {
         var allElements = chartList1.concat(chartList2);
         for (var i = 0; i < allElements.length; i++) {
-            rData += "<div id='CHART_" + allElements[i] + "'></div>";
-        }
-        /* for (var i = 0; i < numElements.length; i++) {
-            rData += "<a href='" + doCh("p", chartList1[i], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList1[i], "Thumb=1&" + chartDefs) + "'/></a>X";
-        }
-        for (var j = 0; j < numElements2.length; j++) {
-            rData += "<a href='" + doCh("p", chartList2[j], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList2[j], "Thumb=1&" + chartDefs) + "'/></a>X";
+            rData += "<span id='CHART_" + allElements[i] + "'></span>";
         }
         rData += "<a href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
                 "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
                 "<a href='" + getResource("Cams") + "' target='nChartC'>" +
                 "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 
-                */
     } else {
         // 3D elements move below later
         var elementList1 = [];
@@ -222,9 +224,9 @@ function populateCharts() {
 
 function populateEDiscovery(lastSsh) {
     var rData = "<strong>SSH Clients</strong>: ";
-    lastSsh.forEach(function (ssh) {
-        rData += ssh.SSHClientIP + " ";
-    });
+    for (var i = 0; i < lastSsh.length; i++) {
+        rData += lastSsh[i].SSHClientIP;
+    }
     rData += "<p>";
     dojo.byId("eDiscoveryHolder").innerHTML = rData;
 }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 28 Apr 2018
+Updated: 29 Apr 2018
  */
 
 package asWebRest.resource;
@@ -27,13 +27,21 @@ public class SnmpResource extends ServerResource {
     
     @Get
     public String represent() {
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        
         List<String> qParams = new ArrayList<>();
         qParams.add(0, "1"); //Test
         qParams.add(1, "1"); //Step
         qParams.add(2, "1"); //DateTest
         qParams.add(3, "20180224"); //Date
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
-        JSONArray snmpData = getSnmpAction.getRouter(qParams);  
+        JSONArray snmpData = getSnmpAction.getRouter(dbc, qParams);  
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
         return snmpData.toString();
     }
     

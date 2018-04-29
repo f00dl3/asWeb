@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 27 Apr 2018
+Updated: 29 Apr 2018
  */
 
 var myHeight = 68;
@@ -131,6 +131,7 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
 }
 
 function getFitnessAllData(inXdt1, inXdt2) {
+    var timeout = 90 * 1000;
     aniPreload("on");
     var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
@@ -166,6 +167,7 @@ function getFitnessAllData(inXdt1, inXdt2) {
         }
     };
     dojo.xhrPost(xhArgs);
+    setTimeout(function () { getFitnessAllData(inXdt1, inXdt2); }, timeout);
 }
 
 function getMapLinkString(inDate, inType, inAct, commonFlag) {
@@ -437,7 +439,6 @@ function putRoute(formData) {
 }
 
 var initFitness = function(event) {
-    // populateFitnessChart("pChart");
     getWeightChart();
     populateSearchBox();
     getFitnessAllData();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 25 Apr 2018
+Updated: 29 Apr 2018
 */
 
 package asWebRest.shared;
@@ -241,7 +241,9 @@ public class WebCommon {
         ResultSet resultSet = pStatement.executeQuery();
         return resultSet;
     }
-    
+
+    public static double tempC2F(double tempC) { return tempC * 9/5 + 32; }
+        
     public static String unzipFile(String zipFile, String outputFolder) {
         String resultsBack = "";
         byte[] buffer = new byte[4096];
