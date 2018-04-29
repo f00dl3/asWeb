@@ -159,7 +159,7 @@ function populateCharts() {
         "mSysTemp", // done 4/29
         "mSysMemory", // done 4/29
         "mSysStorage", // done 4/29
-        "mSysDiskIO",
+        "mSysDiskIO", // done 4/29
         "mSysNet",
         "mSysMySQLSize",
         "mSysNumUsers",

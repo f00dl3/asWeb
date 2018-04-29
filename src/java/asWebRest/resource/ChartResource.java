@@ -111,6 +111,8 @@ public class ChartResource extends ServerResource {
                     qParams.add(2, "1"); //DateTest
                     qParams.add(3, doWhat = argsInForm.getFirstValue("date")); //Date
                     
+                    int step = Integer.valueOf(doWhat = argsInForm.getFirstValue("step"));
+                    
                     JSONArray mainGlob = getSnmpAction.getMain(dbc, qParams);
                     JSONArray note3Glob = getSnmpAction.getNote3(dbc, qParams);
                     JSONArray emS4Glob = getSnmpAction.getEmS4(dbc, qParams);
@@ -131,6 +133,18 @@ public class ChartResource extends ServerResource {
                     JSONArray mSysCPU_Data7 = new JSONArray();
                     JSONArray mSysCPU_Data8 = new JSONArray();
                     JSONArray mSysCPU_Data9 = new JSONArray();
+                    
+                    String mSysDiskIO_ChartName = "Disk I/O Use";
+                    long mSysDiskIO_Cumulative = 0;
+                    long mSysDiskIO_LastTotal = 0;
+                    long mSysDiskIO_LastRead = 0;
+                    long mSysDiskIO_LastWrite = 0;
+                    JSONObject mSysDiskIO_Glob = new JSONObject();
+                    JSONObject mSysDiskIO_Props = new JSONObject();
+                    JSONArray mSysDiskIO_Labels = new JSONArray();
+                    JSONArray mSysDiskIO_Data = new JSONArray();
+                    JSONArray mSysDiskIO_Data2 = new JSONArray();
+                    JSONArray mSysDiskIO_Data3 = new JSONArray();
                     
                     String mSysLoad_ChartName = "Desktop System Load";
                     JSONObject mSysLoad_Glob = new JSONObject();
@@ -177,6 +191,13 @@ public class ChartResource extends ServerResource {
                             .put("s8Name", "Core 7").put("s8Color", "Green")
                             .put("s9Name", "Core 8").put("s9Color", "Green")
                             .put("xLabel", "WalkTime").put("yLabel", "% Use");
+                    
+                    mSysDiskIO_Props
+                            .put("chartName", mSysDiskIO_ChartName).put("chartFileName", "mSysDiskIO")
+                            .put("sName", "Total").put("sColor", "White")
+                            .put("s2Name", "Reads").put("s2Color", "Green")
+                            .put("s3Name", "Writes").put("s3Color", "Red")
+                            .put("xLabel", "WalkTime").put("yLabel", "x1000 Blocks");
                     
                     mSysLoad_Props
                             .put("chartName", mSysLoad_ChartName).put("chartFileName", "mSysLoad")
@@ -235,6 +256,21 @@ public class ChartResource extends ServerResource {
                         mSysCPU_Data8.put(thisObject.getInt("dtCPULoad7"));
                         mSysCPU_Data9.put(thisObject.getInt("dtCPULoad8"));
                         
+                        long mSysDiskIO_ThisRead = 0;
+                        long mSysDiskIO_ThisWrite = 0;
+                        if(thisObject.getLong("dtDiskIOSysRead") != 0) { mSysDiskIO_ThisRead = thisObject.getLong("dtDiskIOSysRead"); }
+                        if(thisObject.getLong("dtDiskIOSysWrite") != 0) { mSysDiskIO_ThisWrite = thisObject.getLong("dtDiskIOSysWrite"); }
+                        long mSysDiskIO_ThisTotal = mSysDiskIO_ThisRead + mSysDiskIO_ThisWrite;
+                        if(mSysDiskIO_LastTotal <= mSysDiskIO_ThisTotal && mSysDiskIO_LastTotal != 0) {
+                            if(mSysDiskIO_Cumulative != 0) { mSysDiskIO_Cumulative = mSysDiskIO_Cumulative + (mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal); }
+                            mSysDiskIO_Data.put((mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal)/1000/120/step);
+                            if(mSysDiskIO_LastRead <= mSysDiskIO_ThisRead) { mSysDiskIO_Data2.put((mSysDiskIO_ThisRead - mSysDiskIO_LastRead)/1000/120/step); }
+                            if(mSysDiskIO_LastWrite <= mSysDiskIO_ThisWrite) { mSysDiskIO_Data3.put((mSysDiskIO_ThisWrite - mSysDiskIO_LastWrite)/1000/120/step); }
+                        }
+                        mSysDiskIO_LastTotal = mSysDiskIO_ThisTotal;
+                        mSysDiskIO_LastRead = mSysDiskIO_ThisRead;
+                        mSysDiskIO_LastWrite = mSysDiskIO_ThisWrite;
+                        
                         mSysLoad_Labels.put(thisObject.getString("WalkTime"));
                         mSysLoad_Data.put(thisObject.getDouble("dtLoadIndex1"));
                         
@@ -268,10 +304,12 @@ public class ChartResource extends ServerResource {
                     mSysLoad_Glob.put("labels", mSysLoad_Labels).put("data", mSysLoad_Data).put("props", mSysLoad_Props);
                     mSysMemory_Glob.put("labels", mSysMemory_Labels).put("data", mSysMemory_Data).put("data2", mSysMemory_Data2).put("data3", mSysMemory_Data3).put("data4", mSysMemory_Data4).put("props", mSysMemory_Props);
                     mSysStorage_Glob.put("labels", mSysStorage_Labels).put("data", mSysStorage_Data).put("data2", mSysStorage_Data2).put("props", mSysStorage_Props);
+                    mSysDiskIO_Glob.put("labels", mSysDiskIO_Labels).put("data", mSysDiskIO_Data).put("data2", mSysDiskIO_Data2).put("data3", mSysDiskIO_Data3).put("props", mSysDiskIO_Props);
                     mSysTemp_Glob.put("labels", mSysTemp_Labels).put("data", mSysTemp_Data).put("data2", mSysTemp_Data2).put("data3", mSysTemp_Data3).put("data4", mSysTemp_Data4).put("data5", mSysTemp_Data5).put("data6", mSysTemp_Data6).put("props", mSysTemp_Props);
                     
                     try { dynChart.LineChart(mSysLoad_Glob); returnData += "Chart generated - mSysLoad!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysCPU_Glob); returnData += "Chart generated - mSysCPU!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(mSysDiskIO_Glob); returnData += "Chart generated - mSysDiskIO!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysMemory_Glob); returnData += "Chart generated - mSysMemory!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysStorage_Glob); returnData += "Chart generated - mSysStorage!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysTemp_Glob); returnData += "Chart generated - mSysTemp!\n"; } catch (Exception e) { e.printStackTrace(); } 
