@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 29 Apr 2018
+Updated: 30 Apr 2018
  */
 
 package asWebRest.dao;
@@ -510,7 +510,7 @@ public class SnmpDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("WalkTime", resultSet.getString("WalkTime"))
-                    .put("SensorsRapid", resultSet.getString("SensorsRapid"));                    
+                    .put("SensorsRapid", new JSONObject(resultSet.getString("SensorsRapid")));                    
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -693,6 +693,7 @@ public class SnmpDAO {
                     .put("KMemBuffU", resultSet.getLong("KMemBuffU"))
                     .put("KMemCachedU", resultSet.getLong("KMemCachedU"))
                     .put("KMemSharedU", resultSet.getLong("KMemSharedU"))
+                    .put("KSwapU", resultSet.getLong("KSwapU"))
                     .put("eth0Rx", resultSet.getLong("eth0Rx"))
                     .put("eth0Tx", resultSet.getLong("eth0Tx"))
                     .put("eth1Rx", resultSet.getLong("eth1Rx"))

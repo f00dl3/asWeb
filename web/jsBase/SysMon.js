@@ -150,42 +150,53 @@ function populateChartHolders(chartArray) {
 function populateCharts() {
     var stepIn = 90; //get Step post var TO-DO
     var dateIn = ""; //  get Date post var TO-DO
-    var chartDefs = "Step=" + stepIn +
-            "&Date=" + dateIn;
     var rData = "";
     var chartList1 = [
-        "mSysLoad", // done 4/29
-        "mSysCPU", // done 4/29
-        "mSysTemp", // done 4/29
-        "mSysMemory", // done 4/29
-        "mSysStorage", // done 4/29
-        "mSysDiskIO", // done 4/29
-        "mSysNet", // done 4/29
-        "mSysMySQLSize", // mostly-done 4/29
-        "mSysNumUsers",
-        "mSysFans",
-        "mSysUPSLoad",
-        "mSysUPSTimeLeft",
-        "mSysTomcatDeploy"
+        "mSysLoad", // done 4/29/18
+        "mSysCPU", // done 4/29/18
+        "mSysTemp", // done 4/29/18
+        "mSysMemory", // done 4/29/18
+        "mSysStorage", // done 4/29/18
+        "mSysDiskIO", // done 4/29/18
+        "mSysNet", // done 4/29/18
+        "mSysMySQLSize", // mostly-done 4/29/18
+        "mSysNumUsers", // done 4/29/18
+        "mSysFans", // done 4/30/18
+        "mSysUPSLoad", // done 4/30/18
+        "mSysUPSTimeLeft", // done 4/30/18
+        "mSysTomcatDeploy" // issues 4/30/18
     ];
     var chartList2 = [
-        "mSysVolt",
-        "mCellBattCPU",
-        "mCellTempRapid",
-        "mCellNet",
-        "mCellSig",
-        "mRouterCPU",
-        "mRouterNet",
-        "mPiAmp",
-        "mPiCPU",
-        "mPiMemory",
-        "mPiTemp",
-        "mJavaCodeLines" // done 4/29
+        "mSysVolt", // done 4/30/18
+        "mCellBattCPU", // issues 4/30/18
+        "mCellTempRapid", // json iteration not known 4/30/18
+        "mCellNet", // done 4/30/18
+        "mCellSig", // done 4/30/18
+        "mRouterCPU", // done 4/30/18
+        "mRouterNet", // data issues 4/30/18
+        "mPiAmb", // done 4/30/18
+        "mPiCPU", // done 4/30/18
+        "mPiMemory", // axis label issues 4/30/18
+        "mPiTemp", // done 4/30/18
+        "mJavaCodeLines" // done 4/29/18
+    ];
+    var UNIMP_chartList = [
+        "mCellTemp", // need to conv. to TF 4/30/18
+        "mPiLoad", // done 4/30/18
+        "mPi2CPU", // done 4/30/18
+        "mPi2Memory", // data issues 4/30/18
+        "mPi2Temp", // data issues 4/30/18
+        "mPi2Load", // done 4/30/18
+        "mPi2Light", // data issues 4/30/18
+        "mPi2GPSSpeed", // data issues 4/30/18
+        "mSysCams", // there, unimplemented anymore 4/30/18
+        "mSysMySQLWeb",
+        "mRouterMemory" // data issues 4/30/18
     ];
     var numElements = chartList1.length;
     var numElements2 = chartList2.length;
     if(1 === 1) {
-        var allElements = chartList1.concat(chartList2);
+        var allElements = chartList1.concat(chartList2).concat(UNIMP_chartList);
         for (var i = 0; i < allElements.length; i++) {
             rData += "<span id='CHART_" + allElements[i] + "'></span>";
         }

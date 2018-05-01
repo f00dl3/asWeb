@@ -131,7 +131,7 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
 }
 
 function getFitnessAllData(inXdt1, inXdt2) {
-    var timeout = 5 * 60 * 1000;
+    var timeout = 90 * 1000;
     aniPreload("on");
     var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
