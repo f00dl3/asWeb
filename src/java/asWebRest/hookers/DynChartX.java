@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 29 Apr 2018
+Updated: 2 May 2018
  */
 
 package asWebRest.hookers;
@@ -11,12 +11,15 @@ import asWebRest.shared.WebCommon;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.Styler.LegendPosition;
 import org.knowm.xchart.style.colors.ChartColor;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
@@ -76,7 +79,10 @@ public class DynChartX {
         chart.getStyler().setChartBackgroundColor(Color.BLACK);
         chart.getStyler().setChartFontColor(Color.WHITE);
         chart.getStyler().setChartTitleFont(new Font(Font.SERIF, Font.PLAIN, 24));
-        chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
+        chart.getStyler().setLegendBackgroundColor(ChartColor.getAWTColor(ChartColor.BLACK));
+        //chart.getStyler().setLegendTextColor(Color.WHITE);
+        chart.getStyler().setLegendVisible(true);
         chart.getStyler().setPlotBackgroundColor(ChartColor.getAWTColor(ChartColor.BLACK));
         chart.getStyler().setPlotGridLinesVisible(true);
         chart.getStyler().setPlotGridLinesColor(getSeriesColor("#5E5E5E"));

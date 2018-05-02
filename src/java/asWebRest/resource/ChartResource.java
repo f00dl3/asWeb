@@ -872,6 +872,8 @@ public class ChartResource extends ServerResource {
                             if(mSysNet_LastVirtualOctets <= mSysNet_ThisVirtualOctets && mSysNet_LastVirtualOctets != 0) { mSysNet_Data6.put((mSysNet_ThisVirtualOctets - mSysNet_LastVirtualOctets)/1024/1024/intLen/step); }
                             if(mSysNet_LastPiOctets <= mSysNet_ThisPiOctets && mSysNet_LastPiOctets != 0) { mSysNet_Data7.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
                             if(mSysNet_LastPi2Octets <= mSysNet_ThisPi2Octets && mSysNet_LastPi2Octets != 0) { mSysNet_Data8.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
+                        } else {
+                            System.out.println("No data! - " + thisObject.getString("WalkTime"));
                         }
                         mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
                         mSysNet_LastOctetsIn = thisObject.getLong("dtOctetsIn");
@@ -987,7 +989,7 @@ public class ChartResource extends ServerResource {
                         mCellSig_Data4.put(mCellSig_GSM);
                         
                         mCellTemp_Labels.put(note3Object.getString("WalkTime"));
-                        mCellTemp_Data.put(note3Object.getInt("BattTemp")/10);
+                        mCellTemp_Data.put(wc.tempC2F(note3Object.getInt("BattTemp")/10));
                         
                         mCellTempRapid_Labels.put(note3Object.getString("WalkTime"));
                         mCellTempRapid_Data.put(0);

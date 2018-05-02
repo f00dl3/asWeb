@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 1 May 2018
+Updated: 2 May 2018
 */
 
 var dateSelect = getDate("day", 0, "yyyyMMdd");
@@ -99,8 +99,8 @@ function getSnmpOverviewData() {
 function nodeState(state, label) {
     var btn = "";
     switch(state) {
-        case "on": btn = "<button style='background-color: yellow; color: black;'>" + label + "</button>"; break;
-        case "off": btn = "<button style='background-color: #666666; color: white;'>" + label + "</button>"; break;
+        case "on": btn = "<button style='background-color: yellow; color: black;'>" + label + "</button> "; break;
+        case "off": btn = "<button style='background-color: #666666; color: white;'>" + label + "</button> "; break;
     }
     return btn;
 }
@@ -308,7 +308,7 @@ function populateStatusHolder(target, stateData) {
 }
 
 function initSysMon() {
-    //snmpRapid("snmpDataRapidHolder");
+    snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     populateCharts();
     getEDiscovery();
