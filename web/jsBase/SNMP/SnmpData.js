@@ -1,9 +1,10 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 26 Apr 2018
+Updated: 2 May 2018
  */
 
+var extraDiskID = "9999";
 var testCounter = 0;
 var diskIoLastRead = 0;
 var diskIoLastWrite = 0;
@@ -16,6 +17,24 @@ function checkIfSnmpIsUp(state) {
         case true: doSnmpWidget(); break;
         case false: break;
     }
+}
+
+function getExtraDiskID() {
+    var thePostData = { "doWhat": "getExtraDiskID" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("SNMP"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    extraDiskID = data;
+                    console.log(extraDiskID);
+                },
+                function(error) { 
+                    console.log("request for ExtraDiskID FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function processSnmpData(snmp, target) {
@@ -125,7 +144,10 @@ function processSnmpData(snmp, target) {
 function snmpRapid(target) {
     var timeout = 500;
     if(checkMobile()) { timeout = 1500; }
-    var thePostData = { "doWhat": "snmpWalk" };
+    var thePostData = {
+        "doWhat": "snmpWalk",
+        "extraDiskID": extraDiskID
+    };
     require(["dojo/request"], function(request) {
         request
             .post(getResource("SNMP"), {
@@ -141,3 +163,9 @@ function snmpRapid(target) {
     });
     setTimeout(function () { snmpRapid(target); }, timeout);
 }
+
+function init() {
+    getExtraDiskID();
+}
+
+dojo.ready(init);

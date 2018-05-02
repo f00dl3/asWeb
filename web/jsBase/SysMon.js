@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 29 Apr 2018
+Updated: 1 May 2018
 */
 
 var dateSelect = getDate("day", 0, "yyyyMMdd");
@@ -169,7 +169,7 @@ function populateCharts() {
     var chartList2 = [
         "mSysVolt", // done 4/30/18
         "mCellBattCPU", // issues 4/30/18
-        "mCellTempRapid", // json iteration not known 4/30/18
+        "mCellTemp", // need to conv. to TF 4/30/18
         "mCellNet", // done 4/30/18
         "mCellSig", // done 4/30/18
         "mRouterCPU", // done 4/30/18
@@ -181,7 +181,7 @@ function populateCharts() {
         "mJavaCodeLines" // done 4/29/18
     ];
     var UNIMP_chartList = [
-        "mCellTemp", // need to conv. to TF 4/30/18
+        "mCellTempRapid", // json iteration not known 4/30/18
         "mPiLoad", // done 4/30/18
         "mPi2CPU", // done 4/30/18
         "mPi2Memory", // data issues 4/30/18

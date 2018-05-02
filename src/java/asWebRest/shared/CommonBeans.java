@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 27 Apr 2018
+Updated: 2 May 2018
  */
 
 package asWebRest.shared;
@@ -20,6 +20,7 @@ public class CommonBeans {
     private String query_SetOrder = "SET @OrderBy = ?;";
     private String query_SetRT0 = "SET @runtot := 0;";
     private String query_SetRT120K = "SET @runtot := 120000;";
+    private String ramPath = "/dev/shm";
     
     public int getChartMaxHeight() { return chartMaxHeight; }
     public int getChartMaxWidth() { return chartMaxWidth; }
@@ -33,5 +34,6 @@ public class CommonBeans {
     public String getQSetOrder() { return query_SetOrder; }
     public String getQSetRT0() { return query_SetRT0; }
     public String getQSetRT120K() { return query_SetRT120K; }
+    public String getRamPath() { return ramPath; }
     
 }

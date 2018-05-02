@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 25 Apr 2018
+Updated: 2 May 2018
  */
 
 package asWebRest.hookers;
@@ -51,12 +51,12 @@ public class SnmpWalk {
         usage = "Usage: snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid";
     }
     
-    private String execSnmpWalk(String node, String requestString) throws IOException {
+    private String execSnmpWalk(String node, String requestString, String requestObject) throws IOException {
     
         SnmpOidConversions stringToOid = new SnmpOidConversions();
         SNMPBeans snmpBeans = new SNMPBeans();
         
-        String oidRequest = stringToOid.translate(requestString);
+        String oidRequest = stringToOid.translate(requestString, requestObject);
         
         String returnData = "";
         TransportMapping<? extends Address> transport = new DefaultUdpTransportMapping();
@@ -132,13 +132,13 @@ public class SnmpWalk {
         
     }
     
-    public String get(String node, String requestString) {
+    public String get(String node, String requestString, String requestObject) {
         WebCommon wc = new WebCommon();
         String snmpBack = "SnmpWalk did not run yet or failed to run!";
         String snmpBackTmp = "";
         try{
             SnmpWalk snmpwalk = new SnmpWalk();
-            snmpBackTmp = snmpwalk.execSnmpWalk(node, requestString);
+            snmpBackTmp = snmpwalk.execSnmpWalk(node, requestString, requestObject);
         }
         catch(Exception e) {
             snmpBackTmp = "----- An Exception happened as follows. Please confirm the usage etc. -----\n" + e.getMessage();

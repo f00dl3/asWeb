@@ -48,7 +48,7 @@ function getSessionVariables() {
 
 function isLoggedIn() {
     console.log(window.location.pathname);
-    if(sessionVars.loggedIn === "true" && isSet(sessionVars.userName)) {
+    if(isSet(sessionVars) && sessionVars.loggedIn === "true" && isSet(sessionVars.userName)) {
         if(window.location.pathname === "/asWeb/") {
             window.location.href = getResource(sessionVars.userName);
         }
