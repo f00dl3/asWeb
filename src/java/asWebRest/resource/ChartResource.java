@@ -603,7 +603,7 @@ public class ChartResource extends ServerResource {
                     
                     mSysCPU_Props
                             .put("chartName", mSysCPU_ChartName).put("chartFileName", "mSysCPU")
-                            .put("sName", "Avg CPU").put("sColor", "White")
+                            .put("sName", "Avg CPU").put("sColor", "Yellow")
                             .put("s2Name", "Core 1").put("s2Color", "Gray")
                             .put("s3Name", "Core 2").put("s3Color", "Gray")
                             .put("s4Name", "Core 3").put("s4Color", "Gray")
@@ -630,7 +630,7 @@ public class ChartResource extends ServerResource {
                     
                     mSysLoad_Props
                             .put("chartName", mSysLoad_ChartName).put("chartFileName", "mSysLoad")
-                            .put("sName", "LoadIndex").put("sColor", "Yellow")
+                            .put("sName", "LoadIndex").put("sColor", "Red")
                             .put("s2Name", "Load 5").put("s2Color", "Green")
                             .put("s3Name", "Load 15").put("s3Color", "Blue")
                             .put("xLabel", "WalkTime").put("yLabel", "Load Index");
@@ -684,8 +684,8 @@ public class ChartResource extends ServerResource {
                             
                     mSysTemp_Props
                             .put("chartName", mSysTemp_ChartName).put("chartFileName", "mSysTemp")
-                            .put("sName", "CPU Average").put("sColor", "Red")
-                            .put("s2Name", "Case").put("s2Color", "Blue")
+                            .put("sName", "CPU Average").put("sColor", "Yellow")
+                            .put("s2Name", "Case").put("s2Color", "Green")
                             .put("s3Name", "Core 1/2").put("s3Color", "Gray")
                             .put("s4Name", "Core 3/4").put("s4Color", "Gray")
                             .put("s5Name", "Core 5/6").put("s5Color", "Gray")
@@ -839,11 +839,11 @@ public class ChartResource extends ServerResource {
                         );
                         mSysMySQLSize_Labels.put(thisObject.getString("WalkTime"));
                         mSysMySQLSize_Data.put(mSysMySQLSize_TotalRows);
-                        mSysMySQLSize_Data2.put(thisObject.getLong("duMySQLCore")/1000);
-                        mSysMySQLSize_Data3.put(thisObject.getLong("duMySQLFeeds")/1000);
-                        mSysMySQLSize_Data4.put(thisObject.getLong("duMySQLNetSNMP")/1000);
-                        mSysMySQLSize_Data5.put(thisObject.getLong("duMySQLWxObs")/1000);
-                        mSysMySQLSize_Data6.put(thisObject.getLong("duMySQLTotal")/1000);
+                        mSysMySQLSize_Data2.put(thisObject.getLong("duMySQLCore")/100);
+                        mSysMySQLSize_Data3.put(thisObject.getLong("duMySQLFeeds")/100);
+                        mSysMySQLSize_Data4.put(thisObject.getLong("duMySQLNetSNMP")/100);
+                        mSysMySQLSize_Data5.put(thisObject.getLong("duMySQLWxObs")/100);
+                        mSysMySQLSize_Data6.put(thisObject.getLong("duMySQLTotal")/100);
                         
                         long mSysNet_ThisLapOctets = thisObject.getLong("lapOctetsIn") + thisObject.getLong("lapOctetsOut");
                         long mSysNet_ThisPiOctets = thisObject.getLong("piOctetsIn") + thisObject.getLong("piOctetsOut");
@@ -873,7 +873,7 @@ public class ChartResource extends ServerResource {
                             if(mSysNet_LastPiOctets <= mSysNet_ThisPiOctets && mSysNet_LastPiOctets != 0) { mSysNet_Data7.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
                             if(mSysNet_LastPi2Octets <= mSysNet_ThisPi2Octets && mSysNet_LastPi2Octets != 0) { mSysNet_Data8.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
                         } else {
-                            System.out.println("No data! - " + thisObject.getString("WalkTime"));
+                            returnData += "No data! - " + thisObject.getString("WalkTime");
                         }
                         mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
                         mSysNet_LastOctetsIn = thisObject.getLong("dtOctetsIn");
