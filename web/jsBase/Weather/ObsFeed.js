@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 27 Apr 2018
+Updated: 2 May 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -40,7 +40,7 @@ function getObsData(targetDiv, displayType) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     
@@ -101,7 +101,7 @@ function getObsDataMerged(targetDiv, displayType) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(arObsJsonMq);

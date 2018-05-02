@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Feb 2018
-Updated: 17 Apr 2018
+Updated: 2 May 2018
  */
 
 function add2Cookie(attrib, value) {

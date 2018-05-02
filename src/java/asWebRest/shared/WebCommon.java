@@ -29,15 +29,23 @@ import org.json.JSONArray;
 import org.jsoup.Jsoup;
 
 public class WebCommon {
-    
-    public static double[] arrayDoubleFromJson(JSONArray inJsonArray) {
-        double[] newArray = new double[inJsonArray.length()];
+        
+    public static Double[] arrayDoubleFromJson(JSONArray inJsonArray) {
+        Double[] newArray = new Double[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             try { newArray[i] = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
         }
         return newArray;
     }
         
+    public static double[] arrayDoubleOldFromJson(JSONArray inJsonArray) {
+        double[] newArray = new double[inJsonArray.length()];
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            try { newArray[i] = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+        }
+        return newArray;
+    }
+    
     public static float[] arrayFloatFromJson(JSONArray inJsonArray) {
         float[] newArray = new float[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
@@ -46,6 +54,14 @@ public class WebCommon {
         return newArray;
     }
     
+    public static Integer[] arrayIntFromJson(JSONArray inJsonArray) {
+        Integer[] newArray = new Integer[inJsonArray.length()];
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            try { newArray[i] = inJsonArray.getInt(i); } catch (Exception e) { e.printStackTrace(); }
+        }
+        return newArray;
+    }
+        
     public static String[] arrayStringFromJson(JSONArray inJsonArray) {
         String[] newArray = new String[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {

@@ -278,8 +278,8 @@ function populateStatusHolder(target, stateData) {
     };
     var nodes = [ "Main", "Router", "Pi", "Pi2", "Phone", "PhoneE" ];
     var rData = "<div class='UPopNM'>" +
-            "<button style='" + styleTemp(indoorTemp) + "'>" + indoorTemp + "F</button>" +
-            "<button style='" + styleTemp(garageTemp) + "'>" + garageTemp + "G</button>" +
+            "<button style='" + styleTemp(indoorTemp) + "'>" + indoorTemp + "F</button> " +
+            "<button style='" + styleTemp(garageTemp) + "'>" + garageTemp + "G</button> " +
             "<div class='UPopNMO'>" +
             "<div class='table'>" +
             "<form class='tr' id='StepForm'>" +
