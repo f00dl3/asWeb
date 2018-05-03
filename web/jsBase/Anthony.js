@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 29 Apr 2018
+Updated: 3 May 2018
 */
 
 console.log(sessionVars);
@@ -9,7 +9,12 @@ console.log(sessionVars);
 function actOnCalendarSubmit(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    putQuickCalendarEntry(thisFormData);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    if(isSet(thisFormData.QuickStart) && isSet(thisFormData.QuickStartTime) && isSet(thisFormData.QuickTitle)) {
+        putQuickCalendarEntry(thisFormData);
+    } else {
+        window.alert("Incomplete data!\nCheck input and try again!\n" + thisFormDataJ);
+    }
 }
 
 function actOnHiddenToggle(event) {
@@ -102,10 +107,17 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     var rData;
     var mySqlOverallSize = 0;
     var mySqlOverallRows = 0;
+    var timeEntryWidth = 110;
+    var dateEntryWidth = 75;
+    if(checkMobile()) {
+        timeEntryWidth = 75;
+        dateEntryWidth = 60;
+    }
     var toolHolder = "<h4>Tools</h4>";
     var quickWebCalEntryForm = "<div class='UBox' id='QuickCalendar'><span>Quick Calendar Entry</span>" +
             "<div class='table'><form class='tr' id='QuickCalFormTr'>" +
-            "<span class='td'><input name='QuickStart' type='text' value='YYYY-MM-DD HH:II' style='width: 100px;'/></span>" +
+            "<span class='td'><input name='QuickStart' type='date' value='' style='width: " + dateEntryWidth + "px;'/></span>" +
+            "<span class='td'><input name='QuickStartTime' type='time' value='' style='width: " + timeEntryWidth + "px'/></span>" +
             "<span class='td'><input name='QuickTitle' type='text' value='' style='width: 100px;' />" +
             "<input name='doWhat' type='hidden' value='setQuickCalEntry'/>" +
             "<button id='QuickCalBtn' name='QuickCalendar' class='UButton'>Go</button>" +
@@ -232,8 +244,9 @@ function putQuickCalendarEntry(formData) {
         handleAs: "text",
         timeout: timeOutMilli,
         load: function(data) {
-            window.alert(data);
             aniPreload("off");
+            console.log(data);
+            getAnthonyOverviewData();
         },
         error: function(data, iostatus) {
             aniPreload("off");

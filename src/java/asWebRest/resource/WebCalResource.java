@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 22 Apr 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.resource;
@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -74,12 +75,14 @@ public class WebCalResource extends ServerResource {
                     List<String> qParams2 = new ArrayList<>();
                     List<String> qParams3 = new ArrayList<>();
                     JSONObject log = getWebCalAction.getLastLogId(dbc);
-                    String timeInString = argsInForm.getFirstValue("QuickStart");
+                    String dateInString = argsInForm.getFirstValue("QuickStart");
+                    String timeInString = argsInForm.getFirstValue("QuickStartTime");
                     String eventTitle = argsInForm.getFirstValue("QuickTitle");
+                    String dateTimeFromInput = dateInString + " " + timeInString;
                     DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
                     DateTimeFormatter formatDate = DateTimeFormat.forPattern("yyyyMMdd");
                     DateTimeFormatter formatTime = DateTimeFormat.forPattern("HHmmss");
-                    DateTime inputtedTime = inputFormat.parseDateTime(timeInString);                    
+                    DateTime inputtedTime = inputFormat.parseDateTime(dateTimeFromInput).withZone(DateTimeZone.UTC);                    
                     LocalDateTime currentDateTime = new LocalDateTime();
                     int nextCEID = (log.getInt("CEID")) + 1;
                     int nextCLID = (log.getInt("CLID")) + 1;
@@ -104,6 +107,9 @@ public class WebCalResource extends ServerResource {
                     qParams3.add(8, eventTitle);
                     qParams3.add(9, eventTitle);
                     returnData += "Attempting entry " + nextCEID + "\n" +
+                            "DEBUG INFO:\n" +
+                            "ENTRY LOG TIME = " + date_Ymd + " " + date_His + "\n" +
+                            "START TIME = " + start_Ymd + " " + start_His + "\n" +
                             updateWebCalAction.setAddEntryUser(dbc, qParams) + "\n" +
                             updateWebCalAction.setAddEntryLog(dbc, qParams2) + "\n" +
                             updateWebCalAction.setAddEntry(dbc, qParams3);
