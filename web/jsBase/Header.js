@@ -386,7 +386,7 @@ function putNavi() {
             getWebLinks(overwriteUsername + ".php-SSH", "naviSshLinks", "bubble");
         }
     } else {
-        dojo.byId("NaviHolder").innerHTML = "<button class='SButton' id='LogoutSpan'>Login</button>";
+        dojo.byId("NaviHolder").innerHTML = "(Not logged in!)";
     }
     var logoutSpan = dojo.byId("LogoutSpan");
     dojo.connect(logoutSpan, "click", actOnLogout);

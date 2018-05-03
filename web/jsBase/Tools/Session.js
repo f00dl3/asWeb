@@ -52,7 +52,6 @@ function isLoggedIn() {
             window.location.href = getResource(sessionVars.userName);
         }
     } else {
-        window.alert("Not logged in. Please log in!");
         if(window.location.pathname !== "/asWeb/") {
             window.location.href = getResource("Landing");
         }
