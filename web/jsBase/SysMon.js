@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 2 May 2018
+Updated: 3 May 2018
 */
 
 var dateSelect = getDate("day", 0, "yyyyMMdd");
@@ -67,7 +67,7 @@ function getEDiscovery(target) {
                     console.log("request for LastSSH FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getLastWalk(target); }, timeout);
+    setTimeout(function () { getEDiscovery("eDiscoveryHolder"); }, timeout);
 }
 
 function getLastWalk(target) {
@@ -86,7 +86,7 @@ function getLastWalk(target) {
                     console.log("request for LastWalk FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getLastWalk(target); }, timeout);
+    setTimeout(function () { getLastWalk("snmpStatusHolder"); }, timeout);
 }
 
 function getSnmpOverviewData() {
@@ -189,7 +189,7 @@ function populateCharts() {
         "mPi2Load", // done 4/30/18
         "mPi2Light", // data issues 4/30/18
         "mPi2GPSSpeed", // data issues 4/30/18
-        "mSysCams", // there, unimplemented anymore 4/30/18
+        //"mSysCams", // there, unimplemented anymore 4/30/18
         "mSysMySQLWeb",
         "mRouterMemory" // data issues 4/30/18
     ];

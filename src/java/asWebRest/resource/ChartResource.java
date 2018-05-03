@@ -509,7 +509,7 @@ public class ChartResource extends ServerResource {
                     
                     mPiLoad_Props
                             .put("chartName", mPiLoad_ChartName).put("chartFileName", "mPiLoad")
-                            .put("sName", "Load Index").put("sColor", "Yellow")
+                            .put("sName", "Load Index").put("sColor", "Red")
                             .put("s2Name", "5 min Avg").put("s2Color", "Green")
                             .put("s3Name", "15 min Avg").put("s3Color", "Blue")
                             .put("xLabel", "WalkTime").put("yLabel", "Load Index");
@@ -549,7 +549,7 @@ public class ChartResource extends ServerResource {
                     
                     mPi2Load_Props
                             .put("chartName", mPi2Load_ChartName).put("chartFileName", "mPi2Load")
-                            .put("sName", "Load Index").put("sColor", "Yellow")
+                            .put("sName", "Load Index").put("sColor", "Red")
                             .put("s2Name", "5 min Avg").put("s2Color", "Green")
                             .put("s3Name", "15 min Avg").put("s3Color", "Blue")
                             .put("xLabel", "WalkTime").put("yLabel", "Load Index");
@@ -1248,6 +1248,8 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mSysUPSLoad_Glob); returnData += "Chart generated - mSysUPSLoad!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysUPSTimeLeft_Glob); returnData += "Chart generated - mSysUPSTimeLeft!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysVolt_Glob); returnData += "Chart generated - mSysVolt!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    
+                    returnData += mCellBattCPU_Data3.toString();
                     
                     break;
                     

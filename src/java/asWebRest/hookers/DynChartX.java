@@ -67,7 +67,7 @@ public class DynChartX {
         XYChart chart = new XYChart(width, height);
         XYChart thChart = new XYChart(thWidth, thHeight);
         
-        String[] xData = wc.arrayStringFromJson(jsonLabelArray);
+        Integer[] xData = wc.arrayIntegerFromJson(jsonLabelArray);
         double[] yData = wc.arrayDoubleOldFromJson(jsonDataArray);
         
         Color sColor = getSeriesColor(jp.getString("sColor"));

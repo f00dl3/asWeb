@@ -54,7 +54,7 @@ public class WebCommon {
         return newArray;
     }
     
-    public static Integer[] arrayIntFromJson(JSONArray inJsonArray) {
+    public static Integer[] arrayIntegerFromJson(JSONArray inJsonArray) {
         Integer[] newArray = new Integer[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             try { newArray[i] = inJsonArray.getInt(i); } catch (Exception e) { e.printStackTrace(); }
