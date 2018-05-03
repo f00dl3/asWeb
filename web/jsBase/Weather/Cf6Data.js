@@ -131,13 +131,14 @@ function popCf6Search(amDat) {
             "<br/>Default values search for the last year. Search & graph up to 25 years." +
             "<br/>Automatically updated 6 AM daily, with second attempt around Noon." +
             "<br/>CPC data updated on the 7th of each month.";
-    var searchForm = "<form id='cf6SearchForm'>" +
+    var searchForm = "<br/><form id='cf6SearchForm'>" +
             "<table><thead><th align='center' colspan=2>CF6 Search</th></thead><tbody>" +
             "<tr><td>Start</td><td><input type='date' name='CF6Search1' value=''/></td></tr>" +
             "<tr><td>End</td><td><input type='date' name='CF6Search2' value=''/></td></tr>" +
             "<input type='hidden' name='DoCf6Search' value='Yes'/>" +
             "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' type='submit' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
+    rData += searchForm;
     dojo.byId("cf6SearchHolder").innerHTML = rData;
 }
 

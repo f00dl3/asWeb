@@ -1,15 +1,17 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 30 Apr 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetSnmpAction;
+import asWebRest.action.GetWeatherAction;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.SnmpDAO;
+import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -34,12 +36,14 @@ public class ChartResource extends ServerResource {
         DynChartX dynChart = new DynChartX();
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+        GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         String doWhat = null;
+        String order = "DESC";
         String returnData = "";      
         
         List<String> qParams = new ArrayList<>();
@@ -1250,6 +1254,41 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mSysVolt_Glob); returnData += "Chart generated - mSysVolt!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     
                     returnData += mCellBattCPU_Data3.toString();
+                    
+                    break;
+                    
+                case "WeatherCf6OverviewCharts":
+                    
+                    genericCharts = false;
+                    order = "ASC";
+                    
+                    try {
+                        qParams.add(0, argsInForm.getFirstValue("dateStart"));
+                        qParams.add(1, argsInForm.getFirstValue("dateEnd"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
+                    String cf6Temps_ChartName = "KMCI Temperatures for range ";
+                    JSONObject cf6Temps_Glob = new JSONObject();
+                    JSONObject cf6Temps_Props = new JSONObject();
+                    JSONArray cf6Temps_Labels = new JSONArray();
+                    JSONArray cf6Temps_Data = new JSONArray();
+                    JSONArray cf6Temps_Data2 = new JSONArray();
+                    
+                    cf6Temps_Props
+                            .put("chartName", cf6Temps_ChartName).put("chartFileName", "mCf6Temps")
+                            .put("sName", "High").put("sColor", "Red")
+                            .put("s2Name", "Low").put("s2Color", "Blue")
+                            .put("xLabel", "WalkTime").put("yLabel", "degress F");
+                    
+                    JSONArray cf6Data = getWeatherAction.getCf6Main(dbc, qParams, order);
+                    
+                    for(int i = 0; i < cf6Data.length(); i++) {
+                        
+                        
+                        
+                    }
                     
                     break;
                     

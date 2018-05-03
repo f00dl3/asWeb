@@ -178,6 +178,60 @@ public class WeatherDAO {
         return tContainer;
     }
     
+    public JSONArray getCf6MciMain(Connection dbc, List<String> qParams, String order) {
+        String query_CF6MCI_Main = "SELECT cf6.Date," +
+            " ued.kWh, fit.RunWalk, fit.Cycling," +
+            " cf6.High, cf6.Low, cf6.Average, cf6.DFNorm," +
+            " cf6.HDD, cf6.CDD," +
+            " cf6.Liquid, cf6.Snow, cf6.SDepth, rg.Precip as HomePrecip," +
+            " cf6.WAvg, cf6.WMax, cf6.Clouds, cf6.Weather," +
+            " ao.Anom AS AO, aao.Anom AS AAO," +
+            " nao.Anom AS NAO, pna.Anom AS PNA" +
+            " FROM WxObs.CF6MCI cf6" +
+            " LEFT OUTER JOIN Core.Fitness fit ON cf6.Date = fit.Date" +
+            " LEFT OUTER JOIN WxObs.RainGauge rg ON cf6.Date = rg.Date" +
+            " LEFT OUTER JOIN Core.UseElecD ued ON cf6.Date = ued.Date" +
+            " LEFT JOIN WxObs.CPC_AO ao ON cf6.Date = ao.ObsDate" +
+            " LEFT JOIN WxObs.CPC_AAO aao ON cf6.Date = aao.ObsDate" +
+            " LEFT JOIN WxObs.CPC_NAO nao ON cf6.Date = nao.ObsDate" +
+            " LEFT JOIN WxObs.CPC_PNA pna ON cf6.Date = pna.ObsDate" +
+            " WHERE cf6.Date BETWEEN ? AND ?" +
+            " ORDER BY cf6.Date " + order +
+            " LIMIT 9150;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_CF6MCI_Main, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("AAO", resultSet.getDouble("AAO"))
+                    .put("AO", resultSet.getDouble("AO"))
+                    .put("Average", resultSet.getDouble("Average"))
+                    .put("CDD", resultSet.getInt("CDD"))
+                    .put("Cycling", resultSet.getDouble("Cycling"))
+                    .put("Date", resultSet.getString("Date"))
+                    .put("DFNorm", resultSet.getDouble("DFNorm"))
+                    .put("HDD", resultSet.getInt("HDD"))
+                    .put("High", resultSet.getInt("High"))
+                    .put("HomePrecip", resultSet.getDouble("HomePrecip"))
+                    .put("kWh", resultSet.getDouble("kWh"))
+                    .put("Liquid", resultSet.getDouble("Liquid"))
+                    .put("Low", resultSet.getInt("Low"))
+                    .put("NAO", resultSet.getDouble("NAO"))
+                    .put("PNA", resultSet.getDouble("PNA"))
+                    .put("RunWalk", resultSet.getDouble("RunWalk"))
+                    .put("SDepth", resultSet.getDouble("SDepth"))
+                    .put("Snow", resultSet.getDouble("Snow"))
+                    .put("WAvg", resultSet.getDouble("WAvg"))
+                    .put("Weather", resultSet.getString("Weather"))
+                    .put("WMax", resultSet.getDouble("WMax"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getChXmlWxObs() {
         final String query_ch_XMLWxObs = "SELECT EndRunTime, Duration FROM Logs ORDER BY EndRunTime DESC LIMIT 2880;";
         JSONArray tContainer = new JSONArray();

@@ -21,6 +21,7 @@ public class GetWeatherAction {
     public JSONArray getAlmanacLOpt(List qParams) { return weatherDAO.getAlmanacLOpt(qParams); }
     public JSONArray getAlmanacWxOpt(List qParams) { return weatherDAO.getAlmanacWxOpt(qParams); }
     public JSONArray getAutoStations() { return weatherDAO.getAutoStations(); }
+    public JSONArray getCf6Main(Connection dbc, List qParams, String order) { return weatherDAO.getCf6MciMain(dbc, qParams, order); }
     public JSONArray getChXmlWxObs() { return weatherDAO.getChXmlWxObs(); }
     public JSONArray getGfsFha() { return weatherDAO.getGfsFha(); }
     public JSONArray getHeights() { return weatherDAO.getHeights(); }
