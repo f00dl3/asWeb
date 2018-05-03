@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 19 Apr 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.action;
@@ -16,7 +16,7 @@ public class GetWeatherAction {
     private WeatherDAO weatherDAO;
     public GetWeatherAction(WeatherDAO weatherDAO) { this.weatherDAO = weatherDAO; }
     
-    public JSONArray getAlmanac() { return weatherDAO.getAlmanac(); }
+    public JSONArray getAlmanac(Connection dbc) { return weatherDAO.getAlmanac(dbc); }
     public JSONArray getAlmanacHOpt(List qParams) { return weatherDAO.getAlmanacHOpt(qParams); }
     public JSONArray getAlmanacLOpt(List qParams) { return weatherDAO.getAlmanacLOpt(qParams); }
     public JSONArray getAlmanacWxOpt(List qParams) { return weatherDAO.getAlmanacWxOpt(qParams); }

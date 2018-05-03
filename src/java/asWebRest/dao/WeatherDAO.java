@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 19 Apr 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.dao;
@@ -31,7 +31,7 @@ public class WeatherDAO {
     
     WebCommon wc = new WebCommon();
     
-    public JSONArray getAlmanac() {
+    public JSONArray getAlmanac(Connection dbc) {
         final String query_Almanac = "SELECT" +
                 " (SELECT COUNT(Date) FROM WxObs.CF6MCI WHERE Low < '12') AS ColdNights," +
                 " (SELECT COUNT(Date) FROM WxObs.CF6MCI WHERE Low < '33') AS Freezing," +
@@ -65,7 +65,7 @@ public class WeatherDAO {
                 " FROM WxObs.CF6MCI;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Almanac, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Almanac, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 22 Apr 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.resource;
@@ -52,6 +52,13 @@ public class WeatherResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
+                
+                case "getCf6Initial":
+                    JSONArray alamanac = getWeatherAction.getAlmanac(dbc);
+                    mergedResults
+                        .put("almanac", alamanac);
+                    returnData += mergedResults.toString();
+                    break;
                 
                 case "getNewsEmail":
                     JSONArray newsFeeds = getNewsFeedAction.getNewsFeed(dbc);

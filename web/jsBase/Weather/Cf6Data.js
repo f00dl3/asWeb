@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 23 Apr 2018
+Updated: 3 May 2018
  */
 
 function displayCf6() {
@@ -13,7 +13,7 @@ function displayCf6() {
 }
 
 function generateCf6Layout() {
-    var rData = "<h1>CF6 KMCI/CPC Data</h1>" +
+    var rData = "<h3>CF6 KMCI/CPC Data</h3>" +
             "<div id='cf6SearchHolder'></div><br/>" +
             "<div id='cf6ResultHolder'></div>";
     dojo.byId("WxCf6").innerHTML = rData;
@@ -39,8 +39,8 @@ function getInitialCf6Data(target) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    popCf6Search(data.almanac);
-                    popStatData(data.almanac);
+                    popCf6Search(data.almanac[0]);
+                    popStatTable(data.almanac[0]);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -123,7 +123,7 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
     });
     cf6Table += "</tbody></table>";
     rData += cf6Graphs + cf6Table;
-    dojo.byId("cf6Results").innerHTML = rData;
+    dojo.byId("cf6ResultHolder").innerHTML = rData;
 }
 
 function popCf6Search(amDat) {
@@ -138,7 +138,7 @@ function popCf6Search(amDat) {
             "<input type='hidden' name='DoCf6Search' value='Yes'/>" +
             "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' type='submit' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
-    dojo.byId("cf6Search").innerHTML = rData;
+    dojo.byId("cf6SearchHolder").innerHTML = rData;
 }
 
 function popLastYearGraphed() {
@@ -162,7 +162,7 @@ function popStatTable(alm) {
         "Blowing Snow":{"BS":"9"},
         "Tornado":{"FC":"X"}
     };
-    var rData = "Last year graphed:<br/><div id='cf6OverviewGraphs'></div>" +
+    var rData = "<br/><div id='cf6OverviewGraphs'></div>" +
             "<h4>Statistics</h4>";
     var rTable = "<table><tbody>" +
             "<tr><td>Average temperature: " + alm.TAvg_Avg + "F" +
@@ -224,7 +224,7 @@ function popStatTable(alm) {
             "<br/>Data from Jan 1934 to Oct 1972 is from Kansas City Downtown Airport" + 
             "<br/>Data from Jan 1900 to Jan 1934 is from Kansas City.";
     rData += rTable + dataDisclaimer;
-    dojo.byId("statHolder").innerHTML = rData;               
+    dojo.byId("cf6ResultHolder").innerHTML = rData;               
     popLastYearGraphed();
 }
 
