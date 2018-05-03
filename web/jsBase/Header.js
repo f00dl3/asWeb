@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 28 Apr 2018
+Updated: 3 May 2018
  */
 
 
@@ -117,13 +117,15 @@ function deg2rad(degrees) {
 
 function doCh(type, dynVar, opts) {
     var dBack = "";
+    var chFileName = dynVar + ".png";
     switch(type) {
         case "p": 
             dBack += getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=" + dynVar;
             if(isSet(opts)) { dBack += "&" + opts; }
             break;
         case "j":
-            window.alert("Use XHR?");
+            if(opts === "th") { chFileName = "th_" + chFileName; }
+            dBack += getBasePath("chartCache") + "/" + chFileName;
             break;
     }
     return dBack;

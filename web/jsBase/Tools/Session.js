@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Feb 2018
-Updated: 2 May 2018
+Updated: 3 May 2018
  */
 
 function add2Cookie(attrib, value) {
@@ -47,13 +47,12 @@ function getSessionVariables() {
 }
 
 function isLoggedIn() {
-    console.log(window.location.pathname);
     if(isSet(sessionVars) && sessionVars.loggedIn === "true" && isSet(sessionVars.userName)) {
         if(window.location.pathname === "/asWeb/") {
             window.location.href = getResource(sessionVars.userName);
         }
     } else {
-        console.log("Not logged in. Please log in!");
+        window.alert("Not logged in. Please log in!");
         if(window.location.pathname !== "/asWeb/") {
             window.location.href = getResource("Landing");
         }

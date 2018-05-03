@@ -4,6 +4,10 @@ Created: 23 Mar 2018
 Updated: 3 May 2018
  */
 
+function actOnCf6Search() {
+    window.alert("Build this!");
+}
+
 function displayCf6() {
     generateCf6Layout();
     $("#WxLiveContainer").hide();
@@ -19,12 +23,33 @@ function generateCf6Layout() {
     dojo.byId("WxCf6").innerHTML = rData;
     var cf6SearchHolder = dojo.byId("cf6SearchHolder");
     getInitialCf6Data();
+    getCf6Data();
 }
 
 function getCf6Data(dateInStart, dateInEnd) {
     var dateStart, dateEnd;
     if(isSet(dateInStart)) { dateStart = dateInStart; } else { dateStart = getDate("day", -365, "dateOnly"); }
     if(isSet(dateInEnd)) { dateEnd = dateInEnd; } else { dateEnd = getDate("day", 0, "dateOnly"); }
+    var thePostData = {
+        "doWhat": "WeatherCf6OverviewCharts",
+        "dateStart": dateStart,
+        "dateEnd": dateEnd
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    popLastYearGraphed();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for CF6 Chart Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function getInitialCf6Data(target) {
@@ -127,24 +152,26 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
 }
 
 function popCf6Search(amDat) {
-    var rData = "<strong>" + amDat.FDay + "</strong> to <strong>" + amDat.LDay + "</strong>(" + amDat.Days + " days of data)" +
+    var rData = "<strong>" + amDat.FDay + "</strong> to <strong>" + amDat.LDay + "</strong> (" + amDat.Days + " days of data)" +
             "<br/>Default values search for the last year. Search & graph up to 25 years." +
             "<br/>Automatically updated 6 AM daily, with second attempt around Noon." +
-            "<br/>CPC data updated on the 7th of each month.";
-    var searchForm = "<br/><form id='cf6SearchForm'>" +
+            "<br/>CPC data updated on the 7th of each month.<p>";
+    var searchForm = "<form id='cf6SearchForm'>" +
             "<table><thead><th align='center' colspan=2>CF6 Search</th></thead><tbody>" +
             "<tr><td>Start</td><td><input type='date' name='CF6Search1' value=''/></td></tr>" +
             "<tr><td>End</td><td><input type='date' name='CF6Search2' value=''/></td></tr>" +
             "<input type='hidden' name='DoCf6Search' value='Yes'/>" +
-            "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' type='submit' name='DoCf6Search'>Search</button></td></tr>" +
+            "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
     rData += searchForm;
     dojo.byId("cf6SearchHolder").innerHTML = rData;
+    var cf6SearchButton = dojo.byId("Cf6SearchButton");
+    dojo.connect(cf6SearchButton, "click", actOnCf6Search);
 }
 
 function popLastYearGraphed() {
-    var rData = "<p>Last year graphed:<p>" +
-            "<a href='" + doCh("p", "WxTemp", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxTemp", "Thumb=1") + "'/></a>" +
+    var rData = "Last year graphed:<p>" +
+            "<a href='" + doCh("j", "cf6Temps", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Temps", "th") + "'/></a>" +
             "<a href='" + doCh("p", "WxTempDFN", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxTempDFN", "Thumb=1") + "'/></a>" +
             "<a href='" + doCh("p", "WxCPC", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxCPC", "Thumb=1") + "'/></a>";
     dojo.byId("cf6OverviewGraphs").innerHTML = rData;

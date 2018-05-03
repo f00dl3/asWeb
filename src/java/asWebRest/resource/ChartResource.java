@@ -1262,14 +1262,19 @@ public class ChartResource extends ServerResource {
                     genericCharts = false;
                     order = "ASC";
                     
+                    String cf6ChDateStart = "";
+                    String cf6ChDateEnd = "";
+                    
                     try {
-                        qParams.add(0, argsInForm.getFirstValue("dateStart"));
-                        qParams.add(1, argsInForm.getFirstValue("dateEnd"));
+                        cf6ChDateStart = argsInForm.getFirstValue("dateStart");
+                        cf6ChDateEnd = argsInForm.getFirstValue("dateEnd");
+                        qParams.add(0, cf6ChDateStart);
+                        qParams.add(1, cf6ChDateEnd);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     
-                    String cf6Temps_ChartName = "KMCI Temperatures for range ";
+                    String cf6Temps_ChartName = "KMCI Temperatures: " + cf6ChDateStart + " to " + cf6ChDateEnd;
                     JSONObject cf6Temps_Glob = new JSONObject();
                     JSONObject cf6Temps_Props = new JSONObject();
                     JSONArray cf6Temps_Labels = new JSONArray();
@@ -1277,7 +1282,7 @@ public class ChartResource extends ServerResource {
                     JSONArray cf6Temps_Data2 = new JSONArray();
                     
                     cf6Temps_Props
-                            .put("chartName", cf6Temps_ChartName).put("chartFileName", "mCf6Temps")
+                            .put("chartName", cf6Temps_ChartName).put("chartFileName", "cf6Temps")
                             .put("sName", "High").put("sColor", "Red")
                             .put("s2Name", "Low").put("s2Color", "Blue")
                             .put("xLabel", "WalkTime").put("yLabel", "degress F");
@@ -1286,9 +1291,17 @@ public class ChartResource extends ServerResource {
                     
                     for(int i = 0; i < cf6Data.length(); i++) {
                         
+                        JSONObject thisObject = cf6Data.getJSONObject(i);
                         
+                        cf6Temps_Labels.put(thisObject.getString("Date"));
+                        cf6Temps_Data.put(thisObject.getInt("High"));
+                        cf6Temps_Data2.put(thisObject.getInt("Low"));
                         
                     }
+                    
+                    cf6Temps_Glob.put("labels", cf6Temps_Labels).put("data", cf6Temps_Data).put("data2", cf6Temps_Data2).put("props", cf6Temps_Props);
+                    
+                    try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     
                     break;
                     
