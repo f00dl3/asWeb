@@ -171,8 +171,8 @@ function popCf6Search(amDat) {
 
 function popLastYearGraphed() {
     var rData = "Last year graphed:<p>" +
-            "<a href='" + doCh("j", "cf6Temps", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Temps", "th") + "'/></a>" +
-            "<a href='" + doCh("p", "WxTempDFN", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxTempDFN", "Thumb=1") + "'/></a>" +
+            "<a href='" + doCh("j", "cf6Temps", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Temps", "t") + "'/></a>" +
+            "<a href='" + doCh("j", "cf6Depart", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Depart", "t") + "'/></a>" +
             "<a href='" + doCh("p", "WxCPC", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxCPC", "Thumb=1") + "'/></a>";
     dojo.byId("cf6OverviewGraphs").innerHTML = rData;
 }

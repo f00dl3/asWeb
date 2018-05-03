@@ -124,7 +124,7 @@ function doCh(type, dynVar, opts) {
             if(isSet(opts)) { dBack += "&" + opts; }
             break;
         case "j":
-            if(opts === "th") { chFileName = "th_" + chFileName; }
+            if(opts === "t") { chFileName = "th_" + chFileName; }
             dBack += getBasePath("chartCache") + "/" + chFileName;
             break;
     }
