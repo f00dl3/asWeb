@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 2 May 2018
+Updated: 3 May 2018
  */
 
 package asWebRest.hookers;
@@ -67,8 +67,6 @@ public class DynChartX {
         XYChart chart = new XYChart(width, height);
         XYChart thChart = new XYChart(thWidth, thHeight);
         
-        //List<String> xData = Arrays.asList(wc.arrayStringFromJson(jsonLabelArray));
-        //List<Double> yData = Arrays.asList(wc.arrayDoubleFromJson(jsonDataArray));
         String[] xData = wc.arrayStringFromJson(jsonLabelArray);
         double[] yData = wc.arrayDoubleOldFromJson(jsonDataArray);
         
