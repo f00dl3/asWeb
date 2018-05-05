@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 Apr 2018
+Updated: 5 May 2018
 */
 
 package asWebRest.dao;
@@ -153,10 +153,10 @@ public class FinanceDAO {
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked," +
                 " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, query_FBook_ATrackPrep1, null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsB = wc.q2rs1c(dbc, query_FBook_ATrackPrep2, null); rsB.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsC = wc.q2rs1c(dbc, query_FBook_ATrackPrep3, null); rsC.close(); } catch (Exception e) { e.printStackTrace(); }
-        try { ResultSet rsD = wc.q2rs1c(dbc, query_FBook_ATrackPrep4, null); rsD.close(); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsA = wc.q2do1c(dbc, query_FBook_ATrackPrep1, null); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsB = wc.q2do1c(dbc, query_FBook_ATrackPrep2, null); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsC = wc.q2do1c(dbc, query_FBook_ATrackPrep3, null); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsD = wc.q2do1c(dbc, query_FBook_ATrackPrep4, null); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ATrack, null);
             while (resultSet.next()) { 

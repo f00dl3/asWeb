@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 29 Apr 2018
+Updated: 5 May 2018
 */
 
 package asWebRest.shared;
@@ -182,11 +182,11 @@ public class WebCommon {
         
     public String q2do1c(Connection connection, String query, List<String> params) throws Exception {
         String messageBack = "Query has not ran yet or failed!";
-        if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
         try {
             PreparedStatement pStatement = connection.prepareStatement(query);
             int pit = 1;
             if(params != null) {
+                if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
                 for (String param : params) {
                     if(param != null) {
                         if (param.equals("on")) { param = "1"; }
