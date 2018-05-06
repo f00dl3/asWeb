@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 2 May 2018
+Updated: 6 May 2018
  */
 
 package asWebRest.hookers;
@@ -68,11 +68,18 @@ public class SnmpWalk {
         
         switch (node) {
             
+            case "router":
+                targetAddr = snmpBeans.getSnmpRouterAddress();
+                tSecName = snmpBeans.getSnmpRouterUser();
+                tSecPass = snmpBeans.getSnmpRouterPass();
+                break;
+            
             case "desktop": default:
-                targetAddr = "127.0.0.1";
+                targetAddr = snmpBeans.getSnmpAddress();
                 tSecName = snmpBeans.getSnmpUser();
                 tSecPass = snmpBeans.getSnmpPass();
                 break;
+                
                 
         }
         

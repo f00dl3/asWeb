@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
 
@@ -16,6 +16,13 @@ var elecCost = 0.14;
 var hiddenFeatures = 0;
 var timeOutMilli = (60*1000);
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
+
+var timeEntryWidth = 110;
+var dateEntryWidth = 75;
+if(checkMobile()) {
+    timeEntryWidth = 75;
+    dateEntryWidth = 60;
+}
 
 if(isSet(window.localStorage.getItem("sessionVars"))) {
     var sessionVars = JSON.parse(window.localStorage.getItem("sessionVars"));
@@ -142,14 +149,15 @@ function formatDate(inDate, request) {
     var fmtDate;
     dojo.require("dojo.date.locale");
     switch(request) {
-        case "dateOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd", selector: "date"}); break;
-        case "full": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
+        case "dateOnly": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy-MM-dd", selector: "date"}); break;
+        case "full": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy-MM-dd HH:mm:ss", selector: "date" }); break;
+        case "hourstamp": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMMddHH", selector: "date" }); break;
         case "js": fmtDate = inDate; break;
-        case "timestamp": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMMddHHmmSS", selector: "date" }); break;
-        case "yearMonth": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMM", selector: "date"}); break;
-        case "yyyyMMdd": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyyMMdd", selector: "date"}); break;
-        case "yyyy-MM": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy-MM", selector: "date"}); break;
-        case "yearOnly": fmtDate = dojo.date.locale.format(inDate, {datePattern: "yyyy", selector: "date"}); break;
+        case "timestamp": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMMddHHmmSS", selector: "date" }); break;
+        case "yearMonth": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMM", selector: "date"}); break;
+        case "yyyyMMdd": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMMdd", selector: "date"}); break;
+        case "yyyy-MM": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy-MM", selector: "date"}); break;
+        case "yearOnly": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy", selector: "date"}); break;
     }
     return fmtDate;
 }

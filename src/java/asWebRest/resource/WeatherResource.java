@@ -67,6 +67,18 @@ public class WeatherResource extends ServerResource {
                         .put("almanac", alamanac);
                     returnData += mergedResults.toString();
                     break;
+                    
+                case "getEventData":
+                    inParams.add(0, argsInForm.getFirstValue("eventSearchStart"));
+                    inParams.add(1, argsInForm.getFirstValue("eventSearchEnd"));
+                    JSONArray eventData = getWeatherAction.getStormReportsByDate(dbc, inParams);
+                    returnData += eventData.toString();
+                    break;
+                    
+                case "getHTrackLast":
+                    JSONArray htLast = getWeatherAction.getHTrackLast(dbc);
+                    returnData += htLast.toString();
+                    break;
                 
                 case "getNewsEmail":
                     JSONArray newsFeeds = getNewsFeedAction.getNewsFeed(dbc);

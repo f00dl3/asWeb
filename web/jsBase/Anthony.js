@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
 */
 
 console.log(sessionVars);
@@ -107,12 +107,6 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     var rData;
     var mySqlOverallSize = 0;
     var mySqlOverallRows = 0;
-    var timeEntryWidth = 110;
-    var dateEntryWidth = 75;
-    if(checkMobile()) {
-        timeEntryWidth = 75;
-        dateEntryWidth = 60;
-    }
     var toolHolder = "<h4>Tools</h4>";
     var quickWebCalEntryForm = "<div class='UBox' id='QuickCalendar'><span>Quick Calendar Entry</span>" +
             "<div class='table'><form class='tr' id='QuickCalFormTr'>" +

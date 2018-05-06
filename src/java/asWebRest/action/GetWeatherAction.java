@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
 package asWebRest.action;
@@ -26,7 +26,7 @@ public class GetWeatherAction {
     public JSONArray getGfsFha() { return weatherDAO.getGfsFha(); }
     public JSONArray getHeights() { return weatherDAO.getHeights(); }
     public JSONArray getHeightsAll() { return weatherDAO.getHeightsAll(); }
-    public JSONArray getHTrackLast() { return weatherDAO.getHTrackLast(); }
+    public JSONArray getHTrackLast(Connection dbc) { return weatherDAO.getHTrackLast(dbc); }
     public JSONArray getHTracks(List qParams) { return weatherDAO.getHTracks(qParams); }
     public JSONArray getJsonModelData(List qParams) { return weatherDAO.getJsonModelData(qParams); }
     public JSONArray getJsonModelLast() { return weatherDAO.getJsonModelLast(); }
@@ -47,7 +47,7 @@ public class GetWeatherAction {
     public JSONArray getRadarList() { return weatherDAO.getRadarList(); }
     public JSONArray getReanalysis(List qParams) { return weatherDAO.getReanalysis(qParams); }
     public JSONArray getSpcLive(Connection dbc, List qParams) { return weatherDAO.getSpcLive(dbc, qParams); }
-    public JSONArray getStormReportsByDate(List inParams) { return weatherDAO.getStormReportsByDate(inParams); }
+    public JSONArray getStormReportsByDate(Connection dbc, List inParams) { return weatherDAO.getStormReportsByDate(dbc, inParams); }
     public JSONArray getUuT(List qParams) { return weatherDAO.getUuT(qParams); }
     
 }

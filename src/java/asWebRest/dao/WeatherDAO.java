@@ -119,7 +119,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getAlmanacHOpt(List<String> qParams) {
-        final String query_Almanac_H_Opt = "SELECT COUNT(High) AS HiR FROM CF6MCI WHERE High BETWEEN ? AND ?;"; // HRB, HRT
+        final String query_Almanac_H_Opt = "SELECT COUNT(High) AS HiR FROM WxObs.CF6MCI WHERE High BETWEEN ? AND ?;"; // HRB, HRT
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Almanac_H_Opt, qParams);
@@ -134,7 +134,7 @@ public class WeatherDAO {
     }
          
     public JSONArray getAlmanacLOpt(List<String> qParams) {
-        final String query_Almanac_L_Opt = "SELECT COUNT(Low) AS LiR FROM CF6MCI WHERE Low BETWEEN ? AND ?;"; // LRB, LRT
+        final String query_Almanac_L_Opt = "SELECT COUNT(Low) AS LiR FROM WxObs.CF6MCI WHERE Low BETWEEN ? AND ?;"; // LRB, LRT
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Almanac_L_Opt, qParams);
@@ -149,7 +149,7 @@ public class WeatherDAO {
     }  
     
     public JSONArray getAlmanacWxOpt(List<String> qParams) {
-        final String query_Almanac_Wx_Opt = "SELECT COUNT(Date) AS ThisWx FROM CF6MCI WHERE Weather LIKE ? OR Weather LIKE ?;"; // WxCnd, WxCNu
+        final String query_Almanac_Wx_Opt = "SELECT COUNT(Date) AS ThisWx FROM WxObs.CF6MCI WHERE Weather LIKE ? OR Weather LIKE ?;"; // WxCnd, WxCNu
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Almanac_Wx_Opt, qParams);
@@ -234,7 +234,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getChXmlWxObs() {
-        final String query_ch_XMLWxObs = "SELECT EndRunTime, Duration FROM Logs ORDER BY EndRunTime DESC LIMIT 2880;";
+        final String query_ch_XMLWxObs = "SELECT EndRunTime, Duration FROM WxObs.Logs ORDER BY EndRunTime DESC LIMIT 2880;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_ch_XMLWxObs, null);
@@ -251,7 +251,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getGfsFha() {
-        final String query_GFSFHA = "SELECT FHour, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWA as HRWN, SRFA, SRFA as SRFN FROM GFSFHA WHERE DoGet=1;";
+        final String query_GFSFHA = "SELECT FHour, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWA as HRWN, SRFA, SRFA as SRFN FROM WxObs.GFSFHA WHERE DoGet=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_GFSFHA, null);
@@ -276,7 +276,7 @@ public class WeatherDAO {
     }
      
     public JSONArray getHeights() {
-        final String query_Heights = "SELECT HeightMb FROM ModelHeightLevels WHERE GFS=1 ORDER BY HeightMb DESC;";
+        final String query_Heights = "SELECT HeightMb FROM WxObs.ModelHeightLevels WHERE GFS=1 ORDER BY HeightMb DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_Heights, null);
@@ -291,7 +291,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getHeightsAll() {
-        final String query_HeightsAll = "SELECT HeightMb FROM ModelHeightLevels ORDER BY HeightMb DESC;";
+        final String query_HeightsAll = "SELECT HeightMb FROM WxObs.ModelHeightLevels ORDER BY HeightMb DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_HeightsAll, null);
@@ -305,12 +305,12 @@ public class WeatherDAO {
         return tContainer;
     }
          
-    public JSONArray getHTrackLast() {
-        final String query_HTrack_Last = "SELECT StormID FROM HurricaneTracks ORDER BY AddedTime DESC LIMIT 1;";
+    public JSONArray getHTrackLast(Connection dbc) {
+        final String query_HTrack_Last = "SELECT StormID FROM WxObs.HurricaneTracks ORDER BY AddedTime DESC LIMIT 1;";
         
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_HTrack_Last, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_HTrack_Last, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("StormID", resultSet.getString("StormID"));
@@ -323,7 +323,7 @@ public class WeatherDAO {
     
     public JSONArray getHTracks(List<String> qParams) {
         final String query_HTrack = "SELECT StormID, DateStart, DateEnd, StormName, MaxCategory, MaxWindKT, MinPresMB, ASON" +
-                " FROM HurricaneTracks WHERE StormID LIKE ? ORDER BY StormID DESC;"; // Year
+                " FROM WxObs.HurricaneTracks WHERE StormID LIKE ? ORDER BY StormID DESC;"; // Year
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_HTrack, qParams);
@@ -347,7 +347,7 @@ public class WeatherDAO {
     
     public JSONArray getJsonModelData(List<String> qParams) {
         final String query_JSONModelData = "SELECT RunString, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWN, SRFA, SRFN" +
-                " FROM KOJC_MFMD WHERE RunString=?;"; // RunStringMatcher
+                " FROM WxObs.KOJC_MFMD WHERE RunString=?;"; // RunStringMatcher
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_JSONModelData, qParams);
@@ -372,7 +372,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getJsonModelLast() {
-        final String query_JSONModelLast = "SELECT RunString FROM MOS_Index ORDER BY RunID DESC LIMIT 1;";
+        final String query_JSONModelLast = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_JSONModelLast, null);
@@ -387,7 +387,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getJsonModelRuns() {
-        final String query_JSONModelRuns = "SELECT RunString FROM MOS_Index ORDER BY RunID DESC LIMIT 48;";
+        final String query_JSONModelRuns = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 48;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_JSONModelRuns, null);
@@ -858,7 +858,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getStormReportsByDate(List<String> inParams) {
+    public JSONArray getStormReportsByDate(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String query_StormReportsByDate = "SELECT" +
@@ -932,7 +932,7 @@ public class WeatherDAO {
 		") as tmp ORDER BY CONCAT(Date,Time) DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_StormReportsByDate, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_StormReportsByDate, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -943,8 +943,8 @@ public class WeatherDAO {
                     .put("Lat", resultSet.getString("Lat"))
                     .put("Lon", resultSet.getString("Lon"))
                     .put("Location", resultSet.getString("Location"))
-                    .put("Comments", resultSet.getString("Comments"))
-                    .put("City", resultSet.getString("City"))
+                    .put("Comments", wc.htmlStripTease(resultSet.getString("Comments")))
+                    .put("County", resultSet.getString("County"))
                     .put("State", resultSet.getString("State"));
                 tContainer.put(tObject);
             }

@@ -45,7 +45,7 @@ function getCf6Data(thisFormData) {
         request
             .post(getResource("Wx"), {
                 data: thePostData,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
                     aniPreload("off");
@@ -118,22 +118,20 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
     cf6Table += "</tr></thead><tbody>";
     cf6Data.forEach(function (cf6) {
         var weather = cf6.Weather;
-        var wxCo1 = [ "1", "2", "3", "4", "5", "6", "7", "8", "9","X" ];
-        var wxCoA = [ "FG", "DF", "TH", "IP", "HA", "ZR", "DS", "HZ", "BS", "TO" ];
-        var wxCoI = [
-            hfWxIconStr("fg", "Fog"),
-            hfWxIconStr("df", "Dense Fog"),
-            hfWxIconStr("ts", "Thunderstorm"),
-            hfWxIconStr("ip", "Ice Pellets"),
-            hfWxIconStr("ha", "Hail"),
-            hfWxIconStr("zr", "Freezing Rain"),
-            hfWxIconStr("sm", "Smoke"),
-            hfWxIconStr("du", "Haze"),
-            hfWxIconStr("cd", "Blowing Snow"),
-            hfWxIconStr("to", "Funnel Cloud")
-        ];
-        var newWxTmp = weather.replace(wxCo1, wxCoA);
-        var newWx = newWxTmp.replace(wxCoA, wxCoI);
+        var newWx = "";
+        if(isSet(weather)) {
+            newWx = weather
+                .replace("1", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/fg.png'/><div class='UPopO'>Fog</div></div> ")
+                .replace("2", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/df.png'/><div class='UPopO'>Dense Fog</div></div> ")
+                .replace("3", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/ts.png'/><div class='UPopO'>Thunderstorm</div></div> ")
+                .replace("4", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/ip.png'/><div class='UPopO'>Ice Pellets</div></div> ")
+                .replace("5", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/ha.png'/><div class='UPopO'>Hail</div></div> ")
+                .replace("6", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/zr.png'/><div class='UPopO'>Freezing Rain</div></div> ")
+                .replace("7", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/sm.png'/><div class='UPopO'>Smoke</div></div> ")
+                .replace("8", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/du.png'/><div class='UPopO'>Haze</div></div> ")
+                .replace("9", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/cd.png'/><div class='UPopO'>Blowing Snow</div></div> ")
+                .replace("X", "<div class='UPop'><img class='th_icon' src='" + getBasePath("icon") + "/wx/to.png'/><div class='UPopO'>Funnel Cloud/Tornado</div></div> ");
+        }
         var spread = (cf6.High - cf6.Low);
         cf6Table += "<tr>" +
                 "<td class='C6DATE'><div class='UPop'>" + cf6.Date + "<div class='UPopO'>" +
