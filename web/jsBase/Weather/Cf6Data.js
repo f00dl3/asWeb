@@ -45,7 +45,7 @@ function getCf6Data(thisFormData) {
         request
             .post(getResource("Wx"), {
                 data: thePostData,
-                handleAs: "text"
+                handleAs: "json"
             }).then(
                 function(data) {
                     aniPreload("off");

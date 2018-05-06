@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 26 Apr 2018
+Updated: 6 May 2018
  */
 
 function actOnShowFeed() {
@@ -173,8 +173,11 @@ function popLiveLinks3d(irsLinks, df7Links) {
     var elementListWx1 = [];
     var irsElems = irsLinks.length;
     irsLinks.forEach(function (irs) {
+        var newImgURL = "https://localhost";
+        if(checkMobile()) { newImgURL += ":8082"; }
+        newImgURL = newImgURL + irs.URL;
         var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
-                "<img " + cubeRes + " src='" + irs.URL + "'/></a>";
+                "<img " + cubeRes + " src='" + newImgURL + "'/></a>";
         elementListWx1.push(tElem);
     });
     var df7Elems = df7Links.length;
@@ -221,7 +224,7 @@ function popNewsEmail(newsEmailFeeds) {
             rData += "<div class='tr'>" +
                 "<span class='td'>" + nem.pubDate + "</span>" +
                 "<span class='td'><div class='UPop'>" + nem.title +
-                "<div class='UPopO'>" + basicInputFilter(nem.description) + "</div>" +
+                "<div class='UPopO'>" + nem.description + "</div>" +
                 "</div></span>" +
                 "<span class='td'><a href='" + nem.link + "' target='new'>" + nem.Source + "</a></span>" +
                 "</div>";

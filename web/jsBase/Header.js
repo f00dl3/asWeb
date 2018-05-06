@@ -107,7 +107,7 @@ function autoUnits(tVal) {
 }
 
 function basicInputFilter(tInput) {
-    return tInput.replace('/[^A-Za-z0-9._]/', ' ');
+    return tInput.replace(/[^a-zA-Z0-9]/g,'');
 }
 
 function checkMobile() {
@@ -177,7 +177,7 @@ function getBasePath(opt) {
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
-        case "getOld": case "getOldGet": tBase += "/Get"; break;
+        case "oldGet": case "getOld": case "getOldGet": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase += "/MediaServ"; break;

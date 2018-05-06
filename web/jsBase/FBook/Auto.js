@@ -1,8 +1,24 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 22 Apr 2018
+Updated: 6 May 2018
  */
+
+function actOnMpgEntry(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    if(
+        isSet(thisFormData.mpgDate) &&
+        isSet(thisFormData.mpgMiles) &&
+        isSet(thisFormData.mpgPrice) &&
+        isSet(thisFormData.mpgGallons)
+    ) {
+        setAddAutoMpg(thisFormData);
+    } else {
+        window.alert("You missed something!\n" + thisFormDataJ)
+    }
+}
 
 function displayAuto() {
     getAuto();
@@ -34,7 +50,7 @@ function getAuto() {
         },
         error: function (data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for Bills FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+            window.alert("xhrGet for AutoMPG FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -44,6 +60,7 @@ function putAuto(autoMpgData, billSum, amrData) {
     var autoMpgCols = [ "Date", "Total Miles", "Cost/Gallon", "Gallons" ];
     var rData = "<h3>Auto Maintenance</h3>";
     var fuelLog = "<h4>Fuel Log/MPG</h4>" +
+            "<div id='mpgEntryForm'></div><br/>" +
             "<div class='table'><div class='tr'>";
     for (var i = 0; i < autoMpgCols.length; i++) { fuelLog += "<span class='td'><strong>" + autoMpgCols[i] + "</strong></span>"; }
     fuelLog += "</div>";
@@ -79,5 +96,43 @@ function putAuto(autoMpgData, billSum, amrData) {
     maintRecs += "</div>";
     rData += maintRecs;
     dojo.byId("FBAuto").innerHTML = rData;
+    popAutoMpgEntryForm();
 }
 
+function popAutoMpgEntryForm() {
+    var rData = "<div class='table'><form class='tr'>" +
+            "<span class='td'><input name='mpgDate' type='date' id='mpgDate' value='' style='width: 100px;' /><br/>Date</span>" +
+            "<span class='td'><input name='mpgMiles' id='mpgMiles' type='number' step='1' value='' style='width: 75px;' /><br/>Miles</span>" +
+            "<span class='td'><input name='mpgPrice' id='mpgPrice' type='number' step='0.001' value='' style='width: 50px;' /><br/>Price</span>" +
+            "<span class='td'><input name='mpgGallons' id='mpgGallons' type='number' step='0.001' value='' style='width: 50px;' /><br/>Gallons</span>" +
+            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmit'>Fuel!</button></span>" +
+            "</form></div>";
+    dojo.byId("mpgEntryForm").innerHTML = rData;
+    var enterMpgButton = dojo.byId("mpgSubmit");
+    dojo.connect(enterMpgButton, "click", actOnMpgEntry);
+}
+
+function setAddAutoMpg(formData) {
+    var thePostData = {
+        "doWhat": "putAutoMpgAdd",
+        "mpgDate": formData.mpgDate,
+        "mpgMiles": formData.mpgMiles,
+        "mpgPrice": formData.mpgPrice,
+        "mpgGallons": formData.mpgGallons
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Finance"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getAuto();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for AutoMPG Entry Add FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
