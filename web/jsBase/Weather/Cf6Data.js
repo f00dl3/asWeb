@@ -1,11 +1,16 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
-function actOnCf6Search() {
-    window.alert("Build this!");
+if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
+if(!isSet(cf6End)) { var cf6End = getDate("day", 0, "dateOnly"); }
+    
+function actOnCf6Search(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    getCf6Data(thisFormData);
 }
 
 function displayCf6() {
@@ -19,21 +24,48 @@ function displayCf6() {
 function generateCf6Layout() {
     var rData = "<h3>CF6 KMCI/CPC Data</h3>" +
             "<div id='cf6SearchHolder'></div><br/>" +
+            "<div id='cf6OverviewGraphs'></div><br/>" +
+            "<div id='cf6StatTableHolder'></div>" +
             "<div id='cf6ResultHolder'></div>";
     dojo.byId("WxCf6").innerHTML = rData;
     var cf6SearchHolder = dojo.byId("cf6SearchHolder");
     getInitialCf6Data();
-    getCf6Data();
+    getCf6ChartData();
 }
 
-function getCf6Data(dateInStart, dateInEnd) {
-    var dateStart, dateEnd;
-    if(isSet(dateInStart)) { dateStart = dateInStart; } else { dateStart = getDate("day", -365, "dateOnly"); }
-    if(isSet(dateInEnd)) { dateEnd = dateInEnd; } else { dateEnd = getDate("day", 0, "dateOnly"); }
+function getCf6Data(thisFormData) {
+    var dateStart = thisFormData.CF6Search1;
+    var dateEnd = thisFormData.CF6Search2;
+    var thePostData = {
+        "doWhat": "getCf6Data",
+        "CF6Search1": dateStart,
+        "CF6Search2": dateEnd
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getCf6ChartData(dateStart, dateEnd);
+                    popCf6Results(data, dateStart, dateEnd);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for CF6 Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getCf6ChartData(dateInStart, dateInEnd) {
+    if(!isSet(dateInStart)) { dateInStart = getDate("day", -365, "dateOnly"); }
+    if(!isSet(dateInEnd)) { dateInEnd = getDate("day", 0, "dateOnly"); }
     var thePostData = {
         "doWhat": "WeatherCf6OverviewCharts",
-        "dateStart": dateStart,
-        "dateEnd": dateEnd
+        "dateStart": dateInStart,
+        "dateEnd": dateInEnd
     };
     require(["dojo/request"], function(request) {
         request
@@ -80,9 +112,6 @@ function hfWxIconStr(icref, desc) {
 
 function popCf6Results(cf6Data, dateStart, dateEnd) {
     var rData = "<h3>CF6 Search Results</h3>";
-    var cf6Graphs = "<p>" + dateStart + " to " + dateEnd + " graphed.<p>" +
-            "<a href='" + doCh("p", "WxTemp", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxTmp", "Thumb=1") + "'/></a>" +
-            "<a href='" + doCh("p", "WxTempDFN", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxTmpDFN", "Thumb=1") + "'/></a>";
     var cf6TH = [ "Date", "High", "Low", "DFN", "DDs", "Liq", "Snow", "SDepth", "WMax", "CC%", "Weather" ];
     var cf6Table = "<table><thead><tr>";
     for (var i = 0; i < cf6TH.length; i++) { cf6Table += "<th>" + cf6TH[i] + "</th>"; }
@@ -130,7 +159,7 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
         cf6Table += "<div class='UPopO'><strong>Electricity Use: </strong>" + cf6.kWh + "</div></div></td>" +
                 "<td style='" + styleLiquid(cf6.Liquid) + "'>" + cf6.Liquid;
         if(isSet(cf6.HomePrecip)) {
-            cf6Table += "<div class='UPOp'>" +
+            cf6Table += "<br/><div class='UPop'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/>" + 
                     "<div class='UPopO'>Home Liquid Precip: <span style='" + styleLiquid(cf6.HomePrecip) + "'>" + 
                     cf6.HomePrecip +
@@ -147,7 +176,8 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
                 "</tr>";
     });
     cf6Table += "</tbody></table>";
-    rData += cf6Graphs + cf6Table;
+    rData += cf6Table;
+    $("#cf6StatTableHolder").hide();
     dojo.byId("cf6ResultHolder").innerHTML = rData;
 }
 
@@ -158,8 +188,8 @@ function popCf6Search(amDat) {
             "<br/>CPC data updated on the 7th of each month.<p>";
     var searchForm = "<form id='cf6SearchForm'>" +
             "<table><thead><th align='center' colspan=2>CF6 Search</th></thead><tbody>" +
-            "<tr><td>Start</td><td><input type='date' name='CF6Search1' value=''/></td></tr>" +
-            "<tr><td>End</td><td><input type='date' name='CF6Search2' value=''/></td></tr>" +
+            "<tr><td>Start</td><td><input type='date' name='CF6Search1' value='" + cf6Start + "'/></td></tr>" +
+            "<tr><td>End</td><td><input type='date' name='CF6Search2' value='" + cf6End + "'/></td></tr>" +
             "<input type='hidden' name='DoCf6Search' value='Yes'/>" +
             "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
@@ -173,7 +203,7 @@ function popLastYearGraphed() {
     var rData = "Last year graphed:<p>" +
             "<a href='" + doCh("j", "cf6Temps", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Temps", "t") + "'/></a>" +
             "<a href='" + doCh("j", "cf6Depart", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Depart", "t") + "'/></a>" +
-            "<a href='" + doCh("p", "WxCPC", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("p", "WxCPC", "Thumb=1") + "'/></a>";
+            "<a href='" + doCh("j", "cf6cpc", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6cpc", "t") + "'/></a>";
     dojo.byId("cf6OverviewGraphs").innerHTML = rData;
 }
 
@@ -190,8 +220,7 @@ function popStatTable(alm) {
         "Blowing Snow":{"BS":"9"},
         "Tornado":{"FC":"X"}
     };
-    var rData = "<br/><div id='cf6OverviewGraphs'></div>" +
-            "<h4>Statistics</h4>";
+    var rData = "<h4>Statistics</h4>";
     var rTable = "<table><tbody>" +
             "<tr><td>Average temperature: " + alm.TAvg_Avg + "F" +
             "<br/>Average high temperature: " + alm.High_Avg + "F" +
@@ -252,7 +281,7 @@ function popStatTable(alm) {
             "<br/>Data from Jan 1934 to Oct 1972 is from Kansas City Downtown Airport" + 
             "<br/>Data from Jan 1900 to Jan 1934 is from Kansas City.";
     rData += rTable + dataDisclaimer;
-    dojo.byId("cf6ResultHolder").innerHTML = rData;               
+    dojo.byId("cf6StatTableHolder").innerHTML = rData;               
     popLastYearGraphed();
 }
 

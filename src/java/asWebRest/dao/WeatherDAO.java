@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
 package asWebRest.dao;
@@ -208,6 +208,7 @@ public class WeatherDAO {
                     .put("AO", resultSet.getDouble("AO"))
                     .put("Average", resultSet.getDouble("Average"))
                     .put("CDD", resultSet.getInt("CDD"))
+                    .put("Clouds", resultSet.getInt("Clouds"))
                     .put("Cycling", resultSet.getDouble("Cycling"))
                     .put("Date", resultSet.getString("Date"))
                     .put("DFNorm", resultSet.getDouble("DFNorm"))

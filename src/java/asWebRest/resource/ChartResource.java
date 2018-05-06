@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
 package asWebRest.resource;
@@ -1276,6 +1276,15 @@ public class ChartResource extends ServerResource {
                     
                     JSONArray cf6Data = getWeatherAction.getCf6Main(dbc, qParams, order);
                     
+                    String cf6cpc_ChartName = "CPC Data: " + cf6ChDateStart + " to " + cf6ChDateEnd;
+                    JSONObject cf6cpc_Glob = new JSONObject();
+                    JSONObject cf6cpc_Props = new JSONObject();
+                    JSONArray cf6cpc_Labels = new JSONArray();
+                    JSONArray cf6cpc_Data = new JSONArray();
+                    JSONArray cf6cpc_Data2 = new JSONArray();
+                    JSONArray cf6cpc_Data3 = new JSONArray();
+                    JSONArray cf6cpc_Data4 = new JSONArray();
+                    
                     String cf6Depart_ChartName = "KMCI Departures: " + cf6ChDateStart + " to " + cf6ChDateEnd;
                     JSONObject cf6Depart_Glob = new JSONObject();
                     JSONObject cf6Depart_Props = new JSONObject();
@@ -1288,6 +1297,14 @@ public class ChartResource extends ServerResource {
                     JSONArray cf6Temps_Labels = new JSONArray();
                     JSONArray cf6Temps_Data = new JSONArray();
                     JSONArray cf6Temps_Data2 = new JSONArray();
+                    
+                    cf6cpc_Props
+                            .put("chartName", cf6cpc_ChartName).put("chartFileName", "cf6cpc")
+                            .put("sName", "AO").put("sColor", "Red")
+                            .put("s2Name", "AAO").put("s2Color", "Blue")
+                            .put("s3Name", "NAO").put("s3Color", "Green")
+                            .put("s4Name", "PNA").put("s4Color", "Yellow")
+                            .put("xLabel", "Date").put("yLabel", "Anom");
                     
                     cf6Depart_Props
                             .put("chartName", cf6Depart_ChartName).put("chartFileName", "cf6Depart")
@@ -1304,6 +1321,12 @@ public class ChartResource extends ServerResource {
                         
                         JSONObject thisObject = cf6Data.getJSONObject(i);
                         
+                        cf6cpc_Labels.put(thisObject.getString("Date"));
+                        cf6cpc_Data.put(thisObject.getDouble("AO"));
+                        cf6cpc_Data2.put(thisObject.getDouble("AAO"));
+                        cf6cpc_Data3.put(thisObject.getDouble("NAO"));
+                        cf6cpc_Data4.put(thisObject.getDouble("PNA"));
+                        
                         cf6Depart_Labels.put(thisObject.getString("Date"));
                         cf6Depart_Data.put(thisObject.getInt("DFNorm"));
                         
@@ -1313,9 +1336,11 @@ public class ChartResource extends ServerResource {
                         
                     }
                     
+                    cf6cpc_Glob.put("labels", cf6cpc_Labels).put("data", cf6cpc_Data).put("data2", cf6cpc_Data2).put("data3", cf6cpc_Data3).put("data4", cf6cpc_Data4).put("props", cf6cpc_Props);
                     cf6Depart_Glob.put("labels", cf6Depart_Labels).put("data", cf6Depart_Data).put("props", cf6Depart_Props);
                     cf6Temps_Glob.put("labels", cf6Temps_Labels).put("data", cf6Temps_Data).put("data2", cf6Temps_Data2).put("props", cf6Temps_Props);
                     
+                    try { dynChart.LineChart(cf6cpc_Glob); returnData += "Chart generated - cf6cpc!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Depart_Glob); returnData += "Chart generated - cf6Depart!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     

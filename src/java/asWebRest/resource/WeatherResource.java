@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 3 May 2018
+Updated: 6 May 2018
  */
 
 package asWebRest.resource;
@@ -43,6 +43,7 @@ public class WeatherResource extends ServerResource {
         
         String doWhat = null;
         String returnData = "";
+        String order = "DESC";
          
         try {
             doWhat = argsInForm.getFirstValue("doWhat");
@@ -52,6 +53,13 @@ public class WeatherResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
+                
+                case "getCf6Data":
+                    qParams.add(0, argsInForm.getFirstValue("CF6Search1"));
+                    qParams.add(1, argsInForm.getFirstValue("CF6Search2"));
+                    JSONArray cf6Data = getWeatherAction.getCf6Main(dbc, qParams, order);
+                    returnData = cf6Data.toString();
+                    break;
                 
                 case "getCf6Initial":
                     JSONArray alamanac = getWeatherAction.getAlmanac(dbc);
