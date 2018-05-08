@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 6 May 2018
+Updated: 7 May 2018
  */
 
 
@@ -259,6 +259,7 @@ function getResource(what) {
         case "Login": return getBasePath("rest") + "/Login"; break;
         case "Logs": return getBasePath("rest") + "/Logs"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
+        case "NewsFeed": return getBasePath("rest") + "/NewsFeed"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
         case "Session": return getBasePath("serv") + "/Session"; break;
         case "SNMP": return getBasePath("rest") + "/SNMP"; break;
