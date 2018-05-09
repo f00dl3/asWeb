@@ -4,34 +4,10 @@ Created: 15 Apr 2018
 Updated: 9 May 2018
  */
 
-var redditData; 
-
 function actOnSearchByDate(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     getRedditData(thisFormData);
-}
-
-function convertToDataStore(data) {
-    var thePostData = {
-        "doWhat": "JsonToDataStore",
-        "identifier": "id"
-    };
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("Tools"), {
-                data: thePostData,
-                handleAs: "text"
-            }).then(
-                function(data) {
-                    popRedditResults(data);
-                    aniPreload("off");
-                },
-                function(error) { 
-                    aniPreload("off");
-                    window.alert("request for ConvertJsonDataStore FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });    
 }
 
 function displayReddit() {
@@ -63,7 +39,7 @@ function getRedditData(thisFormData) {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    redditData = data.items;
+                    redditData = data;
                     popRedditResults(data);
                     popSearchReddit();
                     aniPreload("off");
@@ -73,28 +49,6 @@ function getRedditData(thisFormData) {
                     window.alert("request for RedditDataStore FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-}
-
-function hintReddit(value) {
-    if(value.length > 2) {
-        var hitCount = 0;
-        var matchLimitHit = 0;
-        var contextualData = [];
-        redditData.forEach(function (sr) {
-            if(
-                (isSet(sr.Title) && (sr.Title).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Content) && (sr.Content).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(contextualData.length < 49) {
-                    contextualData.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
-        convertToDataStore(contextualData);
-    }
 }
 
 function layoutReddit() {
@@ -109,8 +63,7 @@ function popSearchReddit() {
     var rData = "<form id='RedditSearch'>Search: " +
             "<input type='date' name='searchDate' id='RedditDate' value='' style='width: 80px;' />" +
             "<button id='submitDateSearch' class='UButton'>Go!</button>" +
-            "</form><br/>" +
-            "<input type='text' name='RedditTextSearch' id='TextSearch' value='' onKeyUp='hintReddit(this.value)' style='width: 225px;' />";
+            "</form>";
     dojo.byId("RedditSearchHolder").innerHTML = rData;
     var searchButton = dojo.byId("submitDateSearch");
     dojo.connect(searchButton, "click", actOnSearchByDate);

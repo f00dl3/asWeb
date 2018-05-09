@@ -54,7 +54,7 @@ public class NewsFeedDAO {
                     .put("Source", resultSet.getString("Source"))
                     .put("title", resultSet.getString("title"))
                     .put("link", resultSet.getString("link"))
-                    .put("content", wc.htmlStripTease(resultSet.getString("content")))
+                    .put("content", resultSet.getString("content"))
                     .put("GetTime", resultSet.getString("GetTime"));
                 tContainer.put(tObject);
             }

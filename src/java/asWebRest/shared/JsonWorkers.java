@@ -14,28 +14,30 @@ import org.json.JSONObject;
 
 public class JsonWorkers {
     
-    public static JSONArray csvToJson(String dataIn) {
+    public static JSONArray csvToJson(String dataIn, String separator) {
         int lineNo = 0;
         List<String> csvKeys = new ArrayList<>();
         JSONArray dataOut = new JSONArray();
         Scanner csvScanner = null; try {		
             csvScanner = new Scanner(dataIn);
             while(csvScanner.hasNext()) {
-                lineNo++;
                 JSONObject jsonRow = new JSONObject();
-                String[] lineData = csvScanner.nextLine().split(",");
+                String[] lineData = csvScanner.nextLine().split(separator);
                 for(int i = 0; i < lineData.length; i++) {
-                    if(lineNo == 1) {
+                    int keyLocation = 0;
+                    if(lineNo == 0) {
                         csvKeys.add(lineData[i]);
                     } else {
                         for(String key : csvKeys) {
                             String fixedKey = key.replace("\"", "");
-                            String fixedLineData = lineData[i].replace("\"", "");
+                            String fixedLineData = lineData[keyLocation].replace("\"", "");
                             jsonRow.put(fixedKey, fixedLineData);
+                            keyLocation++;
                         }
                     }
                 }
-                dataOut.put(jsonRow);
+                if(lineNo != 0) { dataOut.put(jsonRow); }
+                lineNo++;
             }
         } catch (Exception e) { e.printStackTrace(); }
         return dataOut;
@@ -72,7 +74,7 @@ public class JsonWorkers {
         switch(typeDesired) {
             case "csv": returnData = jsonToCsv(dataIn); break;
             case "json": returnData = dataIn.toString(); break;
-            case "jsonFromCsv": returnData = csvToJson(jsonToCsv(dataIn)).toString(); break;
+            case "jsonFromCsv": returnData = csvToJson(jsonToCsv(dataIn), ",").toString(); break;
             case "dataStore": returnData = dojoDataStoreWrapper(dataStoreIdentifier, dataIn).toString(); break;
         }
         return returnData;
