@@ -30,11 +30,7 @@ function getRedditData() {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    popSearchReddit();
-                    require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore, data) {
-                        redditData = new ItemFileReadStore({ data: data });
-                        popRedditResults(redditData);
-                    });
+                    popRedditResults(data);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -83,21 +79,23 @@ function popSearchReddit() {
 
 // work on getting HTML images to show? safely!
 function popRedditResults(contextualData) {
-    dojo.require("dojo.data.ItemFileReadStore");
     var rData = "<div class='table'>";
-    contextualData.fetch({
-        query: { GetTime: "*" },
-        queryOptions: { ignoreCase: true, deep: true },
-        onError: function(error, request) { console.log(error); },
-        onComplete: function(items, request) {
-            for(var i = 0; i < items.length; i++) {
-                var item = items[i];
-                rData += "<div class='tr'>" +
-                    "<span class='td'>" + contextualData.getValue(item, "GetTime") + "</span>" +
-                    "<span class='td'><div class='UPopNM'>" + contextualData.getValue(item, "title") + "<div class='UPopNMO'>" + contextualData.getValue(item, "content") + "</div></div></span>" +
-                    "</div>";
+    require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore, contextualData) {
+        var redditStore = new ItemFileReadStore({ data: contextualData });
+        redditStore.fetch({
+            query: { GetTime: "*" },
+            queryOptions: { ignoreCase: true, deep: true },
+            onError: function(error, request) { console.log(error); },
+            onComplete: function(items, request) {
+                for(var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    rData += "<div class='tr'>" +
+                        "<span class='td'>" + contextualData.getValue(item, "GetTime") + "</span>" +
+                        "<span class='td'><div class='UPopNM'>" + contextualData.getValue(item, "title") + "<div class='UPopNMO'>" + contextualData.getValue(item, "content") + "</div></div></span>" +
+                        "</div>";
+                }
             }
-        }
+        });
     });
     rData += "</div>";
     dojo.byId("RedditResultHolder").innerHTML = rData;

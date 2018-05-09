@@ -94,23 +94,22 @@ public class WebCommon {
             file.delete();
     }
     
-    public static String desiredDataType(JSONArray dataIn, String typeDesired, String dataStoreLabel, String dataStoreIdentifier) {
+    public static String desiredDataType(JSONArray dataIn, String typeDesired, String dataStoreIdentifier) {
         String returnData = "";
         switch(typeDesired) {
                 case "json":
                     returnData = dataIn.toString();
                     break;
                 case "dataStore":
-                    returnData = dojoDataStoreWrapper(dataStoreLabel, dataStoreIdentifier, dataIn).toString();
+                    returnData = dojoDataStoreWrapper(dataStoreIdentifier, dataIn).toString();
                     break;
         }
         return returnData;
     }
     
-    public static JSONObject dojoDataStoreWrapper(String label, String identifier, JSONArray items) {
+    public static JSONObject dojoDataStoreWrapper(String identifier, JSONArray items) {
         JSONObject wrappedDataStore = new JSONObject();
         wrappedDataStore
-            .put("label", label)
             .put("identifier", identifier)
             .put("items", items);
         return wrappedDataStore;

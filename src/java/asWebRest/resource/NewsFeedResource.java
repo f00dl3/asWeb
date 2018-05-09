@@ -68,8 +68,7 @@ public class NewsFeedResource extends ServerResource {
                     returnData = wc.desiredDataType(
                             getNewsFeedAction.getRedditFeeds(dbc, qParams),
                             "dataStore",
-                            doWhat,
-                            "Feeds automatically fetched from Reddit"
+                            "GetTime"
                     );
                     break;
                 
