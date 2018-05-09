@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 6 May 2018
+Updated: 9 May 2018
  */
 
 package asWebRest.dao;
@@ -250,11 +250,11 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getGfsFha() {
+    public JSONArray getGfsFha(Connection dbc) {
         final String query_GFSFHA = "SELECT FHour, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWA as HRWN, SRFA, SRFA as SRFN FROM WxObs.GFSFHA WHERE DoGet=1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_GFSFHA, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GFSFHA, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -275,11 +275,11 @@ public class WeatherDAO {
         return tContainer;
     }
      
-    public JSONArray getHeights() {
+    public JSONArray getHeights(Connection dbc) {
         final String query_Heights = "SELECT HeightMb FROM WxObs.ModelHeightLevels WHERE GFS=1 ORDER BY HeightMb DESC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Heights, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Heights, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("HeightMb", resultSet.getInt("HeightMb"));
@@ -345,12 +345,12 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getJsonModelData(List<String> qParams) {
+    public JSONArray getJsonModelData(Connection dbc, List<String> qParams) {
         final String query_JSONModelData = "SELECT RunString, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWN, SRFA, SRFN" +
                 " FROM WxObs.KOJC_MFMD WHERE RunString=?;"; // RunStringMatcher
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_JSONModelData, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_JSONModelData, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -371,11 +371,11 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getJsonModelLast() {
+    public JSONArray getJsonModelLast(Connection dbc) {
         final String query_JSONModelLast = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_JSONModelLast, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_JSONModelLast, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("RunString", resultSet.getString("RunString"));
@@ -386,11 +386,11 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getJsonModelRuns() {
+    public JSONArray getJsonModelRuns(Connection dbc) {
         final String query_JSONModelRuns = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 48;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_JSONModelRuns, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_JSONModelRuns, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("RunString", resultSet.getString("RunString"));

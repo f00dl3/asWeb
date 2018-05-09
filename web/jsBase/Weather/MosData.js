@@ -1,8 +1,43 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 10 Apr 2018
+Updated: 9 May 2018
  */
+
+function displayModelData() {
+    $("#WxLiveContainer").hide();
+    $("#WxLocalModel").toggle();
+    $("#WxArchive").hide();
+    $("#WxCf6").hide();
+    getModelData();
+}
+
+function getModelData() {
+    var thePostData = {
+        "doWhat": "getMosData"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    processMosData(
+                        data.last, // returns undefined!
+                        data.heights,
+                        data.hours,
+                        data.runs,
+                        data.jsonModelData
+                    );
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for getMosData FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
 
 function processMosData(last, heights, hours, runs, jsonModelData) {
     var searchString = last.RunString;

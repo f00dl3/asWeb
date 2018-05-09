@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 6 May 2018
+Updated: 9 May 2018
  */
 
 package asWebRest.action;
@@ -23,14 +23,14 @@ public class GetWeatherAction {
     public JSONArray getAutoStations() { return weatherDAO.getAutoStations(); }
     public JSONArray getCf6Main(Connection dbc, List qParams, String order) { return weatherDAO.getCf6MciMain(dbc, qParams, order); }
     public JSONArray getChXmlWxObs() { return weatherDAO.getChXmlWxObs(); }
-    public JSONArray getGfsFha() { return weatherDAO.getGfsFha(); }
-    public JSONArray getHeights() { return weatherDAO.getHeights(); }
+    public JSONArray getGfsFha(Connection dbc) { return weatherDAO.getGfsFha(dbc); }
+    public JSONArray getHeights(Connection dbc) { return weatherDAO.getHeights(dbc); }
     public JSONArray getHeightsAll() { return weatherDAO.getHeightsAll(); }
     public JSONArray getHTrackLast(Connection dbc) { return weatherDAO.getHTrackLast(dbc); }
     public JSONArray getHTracks(List qParams) { return weatherDAO.getHTracks(qParams); }
-    public JSONArray getJsonModelData(List qParams) { return weatherDAO.getJsonModelData(qParams); }
-    public JSONArray getJsonModelLast() { return weatherDAO.getJsonModelLast(); }
-    public JSONArray getJsonModelRuns() { return weatherDAO.getJsonModelRuns(); }
+    public JSONArray getJsonModelData(Connection dbc, List qParams) { return weatherDAO.getJsonModelData(dbc, qParams); }
+    public JSONArray getJsonModelLast(Connection dbc) { return weatherDAO.getJsonModelLast(dbc); }
+    public JSONArray getJsonModelRuns(Connection dbc) { return weatherDAO.getJsonModelRuns(dbc); }
     public JSONArray getLiveReports(List inParams) { return weatherDAO.getLiveReports(inParams); }
     public JSONArray getLiveWarnings(List inParams) { return weatherDAO.getLiveWarnings(inParams); }
     public JSONArray getLiveWarningsFipsBounds(List qParams) { return weatherDAO.getLiveWarningsFipsBounds(qParams); }

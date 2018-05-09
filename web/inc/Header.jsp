@@ -60,6 +60,7 @@
     String[] wxScripts = {
         "Weather/Archive",
         "Weather/Cf6Data",
+        "Weather/MosData",
         "Weather/WxFunctions",
         "Weather/WxLiveInside",
         "Weather/ObsFeed"

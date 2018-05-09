@@ -13,6 +13,7 @@ import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class WeatherResource extends ServerResource {
     
     @Post
     public String represent(Representation argsIn) {
+        
+        WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -78,6 +81,27 @@ public class WeatherResource extends ServerResource {
                 case "getHTrackLast":
                     JSONArray htLast = getWeatherAction.getHTrackLast(dbc);
                     returnData += htLast.toString();
+                    break;
+                    
+                case "getMosData":
+                    JSONArray lastRun = getWeatherAction.getJsonModelLast(dbc);
+                    JSONObject lastRunObj = lastRun.getJSONObject(0);
+                    String lastRunString = lastRunObj.getString("RunString");
+                    try { if(wc.isSet(argsInForm.getFirstValue("RunStringOverride"))) {
+                        lastRunString = argsInForm.getFirstValue("RunStringOverride");
+                    } } catch (Exception e) { e.printStackTrace(); }
+                    qParams.add(0, lastRunString);
+                    JSONArray heights = getWeatherAction.getHeights(dbc);
+                    JSONArray hours = getWeatherAction.getGfsFha(dbc);
+                    JSONArray runs = getWeatherAction.getJsonModelRuns(dbc);
+                    JSONArray jsonModelData = getWeatherAction.getJsonModelData(dbc, qParams);
+                    mergedResults
+                        .put("last", lastRun)
+                        .put("heights", heights)
+                        .put("hours", hours)
+                        .put("runs", runs)
+                        .put("jsonModelData", jsonModelData);
+                    returnData = mergedResults.toString();
                     break;
                 
                 case "getNewsEmail":

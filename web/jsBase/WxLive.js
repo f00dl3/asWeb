@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 24 Apr 2018
+Updated: 9 May 2018
  */
 
 function actOnShowArchive() {
@@ -13,10 +13,10 @@ function actOnShowCf6() {
 }
 
 function actOnShowLocalModel() {
-    $("#WxLiveContainer").hide();
-    $("#WxLocalModel").toggle();
-    $("#WxArchive").hide();
-    $("#WxCf6").hide();
+}
+
+function actOnShowLocalModel() {
+    displayModelData();
 }
 
 function actOnShowWxLive() {

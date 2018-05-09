@@ -60,7 +60,7 @@ public class JsonWorkers {
             Iterator<?> rKeys = thisRow.keys();
             while(rKeys.hasNext()) {
                 String rKey = (String) rKeys.next();
-                csvRowData += "\"" + thisRow.getString(rKey) + "\",";
+                csvRowData += "\"" + thisRow.optString(rKey) + "\",";
             }
             csvRowData = csvRowData.substring(0, csvRowData.length() - 1) + "\n";
             csvData += csvRowData;
