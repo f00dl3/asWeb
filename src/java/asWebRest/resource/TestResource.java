@@ -28,6 +28,13 @@ public class TestResource extends ServerResource {
     @Get
     public String represent() {
         
+        JsonWorkers jw = new JsonWorkers();
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        
+        GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
+        
         //snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid
         String snmpArgs[] = {
             "-c", "public",
@@ -53,6 +60,17 @@ public class TestResource extends ServerResource {
                 "test 2: " + test2 + "\n\n" +
                 "snmpTest1: " + snmpTest1 + "\n" +
                 "snmpTest2: " + snmpTest2 + "\n";
+        
+        List<String> qParams = new ArrayList<>();
+        qParams.add(0, "2018-05-09%");
+        testData += "\n" + jw.desiredDataType(
+                getNewsFeedAction.getRedditFeeds(dbc, qParams),
+                "csv",
+                null
+        );
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+                    
         return testData;
         
     }    
@@ -87,7 +105,7 @@ public class TestResource extends ServerResource {
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
                     returnData = jw.desiredDataType(
                             getNewsFeedAction.getRedditFeeds(dbc, qParams),
-                            "csv",
+                            "dataStore",
                             null
                     );
                     break;
