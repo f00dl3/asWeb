@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 15 Apr 2018
-Updated: 7 May 2018
+Updated: 8 May 2018
  */
 
 var redditData; 
@@ -18,24 +18,25 @@ function displayReddit() {
 
 function getRedditData() {
     var thePostData = {
-        "doWhat": "getReddit",
+        "doWhat": "dojoDataStoreTest",
+        "desiredDataType": "dataStore",
         "searchDate": "2018-05-07%"
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("NewsFeed"), {
+            .post(getResource("Test"), {
                 data: thePostData,
                 handleAs: "json"
             }).then(
                 function(data) {
-                    redditData = data;
+                    redditData = data.items;
                     popSearchReddit();
-                    popRedditResults(data);
+                    popRedditResults(data.items);
                     aniPreload("off");
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for Reddit FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request for RedditDataStore FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
@@ -77,6 +78,7 @@ function popSearchReddit() {
     dojo.byId("RedditSearchHolder").innerHTML = rData;
 }
 
+// work on getting HTML images to show? safely!
 function popRedditResults(contextualData) {
     var rData = "<div class='table'>";
     contextualData.forEach(function (reddit) {

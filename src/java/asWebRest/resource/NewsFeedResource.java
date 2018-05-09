@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class NewsFeedResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
+        WebCommon wc = new WebCommon();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
@@ -63,8 +65,12 @@ public class NewsFeedResource extends ServerResource {
                 
                 case "getReddit":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
-                    JSONArray reddit = getNewsFeedAction.getRedditFeeds(dbc, qParams);
-                    returnData += reddit.toString();
+                    returnData = wc.desiredDataType(
+                            getNewsFeedAction.getRedditFeeds(dbc, qParams),
+                            "dataStore",
+                            doWhat,
+                            "Feeds automatically fetched from Reddit"
+                    );
                     break;
                 
             }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 5 May 2018
+Updated: 8 May 2018
 */
 
 package asWebRest.shared;
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 public class WebCommon {
@@ -91,6 +92,28 @@ public class WebCommon {
                     for (File f : contents) { deleteDir(f); }
             }
             file.delete();
+    }
+    
+    public static String desiredDataType(JSONArray dataIn, String typeDesired, String dataStoreLabel, String dataStoreIdentifier) {
+        String returnData = "";
+        switch(typeDesired) {
+                case "json":
+                    returnData = dataIn.toString();
+                    break;
+                case "dataStore":
+                    returnData = dojoDataStoreWrapper(dataStoreLabel, dataStoreIdentifier, dataIn).toString();
+                    break;
+        }
+        return returnData;
+    }
+    
+    public static JSONObject dojoDataStoreWrapper(String label, String identifier, JSONArray items) {
+        JSONObject wrappedDataStore = new JSONObject();
+        wrappedDataStore
+            .put("label", label)
+            .put("identifier", identifier)
+            .put("items", items);
+        return wrappedDataStore;
     }
         
     public static String getFileExtension(File thisFile) {
