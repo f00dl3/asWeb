@@ -5,11 +5,41 @@ Created: 9 May 2018
 
 package asWebRest.shared;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JsonWorkers {
+    
+    public static JSONArray csvToJson(String dataIn) {
+        int lineNo = 0;
+        List<String> csvKeys = new ArrayList<>();
+        JSONArray dataOut = new JSONArray();
+        Scanner csvScanner = null; try {		
+            csvScanner = new Scanner(dataIn);
+            while(csvScanner.hasNext()) {
+                lineNo++;
+                JSONObject jsonRow = new JSONObject();
+                String[] lineData = csvScanner.nextLine().split(",");
+                for(int i = 0; i < lineData.length; i++) {
+                    if(lineNo == 1) {
+                        csvKeys.add(lineData[i]);
+                    } else {
+                        for(String key : csvKeys) {
+                            String fixedKey = key.replace("\"", "");
+                            String fixedLineData = lineData[i].replace("\"", "");
+                            jsonRow.put(fixedKey, fixedLineData);
+                        }
+                    }
+                }
+                dataOut.put(jsonRow);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return dataOut;
+    }
     
     public static String jsonToCsv(JSONArray dataIn) {
         String csvKeys = "";
@@ -42,6 +72,7 @@ public class JsonWorkers {
         switch(typeDesired) {
             case "csv": returnData = jsonToCsv(dataIn); break;
             case "json": returnData = dataIn.toString(); break;
+            case "jsonFromCsv": returnData = csvToJson(jsonToCsv(dataIn)).toString(); break;
             case "dataStore": returnData = dojoDataStoreWrapper(dataStoreIdentifier, dataIn).toString(); break;
         }
         return returnData;

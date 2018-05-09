@@ -65,7 +65,7 @@ public class TestResource extends ServerResource {
         qParams.add(0, "2018-05-09%");
         testData += "\n" + jw.desiredDataType(
                 getNewsFeedAction.getRedditFeeds(dbc, qParams),
-                "csv",
+                "jsonFromCsv",
                 null
         );
         
