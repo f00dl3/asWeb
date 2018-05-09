@@ -6,6 +6,12 @@ Updated: 9 May 2018
 
 var redditData; 
 
+function actOnSearchByDate(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    getRedditData(thisFormData);
+}
+
 function convertToDataStore(data) {
     var thePostData = {
         "doWhat": "JsonToDataStore",
@@ -38,11 +44,17 @@ function displayReddit() {
     getRedditData();
 }
 
-function getRedditData() {
+function getRedditData(thisFormData) {
+    var searchDate;
+    if(isSet(thisFormData) && isSet(thisFormData.searchDate)) {
+        searchDate = thisFormData.searchDate + "%";
+    } else {
+        searchDate = getDate("day", 0, "dateOnly") + "%";
+    }
     var thePostData = {
         "doWhat": "getReddit",
         "desiredDataType": "dataStore",
-        "searchDate": "2018-05-07%"
+        "searchDate": searchDate
     };
     require(["dojo/request"], function(request) {
         request
@@ -51,8 +63,9 @@ function getRedditData() {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    console.log("FROM GET: " + data);
+                    redditData = data.items;
                     popRedditResults(data);
+                    popSearchReddit();
                     aniPreload("off");
                 },
                 function(error) { 
@@ -94,9 +107,13 @@ function layoutReddit() {
 
 function popSearchReddit() {
     var rData = "<form id='RedditSearch'>Search: " +
-            "<input type='date' name='RedditDate' id='RedditDate' value='' style='width: 80px;' />" +
-            "</form><p>";
+            "<input type='date' name='searchDate' id='RedditDate' value='' style='width: 80px;' />" +
+            "<button id='submitDateSearch' class='UButton'>Go!</button>" +
+            "</form><br/>" +
+            "<input type='text' name='RedditTextSearch' id='TextSearch' value='' onKeyUp='hintReddit(this.value)' style='width: 225px;' />";
     dojo.byId("RedditSearchHolder").innerHTML = rData;
+    var searchButton = dojo.byId("submitDateSearch");
+    dojo.connect(searchButton, "click", actOnSearchByDate);
 }
 
 // work on getting HTML images to show? safely!
