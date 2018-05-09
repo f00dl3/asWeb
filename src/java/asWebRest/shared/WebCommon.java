@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 8 May 2018
+Updated: 9 May 2018
 */
 
 package asWebRest.shared;
@@ -93,28 +93,7 @@ public class WebCommon {
             }
             file.delete();
     }
-    
-    public static String desiredDataType(JSONArray dataIn, String typeDesired, String dataStoreIdentifier) {
-        String returnData = "";
-        switch(typeDesired) {
-                case "json":
-                    returnData = dataIn.toString();
-                    break;
-                case "dataStore":
-                    returnData = dojoDataStoreWrapper(dataStoreIdentifier, dataIn).toString();
-                    break;
-        }
-        return returnData;
-    }
-    
-    public static JSONObject dojoDataStoreWrapper(String identifier, JSONArray items) {
-        JSONObject wrappedDataStore = new JSONObject();
-        wrappedDataStore
-            .put("identifier", identifier)
-            .put("items", items);
-        return wrappedDataStore;
-    }
-        
+
     public static String getFileExtension(File thisFile) {
         String fileString = thisFile.toString();
         String fileExtension = null;

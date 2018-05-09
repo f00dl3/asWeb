@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 8 May 2018
+Updated: 9 May 2018
  */
 
 package asWebRest.resource;
@@ -9,8 +9,8 @@ package asWebRest.resource;
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.hookers.SnmpWalk;
+import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
-import asWebRest.shared.WebCommon;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class TestResource extends ServerResource {
     @Post
     public String doPost(Representation argsIn) {
         
-        WebCommon wc = new WebCommon();
+        JsonWorkers jw = new JsonWorkers();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
@@ -85,11 +85,10 @@ public class TestResource extends ServerResource {
                 
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
-                    returnData = wc.desiredDataType(
+                    returnData = jw.desiredDataType(
                             getNewsFeedAction.getRedditFeeds(dbc, qParams),
-                            "dataStore",
-                            "Reddit Feeds",
-                            "Feeds automatically fetched from Reddit"
+                            "csv",
+                            null
                     );
                     break;
                 

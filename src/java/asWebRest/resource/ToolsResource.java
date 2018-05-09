@@ -1,43 +1,21 @@
 /*
 by Anthony Stump
-Created: 22 Feb 2018
-Updated; 9 May 2018
+Created: 9 May 2018
  */
 
 package asWebRest.resource;
 
-import asWebRest.action.GetNewsFeedAction;
-import asWebRest.dao.NewsFeedDAO;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-public class NewsFeedResource extends ServerResource {
-    
-    @Get
-    public String represent() {
-        
-        MyDBConnector mdb = new MyDBConnector();
-        Connection dbc = null;
-        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
-
-        GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
-        JSONArray newsFeeds = getNewsFeedAction.getNewsFeed(dbc);  
-        
-        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
-        
-        return newsFeeds.toString();
-        
-    }   
-    
+public class ToolsResource extends ServerResource {
+       
     @Post
     public String doPost(Representation argsIn) {
         
@@ -46,9 +24,6 @@ public class NewsFeedResource extends ServerResource {
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
-        GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
-                        
-        List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
         
         String doWhat = null;
@@ -63,12 +38,13 @@ public class NewsFeedResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
                 
-                case "getReddit":
-                    qParams.add(0, argsInForm.getFirstValue("searchDate"));
+                case "JsonToDataStore":
+                    JSONArray dataInput = new JSONArray();
+                    dataInput.put(argsInForm.getFirstValue("jsonToConvert"));
                     returnData = jw.desiredDataType(
-                            getNewsFeedAction.getRedditFeeds(dbc, qParams),
+                            dataInput,
                             "dataStore",
-                            "id"
+                            argsInForm.getFirstValue("identifier")
                     );
                     break;
                 
@@ -80,6 +56,5 @@ public class NewsFeedResource extends ServerResource {
         return returnData;
         
     }
-    
-    
+
 }

@@ -42,7 +42,7 @@ public class NewsFeedDAO {
     }
     
     public JSONArray getRedditFeeds(Connection dbc, List<String> qParams) {
-        final String query_RedditFeeds = "SELECT 'Reddit' as Source, title, link, content, GetTime" +
+        final String query_RedditFeeds = "SELECT id, 'Reddit' as Source, title, link, content, GetTime" +
                 " FROM Feeds.RedditFeeds WHERE GetTime LIKE ? ORDER BY GetTime DESC LIMIT 255;"; // RedditDate
         JSONArray tContainer = new JSONArray();
         try {
@@ -50,6 +50,7 @@ public class NewsFeedDAO {
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
+                    .put("id", resultSet.getString("id"))
                     .put("Source", resultSet.getString("Source"))
                     .put("title", resultSet.getString("title"))
                     .put("link", resultSet.getString("link"))

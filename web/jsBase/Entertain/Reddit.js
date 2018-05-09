@@ -1,11 +1,32 @@
 /* 
 by Anthony Stump
 Created: 15 Apr 2018
-Altered off: 8 May 2018
-Updated: 8 May 2018
+Updated: 9 May 2018
  */
 
 var redditData; 
+
+function convertToDataStore(data) {
+    var thePostData = {
+        "doWhat": "JsonToDataStore",
+        "identifier": "id"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Tools"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    popRedditResults(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for ConvertJsonDataStore FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });    
+}
 
 function displayReddit() {
     $("#ETReddit").toggle();
@@ -27,9 +48,10 @@ function getRedditData() {
         request
             .post(getResource("NewsFeed"), {
                 data: thePostData,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
+                    console.log("FROM GET: " + data);
                     popRedditResults(data);
                     aniPreload("off");
                 },
@@ -58,7 +80,7 @@ function hintReddit(value) {
                 }
             }
         });
-        popRedditResults(contextualData, matchLimitHit);    
+        convertToDataStore(contextualData);
     }
 }
 
@@ -80,18 +102,19 @@ function popSearchReddit() {
 // work on getting HTML images to show? safely!
 function popRedditResults(contextualData) {
     var rData = "<div class='table'>";
-    require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore, contextualData) {
-        var redditStore = new ItemFileReadStore({ data: contextualData });
+    require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore) {
+        var redditStore = new ItemFileReadStore({ data: dojo.fromJson(contextualData), hierarchical: false });
         redditStore.fetch({
-            query: { GetTime: "*" },
+            query: { id: "*" },
             queryOptions: { ignoreCase: true, deep: true },
             onError: function(error, request) { console.log(error); },
             onComplete: function(items, request) {
                 for(var i = 0; i < items.length; i++) {
                     var item = items[i];
                     rData += "<div class='tr'>" +
-                        "<span class='td'>" + contextualData.getValue(item, "GetTime") + "</span>" +
-                        "<span class='td'><div class='UPopNM'>" + contextualData.getValue(item, "title") + "<div class='UPopNMO'>" + contextualData.getValue(item, "content") + "</div></div></span>" +
+                        "<span class='td'>" + redditStore.getValue(item, "GetTime") + "</span>" +
+                        "<span class='td'><div class='UPopNM'>" + redditStore.getValue(item, "title") +
+                        "<div class='UPopNMO'>" + redditStore.getValue(item, "content") + "</div></div></span>" +
                         "</div>";
                 }
             }
