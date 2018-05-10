@@ -120,9 +120,11 @@ public class ChartResource extends ServerResource {
                     SysMonRouter smRouter = new SysMonRouter();
                     
                     qParams.add(0, "1"); //Test
-                    qParams.add(1, doWhat = argsInForm.getFirstValue("step"));                   
+                    qParams.add(1, argsInForm.getFirstValue("step"));                   
                     qParams.add(2, "1"); //DateTest
-                    qParams.add(3, doWhat = argsInForm.getFirstValue("date")); //Date
+                    qParams.add(3, argsInForm.getFirstValue("date"));
+                    
+                    returnData += qParams.toString();
                     
                     genericCharts = false;
                     int step = Integer.valueOf(doWhat = argsInForm.getFirstValue("step"));

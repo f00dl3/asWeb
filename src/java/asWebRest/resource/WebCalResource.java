@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 3 May 2018
+Updated: 9 May 2018
  */
 
 package asWebRest.resource;
@@ -106,13 +106,18 @@ public class WebCalResource extends ServerResource {
                     qParams3.add(7, start_His);
                     qParams3.add(8, eventTitle);
                     qParams3.add(9, eventTitle);
-                    returnData += "Attempting entry " + nextCEID + "\n" +
+                    String errorData = "Attempting entry " + nextCEID + "\n" +
                             "DEBUG INFO:\n" +
                             "ENTRY LOG TIME = " + date_Ymd + " " + date_His + "\n" +
                             "START TIME = " + start_Ymd + " " + start_His + "\n" +
                             updateWebCalAction.setAddEntryUser(dbc, qParams) + "\n" +
                             updateWebCalAction.setAddEntryLog(dbc, qParams2) + "\n" +
                             updateWebCalAction.setAddEntry(dbc, qParams3);
+                    JSONObject returnObject = new JSONObject();
+                    returnObject
+                        .put("EntryID", nextCEID)
+                        .put("ErrorLog", errorData);
+                    returnData = returnObject.toString();
                     break;
             
             }

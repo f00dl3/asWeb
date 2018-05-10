@@ -1,12 +1,13 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 3 May 2018
+Updated: 9 May 2018
 */
 
-var dateSelect = getDate("day", 0, "yyyyMMdd");
 var lastWalks;
-var step;
+var stepIn;
+var dateIn;
+var chartArray;
 
 function actOnAlarmFilterSelect(event) {
     dojo.stopEvent(event);
@@ -16,18 +17,31 @@ function actOnAlarmFilterSelect(event) {
     //post alarm filter, return data to div
 }
 
+function actOnChartStepSelect(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    stepIn = thisFormData.chStep;
+    getCharts(chartArray, stepIn, dateIn);
+}
+
+function actOnChartDateSelect(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    dateIn = thisFormData.chDate;
+    getCharts(chartArray, stepIn, dateIn);
+}
+
 function alarmSeverityButton(bgColor, textColor, text) {
     return "<button class='UButton' style='width: 60px; background-color: " + bgColor + "; color: " + textColor + ";'>" + text + "</button>"
 }
 
-function getCharts(chartArray, step) {
+function getCharts(chartArray) {
     aniPreload("on");
-    if(!isSet(step)) { step = 1; }
     var timeout = 5*60*1000;
     var thePostData = {
         "doWhat": "SysMonCharts",
-        "step": step,
-        "date": dateSelect
+        "step": stepIn,
+        "date": dateIn
     };
     require(["dojo/request"], function(request) {
         request
@@ -106,6 +120,7 @@ function nodeState(state, label) {
 }
 
 function onCheck(timestamp, node) {
+    if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
     var staleTime = getDate("minute", -3, "timestamp"); 
     var state = "off";
     if(isSet(timestamp) && staleTime.valueOf() <= timestamp.valueOf()) { state = "on"; }
@@ -148,9 +163,9 @@ function populateChartHolders(chartArray) {
 }
 
 function populateCharts() {
-    var stepIn = 90; //get Step post var TO-DO
-    var dateIn = ""; //  get Date post var TO-DO
-    var rData = "";
+    if(!isSet(stepIn)) { stepIn = 1; }
+    if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
+    var rData = "<em>Debug : { StepIn : " + stepIn + ", DateIn : " + dateIn + " }</em><br/>";
     var chartList1 = [
         "mSysLoad", // done 4/29/18
         "mSysCPU", // done 4/29/18
@@ -195,43 +210,16 @@ function populateCharts() {
     ];
     var numElements = chartList1.length;
     var numElements2 = chartList2.length;
-    if(1 === 1) {
-        var allElements = chartList1.concat(chartList2).concat(UNIMP_chartList);
-        for (var i = 0; i < allElements.length; i++) {
-            rData += "<span id='CHART_" + allElements[i] + "'></span>";
-        }
-        rData += "<a href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
-                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
-                "<a href='" + getResource("Cams") + "' target='nChartC'>" +
-                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 
-    } else {
-        // 3D elements move below later
-        var elementList1 = [];
-        var elementList2 = [];
-        for (var i = 0; i < numElements.length; i++) {
-            var thisElement = "<a styleReplace href='" + doCh("p", chartList1[i], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList1[i], "Thumb=1&" + chartDefs) + "'/></a>";
-            elementList1.push(thisElement);
-        }
-        for (var j = 0; j < numElements2.length; j++) {
-            var thisElement = "<a styleReplace href='" + doCh("p", chartList2[j], chartDefs) + "' target='nChart" + i + "'>" +
-                    "<img class='th_small' src='" + doCh("p", chartList2[j], "Thumb=1&" + chartDefs) + "'/></a>";
-            elementList2.push(thisElement);
-        }
-        var elementPopper1 = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
-                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>";
-        var elementPopper2 = "<a styleReplace href='" + getResource("Cams") + "' target='nChartC'>" +
-                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>";
-        elementList2
-            .push(elementPopper1)
-            .push(elementPopper2);
-        rData += "<p>" + imageLinks3d(elementList1, 25, 100, 2.15) + "<p>" +
-                "<div style='min-height: 64px;'></div>" + imageLinks3d(elementList2, 25, 100, 2.15);
+    chartArray = chartList1.concat(chartList2);
+    for (var i = 0; i < chartArray.length; i++) {
+        rData += "<span id='CHART_" + chartArray[i] + "'></span>";
     }
+    rData += "<a href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
+            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
+            "<a href='" + getResource("Cams") + "' target='nChartC'>" +
+            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 
     dojo.byId("chartPlacement").innerHTML = rData;
-    if(1 === 1) {
-        getCharts(allElements, stepIn);
-    }
+    getCharts(chartArray, stepIn, dateIn);
 }
 
 function populateEDiscovery(lastSsh) {
@@ -292,6 +280,7 @@ function populateStatusHolder(target, stateData) {
             "<form id='chDateForm' class='tr'>" +
             "<span class='td'>Date</span>" +
             "<span class='td'><input name='chDate' type='date' style='width: 75px;'/></span>" +
+            "<button class='UButton' id='subDateForm'>Go</button>" +
             "</form></div><br/>" +
             "<a href='" + getBasePath("ui") + "/Images/Topology.jpg'>Topology Map</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
@@ -305,6 +294,10 @@ function populateStatusHolder(target, stateData) {
         rData += onCheck(timestampToCheck, entityToCheck);
     }
     dojo.byId(target).innerHTML = rData;
+    var stepSelect = dojo.byId("chartStepForm");
+    var dateSelect = dojo.byId("subDateForm");
+    dojo.connect(stepSelect, "change", actOnChartStepSelect);
+    dojo.connect(dateSelect, "click", actOnChartDateSelect);
 }
 
 function initSysMon() {

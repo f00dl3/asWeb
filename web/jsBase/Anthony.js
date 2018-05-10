@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 6 May 2018
+Updated: 9 May 2018
 */
 
 console.log(sessionVars);
@@ -235,16 +235,17 @@ function putQuickCalendarEntry(formData) {
         preventCache: true,
         url: getResource("WebCal"),
         postData: formData,
-        handleAs: "text",
+        handleAs: "json",
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
-            console.log(data);
+            showNotice("Calendar entry " + data.EntryID + " added!");
+            console.log(data.ErrorLog);
             getAnthonyOverviewData();
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("request for Quick WebCal Entry FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+            window.alert("request for QuickCal Entry FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
     dojo.xhrPost(xhArgs);

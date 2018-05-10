@@ -20,11 +20,11 @@ function getModelData() {
         request
             .post(getResource("Wx"), {
                 data: thePostData,
-                handleAs: "text"
+                handleAs: "json"
             }).then(
                 function(data) {
                     processMosData(
-                        data.last, // returns undefined!
+                        data.last[0], // returns undefined!
                         data.heights,
                         data.hours,
                         data.runs,
@@ -45,7 +45,7 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     var mosCols = [ "Forecast", "TA", "TD", "RH", "WND", "P3", "PT", "X3", "PW", "LI", "CAPE", "CIN" ];
     var rData = "<h3>GRIB2 JSON Model Output Data</h3>" +
             "<em>For KOJC / Olathe Johnson County<br/>" +
-            "Auto-updated hourly</em>" +
+            "Auto-updated hourly</em><p>" +
             "<a href='" + getBasePath("g2OutOld") + "' target='new'>Automatic model image output</a>";
     var models = [ "CMC", "GFS", "HRRR", "NAM", "RAP", "HRWA", "HRWN", "SRFA", "SRFN" ];
     var heights = []; heights.forEach(function (hgt) { heights.push(hgt); mosCols.push(hgt) });
@@ -55,8 +55,13 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     estZRTot = estSnowTot = precipTot = mosi = 0;
     var mrForm = "<form id='ModelRunForm'><select id='RunSearch' name='RunSearch'><option value=''>Select...</option>";
     runs.forEach(function (run) { mrForm += "<option value='" + run.RunString + "'>" + run.RunString + "</option>"; });
-    mrForm += "</select>";
-    rData += mrForm + "<p>";
+    mrForm += "</select></form>";
+    var mrDateForm = "<form id='DateSelectForm'><input type='date' id='SelectModelRunDate' value='' /></form>";
+    rData += "<div class='table'><div class='tr'>" +
+            "<span class='td'>Select run:<br/>" + mrForm + "</span>" +
+            "<span class='td'>" + mrDateForm + "<br/>" +
+            "<button id='SubmitDateRun' class='UButton'><img class='th_icon' src='" + getBasePath("icon") + "/transparent-arrow-left-hi.png' /> By date:</button></span>" +
+            "</div></div><p>";
     var mroTable = "<div class='table'>" +
             "<span class='td'>" +
             "<a href='" + getBasePath("g2OutOld") + "/MergedJ/Loops/FOCUS_Loop.mp4' target='new'>" +
@@ -75,23 +80,23 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     rData += mroTable;
     jsonModelData.forEach(function (jmd) {
         runString = jmd.RunString;
-        dataCMC = JSON.parse(jmd.CMC);
-        dataGFS = JSON.parse(jmd.GFS);
-        dataHRRR = JSON.parse(jmd.HRRR);
-        dataHRWA = JSON.parse(jmd.HRWA);
-        dataHRWN = JSON.parse(jmd.HRWN);
-        dataSRFA = JSON.parse(jmd.SRFA);
-        dataSRFN = JSON.parse(jmd.SRFN);
-        dataNAM = JSON.parse(jmd.NAM);
-        dataRAP = JSON.parse(jmd.RAP);
+        dataCMC = jmd.CMC;
+        dataGFS = jmd.GFS;
+        dataHRRR = jmd.HRRR;
+        dataHRWA = jmd.HRWA;
+        dataHRWN = jmd.HRWN;
+        dataSRFA = jmd.SRFA;
+        dataSRFN = jmd.SRFN;
+        dataNAM = jmd.NAM;
+        dataRAP = jmd.RAP;
     });
-    if(isSet(dataCMC.T0_3)) { reportingModels += " CMC"; }
-    if(isSet(dataGFS.T0_3)) { reportingModels += " GMC"; }
-    if(isSet(dataHRRR.T0_3)) { reportingModels += " HRRR"; }
-    if(isSet(dataHRWA.T0_3)) { reportingModels += " HRWA"; }
-    if(isSet(dataHRWN.T0_3)) { reportingModels += " HRWN"; }
-    if(isSet(dataSRFA.T0_3)) { reportingModels += " SRFA"; }
-    if(isSet(dataSRFN.T0_3)) { reportingModels += " SRFN"; }
+    if(isSet(dataCMC) && isSet(dataCMC.T0_3)) { reportingModels += " CMC"; }
+    if(isSet(dataGFS) && isSet(dataGFS.T0_3)) { reportingModels += " GMC"; }
+    if(isSet(dataHRRR) && isSet(dataHRRR.T0_3)) { reportingModels += " HRRR"; }
+    if(isSet(dataHRWA) && isSet(dataHRWA.T0_3)) { reportingModels += " HRWA"; }
+    if(isSet(dataHRWN) && isSet(dataHRWN.T0_3)) { reportingModels += " HRWN"; }
+    if(isSet(dataSRFA) && isSet(dataSRFA.T0_3)) { reportingModels += " SRFA"; }
+    if(isSet(dataSRFN) && isSet(dataSRFN.T0_3)) { reportingModels += " SRFN"; }
     if(isSet(dataNAM)) { reportingModels += " NAM"; }
     if(isSet(dataRAP)) { reportingModels += " RAP"; }
     var runDateTime = runString; // Create date time from format and put how I want it here!
@@ -107,15 +112,15 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
             var tValidTimeString = tValidTime; // convert to string, again, image format Ymd_H for files
         }
         if(
-                isSet(dataCMC["T0_" + tfh]) &&
-                isSet(dataGFS["T0_" + tfh]) &&
-                isSet(dataHRRR["T0_" + tfh]) &&
-                isSet(dataHRWA["T0_" + tfh]) &&
-                isSet(dataHRWN["T0_" + tfh]) &&
-                isSet(dataSRFA["T0_" + tfh]) &&
-                isSet(dataSRFN["T0_" + tfh]) &&
-                isSet(dataNAM["T0_" + tfh]) &&
-                isSet(dataRAP["T0_" + tfh])
+                isSet(dataCMC) && isSet(dataCMC["T0_" + tfh]) &&
+                isSet(dataGFS) && isSet(dataGFS["T0_" + tfh]) &&
+                isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh]) &&
+                isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh]) &&
+                isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh]) &&
+                isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh]) &&
+                isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh]) &&
+                isSet(dataNAM) && isSet(dataNAM["T0_" + tfh]) &&
+                isSet(dataRAP) && isSet(dataRAP["T0_" + tfh])
         ) {
             var tAutoCounter = 0;
             var tAuto0TF = 0;
@@ -127,7 +132,7 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
             var tAuto900TF = 0;
         }
     }); 
-    return rData;
+    dojo.byId("WxLocalModel").innerHTML = rData;
 }
 
 
