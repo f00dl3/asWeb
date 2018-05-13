@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 10 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.resource;
@@ -21,7 +21,10 @@ import asWebRest.hookers.DynChartX;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -113,6 +116,10 @@ public class ChartResource extends ServerResource {
                     
                 case "SysMonCharts":
                     
+                    final DateFormat wtf = new SimpleDateFormat("yyyyMMdd");
+                    final Date nowTimestamp = new Date();
+                    final String wtfDate = wtf.format(nowTimestamp);
+                    
                     SysMonNote3 smCell = new SysMonNote3();
                     SysMonDesktop smDesktop = new SysMonDesktop();
                     SysMonPi smPi = new SysMonPi();
@@ -131,8 +138,8 @@ public class ChartResource extends ServerResource {
                         e.printStackTrace();
                     }
                     
-                    //if(wc.isSet(stepIn)) { stepTest = "0"; }
-                    //if(wc.isSet(dateIn)) { dateTest = "0"; }
+                    if(wc.isSet(stepIn) && !stepIn.equals("1")) { stepTest = "0"; }
+                    if(wc.isSet(dateIn) && !dateIn.equals(wtfDate)) { dateTest = "0"; }
                     
                     qParams.add(0, stepTest); //Test
                     qParams.add(1, stepIn);                   

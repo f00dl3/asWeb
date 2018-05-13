@@ -2,6 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -26,11 +27,11 @@ public class SysMonNote3 {
                 .put("chartName", mCellBattCPU_ChartName).put("chartFileName", "mCellBattCPU")
                 .put("sName", "CPU").put("sColor", "Yellow")
                 .put("s2Name", "Battery").put("s2Color", "Red")
-                .put("s3Name", "Memory").put("s3Color", "Green")
+                .put("s3Name", "Memory").put("s3Color", "Blue")
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject tObj = dataIn.getJSONObject(i);
-            float mCellBattCPU_MemUse = ((tObj.getLong("MemoryUse")/1024/1024)/3*100);
+            float mCellBattCPU_MemUse = ((tObj.getFloat("MemoryUse")/1024/1024)/3*100);
             mCellBattCPU_Labels.put(tObj.getString("WalkTime"));
             mCellBattCPU_Data.put(tObj.getDouble("CPUUse"));
             mCellBattCPU_Data2.put(tObj.getInt("BattLevel"));

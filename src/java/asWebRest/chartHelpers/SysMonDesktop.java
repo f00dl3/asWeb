@@ -341,7 +341,7 @@ public class SysMonDesktop {
                 .put("s4Name", "Size:NetSNMP").put("s4Color", "Yellow")
                 .put("s5Name", "Size:WxObs").put("s5Color", "Green")
                 .put("s6Name", "Size:TOTAL").put("s6Color", "White")
-                .put("xLabel", "WalkTime").put("yLabel", "Size Mbit");
+                .put("xLabel", "WalkTime").put("yLabel", "Size GBit");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             long mSysMySQLSize_TotalRows = ((
@@ -353,12 +353,12 @@ public class SysMonDesktop {
                     / 1000
             );
             mSysMySQLSize_Labels.put(thisObject.getString("WalkTime"));
-            mSysMySQLSize_Data.put(mSysMySQLSize_TotalRows);
-            mSysMySQLSize_Data2.put(thisObject.getLong("duMySQLCore")/100);
-            mSysMySQLSize_Data3.put(thisObject.getLong("duMySQLFeeds")/100);
-            mSysMySQLSize_Data4.put(thisObject.getLong("duMySQLNetSNMP")/100);
-            mSysMySQLSize_Data5.put(thisObject.getLong("duMySQLWxObs")/100);
-            mSysMySQLSize_Data6.put(thisObject.getLong("duMySQLTotal")/100);
+            mSysMySQLSize_Data.put(mSysMySQLSize_TotalRows/100);
+            mSysMySQLSize_Data2.put(thisObject.getFloat("duMySQLCore")/1000000);
+            mSysMySQLSize_Data3.put(thisObject.getFloat("duMySQLFeeds")/1000000);
+            mSysMySQLSize_Data4.put(thisObject.getFloat("duMySQLNetSNMP")/1000000);
+            mSysMySQLSize_Data5.put(thisObject.getFloat("duMySQLWxObs")/1000000);
+            mSysMySQLSize_Data6.put(thisObject.getFloat("duMySQLTotal")/1000000);
         }
         mSysMySQLSize_Glob
                 .put("labels", mSysMySQLSize_Labels)
