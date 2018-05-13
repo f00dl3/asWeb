@@ -2,6 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -63,17 +64,17 @@ public class SysMonRouter {
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject routerObject = dataIn.getJSONObject(i);
-            long mRouterMemory_OverallUse = (
-                routerObject.getLong("KMemPhysU") - (
-                routerObject.getLong("KMemBuffU") +
-                routerObject.getLong("KMemCachedU"))
+            float mRouterMemory_OverallUse = (
+                routerObject.getFloat("KMemPhysU") - (
+                routerObject.getFloat("KMemBuffU") +
+                routerObject.getFloat("KMemCachedU"))
                 / 1024
             );
             mRouterMemory_Labels.put(routerObject.getString("WalkTime"));
             mRouterMemory_Data.put(mRouterMemory_OverallUse);
-            mRouterMemory_Data2.put(routerObject.getLong("KSwapU")/1024);
-            mRouterMemory_Data3.put(routerObject.getLong("KMemBuffU")/1024);
-            mRouterMemory_Data4.put(routerObject.getLong("KMemCachedU")/1024);
+            mRouterMemory_Data2.put(routerObject.getFloat("KSwapU")/1024);
+            mRouterMemory_Data3.put(routerObject.getFloat("KMemBuffU")/1024);
+            mRouterMemory_Data4.put(routerObject.getFloat("KMemCachedU")/1024);
         }
         mRouterMemory_Glob
                 .put("labels", mRouterMemory_Labels)
@@ -87,16 +88,16 @@ public class SysMonRouter {
 
     private JSONObject mRouterNet(JSONArray dataIn, int intLen, int step) {
         String mRouterNet_ChartName = "Router: Network Use";
-        long mRouterNet_Cumulative = 0;
-        long mRouterNet_LastOctetsTotal = 0;
-        long mRouterNet_LastRouterE0Octets = 0;
-        long mRouterNet_LastRouterE1Octets = 0;
-        long mRouterNet_LastRouterE2Octets = 0;
-        long mRouterNet_LastRouterE3Octets = 0;
-        long mRouterNet_LastRouterV1Octets = 0;
-        long mRouterNet_LastRouterV2Octets = 0;
-        long mRouterNet_LastRouterB0Octets = 0;
-        long mRouterNet_LastRouterB1Octets = 0;
+        float mRouterNet_Cumulative = 0;
+        float mRouterNet_LastOctetsTotal = 0;
+        float mRouterNet_LastRouterE0Octets = 0;
+        float mRouterNet_LastRouterE1Octets = 0;
+        float mRouterNet_LastRouterE2Octets = 0;
+        float mRouterNet_LastRouterE3Octets = 0;
+        float mRouterNet_LastRouterV1Octets = 0;
+        float mRouterNet_LastRouterV2Octets = 0;
+        float mRouterNet_LastRouterB0Octets = 0;
+        float mRouterNet_LastRouterB1Octets = 0;
         JSONObject mRouterNet_Glob = new JSONObject();
         JSONObject mRouterNet_Props = new JSONObject();
         JSONArray mRouterNet_Labels = new JSONArray();
@@ -119,21 +120,21 @@ public class SysMonRouter {
                 .put("xLabel", "WalkTime").put("yLabel", "Data Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject routerObject = dataIn.getJSONObject(i);
-            long mRouterNet_ThisDiffRouterE0Octets = 0;
-            long mRouterNet_ThisDiffRouterE1Octets = 0;
-            long mRouterNet_ThisDiffRouterE2Octets = 0;
-            long mRouterNet_ThisDiffRouterE3Octets = 0;
-            long mRouterNet_ThisDiffRouterV1Octets = 0;
-            long mRouterNet_ThisDiffRouterV2Octets = 0;
-            long mRouterNet_ThisDiffRouterB0Octets = 0;
-            long mRouterNet_ThisRouterE0Octets = routerObject.getLong("eth0Rx") + routerObject.getLong("eth0Tx");
-            long mRouterNet_ThisRouterE1Octets = routerObject.getLong("eth1Rx") + routerObject.getLong("eth0Tx");
-            long mRouterNet_ThisRouterE2Octets = routerObject.getLong("eth2Rx") + routerObject.getLong("eth2Tx");
-            long mRouterNet_ThisRouterE3Octets = routerObject.getLong("eth3Rx") + routerObject.getLong("eth3Tx");
-            long mRouterNet_ThisRouterV1Octets = routerObject.getLong("vlan1Rx") + routerObject.getLong("vlan1Tx");
-            long mRouterNet_ThisRouterV2Octets = routerObject.getLong("vlan2Rx") + routerObject.getLong("vlan2Tx");
-            long mRouterNet_ThisRouterB0Octets = routerObject.getLong("br0Rx") + routerObject.getLong("br0Tx");
-            long mRouterNet_ThisOctetsTotal = (
+            float mRouterNet_ThisDiffRouterE0Octets = 0;
+            float mRouterNet_ThisDiffRouterE1Octets = 0;
+            float mRouterNet_ThisDiffRouterE2Octets = 0;
+            float mRouterNet_ThisDiffRouterE3Octets = 0;
+            float mRouterNet_ThisDiffRouterV1Octets = 0;
+            float mRouterNet_ThisDiffRouterV2Octets = 0;
+            float mRouterNet_ThisDiffRouterB0Octets = 0;
+            float mRouterNet_ThisRouterE0Octets = routerObject.getFloat("eth0Rx") + routerObject.getFloat("eth0Tx");
+            float mRouterNet_ThisRouterE1Octets = routerObject.getFloat("eth1Rx") + routerObject.getFloat("eth0Tx");
+            float mRouterNet_ThisRouterE2Octets = routerObject.getFloat("eth2Rx") + routerObject.getFloat("eth2Tx");
+            float mRouterNet_ThisRouterE3Octets = routerObject.getFloat("eth3Rx") + routerObject.getFloat("eth3Tx");
+            float mRouterNet_ThisRouterV1Octets = routerObject.getFloat("vlan1Rx") + routerObject.getFloat("vlan1Tx");
+            float mRouterNet_ThisRouterV2Octets = routerObject.getFloat("vlan2Rx") + routerObject.getFloat("vlan2Tx");
+            float mRouterNet_ThisRouterB0Octets = routerObject.getFloat("br0Rx") + routerObject.getFloat("br0Tx");
+            float mRouterNet_ThisOctetsTotal = (
                     mRouterNet_ThisRouterE0Octets +
                     mRouterNet_ThisRouterE1Octets +
                     mRouterNet_ThisRouterE2Octets +

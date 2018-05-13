@@ -2,6 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -132,17 +133,17 @@ public class SysMonPi {
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject piObject = dataIn.getJSONObject(i);
-            long mPiMemory_OverallUse = (
-                piObject.getLong("KMemPhysU") - (
-                piObject.getLong("KMemBuffU") +
-                piObject.getLong("KMemCachedU"))
+            float mPiMemory_OverallUse = (
+                piObject.getFloat("KMemPhysU") - (
+                piObject.getFloat("KMemBuffU") +
+                piObject.getFloat("KMemCachedU"))
                 / 1024
             );
             mPiMemory_Labels.put(piObject.getString("WalkTime"));
             mPiMemory_Data.put(mPiMemory_OverallUse);
-            mPiMemory_Data2.put(piObject.getLong("KSwapU")/1024);
-            mPiMemory_Data3.put(piObject.getLong("KMemBuffU")/1024);
-            mPiMemory_Data4.put(piObject.getLong("KMemCachedU")/1024);
+            mPiMemory_Data2.put(piObject.getFloat("KSwapU")/1024);
+            mPiMemory_Data3.put(piObject.getFloat("KMemBuffU")/1024);
+            mPiMemory_Data4.put(piObject.getFloat("KMemCachedU")/1024);
         }
         mPiMemory_Glob
                 .put("labels", mPiMemory_Labels)

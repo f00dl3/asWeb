@@ -2,6 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -154,17 +155,17 @@ public class SysMonPi2 {
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for (int i = 0; i < dataIn.length(); i++) {
             JSONObject pi2Object = dataIn.getJSONObject(i);
-            long mPi2Memory_OverallUse = (
-                pi2Object.getLong("KMemPhysU") - (
-                pi2Object.getLong("KMemBuffU") +
-                pi2Object.getLong("KMemCachedU"))
+            float mPi2Memory_OverallUse = (
+                pi2Object.getFloat("KMemPhysU") - (
+                pi2Object.getFloat("KMemBuffU") +
+                pi2Object.getFloat("KMemCachedU"))
                 / 1024
             );
             mPi2Memory_Labels.put(pi2Object.getString("WalkTime"));
             mPi2Memory_Data.put(mPi2Memory_OverallUse);
-            mPi2Memory_Data2.put(pi2Object.getLong("KSwapU")/1024);
-            mPi2Memory_Data3.put(pi2Object.getLong("KMemBuffU")/1024);
-            mPi2Memory_Data4.put(pi2Object.getLong("KMemCachedU")/1024);
+            mPi2Memory_Data2.put(pi2Object.getFloat("KSwapU")/1024);
+            mPi2Memory_Data3.put(pi2Object.getFloat("KMemBuffU")/1024);
+            mPi2Memory_Data4.put(pi2Object.getFloat("KMemCachedU")/1024);
         }
         mPi2Memory_Glob
                 .put("labels", mPi2Memory_Labels)

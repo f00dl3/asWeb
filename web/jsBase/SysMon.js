@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 10 May 2018
+Updated: 13 May 2018
 */
 
 var chartArray;
@@ -174,7 +174,7 @@ function populateCharts() {
         "mSysStorage", // done 4/29/18
         "mSysDiskIO", // done 4/29/18
         "mSysNet", // done 4/29/18
-        "mSysMySQLSize", // mostly-done 4/29/18
+        "mSysMySQLSize", // done 5/13/18
         "mSysNumUsers", // done 4/29/18
         "mSysFans", // done 4/30/18
         "mSysUPSLoad", // done 4/30/18
@@ -183,8 +183,8 @@ function populateCharts() {
     ];
     var chartList2 = [
         "mSysVolt", // done 4/30/18
-        "mCellBattCPU", // issues 4/30/18
-        "mCellTemp", // need to conv. to TF 4/30/18
+        "mCellBattCPU", // done 5/13/18
+        "mCellTemp", // done 5/13/18
         "mCellNet", // done 4/30/18
         "mCellSig", // done 4/30/18
         "mRouterCPU", // done 4/30/18
@@ -225,11 +225,17 @@ function populateCharts() {
 function populateEDiscovery(lastSsh) {
     var rData = "<strong>SSH Clients</strong>: ";
     if(isSet(lastSsh)) {
-        if(lastSsh.length === 1) {
-            rData += "<strong>NO SSH SESSIONS ACTIVE!</strong>";
-        }
-        for (var i = 0; i < lastSsh.length; i++) {
-            rData += lastSsh[i].SSHClientIP;
+        switch(lastSsh.length) {
+            case 0: rData += "<strong>NO SSH SESSIONS ACTIVE!</strong>"; break;
+            default: 
+                for (var i = 0; i < lastSsh.length; i++) {
+                    if(lastSsh.SSHClientIP = "") {
+                        rData += "UnknownIP";
+                    } else {
+                        rData += lastSsh[i].SSHClientIP;
+                    }
+                }
+                break;
         }
     } else {
         rData += "ERROR FETCHING FROM DATABASE!";
@@ -305,10 +311,11 @@ function populateStatusHolder(target, stateData) {
 }
 
 function initSysMon() {
-    //snmpRapid("snmpDataRapidHolder");
+    snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     populateCharts();
     getEDiscovery();
+    populateReliaStump();
 };
 
 dojo.ready(initSysMon);

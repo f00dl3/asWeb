@@ -48,10 +48,10 @@ public class SysMonNote3 {
     
     private JSONObject mCellNet(JSONArray dataIn, int intLen, int step) {
         String mCellNet_ChartName = "Note 3: Data Network Use";
-        long mCellNet_Cumulative = 0;
-        long mCellNet_LastPhoneCellOctets = 0;
-        long mCellNet_LastPhoneWiFiOctets = 0;
-        long mCellNet_LastOctetsTotal = 0;
+        float mCellNet_Cumulative = 0;
+        float mCellNet_LastPhoneCellOctets = 0;
+        float mCellNet_LastPhoneWiFiOctets = 0;
+        float mCellNet_LastOctetsTotal = 0;
         JSONObject mCellNet_Glob = new JSONObject();
         JSONObject mCellNet_Props = new JSONObject();
         JSONArray mCellNet_Labels = new JSONArray();
@@ -66,11 +66,11 @@ public class SysMonNote3 {
                 .put("xLabel", "WalkTime").put("yLabel", "Data Kbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject note3Object = dataIn.getJSONObject(i);
-            long mCellNet_ThisDiffPhoneCell = 0;
-            long mCellNet_ThisDiffPhoneWiFi = 0;
-            long mCellNet_ThisPhoneCellOctets = note3Object.getLong("rmnet0Rx") + note3Object.getLong("rmnet0Tx");
-            long mCellNet_ThisPhoneWiFiOctets = note3Object.getLong("wlan0Rx") + note3Object.getLong("wlan0Tx");
-            long mCellNet_ThisOctetsTotal = mCellNet_ThisPhoneCellOctets + mCellNet_ThisPhoneWiFiOctets;
+            float mCellNet_ThisDiffPhoneCell = 0;
+            float mCellNet_ThisDiffPhoneWiFi = 0;
+            float mCellNet_ThisPhoneCellOctets = note3Object.getFloat("rmnet0Rx") + note3Object.getFloat("rmnet0Tx");
+            float mCellNet_ThisPhoneWiFiOctets = note3Object.getFloat("wlan0Rx") + note3Object.getFloat("wlan0Tx");
+            float mCellNet_ThisOctetsTotal = mCellNet_ThisPhoneCellOctets + mCellNet_ThisPhoneWiFiOctets;
             mCellNet_Labels.put(note3Object.getString("WalkTime"));
             if(mCellNet_LastPhoneCellOctets <= mCellNet_ThisPhoneCellOctets && mCellNet_LastPhoneCellOctets != 0) {
                 mCellNet_ThisDiffPhoneCell = ((mCellNet_ThisPhoneCellOctets - mCellNet_LastPhoneCellOctets)/1024/intLen/step);

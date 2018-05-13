@@ -2,6 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -29,14 +30,14 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
-            long mJavaCodeLines_asWebTotal = (
-                    thisExpanded.getLong("LOC_aswjJs") +
-                    thisExpanded.getLong("LOC_aswjJava") +
-                    thisExpanded.getLong("LOC_aswjCss") +
-                    thisExpanded.getLong("LOC_aswjJsp")
+            float mJavaCodeLines_asWebTotal = (
+                    thisExpanded.getFloat("LOC_aswjJs") +
+                    thisExpanded.getFloat("LOC_aswjJava") +
+                    thisExpanded.getFloat("LOC_aswjCss") +
+                    thisExpanded.getFloat("LOC_aswjJsp")
             );
             mJavaCodeLines_Labels.put(thisObject.getString("WalkTime"));
-            mJavaCodeLines_Data.put(thisExpanded.getLong("LOC_asUtilsJava"));
+            mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava"));
             mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
         }
         mJavaCodeLines_Glob
@@ -48,11 +49,11 @@ public class SysMonDesktop {
     }
     
     private JSONObject mSysCams(JSONArray dataIn, int intLen, int step) {
-        long mSysCams_LastTotal = 0;
-        long mSysCams_Last1 = 0;
-        long mSysCams_Last2 = 0;
-        long mSysCams_Last3 = 0;
-        long mSysCams_Last4 = 0;
+        float mSysCams_LastTotal = 0;
+        float mSysCams_Last1 = 0;
+        float mSysCams_Last2 = 0;
+        float mSysCams_Last3 = 0;
+        float mSysCams_Last4 = 0;
         String mSysCams_ChartName = "IP Camera Availability";
         JSONObject mSysCams_Glob = new JSONObject();
         JSONObject mSysCams_Props = new JSONObject();
@@ -70,19 +71,19 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Percent Available");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            long mSysCams_ThisTotal = 0;
-            long mSysCams_This1 = 0;
-            long mSysCams_This2 = 0;
-            long mSysCams_This3 = 0;
-            long mSysCams_This4 = 0;
+            float mSysCams_ThisTotal = 0;
+            float mSysCams_This1 = 0;
+            float mSysCams_This2 = 0;
+            float mSysCams_This3 = 0;
+            float mSysCams_This4 = 0;
             float mSysCams_Cam1Available = 0.0f;
             float mSysCams_Cam2Available = 0.0f;
             float mSysCams_Cam3Available = 0.0f;
             float mSysCams_Cam4Available = 0.0f;
-            if(thisObject.getLong("dtLogSecCam1Down") > 0) { mSysCams_This1 = thisObject.getLong("dtLogSecCam1Down"); }
-            if(thisObject.getLong("dtLogSecCam2Down") > 0) { mSysCams_This2 = thisObject.getLong("dtLogSecCam2Down"); }
-            if(thisObject.getLong("dtLogSecCam3Down") > 0) { mSysCams_This3 = thisObject.getLong("dtLogSecCam3Down"); }
-            if(thisObject.getLong("dtLogSecCam4Down") > 0) { mSysCams_This4 = thisObject.getLong("dtLogSecCam4Down"); }
+            if(thisObject.getFloat("dtLogSecCam1Down") > 0) { mSysCams_This1 = thisObject.getFloat("dtLogSecCam1Down"); }
+            if(thisObject.getFloat("dtLogSecCam2Down") > 0) { mSysCams_This2 = thisObject.getFloat("dtLogSecCam2Down"); }
+            if(thisObject.getFloat("dtLogSecCam3Down") > 0) { mSysCams_This3 = thisObject.getFloat("dtLogSecCam3Down"); }
+            if(thisObject.getFloat("dtLogSecCam4Down") > 0) { mSysCams_This4 = thisObject.getFloat("dtLogSecCam4Down"); }
             mSysCams_Labels.put(thisObject.getString("WalkTime"));
             mSysCams_ThisTotal = ( mSysCams_This1 + mSysCams_This2 + mSysCams_This3 + mSysCams_This4);
             if(mSysCams_LastTotal <= mSysCams_ThisTotal && mSysCams_LastTotal != 0) {
@@ -184,10 +185,10 @@ public class SysMonDesktop {
 
     private JSONObject mSysDiskIO(JSONArray dataIn, int intLen, int step) {
         String mSysDiskIO_ChartName = "Desktop: Disk I/O Use";
-        long mSysDiskIO_Cumulative = 0;
-        long mSysDiskIO_LastTotal = 0;
-        long mSysDiskIO_LastRead = 0;
-        long mSysDiskIO_LastWrite = 0;
+        float mSysDiskIO_Cumulative = 0;
+        float mSysDiskIO_LastTotal = 0;
+        float mSysDiskIO_LastRead = 0;
+        float mSysDiskIO_LastWrite = 0;
         JSONObject mSysDiskIO_Glob = new JSONObject();
         JSONObject mSysDiskIO_Props = new JSONObject();
         JSONArray mSysDiskIO_Labels = new JSONArray();
@@ -202,11 +203,11 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "x1000 Blocks");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            long mSysDiskIO_ThisRead = 0;
-            long mSysDiskIO_ThisWrite = 0;
-            if(thisObject.getLong("dtDiskIOSysRead") != 0) { mSysDiskIO_ThisRead = thisObject.getLong("dtDiskIOSysRead"); }
-            if(thisObject.getLong("dtDiskIOSysWrite") != 0) { mSysDiskIO_ThisWrite = thisObject.getLong("dtDiskIOSysWrite"); }
-            long mSysDiskIO_ThisTotal = mSysDiskIO_ThisRead + mSysDiskIO_ThisWrite;
+            float mSysDiskIO_ThisRead = 0;
+            float mSysDiskIO_ThisWrite = 0;
+            if(thisObject.getFloat("dtDiskIOSysRead") != 0) { mSysDiskIO_ThisRead = thisObject.getFloat("dtDiskIOSysRead"); }
+            if(thisObject.getFloat("dtDiskIOSysWrite") != 0) { mSysDiskIO_ThisWrite = thisObject.getFloat("dtDiskIOSysWrite"); }
+            float mSysDiskIO_ThisTotal = mSysDiskIO_ThisRead + mSysDiskIO_ThisWrite;
             if(mSysDiskIO_LastTotal <= mSysDiskIO_ThisTotal && mSysDiskIO_LastTotal != 0) {
                 if(mSysDiskIO_Cumulative != 0) { mSysDiskIO_Cumulative = mSysDiskIO_Cumulative + (mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal); }
                 mSysDiskIO_Data.put((mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal)/1000/intLen/step);
@@ -305,12 +306,12 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysMemory_Used = 0.00f;
-            try { mSysMemory_Used = ((thisObject.getLong("dtKMemPhysU")-(thisObject.getLong("dtKMemBuffU")+thisObject.getLong("dtKMemCachedU")))/1024); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))/1024); } catch (Exception e) { e.printStackTrace(); }
             mSysMemory_Labels.put(thisObject.getString("WalkTime"));
             mSysMemory_Data.put(mSysMemory_Used);
-            mSysMemory_Data2.put(thisObject.getLong("dtKSwapU")/1024);
-            mSysMemory_Data3.put(thisObject.getLong("dtKMemBuffU")/1024);
-            mSysMemory_Data4.put(thisObject.getLong("dtKMemCachedU")/1024);
+            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU")/1024);
+            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU")/1024);
+            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU")/1024);
         }
         mSysMemory_Glob
                 .put("labels", mSysMemory_Labels)
@@ -344,12 +345,12 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Size GBit");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            long mSysMySQLSize_TotalRows = ((
-                    thisObject.getLong("dtMySQLRowsCore") +
-                    thisObject.getLong("dtMySQLRowsFeeds") +
-                    thisObject.getLong("dtMySQLRowsWebCal") +
-                    thisObject.getLong("dtMySQLRowsNetSNMP") +
-                    thisObject.getLong("dtMySQLRowsWxObs"))
+            float mSysMySQLSize_TotalRows = ((
+                    thisObject.getFloat("dtMySQLRowsCore") +
+                    thisObject.getFloat("dtMySQLRowsFeeds") +
+                    thisObject.getFloat("dtMySQLRowsWebCal") +
+                    thisObject.getFloat("dtMySQLRowsNetSNMP") +
+                    thisObject.getFloat("dtMySQLRowsWxObs"))
                     / 1000
             );
             mSysMySQLSize_Labels.put(thisObject.getString("WalkTime"));
@@ -375,14 +376,14 @@ public class SysMonDesktop {
     private JSONObject mSysNet(JSONArray dataIn, int intLen, int step) {
         String returnData = "";
         String mSysNet_ChartName = "Desktop: Network Use";
-        long mSysNet_Cumulative = 0;
-        long mSysNet_LastOctetsTotal = 0;
-        long mSysNet_LastOctetsIn = 0;
-        long mSysNet_LastOctetsOut = 0;
-        long mSysNet_LastLapOctets = 0;
-        long mSysNet_LastVirtualOctets = 0;
-        long mSysNet_LastPiOctets = 0;
-        long mSysNet_LastPi2Octets = 0;
+        float mSysNet_Cumulative = 0;
+        float mSysNet_LastOctetsTotal = 0;
+        float mSysNet_LastOctetsIn = 0;
+        float mSysNet_LastOctetsOut = 0;
+        float mSysNet_LastLapOctets = 0;
+        float mSysNet_LastVirtualOctets = 0;
+        float mSysNet_LastPiOctets = 0;
+        float mSysNet_LastPi2Octets = 0;
         JSONObject mSysNet_Glob = new JSONObject();
         JSONObject mSysNet_Props = new JSONObject();
         JSONArray mSysNet_Labels = new JSONArray();
@@ -407,29 +408,29 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            long mSysNet_ThisLapOctets = thisObject.getLong("lapOctetsIn") + thisObject.getLong("lapOctetsOut");
-            long mSysNet_ThisPiOctets = thisObject.getLong("piOctetsIn") + thisObject.getLong("piOctetsOut");
-            long mSysNet_ThisPi2Octets = thisObject.getLong("pi2OctetsIn") + thisObject.getLong("pi2OctetsOut");
-            long mSysNet_ThisVirtualOctets = (
-                    thisObject.getLong("cmvmOctetsIn") +
-                    thisObject.getLong("cmvmOctetsOut") +
-                    thisObject.getLong("uvmOctetsIn") +
-                    thisObject.getLong("uvmOctetsOut") +
-                    thisObject.getLong("w12OctetsIn") +
-                    thisObject.getLong("w12OctetsOut") +
-                    thisObject.getLong("w16OctetsIn") +
-                    thisObject.getLong("w16OctetsOut") +
-                    thisObject.getLong("wxpOctetsIn") +
-                    thisObject.getLong("wxpOctetsOut")
+            float mSysNet_ThisLapOctets = thisObject.getFloat("lapOctetsIn") + thisObject.getFloat("lapOctetsOut");
+            float mSysNet_ThisPiOctets = thisObject.getFloat("piOctetsIn") + thisObject.getFloat("piOctetsOut");
+            float mSysNet_ThisPi2Octets = thisObject.getFloat("pi2OctetsIn") + thisObject.getFloat("pi2OctetsOut");
+            float mSysNet_ThisVirtualOctets = (
+                    thisObject.getFloat("cmvmOctetsIn") +
+                    thisObject.getFloat("cmvmOctetsOut") +
+                    thisObject.getFloat("uvmOctetsIn") +
+                    thisObject.getFloat("uvmOctetsOut") +
+                    thisObject.getFloat("w12OctetsIn") +
+                    thisObject.getFloat("w12OctetsOut") +
+                    thisObject.getFloat("w16OctetsIn") +
+                    thisObject.getFloat("w16OctetsOut") +
+                    thisObject.getFloat("wxpOctetsIn") +
+                    thisObject.getFloat("wxpOctetsOut")
             );
-            long mSysNet_ThisOctetsTotal = thisObject.getLong("dtOctetsIn") + thisObject.getLong("dtOctetsOut");
+            float mSysNet_ThisOctetsTotal = thisObject.getFloat("dtOctetsIn") + thisObject.getFloat("dtOctetsOut");
             if(mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal && mSysNet_LastOctetsTotal != 0) {
                 mSysNet_Labels.put(thisObject.getString("WalkTime"));
                 mSysNet_Cumulative = mSysNet_Cumulative + (mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal);
                 mSysNet_Data.put((mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal)/1024/1024/intLen/step);
-                mSysNet_Data2.put((thisObject.getLong("rtrWANtx") + thisObject.getLong("rtrWANrx"))/1024/1024/intLen/step);
-                if(mSysNet_LastOctetsIn <= thisObject.getLong("dtOctetsIn") && mSysNet_LastOctetsIn != 0) { mSysNet_Data3.put((thisObject.getLong("dtOctetsIn") - mSysNet_LastOctetsIn)/1024/1024/intLen/step); }
-                if(mSysNet_LastOctetsOut <= thisObject.getLong("dtOctetsOut") && mSysNet_LastOctetsOut != 0) { mSysNet_Data4.put((thisObject.getLong("dtOctetsOut") - mSysNet_LastOctetsOut)/1024/1024/intLen/step); }
+                mSysNet_Data2.put((thisObject.getFloat("rtrWANtx") + thisObject.getFloat("rtrWANrx"))/1024/1024/intLen/step);
+                if(mSysNet_LastOctetsIn <= thisObject.getFloat("dtOctetsIn") && mSysNet_LastOctetsIn != 0) { mSysNet_Data3.put((thisObject.getFloat("dtOctetsIn") - mSysNet_LastOctetsIn)/1024/1024/intLen/step); }
+                if(mSysNet_LastOctetsOut <= thisObject.getFloat("dtOctetsOut") && mSysNet_LastOctetsOut != 0) { mSysNet_Data4.put((thisObject.getFloat("dtOctetsOut") - mSysNet_LastOctetsOut)/1024/1024/intLen/step); }
                 if(mSysNet_LastLapOctets <= mSysNet_ThisLapOctets && mSysNet_LastLapOctets != 0) { mSysNet_Data5.put((mSysNet_ThisLapOctets - mSysNet_LastLapOctets)/1024/1024/intLen/step); }
                 if(mSysNet_LastVirtualOctets <= mSysNet_ThisVirtualOctets && mSysNet_LastVirtualOctets != 0) { mSysNet_Data6.put((mSysNet_ThisVirtualOctets - mSysNet_LastVirtualOctets)/1024/1024/intLen/step); }
                 if(mSysNet_LastPiOctets <= mSysNet_ThisPiOctets && mSysNet_LastPiOctets != 0) { mSysNet_Data7.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
@@ -438,8 +439,8 @@ public class SysMonDesktop {
                 returnData += "No data! - " + thisObject.getString("WalkTime");
             }
             mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
-            mSysNet_LastOctetsIn = thisObject.getLong("dtOctetsIn");
-            mSysNet_LastOctetsOut = thisObject.getLong("dtOctetsOut");
+            mSysNet_LastOctetsIn = thisObject.getFloat("dtOctetsIn");
+            mSysNet_LastOctetsOut = thisObject.getFloat("dtOctetsOut");
             mSysNet_LastLapOctets = mSysNet_ThisLapOctets;
             mSysNet_LastVirtualOctets = mSysNet_ThisVirtualOctets;
             mSysNet_LastPiOctets = mSysNet_ThisPiOctets;
@@ -534,8 +535,8 @@ public class SysMonDesktop {
             JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
             double mSysStorage_sda1Used = 0.00;
             double mSysStorage_sdb1Used = 0.00;
-            try { mSysStorage_sda1Used = (double) 100.0 * ((double) thisObject.getLong("dtK4RootU")/(double) thisObject.getLong("dtK4Root")); } catch (Exception e) { e.printStackTrace(); }
-            try { mSysStorage_sdb1Used = (double) 100.0 * ((double) thisExpanded.getLong("k4Extra1U")/(double) thisExpanded.getLong("k4Extra1")); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysStorage_sda1Used = (double) 100.0 * ((double) thisObject.getFloat("dtK4RootU")/(double) thisObject.getFloat("dtK4Root")); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysStorage_sdb1Used = (double) 100.0 * ((double) thisExpanded.getFloat("k4Extra1U")/(double) thisExpanded.getFloat("k4Extra1")); } catch (Exception e) { e.printStackTrace(); }
             mSysStorage_Labels.put(thisObject.getString("WalkTime"));
             mSysStorage_Data.put(mSysStorage_sda1Used);
             mSysStorage_Data2.put(mSysStorage_sdb1Used);
