@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 3 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.hookers;
@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,8 +68,8 @@ public class DynChartX {
         XYChart chart = new XYChart(width, height);
         XYChart thChart = new XYChart(thWidth, thHeight);
         
-        String[] xData = wc.arrayStringFromJson(jsonLabelArray);
-        double[] yData = wc.arrayDoubleOldFromJson(jsonDataArray);
+        List<Date> xData = wc.arrayListDateFromJson(jsonLabelArray);
+        List<Float> yData = wc.arrayListFloatFromJson(jsonDataArray);
         
         Color sColor = getSeriesColor(jp.getString("sColor"));
         
@@ -101,18 +102,18 @@ public class DynChartX {
         thChart.getStyler().setPlotGridLinesColor(getSeriesColor("#5E5E5E"));
         
         try {
-            XYSeries series = chart.addSeries(jp.getString("sName"), null, yData); series.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
-            XYSeries thSeries = thChart.addSeries(jp.getString("sName"), null, yData); thSeries.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
+            XYSeries series = chart.addSeries(jp.getString("sName"), xData, yData); series.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
+            XYSeries thSeries = thChart.addSeries(jp.getString("sName"), xData, yData); thSeries.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
         } catch (Exception e) { e.printStackTrace(); }
         
         try { if(wc.isSet(jp.getString("s2Name")) && wc.isSet(jp.getString("s2Color"))) {
             try { 
                 JSONArray jsonData2Array = jsonGlobIn.getJSONArray("data2");
-                float[] yData2 = wc.arrayFloatFromJson(jsonData2Array);
+                List<Float> yData2 = wc.arrayListFloatFromJson(jsonData2Array);
                 Color s2Color = getSeriesColor(jp.getString("s2Color"));
-                int tArrLen = yData2.length; if(tArrLen != 0) {
-                    XYSeries series2 = chart.addSeries(jp.getString("s2Name"), null, yData2); series2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
-                    XYSeries thSeries2 = thChart.addSeries(jp.getString("s2Name"), null, yData2); thSeries2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
+                int tArrLen = yData2.size(); if(tArrLen != 0) {
+                    XYSeries series2 = chart.addSeries(jp.getString("s2Name"), xData, yData2); series2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
+                    XYSeries thSeries2 = thChart.addSeries(jp.getString("s2Name"), xData, yData2); thSeries2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -120,11 +121,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s3Name")) && wc.isSet(jp.getString("s3Color"))) {
             try {
                 JSONArray jsonData3Array = jsonGlobIn.getJSONArray("data3");
-                float[] yData3 = wc.arrayFloatFromJson(jsonData3Array);
+                List<Float> yData3 = wc.arrayListFloatFromJson(jsonData3Array);
                 Color s3Color = getSeriesColor(jp.getString("s3Color"));
-                int tArrLen = yData3.length; if(tArrLen != 0) {
-                    XYSeries series3 = chart.addSeries(jp.getString("s3Name"), null, yData3); series3.setMarker(SeriesMarkers.NONE).setLineColor(s3Color);
-                    XYSeries thSeries3 = thChart.addSeries(jp.getString("s3Name"), null, yData3); thSeries3.setMarker(SeriesMarkers.NONE).setLineColor(s3Color);
+                int tArrLen = yData3.size(); if(tArrLen != 0) {
+                    XYSeries series3 = chart.addSeries(jp.getString("s3Name"), xData, yData3); series3.setMarker(SeriesMarkers.NONE).setLineColor(s3Color);
+                    XYSeries thSeries3 = thChart.addSeries(jp.getString("s3Name"), xData, yData3); thSeries3.setMarker(SeriesMarkers.NONE).setLineColor(s3Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -132,11 +133,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s4Name")) && wc.isSet(jp.getString("s4Color"))) {
             try {
                 JSONArray jsonData4Array = jsonGlobIn.getJSONArray("data4");
-                float[] yData4 = wc.arrayFloatFromJson(jsonData4Array);
+                List<Float> yData4 = wc.arrayListFloatFromJson(jsonData4Array);
                 Color s4Color = getSeriesColor(jp.getString("s4Color"));
-                int tArrLen = yData4.length; if(tArrLen != 0) {
-                    XYSeries series4 = chart.addSeries(jp.getString("s4Name"), null, yData4); series4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
-                    XYSeries thSeries4 = thChart.addSeries(jp.getString("s4Name"), null, yData4); thSeries4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
+                int tArrLen = yData4.size(); if(tArrLen != 0) {
+                    XYSeries series4 = chart.addSeries(jp.getString("s4Name"), xData, yData4); series4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
+                    XYSeries thSeries4 = thChart.addSeries(jp.getString("s4Name"), xData, yData4); thSeries4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -144,11 +145,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s5Name")) && wc.isSet(jp.getString("s5Color"))) {
             try {
                 JSONArray jsonData5Array = jsonGlobIn.getJSONArray("data5");
-                float[] yData5 = wc.arrayFloatFromJson(jsonData5Array);
+                List<Float> yData5 = wc.arrayListFloatFromJson(jsonData5Array);
                 Color s5Color = getSeriesColor(jp.getString("s5Color"));
-                int tArrLen = yData5.length; if(tArrLen != 0) {
-                    XYSeries series5 = chart.addSeries(jp.getString("s5Name"), null, yData5); series5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
-                    XYSeries thSeries5 = thChart.addSeries(jp.getString("s5Name"), null, yData5); thSeries5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
+                int tArrLen = yData5.size(); if(tArrLen != 0) {
+                    XYSeries series5 = chart.addSeries(jp.getString("s5Name"), xData, yData5); series5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
+                    XYSeries thSeries5 = thChart.addSeries(jp.getString("s5Name"), xData, yData5); thSeries5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -156,11 +157,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s6Name")) && wc.isSet(jp.getString("s6Color"))) {
             try {
                 JSONArray jsonData6Array = jsonGlobIn.getJSONArray("data6");
-                float[] yData6 = wc.arrayFloatFromJson(jsonData6Array);
+                List<Float> yData6 = wc.arrayListFloatFromJson(jsonData6Array);
                 Color s6Color = getSeriesColor(jp.getString("s6Color"));
-                int tArrLen = yData6.length; if(tArrLen != 0) {
-                    XYSeries series6 = chart.addSeries(jp.getString("s6Name"), null, yData6); series6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
-                    XYSeries thSeries6 = thChart.addSeries(jp.getString("s6Name"), null, yData6); thSeries6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
+                int tArrLen = yData6.size(); if(tArrLen != 0) {
+                    XYSeries series6 = chart.addSeries(jp.getString("s6Name"), xData, yData6); series6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
+                    XYSeries thSeries6 = thChart.addSeries(jp.getString("s6Name"), xData, yData6); thSeries6.setMarker(SeriesMarkers.NONE).setLineColor(s6Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -168,11 +169,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s7Name")) && wc.isSet(jp.getString("s7Color"))) {
             try {
                 JSONArray jsonData7Array = jsonGlobIn.getJSONArray("data7");
-                float[] yData7 = wc.arrayFloatFromJson(jsonData7Array);
+                List<Float> yData7 = wc.arrayListFloatFromJson(jsonData7Array);
                 Color s7Color = getSeriesColor(jp.getString("s7Color"));
-                int tArrLen = yData7.length; if(tArrLen != 0) {
-                    XYSeries series7 = chart.addSeries(jp.getString("s7Name"), null, yData7); series7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
-                    XYSeries thSeries7 = thChart.addSeries(jp.getString("s7Name"), null, yData7); thSeries7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
+                int tArrLen = yData7.size(); if(tArrLen != 0) {
+                    XYSeries series7 = chart.addSeries(jp.getString("s7Name"), xData, yData7); series7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
+                    XYSeries thSeries7 = thChart.addSeries(jp.getString("s7Name"), xData, yData7); thSeries7.setMarker(SeriesMarkers.NONE).setLineColor(s7Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -180,11 +181,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s8Name")) && wc.isSet(jp.getString("s8Color"))) {
             try {
                 JSONArray jsonData8Array = jsonGlobIn.getJSONArray("data8");
-                float[] yData8 = wc.arrayFloatFromJson(jsonData8Array);
+                List<Float> yData8 = wc.arrayListFloatFromJson(jsonData8Array);
                 Color s8Color = getSeriesColor(jp.getString("s8Color"));
-                int tArrLen = yData8.length; if(tArrLen != 0) {
-                    XYSeries series8 = chart.addSeries(jp.getString("s8Name"), null, yData8); series8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
-                    XYSeries thSeries8 = thChart.addSeries(jp.getString("s8Name"), null, yData8); thSeries8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
+                int tArrLen = yData8.size(); if(tArrLen != 0) {
+                    XYSeries series8 = chart.addSeries(jp.getString("s8Name"), xData, yData8); series8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
+                    XYSeries thSeries8 = thChart.addSeries(jp.getString("s8Name"), xData, yData8); thSeries8.setMarker(SeriesMarkers.NONE).setLineColor(s8Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -192,11 +193,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s9Name")) && wc.isSet(jp.getString("s9Color"))) {
             try {
                 JSONArray jsonData9Array = jsonGlobIn.getJSONArray("data9");
-                float[] yData9 = wc.arrayFloatFromJson(jsonData9Array);
+                List<Float> yData9 = wc.arrayListFloatFromJson(jsonData9Array);
                 Color s9Color = getSeriesColor(jp.getString("s9Color"));
-                int tArrLen = yData9.length; if(tArrLen != 0) {
-                    XYSeries series9 = chart.addSeries(jp.getString("s9Name"), null, yData9); series9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
-                    XYSeries thSeries9 = thChart.addSeries(jp.getString("s9Name"), null, yData9); thSeries9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
+                int tArrLen = yData9.size(); if(tArrLen != 0) {
+                    XYSeries series9 = chart.addSeries(jp.getString("s9Name"), xData, yData9); series9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
+                    XYSeries thSeries9 = thChart.addSeries(jp.getString("s9Name"), xData, yData9); thSeries9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
@@ -204,11 +205,11 @@ public class DynChartX {
         try { if(wc.isSet(jp.getString("s10Name")) && wc.isSet(jp.getString("s10Color"))) {
             try {
                 JSONArray jsonData10Array = jsonGlobIn.getJSONArray("data10");
-                float[] yData10 = wc.arrayFloatFromJson(jsonData10Array);
+                List<Float> yData10 = wc.arrayListFloatFromJson(jsonData10Array);
                 Color s10Color = getSeriesColor(jp.getString("s10Color"));
-                int tArrLen = yData10.length; if(tArrLen != 0) {
-                    XYSeries series10 = chart.addSeries(jp.getString("s10Name"), null, yData10); series10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
-                    XYSeries thSeries10 = thChart.addSeries(jp.getString("s10Name"), null, yData10); thSeries10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
+                int tArrLen = yData10.size(); if(tArrLen != 0) {
+                    XYSeries series10 = chart.addSeries(jp.getString("s10Name"), xData, yData10); series10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
+                    XYSeries thSeries10 = thChart.addSeries(jp.getString("s10Name"), xData, yData10); thSeries10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }

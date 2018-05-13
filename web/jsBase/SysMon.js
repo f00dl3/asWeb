@@ -1,13 +1,16 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 9 May 2018
+Updated: 10 May 2018
 */
 
+var chartArray;
+var dateIn;
 var lastWalks;
 var stepIn;
-var dateIn;
-var chartArray;
+
+if(!isSet(stepIn)) { stepIn = 1; }
+if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
 
 function actOnAlarmFilterSelect(event) {
     dojo.stopEvent(event);
@@ -50,7 +53,7 @@ function getCharts(chartArray) {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    populateEDiscovery(data);
+                    getEDiscovery("eDiscoveryHolder");
                     populateChartHolders(chartArray);
                     aniPreload("off");
                 },
@@ -120,7 +123,6 @@ function nodeState(state, label) {
 }
 
 function onCheck(timestamp, node) {
-    if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
     var staleTime = getDate("minute", -3, "timestamp"); 
     var state = "off";
     if(isSet(timestamp) && staleTime.valueOf() <= timestamp.valueOf()) { state = "on"; }
@@ -150,7 +152,7 @@ function populateAlarmTable(alarmData) {
             default: asButton = alarmSeverityButton("lightblue", "black", "UNK"); break;
         }
         if(isSet(alarm.shortAlarmText)) { alarmText = alarm.shortAlarmText; } else { alarmText = alarm.alarmText; }
-        /* LEFT OFF HERE 4/20/18 -- will need to rebuild Alarm fetcher too! */
+        /* LEFT OFF HERE 4/20/18 -- will need to rebuild Alarm fetcher too! Not critical - was not ever working in previous ASWebUI PHP version. */
     });
     dojo.byId("AlarmTableHolder").innerHTML = rData;
 }
@@ -163,9 +165,7 @@ function populateChartHolders(chartArray) {
 }
 
 function populateCharts() {
-    if(!isSet(stepIn)) { stepIn = 1; }
-    if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
-    var rData = "<em>Debug : { StepIn : " + stepIn + ", DateIn : " + dateIn + " }</em><br/>";
+    var rData = "";
     var chartList1 = [
         "mSysLoad", // done 4/29/18
         "mSysCPU", // done 4/29/18
@@ -225,6 +225,9 @@ function populateCharts() {
 function populateEDiscovery(lastSsh) {
     var rData = "<strong>SSH Clients</strong>: ";
     if(isSet(lastSsh)) {
+        if(lastSsh.length === 1) {
+            rData += "<strong>NO SSH SESSIONS ACTIVE!</strong>";
+        }
         for (var i = 0; i < lastSsh.length; i++) {
             rData += lastSsh[i].SSHClientIP;
         }
@@ -276,11 +279,6 @@ function populateStatusHolder(target, stateData) {
             "<select name='chStep' id='chartStepForm'><option value='1'>Select...</option>";
     for(var key in intervals) { rData += "<option value='" + key + "'>" + intervals[key] + "</option>"; };
     rData += "</select></span>" +
-            "</form>" +
-            "<form id='chDateForm' class='tr'>" +
-            "<span class='td'>Date</span>" +
-            "<span class='td'><input name='chDate' type='date' style='width: 75px;'/></span>" +
-            "<button class='UButton' id='subDateForm'>Go</button>" +
             "</form></div><br/>" +
             "<a href='" + getBasePath("ui") + "/Images/Topology.jpg'>Topology Map</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
@@ -288,11 +286,17 @@ function populateStatusHolder(target, stateData) {
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
             "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
+    var dateForm = "<form id='chDateForm' class='tr'>" +
+            "<span class='td'>Date</span>" +
+            "<span class='td'><input name='chDate' type='date' style='width: 75px;'/>" +
+            "<button class='UButton' id='subDateForm'>Go</button></span>" +
+            "</form>";
     for (var i = 0; i < nodes.length; i++) {
         var entityToCheck = nodes[i];
         var timestampToCheck = stateData.lastWalk[0][nodes[i]];
         rData += onCheck(timestampToCheck, entityToCheck);
     }
+    rData += "<br/>" + dateForm;
     dojo.byId(target).innerHTML = rData;
     var stepSelect = dojo.byId("chartStepForm");
     var dateSelect = dojo.byId("subDateForm");

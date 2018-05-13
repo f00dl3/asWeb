@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 9 May 2018
+Updated: 13 May 2018
 */
 
 package asWebRest.shared;
@@ -21,7 +21,10 @@ import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -62,7 +65,29 @@ public class WebCommon {
         }
         return newArray;
     }
-        
+    
+    public static ArrayList<Date> arrayListDateFromJson(JSONArray inJsonArray) {
+        DateFormat outFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        ArrayList<Date> newArrayList = new ArrayList<>();
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            try {
+                Date tDate = outFormat.parse(inJsonArray.getString(i));
+                newArrayList.add(tDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return newArrayList;
+    }
+    
+    public static ArrayList<Float> arrayListFloatFromJson(JSONArray inJsonArray) {
+        ArrayList<Float> newArrayList = new ArrayList<>();
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            newArrayList.add(inJsonArray.getFloat(i));
+        }
+        return newArrayList;
+    }        
+    
     public static String[] arrayStringFromJson(JSONArray inJsonArray) {
         String[] newArray = new String[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {

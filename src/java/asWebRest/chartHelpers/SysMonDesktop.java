@@ -501,8 +501,8 @@ public class SysMonDesktop {
             mSysNumUsers_Data3.put(thisObject.getInt("dtNS5ActiveSSH"));
             mSysNumUsers_Data4.put(thisObject.getInt("lapNumUsers"));
             mSysNumUsers_Data5.put(mSysNumUsers_VmUsers);
-            mSysNumUsers_Data6.put((float) (thisObject.getInt("dtNS5Active")/10));
-            mSysNumUsers_Data7.put((float) (thisObject.getInt("dtProcesses")/100));
+            mSysNumUsers_Data6.put((float) (thisObject.getFloat("dtNS5Active")/10));
+            mSysNumUsers_Data7.put((float) (thisObject.getFloat("dtProcesses")/100));
         }
         mSysNumUsers_Glob
                 .put("labels", mSysNumUsers_Labels)

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 24 Apr 2018
-Updated: 6 May 2018
+Updated: 13 May 2018
  */
 
 var eventData;
@@ -40,13 +40,14 @@ function displayArchive() {
 
 function displayEvents() {
     var layout = "<h3>Event Archive</h3>" +
-            "<div id='WxEvSearchHolder'>LOADING EVENT DATA PLEASE WAIT...</div><p>" +
-            "<div id='WxEvResultHolder'>LOADING EVENT DATA PLEASE WAIT...</div>";
+            "<div id='WxEvSearchHolder'>LOADING EVENT DATA </div><p>" +
+            "<div id='WxEvResultHolder'>PLEASE WAIT...</div>";
     dojo.byId("WxArchive").innerHTML = layout;
     getEventData();
 }
 
 function getEventData(formData) {
+    var timeout = 60*2*1000;
     aniPreload("on");
     if(isSet(formData)) {
         if(isSet(formData.evStartDate)) {
@@ -81,6 +82,7 @@ function getEventData(formData) {
                     window.alert("request for Events FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getEventData(formData); }, timeout);
 }
 
 function getHTrackLast() {

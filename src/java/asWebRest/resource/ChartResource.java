@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 7 May 2018
+Updated: 10 May 2018
  */
 
 package asWebRest.resource;
@@ -119,15 +119,30 @@ public class ChartResource extends ServerResource {
                     SysMonPi2 smPi2 = new SysMonPi2();
                     SysMonRouter smRouter = new SysMonRouter();
                     
-                    qParams.add(0, "1"); //Test
-                    qParams.add(1, argsInForm.getFirstValue("step"));                   
-                    qParams.add(2, "1"); //DateTest
-                    qParams.add(3, argsInForm.getFirstValue("date"));
+                    String stepIn = null;
+                    String stepTest = "1";
+                    String dateIn = null;
+                    String dateTest = "1";
                     
-                    returnData += qParams.toString();
+                    try { 
+                        stepIn = argsInForm.getFirstValue("step");
+                        dateIn = argsInForm.getFirstValue("date").replace("-", "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
+                    //if(wc.isSet(stepIn)) { stepTest = "0"; }
+                    //if(wc.isSet(dateIn)) { dateTest = "0"; }
+                    
+                    qParams.add(0, stepTest); //Test
+                    qParams.add(1, stepIn);                   
+                    qParams.add(2, dateTest); //DateTest
+                    qParams.add(3, dateIn);
+                    
+                    returnData += "SQL Query paramaters: " + qParams.toString() + "\n";
                     
                     genericCharts = false;
-                    int step = Integer.valueOf(doWhat = argsInForm.getFirstValue("step"));
+                    int step = Integer.valueOf(stepIn);
                     int intLen = 60 * 2;
                     
                     JSONArray mainGlob = getSnmpAction.getMain(dbc, qParams);
