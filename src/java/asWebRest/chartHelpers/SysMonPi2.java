@@ -26,6 +26,7 @@ public class SysMonPi2 {
         JSONArray mPi2CPU_Data4 = new JSONArray();
         JSONArray mPi2CPU_Data5 = new JSONArray();
         mPi2CPU_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2CPU_ChartName).put("chartFileName", "mPi2CPU")
                 .put("sName", "Average").put("sColor", "Yellow")
                 .put("s2Name", "Core 1").put("s2Color", "Gray")
@@ -67,6 +68,7 @@ public class SysMonPi2 {
         JSONArray mPi2GPSSpeed_Data = new JSONArray();
         JSONArray mPi2GPSSpeed_Data2 = new JSONArray();
         mPi2GPSSpeed_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2GPSSpeed_ChartName).put("chartFileName", "mPi2GPSSpeed")
                 .put("sName", "Speed MPH").put("sColor", "White")
                 .put("s2Name", "Fix Age MS").put("s2Color", "Blue")
@@ -92,6 +94,7 @@ public class SysMonPi2 {
         JSONArray mPi2Light_Labels = new JSONArray();
         JSONArray mPi2Light_Data = new JSONArray();
         mPi2Light_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2Light_ChartName).put("chartFileName", "mPi2Light")
                 .put("sName", "Light Level").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "Units");
@@ -116,6 +119,7 @@ public class SysMonPi2 {
         JSONArray mPi2Load_Data2 = new JSONArray();
         JSONArray mPi2Load_Data3 = new JSONArray();
         mPi2Load_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2Load_ChartName).put("chartFileName", "mPi2Load")
                 .put("sName", "Load Index").put("sColor", "Red")
                 .put("s2Name", "5 min Avg").put("s2Color", "Green")
@@ -147,6 +151,7 @@ public class SysMonPi2 {
         JSONArray mPi2Memory_Data3 = new JSONArray();
         JSONArray mPi2Memory_Data4 = new JSONArray();
         mPi2Memory_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2Memory_ChartName).put("chartFileName", "mPi2Memory")
                 .put("sName", "Overall").put("sColor", "Yellow")
                 .put("s2Name", "Swap").put("s2Color", "Red")
@@ -184,6 +189,7 @@ public class SysMonPi2 {
         JSONArray mPi2Temp_Labels = new JSONArray();
         JSONArray mPi2Temp_Data = new JSONArray();
         mPi2Temp_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2Temp_ChartName).put("chartFileName", "mPi2Temp")
                 .put("sName", "Temperature").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "degrees F");

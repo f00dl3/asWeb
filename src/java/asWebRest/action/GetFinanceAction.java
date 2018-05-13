@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 11 Apr 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.FinanceDAO;
 import java.sql.Connection;
+import java.util.List;
 import org.json.JSONArray;
 
 public class GetFinanceAction {
@@ -36,6 +37,7 @@ public class GetFinanceAction {
     public JSONArray getNwga(Connection dbc) { return financeDAO.getNwga(dbc); }
     public JSONArray getQMerged(Connection dbc) { return financeDAO.getQMerged(dbc); }
     public JSONArray getSaving(Connection dbc) { return financeDAO.getSaving(dbc); }
+    public JSONArray getSavingChart(Connection dbc, List qParams) { return financeDAO.getSavingChart(dbc, qParams); }
     public JSONArray getSettingC(Connection dbc) { return financeDAO.getSettingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return financeDAO.getSettingH(dbc); }
     public JSONArray getSvBk(Connection dbc) { return financeDAO.getSvBk(dbc); }

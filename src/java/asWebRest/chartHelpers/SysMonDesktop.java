@@ -23,6 +23,7 @@ public class SysMonDesktop {
         JSONArray mJavaCodeLines_Data = new JSONArray();
         JSONArray mJavaCodeLines_Data2 = new JSONArray();
         mJavaCodeLines_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mJavaCodeLines_ChartName).put("chartFileName", "mJavaCodeLines")
                 .put("sName", "asUtils/java").put("sColor", "Blue")
                 .put("s2Name", "asWeb/TOTAL").put("s2Color", "Red")
@@ -63,6 +64,7 @@ public class SysMonDesktop {
         JSONArray mSysCams_Data3 = new JSONArray();
         JSONArray mSysCams_Data4 = new JSONArray();
         mSysCams_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysCams_ChartName).put("chartFileName", "mSysCams")
                 .put("sName", "Cam 1 (USB)").put("sColor", "Yellow")
                 .put("s2Name", "Cam 2 (Back)").put("s2Color", "Blue")
@@ -131,6 +133,7 @@ public class SysMonDesktop {
         JSONArray mSysCPU_Data8 = new JSONArray();
         JSONArray mSysCPU_Data9 = new JSONArray();
         mSysCPU_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysCPU_ChartName).put("chartFileName", "mSysCPU")
                 .put("sName", "Avg CPU").put("sColor", "Yellow")
                 .put("s2Name", "Core 1").put("s2Color", "Gray")
@@ -196,6 +199,7 @@ public class SysMonDesktop {
         JSONArray mSysDiskIO_Data2 = new JSONArray();
         JSONArray mSysDiskIO_Data3 = new JSONArray();
         mSysDiskIO_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysDiskIO_ChartName).put("chartFileName", "mSysDiskIO")
                 .put("sName", "Total").put("sColor", "White")
                 .put("s2Name", "Reads").put("s2Color", "Green")
@@ -236,6 +240,7 @@ public class SysMonDesktop {
         JSONArray mSysFans_Data2 = new JSONArray();
         JSONArray mSysFans_Data3 = new JSONArray();
         mSysFans_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysFans_ChartName).put("chartFileName", "mSysFans")
                 .put("sName", "Fan 1").put("sColor", "Red")
                 .put("s2Name", "Fan 2").put("s2Color", "Blue")
@@ -266,6 +271,7 @@ public class SysMonDesktop {
         JSONArray mSysLoad_Data2 = new JSONArray();
         JSONArray mSysLoad_Data3 = new JSONArray();           
         mSysLoad_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysLoad_ChartName).put("chartFileName", "mSysLoad")
                 .put("sName", "LoadIndex").put("sColor", "Red")
                 .put("s2Name", "Load 5").put("s2Color", "Green")
@@ -297,6 +303,7 @@ public class SysMonDesktop {
         JSONArray mSysMemory_Data3 = new JSONArray();
         JSONArray mSysMemory_Data4 = new JSONArray();
         mSysMemory_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysMemory_ChartName).put("chartFileName", "mSysMemory")
                 .put("sName", "Used").put("sColor", "Yellow")
                 .put("s2Name", "Swap").put("s2Color", "Red")
@@ -335,6 +342,7 @@ public class SysMonDesktop {
         JSONArray mSysMySQLSize_Data5 = new JSONArray();
         JSONArray mSysMySQLSize_Data6 = new JSONArray();
         mSysMySQLSize_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysMySQLSize_ChartName).put("chartFileName", "mSysMySQLSize")
                 .put("sName", "Rows").put("sColor", "Blue")
                 .put("s2Name", "Size:Core").put("s2Color", "Red")
@@ -396,6 +404,7 @@ public class SysMonDesktop {
         JSONArray mSysNet_Data7 = new JSONArray();
         JSONArray mSysNet_Data8 = new JSONArray();
         mSysNet_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysNet_ChartName).put("chartFileName", "mSysNet")
                 .put("sName", "Total").put("sColor", "White")
                 .put("s2Name", "Router").put("s2Color", "Yellow")
@@ -473,6 +482,7 @@ public class SysMonDesktop {
         JSONArray mSysNumUsers_Data6 = new JSONArray();
         JSONArray mSysNumUsers_Data7 = new JSONArray();
         mSysNumUsers_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysNumUsers_ChartName).put("chartFileName", "mSysNumUsers")
                 .put("sName", "All Sessions").put("sColor", "White")
                 .put("s2Name", "Desktop Users").put("s2Color", "Red")
@@ -526,6 +536,7 @@ public class SysMonDesktop {
         JSONArray mSysStorage_Data = new JSONArray();
         JSONArray mSysStorage_Data2 = new JSONArray();
         mSysStorage_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysStorage_ChartName).put("chartFileName", "mSysStorage")
                 .put("sName", "sda1").put("sColor", "Red")
                 .put("s2Name", "sdb1").put("s2Color", "Blue")
@@ -561,6 +572,7 @@ public class SysMonDesktop {
         JSONArray mSysTemp_Data5 = new JSONArray();
         JSONArray mSysTemp_Data6 = new JSONArray(); 
         mSysTemp_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysTemp_ChartName).put("chartFileName", "mSysTemp")
                 .put("sName", "CPU Average").put("sColor", "Yellow")
                 .put("s2Name", "Case").put("s2Color", "Green")
@@ -599,6 +611,7 @@ public class SysMonDesktop {
         JSONArray mSysTomcatDeploy_Data = new JSONArray();
         JSONArray mSysTomcatDeploy_Data2 = new JSONArray();
         mSysTomcatDeploy_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysTomcatDeploy_ChartName).put("chartFileName", "mSysTomcatDeploy")
                 .put("sName", "WAR Files").put("sColor", "Green")
                 .put("s2Name", "Deployed").put("s2Color", "Yellow")
@@ -624,6 +637,7 @@ public class SysMonDesktop {
         JSONArray mSysUPSLoad_Labels = new JSONArray();
         JSONArray mSysUPSLoad_Data = new JSONArray();
         mSysUPSLoad_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysUPSLoad_ChartName).put("chartFileName", "mSysUPSLoad")
                 .put("sName", "UPS Load %").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
@@ -646,6 +660,7 @@ public class SysMonDesktop {
         JSONArray mSysUPSTimeLeft_Labels = new JSONArray();
         JSONArray mSysUPSTimeLeft_Data = new JSONArray();
         mSysUPSTimeLeft_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysUPSTimeLeft_ChartName).put("chartFileName", "mSysUPSTimeLeft")
                 .put("sName", "Time Left").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "Minutes");
@@ -676,6 +691,7 @@ public class SysMonDesktop {
         JSONArray mSysVolt_Data8 = new JSONArray();
         JSONArray mSysVolt_Data9 = new JSONArray();
         mSysVolt_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysVolt_ChartName).put("chartFileName", "mSysVolt")
                 .put("sName", "CPU").put("sColor", "Red")
                 .put("s2Name", "Core 1").put("s2Color", "Gray")

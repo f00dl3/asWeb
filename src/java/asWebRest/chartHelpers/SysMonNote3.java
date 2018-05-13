@@ -24,6 +24,7 @@ public class SysMonNote3 {
         JSONArray mCellBattCPU_Data2 = new JSONArray();
         JSONArray mCellBattCPU_Data3 = new JSONArray();
         mCellBattCPU_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mCellBattCPU_ChartName).put("chartFileName", "mCellBattCPU")
                 .put("sName", "CPU").put("sColor", "Yellow")
                 .put("s2Name", "Battery").put("s2Color", "Red")
@@ -59,6 +60,7 @@ public class SysMonNote3 {
         JSONArray mCellNet_Data2 = new JSONArray();
         JSONArray mCellNet_Data3 = new JSONArray();
         mCellNet_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mCellNet_ChartName).put("chartFileName", "mCellNet")
                 .put("sName", "rmnet0").put("sColor", "Yellow")
                 .put("s2Name", "wlan0").put("s2Color", "Red")
@@ -105,6 +107,7 @@ public class SysMonNote3 {
         JSONArray mCellSig_Data3 = new JSONArray();
         JSONArray mCellSig_Data4 = new JSONArray();                    
         mCellSig_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mCellSig_ChartName).put("chartFileName", "mCellSig")
                 .put("sName", "LTE").put("sColor", "Orange")
                 .put("s2Name", "CDMA").put("s2Color", "Yellow")
@@ -144,6 +147,7 @@ public class SysMonNote3 {
         JSONArray mCellTemp_Labels = new JSONArray();
         JSONArray mCellTemp_Data = new JSONArray();           
         mCellTemp_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mCellTemp_ChartName).put("chartFileName", "mCellTemp")
                 .put("sName", "Temperature").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "deg. F");
@@ -166,6 +170,7 @@ public class SysMonNote3 {
         JSONArray mCellTempRapid_Labels = new JSONArray();
         JSONArray mCellTempRapid_Data = new JSONArray();
         mCellTempRapid_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mCellTempRapid_ChartName).put("chartFileName", "mCellTempRapid")
                 .put("sName", "Temperature").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "deg. F");

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 9 May 2018
+Updated: 13 May 2018
  */
 
 package asWebRest.resource;
@@ -13,6 +13,8 @@ import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
 import java.io.IOException;
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -68,6 +70,11 @@ public class TestResource extends ServerResource {
                 "jsonFromCsv",
                 null
         );
+        
+        String testDate = "2018-05-13";
+        LocalDate convertedDate = LocalDate.parse(testDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        convertedDate = convertedDate.withDayOfMonth(convertedDate.getMonth().length(convertedDate.isLeapYear()));
+        testData += "\nTest date end of month: " + convertedDate;
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
                     

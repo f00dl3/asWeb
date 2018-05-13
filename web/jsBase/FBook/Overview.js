@@ -43,8 +43,8 @@ function genOverviewSavings(svData, svBk) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
     var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Savings</strong><p>" +
-            "<a href='" + doCh("p", "FinSavings", null) + "' target='pChart'>" +
-            "<img class='ch_large' src='" + doCh("p", "FinSavings", "Thumb=1") + "'/></a>";
+            "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
+            "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
     var bForm = "<form id='SavingsBookForm'>" +
             "<button id='SvBkAddButton' type='submit' name='SvSetAdd'>Add Savings</button>" +
             "<table><thead><tr>";
@@ -130,6 +130,26 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
 }
 
 function getOverviewData() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "FinanceOverviewCharts" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    getOverviewData2();
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    console.log("request for FOverCharts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getOverviewData2() {
     aniPreload("on");
     var thePostData = "doWhat=getOverview";
     var xhArgs = {

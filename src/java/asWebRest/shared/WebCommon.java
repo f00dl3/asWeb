@@ -23,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +39,9 @@ public class WebCommon {
     public static Double[] arrayDoubleFromJson(JSONArray inJsonArray) {
         Double[] newArray = new Double[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
-            try { newArray[i] = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+            Double tempDouble = 0.0;
+            try { tempDouble = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+            newArray[i] = tempDouble;
         }
         return newArray;
     }
@@ -45,7 +49,9 @@ public class WebCommon {
     public static double[] arrayDoubleOldFromJson(JSONArray inJsonArray) {
         double[] newArray = new double[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
-            try { newArray[i] = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+            double tempDoubleOld = 0.0;
+            try { tempDoubleOld = inJsonArray.getDouble(i); } catch (Exception e) { e.printStackTrace(); }
+            newArray[i] = tempDoubleOld;
         }
         return newArray;
     }
@@ -53,7 +59,9 @@ public class WebCommon {
     public static float[] arrayFloatFromJson(JSONArray inJsonArray) {
         float[] newArray = new float[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
-            try { newArray[i] = inJsonArray.getFloat(i); } catch (Exception e) { e.printStackTrace(); }
+            Float tempFloat = 0.0f;
+            try { tempFloat = inJsonArray.getFloat(i); } catch (Exception e) { e.printStackTrace(); }
+            newArray[i] = tempFloat;
         }
         return newArray;
     }
@@ -61,13 +69,15 @@ public class WebCommon {
     public static Integer[] arrayIntegerFromJson(JSONArray inJsonArray) {
         Integer[] newArray = new Integer[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
-            try { newArray[i] = inJsonArray.getInt(i); } catch (Exception e) { e.printStackTrace(); }
+            Integer tempInteger = 0;
+            try { tempInteger = inJsonArray.getInt(i); } catch (Exception e) { e.printStackTrace(); }
+            newArray[i] = tempInteger;
         }
         return newArray;
     }
     
-    public static ArrayList<Date> arrayListDateFromJson(JSONArray inJsonArray) {
-        DateFormat outFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    public static ArrayList<Date> arrayListDateFromJson(JSONArray inJsonArray, String formatPattern) {
+        DateFormat outFormat = new SimpleDateFormat(formatPattern);
         ArrayList<Date> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
             try {
@@ -83,7 +93,9 @@ public class WebCommon {
     public static ArrayList<Float> arrayListFloatFromJson(JSONArray inJsonArray) {
         ArrayList<Float> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
-            newArrayList.add(inJsonArray.getFloat(i));
+            Float tempFloat = 0.0f;
+            try { tempFloat = inJsonArray.getFloat(i); } catch (Exception e) { e.printStackTrace(); }
+            newArrayList.add(tempFloat);
         }
         return newArrayList;
     }        
@@ -91,7 +103,9 @@ public class WebCommon {
     public static String[] arrayStringFromJson(JSONArray inJsonArray) {
         String[] newArray = new String[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
-            try { newArray[i] = inJsonArray.getString(i); } catch (Exception e) { e.printStackTrace(); }
+            String tempString = "";
+            try { tempString = inJsonArray.getString(i); } catch (Exception e) { e.printStackTrace(); }
+            newArray[i] = tempString;
         }
         return newArray;
     }
@@ -166,6 +180,13 @@ public class WebCommon {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
+    }
+    
+    private String nowDate() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        String nowTime = dtf.format(now);
+        return nowTime;
     }
 
     public String q2do(String query, List<String> params) throws Exception {
@@ -323,5 +344,8 @@ public class WebCommon {
                 out.println(thisVar);
         } catch (IOException io) { io.printStackTrace(); }
     }
+    
+    /* Public accessors */
+    public String getNowDate() { return nowDate(); }
     
 }

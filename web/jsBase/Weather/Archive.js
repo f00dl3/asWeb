@@ -47,7 +47,10 @@ function displayEvents() {
 }
 
 function getEventData(formData) {
-    var timeout = 60*2*1000;
+    var timeout = 60*1*1000;
+    if(checkMobile()) {
+        timeout = 60*2*1000;
+    }
     aniPreload("on");
     if(isSet(formData)) {
         if(isSet(formData.evStartDate)) {
@@ -79,10 +82,14 @@ function getEventData(formData) {
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for Events FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    console.log("request for Events FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getEventData(formData); }, timeout);
+    setTimeout(function () {
+        if(!isSet(evStart)) { var evStart = getDate("hour", -12, "hourstamp"); }
+        if(!isSet(evEnd)) { var evEnd = getDate("hour", 0, "hourstamp"); }
+        getEventData(formData);
+    }, timeout);
 }
 
 function getHTrackLast() {

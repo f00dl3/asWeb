@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 6 May 2018
+Updated: 13 May 2018
 */
 
 package asWebRest.dao;
@@ -470,6 +470,23 @@ public class FinanceDAO {
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject.put("SBal", resultSet.getDouble("SBal"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getSavingChart(Connection dbc, List<String> qParams) { // ?  = end date
+        final String query_ch_Saving_Opt = "SELECT SUM(Credit-Debit) AS Value, ? AS Date FROM FB_CFSV59 WHERE Date <= ?;";        
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_Saving_Opt, qParams);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("Value", resultSet.getDouble("Value"));
                 tContainer.put(tObject);
             }
             resultSet.close();

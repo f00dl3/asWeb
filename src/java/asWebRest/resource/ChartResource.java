@@ -6,14 +6,17 @@ Updated: 13 May 2018
 
 package asWebRest.resource;
 
+import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.SysMonNote3;
 import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
 import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
+import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
@@ -23,6 +26,8 @@ import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +47,7 @@ public class ChartResource extends ServerResource {
         boolean genericCharts = false;
         
         DynChartX dynChart = new DynChartX();
+        GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
@@ -73,6 +79,21 @@ public class ChartResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
+                
+                case "FinanceOverviewCharts":
+                    // loop through months, see code from original.
+                    genericCharts = false;
+                    Finance fin = new Finance();
+                    LocalDate nowDate = LocalDate.parse(wc.getNowDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+                    LocalDate eomDate = nowDate.withDayOfMonth(nowDate.getMonth().length(nowDate.isLeapYear()));
+                    DateTimeFormatter parseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String finalEomString = eomDate.format(parseFormat);
+                    qParams.add(finalEomString);
+                    qParams.add(finalEomString);
+                    JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, qParams);
+                    JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
+                    try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    break;
                  
                 case "FitnessCalorieRange":
                     genericCharts = true;
@@ -89,6 +110,7 @@ public class ChartResource extends ServerResource {
                         data4.put(4 * thisObject.getInt("Carbs"));
                     }
                     props
+                        .put("dateFormat", "yyyy-MM-dd")
                         .put("chartName", fcnCalories).put("chartFileName", "CalorieRange")
                         .put("sName", "Calories").put("sColor", "White")
                         .put("s2Color", "Red").put("s2Name", "Fat")
@@ -109,8 +131,9 @@ public class ChartResource extends ServerResource {
                         data.put(thisObject.getDouble("Weight"));
                     }
                     props
+                        .put("dateFormat", "yyyy-MM-dd")
                         .put("chartName", fullChartName).put("chartFileName", "WeightRange")
-                        .put("sName", "Calories").put("sColor", "Yellow")
+                        .put("sName", "lbs").put("sColor", "Yellow")
                         .put("xLabel", "Date").put("yLabel", "Weight");
                     break;
                     
@@ -275,6 +298,7 @@ public class ChartResource extends ServerResource {
                     JSONArray cf6Temps_Data2 = new JSONArray();
                     
                     cf6cpc_Props
+                            .put("dateFormat", "yyyy-MM-dd")
                             .put("chartName", cf6cpc_ChartName).put("chartFileName", "cf6cpc")
                             .put("sName", "AO").put("sColor", "Red")
                             .put("s2Name", "AAO").put("s2Color", "Blue")
@@ -283,11 +307,13 @@ public class ChartResource extends ServerResource {
                             .put("xLabel", "Date").put("yLabel", "Anom");
                     
                     cf6Depart_Props
+                            .put("dateFormat", "yyyy-MM-dd")
                             .put("chartName", cf6Depart_ChartName).put("chartFileName", "cf6Depart")
                             .put("sName", "Departure").put("sColor", "Yellow")
                             .put("xLabel", "Date").put("yLabel", "degrees F");
                     
                     cf6Temps_Props
+                            .put("dateFormat", "yyyy-MM-dd")
                             .put("chartName", cf6Temps_ChartName).put("chartFileName", "cf6Temps")
                             .put("sName", "High").put("sColor", "Red")
                             .put("s2Name", "Low").put("s2Color", "Blue")

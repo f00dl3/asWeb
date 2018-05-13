@@ -23,6 +23,7 @@ public class SysMonPi {
         JSONArray mPiAmb_Data = new JSONArray();
         JSONArray mPiAmb_Data2 = new JSONArray();
         mPiAmb_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiAmb_ChartName).put("chartFileName", "mPiAmb")
                 .put("sName", "Light").put("sColor", "Yellow")
                 .put("s2Name", "Sound").put("s2Color", "Green")
@@ -52,6 +53,7 @@ public class SysMonPi {
         JSONArray mPiCPU_Data4 = new JSONArray();
         JSONArray mPiCPU_Data5 = new JSONArray();
         mPiCPU_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiCPU_ChartName).put("chartFileName", "mPiCPU")
                 .put("sName", "Average").put("sColor", "Yellow")
                 .put("s2Name", "Core 1").put("s2Color", "Gray")
@@ -94,6 +96,7 @@ public class SysMonPi {
         JSONArray mPiLoad_Data2 = new JSONArray();
         JSONArray mPiLoad_Data3 = new JSONArray();
         mPiLoad_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiLoad_ChartName).put("chartFileName", "mPiLoad")
                 .put("sName", "Load Index").put("sColor", "Red")
                 .put("s2Name", "5 min Avg").put("s2Color", "Green")
@@ -125,6 +128,7 @@ public class SysMonPi {
         JSONArray mPiMemory_Data3 = new JSONArray();
         JSONArray mPiMemory_Data4 = new JSONArray();
         mPiMemory_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiMemory_ChartName).put("chartFileName", "mPiMemory")
                 .put("sName", "Overall").put("sColor", "Yellow")
                 .put("s2Name", "Swap").put("s2Color", "Red")
@@ -162,6 +166,7 @@ public class SysMonPi {
         JSONArray mPiTemp_Labels = new JSONArray();
         JSONArray mPiTemp_Data = new JSONArray();
         mPiTemp_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiTemp_ChartName).put("chartFileName", "mPiTemp")
                 .put("sName", "Temperature").put("sColor", "Yellow")
                 .put("xLabel", "WalkTime").put("yLabel", "degrees F");

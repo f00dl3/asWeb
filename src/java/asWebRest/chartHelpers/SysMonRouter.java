@@ -24,6 +24,7 @@ public class SysMonRouter {
         JSONArray mRouterCPU_Data2 = new JSONArray();
         JSONArray mRouterCPU_Data3 = new JSONArray();
         mRouterCPU_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mRouterCPU_ChartName).put("chartFileName", "mRouterCPU")
                 .put("sName", "CPU Average").put("sColor", "Yellow")
                 .put("s2Name", "Core 1").put("s2Color", "Gray")
@@ -56,6 +57,7 @@ public class SysMonRouter {
         JSONArray mRouterMemory_Data3 = new JSONArray();
         JSONArray mRouterMemory_Data4 = new JSONArray();
         mRouterMemory_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mRouterMemory_ChartName).put("chartFileName", "mRouterMemory")
                 .put("sName", "Overall").put("sColor", "Yellow")
                 .put("s2Name", "Swap").put("s2Color", "Red")
@@ -109,6 +111,7 @@ public class SysMonRouter {
         JSONArray mRouterNet_Data6 = new JSONArray();
         JSONArray mRouterNet_Data7 = new JSONArray();
         mRouterNet_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mRouterNet_ChartName).put("chartFileName", "mRouterNet")
                 .put("sName", "eth0").put("sColor", "Yellow")
                 .put("s2Name", "eth1").put("s2Color", "Orange")
