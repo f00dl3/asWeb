@@ -1,13 +1,13 @@
 /* 
 by Anthony Stump
 Created: 24 Apr 2018
-Updated: 13 May 2018
+Updated: 14 May 2018
  */
 
 var eventData;
 
-if(!isSet(evStart)) { var evStart = getDate("hour", -12, "hourstamp"); }
-if(!isSet(evEnd)) { var evEnd = getDate("hour", 0, "hourstamp"); }
+if(!isSet(evStart)) { var evStart = getDate("hour", -6, "hourstamp"); }
+if(!isSet(evEnd)) { var evEnd = getDate("hour", +6, "hourstamp"); }
 
 function actOnEventSearch(event) {
     dojo.stopEvent(event);
@@ -185,6 +185,7 @@ function popEvents(contextEventData, matchLimitHit) {
 
 function popEventSearch() {
     var searchForm = "<div class='UBox' id='SearchEvents'><span>Event Search Form</span>" +
+        "<tt>Please keep in mind that until fixed, search time is in UTC (+5 hours from CDT)</tt><br/>"
         "<div class='table' id='EventSearchFormTable'><form class='tr'>" +
         "<span class='td'><div class='table'><div class='tr'>" +
         "<span class='td'><input name='evStartDate' type='date' value='' style='width: " + dateEntryWidth + "px;'/></span>" +

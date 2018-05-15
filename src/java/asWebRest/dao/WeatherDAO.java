@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 9 May 2018
+Updated: 14 May 2018
  */
 
 package asWebRest.dao;
@@ -18,6 +18,11 @@ public class WeatherDAO {
     private String timeBetween(String xdt1, String xdt2) {
         return  " BETWEEN CONCAT(SUBSTRING('"+xdt1+"',1,4),'-',SUBSTRING('"+xdt1+"',5,2),'-',SUBSTRING('"+xdt1+"',7,2),' ',SUBSTRING('"+xdt1+"',9,2),':00')" +
             " AND CONCAT(SUBSTRING('"+xdt2+"',1,4),'-',SUBSTRING('"+xdt2+"',5,2),'-',SUBSTRING('"+xdt2+"',7,2),' ',SUBSTRING('"+xdt2+"',9,2),':00')";
+    }
+        
+    private String timeBetweenToUTC(String xdt1, String xdt2) {
+        return  " BETWEEN CONVERT_TZ(STR_TO_DATE(CONCAT(SUBSTRING('"+xdt1+"',1,4),'-',SUBSTRING('"+xdt1+"',5,2),'-',SUBSTRING('"+xdt1+"',7,2),' ',SUBSTRING('"+xdt1+"',9,2),':00'), '-5:00', '+0:00')" +
+            " AND CONVERT_TZ(STR_TO_DATE(CONCAT(SUBSTRING('"+xdt2+"',1,4),'-',SUBSTRING('"+xdt2+"',5,2),'-',SUBSTRING('"+xdt2+"',7,2),' ',SUBSTRING('"+xdt2+"',9,2),':00'), '-5:00', '+0:00')";
     }
     
     private String timeFromGetTime() {
