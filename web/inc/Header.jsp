@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    6 May 2018
+    Updated:    14 May 2018
     Author     : astump
 --%>
 
@@ -51,6 +51,10 @@
     String[] snmpScripts = {
         "SNMP/SnmpData",
         "Weather/WxFunctions"
+    };
+    
+    String [] sysMonScripts = {
+        "SNMP/ReliaStump"
     };
     
     String[] tpScripts = {
@@ -114,6 +118,11 @@
         snmpScriptPack += "<script src='"+rootPath+"/jsBase/"+snmpScripts[i]+".js'></script>";
     }
     
+    String sysMonScriptPack = "";
+    for(int i=0; i < sysMonScripts.length; i++) {
+        sysMonScriptPack += "<script src='"+rootPath+"/jsBase/"+snmpScripts[i]+".js'></script>";
+    }
+    
     String tpScriptPack = "";
     for(int i=0; i < tpScripts.length; i++) {
         tpScriptPack += "<script src='"+rootPath+"/jsBase/"+tpScripts[i]+".js'></script>";
@@ -152,7 +161,7 @@
                 break;
             case "SysMon":
                 fullTitle = "SNMP+ Tools";
-                scripts2Load += snmpScriptPack;
+                scripts2Load += snmpScriptPack + sysMonScriptPack;
                 break;
             case "TPGallery":
                 fullTitle = "TP Gallery";

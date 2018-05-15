@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 13 May 2018
+Updated: 14 May 2018
 */
 
 var chartArray;
@@ -11,14 +11,6 @@ var stepIn;
 
 if(!isSet(stepIn)) { stepIn = 1; }
 if(!isSet(dateIn)) { dateIn = getDate("day", 0, "yyyyMMdd"); }
-
-function actOnAlarmFilterSelect(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToJson(this.form);
-    window.alert(thisFormDataJ);
-    //post alarm filter, return data to div
-}
 
 function actOnChartStepSelect(event) {
     dojo.stopEvent(event);
@@ -32,10 +24,6 @@ function actOnChartDateSelect(event) {
     var thisFormData = dojo.formToObject(this.form);
     dateIn = thisFormData.chDate;
     getCharts(chartArray, stepIn, dateIn);
-}
-
-function alarmSeverityButton(bgColor, textColor, text) {
-    return "<button class='UButton' style='width: 60px; background-color: " + bgColor + "; color: " + textColor + ";'>" + text + "</button>"
 }
 
 function getCharts(chartArray) {
@@ -106,13 +94,6 @@ function getLastWalk(target) {
     setTimeout(function () { getLastWalk("snmpStatusHolder"); }, timeout);
 }
 
-function getSnmpOverviewData() {
-    // set Timeout to 5 mins unless it can be optimized, then 90 seconds.
-    //.then
-    //lastWalks = lastWalks;
-    //populateStatusHolder(indoorTemp, garageTemp);
-}
-
 function nodeState(state, label) {
     var btn = "";
     switch(state) {
@@ -134,27 +115,6 @@ function onCheck(timestamp, node) {
         case "Phone": return nodeState(state, "P"); break;
         case "PhoneE": return nodeState(state, "E"); break;
     }
-}
-
-function populateAlarmTable(alarmData) {
-    var cols = [ "Time", "Severity", "Action", "Status", "Ticket", "Host", "Alarm Text" ];
-    var rData = "<strong>Alarm List View:</strong><br/><div class='table'><div class='tr'>";
-    for (var i = 0; i < cols.length; i++) { rData += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
-    rData += "</div>";
-    alarmData.forEach(function (alarm) {
-        var asButton, alarmText;
-        switch(alarm.severity) {
-            case "0": asButton = alarmSeverityButton("grey", "white", "Critical"); break;
-            case "1": asButton = alarmSeverityButton("red", "white", "Major"); break;
-            case "2": asButton = alarmSeverityButton("orange", "black", "Major"); break;
-            case "3": asButton = alarmSeveirtyButton("yellow", "black", "Minor"); break;
-            case "4": asButton = alarmSeverityButton("lightblue", "black", "FYI"); break;
-            default: asButton = alarmSeverityButton("lightblue", "black", "UNK"); break;
-        }
-        if(isSet(alarm.shortAlarmText)) { alarmText = alarm.shortAlarmText; } else { alarmText = alarm.alarmText; }
-        /* LEFT OFF HERE 4/20/18 -- will need to rebuild Alarm fetcher too! Not critical - was not ever working in previous ASWebUI PHP version. */
-    });
-    dojo.byId("AlarmTableHolder").innerHTML = rData;
 }
 
 function populateChartHolders(chartArray) {
@@ -244,20 +204,6 @@ function populateEDiscovery(lastSsh) {
     dojo.byId("eDiscoveryHolder").innerHTML = rData;
 }
 
-function populateReliaStump() {
-    var rData = "<tt>IN DEVELOPMENT...</tt><p>" +
-            "<form id='AlarmFilterForm'>" +
-            "<select id='AlarmFilter' name='AlarmFilter'>" +
-            "<option value=''>Select...</option>" +        
-            "<option value='Active'>Active</option>" +
-            "<option value='All'>All</option>" +
-            "</select><p>" +
-            "<div id='AlarmTableHolder'></div>";
-    dojo.byId("ReliaStumpHolder").innerHTML = rData;
-    var alarmFilterSelector = dojo.byId("AlarmFilter");
-    dojo.connect(alarmFilterSelector, "change", actOnAlarmFilterSelect);
-}
-
 function populateStatusHolder(target, stateData) {
     var indoorTemp = Math.round(0.93 * conv2Tf(stateData.mergedTemps[0].ExtTemp/1000));
     var garageTemp = Math.round(stateData.mergedTemps[1].ExtTemp);
@@ -311,7 +257,7 @@ function populateStatusHolder(target, stateData) {
 }
 
 function initSysMon() {
-    //snmpRapid("snmpDataRapidHolder");
+    snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     populateCharts();
     getEDiscovery();
