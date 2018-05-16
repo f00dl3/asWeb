@@ -380,7 +380,7 @@ public class FinanceDAO {
     private JSONArray enwChart(Connection dbc) {
         final String query_ch_ENW = "SELECT " +
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts," +
-                " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth," +
+                " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
                 " FROM Core.FB_ENWT" +
                 " WHERE (AsOf LIKE '%-03-01%'" +
                 " OR AsOf LIKE '%-06-01%'" +
