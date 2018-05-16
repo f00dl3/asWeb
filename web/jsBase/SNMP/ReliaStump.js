@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Apr 2018
 Split off: 14 May 2018
-Updated: 14 May 2018
+Updated: 15 May 2018
 */
 
 function actOnAlarmFilterSelect(event) {
@@ -11,6 +11,13 @@ function actOnAlarmFilterSelect(event) {
     var thisFormDataJ = dojo.formToJson(this.form);
     window.alert(thisFormDataJ);
     //post alarm filter, return data to div
+}
+
+function actOnReliaStumpUpdate(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    window.alert(thisFormDataJ);
 }
 
 function alarmSeverityButton(bgColor, textColor, text) {
@@ -44,7 +51,7 @@ function populateAlarmTable(alarmData) {
                 "<span class='td'>" + asButton + "</span>" +
                 "<span class='td'>";
         if(isSet(aaButton)) {
-            rData += "<input name='DoUpdate' class='UButton' type='checkbox' alue='" + aaButton + "' />";
+            rData += "<input name='DoUpdate' class='UButton ReliaStumpUpdate' type='checkbox' alue='" + aaButton + "' />";
         }
         rData += "</span>" +
                 "<span class='td'><div class='UPop'>" + alarm.status +
@@ -53,7 +60,7 @@ function populateAlarmTable(alarmData) {
         if(isSet(alarm.clrBy)) { rData += "<strong>Cleared</strong> by: " + alarm.clrBy + "<br/>at " + alrm.clrTime; }
         rData += "</div></div></span>" +
                 "<span class='td'>";
-        if(isSet(aaButton)) { rData += "<input type'text' name='AlarmTicket' value='" + alarm.ticket + "/>"; }
+        if(isSet(aaButton)) { rData += "<input type'text' class='AlarmTicket' name='AlarmTicket' value='" + alarm.ticket + "/>"; }
         rData += "</span>" +
                 "<span class=td'><div class='UPop'>" + alarm.hostname +
                 "<div class='UPopO'>";
@@ -67,9 +74,14 @@ function populateAlarmTable(alarmData) {
         rData += "</div></div></span>" +
                 "<span class='td'><div class='UPop'>" + thisAlarmText.substring(0, 30) +
                 "<div class='UPopO'>" + thisAlarmText;
-        
+        if(isSet(alarm.description)) { rData += "<br/><em>" + alarm.description + "</em>"; }
+        rData += "</div></div></span>" +
+                "</form>";
     });
+    rData += "</div>";
     dojo.byId("AlarmTableHolder").innerHTML = rData;
+    dojo.query(".ReliaStumpUpdate").connect("onchange", actOnReliaStumpUpdate);
+    
 }
 
 function populateReliaStump() {

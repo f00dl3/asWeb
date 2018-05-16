@@ -105,8 +105,8 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     }
     pTable += "</tr></tbody></table>";
     bubble += pTable +
-            "<p><a href='" + doCh("p", "FinENW", null) + "' target='pChart'>" +
-            "<img class='ch_large' src='" + doCh("p", "FinENW", "Thumb=1") + "' /></a><p>";
+            "<p><a href='" + doCh("j", "FinENW", null) + "' target='pChart'>" +
+            "<img class='ch_large' src='" + doCh("j", "FinENW", "th") + "' /></a><p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {
         wTable += "<th>" + wCols[i] + "</th>";

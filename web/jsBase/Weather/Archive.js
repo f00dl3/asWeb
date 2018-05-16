@@ -48,9 +48,6 @@ function displayEvents() {
 
 function getEventData(formData) {
     var timeout = 60*1*1000;
-    if(checkMobile()) {
-        timeout = 60*2*1000;
-    }
     aniPreload("on");
     if(isSet(formData)) {
         if(isSet(formData.evStartDate)) {
@@ -86,8 +83,8 @@ function getEventData(formData) {
                 });
     });
     setTimeout(function () {
-        if(!isSet(evStart)) { var evStart = getDate("hour", -12, "hourstamp"); }
-        if(!isSet(evEnd)) { var evEnd = getDate("hour", 0, "hourstamp"); }
+        evStart = getDate("hour", -6, "hourstamp");
+        evEnd = getDate("hour", +6, "hourstamp");
         getEventData(formData);
     }, timeout);
 }
@@ -155,19 +152,26 @@ function popArchive(htTrackLast) {
 }
 
 function popEvents(contextEventData, matchLimitHit) {
+    var currentMinus5 = getDate("minute", -5, "yyyy-MM-dd HHmm");
+    var currentMinus15 = getDate("minute", -15, "yyyy-MM-dd HHmm");
+    var currentMinus60 = getDate("minute", -60, "yyyy-MM-dd HHmm");
     if(isSet(matchLimitHit)) { showNotice("Match limit hit - filtering!"); }
     var eCounter = 0;
     var rData = "<div class='table'>";
     contextEventData.forEach(function (feed) {
+        var noColonTime = feed.Time;
+        if(noColonTime.includes(":")) { noColonTime = noColonTime.replace(":", ""); }
+        var timeSearcher = feed.Date + " " + noColonTime;
+        var textColor = styleEventsBasedOnTime(timeSearcher, currentMinus5, currentMinus15, currentMinus60);
         eCounter++;
         if(eCounter <= 50) {
             rData += "<div class='tr'>" +
-                    "<span class='td'>" + feed.Date + " @ " + feed.Time + "</span>" +
-                    "<span class='td'><div class='UPop'>" + feed.Type;
+                    "<span class='td' style='color: " + textColor + "'>" + feed.Date + " @ " + feed.Time + "</span>" +
+                    "<span class='td' style='color: " + textColor + "'><div class='UPop'>" + feed.Type;
             if(isSet(feed.Magnitude)) { rData += ", " + feed.Magnitude; }
             rData += "<div class='UPopO'>" + feed.Comments + "</div>" +
                     "</div></span>" +
-                    "<span class='td'>";
+                    "<span class='td' style='color: " + textColor + "'>";
             if(isSet(feed.Lat)) {
                 rData += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + feed.Date + "&Point=" + 
                         "[" + feed.Lon + "," + feed.Last + "]' target='new'>";
@@ -184,8 +188,8 @@ function popEvents(contextEventData, matchLimitHit) {
 }
 
 function popEventSearch() {
-    var searchForm = "<div class='UBox' id='SearchEvents'><span>Event Search Form</span>" +
-        "<tt>Please keep in mind that until fixed, search time is in UTC (+5 hours from CDT)</tt><br/>"
+    var searchForm = "<div class='UBox' id='SearchEvents'><span>Event Search Form</span><br/>" +
+        "<em>Search time UTC (CDT +5)</em><br/>" +
         "<div class='table' id='EventSearchFormTable'><form class='tr'>" +
         "<span class='td'><div class='table'><div class='tr'>" +
         "<span class='td'><input name='evStartDate' type='date' value='' style='width: " + dateEntryWidth + "px;'/></span>" +
@@ -202,4 +206,20 @@ function popEventSearch() {
     dojo.byId("WxEvSearchHolder").innerHTML = searchForm;
     var submitSearch = dojo.byId("QuickEventSearch");
     dojo.connect(submitSearch, "click", actOnEventSearch);
+}
+
+function styleEventsBasedOnTime(eventTime, cm5, cm15, cm60) {
+    // Color coating not fully functional as of 5/14/2018
+    var rfc = "white";
+    console.log(eventTime, cm5);
+    /* if(eventTime < cm5) {
+        rfc = "red";
+    } else if (eventTime < cm15) {
+        rfc = "yellow";
+    } else if (eventTime < cm60) {
+        rfc = "green";
+    } else {
+        rfc = "white";
+    } */
+    return rfc;
 }

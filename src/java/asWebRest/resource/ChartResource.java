@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 13 May 2018
+Updated: 15 May 2018
  */
 
 package asWebRest.resource;
@@ -81,17 +81,13 @@ public class ChartResource extends ServerResource {
             switch (doWhat) {
                 
                 case "FinanceOverviewCharts":
-                    // loop through months, see code from original.
                     genericCharts = false;
                     Finance fin = new Finance();
-                    LocalDate nowDate = LocalDate.parse(wc.getNowDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-                    LocalDate eomDate = nowDate.withDayOfMonth(nowDate.getMonth().length(nowDate.isLeapYear()));
-                    DateTimeFormatter parseFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    String finalEomString = eomDate.format(parseFormat);
-                    qParams.add(finalEomString);
-                    qParams.add(finalEomString);
-                    JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, qParams);
+                    JSONArray enw_Raw = getFinanceAction.getEnwChart(dbc);
+                    JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
+                    JSONObject enw_Glob = fin.getFinEnw(enw_Raw);
                     JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
+                    try { dynChart.LineChart(enw_Glob); returnData += "Chart generated - Est Net Worth!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                  

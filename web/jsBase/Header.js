@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 9 May 2018
+Updated: 14 May 2018
  */
 
 
@@ -155,9 +155,8 @@ function formatDate(inDate, request) {
         case "js": fmtDate = inDate; break;
         case "timestamp": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMMddHHmmSS", selector: "date" }); break;
         case "yearMonth": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMM", selector: "date"}); break;
-        case "yyyyMMdd": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyyMMdd", selector: "date"}); break;
-        case "yyyy-MM": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy-MM", selector: "date"}); break;
         case "yearOnly": fmtDate = dojo.date.locale.format(inDate, { datePattern: "yyyy", selector: "date"}); break;
+        default: fmtDate = dojo.date.locale.format(inDate, { datePattern: request, selector: "date"}); break;
     }
     return fmtDate;
 }
