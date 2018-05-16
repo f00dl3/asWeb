@@ -18,6 +18,7 @@ import asWebRest.chartHelpers.SysMonPi;
 import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
 import asWebRest.chartHelpers.Utilities;
+import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.SnmpDAO;
@@ -55,6 +56,7 @@ public class ChartResource extends ServerResource {
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         
         Finance fin = new Finance();
+        Weather wx = new Weather();
                     
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -286,13 +288,10 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "WeatherCf6OverviewCharts":
-                    
                     genericCharts = false;
                     order = "ASC";
-                    
                     String cf6ChDateStart = "";
                     String cf6ChDateEnd = "";
-                    
                     try {
                         cf6ChDateStart = argsInForm.getFirstValue("dateStart");
                         cf6ChDateEnd = argsInForm.getFirstValue("dateEnd");
@@ -301,80 +300,13 @@ public class ChartResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    
                     JSONArray cf6Data = getWeatherAction.getCf6Main(dbc, qParams, order);
-                    
-                    String cf6cpc_ChartName = "CPC Data: " + cf6ChDateStart + " to " + cf6ChDateEnd;
-                    JSONObject cf6cpc_Glob = new JSONObject();
-                    JSONObject cf6cpc_Props = new JSONObject();
-                    JSONArray cf6cpc_Labels = new JSONArray();
-                    JSONArray cf6cpc_Data = new JSONArray();
-                    JSONArray cf6cpc_Data2 = new JSONArray();
-                    JSONArray cf6cpc_Data3 = new JSONArray();
-                    JSONArray cf6cpc_Data4 = new JSONArray();
-                    
-                    String cf6Depart_ChartName = "KMCI Departures: " + cf6ChDateStart + " to " + cf6ChDateEnd;
-                    JSONObject cf6Depart_Glob = new JSONObject();
-                    JSONObject cf6Depart_Props = new JSONObject();
-                    JSONArray cf6Depart_Labels = new JSONArray();
-                    JSONArray cf6Depart_Data = new JSONArray();
-                    
-                    String cf6Temps_ChartName = "KMCI Temperatures: " + cf6ChDateStart + " to " + cf6ChDateEnd;
-                    JSONObject cf6Temps_Glob = new JSONObject();
-                    JSONObject cf6Temps_Props = new JSONObject();
-                    JSONArray cf6Temps_Labels = new JSONArray();
-                    JSONArray cf6Temps_Data = new JSONArray();
-                    JSONArray cf6Temps_Data2 = new JSONArray();
-                    
-                    cf6cpc_Props
-                            .put("dateFormat", "yyyy-MM-dd")
-                            .put("chartName", cf6cpc_ChartName).put("chartFileName", "cf6cpc")
-                            .put("sName", "AO").put("sColor", "Red")
-                            .put("s2Name", "AAO").put("s2Color", "Blue")
-                            .put("s3Name", "NAO").put("s3Color", "Green")
-                            .put("s4Name", "PNA").put("s4Color", "Yellow")
-                            .put("xLabel", "Date").put("yLabel", "Anom");
-                    
-                    cf6Depart_Props
-                            .put("dateFormat", "yyyy-MM-dd")
-                            .put("chartName", cf6Depart_ChartName).put("chartFileName", "cf6Depart")
-                            .put("sName", "Departure").put("sColor", "Yellow")
-                            .put("xLabel", "Date").put("yLabel", "degrees F");
-                    
-                    cf6Temps_Props
-                            .put("dateFormat", "yyyy-MM-dd")
-                            .put("chartName", cf6Temps_ChartName).put("chartFileName", "cf6Temps")
-                            .put("sName", "High").put("sColor", "Red")
-                            .put("s2Name", "Low").put("s2Color", "Blue")
-                            .put("xLabel", "Date").put("yLabel", "degress F");
-                    
-                    for(int i = 0; i < cf6Data.length(); i++) {
-                        
-                        JSONObject thisObject = cf6Data.getJSONObject(i);
-                        
-                        cf6cpc_Labels.put(thisObject.getString("Date"));
-                        cf6cpc_Data.put(thisObject.getDouble("AO"));
-                        cf6cpc_Data2.put(thisObject.getDouble("AAO"));
-                        cf6cpc_Data3.put(thisObject.getDouble("NAO"));
-                        cf6cpc_Data4.put(thisObject.getDouble("PNA"));
-                        
-                        cf6Depart_Labels.put(thisObject.getString("Date"));
-                        cf6Depart_Data.put(thisObject.getInt("DFNorm"));
-                        
-                        cf6Temps_Labels.put(thisObject.getString("Date"));
-                        cf6Temps_Data.put(thisObject.getInt("High"));
-                        cf6Temps_Data2.put(thisObject.getInt("Low"));
-                        
-                    }
-                    
-                    cf6cpc_Glob.put("labels", cf6cpc_Labels).put("data", cf6cpc_Data).put("data2", cf6cpc_Data2).put("data3", cf6cpc_Data3).put("data4", cf6cpc_Data4).put("props", cf6cpc_Props);
-                    cf6Depart_Glob.put("labels", cf6Depart_Labels).put("data", cf6Depart_Data).put("props", cf6Depart_Props);
-                    cf6Temps_Glob.put("labels", cf6Temps_Labels).put("data", cf6Temps_Data).put("data2", cf6Temps_Data2).put("props", cf6Temps_Props);
-                    
+                    JSONObject cf6cpc_Glob = wx.getCf6cpc(cf6Data, cf6ChDateStart, cf6ChDateEnd);
+                    JSONObject cf6Depart_Glob = wx.getCf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd);
+                    JSONObject cf6Temps_Glob = wx.getCf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd);
                     try { dynChart.LineChart(cf6cpc_Glob); returnData += "Chart generated - cf6cpc!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Depart_Glob); returnData += "Chart generated - cf6Depart!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } 
-                    
                     break;
                     
             }
