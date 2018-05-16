@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 14 May 2018
+Updated: 16 May 2018
  */
 
 package asWebRest.dao;
@@ -869,7 +869,7 @@ public class WeatherDAO {
         final String query_StormReportsByDate = "SELECT" +
                 " Date, Time, Type, Magnitude, Lat, Lon, Location, Comments, County, State FROM (" +
                 " SELECT" +
-		"   SUBSTRING(CONVERT_TZ(CONCAT(Date, ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10) AS Date," +
+		"   DATE_SUB(SUBSTRING(CONVERT_TZ(CONCAT(Date, ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10), INTERVAL 1 DAY) AS Date," +
 		"   SUBSTRING(CONVERT_TZ(CONCAT(Date, ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 12, 5) AS Time," +
                 "   Type, Magnitude, Lat, Lon, Location, Comments, County, State" +
                 " FROM WxObs.SPCReportsLive WHERE CONCAT(Date,' ',Time)" + timeBetween(xdt1, xdt2) +
