@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 15 May 2018
+Updated: 16 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -10,6 +10,48 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Finance {
+    
+    private static JSONObject billCh(JSONArray dataIn) {
+        String bill_Name = "Bills";
+        JSONObject bill_Glob = new JSONObject();
+        JSONObject bill_Props = new JSONObject();
+        JSONArray bill_Labels = new JSONArray();
+        JSONArray bill_Data = new JSONArray();
+        JSONArray bill_Data2 = new JSONArray();
+        JSONArray bill_Data3 = new JSONArray();
+        JSONArray bill_Data4 = new JSONArray();
+        JSONArray bill_Data5 = new JSONArray();
+        JSONArray bill_Data6 = new JSONArray();
+        bill_Props
+                .put("dateFormat", "yyyy-MM")
+                .put("chartName", bill_Name).put("chartFileName", "FinBills")
+                .put("sName", "Total").put("sColor", "White")
+                .put("s2Name", "Elect+Gas").put("s2Color", "Yellow")
+                .put("s3Name", "Water+Sewer").put("s3Color", "Blue")
+                .put("s4Name", "Trash").put("s4Color", "Orange")
+                .put("s5Name", "Web+Phone").put("s5Color", "Red")
+                .put("s6Name", "Gym/Other").put("s6Color", "Gray")
+                .put("xLabel", "Month").put("yLabel", "USD");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            bill_Labels.put(thisObject.getString("Month"));
+            bill_Data.put(thisObject.getDouble("Total"));
+            bill_Data2.put(thisObject.getDouble("ELE") + thisObject.getDouble("GAS"));
+            bill_Data3.put(thisObject.getDouble("WAT") + thisObject.getDouble("SWR"));
+            bill_Data4.put(thisObject.getDouble("TRA"));
+            bill_Data5.put(thisObject.getDouble("WEB") + thisObject.getDouble("PHO"));
+            bill_Data6.put(thisObject.getDouble("Gym") + thisObject.getDouble("Other"));
+        }
+        bill_Glob
+                .put("labels", bill_Labels)
+                .put("data", bill_Data)
+                .put("data2", bill_Data2)
+                .put("data3", bill_Data3)
+                .put("data4", bill_Data4)
+                .put("data5", bill_Data5)
+                .put("data6", bill_Data6);
+        return bill_Glob;
+    }
 
     private static JSONObject finEnw(JSONArray dataIn) {
         String enw_Name = "Estimated Net Worth";
@@ -77,6 +119,7 @@ public class Finance {
         return svChart_Glob;
     }
     
+    public static JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
     public static JSONObject getFinEnw(JSONArray dataIn) { return finEnw(dataIn); }
     public static JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
     
