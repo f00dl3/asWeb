@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Apr 2018
+Updated: 16 May 2018
 */
 
 package asWebRest.dao;
@@ -19,11 +19,11 @@ public class UtilityUseDAO {
     
     WebCommon wc = new WebCommon(); 
     
-    public JSONArray getChUseElecD() {
-        final String query_ch_UseElecD = "SELECT Date, kWh FROM Core.UseElecD WHERE Date > CURRENT_DATE - '120' DAY ORDER BY Date;";
+    public JSONArray getChUseElecD(Connection dbc) {
+        final String query_ch_UseElecD = "SELECT Date, kWh FROM Core.UseElecD WHERE Date > CURRENT_DATE - INTERVAL '120' DAY ORDER BY Date;;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ch_UseElecD, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_UseElecD, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -36,11 +36,11 @@ public class UtilityUseDAO {
         return tContainer;
     }
     
-    public JSONArray getChUseGas() {
+    public JSONArray getChUseGas(Connection dbc) {
         final String query_ch_UseGas = "SELECT Month, TotalMCF FROM Core.UseGas ORDER BY Month;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ch_UseGas, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_UseGas, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

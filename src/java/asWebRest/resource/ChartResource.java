@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetSnmpAction;
+import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.SysMonNote3;
@@ -16,9 +17,11 @@ import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
 import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
+import asWebRest.chartHelpers.Utilities;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.SnmpDAO;
+import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
 import asWebRest.shared.MyDBConnector;
@@ -48,6 +51,7 @@ public class ChartResource extends ServerResource {
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+        GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         
         Finance fin = new Finance();
@@ -256,6 +260,17 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mSysUPSTimeLeft_Glob); returnData += "Chart generated - mSysUPSTimeLeft!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysVolt_Glob); returnData += "Chart generated - mSysVolt!\n"; } catch (Exception e) { e.printStackTrace(); } 
  
+                    break;
+                    
+                case "Utilities":
+                    genericCharts = false;
+                    Utilities util = new Utilities();
+                    JSONArray gasMcf_Raw = getUtilityUseAction.getChUseGas(dbc);
+                    JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
+                    JSONObject gasMcf_Glob = util.getGasMcf(gasMcf_Raw);
+                    JSONObject kWhU_Glob = util.getKWhU(kWhU_Raw);
+                    try { dynChart.LineChart(gasMcf_Glob); returnData += "Chart generated - Gas!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(kWhU_Glob); returnData += "Chart generated - Electricity!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                     
                 case "WeatherCf6OverviewCharts":

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 22 Apr 2018
+Updated: 16 May 2018
  */
 
 function displayUtils() {
@@ -16,6 +16,27 @@ function displayUtils() {
 }
 
 function getUtils() {
+    var thePostData = {
+        "doWhat": "Utilities"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getUtilsData();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    console.log("request for Util Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });    
+}
+
+function getUtilsData() {
     aniPreload("on");
     var uuMonthLast = getDate("day", 0, "yyyy-MM");
     var thePostData = "doWhat=getUtils&tMonth="+uuMonthLast;
@@ -44,10 +65,8 @@ function getUtils() {
 
 function putUtils(uuRelations, settingC, settingH, uuData) {
     var rData = "<h3>Utility Use</h3>";
-    uuRelations.forEach(function (rel) {
-        // Migrate to jFreeChart
-        rData += "<a href='" + rel.URL + "'><img class='ch_small' src='" + rel.URL + "&Thumb=1'/></a>";
-    });
+    rData += "<a href='" + doCh("j", "UseElecD", null) + "' target='newCh'><img class='ch_small' src='" + doCh("j", "UseElecD", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "UseGas", null) + "' target='newCh'><img class='ch_small' src='" + doCh("j", "UseGas", "th") + "'/></a>";
     var rTable = "<table><thead><tr><th>Month<br/>(A. Tmp.)</th>" +
             "<th><div class='UPop'>Elec<br/>kWh<div class='UPopO'>";
     var coolTable = "<table><thead><tr>" +
