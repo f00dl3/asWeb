@@ -19,6 +19,35 @@ public class UtilityUseDAO {
     
     WebCommon wc = new WebCommon(); 
     
+    private JSONArray chCellUse(Connection dbc) {
+        final String query_ch_CellUse = "SELECT A.Bill AS Bill," +
+                " (A.Texts+E.Texts) AS Texts," +
+                " (A.MBData+E.MBData) AS MBData," +
+                " (A.Minutes+E.Minutes_L500+E.Minutes_Free) AS Minutes," +
+                " (A.MMS+E.MMS) AS MMS" +
+                " FROM Core.UseSprintA A" +
+                " LEFT OUTER JOIN Core.UseSprintE E ON A.Bill = E.Bill" +
+                " WHERE A.Bill >= '2012-08';";      
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_CellUse, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Bill", resultSet.getString("Bill"))
+                    .put("Texts", resultSet.getInt("Texts"))
+                    .put("MBData", resultSet.getInt("MBData"))
+                    .put("Minutes", resultSet.getInt("Minutes"))
+                    .put("MMS", resultSet.getInt("MMS"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getChCellUse(Connection dbc) { return chCellUse(dbc); }
+    
     public JSONArray getChUseElecD(Connection dbc) {
         final String query_ch_UseElecD = "SELECT Date, kWh FROM Core.UseElecD WHERE Date > CURRENT_DATE - INTERVAL '120' DAY ORDER BY Date;;";
         JSONArray tContainer = new JSONArray();

@@ -16,6 +16,7 @@ public class GetUtilityUseAction {
     private UtilityUseDAO utilityUseDAO;
     public GetUtilityUseAction(UtilityUseDAO utilityUseDAO) { this.utilityUseDAO = utilityUseDAO; }
     
+    public JSONArray getChCellUse(Connection dbc) { return utilityUseDAO.getChCellUse(dbc); }
     public JSONArray getChUseElecD(Connection dbc) { return utilityUseDAO.getChUseElecD(dbc); }
     public JSONArray getChUseGas(Connection dbc) { return utilityUseDAO.getChUseGas(dbc); }
     public JSONArray getChWebData() { return utilityUseDAO.getChWebData(); }
