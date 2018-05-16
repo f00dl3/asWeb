@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class UtilityUseDAO {
     
-    WebCommon wc = new WebCommon(); 
+    WebCommon wc = new WebCommon();
     
     private JSONArray chCellUse(Connection dbc) {
         final String query_ch_CellUse = "SELECT A.Bill AS Bill," +
@@ -82,11 +82,11 @@ public class UtilityUseDAO {
         return tContainer;
     }
     
-    public JSONArray getChWebData() {
+    public JSONArray getChWebData(Connection dbc) {
         final String query_ch_WebData = "SELECT (MBUpload + MBDown) AS MBData, Month FROM Core.UseInternet ORDER BY Month ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ch_WebData, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_WebData, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

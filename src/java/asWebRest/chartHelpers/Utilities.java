@@ -123,7 +123,7 @@ public class Utilities {
                 .put("data", phMms_Data)
                 .put("props", phMms_Props);
         return phMms_Glob;
-    }    
+    }
     
     private JSONObject phText(JSONArray dataIn) {
         final String phText_Name = "Phone use - Text Messages";
@@ -133,9 +133,9 @@ public class Utilities {
         JSONArray phText_Data = new JSONArray();
         phText_Props
                 .put("dateFormat", "yyyy-MM")
-                .put("chartName", phText_Name).put("chartFileName", "CellMin")
-                .put("sName", "Minutes").put("sColor", "White")
-                .put("xLabel", "Date").put("yLabel", "Minutes");
+                .put("chartName", phText_Name).put("chartFileName", "CellText")
+                .put("sName", "Messages").put("sColor", "White")
+                .put("xLabel", "Date").put("yLabel", "Messages");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             phText_Labels.put(thisObject.getString("Bill"));
@@ -147,6 +147,29 @@ public class Utilities {
                 .put("props", phText_Props);
         return phText_Glob;
     }
+       
+    private JSONObject webData(JSONArray dataIn) {
+        final String webData_Name = "Web use - Data";
+        JSONObject webData_Glob = new JSONObject();
+        JSONObject webData_Props = new JSONObject();
+        JSONArray webData_Labels = new JSONArray();
+        JSONArray webData_Data = new JSONArray();
+        webData_Props
+                .put("dateFormat", "yyyy-MM")
+                .put("chartName", webData_Name).put("chartFileName", "WebData")
+                .put("sName", "MB Data").put("sColor", "White")
+                .put("xLabel", "Date").put("yLabel", "MB Data");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            webData_Labels.put(thisObject.getString("Month"));
+            webData_Data.put(thisObject.getLong("MBData"));
+        }
+        webData_Glob
+                .put("labels", webData_Labels)
+                .put("data", webData_Data)
+                .put("props", webData_Props);
+        return webData_Glob;
+    }
     
     public JSONObject getGasMcf(JSONArray dataIn) { return gasMcf(dataIn); }
     public JSONObject getKWhU(JSONArray dataIn) { return kWhU(dataIn); }
@@ -154,5 +177,6 @@ public class Utilities {
     public JSONObject getPhMin(JSONArray dataIn) { return phMin(dataIn); }
     public JSONObject getPhMms(JSONArray dataIn) { return phMms(dataIn); }
     public JSONObject getPhText(JSONArray dataIn) { return phText(dataIn); }
+    public JSONObject getWebData(JSONArray dataIn) { return webData(dataIn); }
     
 }

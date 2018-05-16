@@ -94,11 +94,11 @@ function putUtils(uuRelations, settingC, settingH, uuData) {
     });
     heatTable += "</tbody></table>";
     rTable += heatTable + "</div></div></th>" +
-            "<th><span class='UChart'>Cell<br/>MIN<div class='UChartO'><a href='" + doCh("p", "CellMin", null) + "'><img class='ch_large' src='" + doCh("p", "CellMin", "Thumb=1") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>Txt<div class='UChartO'><a href='" + doCh("p", "CellTxt", null) + "'><img class='ch_large' src='" + doCh("p", "CellTxt", "Thumb=1") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>MMS<div class='UChartO'><a href='" + doCh("p", "CellMMS", null) + "'><img class='ch_large' src='" + doCh("p", "CellMMS", "Thumb=1") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>Data<div class='UChartO'><a href='" + doCh("p", "CellData", null) + "'><img class='ch_large' src='" + doCh("p", "CellData", "Thumb=1") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Web<br/>Data<div class='UChartO'><a href='" + doCh("p", "WebData", null) + "'><img class='ch_large' src='" + doCh("p", "WebData", "Thumb=1") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>MIN<div class='UChartO'><a href='" + doCh("j", "CellMin", null) + "'><img class='ch_large' src='" + doCh("j", "CellMin", "th") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>Txt<div class='UChartO'><a href='" + doCh("j", "CellText", null) + "'><img class='ch_large' src='" + doCh("j", "CellTxt", "th") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>MMS<div class='UChartO'><a href='" + doCh("j", "CellMMS", null) + "'><img class='ch_large' src='" + doCh("j", "CellMMS", "th") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>Data<div class='UChartO'><a href='" + doCh("j", "CellData", null) + "'><img class='ch_large' src='" + doCh("j", "CellData", "th") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Web<br/>Data<div class='UChartO'><a href='" + doCh("j", "WebData", null) + "'><img class='ch_large' src='" + doCh("j", "WebData", "th") + "' /></a></div></span></th>" +
             "</tr></thead><tbody>";
     Object.keys(uuData).sort().reverse().forEach(function (mo) {
         var dayEleCost = (uuData[mo].kWh_Avg * elecCost);

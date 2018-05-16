@@ -268,18 +268,21 @@ public class ChartResource extends ServerResource {
                     JSONArray gasMcf_Raw = getUtilityUseAction.getChUseGas(dbc);
                     JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
                     JSONArray ph_Raw = getUtilityUseAction.getChCellUse(dbc);
+                    JSONArray webData_Raw = getUtilityUseAction.getChWebData(dbc);
                     JSONObject gasMcf_Glob = util.getGasMcf(gasMcf_Raw);
                     JSONObject kWhU_Glob = util.getKWhU(kWhU_Raw);
                     JSONObject phData_Glob = util.getPhData(ph_Raw);
                     JSONObject phMin_Glob = util.getPhMin(ph_Raw);
                     JSONObject phMms_Glob = util.getPhMms(ph_Raw);
                     JSONObject phText_Glob = util.getPhText(ph_Raw);
+                    JSONObject webData_Glob = util.getWebData(webData_Raw);
                     try { dynChart.LineChart(gasMcf_Glob); returnData += "Chart generated - Gas!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(kWhU_Glob); returnData += "Chart generated - Electricity!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(phData_Glob); returnData += "Chart generated - Phone Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(phMin_Glob); returnData += "Chart generated - Phone Minutes!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(phMms_Glob); returnData += "Chart generated - Phone MMS Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(phText_Glob); returnData += "Chart generated - Phone Text Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(webData_Glob); returnData += "Chart generated - Web Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                     
                 case "WeatherCf6OverviewCharts":
