@@ -49,7 +49,8 @@ public class Finance {
                 .put("data3", bill_Data3)
                 .put("data4", bill_Data4)
                 .put("data5", bill_Data5)
-                .put("data6", bill_Data6);
+                .put("data6", bill_Data6)
+                .put("props", bill_Props);
         return bill_Glob;
     }
 

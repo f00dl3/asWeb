@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 15 May 2018
+Updated: 16 May 2018
  */
 
 package asWebRest.resource;
@@ -26,8 +26,6 @@ import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +50,8 @@ public class ChartResource extends ServerResource {
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         
+        Finance fin = new Finance();
+                    
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
@@ -80,9 +80,15 @@ public class ChartResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
+                case "FinanceBills":
+                    genericCharts = false;
+                    JSONArray bill_Raw = getFinanceAction.getBills(dbc);
+                    JSONObject bill_Glob = fin.getBillCh(bill_Raw);
+                    try { dynChart.LineChart(bill_Glob); returnData += "Chart generated - Bills!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    break;
+                
                 case "FinanceOverviewCharts":
                     genericCharts = false;
-                    Finance fin = new Finance();
                     JSONArray enw_Raw = getFinanceAction.getEnwChart(dbc);
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
                     JSONObject enw_Glob = fin.getFinEnw(enw_Raw);
