@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 6 May 2018
+Updated: 17 May 2018
  */
 
 function actOnShowFeed() {
@@ -116,6 +116,8 @@ function popEarthquakes() {
     var rData = "<h4>Earthquakes</h4>" +
             "<strong>See Weather Map for live and historical / archived data!</strong><p>" +
             "<span id='qLinkHolder'></span>";
+    var vData = "<div id='vHolder'></div>";
+    rData += vData;
     dojo.byId("WxQuakes").innerHTML = rData;
     getWebLinks("Weather.php-EQuake", "qLinkHolder", null);
 }

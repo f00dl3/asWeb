@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    14 May 2018
+    Updated:    17 May 2018
     Author     : astump
 --%>
 
@@ -64,6 +64,7 @@
     String[] wxScripts = {
         "Weather/Archive",
         "Weather/Cf6Data",
+        "Weather/Kilaeua",
         "Weather/MosData",
         "Weather/WxFunctions",
         "Weather/WxLiveInside",
