@@ -8,8 +8,8 @@ function populateKilaeuaData() {
             "<a href='https://volcanoes.usgs.gov/observatories/hvo/' target='hvo'>Hawaii Volcano Observatory</a><br/>" +
             "<a href='http://volcanoyt.com' target='volyt'>VolcanoYT Website</a><br/>" +
             "<a href='https://www.youtube.com/live_chat?v=GJ7muLq5O9o' target='vchat'>YT Volcano Chat</a><br/>" +
-            "<a href='https://livestormchasing.com/stream/Brandon.Clement' target='live'>Brandon Clement Live Storm Chasing</a><br/>"
-            "** Volcano Cam Leeching";
+            "<a href='https://livestormchasing.com/stream/Brandon.Clement' target='live'>Brandon Clement Live Storm Chasing</a><br/>" +
+            "** Volcano Cam Leeching<p>";
     dojo.byId("vHolder").innerHTML = rData;
 }
 

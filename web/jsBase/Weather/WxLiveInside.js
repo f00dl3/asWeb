@@ -120,6 +120,7 @@ function popEarthquakes() {
     rData += vData;
     dojo.byId("WxQuakes").innerHTML = rData;
     getWebLinks("Weather.php-EQuake", "qLinkHolder", null);
+    populateKilaeuaData();
 }
 
 function popFeeds(spcFeedData) {
