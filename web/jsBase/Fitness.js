@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 29 Apr 2018
+Updated: 20 May 2018
  */
 
 var myHeight = 68;
@@ -271,6 +271,7 @@ function processFitnessAll(dataIn, autoMpg) {
         if(!tData.RunWalk) { tData.RunWalk = " "; }
         if(!tData.Cycling) { tData.Cycling = " "; }
         if(!tData.Calories) { tData.Calories = " "; }
+        if(isSet(tData.EstHoursSleep)) { sleepHours = "<strong>Sleep</strong>: " + tData.EstHoursSleep + " hrs<br/>"; }
         if(tData.BkStudT === 1) { bkStuds = " style='background: blue; color: white;'"; }
         if(tData.Gym === 1) {
             gym = "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg'/>" +
@@ -345,6 +346,7 @@ function processFitnessAll(dataIn, autoMpg) {
         rData += "<tr>";
         rData += "<td><div class='UPop'>" + tData.Date +
                 "<div class='UPopO'>" +
+                sleepHours +
                 "High: <span style='" + styleTemp(tData.High) + "'>" + tData.High + "</span><br/>" +
                 "Low: <span style='" + styleTemp(tData.Low) + "'>" + tData.Low + "</span><br/>" +
                 "Average: <span style='" + styleTemp(tData.Average) + "'>" + tData.Average + "</span>" +

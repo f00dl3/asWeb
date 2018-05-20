@@ -13,14 +13,14 @@ function actUpdateTodaySubmit(event) {
 
 function fitnessToday(dataIn) {
     if(!isSet(dataIn)) { dataIn = {}; }
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags, hSleep;
     studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
-    if(!isSet(dataIn.EstHoursSleep)) { sleep = ""; } else { sleep = dataIn.EstHoursSleep; }
+    if(!isSet(dataIn.EstHoursSleep)) { hSleep = ""; } else { hSleep = dataIn.EstHoursSleep; }
     if(!isSet(dataIn.xTags)) {
         if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
     } else {
@@ -41,7 +41,7 @@ function fitnessToday(dataIn) {
             "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
             "<input type='hidden' name='TodayBicycle' value='" + bicycleUsed + "'/>" +
             "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
-            "<tr><td>Sleep</td><td><input type='number' step='0.1' name='TodayEstHoursSleep' value='" + sleep + "'/></td></tr>" +
+            "<tr><td>Sleep</td><td><input type='number' step='0.1' name='TodayEstHoursSleep' value='" + hSleep + "'/></td></tr>" +
             "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
             "</tbody></table>";
     holderData += tableData +
