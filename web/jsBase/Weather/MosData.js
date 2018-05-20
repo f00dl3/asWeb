@@ -83,7 +83,7 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         runString = jmd.RunString;
         dataCMC = jmd.CMC;
         dataGFS = jmd.GFS;
-        dataHRRR = jmd.HRRR;
+        dataHRRR = JSON.parse(jmd.HRRR);
         dataHRWA = jmd.HRWA;
         dataHRWN = jmd.HRWN;
         dataSRFA = jmd.SRFA;
@@ -107,45 +107,49 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     var mosTable = "<div class='table'><div class='tr'>";
     for(var i = 0; i < mosCols.length; i++) { mosTable += "<span class='td'><strong>" + mosCols[i] + "</strong></span>"; }
     mosTable += "</div>";
-    gfsFh.forEach(function (tfh) {
-        console.log(tfh);
+    gfsFh.forEach(function (tfhA) {
+        
+        var tfh = tfhA.FHour;
+        
         if(isSet(tfh)) {
             var tValidTime = runDateTime; // clone it again
             //var dtTValidTime = getDate();
             tValidTime = tValidTime; // modify it + x hours
             var tValidTimeString = tValidTime; // convert to string, again, image format Ymd_H for files
         }
-        console.log(dataHRRR);
-        if(
-                isSet(dataCMC) && isSet(dataCMC["T0_" + tfh]) ||
-                isSet(dataGFS) && isSet(dataGFS["T0_" + tfh]) ||
-                isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh]) ||
-                isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh]) ||
-                isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh]) ||
-                isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh]) ||
-                isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh]) ||
-                isSet(dataNAM) && isSet(dataNAM["T0_" + tfh]) ||
-                isSet(dataRAP) && isSet(dataRAP["T0_" + tfh])
-        ) {
-            tAutoCounter = 0;
-            var tAuto0TF = 0;
-            if(isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
-            if(isSet(dataGFS["T0_" + tfh]) && dataGFS["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataGFS["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
-            if(isSet(dataHRRR["T0_" + tfh]) && dataHRRR["T0_" + tfh] > -50) {
-                console.log(dataHRRR["T0_" + tfh]+" "+tAutoCounter+" " + tAuto0TF);
-                var tModelAu = conv2Tf(dataHRRR["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++;
-            } else {
-                console.log("No hit on HRRR for " + tfh);
-            }
-            tAuto0TF = Math.round(tAuto0TF/tAutoCounter);
-            tAutoCounter = 0;
-            var tAuto900TF = 0;
-        } else {
-            console.log("isset condition not met!");
-        }
+        
+        tAutoCounter = 0;
+        var tAuto0TF = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["T0_" + tfh]) && dataGFS["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataGFS["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh]) && dataHRRR["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRRR["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh]) && dataHRWA["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRWA["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh]) && dataHRWN["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRWN["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh]) && dataSRFA["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataSRFA["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh]) && dataSRFN["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataSRFN["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["T0_" + tfh]) && dataNAM["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataNAM["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["T0_" + tfh]) && dataRAP["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataRAP["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+        tAuto0TF = Math.round(tAuto0TF/tAutoCounter);
+        
+        tAutoCounter = 0;
+        var tAuto900TF = 0;
+        
         mosTable += "<div class='tr'>" +
-                "<span class='td'>" + tValidTime + " " + tAuto0TF + "</span>" +
+                "<span class='td'>" + tValidTime + "</span>" +
+                "<span class='td' style='" + styleTemp(tAuto0TF) + "'><div class='UPop'>" + tAuto0TF +
+                "<div class='UPopO'>";
+        if(isSet(dataCMC) && isSet(dataCMC["T0_" + tfh])) { mosTable += "<strong>CMC</strong>: <span style='" + styleTemp(conv2Tf(dataCMC["T0_" + tfh])) + "'>" + conv2Tf(dataCMC["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataGFS) && isSet(dataGFS["T0_" + tfh])) { mosTable += "<strong>GFS</strong>: <span style='" + styleTemp(conv2Tf(dataGFS["T0_" + tfh])) + "'>" + conv2Tf(dataGFS["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh])) { mosTable += "<strong>HRRR</strong>: <span style='" + styleTemp(conv2Tf(dataHRRR["T0_" + tfh])) + "'>" + conv2Tf(dataHRRR["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh])) { mosTable += "<strong>HRWA</strong>: <span style='" + styleTemp(conv2Tf(dataHRWA["T0_" + tfh])) + "'>" + conv2Tf(dataHRWA["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh])) { mosTable += "<strong>HRWN</strong>: <span style='" + styleTemp(conv2Tf(dataHRWN["T0_" + tfh])) + "'>" + conv2Tf(dataHRWN["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh])) { mosTable += "<strong>SRFA</strong>: <span style='" + styleTemp(conv2Tf(dataSRFA["T0_" + tfh])) + "'>" + conv2Tf(dataSRFA["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh])) { mosTable += "<strong>SRFN</strong>: <span style='" + styleTemp(conv2Tf(dataSRFN["T0_" + tfh])) + "'>" + conv2Tf(dataSRFN["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataNAM) && isSet(dataNAM["T0_" + tfh])) { mosTable += "<strong>NAM</strong>: <span style='" + styleTemp(conv2Tf(dataNAM["T0_" + tfh])) + "'>" + conv2Tf(dataNAM["T0_" + tfh]) + "</span><br/>"; }
+        if(isSet(dataRAP) && isSet(dataRAP["T0_" + tfh])) { mosTable += "<strong>RAP</strong>: <span style='" + styleTemp(conv2Tf(dataRAP["T0_" + tfh])) + "'>" + conv2Tf(dataRAP["T0_" + tfh]) + "</span><br/>"; }
+        mosTable += "</div></div></span>" +
                 "</div>";
+        
     });
     mosTable += "</div>";
     rData += mosTable;
