@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 13 May 2018
+Updated: 17 May 2018
  */
 
 package asWebRest.hookers;
@@ -11,7 +11,7 @@ import asWebRest.shared.WebCommon;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
@@ -68,9 +68,19 @@ public class DynChartX {
         XYChart chart = new XYChart(width, height);
         XYChart thChart = new XYChart(thWidth, thHeight);
         
-        List<Date> xData = wc.arrayListDateFromJson(jsonLabelArray, jp.getString("dateFormat"));
-        List<Float> yData = wc.arrayListFloatFromJson(jsonDataArray);
+        String dateFormat = "yyyyMMddHHmmss";
+        try { dateFormat = jp.getString("dateFormat"); } catch (Exception e) { e.printStackTrace(); }
         
+        List<Date> xData = new ArrayList<>();
+        List<Float> yData = new ArrayList<>();
+        
+        try { 
+            xData = wc.arrayListDateFromJson(jsonLabelArray, dateFormat);
+            yData = wc.arrayListFloatFromJson(jsonDataArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+            
         Color sColor = getSeriesColor(jp.getString("sColor"));
         
         chart.setTitle(jp.getString("chartName"));

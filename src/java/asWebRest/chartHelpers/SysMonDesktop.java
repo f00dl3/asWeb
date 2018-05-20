@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 13 May 2018
+Updated: 17 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -215,8 +215,16 @@ public class SysMonDesktop {
             if(mSysDiskIO_LastTotal <= mSysDiskIO_ThisTotal && mSysDiskIO_LastTotal != 0) {
                 if(mSysDiskIO_Cumulative != 0) { mSysDiskIO_Cumulative = mSysDiskIO_Cumulative + (mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal); }
                 mSysDiskIO_Data.put((mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal)/1000/intLen/step);
-                if(mSysDiskIO_LastRead <= mSysDiskIO_ThisRead) { mSysDiskIO_Data2.put((mSysDiskIO_ThisRead - mSysDiskIO_LastRead)/1000/intLen/step); }
-                if(mSysDiskIO_LastWrite <= mSysDiskIO_ThisWrite) { mSysDiskIO_Data3.put((mSysDiskIO_ThisWrite - mSysDiskIO_LastWrite)/1000/intLen/step); }
+                if(mSysDiskIO_LastRead <= mSysDiskIO_ThisRead) {
+                    mSysDiskIO_Data2.put((mSysDiskIO_ThisRead - mSysDiskIO_LastRead)/1000/intLen/step);
+                } else {
+                    mSysDiskIO_Data2.put("0");
+                }
+                if(mSysDiskIO_LastWrite <= mSysDiskIO_ThisWrite) {
+                    mSysDiskIO_Data3.put((mSysDiskIO_ThisWrite - mSysDiskIO_LastWrite)/1000/intLen/step);
+                } else {
+                    mSysDiskIO_Data3.put("0");
+                }
             }
             mSysDiskIO_LastTotal = mSysDiskIO_ThisTotal;
             mSysDiskIO_LastRead = mSysDiskIO_ThisRead;

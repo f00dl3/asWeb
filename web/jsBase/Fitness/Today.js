@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Today.js split: 4 Apr 2018
+Updated: 20 May 2018
  */
 
 function actUpdateTodaySubmit(event) {
@@ -19,6 +20,7 @@ function fitnessToday(dataIn) {
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
+    if(!isSet(dataIn.EstHoursSleep)) { sleep = ""; } else { sleep = dataIn.EstHoursSleep; }
     if(!isSet(dataIn.xTags)) {
         if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
     } else {
@@ -39,6 +41,7 @@ function fitnessToday(dataIn) {
             "C<input type='checkbox' style='width: 15px;' name='TodayCommonRoute' " + commonRouteChecked + "/></td></tr>" +
             "<input type='hidden' name='TodayBicycle' value='" + bicycleUsed + "'/>" +
             "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
+            "<tr><td>Sleep</td><td><input type='number' step='0.1' name='TodayEstHoursSleep' value='" + sleep + "'/></td></tr>" +
             "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
             "</tbody></table>";
     holderData += tableData +

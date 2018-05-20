@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 9 May 2018
+Updated: 20 May 2018
  */
 
 function displayModelData() {
@@ -40,6 +40,7 @@ function getModelData() {
 }
 
 function processMosData(last, heights, hours, runs, jsonModelData) {
+    var tAutoCounter = 0;
     var searchString = last.RunString;
     var runString, dataCMC, dataGFS, dataHRRR, dataHRWA, dataHRWN, dataSRFA, dataSRFN, dataNAM, dataRAP;
     var mosCols = [ "Forecast", "TA", "TD", "RH", "WND", "P3", "PT", "X3", "PW", "LI", "CAPE", "CIN" ];
@@ -90,6 +91,7 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         dataNAM = jmd.NAM;
         dataRAP = jmd.RAP;
     });
+    rData += "</div>";
     if(isSet(dataCMC) && isSet(dataCMC.T0_3)) { reportingModels += " CMC"; }
     if(isSet(dataGFS) && isSet(dataGFS.T0_3)) { reportingModels += " GMC"; }
     if(isSet(dataHRRR) && isSet(dataHRRR.T0_3)) { reportingModels += " HRRR"; }
@@ -103,35 +105,50 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     var urlPrefix = runDateTime; // clone it
     urlPrefix = urlPrefix; // format to Ymd_H for image files!
     var mosTable = "<div class='table'><div class='tr'>";
-    for(var i = 0; i < mosCols.length; i++) { mosTable += "<span class='th'>" + mosCols[i] + "</span>"; }
+    for(var i = 0; i < mosCols.length; i++) { mosTable += "<span class='td'><strong>" + mosCols[i] + "</strong></span>"; }
     mosTable += "</div>";
     gfsFh.forEach(function (tfh) {
+        console.log(tfh);
         if(isSet(tfh)) {
             var tValidTime = runDateTime; // clone it again
+            //var dtTValidTime = getDate();
             tValidTime = tValidTime; // modify it + x hours
             var tValidTimeString = tValidTime; // convert to string, again, image format Ymd_H for files
         }
+        console.log(dataHRRR);
         if(
-                isSet(dataCMC) && isSet(dataCMC["T0_" + tfh]) &&
-                isSet(dataGFS) && isSet(dataGFS["T0_" + tfh]) &&
-                isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh]) &&
-                isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh]) &&
-                isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh]) &&
-                isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh]) &&
-                isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh]) &&
-                isSet(dataNAM) && isSet(dataNAM["T0_" + tfh]) &&
+                isSet(dataCMC) && isSet(dataCMC["T0_" + tfh]) ||
+                isSet(dataGFS) && isSet(dataGFS["T0_" + tfh]) ||
+                isSet(dataHRRR) && isSet(dataHRRR["T0_" + tfh]) ||
+                isSet(dataHRWA) && isSet(dataHRWA["T0_" + tfh]) ||
+                isSet(dataHRWN) && isSet(dataHRWN["T0_" + tfh]) ||
+                isSet(dataSRFA) && isSet(dataSRFA["T0_" + tfh]) ||
+                isSet(dataSRFN) && isSet(dataSRFN["T0_" + tfh]) ||
+                isSet(dataNAM) && isSet(dataNAM["T0_" + tfh]) ||
                 isSet(dataRAP) && isSet(dataRAP["T0_" + tfh])
         ) {
-            var tAutoCounter = 0;
+            tAutoCounter = 0;
             var tAuto0TF = 0;
-            if(isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) {
-                var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++;
+            if(isSet(dataCMC["T0_" + tfh]) && dataCMC["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataCMC["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+            if(isSet(dataGFS["T0_" + tfh]) && dataGFS["T0_" + tfh] > -50) { var tModelAu = conv2Tf(dataGFS["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++; }
+            if(isSet(dataHRRR["T0_" + tfh]) && dataHRRR["T0_" + tfh] > -50) {
+                console.log(dataHRRR["T0_" + tfh]+" "+tAutoCounter+" " + tAuto0TF);
+                var tModelAu = conv2Tf(dataHRRR["T0_" + tfh]); tAuto0TF += tModelAu; tAutoCounter++;
+            } else {
+                console.log("No hit on HRRR for " + tfh);
             }
             tAuto0TF = Math.round(tAuto0TF/tAutoCounter);
             tAutoCounter = 0;
             var tAuto900TF = 0;
+        } else {
+            console.log("isset condition not met!");
         }
-    }); 
+        mosTable += "<div class='tr'>" +
+                "<span class='td'>" + tValidTime + " " + tAuto0TF + "</span>" +
+                "</div>";
+    });
+    mosTable += "</div>";
+    rData += mosTable;
     dojo.byId("WxLocalModel").innerHTML = rData;
 }
 

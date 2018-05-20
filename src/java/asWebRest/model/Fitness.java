@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 28 Feb 2018
+Updated: 20 May 2018
 
 Applies to multiple tables:
     Core.Fitness
@@ -47,6 +47,7 @@ public class Fitness {
     private double cycSpeedMax;
     private double cycling;
     private String date;
+    private double estHoursSleep;
     private int exMin;
     private int fat;
     private int fiber;
@@ -108,6 +109,7 @@ public class Fitness {
     public double getCycSpeedMax() { return cycSpeedMax; }
     public double getCycling() { return cycling; }
     public String getDate() { return date; }
+    public double getEstHoursSleep() { return estHoursSleep; }
     public int getExMin() { return exMin; }
     public int getFat() { return fat; }
     public int getFiber() { return fiber; }

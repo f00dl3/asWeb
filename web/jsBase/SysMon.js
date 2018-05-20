@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 14 May 2018
+Updated: 17 May 2018
 */
 
 var chartArray;
@@ -257,7 +257,7 @@ function populateStatusHolder(target, stateData) {
 }
 
 function initSysMon() {
-    //snmpRapid("snmpDataRapidHolder");
+    snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     populateCharts();
     getEDiscovery();
