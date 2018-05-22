@@ -52,7 +52,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
             "Auto-updated hourly</em><p>" +
             "<a href='" + getBasePath("g2OutOld") + "' target='new'>Automatic model image output</a>";
     var models = [ "CMC", "GFS", "HRRR", "NAM", "RAP", "HRWA", "HRWN", "SRFA", "SRFN" ];
-    var heights = []; heightsIn.forEach(function (hgt) { heights.push(hgt); mosCols.push(hgt); });
+    var heights = []; heightsIn.forEach(function (hgt) { heights.push(hgt.HeightMb); mosCols.push(hgt.HeightMb); });
     var gfsFh = []; hours.forEach(function (tfh) { gfsFh.push(tfh); });
     var reportingModels = "";
     var estZRTot, estSnowTot, precipTot, mosi;
@@ -304,15 +304,15 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
                 "<span class='td' style='" + styleWind(tAuto0WS) + "'>" + windDirSvg(tAuto0WD) + " (" + tAuto0WS + ")</span>" +
                 "<span class='td' style='" + styleLiquid(tAutoPRATE) + "'><div class='UPop'>" + tAutoPRATE +
                 "<div class='UPopO'>";
-        if(isSet(dataCMC) && isSet(dataCMC["PRATE_" + tfh])) { mosTable += "<strong>CMC</strong>: <span style='" + styleTemp(dataCMC["PRATE_" + tfh]) + "'>" + dataCMC["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataGFS) && isSet(dataGFS["PRATE_" + tfh])) { mosTable += "<strong>GFS</strong>: <span style='" + styleTemp(dataGFS["PRATE_" + tfh]) + "'>" + dataGFS["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataHRRR) && isSet(dataHRRR["PRATE_" + tfh])) { mosTable += "<strong>HRRR</strong>: <span style='" + styleTemp(dataHRRR["PRATE_" + tfh]) + "'>" + dataHRRR["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataHRWA) && isSet(dataHRWA["PRATE_" + tfh])) { mosTable += "<strong>HRWA</strong>: <span style='" + styleTemp(dataHRWA["PRATE_" + tfh]) + "'>" + dataHRWA["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataHRWN) && isSet(dataHRWN["PRATE_" + tfh])) { mosTable += "<strong>HRWN</strong>: <span style='" + styleTemp(dataHRWN["PRATE_" + tfh]) + "'>" + dataHRWN["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataSRFA) && isSet(dataSRFA["PRATE_" + tfh])) { mosTable += "<strong>SRFA</strong>: <span style='" + styleTemp(dataSRFA["PRATE_" + tfh]) + "'>" + dataSRFA["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataSRFN) && isSet(dataSRFN["PRATE_" + tfh])) { mosTable += "<strong>SRFN</strong>: <span style='" + styleTemp(dataSRFN["PRATE_" + tfh]) + "'>" + dataSRFN["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataNAM) && isSet(dataNAM["PRATE_" + tfh])) { mosTable += "<strong>NAM</strong>: <span style='" + styleTemp(dataNAM["PRATE_" + tfh]) + "'>" + dataNAM["PRATE_" + tfh] + "</span><br/>"; }
-        if(isSet(dataRAP) && isSet(dataRAP["PRATE_" + tfh])) { mosTable += "<strong>RAP</strong>: <span style='" + styleTemp(dataRAP["PRATE_" + tfh]) + "'>" + dataRAP["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataCMC) && isSet(dataCMC["PRATE_" + tfh])) { mosTable += "<strong>CMC</strong>: <span style='" + styleLiquid(dataCMC["PRATE_" + tfh]) + "'>" + dataCMC["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataGFS) && isSet(dataGFS["PRATE_" + tfh])) { mosTable += "<strong>GFS</strong>: <span style='" + styleLiquid(dataGFS["PRATE_" + tfh]) + "'>" + dataGFS["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["PRATE_" + tfh])) { mosTable += "<strong>HRRR</strong>: <span style='" + styleLiquid(dataHRRR["PRATE_" + tfh]) + "'>" + dataHRRR["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["PRATE_" + tfh])) { mosTable += "<strong>HRWA</strong>: <span style='" + styleLiquid(dataHRWA["PRATE_" + tfh]) + "'>" + dataHRWA["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["PRATE_" + tfh])) { mosTable += "<strong>HRWN</strong>: <span style='" + styleLiquid(dataHRWN["PRATE_" + tfh]) + "'>" + dataHRWN["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["PRATE_" + tfh])) { mosTable += "<strong>SRFA</strong>: <span style='" + styleLiquid(dataSRFA["PRATE_" + tfh]) + "'>" + dataSRFA["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["PRATE_" + tfh])) { mosTable += "<strong>SRFN</strong>: <span style='" + styleLiquid(dataSRFN["PRATE_" + tfh]) + "'>" + dataSRFN["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataNAM) && isSet(dataNAM["PRATE_" + tfh])) { mosTable += "<strong>NAM</strong>: <span style='" + styleLiquid(dataNAM["PRATE_" + tfh]) + "'>" + dataNAM["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
+        if(isSet(dataRAP) && isSet(dataRAP["PRATE_" + tfh])) { mosTable += "<strong>RAP</strong>: <span style='" + styleLiquid(dataRAP["PRATE_" + tfh]) + "'>" + dataRAP["PRATE_" + tfh].toFixed(2) + "</span><br/>"; }
         mosTable += "</div></div></span>" +
                 "<span class='td' style='" + styleLiquid(precipTot) + "'>" + precipTot + "</span>" +
                 "<span class='td " + colorSnow(estimatedSnow) + "'><div class='UPopNM'>" + estimatedSnow + 
@@ -325,7 +325,19 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
                 "<span class='td' style='" + styleCape(tAutoCAPE) + "'>" + tAutoCAPE + "</span>" +
                 "<span class='td " + colorCin(tAutoCIN) + "'>" + tAutoCIN + "</span>";
         heights.forEach(function (hgt) {
-            mosTable += "<span class='td'>" + hgt + "</span>";
+            tAutoCounter = 0;
+            var tAutoTHgt = 0;
+            if(isSet(dataCMC) && isSet(dataCMC["T" + hgt + "_" + tfh]) && dataCMC["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataCMC["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataGFS) && isSet(dataGFS["T" + hgt + "_" + tfh]) && dataGFS["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataGFS["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataHRRR) && isSet(dataHRRR["T" + hgt + "_" + tfh]) && dataHRRR["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRRR["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataHRWA) && isSet(dataHRWA["T" + hgt + "_" + tfh]) && dataHRWA["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRWA["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataHRWN) && isSet(dataHRWN["T" + hgt + "_" + tfh]) && dataHRWN["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataHRWN["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataSRFA) && isSet(dataSRFA["T" + hgt + "_" + tfh]) && dataSRFA["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataSRFA["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataSRFN) && isSet(dataSRFN["T" + hgt + "_" + tfh]) && dataSRFN["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataSRFN["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataNAM) && isSet(dataNAM["T" + hgt + "_" + tfh]) && dataNAM["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataNAM["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            if(isSet(dataRAP) && isSet(dataRAP["T" + hgt + "_" + tfh]) && dataRAP["T" + hgt + "_" + tfh] > -50) { var tModelAu = conv2Tf(dataRAP["T" + hgt + "_" + tfh]); tAutoTHgt += tModelAu; tAutoCounter++; }
+            tAutoTHgt = Math.round(tAutoTHgt/tAutoCounter);
+            mosTable += "<span class='td' style='" + styleTemp(tAutoTHgt) + "'>" + tAutoTHgt + "</span>";
         });
         mosTable += "</div>";
         

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 21 May 2018
+Updated: 22 May 2018
  */
 
 var myHeight = 68;
@@ -163,7 +163,7 @@ function getFitnessAllData(inXdt1, inXdt2) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);
