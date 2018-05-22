@@ -7,6 +7,7 @@ Updated: 16 Apr 2018
 package asWebRest.resource;
 
 import asWebRest.action.GetEntertainmentAction;
+import asWebRest.action.UpdateEntertainmentAction;
 import asWebRest.dao.EntertainmentDAO;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
@@ -29,6 +30,7 @@ public class EntertainmentResource extends ServerResource {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetEntertainmentAction getEntertainmentAction = new GetEntertainmentAction(new EntertainmentDAO());
+        UpdateEntertainmentAction updateEntertainmentAction = new UpdateEntertainmentAction(new EntertainmentDAO());
                         
         JSONObject mergedResults = new JSONObject();
         List<String> qParams = new ArrayList<>();
@@ -90,6 +92,11 @@ public class EntertainmentResource extends ServerResource {
                 case "getXFiles":
                     JSONArray xf = getEntertainmentAction.getXFiles(dbc);
                     returnData += xf.toString();
+                    break;
+                    
+                case "setFfxivQuestDone":
+                    qParams.add(0, argsInForm.getFirstValue("questOrder"));
+                    returnData += updateEntertainmentAction.setFfxivQuestDone(dbc, qParams);
                     break;
                     
             }

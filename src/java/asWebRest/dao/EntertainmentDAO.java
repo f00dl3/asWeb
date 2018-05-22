@@ -1,20 +1,30 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 16 Apr 2018
+Updated: 22 May 2018
 */
 
 package asWebRest.dao;
 
+import asWebRest.shared.CommonBeans;
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class EntertainmentDAO {
     
     WebCommon wc = new WebCommon();
+    CommonBeans wcb = new CommonBeans();
+        
+    private String ffxivQuestDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Quests SET Completed=1, OrigCompDate=CURDATE() WHERE QuestOrder=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_QuestDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
     
     public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
@@ -281,5 +291,7 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return xTags;
     }
+ 
+    public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     
 }
