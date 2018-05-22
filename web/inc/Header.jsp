@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    17 May 2018
+    Updated:    22 May 2018
     Author     : astump
 --%>
 
@@ -20,6 +20,7 @@
     String[] etScripts = {
         "Entertain/Cooking",
         "Entertain/Dbx",
+        "Entertain/Ffxiv",
         "Entertain/Games",
         "Entertain/Gallery",
         "Entertain/Goosebumps",
