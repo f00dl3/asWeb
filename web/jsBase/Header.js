@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 14 May 2018
+Updated: 22 May 2018
  */
 
 
@@ -415,6 +415,8 @@ function putWebLinks(data, whereTo, outputType) {
                 theLink = theData.URL;
             }
         }
+        // Temporary link patches until Local Map Server moves to REST API
+        if(theData.Description === "Local Map Server") { theLink = getBasePath("old") + "/Maps"; }
         switch(outputType) {
             case "bubble":
                     placeholder += "<a href='" + theLink + "' target='new'><button class='UButton'>" + theData.Bubble + "</button></a>";
