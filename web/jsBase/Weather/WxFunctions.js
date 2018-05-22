@@ -1,11 +1,11 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 6 May 2018
+Updated: 22 May 2018
  */
 
 function color2Grad(type, direct, vals) {
-    var st = "white", fc, fw, cMatcher = vals.v1;
+    var st = "white", fc, fw, cMatcher = vals.v1, vStr1, vStr2, vStr3;
     switch(type) {
         case "H":
             var vStr1 = styleRh(vals.v1), vStr2 = styleRh(vals.v2);
@@ -45,6 +45,7 @@ function color2Grad(type, direct, vals) {
         style += ", " + vStr3;
     }
     style += ");";
+    console.log(style);
     return style;
             
 }
@@ -577,69 +578,69 @@ function windDirSvg(tDir) {
                     "<line x1=0 y1=18 x2=0 y2=10 " + stroke2Props + " />" +
                     "<line x1=0 y1=18 x2=8 y2=18 " + stroke2Props + " />";
             break;
-            case (tDir >= 56.25 && tDir < 78.75): /* ENE */
-                    "<line x1=18 y1=5 x2=0 y2=14 " + strokeProps + " >/" +
-                    "<line x1=0 y1=14 x2=3 y2=6 " + strokeProps + " >/" +
+        case (tDir >= 56.25 && tDir < 78.75): /* ENE */
+            retSvg += "<line x1=18 y1=5 x2=0 y2=14 " + strokeProps + " />" +
+                    "<line x1=0 y1=14 x2=3 y2=6 " + strokeProps + " />" +
                     "<line x1=0 y1=14 x2=8 y2=16 " + strokeProps + " />";
             break;
         case (tDir >= 78.75 && tDir < 101.25): /* E */
-                    "<line x1=0 y1=9 x2=18 y2=9 " + strokeProps + " >/" +
-                    "<line x1=0 y1=9 x2=6 y2=3 " + strokeProps + " >/" +
+            retSvg += "<line x1=0 y1=9 x2=18 y2=9 " + strokeProps + " />" +
+                    "<line x1=0 y1=9 x2=6 y2=3 " + strokeProps + " />" +
                     "<line x1=0 y1=9 x2=6 y2=15 " + strokeProps + " />";
             break;
         case (tDir >= 101.25 && tDir < 123.75): /* ESE */
-                    "<line x1=18 y1=14 x2=0 y2=5 " + strokeProps + " >/" +
-                    "<line x1=0 y1=5 x2=6 y2=0 " + strokeProps + " >/" +
+            retSvg += "<line x1=18 y1=14 x2=0 y2=5 " + strokeProps + " />" +
+                    "<line x1=0 y1=5 x2=6 y2=0 " + strokeProps + " />" +
                     "<line x1=0 y1=5 x2=4 y2=14 " + strokeProps + " />";
             break;
         case (tDir >= 123.75 && tDir < 146.25): /* SE */
-                    "<line x1=18 y1=18 x2=0 y2=0 " + strokeProps + " >/" +
-                    "<line x1=0 y1=0 x2=8 y2=0 " + stroke2Props + " >/" +
+            retSvg += "<line x1=18 y1=18 x2=0 y2=0 " + strokeProps + " />" +
+                    "<line x1=0 y1=0 x2=8 y2=0 " + stroke2Props + " />" +
                     "<line x1=0 y1=0 x2=0 y2=8 " + stroke2Props + " />";
             break;
         case (tDir >= 146.25 && tDir < 168.75): /* SSE */
-                    "<line x1=14 y1=18 x2=5 y1=0 " + strokeProps + " >/" +
-                    "<line x1=5 y1=0 x2=1 y2=6 " + strokeProps + " >/" +
+            retSvg += "<line x1=14 y1=18 x2=5 y1=0 " + strokeProps + " />" +
+                    "<line x1=5 y1=0 x2=1 y2=6 " + strokeProps + " />" +
                     "<line x1=5 y1=0 x2=12 y2=3 " + strokeProps + " />";
             break;
         case (tDir >= 168.75 && tDir < 191.25): /* S */
-                    "<line x1=9 y1=18 x2=9 y2=0 " + strokeProps + " >/" +
-                    "<line x1=9 y1=0 x2=3 y2=6 " + strokeProps + " >/" +
+            retSvg += "<line x1=9 y1=18 x2=9 y2=0 " + strokeProps + " />" +
+                    "<line x1=9 y1=0 x2=3 y2=6 " + strokeProps + " />" +
                     "<line x1=9 y1=0 x2=15 y2=6 " + strokeProps + " />";
             break;
         case (tDir >= 191.25 && tDir < 213.75): /* SSW */
-                    "<line x1=5 y1=18 x2=14 y2=0 " + strokeProps + " >/" +
-                    "<line x1=14 y1=0 x2=6 y2=3 " + strokeProps + " >/" +
+            retSvg += "<line x1=5 y1=18 x2=14 y2=0 " + strokeProps + " />" +
+                    "<line x1=14 y1=0 x2=6 y2=3 " + strokeProps + " />" +
                     "<line x1=14 y1=0 x2=18 y2=8 " + strokeProps + " />";
             break;
         case (tDir >= 213.75 && tDir < 236.25): /* SW */
-                    "<line x1=0 y1=18 x2=18 y2=0 " + strokeProps + " >/" +
-                    "<line x1=18 y1=0 x2=10 y2=0 " + stroke2Props + " >/" +
+            retSvg += "<line x1=0 y1=18 x2=18 y2=0 " + strokeProps + " />" +
+                    "<line x1=18 y1=0 x2=10 y2=0 " + stroke2Props + " />" +
                     "<line x1=18 y1=0 x2=18 y2=8 " + stroke2Props + " />";
             break;
         case (tDir >= 236.25 && tDir < 258.75): /* WSW */
-                    "<line x1=0 y1=14 x2=18 y2=5 " + strokeProps + " >/" +
-                    "<line x1=18 y1=5 x2=10 y2=2 " + strokeProps + " >/" +
+            retSvg += "<line x1=0 y1=14 x2=18 y2=5 " + strokeProps + " />" +
+                    "<line x1=18 y1=5 x2=10 y2=2 " + strokeProps + " />" +
                     "<line x1=18 y1=5 x2=14 y2=16 " + strokeProps + " />";
             break;
         case (tDir >= 258.75 && tDir < 281.25): /* W */
-                    "<line x1=18 y1=9 x2=0 y2=9 " + strokeProps + " >/" +
-                    "<line x1=18 y1=9 x2=12 y2=3 " + strokeProps + " >/" +
+            retSvg += "<line x1=18 y1=9 x2=0 y2=9 " + strokeProps + " />" +
+                    "<line x1=18 y1=9 x2=12 y2=3 " + strokeProps + " />" +
                     "<line x1=18 y1=9 x2=12 y2=15 " + strokeProps + " />";
             break;
         case (tDir >= 281.25 && tDir < 303.75): /* WNW */
-                    "<line x1=0 y1=5 x2=18 y2=14 " + strokeProps + " >/" +
-                    "<line x1=18 y1=14 x2=12 y2=18 " + strokeProps + " >/" +
+            retSvg += "<line x1=0 y1=5 x2=18 y2=14 " + strokeProps + " />" +
+                    "<line x1=18 y1=14 x2=12 y2=18 " + strokeProps + " />" +
                     "<line x1=18 y1=14 x2=13 y2=6 " + strokeProps + " />";
             break;
         case (tDir >= 303.75 && tDir < 326.25): /* NW */
-                    "<line x1=0 y1=0 x2=18 y2=18 " + strokeProps + " >/" +
-                    "<line x1=18 y1=18 x2=10 y2=18 " + stroke2Props + " >/" +
+            retSvg += "<line x1=0 y1=0 x2=18 y2=18 " + strokeProps + " />" +
+                    "<line x1=18 y1=18 x2=10 y2=18 " + stroke2Props + " />" +
                     "<line x1=18 y1=18 x2=18 y2=10 " + stroke2Props + " />";
             break;
         case (tDir >= 326.25 && tDir < 348.75): /* NNW */
-                    "<line x1=5 y1=0 x2=14 y2=18 " + strokeProps + " >/" +
-                    "<line x1=14 y1=18 x2=6 y2=14 " + strokeProps + " >/" +
+            retSvg += "<line x1=5 y1=0 x2=14 y2=18 " + strokeProps + " />" +
+                    "<line x1=14 y1=18 x2=6 y2=14 " + strokeProps + " />" +
                     "<line x1=14 y1=18 x2=17 y2=10 " + strokeProps + " />";
             break;
     }       

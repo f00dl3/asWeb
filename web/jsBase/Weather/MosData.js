@@ -52,7 +52,13 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
             "Auto-updated hourly</em><p>" +
             "<a href='" + getBasePath("g2OutOld") + "' target='new'>Automatic model image output</a>";
     var models = [ "CMC", "GFS", "HRRR", "NAM", "RAP", "HRWA", "HRWN", "SRFA", "SRFN" ];
-    var heights = []; heightsIn.forEach(function (hgt) { heights.push(hgt.HeightMb); mosCols.push(hgt.HeightMb); });
+    var heights = [];
+    heightsIn.forEach(function (hgt) {
+        if(hgt.HeightMb !== 0) {
+            heights.push(hgt.HeightMb);
+            mosCols.push(hgt.HeightMb);
+        }
+    });
     var gfsFh = []; hours.forEach(function (tfh) { gfsFh.push(tfh); });
     var reportingModels = "";
     var estZRTot, estSnowTot, precipTot, mosi;

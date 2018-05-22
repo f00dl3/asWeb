@@ -243,6 +243,9 @@ function processUpperAirData(baseEle, stationData) {
         var obsData = parseWxObs(stationData);
         var doSoundingMin = "<table>";
         if(isSet(obsData.H900T)) {
+            var tA100 = [ obsData.H100T ]; var dA100 = [ obsData.H100D ];
+            var hA100 = [ obsData.H100H ]; var wA100 = [ obsData.H100WS ];
+            var hA150 = [ obsData.H100H, obsData.H125H, obsData.H150H ]; var wA150 = [ obsData.H100WS, obsData.H125WS, obsData.H150WS ];
             var tA150 = [ obsData.H100T, obsData.H125T, obsData.H150T ]; var dA150 = [ obsData.H100D, obsData.H125D, obsData.H150D ];
             var hA150 = [ obsData.H100H, obsData.H125H, obsData.H150H ]; var wA150 = [ obsData.H100WS, obsData.H125WS, obsData.H150WS ];
             var tA200 = [ obsData.H150T, obsData.H175T, obsData.H200T ]; var dA200 = [ obsData.H150D, obsData.H175D, obsData.H200D ];
@@ -279,21 +282,23 @@ function processUpperAirData(baseEle, stationData) {
             var hA950 = [ obsData.H900H, obsData.H925H, obsData.H950H ]; var wA950 = [ obsData.H900WS, obsData.H925WS, obsData.H950WS ];
             var tA1000 = [ obsData.H950T, obsData.H975T, obsData.H1000T ]; var dA1000 = [ obsData.H950D, obsData.H975D, obsData.H1000D ];
             var hA1000 = [ obsData.H950H, obsData.H975H, obsData.H1000H ]; var wA1000 = [ obsData.H950WS, obsData.H975WS, obsData.H1000WS ];
-            for(var i = h2eMap.length; i >= 0; i -= 2) {
-                if(isSet(baseEle) || baseEle >= heights[i]) {
-                    var dht = "H" + heights[i] + "T";
-                    var dhd = "H" + heights[i] + "D";
-                    var dhh = "H" + heights[i] + "H";
-                    var dhws = "H" + heights[i] + "WS";
-                    var dhwv = "H" + heights[i] + "WV";
-                    doSoundingMin += "<tr>" +
-                            "<td>+" + (h2eMap[i] - sfcFt) + " K</td>" +
-                            "<td style='" + styleTemp(obsData[dht]) + "'>" + obsData[dht] + "</td>" + 
-                            "<td style='" + styleTemp(obsData[dhd]) + "'>" + obsData[dhd] + "</td>" + 
-                            "<td style='" + styleRh(obsData[dhh]) + "'>" + obsData[dhh] + "</td>" + 
-                            "<td style='" + styleWind(obsData[dhws]) + "'>" + obsData[dhwv] + " " + obsData[dhws] + "</td>" + 
-                            "</tr>";
-                    theLastT = obsData[dht]; theLastD = obsData[dhd]; theLastW = obsData[dhws]; theLastH = obsData[dhh];
+            for(var i = h2eMap.length; i >= 0; i -= 1) {
+                if(isSet(heights[i])) {
+                    if(isSet(baseEle) || baseEle >= heights[i]) {
+                        var dht = "H" + heights[i] + "T";
+                        var dhd = "H" + heights[i] + "D";
+                        var dhh = "H" + heights[i] + "H";
+                        var dhws = "H" + heights[i] + "WS";
+                        var dhwv = "H" + heights[i] + "WV";
+                        doSoundingMin += "<tr>" +
+                                "<td>+" + (h2eMap[i] - sfcFt) + " K</td>" +
+                                "<td style='" + styleTemp(obsData[dht]) + "'>" + obsData[dht] + "</td>" + 
+                                "<td style='" + styleTemp(obsData[dhd]) + "'>" + obsData[dhd] + "</td>" + 
+                                "<td style='" + styleRh(obsData[dhh]) + "'>" + obsData[dhh] + "</td>" + 
+                                "<td style='" + styleWind(obsData[dhws]) + "'>" + obsData[dhwv] + " " + obsData[dhws] + "</td>" + 
+                                "</tr>";
+                        theLastT = obsData[dht]; theLastD = obsData[dhd]; theLastW = obsData[dhws]; theLastH = obsData[dhh];
+                    }
                 }
             }
             if(!isSet(theLastT)) { theLastT = obsData.SfcT; }
@@ -303,12 +308,13 @@ function processUpperAirData(baseEle, stationData) {
             if(isSet(theLastT) && isSet(theLastD) && isSet(theLastH) && isSet(theLastW)) {
                 var tASurface = [ theLastT, obsData.SfcT ]; var dASurface = [ theLastD, obsData.SfcD ];
                 var hASurface = [ theLastH, obsData.SfcH ]; var wASurface = [ theLastW, obsData.SfcWS ];
-                doSoundingMin += "<tr><td>SFC</td>" +
-                    "<td style='" + color2Grad("T", "bottom", tASurface) + "'>" + obsData.SfcT + "</td>" +
-                    "<td style='" + color2Grad("T", "bottom", dASurface) + "'>" + obsData.SfcD + "</td>" +
-                    "<td style='" + color2Grad("H", "bottom", hASurface) + "'>" + obsData.SfcH + "</td>" +
-                    "<td style='" + color2Grad("W", "bottom", wASurface) + "'>" + obsData.SfcWV + " " + obsData.SfcWS + "</td>" +
+                doSoundingMin += "<tr><td>SFC</td>" + // Not fully functional
+                    "<td style='" + styleTemp(obsData.SfcT) + "'>" + obsData.SfcT + "</td>" +
+                    "<td style='" + styleTemp(obsData.SfcD) + "'>" + obsData.SfcD + "</td>" +
+                    "<td style='" + styleRh(obsData.SfcH) + "'>" + obsData.SfcH + "</td>" +
+                    "<td style='" + styleWind(obsData.SfcWS) + "'>" + obsData.SfcWV + " " + obsData.SfcWS + "</td>" +
                     "</tr>";
+                console.log(tASurface);
             }
             if(isSet(stationData.CAPE)) {
                 doSoundingMin += "</table><table>" +
