@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 20 May 2018
+Updated: 21 May 2018
  */
 
 function displayModelData() {
@@ -81,15 +81,15 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     rData += mroTable;
     jsonModelData.forEach(function (jmd) {
         runString = jmd.RunString;
-        dataCMC = jmd.CMC;
-        dataGFS = jmd.GFS;
-        dataHRRR = JSON.parse(jmd.HRRR);
-        dataHRWA = jmd.HRWA;
-        dataHRWN = jmd.HRWN;
-        dataSRFA = jmd.SRFA;
-        dataSRFN = jmd.SRFN;
-        dataNAM = jmd.NAM;
-        dataRAP = jmd.RAP;
+        if(isSet(jmd.CMC)) { dataCMC = JSON.parse(jmd.CMC) }
+        if(isSet(jmd.GFS)) { dataGFS = JSON.parse(jmd.GFS); }
+        if(isSet(jmd.HRRR)) { dataHRRR = JSON.parse(jmd.HRRR); }
+        if(isSet(jmd.HRWA)) { dataHRWA = JSON.parse(jmd.HRWA); }
+        if(isSet(jmd.HRWN)) { dataHRWN = JSON.parse(jmd.HRWN); }
+        if(isSet(jmd.SRFA)) { dataSRFA = JSON.parse(jmd.SRFA); }
+        if(isSet(jmd.SRFN)) { dataSRFN = JSON.parse(jmd.SRFN); }
+        if(isSet(jmd.NAM)) { dataNAM = JSON.parse(jmd.NAM); }
+        if(isSet(jmd.RAP)) { dataRAP = JSON.parse(jmd.RAP); }
     });
     rData += "</div>";
     if(isSet(dataCMC) && isSet(dataCMC.T0_3)) { reportingModels += " CMC"; }

@@ -1,6 +1,9 @@
 /* 
 by Anthony Stump
 Created: 17 May 2018
+Updated: 21 May 2018
+
+HSN: https://www.fdsn.org/networks/detail/HV/
  */
 
 function popKilaeuaCam() {
