@@ -39,7 +39,7 @@ function getModelData() {
     });
 }
 
-function processMosData(last, heights, hours, runs, jsonModelData) {
+function processMosData(last, heightsIn, hours, runs, jsonModelData) {
     var tAutoCounter = 0;
     var searchString = last.RunString;
     var runString, dataCMC, dataGFS, dataHRRR, dataHRWA, dataHRWN, dataSRFA, dataSRFN, dataNAM, dataRAP;
@@ -52,7 +52,7 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
             "Auto-updated hourly</em><p>" +
             "<a href='" + getBasePath("g2OutOld") + "' target='new'>Automatic model image output</a>";
     var models = [ "CMC", "GFS", "HRRR", "NAM", "RAP", "HRWA", "HRWN", "SRFA", "SRFN" ];
-    var heights = []; heights.forEach(function (hgt) { heights.push(hgt); mosCols.push(hgt) });
+    var heights = []; heightsIn.forEach(function (hgt) { heights.push(hgt); mosCols.push(hgt); });
     var gfsFh = []; hours.forEach(function (tfh) { gfsFh.push(tfh); });
     var reportingModels = "";
     var estZRTot, estSnowTot, precipTot, mosi;
@@ -212,6 +212,45 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         if(isSet(dataRAP) && isSet(dataRAP["PWAT_" + tfh]) && dataRAP["PWAT_" + tfh] > -50) { var tModelAu = dataRAP["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
         if(isSet(tAutoPWAT)) { tAutoPWAT = (tAutoPWAT/tAutoCounter).toFixed(2); } else { tAutoPWAT = 0.00; }
         
+        tAutoCounter = 0;
+        var tAutoLI = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["LI_" + tfh]) && dataCMC["LI_" + tfh] > -50) { var tModelAu = dataCMC["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["LI_" + tfh]) && dataGFS["LI_" + tfh] > -50) { var tModelAu = dataGFS["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["LI_" + tfh]) && dataHRRR["LI_" + tfh] > -50) { var tModelAu = dataHRRR["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["LI_" + tfh]) && dataHRWA["LI_" + tfh] > -50) { var tModelAu = dataHRWA["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["LI_" + tfh]) && dataHRWN["LI_" + tfh] > -50) { var tModelAu = dataHRWN["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["LI_" + tfh]) && dataSRFA["LI_" + tfh] > -50) { var tModelAu = dataSRFA["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["LI_" + tfh]) && dataSRFN["LI_" + tfh] > -50) { var tModelAu = dataSRFN["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["LI_" + tfh]) && dataNAM["LI_" + tfh] > -50) { var tModelAu = dataNAM["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["LI_" + tfh]) && dataRAP["LI_" + tfh] > -50) { var tModelAu = dataRAP["LI_" + tfh]; tAutoLI += tModelAu; tAutoCounter++; }
+        tAutoLI = (tAutoLI/tAutoCounter).toFixed(2);
+                
+        tAutoCounter = 0;
+        var tAutoCAPE = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["CAPE_" + tfh]) && dataCMC["CAPE_" + tfh] > -50) { var tModelAu = dataCMC["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["CAPE_" + tfh]) && dataGFS["CAPE_" + tfh] > -50) { var tModelAu = dataGFS["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["CAPE_" + tfh]) && dataHRRR["CAPE_" + tfh] > -50) { var tModelAu = dataHRRR["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["CAPE_" + tfh]) && dataHRWA["CAPE_" + tfh] > -50) { var tModelAu = dataHRWA["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["CAPE_" + tfh]) && dataHRWN["CAPE_" + tfh] > -50) { var tModelAu = dataHRWN["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["CAPE_" + tfh]) && dataSRFA["CAPE_" + tfh] > -50) { var tModelAu = dataSRFA["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["CAPE_" + tfh]) && dataSRFN["CAPE_" + tfh] > -50) { var tModelAu = dataSRFN["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["CAPE_" + tfh]) && dataNAM["CAPE_" + tfh] > -50) { var tModelAu = dataNAM["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["CAPE_" + tfh]) && dataRAP["CAPE_" + tfh] > -50) { var tModelAu = dataRAP["CAPE_" + tfh]; tAutoCAPE += tModelAu; tAutoCounter++; }
+        tAutoCAPE = Math.round(tAutoCAPE/tAutoCounter);
+                                
+        tAutoCounter = 0;
+        var tAutoCIN = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["CIN_" + tfh]) && dataCMC["CIN_" + tfh] > -50) { var tModelAu = dataCMC["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["CIN_" + tfh]) && dataGFS["CIN_" + tfh] > -50) { var tModelAu = dataGFS["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["CIN_" + tfh]) && dataHRRR["CIN_" + tfh] > -50) { var tModelAu = dataHRRR["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["CIN_" + tfh]) && dataHRWA["CIN_" + tfh] > -50) { var tModelAu = dataHRWA["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["CIN_" + tfh]) && dataHRWN["CIN_" + tfh] > -50) { var tModelAu = dataHRWN["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["CIN_" + tfh]) && dataSRFA["CIN_" + tfh] > -50) { var tModelAu = dataSRFA["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["CIN_" + tfh]) && dataSRFN["CIN_" + tfh] > -50) { var tModelAu = dataSRFN["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["CIN_" + tfh]) && dataNAM["CIN_" + tfh] > -50) { var tModelAu = dataNAM["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["CIN_" + tfh]) && dataRAP["CIN_" + tfh] > -50) { var tModelAu = dataRAP["CIN_" + tfh]; tAutoCIN += tModelAu; tAutoCounter++; }
+        tAutoCIN = Math.round(tAutoCIN/tAutoCounter);
+                
         var rHumidity = relativeHumidity(tAuto0TF, tAuto0DF);
         
         var estimatedSnow = 0;
@@ -282,7 +321,13 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
                 "<strong>Freezing rain</strong>: " + estimatedFreezingRainTotal + " in.<br/>" +
                 "</div></div></span>" +
                 "<span class='td' style='" + styleLiquid(tAutoPWAT) + "'>" + tAutoPWAT + "</span>" +
-                "</div>";
+                "<span class='td " + colorLi(tAutoLI) + "'>" + tAutoLI + "</span>" +
+                "<span class='td' style='" + styleCape(tAutoCAPE) + "'>" + tAutoCAPE + "</span>" +
+                "<span class='td " + colorCin(tAutoCIN) + "'>" + tAutoCIN + "</span>";
+        heights.forEach(function (hgt) {
+            mosTable += "<span class='td'>" + hgt + "</span>";
+        });
+        mosTable += "</div>";
         
     });
     mosTable += "</div>";
