@@ -43,6 +43,9 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
     var tAutoCounter = 0;
     var searchString = last.RunString;
     var runString, dataCMC, dataGFS, dataHRRR, dataHRWA, dataHRWN, dataSRFA, dataSRFN, dataNAM, dataRAP;
+    var precipTot = 0.00,
+        estimatedFreezingRainTotal = 0.0,
+        estimatedSnowTotal = 0.0;
     var mosCols = [ "Forecast", "TA", "TD", "RH", "WND", "P3", "PT", "X3", "PW", "LI", "CAPE", "CIN" ];
     var rData = "<h3>GRIB2 JSON Model Output Data</h3>" +
             "<em>For KOJC / Olathe Johnson County<br/>" +
@@ -182,8 +185,55 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         if(isSet(dataNAM) && isSet(dataNAM["WS0_" + tfh]) && dataNAM["WS0_" + tfh] > -50) { var tModelAu = dataNAM["WS0_" + tfh]; tAuto0WS += tModelAu; tAutoCounter++; }
         if(isSet(dataRAP) && isSet(dataRAP["WS0_" + tfh]) && dataRAP["WS0_" + tfh] > -50) { var tModelAu = dataRAP["WS0_" + tfh]; tAuto0WS += tModelAu; tAutoCounter++; }
         tAuto0WS = Math.round(tAuto0WS/tAutoCounter);
+                
+        tAutoCounter = 0;
+        var tAutoPRATE = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["PRATE_" + tfh]) && dataCMC["PRATE_" + tfh] > -50) { var tModelAu = dataCMC["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["PRATE_" + tfh]) && dataGFS["PRATE_" + tfh] > -50) { var tModelAu = dataGFS["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["PRATE_" + tfh]) && dataHRRR["PRATE_" + tfh] > -50) { var tModelAu = dataHRRR["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["PRATE_" + tfh]) && dataHRWA["PRATE_" + tfh] > -50) { var tModelAu = dataHRWA["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["PRATE_" + tfh]) && dataHRWN["PRATE_" + tfh] > -50) { var tModelAu = dataHRWN["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["PRATE_" + tfh]) && dataSRFA["PRATE_" + tfh] > -50) { var tModelAu = dataSRFA["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["PRATE_" + tfh]) && dataSRFN["PRATE_" + tfh] > -50) { var tModelAu = dataSRFN["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["PRATE_" + tfh]) && dataNAM["PRATE_" + tfh] > -50) { var tModelAu = dataNAM["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["PRATE_" + tfh]) && dataRAP["PRATE_" + tfh] > -50) { var tModelAu = dataRAP["PRATE_" + tfh]; tAutoPRATE += tModelAu; tAutoCounter++; }
+        if(isSet(tAutoPRATE)) { tAutoPRATE = (tAutoPRATE/tAutoCounter).toFixed(2); preciptTot = precipTot+tAutoPRATE; } else { tAutoPRATE = 0.00; }        
+        
+        tAutoCounter = 0;
+        var tAutoPWAT = 0;
+        if(isSet(dataCMC) && isSet(dataCMC["PWAT_" + tfh]) && dataCMC["PWAT_" + tfh] > -50) { var tModelAu = dataCMC["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataGFS) && isSet(dataGFS["PWAT_" + tfh]) && dataGFS["PWAT_" + tfh] > -50) { var tModelAu = dataGFS["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["PWAT_" + tfh]) && dataHRRR["PWAT_" + tfh] > -50) { var tModelAu = dataHRRR["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["PWAT_" + tfh]) && dataHRWA["PWAT_" + tfh] > -50) { var tModelAu = dataHRWA["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["PWAT_" + tfh]) && dataHRWN["PWAT_" + tfh] > -50) { var tModelAu = dataHRWN["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["PWAT_" + tfh]) && dataSRFA["PWAT_" + tfh] > -50) { var tModelAu = dataSRFA["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["PWAT_" + tfh]) && dataSRFN["PWAT_" + tfh] > -50) { var tModelAu = dataSRFN["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataNAM) && isSet(dataNAM["PWAT_" + tfh]) && dataNAM["PWAT_" + tfh] > -50) { var tModelAu = dataNAM["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(dataRAP) && isSet(dataRAP["PWAT_" + tfh]) && dataRAP["PWAT_" + tfh] > -50) { var tModelAu = dataRAP["PWAT_" + tfh]; tAutoPWAT += tModelAu; tAutoCounter++; }
+        if(isSet(tAutoPWAT)) { tAutoPWAT = (tAutoPWAT/tAutoCounter).toFixed(2); } else { tAutoPWAT = 0.00; }
         
         var rHumidity = relativeHumidity(tAuto0TF, tAuto0DF);
+        
+        var estimatedSnow = 0;
+        var estimatedFreezingRain = 0;
+        
+        switch(true) {
+            case (tAuto0TF > 34 && tAuto900TF > 32):
+                break;
+            case (tAuto0TF <= 34 && tAuto0TF > 32 && tAuto900TF <= 32):
+                estimatedSnow = (10*(tAutoPRATE*snowRatio(tAutoPRATE,tAuto0TF))).toFixed(1);
+                break;
+            case (tAuto0TF <= 32):
+                if(tAuto900TF > 32) {
+                    estimatedFreezingRain = tAutoPRATE;
+                } else {
+                    estimatedSnow = (10*(tAutoPRATE*snowRatio(tAutoPRATE,tAuto0TF))).toFixed(1);
+                }
+                break;
+        }
+        
+        estimatedSnowTotal = estimatedSnowTotal + estimatedSnow;
+        estimatedFreezingRainTotal = estimatedFreezingRainTotal + estimatedFreezingRain;
         
         mosTable += "<div class='tr'>" +
                 "<span class='td'>" + tValidTime + "</span>" +
@@ -212,6 +262,26 @@ function processMosData(last, heights, hours, runs, jsonModelData) {
         if(isSet(dataRAP) && isSet(dataRAP["D0_" + tfh])) { mosTable += "<strong>RAP</strong>: <span style='" + styleTemp(conv2Tf(dataRAP["D0_" + tfh])) + "'>" + conv2Tf(dataRAP["D0_" + tfh]) + "</span><br/>"; }
         mosTable += "</div></div></span>" +
                 "<span class='td' style='" + styleRh(rHumidity) + "'>" + rHumidity + "</span>" +
+                "<span class='td' style='" + styleWind(tAuto0WS) + "'>" + windDirSvg(tAuto0WD) + " (" + tAuto0WS + ")</span>" +
+                "<span class='td' style='" + styleLiquid(tAutoPRATE) + "'><div class='UPop'>" + tAutoPRATE +
+                "<div class='UPopO'>";
+        if(isSet(dataCMC) && isSet(dataCMC["PRATE_" + tfh])) { mosTable += "<strong>CMC</strong>: <span style='" + styleTemp(dataCMC["PRATE_" + tfh]) + "'>" + dataCMC["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataGFS) && isSet(dataGFS["PRATE_" + tfh])) { mosTable += "<strong>GFS</strong>: <span style='" + styleTemp(dataGFS["PRATE_" + tfh]) + "'>" + dataGFS["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataHRRR) && isSet(dataHRRR["PRATE_" + tfh])) { mosTable += "<strong>HRRR</strong>: <span style='" + styleTemp(dataHRRR["PRATE_" + tfh]) + "'>" + dataHRRR["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataHRWA) && isSet(dataHRWA["PRATE_" + tfh])) { mosTable += "<strong>HRWA</strong>: <span style='" + styleTemp(dataHRWA["PRATE_" + tfh]) + "'>" + dataHRWA["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataHRWN) && isSet(dataHRWN["PRATE_" + tfh])) { mosTable += "<strong>HRWN</strong>: <span style='" + styleTemp(dataHRWN["PRATE_" + tfh]) + "'>" + dataHRWN["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataSRFA) && isSet(dataSRFA["PRATE_" + tfh])) { mosTable += "<strong>SRFA</strong>: <span style='" + styleTemp(dataSRFA["PRATE_" + tfh]) + "'>" + dataSRFA["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataSRFN) && isSet(dataSRFN["PRATE_" + tfh])) { mosTable += "<strong>SRFN</strong>: <span style='" + styleTemp(dataSRFN["PRATE_" + tfh]) + "'>" + dataSRFN["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataNAM) && isSet(dataNAM["PRATE_" + tfh])) { mosTable += "<strong>NAM</strong>: <span style='" + styleTemp(dataNAM["PRATE_" + tfh]) + "'>" + dataNAM["PRATE_" + tfh] + "</span><br/>"; }
+        if(isSet(dataRAP) && isSet(dataRAP["PRATE_" + tfh])) { mosTable += "<strong>RAP</strong>: <span style='" + styleTemp(dataRAP["PRATE_" + tfh]) + "'>" + dataRAP["PRATE_" + tfh] + "</span><br/>"; }
+        mosTable += "</div></div></span>" +
+                "<span class='td' style='" + styleLiquid(precipTot) + "'>" + precipTot + "</span>" +
+                "<span class='td " + colorSnow(estimatedSnow) + "'><div class='UPopNM'>" + estimatedSnow + 
+                "<div class='UPopNMO'>" +
+                "<strong>Total snow</strong>: " + estimatedSnowTotal + " in.<br/>" +
+                "<strong>Freezing rain</strong>: " + estimatedFreezingRainTotal + " in.<br/>" +
+                "</div></div></span>" +
+                "<span class='td' style='" + styleLiquid(tAutoPWAT) + "'>" + tAutoPWAT + "</span>" +
                 "</div>";
         
     });
