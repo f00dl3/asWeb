@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 17 May 2018
+Updated: 22 May 2018
  */
 
 package asWebRest.resource;
@@ -307,6 +307,22 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(cf6cpc_Glob); returnData += "Chart generated - cf6cpc!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Depart_Glob); returnData += "Chart generated - cf6Depart!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    break;
+                    
+                case "WeatherModelCharts":
+                    genericCharts = false;
+                    JSONArray lastRun = getWeatherAction.getJsonModelLast(dbc);
+                    JSONObject lastRunObj = lastRun.getJSONObject(0);
+                    String lastRunString = lastRunObj.getString("RunString");
+                    if(wc.isSet(argsInForm.getFirstValue("modelRunString"))) { lastRunString = argsInForm.getFirstValue("modelRunString"); }
+                    try {
+                        qParams.add(0, lastRunString);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray modelData = getWeatherAction.getJsonModelData(dbc, qParams);
+                    JSONObject mosTemps_Glob = wx.getMosTemps(modelData);
+                    try { dynChart.LineChart(mosTemps_Glob); returnData += "Chart generated - mosTemps!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
             }

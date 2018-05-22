@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
+Updated: 22 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -86,9 +87,15 @@ public class Weather {
         return cf6Temps_Glob;
     }
     
+    private JSONObject mosTemps(JSONArray dataIn) {
+        JSONObject mosTemps_Glob = new JSONObject();
+        return mosTemps_Glob;
+    }
+    
     public JSONObject getCf6cpc(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6cpc(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6depart(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6temps(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
+    public JSONObject getMosTemps(JSONArray dataIn) { return mosTemps(dataIn); }
        
 }
     

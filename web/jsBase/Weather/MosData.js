@@ -12,6 +12,26 @@ function displayModelData() {
     getModelData();
 }
 
+function getModelCharts() {
+    var thePostData = {
+        "doWhat": "WeatherModelCharts"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Model Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function getModelData() {
     var thePostData = {
         "doWhat": "getMosData"
@@ -24,7 +44,7 @@ function getModelData() {
             }).then(
                 function(data) {
                     processMosData(
-                        data.last[0], // returns undefined!
+                        data.last[0],
                         data.heights,
                         data.hours,
                         data.runs,
