@@ -33,6 +33,7 @@ function getModelCharts() {
 }
 
 function getModelData() {
+    var timeout = 2 * 60 * 1000;
     var thePostData = {
         "doWhat": "getMosData"
     };
@@ -57,6 +58,7 @@ function getModelData() {
                     window.alert("request for getMosData FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getModelData(); }, timeout);
 }
 
 function processMosData(last, heightsIn, hours, runs, jsonModelData) {

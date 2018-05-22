@@ -29,6 +29,7 @@ function displayGameIndex() {
 }
 
 function getGameData(target) {
+    var timeout = 2 * 60 * 1000;
     getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = { "doWhat": "getGameData" };
@@ -53,6 +54,7 @@ function getGameData(target) {
                     window.alert("request for Game Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getGameData(target); }, timeout);
 }
 
 function getGameIndex(target) {

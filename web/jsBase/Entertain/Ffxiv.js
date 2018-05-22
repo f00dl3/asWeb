@@ -31,7 +31,7 @@ function ffxivQuestHint(value) {
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 24) {
+                if(matchingRows.length < 249) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
@@ -43,6 +43,7 @@ function ffxivQuestHint(value) {
 }
 
 function getGameFf14q(target) {
+    var timeout = 90 * 1000;
     getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = { "doWhat": "getFfxivQuests" };
@@ -63,6 +64,7 @@ function getGameFf14q(target) {
                     window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getGameFf14q(target); }, timeout);
 }
 
 function putFfxivQuestList(target, questData) {
@@ -72,7 +74,7 @@ function putFfxivQuestList(target, questData) {
     for (var i = 0; i < qCols.length; i++) { rData += "<span class='td'><strong>" + qCols[i] + "</strong></span>"; }
     rData += "</div>";
     questData.forEach(function (ff14q) {
-        if(qNum <= 24) {
+        if(qNum <= 249) {
             var qComplete = "No";
             var fontColor = "White";
             var tdsStyle = "style='color: " + fontColor + ";'";
