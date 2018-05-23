@@ -92,6 +92,13 @@ public class FitnessResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                     
+                case "processGpsTracks":
+                    returnData += "Processing GPS Tracks at /home/astump/Desktop !";
+                    String[] args = {};
+                    asUtils.GPSBulk.main(args);
+                    returnData += "Completed!";
+                    break;
+                    
                 case "putCalories":
                     String tempReturn = "";
                     JSONObject callbackData = new JSONObject();

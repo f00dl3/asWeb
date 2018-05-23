@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
+Updated: 23 May 2018
  */
 
 function actOnCommitRoute(event) {
@@ -10,9 +11,30 @@ function actOnCommitRoute(event) {
     putRoute(thisFormData);
 }
 
+function actOnProcessGps(event) {
+    dojo.stopEvent(event);
+    window.alert("Process GPS Tracks at /home/astump/Desktop !");
+    processGpsTracks();
+}
+
+function fileUploadGenerator() {
+    // Stub for future upload selector - for now pass through to process GPS.
+    var rData = "<form id='UploadFile' name='UploadGPS'>" +
+            "<input type='file' name='gpsFile' id='gpsFile'/>" +
+            "<button class='"
+            "</form>";
+    //dojo.byId("gpsUpHold").innerHTML = rData;
+    //$("#gpsUpHold").show();
+    (event);
+}
+
 function fitnessPlans(dataIn) {
     var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
-            "<form id='RoutePlanForm'><button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button><p>";
+            "<form id='RoutePlanForm'>" +
+            "<button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button>" +
+            "<button class='UButton' id='UploadGPS' name='UploadGPS' value='Yes'>Process GPS</button>" +
+            "<span id='gpsUpHold'></span>" +
+            "<p>";
     var routeOptions = [ "RunGeoJSON", "CycGeoJSON" ];
     var routeId = 1;
     var routeDoneFlag;
@@ -45,5 +67,28 @@ function fitnessPlans(dataIn) {
     container += tableData + "</form></div></div>";
     dojo.byId("Plans").innerHTML = container;
     var commitRouteButton = dojo.byId("CommitRouteButton");
-    dojo.connect(commitRouteButton, "onclick", actOnCommitRoute);
+    var uploadGpsButton = dojo.byId("UploadGPS");
+    dojo.connect(commitRouteButton, "click", actOnCommitRoute);
+    dojo.connect(uploadGpsButton, "click", actOnProcessGps);
+}
+
+function processGpsTracks() {
+    var thePostData = {
+        "doWhat": "processGpsTracks"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getFitnessAllData();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to FitnessResource/processGpsTracks FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
