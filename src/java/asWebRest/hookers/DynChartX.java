@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 17 May 2018
+Updated: 23 May 2018
  */
 
 package asWebRest.hookers;
@@ -223,7 +223,19 @@ public class DynChartX {
                 }
             } catch (Exception e) { e.printStackTrace(); }
         } } catch (Exception e) { }
-    
+            
+        try { if(wc.isSet(jp.getString("s11Name")) && wc.isSet(jp.getString("s11Color"))) {
+            try {
+                JSONArray jsonData11Array = jsonGlobIn.getJSONArray("data11");
+                List<Float> yData11 = wc.arrayListFloatFromJson(jsonData11Array);
+                Color s11Color = getSeriesColor(jp.getString("s11Color"));
+                int tArrLen = yData11.size(); if(tArrLen != 0) {
+                    XYSeries series11 = chart.addSeries(jp.getString("s11Name"), xData, yData11); series11.setMarker(SeriesMarkers.NONE).setLineColor(s11Color);
+                    XYSeries thSeries11 = thChart.addSeries(jp.getString("s11Name"), xData, yData11); thSeries11.setMarker(SeriesMarkers.NONE).setLineColor(s11Color);
+                }
+            } catch (Exception e) { e.printStackTrace(); }
+        } } catch (Exception e) { }
+        
         BitmapEncoder.saveBitmap(chart, fullChart.toString(), BitmapFormat.PNG);
         BitmapEncoder.saveBitmap(thChart, thumbChart.toString(), BitmapFormat.PNG);
         

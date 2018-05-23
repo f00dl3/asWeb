@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 22 May 2018
+Updated: 23 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -88,7 +88,35 @@ public class Weather {
     }
     
     private JSONObject mosTemps(JSONArray dataIn) {
+        String mosTemps_ChartName = "Model Output Soundings: Temps";
         JSONObject mosTemps_Glob = new JSONObject();
+        JSONObject mosTemps_Props = new JSONObject();
+        JSONArray mosTemps_Labels = new JSONArray();
+        JSONArray mosTemps_Data = new JSONArray();
+        JSONArray mosTemps_Data1 = new JSONArray();
+        JSONArray mosTemps_Data2 = new JSONArray();
+        JSONArray mosTemps_Data3 = new JSONArray();
+        JSONArray mosTemps_Data4 = new JSONArray();
+        JSONArray mosTemps_Data5 = new JSONArray();
+        JSONArray mosTemps_Data6 = new JSONArray();
+        JSONArray mosTemps_Data7 = new JSONArray();
+        JSONArray mosTemps_Data8 = new JSONArray();
+        JSONArray mosTemps_Data9 = new JSONArray();
+        JSONArray mosTemps_Data10 = new JSONArray();
+        mosTemps_Props
+                .put("dateFormat", "yyyy-MM-dd")
+                .put("chartName", mosTemps_ChartName).put("chartFileName", "mosTemps")
+                .put("sName", "Merged TF").put("sColor", "Red")
+                .put("s2Name", "Merged DF").put("s2Color", "Green")
+                .put("s3Name", "GFS TF").put("s3Color", "White")
+                .put("s4Name", "GFS DF").put("s4Color", "Gray")
+                .put("s5Name", "NAM TF").put("s5Color", "White")
+                .put("s6Name", "NAM DF").put("s6Color", "Gray")
+                .put("s7Name", "CMC TF").put("s7Color", "White")
+                .put("s8Name", "CMC DF").put("s8Color", "Gray")
+                .put("s9Name", "HRRR TF").put("s9Color", "White")
+                .put("s10Name", "HRRR DF").put("s10Color", "Gray")
+                .put("xLabel", "Date").put("yLabel", "degrees F");
         return mosTemps_Glob;
     }
     

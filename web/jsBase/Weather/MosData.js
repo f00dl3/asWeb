@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 22 May 2018
+Updated: 23 May 2018
  */
 
 function displayModelData() {
@@ -348,7 +348,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
                     "<strong>Total snow</strong>: " + estimatedSnowTotal + " in.<br/>" +
                     "<strong>Freezing rain</strong>: " + estimatedFreezingRainTotal + " in.<br/>" +
                     "</div></div></span>" +
-                    "<span class='td' style='" + styleLiquid(tAutoPWAT) + "'>" + tAutoPWAT + "</span>" +
+                    "<span class='td' style='" + styleLiquid(tAutoPWAT) + "'>" + tAutoPWAT + "</span>" + // Bugs exist here and between PRATE / PWAT 5/23/18
                     "<span class='td " + colorLi(tAutoLI) + "'>" + tAutoLI + "</span>" +
                     "<span class='td' style='" + styleCape(tAutoCAPE) + "'>" + tAutoCAPE + "</span>" +
                     "<span class='td " + colorCin(tAutoCIN) + "'>" + tAutoCIN + "</span>";
