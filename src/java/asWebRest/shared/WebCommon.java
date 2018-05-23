@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 17 May 2018
+Updated: 23 May 2018
 */
 
 package asWebRest.shared;
@@ -96,6 +96,16 @@ public class WebCommon {
             Float tempFloat = 0.0f;
             try { tempFloat = inJsonArray.getFloat(i); } catch (Exception e) { e.printStackTrace(); }
             newArrayList.add(tempFloat);
+        }
+        return newArrayList;
+    }        
+    
+    public static ArrayList<Integer> arrayListIntegerFromJson(JSONArray inJsonArray) {
+        ArrayList<Integer> newArrayList = new ArrayList<>();
+        for (int i = 0; i < inJsonArray.length(); i++) {
+            Integer tempInteger = 0;
+            try { tempInteger = inJsonArray.getInt(i); } catch (Exception e) { e.printStackTrace(); }
+            newArrayList.add(tempInteger);
         }
         return newArrayList;
     }        

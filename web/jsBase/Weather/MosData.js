@@ -12,7 +12,7 @@ function displayModelData() {
     getModelData();
 }
 
-function getModelCharts() {
+function getModelData() {
     var thePostData = {
         "doWhat": "WeatherModelCharts"
     };
@@ -24,6 +24,7 @@ function getModelCharts() {
             }).then(
                 function(data) {
                     aniPreload("off");
+                    getModelData2();
                 },
                 function(error) { 
                     aniPreload("off");
@@ -32,7 +33,7 @@ function getModelCharts() {
     });
 }
 
-function getModelData() {
+function getModelData2() {
     var timeout = 2 * 60 * 1000;
     var thePostData = {
         "doWhat": "getMosData"
@@ -101,7 +102,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
             "<source src='" + getBasePath("g2OutOld") + "/MergedJ/Loops/FOCUS_Loop.mp4?ts=" + getDate("day", 0, "full") + "'></source>" +
             "</video></a><br/>Focus</span>" +
             "<span class='td'>" +
-            "<a href='" + doCh("p", "WxMOSTemp", "RunString=" + searchString) + "' target='pChart'>" +
+            "<a href='" + doCh("j", "WxMOSTemp", "th") + "' target='pChart'>" +
             "<img class='th_sm_med' src='" + doCh("p", "WxMOSTemp", "RunString=" + searchString + "&Thumb=1") + "'/>" +
             "</a><br/>Temperature</span>" +
             "<span class='td'>" +

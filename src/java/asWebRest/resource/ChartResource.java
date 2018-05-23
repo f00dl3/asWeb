@@ -312,6 +312,7 @@ public class ChartResource extends ServerResource {
                 case "WeatherModelCharts":
                     genericCharts = false;
                     JSONArray lastRun = getWeatherAction.getJsonModelLast(dbc);
+                    JSONArray hourSet = getWeatherAction.getGfsFha(dbc);
                     JSONObject lastRunObj = lastRun.getJSONObject(0);
                     String lastRunString = lastRunObj.getString("RunString");
                     if(wc.isSet(argsInForm.getFirstValue("modelRunString"))) { lastRunString = argsInForm.getFirstValue("modelRunString"); }
@@ -321,8 +322,13 @@ public class ChartResource extends ServerResource {
                         e.printStackTrace();
                     }
                     JSONArray modelData = getWeatherAction.getJsonModelData(dbc, qParams);
-                    JSONObject mosTemps_Glob = wx.getMosTemps(modelData);
-                    try { dynChart.LineChart(mosTemps_Glob); returnData += "Chart generated - mosTemps!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    JSONObject mosTemps_Glob = wx.getMosTemps(modelData, hourSet);
+                    try {
+                        dynChart.LineChart(mosTemps_Glob);
+                        returnData += "DEBUG: " + mosTemps_Glob.getJSONArray("debug").toString() +
+                            "\nChart generated - mosTemps!\n";
+                    } catch (Exception e) { e.printStackTrace(); } 
+                    // Troubleshoot 5/23/18
                     break;
                     
             }

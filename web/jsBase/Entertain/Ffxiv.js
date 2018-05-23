@@ -2,6 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
+Updated: 23 May 2018
  */
 
 var ffxivQuests;
@@ -92,6 +93,7 @@ function putFfxivQuestList(target, questData) {
                     "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>";
             if(isSet(ff14q.GivingNPC)) { rData += "Giving NPC: " + ff14q.GivingNPC + "<br/>"; }
             if(isSet(ff14q.Classes)) { rData += "Class/Jobs: " + ff14q.Classes + "<br/>"; }
+            if(isSet(ff14q.Version)) { rData += "Patch Level: " + ff14q.Version + "<br/>"; }
             if(isSet(ff14q.OrigCompDate)) { rData += "1st Completed: " + ff14q.OrigCompDate + "<br/>"; }
             rData += "Quest Order: " + ff14q.QuestOrder + "<br/>" +
                     "</div></div></span>" +

@@ -1,6 +1,10 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
+Updated: 23 May 2018
+
+Applies to tables:
+    Core.FFXIV_Quests
  */
 
 package asWebRest.model;
@@ -19,6 +23,7 @@ public class FfxivQuests {
     private String origCompDate;
     private String questOrder;
     private int seals;
+    private double version;
     private String zone;
     
     public String getClasses() { return classes; }
@@ -33,6 +38,7 @@ public class FfxivQuests {
     public String getOrigCompDate() { return origCompDate; }
     public String getQuestOrder() { return questOrder; }
     public int getSeals() { return seals; }
+    public double getVersion() { return version; }
     public String getZone() { return zone; }
     
     public void setClasses(String classes ) { this.classes = classes; }
@@ -47,6 +53,7 @@ public class FfxivQuests {
     public void setOrigCompDate(String origCompDate) { this.origCompDate = origCompDate; }
     public void setQuestOrder(String questOrder) { this.questOrder = questOrder; }
     public void setSeals(int seals) { this.seals = seals; }
+    public void setVersion(double version) { this.version = version; }
     public void setZone(String zone) { this.zone = zone; }
     
 }
