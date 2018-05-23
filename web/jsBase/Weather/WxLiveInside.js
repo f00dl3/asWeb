@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 17 May 2018
+Updated: 23 May 2018
  */
 
 function actOnShowFeed() {
@@ -69,12 +69,13 @@ function getLiveLinks3d() {
                 $("#WxNews").toggle();;
     });
 }
+
 function getLiveWarnings() {
     aniPreload("on");
     var warnTimeout = 90 * 1000;
     var thePostData = {
         "doWhat": "getLiveWarnings",
-        "xdt1": getDate("day", -1, "full"),
+        "xdt1": getDate("day", -7, "full"),
         "xdt2": getDate("day", 0, "full"),
         "xExp": getDate("day", 0, "full"),
         "limit": "5",
