@@ -43,7 +43,7 @@ function ffxivQuestHint(value) {
 }
 
 function getGameFf14q(target) {
-    var timeout = 90 * 1000;
+    var timeout = 2 * 60 * 1000;
     getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = { "doWhat": "getFfxivQuests" };
@@ -113,8 +113,13 @@ function putFfxivQuestList(target, questData) {
 function putFfxivQuests(target, questData) {
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var qCount = ffxivQuests.length;
+    var compCounter = 0;
+    ffxivQuests.forEach(function (ffxq) {
+        if(ffxq.Completed === 1) { compCounter++; }
+    });
     var rData = "<a href='" + charProfLink + "' target='new'>Foodle Faddle</a>" +
-            "<h3>Quests</h3><strong>Indexed quests: " + qCount + 
+            "<h3>Quests</h3><strong>Indexed quests: " + qCount + "<br/>" +
+            "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)" +
             "<p><div id='qSearchHolder'></div>" +
             "<p><div id='questList'></div>";
     dojo.byId(target).innerHTML = rData;

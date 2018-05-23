@@ -1,9 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 May 2018
-Updated: 21 May 2018
-
-HSN: https://www.fdsn.org/networks/detail/HV/
+Updated: 22 May 2018
  */
 
 function popKilaeuaCam() {
@@ -18,7 +16,8 @@ function popKilaeuaCam() {
 function populateKilaeuaData() {
     var rData = "<strong>Kilaeua data</strong><br/>" +
             "<div id='kCamHolder'></div><br/>" +
-            "<span id='vLinkHolder'></span><br/>";
+            "<span id='vLinkHolder'></span><br/>" +
+            "<a href='" + getBasePath("oldGet") + "/Kilaeua' target='kca'>Kilauea Cam Archives</a><br/>";
     dojo.byId("vHolder").innerHTML = rData;
     getWebLinks("Volcano", "vLinkHolder", null);
     popKilaeuaCam();
