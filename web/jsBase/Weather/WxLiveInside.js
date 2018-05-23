@@ -69,6 +69,35 @@ function getLiveLinks3d() {
                 $("#WxNews").toggle();;
     });
 }
+function getLiveWarnings() {
+    aniPreload("on");
+    var warnTimeout = 90 * 1000;
+    var thePostData = {
+        "doWhat": "getLiveWarnings",
+        "xdt1": getDate("day", -1, "full"),
+        "xdt2": getDate("day", 0, "full"),
+        "xExp": getDate("day", 0, "full"),
+        "limit": "5",
+        "stationA": "020091",
+        "idMatch": "/"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    popLiveWarnings();
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Live Warnings FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                })
+    });
+    setTimeout(function () { getLiveWarnings(); }, warnTimeout);
+}
 
 function getNewsEmail() {
     aniPreload("on");
@@ -165,6 +194,7 @@ function popLiveContainer() {
             "<div id='WxQuakes'></div>" +
             "<div id='WxNews'></div>";
     dojo.byId("WxLiveContainer").innerHTML = rData;
+    getLiveWarnings();
     popLiveButtonNavi();
     popLiveLinksList();
     getLiveLinks3d();

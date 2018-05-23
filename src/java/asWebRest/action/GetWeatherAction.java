@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 9 May 2018
+Updated: 23 May 2018
  */
 
 package asWebRest.action;
@@ -32,7 +32,7 @@ public class GetWeatherAction {
     public JSONArray getJsonModelLast(Connection dbc) { return weatherDAO.getJsonModelLast(dbc); }
     public JSONArray getJsonModelRuns(Connection dbc) { return weatherDAO.getJsonModelRuns(dbc); }
     public JSONArray getLiveReports(List inParams) { return weatherDAO.getLiveReports(inParams); }
-    public JSONArray getLiveWarnings(List inParams) { return weatherDAO.getLiveWarnings(inParams); }
+    public JSONArray getLiveWarnings(Connection dbc, List inParams) { return weatherDAO.getLiveWarnings(dbc, inParams); }
     public JSONArray getLiveWarningsFipsBounds(List qParams) { return weatherDAO.getLiveWarningsFipsBounds(qParams); }
     public JSONArray getLiveWarningsSameBounds(List qParams) { return weatherDAO.getLiveWarningsSameBounds(qParams); }
     public JSONArray getLiveWatches(List inParams) { return weatherDAO.getLiveWatches(inParams); }

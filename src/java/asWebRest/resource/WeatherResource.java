@@ -83,6 +83,17 @@ public class WeatherResource extends ServerResource {
                     returnData += htLast.toString();
                     break;
                     
+                case "getLiveWarnings":
+                    inParams.add(0, argsInForm.getFirstValue("xdt1"));
+                    inParams.add(1, argsInForm.getFirstValue("xdt2"));
+                    inParams.add(2, argsInForm.getFirstValue("xExp"));
+                    inParams.add(3, argsInForm.getFirstValue("stationA"));
+                    inParams.add(4, argsInForm.getFirstValue("idMatch"));
+                    inParams.add(5, argsInForm.getFirstValue("limit"));
+                    JSONArray liveWarnings = getWeatherAction.getLiveWarnings(dbc, inParams);
+                    returnData += liveWarnings.toString();
+                    break;
+                    
                 case "getMosData":
                     JSONArray lastRun = getWeatherAction.getJsonModelLast(dbc);
                     JSONObject lastRunObj = lastRun.getJSONObject(0);

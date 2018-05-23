@@ -15,6 +15,80 @@ import org.json.JSONObject;
 
 public class WeatherDAO {
     
+    private JSONArray liveWarnings(Connection dbc, List<String> inParams) {
+        // This fails right now. 5/23/18.
+        final String xdt1 = inParams.get(0);
+        final String xdt2 = inParams.get(1);
+        final String xExp = inParams.get(2);
+        final String stationA = inParams.get(3);
+        final String idMatch = inParams.get(4);
+        final int limit = Integer.parseInt(inParams.get(5));
+        final String query_LiveWarnings = "SELECT * FROM (" +
+                " SELECT" +
+                "   lw.capVersion, lw.id, lw.published, lw.updated, lw.title," +
+		"   SUBSTRING(lw.summary,1,320) AS briefSummary, lw.summary," +
+		"   lw.cappolygon, lw.cap12polygon, lw.capgeocode, lw.capparameter, lw.capevent," +
+		"   lwc.ColorRGB, lwc.ColorHEX, lwc.ExtendDisplayTime, lwc.ShowIt, lw.GetTime," +
+		"   CASE WHEN lw.capgeocode IS NOT NULL " +
+                "       THEN REPLACE(REPLACE(REPLACE(substring_index(substring_index(lw.capgeocode, 'FIPS6', -1), 'UGC', 1),'\r\n\t ',' '),'  ',''),' ',',')" +
+                "       ELSE ''" +
+		"   END as FIPSCodes," +
+		"   lw.cap12same, lw.cap12ugc, lw.cap12vtec" +
+                " FROM WxObs.LiveWarnings lw" +
+                " LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
+                " WHERE" +
+		"   CASE WHEN lwc.ExtendDisplayTime = 0" +
+                "       THEN" +
+		"           (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
+                "           OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"')" +
+                "           AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
+		"       ELSE" +
+		"           CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
+		"   END" +
+		" AND lw.title IS NOT NULL" +
+		" AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
+		" AND ( lw.capgeocode REGEXP '"+stationA+"' OR lw.cap12same REGEXP '"+stationA+"' )" +
+		" AND lw.id REGEXP '"+idMatch+"'" +
+                " ORDER BY lw.published DESC ) as lwm" +
+                " GROUP BY " +
+                "   CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
+                "   CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
+                "   CASE WHEN cappolygon IS NULL AND cap12polygon IS NULL THEN CONCAT(capevent,FIPSCodes,cap12same) END" +
+                " LIMIT "+limit+";";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("capVersion", resultSet.getDouble("capVersion"))
+                    .put("id", resultSet.getString("id"))
+                    .put("published", resultSet.getString("published"))
+                    .put("updated", resultSet.getString("updated"))
+                    .put("title", resultSet.getString("title"))
+                    .put("briefSummary", resultSet.getString("briefSummary"))
+                    .put("summary", resultSet.getString("summary"))
+                    .put("cappolygon", resultSet.getString("cappolygon"))
+                    .put("cap12polygon", resultSet.getString("cap12polygon"))
+                    .put("capgeocode", resultSet.getString("capgeocode"))
+                    .put("capparameter", resultSet.getString("capparameter"))
+                    .put("capevent", resultSet.getString("capevent"))
+                    .put("ColorRGB", resultSet.getString("ColorRGB"))
+                    .put("ColorHEX", resultSet.getString("ColorHEX"))
+                    .put("ExtendedDisplayTime", resultSet.getInt("ExtendedDisplayTime"))
+                    .put("ShowIt", resultSet.getInt("ShowIt"))
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("FIPSCodes", resultSet.getString("FIPSCodes"))
+                    .put("cap12same", resultSet.getString("cap12same"))
+                    .put("cap12ugc", resultSet.getString("cap12ugc"))
+                    .put("cap12vtec", resultSet.getString("cap12vtec"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
     private String timeBetween(String xdt1, String xdt2) {
         return  " BETWEEN CONCAT(SUBSTRING('"+xdt1+"',1,4),'-',SUBSTRING('"+xdt1+"',5,2),'-',SUBSTRING('"+xdt1+"',7,2),' ',SUBSTRING('"+xdt1+"',9,2),':00')" +
             " AND CONCAT(SUBSTRING('"+xdt2+"',1,4),'-',SUBSTRING('"+xdt2+"',5,2),'-',SUBSTRING('"+xdt2+"',7,2),' ',SUBSTRING('"+xdt2+"',9,2),':00')";
@@ -463,78 +537,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getLiveWarnings(List<String> inParams) {
-        final String xdt1 = inParams.get(0);
-        final String xdt2 = inParams.get(1);
-        final String xExp = inParams.get(2);
-        final String stationA = inParams.get(3);
-        final String idMatch = inParams.get(4);
-        final int limit = Integer.parseInt(inParams.get(5));
-        final String query_LiveWarnings = "SELECT * FROM (" +
-                " SELECT" +
-                "   lw.capVersion, lw.id, lw.published, lw.updated, lw.title," +
-		"   SUBSTRING(lw.summary,1,320) AS briefSummary, lw.summary," +
-		"   lw.cappolygon, lw.cap12polygon, lw.capgeocode, lw.capparameter, lw.capevent," +
-		"   lwc.ColorRGB, lwc.ColorHEX, lwc.ExtendDisplayTime, lwc.ShowIt, lw.GetTime," +
-		"   CASE WHEN lw.capgeocode IS NOT NULL " +
-                "       THEN REPLACE(REPLACE(REPLACE(substring_index(substring_index(lw.capgeocode, 'FIPS6', -1), 'UGC', 1),'\r\n\t ',' '),'  ',''),' ',',')" +
-                "       ELSE ''" +
-		"   END as FIPSCodes," +
-		"   lw.cap12same, lw.cap12ugc, lw.cap12vtec" +
-                " FROM WxObs.LiveWarnings lw" +
-                " LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
-                " WHERE" +
-		"   CASE WHEN lwc.ExtendDisplayTime = 0" +
-                "       THEN" +
-		"           (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
-                "           OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"')" +
-                "           AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
-		"       ELSE" +
-		"           CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
-		"   END" +
-		" AND lw.title IS NOT NULL" +
-		" AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
-		" AND ( lw.capgeocode REGEXP '"+stationA+"' OR lw.cap12same REGEXP '"+stationA+"' )" +
-		" AND lw.id REGEXP '"+idMatch+"'" +
-                " ORDER BY lw.published DESC ) as lwm" +
-                " GROUP BY " +
-                "   CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
-                "   CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
-                "   CASE WHEN cappolygon IS NULL AND cap12polygon IS NULL THEN CONCAT(capevent,FIPSCodes,cap12same) END" +
-                " LIMIT "+limit+";";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs(query_LiveWarnings, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("capVersion", resultSet.getDouble("capVersion"))
-                    .put("id", resultSet.getString("id"))
-                    .put("published", resultSet.getString("published"))
-                    .put("updated", resultSet.getString("updated"))
-                    .put("title", resultSet.getString("title"))
-                    .put("briefSummary", resultSet.getString("briefSummary"))
-                    .put("summary", resultSet.getString("summary"))
-                    .put("cappolygon", resultSet.getString("cappolygon"))
-                    .put("cap12polygon", resultSet.getString("cap12polygon"))
-                    .put("capgeocode", resultSet.getString("capgeocode"))
-                    .put("capparameter", resultSet.getString("capparameter"))
-                    .put("capevent", resultSet.getString("capevent"))
-                    .put("ColorRGB", resultSet.getString("ColorRGB"))
-                    .put("ColorHEX", resultSet.getString("ColorHEX"))
-                    .put("ExtendedDisplayTime", resultSet.getInt("ExtendedDisplayTime"))
-                    .put("ShowIt", resultSet.getInt("ShowIt"))
-                    .put("GetTime", resultSet.getString("GetTime"))
-                    .put("FIPSCodes", resultSet.getString("FIPSCodes"))
-                    .put("cap12same", resultSet.getString("cap12same"))
-                    .put("cap12ugc", resultSet.getString("cap12ugc"))
-                    .put("cap12vtec", resultSet.getString("cap12vtec"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); } 
-        return tContainer;
-    }
+    public JSONArray getLiveWarnings(Connection dbc, List<String> inParams) { return liveWarnings(dbc, inParams); }
     
     public JSONArray getLiveWarningsFipsBounds(List<String> qParams) {
         final String query_LiveWarnings_FIPSBounds = "SELECT" +
