@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 23 May 2018
+Updated: 24 May 2018
 */
 
 package asWebRest.dao;
@@ -23,6 +23,13 @@ public class EntertainmentDAO {
         String returnData = wcb.getDefaultNotRanYet();
         String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Quests SET Completed=1, OrigCompDate=CURDATE() WHERE QuestOrder=?;";
         try { returnData = wc.q2do1c(dbc, query_FFXIV_QuestDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    private String playedGameHours(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
+        try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
@@ -294,5 +301,6 @@ public class EntertainmentDAO {
     }
  
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
+    public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }
     
 }

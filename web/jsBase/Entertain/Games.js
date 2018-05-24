@@ -2,8 +2,14 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 22 May 2018
+Updated: 24 May 2018
  */
+
+function actOnPlayedGameHours(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    setGameHours(thisFormData);
+}
 
 function displayGames() {
     gameButtonListeners();
@@ -26,6 +32,15 @@ function displayGameIndex() {
     getGameIndex(target);
     $("#ETGFF14Q").hide();
     $("#ETGHours").hide();
+}
+
+function gameButtonListeners() {
+    var btnShowHours = dojo.byId("ShETGHours");
+    var btnShowIndex = dojo.byId("ShETGIndex");
+    var btnShowFF14Q = dojo.byId("ShETGFF14Q");
+    dojo.connect(btnShowHours, "click", displayGameHours);
+    dojo.connect(btnShowIndex, "click", displayGameIndex);
+    dojo.connect(btnShowFF14Q, "click", displayGameFf14q);
 }
 
 function getGameData(target) {
@@ -79,18 +94,9 @@ function getGameIndex(target) {
     });
 }
 
-function putFfxivQuestSearchBox(target) {
-    var rData = "<div class='table'>" +
-        "<form class='tr' id='ffxivSearchForm'>" +
-        "<span class='td'><input type='text' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /></span>" +
-        "<span class='td'><strong>Search</strong></span>" +
-        "</form>" +
-        "</div>";
-    dojo.byId(target).innerHTML = rData;
-}
-
 function putGameHours(target, gameHoursTotal, latest, gameHours) {
-    var thCols = [ "Name", "Hours" ];
+    var ghInWidth = 35;
+    var thCols = [ "Do", "Name", "Hours", "New" ];
     var ghe, gheA;
     ghe = gheA = "<div class='table'><div class='tr'>";
     var totalHoursDiv = "<div class='UBox'>Total Hours<br/><span>" + (gameHoursTotal.TotalHours).toFixed(1) + "</span></div>";
@@ -107,26 +113,37 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
     gheA += "</div>";
     var playing = "";
     if(latest.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
-    ghe += "<div class='tr'>" +
-            "<span class='td'>" + latest.Name + playing + "</span>" +
+    ghe += "<form class='tr'>" +
+            "<span class='td'><input type='checkbox' class='doHours'/></span>" +
+            "<span class='td'>" + latest.Name + playing + "<input type='hidden' name='gameName' value='" + latest.Name + "'/></span>" +
             "<span class='td'><div class='UPop'>" + latest.Hours +
             "<div class='UPopO'>Last played: " + latest.Last +
             "</div></div></span>" +
-            "</div>";
+            "<span class='td'>" +
+            "<input type='number' step='1' style='width: 35px;' value='' name='playedHours'/>h " +
+            "<input type='number' step='1' style='width: 35px;' value='' name='playedMinutes'/>m" +
+            "</span>" +
+            "</form>";
     rData += ghe + "<div class='UPopNMO'>";
     gameHours.forEach(function (game) {
         var playing = "";
         if(game.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
-        gheA += "<div class='tr'>" +
-                "<span class='td'>" + game.Name + playing + "</span>" +
+        gheA += "<form class='tr'>" +
+                "<span class='td'><input type='checkbox' class='doHours'/></span>" +
+                "<span class='td'>" + game.Name + playing + "<input type='hidden' name='gameName' value='" + game.Name + "'/></span>" +
                 "<span class='td'><div class='UPop'>" + game.Hours +
                 "<div class='UPopO'>Last played: " + game.Last +
                 "</div></div></span>" +
-                "</div>";
+                "<span class='td'>" +
+                "<input type='number' step='1' style='width: " + ghInWidth + "px;' value='' name='playedHours'/>h " +
+                "<input type='number' step='1' style='width: " + ghInWidth + "px;' value='' name='playedMinutes'/>" +
+                "</span>" +
+                "</form>";
     });
     gheA += "</div>";
     rData += gheA + "</div></div></span>";
     dojo.byId(target).innerHTML = rData;
+    dojo.query(".doHours").connect("onchange", actOnPlayedGameHours);
 }
 
 function putGameIndex(target, gameIndex) {
@@ -154,11 +171,31 @@ function putGameIndex(target, gameIndex) {
     dojo.byId(target).innerHTML = rData;
 }
 
-function gameButtonListeners() {
-    var btnShowHours = dojo.byId("ShETGHours");
-    var btnShowIndex = dojo.byId("ShETGIndex");
-    var btnShowFF14Q = dojo.byId("ShETGFF14Q");
-    dojo.connect(btnShowHours, "click", displayGameHours);
-    dojo.connect(btnShowIndex, "click", displayGameIndex);
-    dojo.connect(btnShowFF14Q, "click", displayGameFf14q);
+function setGameHours(formData) {
+    var target = "ETGHours";
+    aniPreload("on");
+    var playedMinutes = 0;
+    if(formData.playedMinutes) { playedMinutes = Number(playedMinutes + formData.playedMinutes); }
+    if(formData.playedHours) { playedMinutes = Number(playedMinutes + (60 * formData.playedHours)); }
+    var thePostData = {
+        "doWhat": "setPlayedGameHours",
+        "minutes": playedMinutes,
+        "game": formData.gameName
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice(formData.gameName + " for " + (playedMinutes/60).toFixed(1) + " hr!");
+                    getGameData(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Update Game Hours FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }

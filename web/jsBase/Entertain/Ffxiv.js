@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 23 May 2018
+Updated: 24 May 2018
  */
 
 var ffxivQuests;
@@ -10,7 +10,6 @@ var ffxivQuests;
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToJson(this.form);
     setFfxivQuestDone(thisFormData);
 }
 
@@ -41,6 +40,16 @@ function ffxivQuestHint(value) {
         });
         putFfxivQuestList("questList", matchingRows);    
     }
+}
+
+function putFfxivQuestSearchBox(target) {
+    var rData = "<div class='table'>" +
+        "<form class='tr' id='ffxivSearchForm'>" +
+        "<span class='td'><input type='text' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /></span>" +
+        "<span class='td'><strong>Search</strong></span>" +
+        "</form>" +
+        "</div>";
+    dojo.byId(target).innerHTML = rData;
 }
 
 function getGameFf14q(target) {

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 16 Apr 2018
+Updated: 24 May 2018
  */
 
 package asWebRest.resource;
@@ -97,6 +97,12 @@ public class EntertainmentResource extends ServerResource {
                 case "setFfxivQuestDone":
                     qParams.add(0, argsInForm.getFirstValue("questOrder"));
                     returnData += updateEntertainmentAction.setFfxivQuestDone(dbc, qParams);
+                    break;
+                    
+                case "setPlayedGameHours":
+                    qParams.add(0, argsInForm.getFirstValue("minutes"));
+                    qParams.add(1, argsInForm.getFirstValue("game"));
+                    returnData += updateEntertainmentAction.setPlayedGameHours(dbc, qParams);
                     break;
                     
             }
