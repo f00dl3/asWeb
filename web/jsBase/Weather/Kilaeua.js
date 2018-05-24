@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 May 2018
-Updated: 23 May 2018
+Updated: 24 May 2018
  */
 
 function popKilaeuaCam() {
@@ -9,18 +9,19 @@ function popKilaeuaCam() {
     var timestamp = getDate("minute", 0, "timestamp");
     var camLink = getBasePath("getOld") + "/Kilaeua/KICam_Latest.jpg";
     var cObj = "<a href='" + camLink + "' target='kcam'>" +
-            "<img class='ch_small' src='" + camLink + "?ts=" + timestamp + "'>" +
+            "<img class='th_small' src='" + camLink + "?ts=" + timestamp + "'>" +
             "</a>";
     dojo.byId("kCamHolder").innerHTML = cObj;
     setTimeout(function() { popKilaeuaCam(); }, timeout);
 }
 
 function popKilaueaSpectro() {
-    var timeout = 1000 * 5;
+    var timeout = 1000 * 10;
     var timestamp = getDate("minute", 0, "timestamp");
     var spectLink = "http://st-rau.de/img/seismo.jpg";
-    var spectHolder = "<a href='" + spectLink + "' target='specKil'>" + 
-            "<img class='ch_small' src='" + spectLink + "?" + timestamp + "'></a>";
+    var seisLink = "https://volcanoes.usgs.gov/vsc/captures/kilauea/PAUD-6h.png";
+    var spectHolder = "<a href='" + spectLink + "' target='specKil'><img class='th_small' src='" + spectLink + "?" + timestamp + "'></a>" +
+            "<a href='" + seisLink + "' target='seiKil'><img class='th_small' src='" + seisLink + "?" + timestamp + "'></a>";
     dojo.byId("kSpectHolder").innerHTML= spectHolder;
     setTimeout(function() { popKilaueaSpectro(); }, timeout);
 }

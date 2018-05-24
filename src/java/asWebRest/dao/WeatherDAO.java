@@ -17,6 +17,7 @@ public class WeatherDAO {
     
     private JSONArray liveWarnings(Connection dbc, List<String> inParams) {
         // This fails right now. 5/23/18.
+        // Reason: Worked when CAP data was in TEXT but now it's in JSON, REGEX does not work on JSON.
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String xExp = inParams.get(2);
@@ -47,7 +48,7 @@ public class WeatherDAO {
 		"   END" +
 		" AND lw.title IS NOT NULL" +
 		" AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
-		" AND ( lw.capgeocode REGEXP '"+stationA+"' OR lw.cap12same REGEXP '"+stationA+"' )" +
+		" AND ( lw.capgeocode REGEXP '%"+stationA+"%' OR lw.cap12same REGEXP '%"+stationA+"%' )" +
 		" AND lw.id REGEXP '"+idMatch+"'" +
                 " ORDER BY lw.published DESC ) as lwm" +
                 " GROUP BY " +
