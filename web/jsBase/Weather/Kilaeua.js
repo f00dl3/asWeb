@@ -18,10 +18,16 @@ function popKilaeuaCam() {
 function popKilaueaSpectro() {
     var timeout = 1000 * 10;
     var timestamp = getDate("minute", 0, "timestamp");
-    var spectLink = "http://st-rau.de/img/seismo.jpg";
-    var seisLink = "https://volcanoes.usgs.gov/vsc/captures/kilauea/PAUD-6h.png";
-    var spectHolder = "<a href='" + spectLink + "' target='specKil'><img class='th_small' src='" + spectLink + "?" + timestamp + "'></a>" +
-            "<a href='" + seisLink + "' target='seiKil'><img class='th_small' src='" + seisLink + "?" + timestamp + "'></a>";
+    var spectHolder = "";
+    var volcLinks = [
+        "https://volcanoes.usgs.gov/vsc/captures/kilauea/summit_uwe_tilt_2weeks.png",
+        "http://st-rau.de/img/seismo.jpg",
+        "https://volcanoes.usgs.gov/vsc/captures/kilauea/PAUD-6h.png",
+        "https://volcanoes.usgs.gov/vsc/captures/kilauea/UWB-6h.png"
+    ];
+    for (var i = 0; i < volcLinks.length; i++) {
+        spectHolder += "<a href='" + volcLinks[i] + "' target='specKil'><img class='th_small' src='" + volcLinks[i] + "?" + timestamp + "'></a>";
+    }
     dojo.byId("kSpectHolder").innerHTML= spectHolder;
     setTimeout(function() { popKilaueaSpectro(); }, timeout);
 }
