@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 6 May 2018
+Updated: 25 May 2018
  */
 
 if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
@@ -10,7 +10,14 @@ if(!isSet(cf6End)) { var cf6End = getDate("day", 0, "dateOnly"); }
 function actOnCf6Search(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
+    setRainGauge(thisFormData);
     getCf6Data(thisFormData);
+}
+
+function actOnUpdateRainGauge(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    getCf6Data();
 }
 
 function displayCf6() {
@@ -294,4 +301,27 @@ function popTempDistTable(trDat) {
     for (var i = 110; i >= -20; i = i-10) { tempDistTable += "<td>" + i + "s</td>"; }
     tempDistTable += "</tr></tbody></table>";
     dojo.byId("tempDistHolder").innerHTML = rData;
+}
+
+function setRainGauge(formData) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setUpdateRainGauge",
+        "precip": formData.precip
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Wx"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Rain Gauge updated!");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Update Rain Gauge FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
