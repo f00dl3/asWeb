@@ -10,14 +10,15 @@ if(!isSet(cf6End)) { var cf6End = getDate("day", 0, "dateOnly"); }
 function actOnCf6Search(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    setRainGauge(thisFormData);
     getCf6Data(thisFormData);
 }
 
-function actOnUpdateRainGauge(event) {
+function actOnRainGauge(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    getCf6Data();
+    var thisFormDataJ = dojo.formToJson(this.form);
+    window.alert(thisFormDataJ);
+    setRainGauge(thisFormData);
 }
 
 function displayCf6() {
@@ -198,10 +199,20 @@ function popCf6Search(amDat) {
             "<input type='hidden' name='DoCf6Search' value='Yes'/>" +
             "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
-    rData += searchForm;
+    var rainGaugeForm = "<form id='rainGaugeForm'>" +
+            "<strong>New Rainfall<br/>@ Home</strong><br>" +
+            "<input name='precip' type='number' step='0.01' style='width: 75px;' value=''/><button class='UButton' id='doRainGauge'>Log It!</button>" +
+            "</form>";
+    var encapsulatingDiv = "<div class='table'><div class='tr'>" + 
+            "<span class='td'>" + searchForm + "</span>" +
+            "<span class='td'>" + rainGaugeForm + "</span>" +
+            "</div></div>";
+    rData += encapsulatingDiv;
     dojo.byId("cf6SearchHolder").innerHTML = rData;
     var cf6SearchButton = dojo.byId("Cf6SearchButton");
+    var rainGaugeButton = dojo.byId("doRainGauge");
     dojo.connect(cf6SearchButton, "click", actOnCf6Search);
+    dojo.connect(rainGaugeButton, "click", actOnRainGauge);
 }
 
 function popLastYearGraphed() {
@@ -317,6 +328,7 @@ function setRainGauge(formData) {
             }).then(
                 function(data) {
                     aniPreload("off");
+                    getCf6Data();
                     showNotice("Rain Gauge updated!");
                 },
                 function(error) { 

@@ -169,6 +169,7 @@ public class WeatherResource extends ServerResource {
                     
                 case "setUpdateRainGauge":
                     qParams.add(0, argsInForm.getFirstValue("precip"));
+                    qParams.add(1, argsInForm.getFirstValue("precip"));
                     returnData += updateWeatherAction.setUpdateRainGauge(dbc, qParams);
                     break;
                     

@@ -1,13 +1,12 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 23 May 2018
+Updated: 25 May 2018
  */
 
 package asWebRest.chartHelpers;
 
 import asWebRest.shared.WebCommon;
-import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
