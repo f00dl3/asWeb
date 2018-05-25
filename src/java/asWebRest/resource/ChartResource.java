@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 23 May 2018
+Updated: 25 May 2018
  */
 
 package asWebRest.resource;
 
+import asWebRest.action.GetEntertainmentAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetSnmpAction;
@@ -19,6 +20,7 @@ import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
 import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
+import asWebRest.dao.EntertainmentDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.SnmpDAO;
@@ -49,6 +51,7 @@ public class ChartResource extends ServerResource {
         boolean genericCharts = false;
         
         DynChartX dynChart = new DynChartX();
+        GetEntertainmentAction getEntertainmentAction = new GetEntertainmentAction(new EntertainmentDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
@@ -85,7 +88,23 @@ public class ChartResource extends ServerResource {
         
         if(doWhat != null) {
             switch (doWhat) {
-                
+                                                   
+                case "EntertainmentFfxivQuestsByDate":
+                    genericCharts = true;
+                    final String fullChartNameQBD = "FFXIV Quests By Date";
+                    JSONArray jsonResultArrayQBD = getEntertainmentAction.getFfxivQuestsByDate(dbc);
+                    for (int i = 0; i < jsonResultArrayQBD.length(); i++) {
+                        JSONObject thisObject = jsonResultArrayQBD.getJSONObject(i);
+                        labels.put(thisObject.getString("OrigCompDate"));
+                        data.put(thisObject.getInt("OnThisDate"));
+                    }
+                    props
+                        .put("dateFormat", "yyyy-MM-dd")
+                        .put("chartName", fullChartNameQBD).put("chartFileName", "ffxivQuestsByDay")
+                        .put("sName", "Quests").put("sColor", "Yellow")
+                        .put("xLabel", "Date").put("yLabel", "Quests");
+                    break;
+                    
                 case "FinanceBills":
                     genericCharts = false;
                     JSONArray bill_Raw = getFinanceAction.getBills(dbc);

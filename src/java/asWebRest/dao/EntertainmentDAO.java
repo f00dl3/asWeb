@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 24 May 2018
+Updated: 25 May 2018
 */
 
 package asWebRest.dao;
@@ -18,17 +18,35 @@ public class EntertainmentDAO {
     
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
+    
+    private JSONArray ffxivQuestsByDate(Connection dbc) {
+        final String query_FfxivQuestByDate = "SELECT OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
+                " FROM FFXIV_Quests WHERE OrigCompDate IS NOT NULL GROUP BY OrigCompDate;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivQuestByDate, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("OrigCompDate", resultSet.getString("OrigCompDate"))
+                    .put("OnThisDate", resultSet.getInt("OnThisDate"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
         
     private String ffxivQuestDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Quests SET Completed=1, OrigCompDate=CURDATE() WHERE QuestOrder=?;";
+        final String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Quests SET Completed=1, OrigCompDate=CURDATE() WHERE QuestOrder=?;";
         try { returnData = wc.q2do1c(dbc, query_FFXIV_QuestDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
     private String playedGameHours(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
+        final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -64,6 +82,8 @@ public class EntertainmentDAO {
         return tContainer;
     }
         
+    public JSONArray getFfxivQuestsByDate(Connection dbc) { return ffxivQuestsByDate(dbc); }
+    
     public JSONArray getGameHours(Connection dbc) {
         final String query_GameHours = "SELECT Name, CAST(Hours AS DECIMAL(5,0)) AS Hours, Last, Active FROM Core.GameHours ORDER BY Hours DESC;";
         JSONArray tContainer = new JSONArray();

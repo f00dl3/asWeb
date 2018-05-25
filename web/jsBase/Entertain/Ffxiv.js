@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 24 May 2018
+Updated: 25 May 2018
  */
 
 var ffxivQuests;
@@ -54,6 +54,27 @@ function putFfxivQuestSearchBox(target) {
 
 function getGameFf14q(target) {
     var timeout = 2 * 60 * 1000;
+    aniPreload("on");
+    var thePostData = { "doWhat": "EntertainmentFfxivQuestsByDate" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getGameFf14qData(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for FFXIV Quests by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    setTimeout(function () { getGameFf14q(target); }, timeout);
+}
+
+function getGameFf14qData(target) {
     getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = { "doWhat": "getFfxivQuests" };
@@ -74,7 +95,6 @@ function getGameFf14q(target) {
                     window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getGameFf14q(target); }, timeout);
 }
 
 function putFfxivQuestList(target, questData) {
@@ -130,7 +150,8 @@ function putFfxivQuests(target, questData) {
     });
     var rData = "<a href='" + charProfLink + "' target='new'>Foodle Faddle</a>" +
             "<h3>Quests</h3><strong>Indexed quests: " + qCount + "<br/>" +
-            "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)" +
+            "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
+            "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
             "<p><div id='qSearchHolder'></div>" +
             "<p><div id='questList'></div>";
     dojo.byId(target).innerHTML = rData;
