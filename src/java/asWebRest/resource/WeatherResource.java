@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 6 May 2018
+Updated: 25 May 2018
  */
 
 package asWebRest.resource;
@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.action.UpdateWeatherAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
@@ -42,6 +43,7 @@ public class WeatherResource extends ServerResource {
         GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+        UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
         final Form argsInForm = new Form(argsIn);
         
         String doWhat = null;
@@ -163,6 +165,11 @@ public class WeatherResource extends ServerResource {
                     qParams.add(1, "%");
                     JSONArray spcFeed = getWeatherAction.getSpcLive(dbc, qParams);
                     returnData = spcFeed.toString();
+                    break;
+                    
+                case "setUpdateRainGauge":
+                    qParams.add(0, argsInForm.getFirstValue("precip"));
+                    returnData += updateWeatherAction.setUpdateRainGauge(dbc, qParams);
                     break;
                     
             }

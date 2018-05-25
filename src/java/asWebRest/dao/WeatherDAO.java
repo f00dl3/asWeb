@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 23 May 2018
+Updated: 25 May 2018
  */
 
 package asWebRest.dao;
 
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class WeatherDAO {
+    
+    private CommonBeans wcb = new CommonBeans();
     
     private JSONArray liveWarnings(Connection dbc, List<String> inParams) {
         // This fails right now. 5/23/18.
@@ -104,6 +107,13 @@ public class WeatherDAO {
         return " SUBSTRING(GetTime, 1, 10) AS Date, CONCAT(SUBSTRING(GetTime, 12, 2),SUBSTRING(GetTime, 15, 2)) AS Time,";
     }
 
+    private String updateRainGauge(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_UpdateRainGauge = "INSERT INTO WxObs.RainGauge VALUES (CURDATE(),?,2);";
+        try { returnData = wc.q2do1c(dbc, query_UpdateRainGauge, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     // xdt1, xdt2, limit - pass orderSet string
     private String xmlBindTheRest(String orderSet) {
         return " WHERE GetTime BETWEEN ? AND ? ORDER BY GetTime "+orderSet+" LIMIT ?";
@@ -976,5 +986,7 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-    
+ 
+    public String setUpdateRainGauge(Connection dbc, List<String> qParams) { return updateRainGauge(dbc, qParams); }
+        
 }
