@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    22 May 2018
+    Updated:    29 May 2018
     Author     : astump
 --%>
 
@@ -47,6 +47,9 @@
         "Fitness/Calories",
         "Fitness/Plans",
         "Fitness/Today"
+    };
+    
+    String[] olMapScripts = {
     };
     
     String[] snmpScripts = {
@@ -114,6 +117,11 @@
     for(int i=0; i < fitScripts.length; i++) {
         fitScriptPack += "<script src='"+rootPath+"/jsBase/"+fitScripts[i]+".js'></script>";
     }
+    
+    String olMapScriptPack = "";
+    for(int i=0; i < olMapScripts.length; i++) {
+        olMapScriptPack += "<script src='"+rootPath+"/jsBase/"+olMapScripts[i]+".js'></script>";
+    }
         
     String snmpScriptPack = "";
     for(int i=0; i < snmpScripts.length; i++) {
@@ -156,6 +164,10 @@
             case "Fitness":
                 scripts2Load += "<script src='"+rootPath+"/jsBase/Weather/WxFunctions.js'></script>" +
                         fitScriptPack;
+                break;
+            case "OLMap":
+                fullTitle = "Maps OL";
+                scripts2Load += olMapScriptPack;
                 break;
             case "OutMap":
                 fullTitle = "Maps";
