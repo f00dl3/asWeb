@@ -32,8 +32,25 @@ function initMap(action) {
         })
     });
     var raster = localTiles;
-    var source = new ol.source.Vector({ wrapX: false });
-    var vector = new ol.layer.Vector({ source: source });
+    var source = new ol.source.Vector({
+        format: new ol.format.GeoJSON,
+        wrapX: false
+    });
+    var style = {
+        'LineString': new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'yellow',
+                width: 5
+            })
+        })
+    };
+    var styleFunction = function(feature) {
+        return style[feature.getGeometry().getType()];
+    };
+    var vector = new ol.layer.Vector({
+        source: source,
+        style: styleFunction
+    });
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -55,7 +72,13 @@ function initMap(action) {
                     });
                     map.addInteraction(draw);
                 }
+                function logFeatures() {
+                    var writer = new ol.format.GeoJSON();
+                    var geoJsonStr = writer.writeFeatures(vectorSource.getFeatures());
+                    console.log(geoJsonStr);
+                }
                 addInteraction();
+                logFeatures();
                 break;
         }
     }
