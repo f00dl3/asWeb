@@ -1,6 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
+    Updated: 30 May 2018
     Author     : astump
 --%>
 
@@ -16,6 +17,7 @@
 
     <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/ol.css"/>
     <script src="/asWeb/jsLib/OpenLayers/ol.js"></script>
+    <script src="/asWeb/jsLib/OpenLayers/proj4.js"></script>
     
 <jsp:include page="/inc/Header.jsp?type=full&title=OLMap&scripts=true"></jsp:include>
 

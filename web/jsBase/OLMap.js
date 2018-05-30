@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
+Updated: 30 May 2018
  */
 
 function generateMapHolder() {
@@ -15,7 +16,7 @@ function generateMapHolder() {
 
 function initMap() {
     var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
-    console.log(tilePathLocal);
+    var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
     var remoteTiles = new ol.layer.Tile({
         source: new ol.source.OSM()
     });
@@ -32,13 +33,11 @@ function initMap() {
     var map = new ol.Map({
         target: 'map',
         layers: [
-            remoteTiles,
             localTiles
         ],
         view: new ol.View({
-            center: ol.proj.fromLonLat([getHomeGeo("lat"), getHomeGeo("lon")]),
-            maxZoom: 17,
-            zoom: 4
+            center: wmGeoJson,
+            zoom: 14
         })
     });
 }
