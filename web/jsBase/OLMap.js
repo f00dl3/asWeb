@@ -14,7 +14,7 @@ function generateMapHolder() {
 }
 
 function initMap() {
-    var tilePathLocal = getBasePath("osmTiles") + '{z}/{x}/{y}.png';
+    var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
     console.log(tilePathLocal);
     var remoteTiles = new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -38,7 +38,7 @@ function initMap() {
         view: new ol.View({
             center: ol.proj.fromLonLat([getHomeGeo("lat"), getHomeGeo("lon")]),
             maxZoom: 17,
-            zoom: 14
+            zoom: 4
         })
     });
 }
