@@ -78,14 +78,19 @@ function putDrawPathMap() {
         var value = "LineString";
         draw = new ol.interaction.Draw({
             source: source,
-            type: value
+            type: (value)
         });
         map.addInteraction(draw);
-        vectorSource.addFeatures(draw);
-        logFeatures();
+        draw.on('drawend', function(evt) {
+            map.removeInteraction(draw);
+            console.log("Draw event ended.");
+            vectorSource.addFeatures(draw);
+            logFeatures();
+        }, this);
     }
     function logFeatures() {
         var writer = new ol.format.GeoJSON();
+        console.log(vectorSource.getFeatures());
         var geoJsonStr = writer.writeFeatures(vectorSource.getFeatures());
         console.log(geoJsonStr);
     }
