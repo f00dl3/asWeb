@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 22 May 2018
+Updated: 30 May 2018
  */
 
 
@@ -123,6 +123,7 @@ function deg2rad(degrees) {
 }
 
 function doCh(type, dynVar, opts) {
+    var timestamp = getDate("day", 0, "timestamp");
     var dBack = "";
     var chFileName = dynVar + ".png";
     switch(type) {
@@ -132,7 +133,7 @@ function doCh(type, dynVar, opts) {
             break;
         case "j":
             if(opts === "t") { chFileName = "th_" + chFileName; }
-            dBack += getBasePath("chartCache") + "/" + chFileName;
+            dBack += getBasePath("chartCache") + "/" + chFileName + "?" + timestamp;
             break;
     }
     return dBack;
