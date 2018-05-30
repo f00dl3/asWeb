@@ -4,8 +4,8 @@ Created: 29 May 2018
  */
 
 function generateMapHolder() {
-    var mapHeight = "100%";
-    var mapWidth = "100%";
+    var mapHeight = "88%";
+    var mapWidth = "95%";
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
     var rData = styleForMap + "<h3>Test Map</h3><br/>" +
         "<div id='map' class='map'></div>";
@@ -16,6 +16,9 @@ function generateMapHolder() {
 function initMap() {
     var tilePathLocal = getBasePath("osmTiles") + '{z}/{x}/{y}.png';
     console.log(tilePathLocal);
+    var remoteTiles = new ol.layer.Tile({
+        source: new ol.source.OSM()
+    });
     var localTiles = new ol.layer.Tile({
         source: new ol.source.OSM({
             attributions: [
@@ -29,11 +32,13 @@ function initMap() {
     var map = new ol.Map({
         target: 'map',
         layers: [
+            remoteTiles,
             localTiles
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([getHomeGeo("lat"), getHomeGeo("lon")]),
-            zoom: 4
+            maxZoom: 17,
+            zoom: 14
         })
     });
 }
