@@ -8,7 +8,8 @@ function generateMapHolder(action) {
     var mapHeight = "95%";
     var mapWidth = "100%";
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
-    var rData = styleForMap + "<div id='map' class='map'></div>";
+    var rData = styleForMap + "<div id='map' class='map'></div><br/>" +
+            "<div id='MessageHolder'></div>";
     dojo.byId("OLMapHolder").innerHTML = rData;
     initMap(action);
 }

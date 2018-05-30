@@ -75,24 +75,23 @@ function putDrawPathMap() {
         })
     });
     function addInteraction() {
-        var value = "LineString";
+        var typeOfDraw = "LineString";
         draw = new ol.interaction.Draw({
             source: source,
-            type: (value)
+            type: typeOfDraw
         });
-        map.addInteraction(draw);
+        map.addInteraction(draw);   
+        vectorSource.addFeatures(draw);
         draw.on('drawend', function(evt) {
             map.removeInteraction(draw);
             console.log("Draw event ended.");
-            vectorSource.addFeatures(draw);
             logFeatures();
         }, this);
     }
     function logFeatures() {
         var writer = new ol.format.GeoJSON();
-        console.log(vectorSource.getFeatures());
         var geoJsonStr = writer.writeFeatures(vectorSource.getFeatures());
-        console.log(geoJsonStr);
+        dojo.byId("MessageHolder").innerHTML = geoJsonStr;
     }
     addInteraction();
 }
