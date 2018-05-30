@@ -4,11 +4,11 @@ Created: 29 May 2018
 Updated: 30 May 2018
  */
 
-function generateMapHolder() {
-    var mapHeight = "88%";
+function generateMapHolder(mapTitle) {
+    var mapHeight = "93%";
     var mapWidth = "95%";
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
-    var rData = styleForMap + "<h3>Test Map</h3><br/>" +
+    var rData = styleForMap + "<strong>" + mapTitle + "</strong><br/>" +
         "<div id='map' class='map'></div>";
     dojo.byId("OLMapHolder").innerHTML = rData;
     initMap();
@@ -26,6 +26,7 @@ function initMap() {
                 'Anthony Stump 2018',
                 ol.source.OSM.ATTRIBUTION
             ],
+            crossOrigin: null,
             opaque: false,
             url: tilePathLocal
         })
@@ -43,7 +44,7 @@ function initMap() {
 }
 
 function initOLMapPage() {
-    generateMapHolder();
+    generateMapHolder("Local OpenLayers Test Map");
 }
 
 dojo.ready(initOLMapPage);
