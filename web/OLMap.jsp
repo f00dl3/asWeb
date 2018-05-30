@@ -17,7 +17,6 @@
 
     <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/ol.css"/>
     <script src="/asWeb/jsLib/OpenLayers/ol.js"></script>
-    <script src="/asWeb/jsLib/OpenLayers/proj4.js"></script>
     
 <jsp:include page="/inc/Header.jsp?type=full&title=OLMap&scripts=true"></jsp:include>
 

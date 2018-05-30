@@ -4,17 +4,17 @@ Created: 29 May 2018
 Updated: 30 May 2018
  */
 
-function generateMapHolder(mapTitle) {
-    var mapHeight = "93%";
-    var mapWidth = "95%";
+function generateMapHolder(action) {
+    var mapHeight = "98%";
+    var mapWidth = "98%";
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
-    var rData = styleForMap + "<strong>" + mapTitle + "</strong><br/>" +
-        "<div id='map' class='map'></div>";
+    var rData = styleForMap + "<div id='map' class='map'></div>";
     dojo.byId("OLMapHolder").innerHTML = rData;
-    initMap();
+    initMap(action);
 }
 
-function initMap() {
+function initMap(action) {
+    var draw;
     var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
     var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
     var remoteTiles = new ol.layer.Tile({
@@ -31,20 +31,38 @@ function initMap() {
             url: tilePathLocal
         })
     });
+    var raster = localTiles;
+    var source = new ol.source.Vector({ wrapX: false });
+    var vector = new ol.layer.Vector({ source: source });
     var map = new ol.Map({
         target: 'map',
         layers: [
-            localTiles
+            raster, vector
         ],
         view: new ol.View({
             center: wmGeoJson,
             zoom: 14
         })
     });
+    if(isSet(action)) {
+        switch(action) {
+            case "draw":
+                function addInteraction() {
+                    var value = "LineString";
+                    draw = new ol.interaction.Draw({
+                        source: source,
+                        type: value
+                    });
+                    map.addInteraction(draw);
+                }
+                addInteraction();
+                break;
+        }
+    }
 }
 
 function initOLMapPage() {
-    generateMapHolder("Local OpenLayers Test Map");
+    generateMapHolder("draw");
 }
 
 dojo.ready(initOLMapPage);
