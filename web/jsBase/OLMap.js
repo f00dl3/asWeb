@@ -3,31 +3,43 @@ by Anthony Stump
 Created: 29 May 2018
  */
 
+function generateMapHolder() {
+    var mapHeight = "100%";
+    var mapWidth = "100%";
+    var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
+    var rData = styleForMap + "<h3>Test Map</h3><br/>" +
+        "<div id='map' class='map'></div>";
+    dojo.byId("OLMapHolder").innerHTML = rData;
+    initMap();
+}
+
 function initMap() {
+    var tilePathLocal = getBasePath("osmTiles") + '{z}/{x}/{y}.png';
+    console.log(tilePathLocal);
+    var localTiles = new ol.layer.Tile({
+        source: new ol.source.OSM({
+            attributions: [
+                'Anthony Stump 2018',
+                ol.source.OSM.ATTRIBUTION
+            ],
+            opaque: false,
+            url: tilePathLocal
+        })
+    });
     var map = new ol.Map({
         target: 'map',
         layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
-            })
+            localTiles
         ],
         view: new ol.View({
-            center: ol.proj.fromLonLat([37.41, 8.82]),
+            center: ol.proj.fromLonLat([getHomeGeo("lat"), getHomeGeo("lon")]),
             zoom: 4
         })
     });
 }
 
-function mapHeader() {
-    var rData = "<h3>Test Map</h3>";
-    dojo.byId("MapTitleSection").innerHTML = rData;
+function initOLMapPage() {
+    generateMapHolder();
 }
 
-function init() {
-    mapHeader();
-    //initMap();
-}
-
-dojo.ready(init);
-
-
+dojo.ready(initOLMapPage);
