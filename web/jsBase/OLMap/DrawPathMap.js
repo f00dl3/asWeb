@@ -34,10 +34,6 @@ function putDrawPathMap() {
     var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
     var features = (new ol.format.GeoJSON()).readFeatures(jsonDrawn);
     var raster = localTiles;
-    var source = new ol.source.Vector({
-        format: new ol.format.GeoJSON,
-        wrapX: false
-    });
     var style = {
         'LineString': new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -49,13 +45,13 @@ function putDrawPathMap() {
     var styleFunction = function(feature) {
         return style[feature.getGeometry().getType()];
     };
-    var vector = new ol.layer.Vector({
-        source: source,
-        style: styleFunction
-    });
     var vectorSource = new ol.source.Vector({
         features: features,
         format: new ol.format.GeoJSON()
+    });
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: styleFunction
     });
     var map = new ol.Map({
         controls: ol.control.defaults({
@@ -67,7 +63,7 @@ function putDrawPathMap() {
         ]),
         target: 'map',
         layers: [
-            raster, vector
+            raster, vectorLayer
         ],
         view: new ol.View({
             center: wmGeoJson,
@@ -77,7 +73,7 @@ function putDrawPathMap() {
     function addInteraction() {
         var typeOfDraw = "LineString";
         draw = new ol.interaction.Draw({
-            source: source,
+            source: vectorSource,
             type: typeOfDraw
         });
         map.addInteraction(draw);   
