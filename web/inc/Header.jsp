@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    30 May 2018
+    Updated:    31 May 2018
     Author     : astump
 --%>
 
@@ -50,6 +50,7 @@
     };
     
     String[] olMapScripts = {
+        "OLMap/AddElements",
         "OLMap/CommonStuff",
         "OLMap/DrawPathMap",
         "OLMap/SimpleMap"

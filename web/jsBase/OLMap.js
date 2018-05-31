@@ -22,7 +22,7 @@ function initMap(action) {
 }
 
 function initOLMapPage() {
-    generateMapHolder("drawPath");
+    generateMapHolder();
 }
 
 dojo.ready(initOLMapPage);

@@ -16,5 +16,17 @@ function putSimpleMap() {
             zoom: 14
         })
     });
+    if(isSet(dataInput) && isSet(doAction)) {
+        switch(doAction) {
+            case "Route":
+                var pointsToAdd = dataInput;
+                var featureLine = new ol.Feature({ geometry: new ol.geom.LineString(pointsToAdd) });
+                var sourceLine = new ol.source.Vector({ features: [featureLine] });
+                var vectorLine = new ol.layer.Vector({ source: sourceLine });
+                map.addLayer(vectorLine);
+                dojo.byId("MessageHolder").innerHTML = dataInput;
+                break;
+        }
+    } 
 }
 

@@ -1,15 +1,30 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
-    Updated: 30 May 2018
+    Updated: 31 May 2018
     Author     : astump
 --%>
 
+<%@ page import="asWebRest.shared.WebCommon" %>
+
 <%
+    
     String headerType = "full";
     String pageTitle = "OLMap";
     String scriptIt = "true";
     String authCheck = "true";
+    
+    WebCommon wc = new WebCommon();
+    
+    if(wc.isSet(request.getParameter("action")) && wc.isSet(request.getParameter("dataInput"))) {
+        String action = wc.basicInputFilter(request.getParameter("action"));
+        String postData = wc.basicInputFilter(request.getParameter("dataInput"));
+        %><script>
+            var doAction = "<% out.print(action); %>";
+            var dataInput = "<% out.print(postData); %>";
+        </script><%
+    }
+    
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
