@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 May 2018
+Updated: 2 Jun 2018
 */
 
 package asWebRest.dao;
@@ -29,7 +29,8 @@ public class FitnessDAO {
                 " f.TrackedTime, f.TrackedDist," +
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
                 " f.RunSpeedAvg, f.RunSpeedMax, f.RunHeartAvg, f.RunHeartMax," +
-                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags, f.Vomit, f.EstHoursSleep," +
+                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags," +
+                " f.Vomit, f.EstHoursSleep, f.Swimming," +
                 " cf6.High, cf6.Low, cf6.Average," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
@@ -88,6 +89,7 @@ public class FitnessDAO {
                     .put("xTags", resultSet.getString("xTags"))
                     .put("Vomit", resultSet.getInt("Vomit"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"))
+                    .put("Swimming", resultSet.getInt("Swimming"))
                     .put("High", resultSet.getInt("High"))
                     .put("Low", resultSet.getInt("Low"))
                     .put("Average", resultSet.getInt("Average"))

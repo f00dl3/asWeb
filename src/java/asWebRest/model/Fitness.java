@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 20 May 2018
+Updated: 2 Jun 2018
 
 Applies to multiple tables:
     Core.Fitness
@@ -71,6 +71,7 @@ public class Fitness {
     private String shoe;
     private int sodium;
     private int sugar;
+    private int swimming;
     private int trackedTime;
     private double trackedDist;
     private int vomit;
@@ -133,6 +134,7 @@ public class Fitness {
     public String getShoe() { return shoe; }
     public int getSodium() { return sodium; }
     public int getSugar() { return sugar; }
+    public int getSwimming() { return swimming; }
     public int getTrackedTime() { return trackedTime; }
     public double getTrackedDist() { return trackedDist; }
     public int getVomit() { return vomit; }
@@ -194,6 +196,7 @@ public class Fitness {
     public void setShoe(String shoe) { this.shoe = shoe; }
     public void setSodium(int sodium) { this.sodium = sodium; }
     public void setSugar(int sugar) { this.sugar = sugar; }
+    public void setSwimming(int swimming) { this.swimming = swimming; }
     public void setTrackedTime(int trackedTime) { this.trackedTime = trackedTime; }
     public void setTrackedDist(double trackedDist) { this.trackedDist = trackedDist; }
     public void setVomit(int vomit) { this.vomit = vomit; }
