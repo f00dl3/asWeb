@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
+Updated: 2 Jun 2018
  */
 
 function putSimpleMap() {
@@ -16,15 +17,22 @@ function putSimpleMap() {
             zoom: 14
         })
     });
-    if(isSet(dataInput) && isSet(doAction)) {
+    if(isSet(doAction) /* && isSet(dataInput) */) {
         switch(doAction) {
             case "Route":
-                var pointsToAdd = dataInput;
-                var featureLine = new ol.Feature({ geometry: new ol.geom.LineString(pointsToAdd) });
-                var sourceLine = new ol.source.Vector({ features: [featureLine] });
-                var vectorLine = new ol.layer.Vector({ source: sourceLine });
+                var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
+                console.log(dataInputOverride);
+                var pointsToAdd = dataInputOverride; //dataInput when all is working.
+                var vectorLine = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: [new ol.Feature({
+                                geometry: new ol.geom.LineString(pointsToAdd),
+                                name: 'Line'
+                        })]
+                    })
+                });
                 map.addLayer(vectorLine);
-                dojo.byId("MessageHolder").innerHTML = dataInput;
+                dojo.byId("MessageHolder").innerHTML = dataInputOverride;
                 break;
         }
     } 

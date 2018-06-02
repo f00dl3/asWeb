@@ -16,9 +16,9 @@
     
     WebCommon wc = new WebCommon();
     
-    if(wc.isSet(request.getParameter("action")) && wc.isSet(request.getParameter("dataInput"))) {
+    if(wc.isSet(request.getParameter("action")) /* && wc.isSet(request.getParameter("dataInput")) */) {
         String action = wc.basicInputFilter(request.getParameter("action"));
-        String postData = wc.basicInputFilter(request.getParameter("dataInput"));
+        String postData = "test"; /* wc.basicInputFilter(request.getParameter("dataInput")); */
         %><script>
             var doAction = "<% out.print(action); %>";
             var dataInput = "<% out.print(postData); %>";
