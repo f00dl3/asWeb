@@ -20,6 +20,12 @@ function reverseGeodata(pointsToAdd) {
     return resortedPoints;
 }
 
+function transform_geometry(element) {
+    var current_projection = new ol.proj.Projection({code: "EPSG:4326"});
+    var new_projection = localTiles.getSource().getProjection();
+    element.getGeometry().transform(current_projection, new_projection);
+}
+
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
 

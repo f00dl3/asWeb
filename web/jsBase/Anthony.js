@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 9 May 2018
+Updated: 3 Jun 2018
 */
 
 console.log(sessionVars);
@@ -119,7 +119,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     toolHolder += quickWebCalEntryForm;
     var bubbleHolder = "<h4>Bubbles</h4>";
     var databaseInfoBubble = "<div class='UPopNM'>" +
-            "<a href='" + getBasePath("old") + "/Include/MySQLInfo.php' target='new'>" +
+            "<a href='" + getBasePath("ui") + "/DBInfo.jsp' target='new'>" +
             "<button class='UButton'>Database" +
             "<div class='UPopNMO'>";
     dbInfo.forEach(function (dbi) {
