@@ -20,9 +20,16 @@ function putSimpleMap() {
     if(isSet(doAction) /* && isSet(dataInput) */) {
         switch(doAction) {
             case "Route":
+                
                 var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
                 console.log(dataInputOverride);
                 var pointsToAdd = dataInputOverride; //dataInput when all is working.
+                var resortedPoints = [];
+                for(var i = 0; i < pointsToAdd.length; i++) { 
+                    var thisPointSet = pointsToAdd[i];
+                    resortedPoints.push([ thisPointSet[1], thisPointSet[0] ]);
+                }
+                console.log(resortedPoints);
                 var vectorLine = new ol.layer.Vector({
                     source: new ol.source.Vector({
                         features: [new ol.Feature({
