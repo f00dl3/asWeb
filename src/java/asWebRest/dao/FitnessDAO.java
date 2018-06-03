@@ -16,6 +16,28 @@ import org.json.JSONObject;
 public class FitnessDAO {
     
     WebCommon wc = new WebCommon();
+       
+    private JSONArray geoJson(Connection dbc, List<String> qParams) {
+        final String query_Fitness_GeoJSON = "SELECT" +
+                " Date, RunGeoJSON, CycGeoJSON, AltGeoJSON FROM Core.Fitness" +
+                " WHERE Date BETWEEN ? AND ? " +
+                " ORDER BY Date DESC LIMIT 0, 365;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_GeoJSON, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("RunGeoJSON", resultSet.getString("RunGeoJSON"))
+                    .put("CycGeoJSON", resultSet.getString("CycGeoJSON"))
+                    .put("AltGeoJSON", resultSet.getString("AltGeoJSON"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     public JSONArray getAll(Connection dbc, List<String> qParams) {
         final String query_Fitness_All = "SELECT" +
@@ -52,11 +74,11 @@ public class FitnessDAO {
                     .put("Shoe", resultSet.getString("Shoe"))
                     .put("RSMile", resultSet.getString("RSMile"))
                     .put("RunGeoJSON", resultSet.getString("RunGeoJSON"))
+                    .put("CycGeoJSON", resultSet.getString("CycGeoJSON"))
+                    .put("AltGeoJSON", resultSet.getString("AltGeoJSON"))
                     .put("Bicycle", resultSet.getString("Bicycle"))
                     .put("Cycling", resultSet.getDouble("Cycling"))
                     .put("BkStudT", resultSet.getInt("BkStudT"))
-                    .put("CycGeoJSON", resultSet.getString("CycGeoJSON"))
-                    .put("AltGeoJSON", resultSet.getString("AltGeoJSON"))
                     .put("ReelMow", resultSet.getInt("ReelMow"))
                     .put("MowNotes", resultSet.getString("MowNotes"))
                     .put("Calories", resultSet.getInt("Calories"))
@@ -412,6 +434,8 @@ public class FitnessDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+    
+    public JSONArray getGeoJSON(Connection dbc, List<String> qParams) { return geoJson(dbc, qParams); }
     
     public JSONArray getJsonLogCyc(List<String> qParams) {
         final String query_Fitness_jsonLogCyc = "SELECT gpsLogCyc as gpsLog FROM Fitness WHERE Date=?;";

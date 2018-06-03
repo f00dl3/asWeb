@@ -92,6 +92,19 @@ public class FitnessResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                     
+                case "getOnlyFitnessGeoJSON": 
+                    String xdt1a = argsInForm.getFirstValue("XDT1");
+                    String xdt2a = argsInForm.getFirstValue("XDT2");
+                    if(xdt1a != null && xdt2a != null) {
+                        qParams.add(xdt1a);
+                        qParams.add(xdt2a);
+                        JSONArray allRecs = getFitnessAction.getGeoJSON(dbc, qParams);
+                        returnData += allRecs.toString();
+                    } else {
+                        returnData += "ERROR!";
+                    }
+                    break;
+                    
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
                     String[] args = {};

@@ -29,6 +29,7 @@ public class GetFitnessAction {
     public JSONArray getCrsm(Connection dbc) { return fitnessDAO.getCrsm(dbc); }
     public JSONArray getDay(Connection dbc) { return fitnessDAO.getDay(dbc); }
     public JSONArray getDayE(Connection dbc) { return fitnessDAO.getDayE(dbc); }
+    public JSONArray getGeoJSON(Connection dbc, List qParams) { return fitnessDAO.getGeoJSON(dbc, qParams); }
     public JSONArray getJsonLogCyc(List qParams) { return fitnessDAO.getJsonLogCyc(qParams); }
     public JSONArray getJsonLogCyc2(List qParams) { return fitnessDAO.getJsonLogCyc2(qParams); }
     public JSONArray getJsonLogRun(List qParams) { return fitnessDAO.getJsonLogRun(qParams); }
