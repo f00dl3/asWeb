@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 30 Mar 2018
+Updated: 3 Jun 2018
  */
 
 package asWebRest.resource;
@@ -12,6 +12,8 @@ import asWebRest.action.GetWebVersionAction;
 import asWebRest.dao.DatabaseInfoDAO;
 import asWebRest.dao.LogsDAO;
 import asWebRest.dao.WebVersionDAO;
+import asWebRest.shared.MyDBConnector;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -26,16 +28,29 @@ public class LogsResource extends ServerResource {
     
     @Get
     public String represent() {
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        
         List<String> qParams = new ArrayList<>();
         qParams.add("25");
         String order = "ASC";
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
-        JSONArray camLog = getLogsAction.getCameras(qParams, order);  
+        JSONArray camLog = getLogsAction.getCameras(dbc, qParams, order);
+        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
         return qParams.toString()+"\n"+camLog.toString();
+        
     }
     
     @Post
     public String doPost(Representation argsIn) {
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetDatabaseInfoAction getDatabaseInfoAction = new GetDatabaseInfoAction(new DatabaseInfoDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
@@ -60,11 +75,11 @@ public class LogsResource extends ServerResource {
                 case "AnthonyOverviewData":
                     String camLogOrder = "DESC";
                     qParams.add(0, "5");
-                    JSONArray dbInfo = getDatabaseInfoAction.getDatabaseInfo();
-                    JSONArray webVersion = getWebVersionAction.getWebVersion();
-                    JSONArray sduLogs = getLogsAction.getSdUtils();
-                    JSONArray camLogs = getLogsAction.getCameras(qParams, camLogOrder);
-                    JSONArray backupLogs = getLogsAction.getSystemBackup();
+                    JSONArray dbInfo = getDatabaseInfoAction.getDatabaseInfo(dbc);
+                    JSONArray webVersion = getWebVersionAction.getWebVersion(dbc);
+                    JSONArray sduLogs = getLogsAction.getSdUtils(dbc);
+                    JSONArray camLogs = getLogsAction.getCameras(dbc, qParams, camLogOrder);
+                    JSONArray backupLogs = getLogsAction.getSystemBackup(dbc);
                     mergedResults
                         .put("dbInfo", dbInfo)
                         .put("webVersion", webVersion)
@@ -74,9 +89,19 @@ public class LogsResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                     
+                case "Notes":
+                    String nss = "%";
+                    try { nss = argsInForm.getFirstValue("noteSearchString"); } catch (Exception e) { e.printStackTrace(); }
+                    qParams.add(0, nss);
+                    JSONArray notes = getLogsAction.getPlainTextNotes(dbc, qParams);
+                    returnData += notes.toString();
+                    break;
+                    
             }
         }
        
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
         return returnData;
         
     }

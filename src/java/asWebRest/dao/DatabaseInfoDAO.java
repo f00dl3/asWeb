@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 7 Apr 2018
+Updated: 3 Jun 2018
 */
 
 package asWebRest.dao;
 
 import java.sql.ResultSet;
 import asWebRest.shared.WebCommon;
+import java.sql.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +16,7 @@ public class DatabaseInfoDAO {
 
     WebCommon wc = new WebCommon();
     
-    public JSONArray getDbInfo() {
+    public JSONArray getDbInfo(Connection dbc) {
         final String query_Logs_DBInfo = "SELECT" +
         " table_schema 'Database'," +
         " SUM(data_length + index_length) AS 'DBSize'," +
@@ -24,7 +25,7 @@ public class DatabaseInfoDAO {
         " GROUP BY table_schema;";
         JSONArray dbInfo = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Logs_DBInfo, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Logs_DBInfo, null);
             while (resultSet.next()) {
                 JSONObject tDbInfo = new JSONObject();
                 tDbInfo
@@ -38,7 +39,7 @@ public class DatabaseInfoDAO {
         return dbInfo;
     }
     
-    public JSONArray getDbInfoByTable() {
+    public JSONArray getDbInfoByTable(Connection dbc) {
         final String query_Logs_DBInfo2 = "SELECT" +
         " isT.table_schema AS `Database`," +
         " isT.table_name AS `Table`," +
@@ -49,7 +50,7 @@ public class DatabaseInfoDAO {
         " ORDER BY (data_length + index_length) DESC;";
         JSONArray dbInfo2 = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Logs_DBInfo2, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Logs_DBInfo2, null);
             while (resultSet.next()) {
                 JSONObject tDbInfo2 = new JSONObject();
                 tDbInfo2

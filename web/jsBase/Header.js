@@ -1,9 +1,8 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 30 May 2018
+Updated: 3 Jun 2018
  */
-
 
 var annMaint = 910.66;
 var annMiles = 12672;
@@ -250,6 +249,7 @@ function getResource(what) {
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
+        case "DBInfo": return getBasePath("rest") + "/DBInfo"; break;
         case "Emily": return getBasePath("ui") + "/Emily.jsp"; break;
         case "Entertainment": return getBasePath("rest") + "/Entertainment"; break;
         case "Fitness": return getBasePath("rest") + "/Fitness"; break;

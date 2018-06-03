@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 20 Feb 2018
+Updated: 3 Jun 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.WebVersionDAO;
+import java.sql.Connection;
 import org.json.JSONArray;
 
 public class GetWebVersionAction {
@@ -14,7 +15,7 @@ public class GetWebVersionAction {
     private WebVersionDAO webVersionDAO;
     public GetWebVersionAction(WebVersionDAO webVersionDAO) { this.webVersionDAO = webVersionDAO; }
     
-    public JSONArray getCurrentVer() { return webVersionDAO.getCurrentVer(); }
-    public JSONArray getWebVersion() { return webVersionDAO.getWebVersion(); }
+    public JSONArray getCurrentVer(Connection dbc) { return webVersionDAO.getCurrentVer(dbc); }
+    public JSONArray getWebVersion(Connection dbc) { return webVersionDAO.getWebVersion(dbc); }
     
 }

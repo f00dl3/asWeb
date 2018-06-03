@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    31 May 2018
+    Updated:    3 Jun 2018
     Author     : astump
 --%>
 
@@ -156,6 +156,9 @@
                 break;
             case "Cams":
                 scripts2Load += wxScriptPack + snmpScriptPack;
+                break;
+            case "DBInfo":
+                fullTitle = "Database Info";
                 break;
             case "Entertain":
                 fullTitle = "Entertainment";

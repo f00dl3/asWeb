@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 9 May 2018
+Updated: 3 Jun 2018
  */
 
 package asWebRest.application;
@@ -61,7 +61,7 @@ public class AnthonyRestlet extends Application {
         router.attach("/Chart", ChartResource.class);
         router.attach("/Congress", CongressResource.class);
         router.attach("/Cooking", CookingResource.class);
-        router.attach("/DatabaseInfo", DatabaseInfoResource.class);
+        router.attach("/DBInfo", DatabaseInfoResource.class);
         router.attach("/Entertainment", EntertainmentResource.class);
         router.attach("/Finance", FinanceResource.class);
         router.attach("/Fitness", FitnessResource.class);
