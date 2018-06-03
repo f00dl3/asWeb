@@ -26,6 +26,8 @@ function transform_geometry(element) {
     element.getGeometry().transform(current_projection, new_projection);
 }
 
+var map;
+
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
 

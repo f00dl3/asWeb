@@ -11,17 +11,19 @@ function processLineStringFromLatLon(dataInput) {
     });
     features = [linestring_feature];
     features.forEach(transform_geometry);
+    console.log(features);
     var vector_layer = new ol.layer.Vector({
         source: new ol.source.Vector({
             features: features
         })
     })
+    dojo.byId("MessageHolder").innerHTML = dataInput;
     return vector_layer;
 }
 
 function putSimpleMap() {
     var raster = localTiles;
-    var map = new ol.Map({
+    map = new ol.Map({
         target: 'map',
         layers: [
             raster
@@ -35,10 +37,11 @@ function putSimpleMap() {
         switch(doAction) {
             case "Route":
                 var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
-                console.log(dataInputOverride);
-                var pointsToAdd = dataInputOverride; //dataInput when all is working.
-                map.addLayer(processLineStringFromLatLon(pointsToAdd));
-                dojo.byId("MessageHolder").innerHTML = pointsToAdd;
+                if(isSet(map)) {
+                    map.addLayer(processLineStringFromLatLon(dataInputOverride));
+                } else {
+                    window.alert("Map not ready!");
+                }
                 break;
         }
     } 
