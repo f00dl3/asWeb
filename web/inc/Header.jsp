@@ -53,6 +53,7 @@
         "OLMap/AddElements",
         "OLMap/CommonStuff",
         "OLMap/DrawPathMap",
+        "OLMap/RenderImage",
         "OLMap/SimpleMap"
     };
     

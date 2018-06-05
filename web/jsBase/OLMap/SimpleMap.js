@@ -35,7 +35,7 @@ function getRouteFromDatabase(map, date, type) {
 
 function postProcessOptions(map) {
     var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
-    if(isSet(doAction)) {
+    if(isSet(doAction) && isSet(dataInput)) {
         switch(doAction) {
             case "Route":
                 addLineStringToMap(map, dataInputOverride);

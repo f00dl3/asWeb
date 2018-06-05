@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
+Updated: 5 Jun 2018
 */
 
 function addLineStringToMap(map, pointsToAdd, caption) {

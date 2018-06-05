@@ -7,5 +7,5 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<jsp:include page="/inc/Clock.jsp"></jsp:include>
+<div id="MAIN_FOOTER"><jsp:include page="/inc/Clock.jsp"></jsp:include></div>
 </html>

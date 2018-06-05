@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 24 May 2018
+Updated: 5 Jun 2018
  */
 
 var msIndex;
@@ -231,16 +231,22 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                         var imageWidth = imageAttribs[0];
                         var imageHeight = imageAttribs[1];
                         var imageWidthHeightAttribs = "IW=" + imageWidth + "&IH=" + imageHeight + "&";
+                        var olResolution = imageAttribs[0] + "x" + imageAttribs[1];
+                        var olPicPath, thisYear;
                         if(tm.WarDeploy === 1) {
-                            var thisYear = (tm.Path).substr((tm.Path).length - 2);
+                            thisYear = (tm.Path).substr((tm.Path).length - 2);
+                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
                             thisAddCheckbox += /* "<a href='" + getBasePath("old") + "/OutMap.php?Image=Gallery&" + imageWidthHeightAttribs +
-                                    "PicPath=Tomcat/PicsL" + thisYear + "/full/" + tm.File + "' target='photoPop'>" + */
-                                    "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" +
+                                    "PicPath=Tomcat/PicsL" + thisYear + "/full/" + tm.File + "' target='photoPop'>" + 
+                                    "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" + */
+                                    "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Image&Input=" + olPicPath + "&Resolution=" + olResolution + "' target='photoPop'>" +
                                     "<img class='th_icon' src='" + getBasePath("tomcatOld") + "/PicsL" + thisYear + "/thumb/" + tm.File + "'/>";
                         } else {
-                            var thisYear = (tm.Path).substr((tm.Path).length - 4);
+                            thisYear = (tm.Path).substr((tm.Path).length - 4);
+                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
                             thisAddCheckbox += "<a href='" + getBasePath("old") + "/OutMap.php?Image=Gallery&" + imageWidthHeightAttribs +
                                     "PicPath=Images/Memories/" + thisYear + "/full/" + tm.File + "' target='photoPop'>" +
+                                    /* "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Image&Input=" + olPicPath + "&Resolution=" + olResolution + "' target='photoPop'>" + */
                                     "<img class='th_icon' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
                         }
                         thisAddCheckbox += "</a>";

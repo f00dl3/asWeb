@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
-    Updated: 31 May 2018
+    Updated: 5 Jun 2018
     Author     : astump
 --%>
 
@@ -13,19 +13,27 @@
     String pageTitle = "OLMap";
     String scriptIt = "true";
     String authCheck = "true";
+    String action = "";
+    String postData = "";
+    String resolution = "";
     
     WebCommon wc = new WebCommon();
-    
-    if(wc.isSet(request.getParameter("Action")) && wc.isSet(request.getParameter("Input"))) {
-        String action = wc.basicInputFilter(request.getParameter("Action"));
-        String postData = wc.basicInputFilter(request.getParameter("Input"));
-        %><script>
-            var doAction = "<% out.print(action); %>";
-            var dataInput = "<% out.print(postData); %>";
-        </script><%
-    }
-    
-%>
+       
+    %>
+    <script>
+        var doAction, dataInput, iRes;
+    </script>
+    <%
+    if(wc.isSet(request.getParameter("Action"))) { action = wc.basicInputFilter(request.getParameter("Action")); }
+    if(wc.isSet(request.getParameter("Input"))) { postData = wc.basicInputFilter(request.getParameter("Input")); }
+    if(wc.isSet(request.getParameter("Resolution"))) { resolution = wc.basicInputFilter(request.getParameter("Resolution")); }
+    %>
+    <script>
+        doAction = "<% out.print(action); %>";
+        dataInput = "<% out.print(postData); %>";
+        iRes = "<% out.print(resolution); %>";
+        console.log("DEBUG VARS: doAction='" + doAction + "', dataInput='" + dataInput + "', iRes='" + iRes + "'");
+    </script>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
