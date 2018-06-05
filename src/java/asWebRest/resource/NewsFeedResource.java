@@ -65,7 +65,7 @@ public class NewsFeedResource extends ServerResource {
                 
                 case "getReddit":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
-                    returnData = jw.desiredDataType(
+                    returnData = jw.getDesiredDataType(
                             getNewsFeedAction.getRedditFeeds(dbc, qParams),
                             "dataStore",
                             "id"

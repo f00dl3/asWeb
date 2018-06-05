@@ -41,7 +41,7 @@ public class ToolsResource extends ServerResource {
                 case "JsonToDataStore":
                     JSONArray dataInput = new JSONArray();
                     dataInput.put(argsInForm.getFirstValue("jsonToConvert"));
-                    returnData = jw.desiredDataType(
+                    returnData = jw.getDesiredDataType(
                             dataInput,
                             "dataStore",
                             argsInForm.getFirstValue("identifier")

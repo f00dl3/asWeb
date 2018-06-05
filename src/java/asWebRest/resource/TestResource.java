@@ -65,7 +65,7 @@ public class TestResource extends ServerResource {
         
         List<String> qParams = new ArrayList<>();
         qParams.add(0, "2018-05-09%");
-        testData += "\n" + jw.desiredDataType(
+        testData += "\n" + jw.getDesiredDataType(
                 getNewsFeedAction.getRedditFeeds(dbc, qParams),
                 "jsonFromCsv",
                 null
@@ -110,7 +110,7 @@ public class TestResource extends ServerResource {
                 
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
-                    returnData = jw.desiredDataType(
+                    returnData = jw.getDesiredDataType(
                             getNewsFeedAction.getRedditFeeds(dbc, qParams),
                             "dataStore",
                             null
