@@ -1,11 +1,11 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 22 Apr 2018
+Updated: 6 Jun 2018
  */
 
 var tppCallback;
-var lastWarYear = 2017;
+var lastWarYear = getDate("day", 0, "yearOnly");
 
 function actOnYearPicker(event) {
     var target = "GalleryHolder";
@@ -78,6 +78,7 @@ function generateGallery(argsIn, fileList) {
         var fileName = tFile;
         var fullPath = fileList[tFile].Path;
         var relativePath = "";
+        var iRes = "";
         console.log(argsIn.flagOut);
         switch(argsIn.flagOut) {
             case "tp":
@@ -97,13 +98,14 @@ function generateGallery(argsIn, fileList) {
         if(isSet(fileList[tFile].Width) && isSet(fileList[tFile].Height)) {
             iWidth = fileList[tFile].Width;
             iHeight = fileList[tFile].Height;
+            iRes = iWidth + "x" + iHeight;
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
         rData += "<div class='UPop'>" +
-                /* "<a href='" + getBasePath("old") + "/OutMap.php?" +
-                "Image=Gallery&IW=" + iWidth + "&IH=" + iHeight + "&PicPath=" + relativePath + "' target='new'>"; */
-                "<a href='" + relativePath + "' target='new'>";
+                /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
+                "<a href='" + relativePath + "' target='new'>"; */
+                "<a href='" + olMapImageLink(relativePath, iRes) + "' target'tpPic'>";
         if(checkMobile()) {
             rData += "<img class='th_small' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         } else {

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 23 May 2018
+Updated: 6 Jun 2018
  */
 
 function actOnShowFeed() {
@@ -210,7 +210,9 @@ function popLiveLinks3d(irsLinks, df7Links) {
         var newImgURL = "https://localhost";
         if(checkMobile()) { newImgURL += ":8082"; }
         newImgURL = newImgURL + irs.URL;
+        irsBubbleCopy = irs.Bubble.replace("Image=", "Action=");
         var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
+                /* "<a styleReplace href='" + getBasePath("ui") + "/OLMap.jsp?" + irsBubbleCopy + "' target='new'>" + NEED TO FIGURE ANIMATION 6/6/18 */
                 "<img " + cubeRes + " src='" + newImgURL + "'/></a>";
         elementListWx1.push(tElem);
     });

@@ -2,14 +2,8 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 3 Jun 2018
+Updated: 6 Jun 2018
  */
-
-function centerMapOnThis(map, rFeature) {
-    var extent = rFeature.getGeometry().getExtent();
-    var center = ol.extent.getCenter(extent);
-    map.getView().setCenter(center);
-}
 
 function getOSMAttribution() {
     var currentYear = getDate("day", 0, "yearOnly");

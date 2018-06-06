@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 5 Jun 2018
+Updated: 6 Jun 2018
 */
 
 function addLineStringToMap(map, pointsToAdd, caption) {
@@ -13,6 +13,7 @@ function addLineStringToMap(map, pointsToAdd, caption) {
     var vSource = new ol.source.Vector({ features: [rFeature] });
     var vLayer = new ol.layer.Vector({ source: vSource });
     map.addLayer(vLayer);
-    //centerMapOnThis(map, rFeature);
+    map.getView().fit(vSource.getExtent(), map.getSize());
+    console.log(map.getView().getCenter());
     dojo.byId("MessageHolder").innerHTML = caption;
 }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 3 Jun 2018
+Updated: 6 Jun 2018
  */
 
 var annMaint = 910.66;
@@ -323,6 +323,10 @@ function getWebVersion(whereTo) {
     dojo.xhrGet(xhrWebVersionArgs);
 }
 
+function hideFooter() {
+    $("#MAIN_FOOTER").hide();
+}
+
 function imageLinks3d(elems, maxW, maxH, tFact) {
 	var numElems = elems.length;
         var rotation = 0;
@@ -366,11 +370,21 @@ function isSetNotZero(varIn) {
     } else { return false; }
 }
 
+function leafMapImageLink(relativePath, iWidth, iHeight) {
+    return getBasePath("old") + "/OutMap.php?Image=Gallery&IW=" + iWidth + "&IH=" + iHeight + "&PicPath=" + relativePath;
+}
+
 function nodeState(tNode, state) {
     switch(state) {
         case "online": return "<button style='background-color: #666666; color: white;'>" + tNode + "</button>"; break;
         case "offline": return "<button style='background-color: yellow; color: black;'>" + tNode + "</button>"; break; 
     }
+}
+
+function olMapImageLink(olPicPath, olResolution, oldFlag) {
+    var returnLink = getBasePath("ui") + "/OLMap.jsp?Action=Image&Input=" + olPicPath + "&Resolution=" + olResolution;
+    if(isSet(oldFlag) && oldFlag) { returnLink += "&LegacyPath=Yes"; }
+    return returnLink;
 }
 
 function putNavi() {

@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
-    Updated: 5 Jun 2018
+    Updated: 6 Jun 2018
     Author     : astump
 --%>
 
@@ -16,23 +16,32 @@
     String action = "";
     String postData = "";
     String resolution = "";
+    String legacyPath = "";
     
     WebCommon wc = new WebCommon();
        
     %>
+    
     <script>
-        var doAction, dataInput, iRes;
+        var doAction,
+            dataInput,
+            iRes,
+            legacyPath;
     </script>
+    
     <%
     if(wc.isSet(request.getParameter("Action"))) { action = wc.basicInputFilter(request.getParameter("Action")); }
     if(wc.isSet(request.getParameter("Input"))) { postData = wc.basicInputFilter(request.getParameter("Input")); }
     if(wc.isSet(request.getParameter("Resolution"))) { resolution = wc.basicInputFilter(request.getParameter("Resolution")); }
+    if(wc.isSet(request.getParameter("LegacyPath"))) { legacyPath = wc.basicInputFilter(request.getParameter("LegacyPath")); }
     %>
+    
     <script>
         doAction = "<% out.print(action); %>";
         dataInput = "<% out.print(postData); %>";
         iRes = "<% out.print(resolution); %>";
-        console.log("DEBUG VARS: doAction='" + doAction + "', dataInput='" + dataInput + "', iRes='" + iRes + "'");
+        legacyPath = "<% out.print(legacyPath); %>";
+        console.log("DEBUG VARS: doAction='" + doAction + "', dataInput='" + dataInput + "', iRes='" + iRes + "', legacyPath='" + legacyPath + "'");
     </script>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -44,7 +53,7 @@
     
 <jsp:include page="/inc/Header.jsp?type=full&title=OLMap&scripts=true"></jsp:include>
 
-    <body>
+    <body id="MapPage">
     
         <div id="OLMapHolder"></div>
         
