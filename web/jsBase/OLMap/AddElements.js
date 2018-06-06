@@ -11,14 +11,7 @@ function addGpsToMap(map, jsonData) {
         var sk = i.toString();
         coords.push([ jsonData[sk].Longitude , jsonData[sk].Latitude ]);
     }
-    var polyLine = new ol.geom.LineString(coords);
-    polyLine.transform('EPSG:4326', 'EPSG:3857');
-    var rFeature = new ol.Feature({ geometry: polyLine });
-    rFeature.setStyle(routeStyle);
-    var vSource = new ol.source.Vector({ features: [rFeature] });
-    var vLayer = new ol.layer.Vector({ source: vSource });
-    map.addLayer(vLayer);
-    map.getView().fit(vSource.getExtent(), map.getSize());
+    addLineStringToMap(map, coords, null);
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {
