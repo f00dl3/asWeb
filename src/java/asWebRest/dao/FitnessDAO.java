@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 Jun 2018
+Updated: 6 Jun 2018
 */
 
 package asWebRest.dao;
@@ -437,11 +437,11 @@ public class FitnessDAO {
     
     public JSONArray getGeoJSON(Connection dbc, List<String> qParams) { return geoJson(dbc, qParams); }
     
-    public JSONArray getJsonLogCyc(List<String> qParams) {
+    public JSONArray getJsonLogCyc(Connection dbc, List<String> qParams) {
         final String query_Fitness_jsonLogCyc = "SELECT gpsLogCyc as gpsLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_jsonLogCyc, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
@@ -452,11 +452,11 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getJsonLogCyc2(List<String> qParams) {
+    public JSONArray getJsonLogCyc2(Connection dbc, List<String> qParams) {
         final String query_Fitness_jsonLogCyc2 = "SELECT gpsLogCyc2 as gpsLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_jsonLogCyc2, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
@@ -467,11 +467,11 @@ public class FitnessDAO {
         return tContainer;
     }
        
-    public JSONArray getJsonLogRun(List<String> qParams) {
+    public JSONArray getJsonLogRun(Connection dbc, List<String> qParams) {
         final String query_Fitness_jsonLogRun = "SELECT gpsLogRun as gpsLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_jsonLogRun, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));
@@ -482,11 +482,11 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getJsonLogRun2(List<String> qParams) {
+    public JSONArray getJsonLogRun2(Connection dbc, List<String> qParams) {
         final String query_Fitness_jsonLogRun2 = "SELECT gpsLogRun2 as gpsLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_jsonLogRun2, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("gpsLog", resultSet.getString("gpsLog"));

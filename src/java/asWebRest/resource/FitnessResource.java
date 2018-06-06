@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 May 2018
+Updated: 6 Jun 2018
  */
 
 package asWebRest.resource;
@@ -90,6 +90,24 @@ public class FitnessResource extends ServerResource {
                         returnData += "ERROR";
                     }
                     returnData += mergedResults.toString();
+                    break;
+                    
+                case "getGpsJson":
+                    String actType = argsInForm.getFirstValue("activity");
+                    String actDate = argsInForm.getFirstValue("logDate");
+                    JSONArray gpsData = new JSONArray();
+                    if(actDate != null && actType != null) {
+                        qParams.add(0, actDate);
+                        switch(actType) {
+                            case "Run": gpsData = getFitnessAction.getJsonLogRun(dbc, qParams); break;
+                            case "Ru2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                            case "Cyc": gpsData = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
+                            case "Cy2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                        }
+                        returnData += gpsData.toString();
+                    } else {
+                        returnData += "ERROR!";
+                    }
                     break;
                     
                 case "getOnlyFitnessGeoJSON": 

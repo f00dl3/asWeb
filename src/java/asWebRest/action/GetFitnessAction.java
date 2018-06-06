@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 8 Apr 2018
+Updated: 6 Jun 2018
  */
 
 package asWebRest.action;
@@ -30,10 +30,10 @@ public class GetFitnessAction {
     public JSONArray getDay(Connection dbc) { return fitnessDAO.getDay(dbc); }
     public JSONArray getDayE(Connection dbc) { return fitnessDAO.getDayE(dbc); }
     public JSONArray getGeoJSON(Connection dbc, List qParams) { return fitnessDAO.getGeoJSON(dbc, qParams); }
-    public JSONArray getJsonLogCyc(List qParams) { return fitnessDAO.getJsonLogCyc(qParams); }
-    public JSONArray getJsonLogCyc2(List qParams) { return fitnessDAO.getJsonLogCyc2(qParams); }
-    public JSONArray getJsonLogRun(List qParams) { return fitnessDAO.getJsonLogRun(qParams); }
-    public JSONArray getJsonLogRun2(List qParams) { return fitnessDAO.getJsonLogRun2(qParams); }
+    public JSONArray getJsonLogCyc(Connection dbc, List qParams) { return fitnessDAO.getJsonLogCyc(dbc, qParams); }
+    public JSONArray getJsonLogCyc2(Connection dbc, List qParams) { return fitnessDAO.getJsonLogCyc2(dbc, qParams); }
+    public JSONArray getJsonLogRun(Connection dbc, List qParams) { return fitnessDAO.getJsonLogRun(dbc, qParams); }
+    public JSONArray getJsonLogRun2(Connection dbc, List qParams) { return fitnessDAO.getJsonLogRun2(dbc, qParams); }
     public JSONArray getOverallStats(Connection dbc) { return fitnessDAO.getOverallStats(dbc); }
     public JSONArray getOverallSensors() { return fitnessDAO.getOverallSensors(); }
     public JSONArray getRelatedPhotos(List qParams) { return fitnessDAO.getRelatedPhotos(qParams); }

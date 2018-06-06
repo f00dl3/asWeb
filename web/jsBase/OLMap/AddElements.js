@@ -4,6 +4,10 @@ Created: 31 May 2018
 Updated: 6 Jun 2018
 */
 
+function addGpsToMap(map, data) {
+    window.alert("NOT BUILT YET!");
+}
+
 function addLineStringToMap(map, pointsToAdd, caption) {
     if(!isSet(caption)) { var caption = pointsToAdd; }
     var polyLine = new ol.geom.LineString(pointsToAdd);
