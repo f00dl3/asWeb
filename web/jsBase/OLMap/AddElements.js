@@ -4,8 +4,21 @@ Created: 31 May 2018
 Updated: 6 Jun 2018
 */
 
-function addGpsToMap(map, data) {
-    window.alert("NOT BUILT YET!");
+function addGpsToMap(map, jsonData) {
+    showNotice("TEST ACTIVATED!");
+    var coords = [];
+    for(var i = 0; i < Object.keys(jsonData).length; i++) {
+        var sk = i.toString();
+        coords.push([ jsonData[sk].Longitude , jsonData[sk].Latitude ]);
+    }
+    var polyLine = new ol.geom.LineString(coords);
+    polyLine.transform('EPSG:4326', 'EPSG:3857');
+    var rFeature = new ol.Feature({ geometry: polyLine });
+    rFeature.setStyle(routeStyle);
+    var vSource = new ol.source.Vector({ features: [rFeature] });
+    var vLayer = new ol.layer.Vector({ source: vSource });
+    map.addLayer(vLayer);
+    map.getView().fit(vSource.getExtent(), map.getSize());
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {
@@ -18,6 +31,4 @@ function addLineStringToMap(map, pointsToAdd, caption) {
     var vLayer = new ol.layer.Vector({ source: vSource });
     map.addLayer(vLayer);
     map.getView().fit(vSource.getExtent(), map.getSize());
-    console.log(map.getView().getCenter());
-    dojo.byId("MessageHolder").innerHTML = caption;
 }

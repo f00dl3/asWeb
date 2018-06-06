@@ -20,8 +20,9 @@ function getGpsFromDatabase(map, date, type) {
             }).then(
                 function(data) {
                     aniPreload("off");
+                    dataToPass = JSON.parse(data[0].gpsLog);
                     switch(type) {
-                        case "Run": addGpsToMap(map, data); break;
+                        case "Run": addGpsToMap(map, dataToPass); break;
                         //case "C": addLineStringToMap(map, JSON.parse(data[0].CycGeoJSON), "Bike ride on " + date); break;
                         //case "A": addLineStringToMap(map, JSON.parse(data[0].AltGeoJSON), "Alt route on " + date); break;
                     }
@@ -69,7 +70,7 @@ function postProcessOptions(map) {
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
-            case "RouteGpsRun": getGpsFromDatabase(map, dataInput, "R"); break;
+            case "RouteGPSTest": getGpsFromDatabase(map, "2018-06-06", "Run"); break;
         }
     }
 }
