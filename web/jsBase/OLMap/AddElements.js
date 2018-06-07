@@ -16,27 +16,30 @@ function addGpsMarkersMethod1(map, jsonData) {
     map.addLayer(vectorLayer);
 }
 
-function addGpsMarkersMethod2(map, jsonData) {
-    console.log("addGpsMarkersMethod2(map, jsonData) called!");
+function addGpsMarkersMethod2(map, jsonData, iter, markerType) {
     var tCoord = [ jsonData.Longitude, jsonData.Latitude ];
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
+    var pos = ol.proj.fromLonLat(tCoord);
     var marker = new ol.Overlay({
-        position: point,
+        position: pos,
         positioning: 'center-center',
-        element: genDivMarker("circ"),
+        element: document.getElementById(markerType + iter),
         stopEvent: false
     });
     map.addOverlay(marker);
+    console.log("addGpsMarkersMethod2(map, jsonData, " + iter + ", " + markerType + ") called! --> " + tCoord);
 }
 
 function addGpsToMap(map, jsonData) {
     showNotice("TEST ACTIVATED!");
+    var markerType = "olCirc";
     var coords = [];
-    var iconFeatures = [];
-    for(var i = 0; i < Object.keys(jsonData).length; i++) {
+    var keyCount = Object.keys(jsonData).length;
+    dojo.byId("MarkerHolder").innerHTML = genDivMarkers(markerType, keyCount);
+    for(var i = 0; i < keyCount; i++) {
         var sk = i.toString();
-        addGpsMarkersMethod1(map, jsonData[sk]);
+        addGpsMarkersMethod2(map, jsonData[sk], i, markerType);
         coords.push([ jsonData[sk].Longitude , jsonData[sk].Latitude ]);
     }
     addLineStringToMap(map, coords, null);

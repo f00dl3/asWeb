@@ -5,10 +5,17 @@ Split off from OLMap.js on 30 May 2018
 Updated: 7 Jun 2018
  */
 
-function genDivMarker(type) {
-    switch(type) {
-        case "circ": return "<div class='olCircMarker'></div>";
+function genDivMarkers(type, kCount) {
+    rData = "<div style='display: none;'>";
+    for(var i=0; i < kCount; i++) {
+        switch(type) {
+            case "olCirc":
+                rData += "<div class='olCircMarker' id=" + type + i + "'></div>";
+                break;
+        }
     }
+    rData += "</div>";
+    return rData;
 }
 
 function genSquareMarker(color, radius) {

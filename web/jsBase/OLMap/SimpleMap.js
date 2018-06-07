@@ -88,7 +88,6 @@ function putSimpleMap() {
             zoom: 15
         })
     });
-    genDivMarker("circ");
     postProcessOptions(map);
 }
 

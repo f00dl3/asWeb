@@ -9,7 +9,9 @@ function generateMapHolder() {
     if(checkMobile()) { mapHeight = "100%"; }
     var mapWidth = "100%";
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
-    var rData = styleForMap + "<div id='map' class='map'></div>";
+    var rData = styleForMap + 
+            "<div id='MarkerHolder'></div>" +
+            "<div id='map' class='map'></div>";
     if(!checkMobile()) {
         rData += "<br/><div id='MessageHolder'></div>";
     } else {
