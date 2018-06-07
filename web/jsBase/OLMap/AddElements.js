@@ -37,7 +37,7 @@ function addGpsMarkersMethod3(map, jsonData) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({ geometry: point });
     //iconFeature.setStyle(svgIconStyle("circle", 60, "red", 0.5));
-    console.log("addGpsMarkersMethod3(map, jsonData) called! --> " + tCoord);
+    //console.log("addGpsMarkersMethod3(map, jsonData) called! --> " + tCoord);
     return iconFeature;
 }
 
@@ -54,11 +54,10 @@ function addGpsToMap(map, jsonData) {
     }
     var vectorLayer = new ol.layer.Vector({
         source: vectorSource,
-        style: svgIconStyle("circle", 60, "red", 0.5)
+        style: svgIconStyle("c", 25, "red", 0.5)
     });
     map.addLayer(vectorLayer);
     addLineStringToMap(map, coords, null);
-
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {

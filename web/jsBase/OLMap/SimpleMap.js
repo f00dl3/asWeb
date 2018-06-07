@@ -85,7 +85,8 @@ function putSimpleMap() {
         ],
         view: new ol.View({
             center: wmGeoJson,
-            zoom: 15
+            zoom: 15,
+            maxZoom: 16
         })
     });
     postProcessOptions(map);

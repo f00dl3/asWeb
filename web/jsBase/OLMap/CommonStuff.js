@@ -91,16 +91,18 @@ function reverseGeodata(pointsToAdd) {
 function svgIconStyle(type, size, color, opacity) {
     var svgData = "";
     switch(type) {
-        case "circle":
+        case "c":
             var svgSize = size * 2;
-            svgData += "<svg width='" + svgSize + "' height='" + svgSize + "' version='1.1' xmlns='http://www.w3.org/2000/svg'>" +
-                    "<circle r=" + size + " fill='" + color + "'>" +
-                    "</svg>";
+            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
+                    '<circle r="' + size + '" fill="' + color + '"/>' +
+                    '</svg>';
     }
+    var genSvgUrl = "data:image/svg+xml;utf8," + svgData;
+    console.log(genSvgUrl);
     var style = new ol.style.Style({
         image: new ol.style.Icon({
             opacity: opacity,
-            src: 'data:image/svg+xml;utf8,' + svgData,
+            src: genSvgUrl,
             scale: 0.3
         })
     });
