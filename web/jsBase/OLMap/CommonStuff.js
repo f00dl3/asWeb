@@ -39,6 +39,7 @@ function genSquareMarker(color, radius) {
     return square;
 }
 
+
 function genSvgMarker(color) {
     var size = 5;
     var symbol = [[0,0], [4, 2], [6, 0], [10, 5], [6, 3], [4, 5], [0, 0]];
@@ -85,6 +86,25 @@ function reverseGeodata(pointsToAdd) {
         resortedPoints.push([ thisPointSet[1], thisPointSet[0] ]);
     }
     return resortedPoints;
+}
+
+function svgIconStyle(type, size, color, opacity) {
+    var svgData = "";
+    switch(type) {
+        case "circle":
+            var svgSize = size * 2;
+            svgData += "<svg width='" + svgSize + "' height='" + svgSize + "' version='1.1' xmlns='http://www.w3.org/2000/svg'>" +
+                    "<circle r=" + size + " fill='" + color + "'>" +
+                    "</svg>";
+    }
+    var style = new ol.style.Style({
+        image: new ol.style.Icon({
+            opacity: opacity,
+            src: 'data:image/svg+xml;utf8,' + svgData,
+            scale: 0.3
+        })
+    });
+    return style;
 }
 
 function transform_geometry(element) {
