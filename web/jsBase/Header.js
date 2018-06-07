@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 6 Jun 2018
+Updated: 7 Jun 2018
  */
 
 var annMaint = 910.66;
@@ -64,6 +64,8 @@ function aniPreloadGetSize() {
 
 function autoColorScale(tData,tMax,tMin,tForcedAvg) { 
     var tAverage, tJump, tColor;
+    var tAverage = tJump = 0;
+    var tColor = "";
     if(isSet(tForcedAvg)) { tAverage = tForcedAvg; } else { tAverage = (tMax + tMin)/2; }
     tJump = (tMax - tMin)/12;
     switch(true) {
@@ -81,6 +83,7 @@ function autoColorScale(tData,tMax,tMin,tForcedAvg) {
         case (tData <= tAverage-(5*tJump) && tData > tAverage-(6*tJump)): tColor = "#660099"; break;
         default: tColor = "#ffffff"; break;
     }
+    console.log("AutoColor: " + tColor);
     return tColor;
 }
 
