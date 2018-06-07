@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Feb 2018
-Updated: 3 May 2018
+Updated: 7 Jun 2018
  */
 
 function add2Cookie(attrib, value) {
@@ -50,10 +50,12 @@ function isLoggedIn() {
     if(isSet(sessionVars) && sessionVars.loggedIn === "true" && isSet(sessionVars.userName)) {
         if(window.location.pathname === "/asWeb/") {
             window.location.href = getResource(sessionVars.userName);
+            console.log("Logged in: True");
         }
     } else {
         if(window.location.pathname !== "/asWeb/") {
             window.location.href = getResource("Landing");
+            console.log("Logged in: False");
         }
     }
 }

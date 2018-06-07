@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 18 Apr 2018 
+Updated: 7 Jun 2018
  **/
 
 var loggedIn = false;
@@ -9,10 +9,10 @@ var loggedIn = false;
 function actOnLogin(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
+    window.alert("Attempted login!");
     var concattedUserAndPass = thisFormData.User + "::" + thisFormData.Pass;
     setSessionVariable("userAndPass", concattedUserAndPass);
-    window.alert("Attempted login!");
-    window.location.href = getResource("Landing");
+    setLogLogin(thisFormData);
 }
     
 function getWebLogs() {
@@ -27,7 +27,7 @@ function getWebLogs() {
             dojo.byId('lastIP').innerHTML = theData.RemoteIP;
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet WebAccessLogs: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrGet WebAccessLogs: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrGet(xhrLogArgs);
@@ -46,7 +46,7 @@ function getWebVersion() {
             dojo.byId('webVersion').innerHTML = thisDiv;
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet WebVersion: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrGet WebVersion: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrGet(xhrWebVersionArgs);
@@ -63,6 +63,29 @@ function populateLogin() {
     dojo.byId("loginPlaceholder").innerHTML = rData;
     var btnLogin = dojo.byId('btnLogin');
     dojo.connect(btnLogin, "click", actOnLogin);
+}
+
+function setLogLogin(thisFormData) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "LogLogin",
+        "UserName": thisFormData.User
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Logs"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    window.location.href = getResource("Landing");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to update Access Log FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 var init = function(event) {

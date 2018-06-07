@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 3 Jun 2018
+Updated: 7 Jun 2018
  */
 
 package asWebRest.resource;
@@ -9,9 +9,12 @@ package asWebRest.resource;
 import asWebRest.action.GetDatabaseInfoAction;
 import asWebRest.action.GetLogsAction;
 import asWebRest.action.GetWebVersionAction;
+import asWebRest.action.UpdateWebAccessLogAction;
 import asWebRest.dao.DatabaseInfoDAO;
 import asWebRest.dao.LogsDAO;
+import asWebRest.dao.WebAccessLogDAO;
 import asWebRest.dao.WebVersionDAO;
+import asWebRest.model.WebAccessLog;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -87,6 +90,15 @@ public class LogsResource extends ServerResource {
                         .put("camLogs", camLogs)
                         .put("backupLogs", backupLogs);
                     returnData += mergedResults.toString();
+                    break;
+                    
+                case "LogLogin":
+                    WebAccessLog webAccessLog = new WebAccessLog();
+                    webAccessLog.setUser(argsInForm.getFirstValue("UserName"));
+                    webAccessLog.setRemoteIp("NA-Yet"); // To work on
+                    UpdateWebAccessLogAction updateWebAccessLogAction = new UpdateWebAccessLogAction(new WebAccessLogDAO());
+                    updateWebAccessLogAction.updateWebAccessLog(webAccessLog);
+                    returnData += "QUERY RAN SUCESSFULLY!";
                     break;
                     
                 case "Notes":
