@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 22 May 2018
+Updated: 7 Jun 2018
  */
 
 var myHeight = 68;
@@ -199,40 +199,13 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
     return genString;
 }
 
-function getCalorieChart(inXdt1, inXdt2) {
-    aniPreload("on");
-    var xdt1, xdt2;
-    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
-    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
-    var thePostData = {
-        "doWhat": "FitnessCalorieRange",
-        "XDT1": xdt1,
-        "XDT2": xdt2
-    };
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("Chart"), {
-                data: thePostData,
-                handleAs: "text"
-            }).then(
-                function(data) {
-                    populateCalorieChart();
-                    aniPreload("off");
-                },
-                function(error) { 
-                    aniPreload("off");
-                    window.alert("request for Calorie Chart FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });
-}
-
 function getWeightChart(inXdt1, inXdt2) {
     aniPreload("on");
     var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
-    var thePostData = "doWhat=FitnessWeightRange&XDT1=" + xdt1 + "&XDT2=" + xdt2;
+    var thePostData = "doWhat=FitnessCharts&XDT1=" + xdt1 + "&XDT2=" + xdt2;
     var xhArgs = {
         preventCache: true,
         url: getResource("Chart"),
@@ -245,7 +218,7 @@ function getWeightChart(inXdt1, inXdt2) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for WeightChart FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            window.alert("xhrGet for Fitness Charts FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -255,7 +228,7 @@ function processFitnessAll(dataIn, autoMpg) {
     var costPerMileTco = 14000/((autoMpg.EndMiles - 47500) + 60000);
     var costPerMile = costPerMileTco + cpmNoMpg + (autoMpg.AvgCost / ((autoMpg.EndMiles - autoMpg.StartMiles) / autoMpg.Gallons));
     var fitTableDefs = [
-        "Date",
+        "<div class='UPop'>Date<div class='UPopO'><span id='SleepChartHolder'></span></div></div>",
         "Weight",
         "RunWalk",
         "Cycling",
@@ -373,11 +346,12 @@ function processFitnessAll(dataIn, autoMpg) {
         rData += "</td></tr>";
     }
     dojo.byId("fitnessTable").innerHTML = rData;
-    getCalorieChart();
+    populateCalorieChart();
+    populateSleepChart();
 }
 
 function populateCalorieChart() {
-    var rData = "<a href='" + getBasePath("chartCache") + "/CalorieRange.png' target='pChart'><img class='ch_large' src='" + getBasePath("chartCache") + "/th_CalorieRange.png'/></a>";
+    var rData = "<a href='" + doCh("j", "CalorieRange", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "CalorieRange", "th") + "'/></a>";
     dojo.byId("CalorieChartHolder").innerHTML = rData;
 }
 
@@ -410,6 +384,11 @@ function populateFitnessChart(chartSource) {
     }
     
     dojo.byId("WeightChartHolder").innerHTML = tElement;
+}
+
+function populateSleepChart() {
+    var rData = "<a href='" + doCh("j", "SleepRange", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "SleepRange", "th") + "'/></a>";
+    dojo.byId("SleepChartHolder").innerHTML = rData;
 }
 
 function populateSearchBox() {

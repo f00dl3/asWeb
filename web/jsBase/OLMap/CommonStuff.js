@@ -10,7 +10,7 @@ function genDivMarkers(type, kCount) {
     for(var i=0; i < kCount; i++) {
         switch(type) {
             case "olCirc":
-                rData += "<div class='olCircMarker' id=" + type + i + "'></div>";
+                rData += "<div class='olCircMarker' id=" + type + i + "'>" + i + "</div>";
                 break;
         }
     }
@@ -37,6 +37,39 @@ function genSquareMarker(color, radius) {
         })
     });
     return square;
+}
+
+function genSvgMarker(color) {
+    var size = 5;
+    var symbol = [[0,0], [4, 2], [6, 0], [10, 5], [6, 3], [4, 5], [0, 0]];
+    var stroke = new ol.style.Stroke({
+        color: 'black',
+        width: 1
+    });
+    var fill = new ol.style.Fill({
+        color: color
+    });
+    var canvas = document.createElement('canvas');
+    var vectorContext = ol.render.toContext(
+            canvas.getContext('2d'), {
+                size: [ size, size ],
+                pixelRatio: 1
+            }
+    );
+    vectorContext.setStyle(new ol.style.Style({
+        fill: fill,
+        stroke: stroke
+    }));
+    vectorContext.drawGeometry(new ol.geom.Polygon([symbol.map()]));
+    style = new ol.style.Style({
+        image: new ol.style.Icon({
+            img: canvas,
+            imgSize: [ size, size ],
+            rotation: 0
+        })
+    });
+    return style;
+    console.log("genSvgMarker(" + color + ") called!");
 }
 
 function getOSMAttribution() {

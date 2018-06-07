@@ -39,7 +39,8 @@ function addGpsToMap(map, jsonData) {
     dojo.byId("MarkerHolder").innerHTML = genDivMarkers(markerType, keyCount);
     for(var i = 0; i < keyCount; i++) {
         var sk = i.toString();
-        addGpsMarkersMethod2(map, jsonData[sk], i, markerType);
+        //addGpsMarkersMethod2(map, jsonData[sk], i, markerType);
+        genSvgMarker("red");
         coords.push([ jsonData[sk].Longitude , jsonData[sk].Latitude ]);
     }
     addLineStringToMap(map, coords, null);

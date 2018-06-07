@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 6 Jun 2018
+Updated: 7 Jun 2018
  */
 
 package asWebRest.action;
@@ -22,9 +22,9 @@ public class GetFitnessAction {
     public JSONArray getBike(Connection dbc, String bike) { return fitnessDAO.getBike(dbc, bike); }    
     public JSONArray getBkStats(Connection dbc, String bike) { return fitnessDAO.getBkStats(dbc, bike); }
     public JSONArray getCalories(Connection dbc) { return fitnessDAO.getCalories(dbc); }
-    public JSONArray getChCaloriesR(List qParams) { return fitnessDAO.getChCaloriesR(qParams); }
+    public JSONArray getChCaloriesR(Connection dbc, List qParams) { return fitnessDAO.getChCaloriesR(dbc, qParams); }
     public JSONArray getChWeightA() { return fitnessDAO.getChWeightA(); }
-    public JSONArray getChWeightR(List qParams) { return fitnessDAO.getChWeightR(qParams); }
+    public JSONArray getChWeightR(Connection dbc, List qParams) { return fitnessDAO.getChWeightR(dbc, qParams); }
     public JSONArray getChWeightRE(List qParams) { return fitnessDAO.getChWeightRE(qParams); }
     public JSONArray getCrsm(Connection dbc) { return fitnessDAO.getCrsm(dbc); }
     public JSONArray getDay(Connection dbc) { return fitnessDAO.getDay(dbc); }

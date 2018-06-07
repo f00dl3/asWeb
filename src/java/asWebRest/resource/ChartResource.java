@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 25 May 2018
+Updated: 7 Jun 2018
  */
 
 package asWebRest.resource;
@@ -13,6 +13,7 @@ import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Finance;
+import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.SysMonNote3;
 import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
@@ -122,46 +123,19 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                  
-                case "FitnessCalorieRange":
-                    genericCharts = true;
-                    String fcnCalories = "Calorie Range: " + argsInForm.getFirstValue("XDT1") + " to " + argsInForm.getFirstValue("XDT2");
+                case "FitnessCharts":
+                    genericCharts = false;
                     qParams.add(argsInForm.getFirstValue("XDT1"));
                     qParams.add(argsInForm.getFirstValue("XDT2"));
-                    JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(qParams);
-                    for (int i = 0; i < jraCalorieRange.length(); i++) {
-                        JSONObject thisObject = jraCalorieRange.getJSONObject(i);
-                        labels.put(thisObject.getString("Date"));
-                        data.put(thisObject.getInt("Calories"));
-                        data2.put(9 * thisObject.getInt("Fat"));
-                        data3.put(4 * thisObject.getInt("Protein"));
-                        data4.put(4 * thisObject.getInt("Carbs"));
-                    }
-                    props
-                        .put("dateFormat", "yyyy-MM-dd")
-                        .put("chartName", fcnCalories).put("chartFileName", "CalorieRange")
-                        .put("sName", "Calories").put("sColor", "White")
-                        .put("s2Color", "Red").put("s2Name", "Fat")
-                        .put("s3Color", "Green").put("s3Name", "Protein")
-                        .put("s4Color", "Yellow").put("s4Name", "Carbs")
-                        .put("xLabel", "Date").put("yLabel", "Calories");
-                    break;
-                                   
-                case "FitnessWeightRange":
-                    genericCharts = true;
-                    String fullChartName = "Weight Range: " + argsInForm.getFirstValue("XDT1") + " to " + argsInForm.getFirstValue("XDT2");
-                    qParams.add(argsInForm.getFirstValue("XDT1"));
-                    qParams.add(argsInForm.getFirstValue("XDT2"));
-                    JSONArray jsonResultArray = getFitnessAction.getChWeightR(qParams);
-                    for (int i = 0; i < jsonResultArray.length(); i++) {
-                        JSONObject thisObject = jsonResultArray.getJSONObject(i);
-                        labels.put(thisObject.getString("Date"));
-                        data.put(thisObject.getDouble("Weight"));
-                    }
-                    props
-                        .put("dateFormat", "yyyy-MM-dd")
-                        .put("chartName", fullChartName).put("chartFileName", "WeightRange")
-                        .put("sName", "lbs").put("sColor", "Yellow")
-                        .put("xLabel", "Date").put("yLabel", "Weight");
+                    JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(dbc, qParams);
+                    JSONArray jsonResultArray = getFitnessAction.getChWeightR(dbc, qParams);
+                    Fitness fitness = new Fitness();
+                    JSONObject calChGlob = fitness.getCalCh(jraCalorieRange);
+                    JSONObject sleepGlob = fitness.getSleepCh(jsonResultArray);
+                    JSONObject wgtChGlob = fitness.getWeightCh(jsonResultArray);
+                    try { dynChart.LineChart(calChGlob); returnData += "Chart generated - CalorieRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(sleepGlob); returnData += "Chart generated - SleepRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(wgtChGlob); returnData += "Chart generated - WeightRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "SysMonCharts":

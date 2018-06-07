@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 6 Jun 2018
+Updated: 7 Jun 2018
 */
 
 package asWebRest.dao;
@@ -297,12 +297,12 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getChCaloriesR(List<String> qParams) {
+    public JSONArray getChCaloriesR(Connection dbc, List<String> qParams) {
         final String query_ch_CaloriesR = "SELECT Date, Calories, Fat, Protein, Carbs" +
                 " FROM Core.Fitness WHERE Date BETWEEN ? AND ? LIMIT 366;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ch_CaloriesR, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_CaloriesR, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -319,7 +319,7 @@ public class FitnessDAO {
     }
      
     public JSONArray getChWeightA() {
-        final String query_ch_WeightA = "SELECT Date, Weight FROM Core.Fitness ORDER BY Date ASC;";
+        final String query_ch_WeightA = "SELECT Date, Weight, EstHoursSleep FROM Core.Fitness ORDER BY Date ASC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_ch_WeightA, null);
@@ -327,7 +327,8 @@ public class FitnessDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Date", resultSet.getString("Date"))
-                    .put("Weight", resultSet.getDouble("Weight"));
+                    .put("Weight", resultSet.getDouble("Weight"))
+                    .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -335,16 +336,17 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getChWeightR(List<String> qParams) {
-        final String query_ch_WeightR = "SELECT Date, Weight FROM Core.Fitness WHERE Date BETWEEN ? AND ? ORDER BY Date ASC LIMIT 366;";
+    public JSONArray getChWeightR(Connection dbc, List<String> qParams) {
+        final String query_ch_WeightR = "SELECT Date, Weight, EstHoursSleep FROM Core.Fitness WHERE Date BETWEEN ? AND ? ORDER BY Date ASC LIMIT 366;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_ch_WeightR, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_WeightR, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Date", resultSet.getString("Date"))
-                    .put("Weight", resultSet.getDouble("Weight"));
+                    .put("Weight", resultSet.getDouble("Weight"))
+                    .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"));
                 tContainer.put(tObject);
             }
             resultSet.close();
