@@ -26,20 +26,20 @@ function addGpsToMap(map, jsonData) {
     var speedMphMin = Math.min.apply(Math, aSpeedMPH);
     var speedMphAvg = getSum(aSpeedMPH) / aSpeedMPH.length;
     for(var i = 0; i < keyCount; i++) {
-        if(i % 3 === 0) {
+        if(i % 5 === 0) {
             var thisColor = 'gray';
             var tJson = jsonData[i.toString()];
             coords.push([ tJson.Longitude , tJson.Latitude ]);
             var tIconFeature = addGpsMarkersMethod3(map, tJson);
-            if(isSet(tJson.SpeedMPH)) { thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg); }
-            tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1));
+            // Errors out here 6/7/18
+            //if(isSet(tJson.SpeedMPH)) { thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg); }
+            tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
             vectorSource.addFeature(tIconFeature);
         }
     }
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
     addLineStringToMap(map, coords, null);
     map.addLayer(vectorLayer);
-    console.log("Debug: SpeedMPH max/min/avg: " + speedMphMax + ", " + speedMphMin + ", " + speedMphAvg);
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {
