@@ -1,0 +1,11 @@
+/* 
+    Created on : Jun 7, 2018, 8:20:04 AM
+    Author     : astump
+*/
+
+.olCircMarker {
+    width: 8px;
+    height: 8px;
+    background-color: yellow;
+    opacity: 0.5;
+}

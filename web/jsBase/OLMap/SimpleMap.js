@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 6 Jun 2018
+Updated: 7 Jun 2018
  */
 
 function getGpsFromDatabase(map, date, type) {
@@ -70,6 +70,7 @@ function postProcessOptions(map) {
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
+            //https://localhost:8444/asWeb/OLMap.jsp?Action=RouteGPSTest&Input=Test
             case "RouteGPSTest": getGpsFromDatabase(map, "2018-06-06", "Run"); break;
         }
     }
@@ -87,6 +88,7 @@ function putSimpleMap() {
             zoom: 15
         })
     });
+    genDivMarker("circ");
     postProcessOptions(map);
 }
 

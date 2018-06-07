@@ -2,8 +2,35 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 6 Jun 2018
+Updated: 7 Jun 2018
  */
+
+function genDivMarker(type) {
+    switch(type) {
+        case "circ": return "<div class='olCircMarker'></div>";
+    }
+}
+
+function genSquareMarker(color, radius) {
+    console.log("genSquareMarker(" + color + ", " + radius + ") called!");
+    var stroke = new ol.style.Stroke({
+        color: 'black',
+        width: 1
+    });
+    var fill = new ol.style.Fill({
+        color: color
+    });
+    var square = new ol.style.Style({
+        image: new ol.style.RegularShape({
+            fill: fill,
+            stroke: stroke,
+            points: 4,
+            radius: radius,
+            angle: Math.PI / 4
+        })
+    });
+    return square;
+}
 
 function getOSMAttribution() {
     var currentYear = getDate("day", 0, "yearOnly");
@@ -27,10 +54,10 @@ function transform_geometry(element) {
 }
 
 var map;
-
+var remoteTiles = new ol.layer.Tile({ source: new ol.source.OSM() });
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
-var remoteTiles = new ol.layer.Tile({ source: new ol.source.OSM() });
+
 
 var routeStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({

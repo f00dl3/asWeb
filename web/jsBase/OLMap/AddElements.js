@@ -1,20 +1,33 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 6 Jun 2018
-http://openlayersbook.github.io/
+Updated: 7 Jun 2018
 */
 
-function addGpsIconFeatures(map, jsonData) {
+function addGpsMarkersMethod1(map, jsonData) {
+    console.log("addGpsMarkersMethod1(map, jsonData) called!");
     var tCoord = [ jsonData.Longitude, jsonData.Latitude ];
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
-    var iconFeature = new ol.Feature({
-        geometry: point,
-        name: 'Point: ' + tCoord[0] + ", " + tCoord[1]
+    var feature = new ol.Feature(point);
+    feature.setStyle(genSquareMarker("red", 5));
+    var source = new ol.source.Vector({ feature: feature });
+    var vectorLayer = new ol.layer.Vector({ source: source });
+    map.addLayer(vectorLayer);
+}
+
+function addGpsMarkersMethod2(map, jsonData) {
+    console.log("addGpsMarkersMethod2(map, jsonData) called!");
+    var tCoord = [ jsonData.Longitude, jsonData.Latitude ];
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var marker = new ol.Overlay({
+        position: point,
+        positioning: 'center-center',
+        element: genDivMarker("circ"),
+        stopEvent: false
     });
-    console.log("icon feature added");
-    return iconFeature;
+    map.addOverlay(marker);
 }
 
 function addGpsToMap(map, jsonData) {
@@ -23,26 +36,11 @@ function addGpsToMap(map, jsonData) {
     var iconFeatures = [];
     for(var i = 0; i < Object.keys(jsonData).length; i++) {
         var sk = i.toString();
-        iconFeatures.push(addGpsIconFeatures(map, jsonData[sk]));
+        addGpsMarkersMethod1(map, jsonData[sk]);
         coords.push([ jsonData[sk].Longitude , jsonData[sk].Latitude ]);
     }
     addLineStringToMap(map, coords, null);
-    var iconVector = new ol.source.Vector({ features: iconFeatures });
-    var iconStyle = new ol.style.Style({
-        image: new ol.style.Icon({
-            anchor: [0.5, 5],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'pixels',
-            opacity: 0.75,
-            src: getBasePath('icon') + '/ic_run.png'
-        })
-    });
-    console.log(iconFeatures);
-    var iconLayer = new ol.layer.Vector({
-        source: iconVector,
-        style: iconStyle
-    });
-    map.addLayer(iconLayer);
+
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {
