@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 25 Apr 2018
+Updated: 7 Jun 2018
 For support of non-RESTful API calls
 */
 
@@ -61,6 +61,16 @@ public class Controller extends HttpServlet {
                 dispatchUrl = "/Session.jsp";
                 if(wc.isSet(request.getParameter("paramName")) && wc.isSet(request.getParameter("paramValue"))) {
                     switch(request.getParameter("paramName")) {
+                        
+                        case "clientIp":
+                            String clientIp = request.getParameter("paramValue");
+                            session.setAttribute("clientIp", clientIp);
+                            break;
+                            
+                        case "clientBrowser":
+                            String clientBrowser = request.getParameter("paramValue");
+                            session.setAttribute("clientBrowser", clientBrowser);
+                            break;
                         
                         case "hiddenFeatures":
                             String hiddenFeatures;

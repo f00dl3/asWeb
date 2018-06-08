@@ -95,7 +95,8 @@ public class LogsResource extends ServerResource {
                 case "LogLogin":
                     WebAccessLog webAccessLog = new WebAccessLog();
                     webAccessLog.setUser(argsInForm.getFirstValue("UserName"));
-                    webAccessLog.setRemoteIp("NA-Yet"); // To work on
+                    webAccessLog.setRemoteIp(argsInForm.getFirstValue("RemoteIP"));
+                    webAccessLog.setBrowser(argsInForm.getFirstValue("UserAgent"));
                     UpdateWebAccessLogAction updateWebAccessLogAction = new UpdateWebAccessLogAction(new WebAccessLogDAO());
                     updateWebAccessLogAction.updateWebAccessLog(webAccessLog);
                     returnData += "QUERY RAN SUCESSFULLY!";

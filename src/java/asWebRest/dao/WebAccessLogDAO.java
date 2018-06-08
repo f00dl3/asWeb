@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 7 Apr 2018
+Updated: 7 Jun 2018
 */
 
 package asWebRest.dao;
@@ -40,13 +40,14 @@ public class WebAccessLogDAO {
     }
     
     public void updateWebAccessLog(WebAccessLog webAccessLog) {
-        final String query_WebAccessLog = "INSERT INTO Core.WebAccessLog (LoginTime, User, RemoteIP, Tomcat) VALUES (Null, ?, ?, 1);";
+        final String query_WebAccessLog = "INSERT INTO Core.WebAccessLog (LoginTime, User, RemoteIP, Tomcat, Browser) VALUES (Null, ?, ?, 1, ?);";
         try (
             Connection connection = MyDBConnector.getMyConnection();
             PreparedStatement pStatement = connection.prepareStatement(query_WebAccessLog);
         ) {
             pStatement.setString(1, webAccessLog.getUser());
             pStatement.setString(2, webAccessLog.getRemoteIp());
+            pStatement.setString(3, webAccessLog.getBrowser());
             pStatement.execute();
         } catch (SQLException sx) {
             sx.printStackTrace();

@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Apr 2018
+Updated: 7 Jun 2018
  */
 
 package asWebRest.resource;
@@ -27,7 +28,7 @@ public class SessionResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
-                
+                //For later use if needed. Right now unused.
             }
         }
         

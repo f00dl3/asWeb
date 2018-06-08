@@ -66,11 +66,15 @@ function populateLogin() {
 }
 
 function setLogLogin(thisFormData) {
+    getSessionVariables();
     aniPreload("on");
     var thePostData = {
         "doWhat": "LogLogin",
-        "UserName": thisFormData.User
+        "UserName": thisFormData.User,
+        "RemoteIP": sessionVars.clientIp,
+        "UserAgent": sessionVars.clientBrowser
     };
+    console.log(thePostData);
     require(["dojo/request"], function(request) {
         request
             .post(getResource("Logs"), {
