@@ -11,6 +11,12 @@ function getOSMAttribution() {
     return rString;
 }
 
+function getOLPopup() {
+    var popup = new ol.Overlay.Popup;
+    popup.setOffset([0, -55]);
+    return popup;
+}
+
 function svgIconStyle(type, size, thisColor, opacity) {
     var svgData = "";
     switch(type) {
