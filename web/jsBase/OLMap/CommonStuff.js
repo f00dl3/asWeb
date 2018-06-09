@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 7 Jun 2018
+Updated: 9 Jun 2018
  */
 
 function getOSMAttribution() {
@@ -11,17 +11,16 @@ function getOSMAttribution() {
     return rString;
 }
 
-function svgIconStyle(type, size, color, opacity) {
+function svgIconStyle(type, size, thisColor, opacity) {
     var svgData = "";
     switch(type) {
         case "c":
             var svgSize = size * 2;
             svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
-                    '<circle cx="' + size + '" cy="' + size + '" r="' + size + '" fill="' + color + '"/>' +
+                    '<circle cx="' + size + '" cy="' + size + '" r="' + size + '" fill="' + thisColor + '"/>' +
                     '</svg>';
     }
-    var genSvgUrl = "data:image/svg+xml;utf8," + svgData;
-    //console.log(genSvgUrl);
+    var genSvgUrl = "data:image/svg+xml;utf8," + encodeURIComponent(svgData);
     var style = new ol.style.Style({
         image: new ol.style.Icon({
             opacity: opacity,

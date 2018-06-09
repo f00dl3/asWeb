@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 7 Jun 2018
+Updated: 9 Jun 2018
  */
 
 var annMaint = 910.66;
@@ -83,7 +83,7 @@ function autoColorScale(tData,tMax,tMin,tForcedAvg) {
         case (tData <= tAverage-(5*tJump) && tData > tAverage-(6*tJump)): tColor = "#660099"; break;
         default: tColor = "#ffffff"; break;
     }
-    console.log("AutoColor: " + tColor);
+    //console.log("AutoColor: " + tColor);
     return tColor;
 }
 

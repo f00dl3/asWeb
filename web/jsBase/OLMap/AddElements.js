@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 7 Jun 2018
+Updated: 9 Jun 2018
 */
 
 function addGpsMarkersMethod3(map, jsonData) {
@@ -28,13 +28,17 @@ function addGpsToMap(map, jsonData) {
     for(var i = 0; i < keyCount; i++) {
         if(i % 5 === 0) {
             var thisColor = 'gray';
+            var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = jsonData[i.toString()];
-            coords.push([ tJson.Longitude , tJson.Latitude ]);
-            var tIconFeature = addGpsMarkersMethod3(map, tJson);
-            // Errors out here 6/7/18
-            //if(isSet(tJson.SpeedMPH)) { thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg); }
-            tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
-            vectorSource.addFeature(tIconFeature);
+            if(isSet(tJson.SpeedMPH) && isSet(tCoords[0]) && isSet(tCoords[1])) {
+                coords.push(tCoords);
+                var tIconFeature = addGpsMarkersMethod3(map, tJson);
+                thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg);
+                tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
+                vectorSource.addFeature(tIconFeature);
+            } else {
+                console.log("ERROR @ " + tCoords);
+            }
         }
     }
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
