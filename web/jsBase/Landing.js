@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 7 Jun 2018
+Updated: 9 Jun 2018
  **/
 
 var loggedIn = false;
@@ -68,11 +68,17 @@ function populateLogin() {
 function setLogLogin(thisFormData) {
     getSessionVariables();
     aniPreload("on");
+    var clientIp = "";
+    var clientBrowser = "";
+    if(isSet(sessionVars)) {
+        clientIp = sessionVars.clientIp;
+        clientBrowser = sessionVars.clientBrowser;
+    }
     var thePostData = {
         "doWhat": "LogLogin",
         "UserName": thisFormData.User,
-        "RemoteIP": sessionVars.clientIp,
-        "UserAgent": sessionVars.clientBrowser
+        "RemoteIP": clientIp,
+        "UserAgent": clientBrowser
     };
     console.log(thePostData);
     require(["dojo/request"], function(request) {
