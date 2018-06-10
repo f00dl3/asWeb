@@ -1,10 +1,8 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 3 Jun 2018
+Updated: 10 Jun 2018
 */
-
-console.log(sessionVars);
 
 function actOnCalendarSubmit(event) {
     dojo.stopEvent(event);
@@ -77,6 +75,26 @@ function get3dLinkList() {
 }
 
 function getAnthonyOverviewData() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "LogCharts" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getAnthonyOverviewDataRawData();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Log Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getAnthonyOverviewDataRawData() {
     aniPreload("on");
     var thePostData = "doWhat=AnthonyOverviewData";
     var xhArgs = {
@@ -154,7 +172,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     sduBubble += "</tbody></table></div></button></div>";
     var camCols = [ "Date", "MP4<br/>", "Frames" ];
     var camLogBubble = "<div class='UPopC'>" +
-            "<a href='" + doCh("p", "LogCams", null) + "' target='new'>" +
+            "<a href='" + doCh("j", "LogCamsMp4", null) + "' target='new'>" +
             "<button class='UButton'>Cams" +
             "<div class='UPopCO'>" +
             "<table><thead><tr>";
