@@ -24,7 +24,7 @@ public class Logs {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             cmp4_Labels.put(thisObject.getString("Date"));
-            cmp4_Data.put(thisObject.getDouble("MP4Size"));
+            cmp4_Data.put(thisObject.getDouble("MP4Size")/1024);
         }
         cmp4_Glob
                 .put("labels", cmp4_Labels)
