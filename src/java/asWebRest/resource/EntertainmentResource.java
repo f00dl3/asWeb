@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 24 May 2018
+Updated: 13 Jun 2018
  */
 
 package asWebRest.resource;
@@ -87,6 +87,11 @@ public class EntertainmentResource extends ServerResource {
                 case "getStarTrek":
                     JSONArray st = getEntertainmentAction.getStarTrek(dbc);
                     returnData += st.toString();
+                    break;
+                    
+                case "getTrueBlood":
+                    JSONArray tb = getEntertainmentAction.getTrueBlood(dbc);
+                    returnData += tb.toString();
                     break;
                     
                 case "getXFiles":

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 6 Jun 2018
+Updated: 13 Jun 2018
  */
 
 var msIndex;
@@ -18,6 +18,7 @@ function actOnNonMedia(event) {
         case "Photos": populateGallery(target); break;
         case "PowerRangers": getPowerRangers(target); break;
         case "StarTrek": getStarTrek(target); break;
+        case "TrueBlood": getTrueBlood(target); break;
         case "XFiles": getXFiles(target); break;
         default: window.alert("Invalid / unbuilt option! (" + thisFormData.Genre + ")"); break;
     }
@@ -88,6 +89,7 @@ function mediaOpts() {
         "Goosebumps",
         "PowerRangers",
         "StarTrek",
+        "TrueBlood",
         "XFiles"
     ];
     if(isSet(hiddenFeatures)) {

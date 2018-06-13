@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 25 May 2018
+Updated: 13 Jun 2018
  */
 
 package asWebRest.action;
@@ -25,6 +25,7 @@ public class GetEntertainmentAction {
     public JSONArray getLego(Connection dbc) { return entertainmentDAO.getLego(dbc); }
     public JSONArray getPowerRangers(Connection dbc) { return entertainmentDAO.getPowerRangers(dbc); }
     public JSONArray getStarTrek(Connection dbc) { return entertainmentDAO.getStarTrek(dbc); }
+    public JSONArray getTrueBlood(Connection dbc) { return entertainmentDAO.getTrueBlood(dbc); }
     public JSONArray getXFiles(Connection dbc) { return entertainmentDAO.getXFiles(dbc); }
     public JSONArray getXTags(Connection dbc) { return entertainmentDAO.getXTags(dbc); }
     

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 25 May 2018
+Updated: 13 Jun 2018
 */
 
 package asWebRest.dao;
@@ -49,6 +49,34 @@ public class EntertainmentDAO {
         final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
+    }
+    
+    private JSONArray trueBlood(Connection dbc) {
+        final String query_MediaServer_TrueBlood = "SELECT" +
+                " OverallNo, SeasonNo," +
+                " Director, Producer, Title, AirDate, Viewers," +
+                " Synopsis" +
+                " FROM Core.TrueBlood" +
+                " ORDER BY OverallNo DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_TrueBlood, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("OverallNo", resultSet.getInt("OverallNo"))
+                    .put("SeasonNo", resultSet.getInt("SeasonNo"))
+                    .put("Director", resultSet.getString("Director"))
+                    .put("Producer", resultSet.getString("Producer"))
+                    .put("Title", resultSet.getString("Title"))
+                    .put("AirDate", resultSet.getString("AirDate"))
+                    .put("Viewers", resultSet.getDouble("Viewers"))
+                    .put("Synopsis", resultSet.getString("Synopsis"));                   
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
     }
     
     public JSONArray getFfxivQuests(Connection dbc) {
@@ -213,34 +241,6 @@ public class EntertainmentDAO {
         return tContainer;
     }  
        
-    public JSONArray getStarTrek(Connection dbc) {
-        final String query_StarTrek = "SELECT" +
-                " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
-                " Title, Synopsis, MediaServer, StarDate, ViewersM" +
-                " FROM Core.StarTrek ORDER BY StarDate DESC;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_StarTrek, null);
-            while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Series", resultSet.getInt("Series"))
-                    .put("Season", resultSet.getInt("Season"))
-                    .put("SeasonEp", resultSet.getInt("SeasonEp"))
-                    .put("ProdCode", resultSet.getString("ProdCode"))
-                    .put("AirDate", resultSet.getString("AirDate"))
-                    .put("Title", resultSet.getString("Title"))
-                    .put("Synopsis", resultSet.getString("Synopsis"))
-                    .put("MediaServer", resultSet.getInt("MediaServer"))
-                    .put("StarDate", resultSet.getDouble("StarDate"))
-                    .put("ViewersM", resultSet.getDouble("ViewersM"));                       
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }  
-     
     public JSONArray getPowerRangers(Connection dbc) {
         final String query_MediaServer_PowerRangers = "SELECT" +
                 " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
@@ -267,6 +267,36 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
+    
+    public JSONArray getStarTrek(Connection dbc) {
+        final String query_StarTrek = "SELECT" +
+                " Series, Season, SeasonEp, SeriesEp, ProdCode, AirDate," +
+                " Title, Synopsis, MediaServer, StarDate, ViewersM" +
+                " FROM Core.StarTrek ORDER BY StarDate DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_StarTrek, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Series", resultSet.getInt("Series"))
+                    .put("Season", resultSet.getInt("Season"))
+                    .put("SeasonEp", resultSet.getInt("SeasonEp"))
+                    .put("ProdCode", resultSet.getString("ProdCode"))
+                    .put("AirDate", resultSet.getString("AirDate"))
+                    .put("Title", resultSet.getString("Title"))
+                    .put("Synopsis", resultSet.getString("Synopsis"))
+                    .put("MediaServer", resultSet.getInt("MediaServer"))
+                    .put("StarDate", resultSet.getDouble("StarDate"))
+                    .put("ViewersM", resultSet.getDouble("ViewersM"));                       
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getTrueBlood(Connection dbc) { return trueBlood(dbc); }
     
     public JSONArray getXFiles(Connection dbc) {
         final String query_MediaServer_XFiles = "SELECT" +

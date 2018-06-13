@@ -29,6 +29,7 @@
         "Entertain/PowerRangers",
         "Entertain/Reddit",
         "Entertain/StarTrek",
+        "Entertain/TrueBlood",
         "Entertain/XFiles"
     };
     
