@@ -1,0 +1,23 @@
+{
+    "label" : "Weather",
+    "identifier" : "Empty",
+    "items" : [{
+        "station": "KOJC",
+        "children" : {
+            "Temperature": "38",
+            "Dewpoint": "25",
+            "Humidity": "76",
+            "WindSpeed": "25",
+            "WindDirection": "South"
+        },
+        "station": "KICT",
+        "children": {
+            "Temperature": "52",
+            "Dewpoint": "51",
+            "Humidity": "99",
+            "WindSpeed": "14",
+            "WindDirection": "South"
+        }
+    }]
+}
+    
