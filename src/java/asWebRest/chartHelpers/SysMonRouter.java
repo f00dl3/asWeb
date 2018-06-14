@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 13 May 2018
+Updated: 14 Jun 2018
  */
 
 package asWebRest.chartHelpers;
@@ -110,6 +110,7 @@ public class SysMonRouter {
         JSONArray mRouterNet_Data5 = new JSONArray();
         JSONArray mRouterNet_Data6 = new JSONArray();
         JSONArray mRouterNet_Data7 = new JSONArray();
+        JSONArray mRouterNet_Data8 = new JSONArray();
         mRouterNet_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mRouterNet_ChartName).put("chartFileName", "mRouterNet")
@@ -120,6 +121,7 @@ public class SysMonRouter {
                 .put("s5Name", "vlan1").put("s5Color", "Gray")
                 .put("s6Name", "vlan2").put("s6Color", "Gray")
                 .put("s7Name", "br0").put("s7Color", "White")
+                .put("s8Name", "br1").put("s8Color", "White")
                 .put("xLabel", "WalkTime").put("yLabel", "Data Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject routerObject = dataIn.getJSONObject(i);
@@ -130,13 +132,15 @@ public class SysMonRouter {
             float mRouterNet_ThisDiffRouterV1Octets = 0;
             float mRouterNet_ThisDiffRouterV2Octets = 0;
             float mRouterNet_ThisDiffRouterB0Octets = 0;
+            float mRouterNet_ThisDiffRouterB1Octets = 0;
             float mRouterNet_ThisRouterE0Octets = routerObject.getFloat("eth0Rx") + routerObject.getFloat("eth0Tx");
-            float mRouterNet_ThisRouterE1Octets = routerObject.getFloat("eth1Rx") + routerObject.getFloat("eth0Tx");
+            float mRouterNet_ThisRouterE1Octets = routerObject.getFloat("eth1Rx") + routerObject.getFloat("eth1Tx");
             float mRouterNet_ThisRouterE2Octets = routerObject.getFloat("eth2Rx") + routerObject.getFloat("eth2Tx");
             float mRouterNet_ThisRouterE3Octets = routerObject.getFloat("eth3Rx") + routerObject.getFloat("eth3Tx");
             float mRouterNet_ThisRouterV1Octets = routerObject.getFloat("vlan1Rx") + routerObject.getFloat("vlan1Tx");
             float mRouterNet_ThisRouterV2Octets = routerObject.getFloat("vlan2Rx") + routerObject.getFloat("vlan2Tx");
             float mRouterNet_ThisRouterB0Octets = routerObject.getFloat("br0Rx") + routerObject.getFloat("br0Tx");
+            float mRouterNet_ThisRouterB1Octets = routerObject.getFloat("br1Rx") + routerObject.getFloat("br1Tx");
             float mRouterNet_ThisOctetsTotal = (
                     mRouterNet_ThisRouterE0Octets +
                     mRouterNet_ThisRouterE1Octets +
@@ -144,7 +148,8 @@ public class SysMonRouter {
                     mRouterNet_ThisRouterE3Octets +
                     mRouterNet_ThisRouterV1Octets +
                     mRouterNet_ThisRouterV2Octets +
-                    mRouterNet_ThisRouterB0Octets
+                    mRouterNet_ThisRouterB0Octets +
+                    mRouterNet_ThisRouterB1Octets
             );
             if(mRouterNet_LastRouterE0Octets <= mRouterNet_ThisRouterE0Octets && mRouterNet_LastRouterE0Octets != 0) {
                 mRouterNet_ThisDiffRouterE0Octets = ((mRouterNet_ThisRouterE0Octets - mRouterNet_LastRouterE0Octets)/1024/intLen/step);
@@ -167,6 +172,9 @@ public class SysMonRouter {
             if(mRouterNet_LastRouterB0Octets <= mRouterNet_LastRouterB0Octets && mRouterNet_LastRouterB0Octets != 0) {
                 mRouterNet_ThisDiffRouterB0Octets = ((mRouterNet_ThisRouterB0Octets - mRouterNet_LastRouterB0Octets)/1024/intLen/step);
             }
+            if(mRouterNet_LastRouterB1Octets <= mRouterNet_LastRouterB1Octets && mRouterNet_LastRouterB1Octets != 0) {
+                mRouterNet_ThisDiffRouterB1Octets = ((mRouterNet_ThisRouterB1Octets - mRouterNet_LastRouterB1Octets)/1024/intLen/step);
+            }
             mRouterNet_Labels.put(routerObject.getString("WalkTime"));
             mRouterNet_Data.put(mRouterNet_ThisDiffRouterE0Octets);
             mRouterNet_Data2.put(mRouterNet_ThisDiffRouterE1Octets);
@@ -175,6 +183,7 @@ public class SysMonRouter {
             mRouterNet_Data5.put(mRouterNet_ThisDiffRouterV1Octets);
             mRouterNet_Data6.put(mRouterNet_ThisDiffRouterV2Octets);
             mRouterNet_Data7.put(mRouterNet_ThisDiffRouterB0Octets);
+            mRouterNet_Data8.put(mRouterNet_ThisDiffRouterB1Octets);
             mRouterNet_LastRouterE0Octets = mRouterNet_ThisRouterE0Octets;
             mRouterNet_LastRouterE1Octets = mRouterNet_ThisRouterE1Octets;
             mRouterNet_LastRouterE2Octets = mRouterNet_ThisRouterE2Octets;
@@ -182,6 +191,7 @@ public class SysMonRouter {
             mRouterNet_LastRouterV1Octets = mRouterNet_ThisRouterV1Octets;
             mRouterNet_LastRouterV2Octets = mRouterNet_ThisRouterV2Octets;
             mRouterNet_LastRouterB0Octets = mRouterNet_ThisRouterB0Octets;
+            mRouterNet_LastRouterB1Octets = mRouterNet_ThisRouterB1Octets;
             mRouterNet_LastOctetsTotal = mRouterNet_ThisOctetsTotal;
         }
         mRouterNet_Glob
@@ -193,6 +203,7 @@ public class SysMonRouter {
                 .put("data5", mRouterNet_Data5)
                 .put("data6", mRouterNet_Data6)
                 .put("data7", mRouterNet_Data7)
+                .put("data8", mRouterNet_Data8)
                 .put("props", mRouterNet_Props);
         return mRouterNet_Glob;
     }
