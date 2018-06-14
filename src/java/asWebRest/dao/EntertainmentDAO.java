@@ -53,8 +53,8 @@ public class EntertainmentDAO {
     
     private JSONArray trueBlood(Connection dbc) {
         final String query_MediaServer_TrueBlood = "SELECT" +
-                " OverallNo, SeasonNo," +
-                " Director, Producer, Title, AirDate, Viewers," +
+                " OverallNo, Season, SeasonNo," +
+                " Director, Producer, Title, AirDate, AirDateDTS, Viewers," +
                 " Synopsis" +
                 " FROM Core.TrueBlood" +
                 " ORDER BY OverallNo DESC;";
@@ -65,11 +65,13 @@ public class EntertainmentDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("OverallNo", resultSet.getInt("OverallNo"))
+                    .put("Season", resultSet.getInt("Season"))
                     .put("SeasonNo", resultSet.getInt("SeasonNo"))
                     .put("Director", resultSet.getString("Director"))
                     .put("Producer", resultSet.getString("Producer"))
                     .put("Title", resultSet.getString("Title"))
                     .put("AirDate", resultSet.getString("AirDate"))
+                    .put("AirDateDTS", resultSet.getString("AirDateDTS"))
                     .put("Viewers", resultSet.getDouble("Viewers"))
                     .put("Synopsis", resultSet.getString("Synopsis"));                   
                 tContainer.put(tObject);

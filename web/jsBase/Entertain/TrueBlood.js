@@ -1,6 +1,6 @@
 /* 
 by Anthony Stump
-Created: 16 Jun 2018
+Created: 13 Jun 2018
  */
 
 function getTrueBlood(target) {
@@ -24,7 +24,7 @@ function getTrueBlood(target) {
 }
 
 function populateTrueBlood(target, tbEps) {
-    var cols = [ "Episode", "Title" ];
+    var cols = [ "Sea/Ep", "Title" ];
     var rData = "<h3>TrueBlood</h3>" +
             "<div class='table'>" +
             "<div class='tr'>";
@@ -32,9 +32,9 @@ function populateTrueBlood(target, tbEps) {
     rData += "</div>";
     tbEps.forEach(function (tb) {
         rData += "<div class='tr'>" +
-                "<span class='td'><div class='UPop'>" + tb.OverallNo +
+                "<span class='td'><div class='UPop'>" + tb.Season + "/" + tb.SeasonNo +
                 "<div class='UPopO'>" +
-                "<strong>Season Episode:</strong> " + tb.SeasonNo + "<br/>" +
+                "<strong>Overall:</strong> " + tb.OverallNo + "<br/>" +
                 "</div></div></span>" +
                 "<span class='td'><div class='UPop'>" + tb.Title +
                 "<div class='UPopO'>" +
