@@ -12,13 +12,31 @@ function afterCountryDatastore(cdsData) {
 
 function genLayout() {
     var rData = "<h3>Dojo DataStore IFRS/IFWS tests</h3>" +
-            "<div id='datastoreTreeTester'>...Loading data...</div><br/>" +
-            "<div id='jsonRestTest'>... JSON Rest Test ...</div><br/>" +
+            //"<div id='datastoreTreeTester'>...Loading data...</div><br/>" +
+            //"<div id='jsonRestTest'>... JSON Rest Test ...</div><br/>" +
             "<div id='treeTest2'>... Tree Test II ...</div>";
     dojo.byId("HeaderHolder").innerHTML = rData;
-    getDatastoreCountries();
-    gdsJsonRest();
     treeTest2();
+}
+
+function gdsFitness() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getFitnessAsStore" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    showNotice("Fitness Store Fetched!");
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Fitness Store FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function gdsJsonRest() {
@@ -58,7 +76,7 @@ function treeTest2() {
         "dojo/domReady!"
     ], function(Tree, ItemFileReadStore, ForestStoreModel) {
         var store = new ItemFileReadStore({
-           url: "std_Countries.djds" 
+           url: "fitnessPull.djds" 
         });
         var treeModel = new ForestStoreModel({
             store: store,

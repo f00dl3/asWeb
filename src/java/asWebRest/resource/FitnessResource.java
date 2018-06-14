@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Jun 2018
+Updated: 14 Jun 2018
  */
 
 package asWebRest.resource;
@@ -11,6 +11,7 @@ import asWebRest.action.GetFitnessAction;
 import asWebRest.action.UpdateFitnessAction;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
+import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -32,6 +33,7 @@ public class FitnessResource extends ServerResource {
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
+        JsonWorkers jw = new JsonWorkers();
         WebCommon wc = new WebCommon();
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
@@ -92,6 +94,13 @@ public class FitnessResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                     
+                case "getFitnessAsStore":
+                    qParams.add(0, "2017-06-14");
+                    qParams.add(1, "2018-06-14");
+                    JSONArray allRecs = getFitnessAction.getAll(dbc, qParams);
+                    returnData += jw.getDesiredDataType(allRecs, "dataStore", "Date");
+                    break;
+                    
                 case "getGpsJson":
                     String actType = argsInForm.getFirstValue("activity");
                     String actDate = argsInForm.getFirstValue("logDate");
@@ -116,8 +125,8 @@ public class FitnessResource extends ServerResource {
                     if(xdt1a != null && xdt2a != null) {
                         qParams.add(xdt1a);
                         qParams.add(xdt2a);
-                        JSONArray allRecs = getFitnessAction.getGeoJSON(dbc, qParams);
-                        returnData += allRecs.toString();
+                        JSONArray foj = getFitnessAction.getGeoJSON(dbc, qParams);
+                        returnData += foj.toString();
                     } else {
                         returnData += "ERROR!";
                     }
