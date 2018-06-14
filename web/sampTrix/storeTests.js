@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Jun 2018
-Updated: 13 Jun 2018
+Updated: 14 Jun 2018
  */
 
 function afterCountryDatastore(cdsData) {
@@ -12,11 +12,13 @@ function afterCountryDatastore(cdsData) {
 
 function genLayout() {
     var rData = "<h3>Dojo DataStore IFRS/IFWS tests</h3>" +
-            "<div id='datastoreTreeTester'>...Loading data...</div>" +
-            "<div id='jsonRestTest'>... JSON Rest Test ...</div>";
+            "<div id='datastoreTreeTester'>...Loading data...</div><br/>" +
+            "<div id='jsonRestTest'>... JSON Rest Test ...</div><br/>" +
+            "<div id='treeTest2'>... Tree Test II ...</div>";
     dojo.byId("HeaderHolder").innerHTML = rData;
     getDatastoreCountries();
     gdsJsonRest();
+    treeTest2();
 }
 
 function gdsJsonRest() {
@@ -44,6 +46,31 @@ function getDatastoreCountries() {
                     aniPreload("off");
                     window.alert("request Countries datastore FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
             });
+    });
+}
+
+function treeTest2() {
+    showNotice("treeTest2 Called!");
+    require([
+        "dijit/Tree",
+        "dojo/data/ItemFileReadStore",
+        "dijit/tree/ForestStoreModel",
+        "dojo/domReady!"
+    ], function(Tree, ItemFileReadStore, ForestStoreModel) {
+        var store = new ItemFileReadStore({
+           url: "std_Countries.djds" 
+        });
+        var treeModel = new ForestStoreModel({
+            store: store,
+            //query:
+            rootId: "root",
+            rootLabel: "Test",
+            childrenAttrs: [ "children" ]
+        });
+        var myTree = new Tree({
+            model: treeModel
+        }, "treeTest2");
+        myTree.startup();
     });
 }
 
