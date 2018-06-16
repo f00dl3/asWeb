@@ -26,11 +26,14 @@ function putPointClickMap() {
         view: homeView
     });
     map.on('singleclick', function(evt) {
-        var coordinate = evt.coordinate;
-        console.log("EVENT CLICK: " + coordinate);
-        var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(coordinate, 'ESPG:3857', 'ESPG:4326'));
-        content.innerHTML = '<p>You clicked: </p><code>' + hdms + '</code>';
-        overlay.setPosition(coordinate);
+        var coord = evt.coordinate;
+        var xfCoord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+        var xfcm = xfCoord;
+        var tca = xfcm.splice(",");
+        var tLon = tca[0].toFixed(4);
+        var tLat = tca[1].toFixed(4);
+        content.innerHTML = '<p>You clicked: </p>Lat: ' + tLon + '<br>Lon: ' + tLat + '</code>';
+        overlay.setPosition(coord);
     });
 }
 
