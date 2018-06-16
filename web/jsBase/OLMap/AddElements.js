@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 9 Jun 2018
+Updated: 16 Jun 2018
 */
 
 function addGpsMarkersMethod3(map, jsonData) {
