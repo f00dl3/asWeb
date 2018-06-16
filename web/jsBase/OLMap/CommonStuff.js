@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 9 Jun 2018
+Updated: 16 Jun 2018
  */
 
 function getOSMAttribution() {
@@ -38,17 +38,8 @@ function svgIconStyle(type, size, thisColor, opacity) {
 }
 
 var map;
-var remoteTiles = new ol.layer.Tile({ source: new ol.source.OSM() });
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
-
-
-var routeStyle = new ol.style.Style({
-    stroke: new ol.style.Stroke({
-        color: 'rgba(255,255,0,0.4)',
-        width: 5
-    })
-});
 
 var localTiles = new ol.layer.Tile({
     source: new ol.source.OSM({
@@ -61,3 +52,20 @@ var localTiles = new ol.layer.Tile({
         url: tilePathLocal
     })
 });
+
+var remoteTiles = new ol.layer.Tile({ source: new ol.source.OSM() });
+
+var homeView = new ol.View({
+    center: wmGeoJson,
+    zoom: 15,
+    maxZoom: 16
+});
+
+var routeStyle = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+        color: 'rgba(255,255,0,0.4)',
+        width: 5
+    })
+});
+
+var tileSource = localTiles;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 7 Jun 2018
+Updated: 16 Jun 2018
  */
 
 function generateMapHolder() {
@@ -11,7 +11,11 @@ function generateMapHolder() {
     var styleForMap = "<style>.map { height: " + mapHeight + "; width: " + mapWidth + "; }</style>";
     var rData = styleForMap + 
             "<div id='MarkerHolder'></div>" +
-            "<div id='map' class='map'></div>";
+            "<div id='map' class='map'></div>" +
+            "<div id='popup' class='ol-popup'>" +
+            "<a href='#' id='popup-closer' class='ol-popup-closer'></a>" +
+            "<div id='popup-content'></div>" +
+            "</div>";
     if(!checkMobile()) {
         rData += "<br/><div id='MessageHolder'></div>";
     } else {
@@ -27,6 +31,7 @@ function initMap() {
         case "G16IR": renderImage("G16IR"); break;
         case "G16VIS": renderImage("G16VIS"); break;
         case "Image": renderImage(); break;
+        case "PointClick": putPointClickMap(); break;
         default: putSimpleMap(); break;
     }
 }

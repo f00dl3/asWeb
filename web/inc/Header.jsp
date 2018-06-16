@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    7 Jun 2018
+    Updated:    16 Jun 2018
     Author     : astump
 --%>
 
@@ -54,6 +54,7 @@
         "OLMap/AddElements",
         "OLMap/CommonStuff",
         "OLMap/DrawPathMap",
+        "OLMap/PointClick",
         "OLMap/RenderImage",
         "OLMap/SimpleMap"
     };

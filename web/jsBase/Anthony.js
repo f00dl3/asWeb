@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 10 Jun 2018
+Updated: 16 Jun 2018
 */
 
 function actOnCalendarSubmit(event) {
@@ -210,7 +210,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     backupLogBubble += "</tbody></table></div></button></div>";
     bubbleHolder += databaseInfoBubble + webVersionBubble + sduBubble + camLogBubble + backupLogBubble;
     rData += toolHolder + bubbleHolder + "<br/>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?Title=Default&Point=" + getHomeGeo("geoJSON") + "' target='new'>Geo Point Click Map</a><p>";
+            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PointClick' target='new'>Geo Point Click Map</a><p>";
     var newHiddenValue = "Enabled";
     if(isSet(hiddenFeatures) && hiddenFeatures === "Enabled") { newHiddenValue = "Disabled"; }
     if(sessionVars.userName === "f00dl3") {

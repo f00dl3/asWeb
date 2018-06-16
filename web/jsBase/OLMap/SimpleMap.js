@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 7 Jun 2018
+Updated: 16 Jun 2018
  */
 
 function getGpsFromDatabase(map, date, type) {
@@ -77,17 +77,13 @@ function postProcessOptions(map) {
 }
 
 function putSimpleMap() {
-    var raster = localTiles;
+    var raster = tileSource;
     var map = new ol.Map({
         target: 'map',
         layers: [
             raster
         ],
-        view: new ol.View({
-            center: wmGeoJson,
-            zoom: 15,
-            maxZoom: 16
-        })
+        view: homeView
     });
     postProcessOptions(map);
 }
