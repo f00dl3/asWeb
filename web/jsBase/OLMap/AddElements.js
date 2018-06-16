@@ -44,6 +44,14 @@ function addGpsToMap(map, jsonData) {
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
     addLineStringToMap(map, coords, null);
     map.addLayer(vectorLayer);
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return feature;
+        });
+        if(feature) {
+            console.log("Clicked valid feature!\n" + feature);   
+        }
+    });
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {
