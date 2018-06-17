@@ -11,9 +11,11 @@ function addGpsMarkersMethod3(map, jsonData, pointId) {
     var iconFeature = new ol.Feature({
         altitude: jsonData.AltitudeFt,
         geometry: point,
+        heart: jsonData.HeartRate,
         id: pointId,
         latitude: jsonData.Latitude,
         longitude: jsonData.Longitude,
+        power: jsonData.PowerWatts,
         source: jsonData.SpeedSource,
         speed: jsonData.SpeedMPH,
         temperature: jsonData.TemperatureF
@@ -70,6 +72,12 @@ function addGpsToMap(map, jsonData) {
                     "<strong>Latitude:</strong> " + feature.get("latitude") + "<br/>" +
                     "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
                     "<strong>Temperature:</strong> " + feature.get("temperature").toFixed(1) + " F";
+            if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
+                content.innerHTML += "<br/><strong>Heart Rate:</strong>" + feature.get("heart").toFixed(1) + " bpm";
+            }
+            if(isSet(feature.get("power")) && feature.get("power") !== 0) {
+                content.innerHTML += "<br/><strong>Power:</strong>" + feature.get("power").toFixed(1) + " wt";
+            }
             overlay.setPosition(eCoord);
         }
     });
