@@ -37,9 +37,9 @@ public class SysMonDesktop {
                     thisExpanded.getFloat("LOC_aswjCss") +
                     thisExpanded.getFloat("LOC_aswjJsp")
             );
-            mJavaCodeLines_Labels.put(thisObject.getString("WalkTime"));
-            mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava"));
-            mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
+            try { mJavaCodeLines_Labels.put(thisObject.getString("WalkTime")); } catch (Exception e) { mJavaCodeLines_Labels.put("20000101000000"); }
+            try { mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava")); } catch (Exception e) { mJavaCodeLines_Data.put(0.00f); }
+            try { mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal); } catch (Exception e) { mJavaCodeLines_Data2.put(0.00f); }
         }
         mJavaCodeLines_Glob
                 .put("labels", mJavaCodeLines_Labels)
