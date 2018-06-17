@@ -145,8 +145,20 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "GpsCharts":
-                    GpsData gpsData = new GpsData();
                     genericCharts = false;
+                    JSONArray gpsDataGlob = new JSONArray();
+                    qParams.add(0, argsInForm.getFirstValue("logDate"));
+                    final String activityType = argsInForm.getFirstValue("activity");
+                    switch(activityType) {
+                        case "Cyc": gpsDataGlob = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
+                        case "Cyc2": gpsDataGlob = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                        case "Run": gpsDataGlob = getFitnessAction.getJsonLogRun(dbc, qParams); break;
+                        case "Run2": gpsDataGlob = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                        default: gpsDataGlob = getFitnessAction.getJsonLogRun(dbc, qParams); break;
+                    }
+                    GpsData gpsData = new GpsData();
+                    JSONObject gpsSpeedGlob = gpsData.getGpsSpeed(gpsDataGlob);
+                    try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n" + gpsSpeedGlob.toString() + "\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "LogCharts":

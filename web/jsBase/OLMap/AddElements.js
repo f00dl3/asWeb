@@ -6,6 +6,14 @@ Updated: 17 Jun 2018
 
 var gActivity;
 var gJsonData;
+var pu_Altitude = [];
+var pu_Cadence = [];
+var pu_Dists= [];
+var pu_Heart = [];
+var pu_Power = [];
+var pu_Speed = [];
+var pu_Temps = [];
+var pu_Times = [];
 
 function actOnPointDrop(event) {
     dojo.stopEvent(event);
@@ -13,11 +21,44 @@ function actOnPointDrop(event) {
     window.alert("To build out!");
 }
 
-function addGpsInfo() {
-    var rData = "<div class='GpsInfo'>" +
+function addGpsInfo(activity) {
+    var gpsThumbSize = "th_icon";
+    var gpsPopScale = 3;
+    var gpsPopOClass = "mGPSPopO";
+    var labelC = "CA";
+    var labelE = "EL";
+    var labelF = "PF";
+    var labelH = "HR";
+    var labelP = "PW";
+    var labelQ = "QA";
+    var labelS = "SP";
+    var labelT = "TM";
+    if(!checkMobile()) {
+        gpsThumbSize = "th_small";
+        gpsPopScale = 1;
+        gpsPopOClass = "GPSPopO";
+        labelC = "Cadence";
+        labelE = "Elevat";
+        labelF = "Pedal";
+        labelH = "Heart";
+        labelP = "Power";
+        labelQ = "Quadra";
+        labelS = "Speed";
+        labelT = "Temps";
+    }
+    var rData = "<div class='GpsInfo'>TEST<br/>" +
             "<div class='table'>" +
             "<div class='tr'>" +
-            "<span class='td'>" + gActivity + " Test</span>" +
+            "<span class='td'><div class='GPSPop'>" + labelS + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsSpeed", "th") + "'/>" +
+            "<div class='" + gpsPopOClass + "'><h3>Speed</h3>" +
+            "<a href='" + doCh("j", "gpsSpeed", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsSpeed", null) + "'/></a><br/>" +
+            "<div class='table'>" +
+            "<div class='tr'><span class='td'><em>MPH</em></span><span class='td'><strong>This</strong>";
+    if(activity == "Cyc") { rData += "</span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong>"; }
+    rData += "</span></div>" +
+            "<div class='tr'><span class='td'><strong>Average</strong><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1) +
+            "</span></div>" +
             "</div>" +
             "</div>" +
             "</div>";
@@ -30,6 +71,8 @@ function addGpsMarkers(map, jsonData, pointId) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         altitude: jsonData.AltitudeFt,
+        distance: jsonData.DistTotMiles,
+        elapsed: jsonData.TrainingTimeTotalSec,
         geometry: point,
         heart: jsonData.HeartRate,
         id: pointId,
@@ -91,6 +134,14 @@ function addGpsToMap(map, jsonData, activity, metric) {
             var thisColor = 'gray';
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = gJsonData[i.toString()];
+            if(isSet(tJson.AltitudeFt)) { pu_Altitude.push(tJson.AltitudeFt); } else { pu_Altitude.push(0); }
+            if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0); }
+            if(isSet(tJson.DistTotMiles)) { pu_Dists.push(tJson.DistTotMiles); } else { pu_Dists.push(0); }
+            if(isSet(tJson.HeartRate)) { pu_Heart.push(tJson.HeartRate); } else { pu_Heart.push(0); }
+            if(isSet(tJson.PowerWatts)) { pu_Power.push(tJson.PowerWatts); } else { pu_Power.push(0); }
+            if(isSet(tJson.SpeedMPH)) { pu_Speed.push(tJson.SpeedMPH); } else { pu_Speed.push(0); }
+            if(isSet(tJson.TemperatureF)) { pu_Temps.push(tJson.TemperatureF); } else { pu_Temps.push(0); }
+            if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
             switch(metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
@@ -120,10 +171,13 @@ function addGpsToMap(map, jsonData, activity, metric) {
             console.log("Clicked valid feature!");
             content.innerHTML = "<strong>Point ID: </strong> " + feature.get("id") + "<br/>" +
                     "<strong>Source:</strong> " + feature.get("source") + "<br/>" +
-                    "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
-                    "<strong>Latitude:</strong> " + feature.get("latitude") + "<br/>" +
+                    "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
+                    "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
                     "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
-                    "<strong>Temperature:</strong> " + feature.get("temperature").toFixed(1) + " F";
+                    "<strong>Temperature:</strong> " + feature.get("temperature").toFixed(1) + " F<br/>" +
+                    "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
+                    "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
+                    "<strong>Latitude:</strong> " + feature.get("latitude");
             if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
                 content.innerHTML += "<br/><strong>Heart Rate:</strong>" + feature.get("heart").toFixed(1) + " bpm";
             }
@@ -133,7 +187,7 @@ function addGpsToMap(map, jsonData, activity, metric) {
             overlay.setPosition(eCoord);
         }
     });
-    addGpsInfo();
+    addGpsInfo(activity);
     addGpsSelectDrop();
 }
 
@@ -147,4 +201,54 @@ function addLineStringToMap(map, pointsToAdd, caption) {
     var vLayer = new ol.layer.Vector({ source: vSource });
     map.addLayer(vLayer);
     map.getView().fit(vSource.getExtent(), map.getSize());
+}
+
+function getGpsFromDatabase(map, date, type) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "GpsCharts",
+        "logDate": date,
+        "activity": type
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    getGpsFromDatabasePart2(map, date, type);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for GPS Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getGpsFromDatabasePart2(map, date, type) {
+    var metric = "Speed";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getGpsJson",
+        "logDate": date,
+        "activity": type
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    dataToPass = data[0].gpsLog;
+                    addGpsToMap(map, dataToPass, type, metric);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for GPS JSON Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }

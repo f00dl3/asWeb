@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Jun 2018
+Updated: 17 Jun 2018
 */
 
 package asWebRest.dao;
@@ -446,7 +446,7 @@ public class FitnessDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", resultSet.getString("gpsLog"));
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -461,7 +461,7 @@ public class FitnessDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", resultSet.getString("gpsLog"));
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -476,7 +476,7 @@ public class FitnessDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", resultSet.getString("gpsLog"));
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -491,7 +491,7 @@ public class FitnessDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", resultSet.getString("gpsLog"));
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
                 tContainer.put(tObject);
             }
             resultSet.close();

@@ -5,32 +5,6 @@ Split off from OLMap.js on 30 May 2018
 Updated: 17 Jun 2018
  */
 
-function getGpsFromDatabase(map, date, type) {
-    var metric = "s";
-    aniPreload("on");
-    var thePostData = {
-        "doWhat": "getGpsJson",
-        "logDate": date,
-        "activity": type
-    };
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("Fitness"), {
-                data: thePostData,
-                handleAs: "json"
-            }).then(
-                function(data) {
-                    aniPreload("off");
-                    dataToPass = JSON.parse(data[0].gpsLog);
-                    addGpsToMap(map, dataToPass, type, metric);
-                },
-                function(error) { 
-                    aniPreload("off");
-                    window.alert("request for GPS JSON Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });
-}
-
 function getRouteFromDatabase(map, date, type) {
     aniPreload("on");
     var thePostData = {
