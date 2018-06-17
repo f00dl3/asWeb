@@ -23,30 +23,40 @@ function addGpsMarkersMethod3(map, jsonData, pointId) {
     return iconFeature;
 }
 
-function addGpsToMap(map, jsonData) {
+function addGpsToMap(map, jsonData, type) {
     showNotice("TEST ACTIVATED!");
     var keyCount = Object.keys(jsonData).length;
-    var aSpeedMPH = [];
+    var tMetrics = [];
+    var tMetricValue;
     var coords = [];
     var vectorSource = new ol.source.Vector({});
     var j = 0;
-    for(var i = 0; i < keyCount; i++) {
-        var tJson = jsonData[i.toString()];
-        if(isSet(tJson.SpeedMPH)) { aSpeedMPH.push(Number(tJson.SpeedMPH)); }
+    switch(type) {
+        case "s":
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = jsonData[i.toString()];
+                if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); }
+            }
+            break;
+
     }
-    var speedMphMax = Math.max.apply(Math, aSpeedMPH);
-    var speedMphMin = Math.min.apply(Math, aSpeedMPH);
-    var speedMphAvg = getSum(aSpeedMPH) / aSpeedMPH.length;
+    var tMetricsMax = Math.max.apply(Math, tMetrics);
+    var tMetricsMin = Math.min.apply(Math, tMetrics);
+    var tMetricsAvg = getSum(tMetrics) / tMetrics.length;
     for(var i = 0; i < keyCount; i++) {
         if(i % 5 === 0) {
+            var t2Metric;
             var thisColor = 'gray';
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = jsonData[i.toString()];
+            switch(type) {
+                case "s": t2Metric = tJson.SpeedMPH; break;
+            }
             if(j === 0) { console.log(tJson); }
-            if(isSet(tJson.SpeedMPH) && isSet(tCoords[0]) && isSet(tCoords[1])) {
+            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkersMethod3(map, tJson, j);
-                thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg);
+                thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
                 tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
                 vectorSource.addFeature(tIconFeature);
                 j++;

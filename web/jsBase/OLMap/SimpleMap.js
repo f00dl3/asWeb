@@ -22,7 +22,7 @@ function getGpsFromDatabase(map, date, type) {
                     aniPreload("off");
                     dataToPass = JSON.parse(data[0].gpsLog);
                     switch(type) {
-                        case "Run": addGpsToMap(map, dataToPass); break;
+                        case "Run": addGpsToMap(map, dataToPass, "s"); break;
                         //case "C": addLineStringToMap(map, JSON.parse(data[0].CycGeoJSON), "Bike ride on " + date); break;
                         //case "A": addLineStringToMap(map, JSON.parse(data[0].AltGeoJSON), "Alt route on " + date); break;
                     }
