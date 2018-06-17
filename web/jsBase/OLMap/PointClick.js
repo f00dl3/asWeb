@@ -1,13 +1,11 @@
 /* 
 by Anthony Stump
 Created: 16 Jun 2018
+Updated: 17 Jun 2018
  */
 
 function putPointClickMap() {
-    var container = dojo.byId("popup");
-    var content = dojo.byId("popup-content");
-    var closer = dojo.byId("popup-closer");
-    var overlay = new ol.Overlay({
+    overlay = new ol.Overlay({
         element: container,
         autoPan: true,
         autoPanAnimation: {
@@ -26,6 +24,7 @@ function putPointClickMap() {
         view: homeView
     });
     map.on('singleclick', function(evt) {
+        $("#popup").toggle();
         var coord = evt.coordinate;
         var xfCoord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
         var xfcm = xfCoord;

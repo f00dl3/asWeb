@@ -1,14 +1,23 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 16 Jun 2018
+Updated: 17 Jun 2018
 */
 
-function addGpsMarkersMethod3(map, jsonData) {
+function addGpsMarkersMethod3(map, jsonData, pointId) {
     var tCoord = [ jsonData.Longitude, jsonData.Latitude ];
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
-    var iconFeature = new ol.Feature({ geometry: point });
+    var iconFeature = new ol.Feature({
+        altitude: jsonData.AltitudeFt,
+        geometry: point,
+        id: pointId,
+        latitude: jsonData.Latitude,
+        longitude: jsonData.Longitude,
+        source: jsonData.SpeedSource,
+        speed: jsonData.SpeedMPH,
+        temperature: jsonData.TemperatureF
+    });
     return iconFeature;
 }
 
@@ -18,6 +27,7 @@ function addGpsToMap(map, jsonData) {
     var aSpeedMPH = [];
     var coords = [];
     var vectorSource = new ol.source.Vector({});
+    var j = 0;
     for(var i = 0; i < keyCount; i++) {
         var tJson = jsonData[i.toString()];
         if(isSet(tJson.SpeedMPH)) { aSpeedMPH.push(Number(tJson.SpeedMPH)); }
@@ -30,12 +40,14 @@ function addGpsToMap(map, jsonData) {
             var thisColor = 'gray';
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = jsonData[i.toString()];
+            if(j === 0) { console.log(tJson); }
             if(isSet(tJson.SpeedMPH) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
-                var tIconFeature = addGpsMarkersMethod3(map, tJson);
+                var tIconFeature = addGpsMarkersMethod3(map, tJson, j);
                 thisColor = autoColorScale(tJson.SpeedMPH, speedMphMax, speedMphMin, speedMphAvg);
                 tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
                 vectorSource.addFeature(tIconFeature);
+                j++;
             } else {
                 console.log("ERROR @ " + tCoords);
             }
@@ -49,7 +61,16 @@ function addGpsToMap(map, jsonData) {
             return feature;
         });
         if(feature) {
-            console.log("Clicked valid feature!\n" + feature);   
+            $("#popup").toggle();
+            var eCoord = evt.coordinate;
+            console.log("Clicked valid feature!");
+            content.innerHTML = "<strong>Point ID: </strong> " + feature.get("id") + "<br/>" +
+                    "<strong>Source:</strong> " + feature.get("source") + "<br/>" +
+                    "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
+                    "<strong>Latitude:</strong> " + feature.get("latitude") + "<br/>" +
+                    "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
+                    "<strong>Temperature:</strong> " + feature.get("temperature").toFixed(1) + " F";
+            overlay.setPosition(eCoord);
         }
     });
 }

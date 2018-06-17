@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 16 Jun 2018
+Updated: 17 Jun 2018
  */
 
 function generateMapHolder() {
@@ -22,6 +22,9 @@ function generateMapHolder() {
         hideFooter();
     }
     dojo.byId("OLMapHolder").innerHTML = rData;
+    container = dojo.byId("popup");
+    content = dojo.byId("popup-content");
+    closer = dojo.byId("popup-closer");
     initMap();
 }
 

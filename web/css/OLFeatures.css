@@ -1,6 +1,6 @@
 /* 
     Created on : Jun 7, 2018, 8:20:04 AM
-    Updated: 16 Jun 2018
+    Updated: 17 Jun 2018
     Author     : astump
 */
 
@@ -11,10 +11,11 @@
     filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid #ccccc;
+    border: 1px solid #cccccc;
     bottom: 12px;
     left: -50px;
     min-width: 280px;
+    display: none;
 }
 
 .ol-popup:after, .ol-popup:before {
