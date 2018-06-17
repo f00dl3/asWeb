@@ -105,15 +105,19 @@ public class FitnessResource extends ServerResource {
                     String actType = argsInForm.getFirstValue("activity");
                     String actDate = argsInForm.getFirstValue("logDate");
                     JSONArray gpsData = new JSONArray();
+                    JSONArray oaStats = getFitnessAction.getOverallStats(dbc);
                     if(actDate != null && actType != null) {
                         qParams.add(0, actDate);
                         switch(actType) {
                             case "Run": gpsData = getFitnessAction.getJsonLogRun(dbc, qParams); break;
-                            case "Ru2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                            case "Run2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
                             case "Cyc": gpsData = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
-                            case "Cy2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                            case "Cyc2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
                         }
-                        returnData += gpsData.toString();
+                        mergedResults
+                            .put("gpsLog", gpsData.toString())
+                            .put("oaStats", oaStats.toString());
+                        returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";
                     }

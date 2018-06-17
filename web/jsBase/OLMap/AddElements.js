@@ -21,7 +21,7 @@ function actOnPointDrop(event) {
     window.alert("To build out!");
 }
 
-function addGpsInfo(activity) {
+function addGpsInfo(activity, oaStats) {
     var gpsThumbSize = "th_icon";
     var gpsPopScale = 3;
     var gpsPopOClass = "mGPSPopO";
@@ -55,9 +55,13 @@ function addGpsInfo(activity) {
             "<a href='" + doCh("j", "gpsSpeed", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsSpeed", null) + "'/></a><br/>" +
             "<div class='table'>" +
             "<div class='tr'><span class='td'><em>MPH</em></span><span class='td'><strong>This</strong>";
-    if(activity == "Cyc") { rData += "</span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong>"; }
+    if(activity === "Cyc") { rData += "</span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong>"; }
     rData += "</span></div>" +
-            "<div class='tr'><span class='td'><strong>Average</strong><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1) +
+            "<div class='tr'><span class='td'><strong>Average</strong><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1);
+    if(activity === "Cyc") { rData += "</span><span class='td'><strong>" + oaStats.AvgCycSpeedAvg.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedAvg.toFixed(1); }
+            "</span></div>" +
+            "<div class='tr'><span class='td'><strong>Maximum</strong><span class='td'>" + (Math.max(pu_Speed).toFixed(1));
+    if(activity === "Cyc") { rData += "</span><span class='td'><strong>" + oaStats.AvgCycSpeedMax.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedMax.toFixed(1); }
             "</span></div>" +
             "</div>" +
             "</div>" +
@@ -102,10 +106,12 @@ function addGpsSelectDrop() {
     dojo.connect(pointsDrop, "onchange", actOnPointDrop);
 }
 
-function addGpsToMap(map, jsonData, activity, metric) {
+function addGpsToMap(map, inData, activity, metric) {
+    jsonData = JSON.parse(inData.gpsLog)[0].gpsLog;
+    if(isSet(jsonData)) { gJsonData = jsonData; }
+    var oaStats = JSON.parse(inData.oaStats)[0];
     gActivity = activity;
     showNotice(gActivity + " test activated!");
-    if(isSet(jsonData)) { gJsonData = jsonData; }
     var keyCount = Object.keys(gJsonData).length;
     var tMetrics = [];
     var coords = [];
@@ -187,7 +193,7 @@ function addGpsToMap(map, jsonData, activity, metric) {
             overlay.setPosition(eCoord);
         }
     });
-    addGpsInfo(activity);
+    addGpsInfo(activity, oaStats);
     addGpsSelectDrop();
 }
 
@@ -243,8 +249,7 @@ function getGpsFromDatabasePart2(map, date, type) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    dataToPass = data[0].gpsLog;
-                    addGpsToMap(map, dataToPass, type, metric);
+                    addGpsToMap(map, data, type, metric);
                 },
                 function(error) { 
                     aniPreload("off");
