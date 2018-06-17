@@ -4,7 +4,27 @@ Created: 31 May 2018
 Updated: 17 Jun 2018
 */
 
-function addGpsMarkersMethod3(map, jsonData, pointId) {
+var gActivity;
+var gJsonData;
+
+function actOnPointDrop(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    window.alert("To build out!");
+}
+
+function addGpsInfo() {
+    var rData = "<div class='GpsInfo'>" +
+            "<div class='table'>" +
+            "<div class='tr'>" +
+            "<span class='td'>" + gActivity + " Test</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+    dojo.byId("mapEx").innerHTML += rData;
+}
+
+function addGpsMarkers(map, jsonData, pointId) {
     var tCoord = [ jsonData.Longitude, jsonData.Latitude ];
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
@@ -23,22 +43,44 @@ function addGpsMarkersMethod3(map, jsonData, pointId) {
     return iconFeature;
 }
 
-function addGpsToMap(map, jsonData, type) {
-    showNotice("TEST ACTIVATED!");
-    var keyCount = Object.keys(jsonData).length;
+function addGpsSelectDrop() {
+    var rData = "<div class='GPSTopDrop'>" +
+            "<form id='DoGPSPointsForm'>";
+    if(checkMobile()) { rData += ""; } else { rData += "<strong>Points: </strong>"; }
+    var options = [ "Speed", "Altitude" ];
+    rData += "<select id='GPSPointsDD' name='GPSPoints'>" +
+            "<option value=''>Points...</option>";
+    for(var i = 0; i < options.length; i++) { rData += "<option value='" + options[i] + "'>" + options[i] + "</option>"; }
+    rData += "</select>" +
+            "</form>" +
+            "</div>";
+    dojo.byId("mapEx").innerHTML += rData;
+    var pointsDrop = dojo.byId("GPSPointsDD");
+    dojo.connect(pointsDrop, "onchange", actOnPointDrop);
+}
+
+function addGpsToMap(map, jsonData, activity, metric) {
+    gActivity = activity;
+    showNotice(gActivity + " test activated!");
+    if(isSet(jsonData)) { gJsonData = jsonData; }
+    var keyCount = Object.keys(gJsonData).length;
     var tMetrics = [];
-    var tMetricValue;
     var coords = [];
     var vectorSource = new ol.source.Vector({});
     var j = 0;
-    switch(type) {
-        case "s":
+    switch(metric) {
+        case "Altitude":
             for(var i = 0; i < keyCount; i++) {
-                var tJson = jsonData[i.toString()];
+                var tJson = gJsonData[i.toString()];
+                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); }
+            }
+            break;
+        case "Speed": default: 
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
                 if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); }
             }
             break;
-
     }
     var tMetricsMax = Math.max.apply(Math, tMetrics);
     var tMetricsMin = Math.min.apply(Math, tMetrics);
@@ -48,14 +90,15 @@ function addGpsToMap(map, jsonData, type) {
             var t2Metric;
             var thisColor = 'gray';
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
-            var tJson = jsonData[i.toString()];
-            switch(type) {
-                case "s": t2Metric = tJson.SpeedMPH; break;
+            var tJson = gJsonData[i.toString()];
+            switch(metric) {
+                case "Altitude": t2Metric = tJson.AltitudeFt; break;
+                case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
-            if(j === 0) { console.log(tJson); }
+            //if(j === 0) { console.log(tJson); }
             if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
-                var tIconFeature = addGpsMarkersMethod3(map, tJson, j);
+                var tIconFeature = addGpsMarkers(map, tJson, j);
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
                 tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
                 vectorSource.addFeature(tIconFeature);
@@ -91,6 +134,8 @@ function addGpsToMap(map, jsonData, type) {
             overlay.setPosition(eCoord);
         }
     });
+    addGpsInfo();
+    addGpsSelectDrop();
 }
 
 function addLineStringToMap(map, pointsToAdd, caption) {

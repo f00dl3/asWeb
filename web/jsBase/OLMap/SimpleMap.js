@@ -6,6 +6,7 @@ Updated: 17 Jun 2018
  */
 
 function getGpsFromDatabase(map, date, type) {
+    var metric = "s";
     aniPreload("on");
     var thePostData = {
         "doWhat": "getGpsJson",
@@ -21,11 +22,7 @@ function getGpsFromDatabase(map, date, type) {
                 function(data) {
                     aniPreload("off");
                     dataToPass = JSON.parse(data[0].gpsLog);
-                    switch(type) {
-                        case "Run": addGpsToMap(map, dataToPass, "s"); break;
-                        //case "C": addLineStringToMap(map, JSON.parse(data[0].CycGeoJSON), "Bike ride on " + date); break;
-                        //case "A": addLineStringToMap(map, JSON.parse(data[0].AltGeoJSON), "Alt route on " + date); break;
-                    }
+                    addGpsToMap(map, dataToPass, type, metric);
                 },
                 function(error) { 
                     aniPreload("off");
