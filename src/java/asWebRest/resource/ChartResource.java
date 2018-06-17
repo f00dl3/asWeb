@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 7 Jun 2018
+Updated: 17 Jun 2018
  */
 
 package asWebRest.resource;
@@ -15,6 +15,7 @@ import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
+import asWebRest.chartHelpers.GpsData;
 import asWebRest.chartHelpers.Logs;
 import asWebRest.chartHelpers.SysMonNote3;
 import asWebRest.chartHelpers.SysMonDesktop;
@@ -141,6 +142,11 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(calChGlob); returnData += "Chart generated - CalorieRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(sleepGlob); returnData += "Chart generated - SleepRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(wgtChGlob); returnData += "Chart generated - WeightRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    break;
+                    
+                case "GpsCharts":
+                    GpsData gpsData = new GpsData();
+                    genericCharts = false;
                     break;
                     
                 case "LogCharts":

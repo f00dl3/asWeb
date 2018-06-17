@@ -95,7 +95,6 @@ function addGpsToMap(map, jsonData, activity, metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
-            //if(j === 0) { console.log(tJson); }
             if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkers(map, tJson, j);
