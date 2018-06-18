@@ -31,15 +31,18 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
-            float mJavaCodeLines_asWebTotal = (
+            mJavaCodeLines_Labels.put(thisObject.getString("WalkTime"));
+            // These try catches still cause it to error out, 6/17/2018
+            try { mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava")); } catch (Exception e) { mJavaCodeLines_Data.put(0.00f); }
+            try {
+                float mJavaCodeLines_asWebTotal = (
                     thisExpanded.getFloat("LOC_aswjJs") +
                     thisExpanded.getFloat("LOC_aswjJava") +
                     thisExpanded.getFloat("LOC_aswjCss") +
                     thisExpanded.getFloat("LOC_aswjJsp")
-            );
-            try { mJavaCodeLines_Labels.put(thisObject.getString("WalkTime")); } catch (Exception e) { mJavaCodeLines_Labels.put("20000101000000"); }
-            try { mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava")); } catch (Exception e) { mJavaCodeLines_Data.put(0.00f); }
-            try { mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal); } catch (Exception e) { mJavaCodeLines_Data2.put(0.00f); }
+                );
+                mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
+            } catch (Exception e) { mJavaCodeLines_Data2.put(0.00f); }
         }
         mJavaCodeLines_Glob
                 .put("labels", mJavaCodeLines_Labels)
@@ -98,10 +101,10 @@ public class SysMonDesktop {
             if(mSysCams_Cam2Available < 0) { mSysCams_Cam2Available = 0; }
             if(mSysCams_Cam3Available < 0) { mSysCams_Cam3Available = 0; }
             if(mSysCams_Cam4Available < 0) { mSysCams_Cam4Available = 0; }
-            mSysCams_Data.put(mSysCams_Cam1Available);
-            mSysCams_Data2.put(mSysCams_Cam2Available);
-            mSysCams_Data3.put(mSysCams_Cam3Available);
-            mSysCams_Data4.put(mSysCams_Cam4Available);
+            try { mSysCams_Data.put(mSysCams_Cam1Available); } catch (Exception e) { mSysCams_Data.put(0.0f); }
+            try { mSysCams_Data2.put(mSysCams_Cam2Available); } catch (Exception e) { mSysCams_Data2.put(0.0f); }
+            try { mSysCams_Data3.put(mSysCams_Cam3Available); } catch (Exception e) { mSysCams_Data3.put(0.0f); }
+            try { mSysCams_Data4.put(mSysCams_Cam4Available); } catch (Exception e) { mSysCams_Data.put(0.0f); }
             mSysCams_LastTotal = mSysCams_ThisTotal;
             mSysCams_Last1 = mSysCams_This1;
             mSysCams_Last2 = mSysCams_This2;
