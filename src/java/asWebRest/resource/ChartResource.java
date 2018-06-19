@@ -160,10 +160,12 @@ public class ChartResource extends ServerResource {
                     JSONObject gpsSpeedGlob = gpsData.getGpsSpeed(gpsDataGlob);
                     JSONObject gpsElevationGlob = gpsData.getGpsElevation(gpsDataGlob);
                     JSONObject gpsHeartRateGlob = gpsData.getGpsHeartRate(gpsDataGlob);
+                    JSONObject gpsPowerGlob = gpsData.getGpsPower(gpsDataGlob);
                     JSONObject gpsTemperatureGlob = gpsData.getGpsTemperature(gpsDataGlob);
                     try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsElevationGlob); returnData += "Chart generated - GPS Elevation!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsHeartRateGlob); returnData += "Chart generated - GPS Heart Rate!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsPowerGlob); returnData += "Chart generated - GPS Power!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsTemperatureGlob); returnData += "Chart generated - GPS Temperature!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     

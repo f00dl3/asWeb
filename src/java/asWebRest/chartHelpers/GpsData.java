@@ -81,6 +81,40 @@ public class GpsData {
                 .put("debug", data);
         return glob;
     }
+        
+    private JSONObject gpsPower(JSONArray dataIn) {
+        final String name = "GPS Power";
+        JSONObject glob = new JSONObject();
+        JSONObject props = new JSONObject();
+        JSONArray labels = new JSONArray();
+        JSONArray data = new JSONArray();
+        props
+                .put("dateFormat", "ss")
+                .put("chartName", name).put("chartFileName", "gpsPower")
+                .put("sName", "Power").put("sColor", "White")
+                .put("xLabel", "Watts").put("yLabel", "Interval");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            JSONObject tGpsLog = thisObject.getJSONObject("gpsLog");
+            for(int j = 0; j < tGpsLog.length(); j++) {
+                String jStr = String.valueOf(j);
+                JSONObject tLog = tGpsLog.getJSONObject(jStr);
+                try {
+                    if(wc.isSet(Double.toString(tLog.getDouble("PowerWatts")))) { data.put(tLog.getDouble("PowerWatts")); } else { data.put(0.00); }
+                } catch (Exception e) {
+                    data.put(0.00);
+                } finally { 
+                    labels.put(jStr);
+                }
+            }
+        }
+        glob
+                .put("labels", labels)
+                .put("data", data)
+                .put("props", props)
+                .put("debug", data);
+        return glob;
+    }
     
     private JSONObject gpsSpeed(JSONArray dataIn) {
         final String name = "GPS Speed";
@@ -154,6 +188,7 @@ public class GpsData {
     
     public JSONObject getGpsElevation(JSONArray dataIn) { return gpsElevation(dataIn); }
     public JSONObject getGpsHeartRate(JSONArray dataIn) { return gpsHeartRate(dataIn); }
+    public JSONObject getGpsPower(JSONArray dataIn) { return gpsPower(dataIn); }
     public JSONObject getGpsSpeed(JSONArray dataIn) { return gpsSpeed(dataIn); }
     public JSONObject getGpsTemperature(JSONArray dataIn) { return gpsTemperature(dataIn); }
         

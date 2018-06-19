@@ -48,12 +48,15 @@ function addGpsInfo(activity, oaStats) {
     }
     var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
-            "<div class='tr'>";
+            "<div class='tr'>" +
             "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
             "</div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
+            "</div></span>" +
+            "<span class='td'><div class='GPSPop'>" + labelP + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsPower", "th") + "'/>" +
             "</div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelS + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsSpeed", "th") + "'/>" +
