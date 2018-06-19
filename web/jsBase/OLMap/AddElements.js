@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 17 Jun 2018
+Updated: 18 Jun 2018
 */
 
 var gActivity;
@@ -46,9 +46,15 @@ function addGpsInfo(activity, oaStats) {
         labelS = "Speed";
         labelT = "Temps";
     }
-    var rData = "<div class='GpsInfo'>TEST<br/>" +
+    var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
-            "<div class='tr'>" +
+            "<div class='tr'>";
+            "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
+            "</div></span>" +
+            "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
+            "</div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelS + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsSpeed", "th") + "'/>" +
             "<div class='" + gpsPopOClass + "'><h3>Speed</h3>" +
@@ -62,7 +68,13 @@ function addGpsInfo(activity, oaStats) {
             "</span></div>" +
             "<div class='tr'><span class='td'><strong>Maximum</strong><span class='td'>" + (Math.max(pu_Speed).toFixed(1));
     if(activity === "Cyc") { rData += "</span><span class='td'><strong>" + oaStats.AvgCycSpeedMax.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedMax.toFixed(1); }
-            "</span></div>" +
+    rData += "</span></div>" +
+            "</div>" +
+            "</div></div></span>" +
+            "<span class='td'><div class='GPSPop'>" + labelT + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsTemperature", "th") + "'/>" +
+            "</div></span>" +
+            "</div>" +
             "</div>" +
             "</div>" +
             "</div>";

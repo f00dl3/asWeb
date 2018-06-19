@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 17 Jun 2018
+Updated: 18 Jun 2018
  */
 
 package asWebRest.resource;
@@ -158,7 +158,13 @@ public class ChartResource extends ServerResource {
                     }
                     GpsData gpsData = new GpsData();
                     JSONObject gpsSpeedGlob = gpsData.getGpsSpeed(gpsDataGlob);
-                    try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n" + gpsSpeedGlob.toString() + "\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    JSONObject gpsElevationGlob = gpsData.getGpsElevation(gpsDataGlob);
+                    JSONObject gpsHeartRateGlob = gpsData.getGpsHeartRate(gpsDataGlob);
+                    JSONObject gpsTemperatureGlob = gpsData.getGpsTemperature(gpsDataGlob);
+                    try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsElevationGlob); returnData += "Chart generated - GPS Elevation!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsHeartRateGlob); returnData += "Chart generated - GPS Heart Rate!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsTemperatureGlob); returnData += "Chart generated - GPS Temperature!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "LogCharts":
