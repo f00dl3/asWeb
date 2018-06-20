@@ -54,6 +54,7 @@
         "OLMap/AddElements",
         "OLMap/CommonStuff",
         "OLMap/DrawPathMap",
+        "OLMap/GpsElements",
         "OLMap/PointClick",
         "OLMap/RenderImage",
         "OLMap/SimpleMap",
