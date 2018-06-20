@@ -225,6 +225,17 @@ function getGetParams() {
     return $_GET;
 }
 
+function getRefresh(measure) {
+    switch(measure) {
+        case "rapid": return 1 * 1000;
+        case "short": return 30 * 1000;
+        case "medium": return 90 * 1000;
+        case "long": return 300 * 1000;
+        case "veryLong": return 500 * 1000;
+        default: return 90 * 1000;
+    }
+}
+
 function getRelatedLinks(page) {
     aniPreload("on");
     var thePostData = { "master": page };

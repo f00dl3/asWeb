@@ -2,18 +2,19 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 6 Jun 2018
+Updated: 20 Jun 2018
  */
 
 function actOnShowFeed() {
     getSpcFeeds();
+    $("#WxFeeds").toggle();
     $("#WxLive").hide();
     $("#WxQuakes").hide();
     $("#WxNews").hide();
 }
 
 function actOnShowLive() {
-    $("#WxLive").toggle();
+    $("#WxLive").show();
     $("#WxFeeds").hide();
     $("#WxQuakes").hide();
     $("#WxNews").hide();
@@ -21,6 +22,7 @@ function actOnShowLive() {
 
 function actOnShowNews() {
     getNewsEmail();
+    $("#WxNews").toggle();;
     $("#WxFeeds").hide();
     $("#WxQuakes").hide();
     $("#WxLive").hide();
@@ -36,7 +38,7 @@ function actOnShowQuakes() {
 
 function displayWxLive() {
     popLiveContainer();
-    $("#WxLiveContainer").toggle();
+    $("#WxLiveContainer").show();
     $("#WxLocalModel").hide();
     $("#WxArchive").hide();
     $("#WxCf6").hide();
@@ -65,14 +67,13 @@ function getLiveLinks3d() {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for 3D Weather Links FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                }),
-                $("#WxNews").toggle();;
+                })
     });
+    setTimeout(function () { getLiveLinks3d(); }, getRefresh("medium"));
 }
 
 function getLiveWarnings() {
     aniPreload("on");
-    var warnTimeout = 90 * 1000;
     var thePostData = {
         "doWhat": "getLiveWarnings",
         "xdt1": getDate("day", -7, "full"),
@@ -97,7 +98,7 @@ function getLiveWarnings() {
                     window.alert("request for Live Warnings FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 })
     });
-    setTimeout(function () { getLiveWarnings(); }, warnTimeout);
+    setTimeout(function () { getLiveWarnings(); }, getRefresh("medium"));
 }
 
 function getNewsEmail() {
@@ -116,9 +117,9 @@ function getNewsEmail() {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for News/Email FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                }),
-                $("#WxNews").toggle();;
+                })
     });
+    setTimeout(function () { getNewsEmail(); }, getRefresh("medium"));
 }
 
 function getSpcFeeds() {
@@ -137,9 +138,9 @@ function getSpcFeeds() {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for SPC Feeds FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                }),
-                $("#WxFeeds").toggle();;
+                })
     });
+    setTimeout(function () { getNewsEmail(); }, getRefresh("medium"));
 }
 
 function popEarthquakes() {
