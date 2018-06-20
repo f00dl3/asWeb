@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 7 Jun 2018
+Updated: 20 Jun 2018
  */
 
 package asWebRest.action;
@@ -35,7 +35,7 @@ public class GetFitnessAction {
     public JSONArray getJsonLogRun(Connection dbc, List qParams) { return fitnessDAO.getJsonLogRun(dbc, qParams); }
     public JSONArray getJsonLogRun2(Connection dbc, List qParams) { return fitnessDAO.getJsonLogRun2(dbc, qParams); }
     public JSONArray getOverallStats(Connection dbc) { return fitnessDAO.getOverallStats(dbc); }
-    public JSONArray getOverallSensors() { return fitnessDAO.getOverallSensors(); }
+    public JSONArray getOverallSensors(Connection dbc) { return fitnessDAO.getOverallSensors(dbc); }
     public JSONArray getRelatedPhotos(List qParams) { return fitnessDAO.getRelatedPhotos(qParams); }
     public JSONArray getRShoe(Connection dbc) { return fitnessDAO.getRShoe(dbc); }
     public JSONArray getRSMileMax(List qParams) { return fitnessDAO.getRSMileMax(qParams); }

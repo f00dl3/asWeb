@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 19 Jun 2018
+Updated: 20 Jun 2018
 */
 
 var gActivity;
@@ -21,7 +21,7 @@ function actOnPointDrop(event) {
     window.alert("To build out!");
 }
 
-function addGpsInfo(activity, oaStats) {
+function addGpsInfo(activity, oaStats, oaSensors) {
     var gpsThumbSize = "th_icon";
     var gpsPopScale = 3;
     var gpsPopOClass = "mGPSPopO";
@@ -48,12 +48,26 @@ function addGpsInfo(activity, oaStats) {
     }
     var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
-            "<div class='tr'>" +
-            "<span class='td'><div class='GPSPop'>" + labelC + "<br/>" +
-            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsCadence", "th") + "'/>" +
-            "</div></span>" +
-            "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
+            "<div class='tr'>";
+    if(activity === "Cyc") {
+        rData += "<span class='td'><div class='GPSPop'>" + labelC + "<br/>" +
+                "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsCadence", "th") + "'/>" +
+                "<div class='" + gpsPopOClass + "'>" +
+                "<a href='" + doCh("j", "gpsCadence", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsCadence", null) + "'/></a><br/>" +
+                "<div class='table'>" +
+                "<div class='tr'><span class='td'><em>RPM</em></span><span class='td'><strong>This</strong></span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong></span></div>" +
+                "<div class='tr'><span class='td'><strong>Average</strong></span><span class='td'>" + (getSum(pu_Cadence)/pu_Cadence.length).toFixed(1) + "</span><span class='td'>" + oaSensors.AvgCycCadAvg.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycCadAvg.toFixed(1) + "</span></div>" +
+                "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max(pu_Cadence).toFixed(1)) + "</span><span class='td'>" + oaSensors.AvgCycCadMax.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycCadMax.toFixed(1) + "</span></div>" +
+                "</div>" +
+                "</div></div></span>";
+    }
+    rData += "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
+            "<div class='" + gpsPopOClass + "'>" +
+            "<a href='" + doCh("j", "gpsElevation", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsElevation", null) + "'/></a><br/>" +
+            "<strong>Maximum: </strong> " + Math.max(pu_Altitude) + " ft<br/>" +
+            "<strong>Minimum: </strong> " + Math.min(pu_Altitude) + " ft<br/>" +
+            "</div>" +
             "</div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
@@ -128,6 +142,7 @@ function addGpsToMap(map, inData, activity, metric) {
     jsonData = JSON.parse(inData.gpsLog)[0].gpsLog;
     if(isSet(jsonData)) { gJsonData = jsonData; }
     var oaStats = JSON.parse(inData.oaStats)[0];
+    var oaSensors = JSON.parse(inData.oaSensors)[0];
     gActivity = activity;
     showNotice(gActivity + " test activated!");
     var keyCount = Object.keys(gJsonData).length;
@@ -211,7 +226,7 @@ function addGpsToMap(map, inData, activity, metric) {
             overlay.setPosition(eCoord);
         }
     });
-    addGpsInfo(activity, oaStats);
+    addGpsInfo(activity, oaStats, oaSensors);
     addGpsSelectDrop();
 }
 

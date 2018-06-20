@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 14 Jun 2018
+Updated: 20 Jun 2018
  */
 
 package asWebRest.resource;
@@ -106,6 +106,7 @@ public class FitnessResource extends ServerResource {
                     String actDate = argsInForm.getFirstValue("logDate");
                     JSONArray gpsData = new JSONArray();
                     JSONArray oaStats = getFitnessAction.getOverallStats(dbc);
+                    JSONArray oaSensors = getFitnessAction.getOverallSensors(dbc);
                     if(actDate != null && actType != null) {
                         qParams.add(0, actDate);
                         switch(actType) {
@@ -116,7 +117,8 @@ public class FitnessResource extends ServerResource {
                         }
                         mergedResults
                             .put("gpsLog", gpsData.toString())
-                            .put("oaStats", oaStats.toString());
+                            .put("oaStats", oaStats.toString())
+                            .put("oaSensors", oaSensors.toString());
                         returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";

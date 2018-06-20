@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 17 Jun 2018
+Updated: 20 Jun 2018
 */
 
 package asWebRest.dao;
@@ -528,7 +528,7 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getOverallSensors() {
+    public JSONArray getOverallSensors(Connection dbc) {
         final String query_Fitness_OverallSensors = "SELECT" +
             " AVG(CycCadAvg) AS AvgCycCadAvg," +
             " MAX(CycCadAvg) AS MaxCycCadAvg," +
@@ -544,7 +544,7 @@ public class FitnessDAO {
             " WHERE CycCadAvg IS NOT NULL AND CycCadAvg != 0;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_OverallSensors, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_OverallSensors, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
