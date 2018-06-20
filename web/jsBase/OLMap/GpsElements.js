@@ -185,7 +185,6 @@ function addGpsToMap(map, inData, activity, metric) {
     var oaSensors = JSON.parse(inData.oaSensors)[0];
     var fitToday = JSON.parse(inData.fitToday)[0];
     gActivity = activity;
-    showNotice(gActivity + " test activated!");
     var keyCount = Object.keys(gJsonData).length;
     var tMetrics = [];
     var coords = [];

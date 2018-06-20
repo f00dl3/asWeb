@@ -22,13 +22,14 @@ function generateMapHolder() {
     } else {
         hideFooter();
     }
-    showNotice("<button class='UButton' id='trackMe'>Track me!</button>");
     dojo.byId("OLMapHolder").innerHTML = rData;
     container = dojo.byId("popup");
     content = dojo.byId("popup-content");
     closer = dojo.byId("popup-closer");
+    /* FOR FUTURE LOCATIONT TRACKING! ***
+    showNotice("<button class='UButton' id='trackMe'>Track me!</button>");
     var consentTracking = dojo.byId("trackMe");
-    dojo.connect(consentTracking, "click", actOnTrackMe);
+    dojo.connect(consentTracking, "click", actOnTrackMe); */
     initMap();
 }
 
