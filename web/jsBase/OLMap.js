@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 17 Jun 2018
+Updated: 20 Jun 2018
  */
 
 function generateMapHolder() {
@@ -22,10 +22,13 @@ function generateMapHolder() {
     } else {
         hideFooter();
     }
+    showNotice("<button class='UButton' id='trackMe'>Track me!</button>");
     dojo.byId("OLMapHolder").innerHTML = rData;
     container = dojo.byId("popup");
     content = dojo.byId("popup-content");
     closer = dojo.byId("popup-closer");
+    var consentTracking = dojo.byId("trackMe");
+    dojo.connect(consentTracking, "click", actOnTrackMe);
     initMap();
 }
 
