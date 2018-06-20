@@ -22,6 +22,7 @@ function actOnPointDrop(event) {
 }
 
 function addGpsInfo(activity, oaStats, oaSensors) {
+    console.log(pu_Dists);
     var gpsThumbSize = "th_icon";
     var gpsPopScale = 3;
     var gpsPopOClass = "mGPSPopO";
@@ -46,10 +47,11 @@ function addGpsInfo(activity, oaStats, oaSensors) {
         labelS = "Speed";
         labelT = "Temps";
     }
+    var thisActivityTimeMins = Math.round(Math.max.apply(Math, pu_Times)/100/60);
     var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
             "<div class='tr'>";
-    if(activity === "Cyc") {
+    if(pu_Cadence.length !== 0 && Math.max.apply(Math, pu_Cadence) !== 0) {
         rData += "<span class='td'><div class='GPSPop'>" + labelC + "<br/>" +
                 "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsCadence", "th") + "'/>" +
                 "<div class='" + gpsPopOClass + "'>" +
@@ -57,7 +59,7 @@ function addGpsInfo(activity, oaStats, oaSensors) {
                 "<div class='table'>" +
                 "<div class='tr'><span class='td'><em>RPM</em></span><span class='td'><strong>This</strong></span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong></span></div>" +
                 "<div class='tr'><span class='td'><strong>Average</strong></span><span class='td'>" + (getSum(pu_Cadence)/pu_Cadence.length).toFixed(1) + "</span><span class='td'>" + oaSensors.AvgCycCadAvg.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycCadAvg.toFixed(1) + "</span></div>" +
-                "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max(pu_Cadence).toFixed(1)) + "</span><span class='td'>" + oaSensors.AvgCycCadMax.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycCadMax.toFixed(1) + "</span></div>" +
+                "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max.apply(Math, pu_Cadence).toFixed(1)) + "</span><span class='td'>" + oaSensors.AvgCycCadMax.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycCadMax.toFixed(1) + "</span></div>" +
                 "</div>" +
                 "</div></div></span>";
     }
@@ -65,17 +67,33 @@ function addGpsInfo(activity, oaStats, oaSensors) {
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
             "<div class='" + gpsPopOClass + "'>" +
             "<a href='" + doCh("j", "gpsElevation", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsElevation", null) + "'/></a><br/>" +
-            "<strong>Maximum: </strong> " + Math.max(pu_Altitude) + " ft<br/>" +
+            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Altitude) + " ft<br/>" +
             "<strong>Minimum: </strong> " + Math.min(pu_Altitude) + " ft<br/>" +
             "</div>" +
-            "</div></span>" +
-            "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
-            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
-            "</div></span>" +
-            "<span class='td'><div class='GPSPop'>" + labelP + "<br/>" +
-            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsPower", "th") + "'/>" +
-            "</div></span>" +
-            "<span class='td'><div class='GPSPop'>" + labelS + "<br/>" +
+            "</div></span>";
+    if(pu_Heart.length !== 0 && Math.max.apply(Math, pu_Heart) !== 0) {
+        rData += "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
+                "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
+                "<div class='" + gpsPopOClass + "'>" +
+                "<a href='" + doCh("j", "gpsHeartRate", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsHeartRate", null) + "'/></a><br/>" +
+                "<strong>Average: </strong> " + (getSum(pu_Heart)/pu_Heart.length).toFixed(1) + " bpm<br/>" +
+                "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Heart) + " bpm<br/>" +
+                "</div>" +
+                "</div></span>";
+    }
+    if(pu_Power.length !== 0 && Math.max.apply(Math, pu_Power) !== 0) {
+        rData += "<span class='td'><div class='GPSPop'>" + labelP + "<br/>" +
+                "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsPower", "th") + "'/>" +
+                "<div class='" + gpsPopOClass + "'>" +
+                "<a href='" + doCh("j", "gpsPower", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsPower", null) + "'/></a><br/>" +
+                "<div class='table'>" +
+                "<div class='tr'><span class='td'><em>RPM</em></span><span class='td'><strong>This</strong></span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong></span></div>" +
+                "<div class='tr'><span class='td'><strong>Average</strong></span><span class='td'>" + (getSum(pu_Power)/pu_Power.length).toFixed(1) + "</span><span class='td'>" + oaSensors.AvgCycPowerAvg.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycPowerAvg.toFixed(1) + "</span></div>" +
+                "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max.apply(Math, pu_Power).toFixed(1)) + "</span><span class='td'>" + oaSensors.AvgCycPowerMax.toFixed(1) + "</span><span class='td'>" + oaSensors.MaxCycPowerMax.toFixed(1) + "</span></div>" +
+                "</div>" +
+                "</div></div></span>";
+    }
+    rData += "<span class='td'><div class='GPSPop'>" + labelS + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsSpeed", "th") + "'/>" +
             "<div class='" + gpsPopOClass + "'><h3>Speed</h3>" +
             "<a href='" + doCh("j", "gpsSpeed", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsSpeed", null) + "'/></a><br/>" +
@@ -86,16 +104,23 @@ function addGpsInfo(activity, oaStats, oaSensors) {
             "<div class='tr'><span class='td'><strong>Average</strong></span><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1);
     if(activity === "Cyc") { rData += "</span><span class='td'>" + oaStats.AvgCycSpeedAvg.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedAvg.toFixed(1); }
     rData += "</span></div>" +
-            "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max(pu_Speed).toFixed(1));
+            "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max.apply(Math, pu_Speed).toFixed(1));
     if(activity === "Cyc") { rData += "</span><span class='td'>" + oaStats.AvgCycSpeedMax.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedMax.toFixed(1); }
     rData += "</span></div>" +
             "</div>" +
             "</div></div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelT + "<br/>" +
-            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsTemperature", "th") + "'/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsTemperature", "th") + "'/>" +   
+            "<div class='" + gpsPopOClass + "'>" +
+            "<a href='" + doCh("j", "gpsTemperature", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsTemperature", null) + "'/></a><br/>" +
+            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Temps) + " degrees F<br/>" +
+            "<strong>Minimum: </strong> " + Math.min(pu_Temps) + " degrees F<br/>" +
+            "</div>" +
             "</div></span>" +
             "</div>" +
             "</div>" +
+            "<strong> " + activity + ", " + (Math.max.apply(Math, pu_Dists).toFixed(2)) + " mi.<br/>" +
+            thisActivityTimeMins + " min." +
             "</div>" +
             "</div>";
     dojo.byId("mapEx").innerHTML += rData;
