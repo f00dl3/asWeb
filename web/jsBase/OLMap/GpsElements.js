@@ -126,7 +126,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     switch(activity) {
         case "Cyc":
             if(isSet(pu_Power) && Math.max.apply(Math, pu_Power) !== 0) {
-                calsBurned = Math.round(((getSum(pu_Power)/pu_Power.length) * Math.max.apply(Math, pu_Times)/100/60/60) * 3.6);
+                calsBurned = Math.round(((getSum(pu_Power)/pu_Power.length) * Math.max.apply(Math, pu_Times)/100/60/60) * 9.6);
             } break;
         case "Run":
             if(isSet(pu_Heart) && Math.max.apply(Math, pu_Heart) !== 0) {

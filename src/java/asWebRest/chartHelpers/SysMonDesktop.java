@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 17 May 2018
+Updated: 20 May 2018
  */
 
 package asWebRest.chartHelpers;
@@ -31,18 +31,23 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
+            float mJavaCodeLines_asUtils = 0.0f;
+            float mJavaCodeLines_asWebTotal = 0.0f;
+            String walkTime = "00000000000000";
+            try { walkTime = thisObject.getString("WalkTime"); } catch (Exception e) { }
             mJavaCodeLines_Labels.put(thisObject.getString("WalkTime"));
-            // These try catches still cause it to error out, 6/17/2018
-            try { mJavaCodeLines_Data.put(thisExpanded.getFloat("LOC_asUtilsJava")); } catch (Exception e) { mJavaCodeLines_Data.put(0.00f); }
+            if(wc.isSet(Float.toString(thisExpanded.getFloat("LOC_asUtilsJava")))) { mJavaCodeLines_asUtils = thisExpanded.getFloat("LOC_asUtilsJava"); }
             try {
-                float mJavaCodeLines_asWebTotal = (
+                mJavaCodeLines_asWebTotal = (
                     thisExpanded.getFloat("LOC_aswjJs") +
                     thisExpanded.getFloat("LOC_aswjJava") +
                     thisExpanded.getFloat("LOC_aswjCss") +
                     thisExpanded.getFloat("LOC_aswjJsp")
                 );
-                mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
-            } catch (Exception e) { mJavaCodeLines_Data2.put(0.00f); }
+            } catch (Exception e) { }
+            mJavaCodeLines_Data.put(mJavaCodeLines_asUtils);
+            mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
+            
         }
         mJavaCodeLines_Glob
                 .put("labels", mJavaCodeLines_Labels)
