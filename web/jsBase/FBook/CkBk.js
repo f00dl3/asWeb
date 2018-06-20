@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 22 Apr 2018
+Updated: 20 Jun 2018
  */
 
 var searchableData;
