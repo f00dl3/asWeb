@@ -18,7 +18,7 @@ public class GetFitnessAction {
     
     public JSONArray getAll(Connection dbc, List qParams) { return fitnessDAO.getAll(dbc, qParams); }
     public JSONArray getAllE() { return fitnessDAO.getAllE(); }
-    public JSONArray getAllRoutes() { return fitnessDAO.getAllRoutes(); }
+    public JSONArray getAllRoutes(Connection dbc) { return fitnessDAO.getAllRoutes(dbc); }
     public JSONArray getBike(Connection dbc, String bike) { return fitnessDAO.getBike(dbc, bike); }    
     public JSONArray getBkStats(Connection dbc, String bike) { return fitnessDAO.getBkStats(dbc, bike); }
     public JSONArray getCalories(Connection dbc) { return fitnessDAO.getCalories(dbc); }

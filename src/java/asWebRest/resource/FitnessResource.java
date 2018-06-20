@@ -140,6 +140,11 @@ public class FitnessResource extends ServerResource {
                     }
                     break;
                     
+                case "getRouteHistory":
+                    JSONArray routes = getFitnessAction.getAllRoutes(dbc);
+                    returnData += routes;
+                    break;
+                    
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
                     String[] args = {};

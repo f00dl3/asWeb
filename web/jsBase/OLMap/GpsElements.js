@@ -318,3 +318,25 @@ function getGpsFromDatabasePart2(map, date, type) {
                 });
     });
 }
+
+function getRouteHistoryFromDatabase(map) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getRouteHistory"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Data pull success!");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Route History FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}

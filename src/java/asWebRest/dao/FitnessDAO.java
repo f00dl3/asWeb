@@ -158,17 +158,17 @@ public class FitnessDAO {
         return tContainer;
     }
 
-    public JSONArray getAllRoutes() {
+    public JSONArray getAllRoutes(Connection dbc) {
         final String commonRouteCheck = "(CommonRoute = 0 OR CommonRoute IS NULL)";
         final String query_Fitness_AllRoutes = "SELECT" +
                 " Date, Type, GeoJSON FROM (" +
                 " SELECT Date, 'R' AS Type, RunGeoJSON as GeoJSON FROM Core.Fitness WHERE RunGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
                 " SELECT Date, 'C' AS Type, CycGeoJSON as GeoJSON FROM Core.Fitness WHERE CycGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
-                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND " + commonRouteCheck + " as tmp" +
+                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND " + commonRouteCheck + ") as tmp" +
                 " ORDER BY Date DESC";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_AllRoutes, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_AllRoutes, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

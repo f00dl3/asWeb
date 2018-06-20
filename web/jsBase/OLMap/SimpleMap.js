@@ -35,7 +35,7 @@ function getRouteFromDatabase(map, date, type) {
 
 function postProcessOptions(map) {
     var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
-    if(isSet(doAction) && isSet(dataInput)) {
+    if(isSet(doAction)) {
         switch(doAction) {
             case "Route": addLineStringToMap(map, dataInputOverride); break;
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
@@ -44,6 +44,7 @@ function postProcessOptions(map) {
             case "RouteGPSAlt": getGpsFromDatabase(map, dataInput, "Run"); break;
             case "RouteGPSCyc": getGpsFromDatabase(map, dataInput, "Cyc"); break;
             case "RouteGPSRun": getGpsFromDatabase(map, dataInput, "Run"); break;
+            case "RouteHistory": getRouteHistoryFromDatabase(map); break;
         }
     }
 }
