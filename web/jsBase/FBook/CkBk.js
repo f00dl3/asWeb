@@ -32,7 +32,7 @@ function displayCheckbook() {
 }
 
 function genOverviewChecking(cbData) {
-    var bubble = "<div class='UBox'>Check<br/><span>$" + (cbData.Balance + 367.43).toFixed(2) + "</span></div>";
+    var bubble = "<div class='UBox'>Check<br/><span>$" + (cbData.Balance).toFixed(2) + "</span></div>";
     dojo.byId("HoldChecking").innerHTML = bubble;
 }
 
