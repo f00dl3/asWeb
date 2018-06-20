@@ -208,9 +208,7 @@ function popLiveLinks3d(irsLinks, df7Links) {
     var elementListWx1 = [];
     var irsElems = irsLinks.length;
     irsLinks.forEach(function (irs) {
-        var newImgURL = "https://localhost";
-        if(checkMobile()) { newImgURL += ":8082"; }
-        newImgURL = newImgURL + irs.URL;
+        var newImgURL = "https://localhost:8444/asWeb" + irs.URL;
         irsBubbleCopy = irs.Bubble.replace("Image=", "Action=");
         var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
                 /* "<a styleReplace href='" + getBasePath("ui") + "/OLMap.jsp?" + irsBubbleCopy + "' target='new'>" + NEED TO FIGURE ANIMATION 6/6/18 */

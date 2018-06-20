@@ -179,13 +179,13 @@ function getBasePath(opt) {
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
         case "g2OutOld": tBase += "/G2Out"; break;
-        case "oldGet": case "getOld": case "getOldGet": tBase += "/Get"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase += "/MediaServ"; break;
         case "rest": tBase = baseForRestlet; break;
         case "serv": tBase = baseForServlet; break;
         case "old": tBase += "/ASWebUI"; break;
+        case "oldGet": case "getOld": case "getOldGet": case "get": /* tBase += "/Get"; */ tBase = baseForUi + "/Get"; break;
         case "oldRoot": tBase = tBase; break;
         case "osmTiles": tBase += "/osm_tiles/"; break;
         case "pageSnaps": tBase = baseForUi + "/img/PageSnaps"; break;
