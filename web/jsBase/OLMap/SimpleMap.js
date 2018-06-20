@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 17 Jun 2018
+Updated: 19 Jun 2018
  */
 
 function getRouteFromDatabase(map, date, type) {
@@ -41,6 +41,10 @@ function postProcessOptions(map) {
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
+            case "RouteGPSCyc": getGpsFromDatabase(map, dataInput, "Cyc"); break;
+            case "RouteGPSCyc2": getGpsFromDatabase(map, dataInput, "Cyc2"); break;
+            case "RouteGPSRun": getGpsFromDatabase(map, dataInput, "Run"); break;
+            case "RouteGPSRun2": getGpsFromDatabase(map, dataInput, "Run2"); break;
             //https://localhost:8444/asWeb/OLMap.jsp?Action=RouteGPSTest&Input=Test
             case "RouteGPSTest": getGpsFromDatabase(map, "2018-06-06", "Run"); break;
         }
