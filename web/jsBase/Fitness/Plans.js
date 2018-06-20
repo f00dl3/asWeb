@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
-Updated: 5 Jun 2018
+Updated: 20 Jun 2018
  */
 
 function actOnCommitRoute(event) {
@@ -46,7 +46,7 @@ function fitnessPlans(dataIn) {
     dataIn.forEach(function(tData) {
         var routeDistMi = (tData.DistKm * 0.621371).toFixed(1);
         var pRoute = tData.GeoJSON;
-        var rpMap = "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tData.Description + "&Route=" + pRoute + "&KML=true'>Mapped</a>";
+        var rpMap = "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=RoutePlan&Input=" + tData.Description + "'>Mapped</a>";
         if(tData.Done === 1) { routeDoneFlag = "Yes"; } else { routeDoneFlag = "No"; }
         tableData += "<tr><input type='hidden' name='RouteID[" + routeId + "]' value=" + routeId + ">" +
                 "<td><input type='checkbox' name='RouteSetCommit[" + routeId + "]' value='Yes'/></td>" +

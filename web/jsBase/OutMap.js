@@ -71,7 +71,7 @@ function initMaps() {
         // Build further
         mapPop("gpsJSON", title);
     }
-    if(isSet(getGetParams("Route"))) {
+    if(isSet(getGetParams("Route")) || isSet(getGetParams("RoutePlan"))) {
         // unset 'gpsJSON', 'radaraMode' sessvar
         getFitnessRouteData();
     }

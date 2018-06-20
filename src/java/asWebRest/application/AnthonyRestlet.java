@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 3 Jun 2018
+Updated: 20 Jun 2018
  */
 
 package asWebRest.application;
@@ -35,8 +35,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.engine.application.Encoder;
+import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
+import org.restlet.service.EncoderService;
 
 public class AnthonyRestlet extends Application {
     
@@ -56,6 +59,8 @@ public class AnthonyRestlet extends Application {
     
     @Override
     public synchronized Restlet createInboundRoot() {
+        // Encoder does nothing! 6/20/2018
+        Filter encoder = new Encoder(getContext(), false, true, new EncoderService(true));
         Router router = new Router(getContext());
         router.attach("/Addresses", AddressResource.class);
         router.attach("/Chart", ChartResource.class);
@@ -82,6 +87,8 @@ public class AnthonyRestlet extends Application {
         router.attach("/WebCal", WebCalResource.class);
         router.attach("/WebLinks", WebLinkResource.class);
         router.attach("/WebVersion", WebVersionResource.class);
-        return router;      
+        encoder.setNext(router);
+        return encoder;      
     }
+    
 }

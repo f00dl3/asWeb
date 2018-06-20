@@ -39,6 +39,7 @@ public class GetFitnessAction {
     public JSONArray getRelatedPhotos(List qParams) { return fitnessDAO.getRelatedPhotos(qParams); }
     public JSONArray getRShoe(Connection dbc) { return fitnessDAO.getRShoe(dbc); }
     public JSONArray getRSMileMax(List qParams) { return fitnessDAO.getRSMileMax(qParams); }
+    public JSONArray getRPlanByDesc(Connection dbc, List qParams) { return fitnessDAO.getRPlanByDesc(dbc, qParams); }
     public JSONArray getRPlans(Connection dbc) { return fitnessDAO.getRPlans(dbc); }
     public JSONArray getTot(Connection dbc) { return fitnessDAO.getTot(dbc); }
     public JSONArray getYear(Connection dbc, String yearIn) { return fitnessDAO.getYear(dbc, yearIn); } 

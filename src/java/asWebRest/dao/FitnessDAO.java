@@ -39,6 +39,24 @@ public class FitnessDAO {
         return tContainer;
     }
     
+    private JSONArray rPlanByDesc(Connection dbc, List<String> qParams) {
+        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans WHERE Description = ?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RPlans, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Description", resultSet.getString("Description"))
+                    .put("GeoJSON", resultSet.getString("GeoJSON"))
+                    .put("DistKm", resultSet.getDouble("DistKm"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getAll(Connection dbc, List<String> qParams) {
         final String query_Fitness_All = "SELECT" +
                 " f.Date, f.Weight, f.RunWalk, f.Shoe, f.RSMile," +
@@ -587,6 +605,8 @@ public class FitnessDAO {
         return tContainer;
     }
       
+    public JSONArray getRPlanByDesc(Connection dbc, List<String> qParams) { return rPlanByDesc(dbc, qParams); }
+    
     public JSONArray getRPlans(Connection dbc) {
         final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans ORDER BY Description DESC;";
         JSONArray tContainer = new JSONArray();

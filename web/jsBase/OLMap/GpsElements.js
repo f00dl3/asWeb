@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
+Updated: 20 Jun 2018
  */
 
 var gActivity;
@@ -337,6 +338,32 @@ function getRouteHistoryFromDatabase(map) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for Route History FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getRoutePlanFromDatabase(map, dataInput) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getRoutePlan",
+        "SearchString": dataInput
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    var tObj = data[0];
+                    var routeData = JSON.parse(tObj.GeoJSON);
+                    addLineStringToMap(map, routeData, tObj.Description);
+                    showNotice("Plan: " + tObj.Description + " (" + tObj.DistKm + "km)");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Route Plan FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

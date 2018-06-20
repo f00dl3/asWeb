@@ -45,6 +45,7 @@ function postProcessOptions(map) {
             case "RouteGPSCyc": getGpsFromDatabase(map, dataInput, "Cyc"); break;
             case "RouteGPSRun": getGpsFromDatabase(map, dataInput, "Run"); break;
             case "RouteHistory": getRouteHistoryFromDatabase(map); break;
+            case "RoutePlan": getRoutePlanFromDatabase(map, dataInput); break;
         }
     }
 }

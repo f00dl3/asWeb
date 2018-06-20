@@ -145,6 +145,12 @@ public class FitnessResource extends ServerResource {
                     returnData += routes;
                     break;
                     
+                case "getRoutePlan":
+                    qParams.add(0, argsInForm.getFirstValue("SearchString"));
+                    JSONArray planned = getFitnessAction.getRPlanByDesc(dbc, qParams);
+                    returnData += planned.toString();
+                    break;
+                    
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
                     String[] args = {};
