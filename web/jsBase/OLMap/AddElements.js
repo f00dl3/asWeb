@@ -252,7 +252,7 @@ function addGpsToMap(map, inData, activity, metric) {
                     "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
                     "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
                     "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
-                    "<strong>Temperature:</strong> " + feature.get("temperature").toFixed(1) + " F<br/>" +
+                    "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + " F</span><br/>" +
                     "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
                     "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
                     "<strong>Latitude:</strong> " + feature.get("latitude");
