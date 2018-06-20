@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 18 Jun 2018
+Updated: 19 Jun 2018
 */
 
 var gActivity;
@@ -49,6 +49,9 @@ function addGpsInfo(activity, oaStats) {
     var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
             "<div class='tr'>" +
+            "<span class='td'><div class='GPSPop'>" + labelC + "<br/>" +
+            "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsCadence", "th") + "'/>" +
+            "</div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
             "</div></span>" +
@@ -66,11 +69,11 @@ function addGpsInfo(activity, oaStats) {
             "<div class='tr'><span class='td'><em>MPH</em></span><span class='td'><strong>This</strong>";
     if(activity === "Cyc") { rData += "</span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong>"; }
     rData += "</span></div>" +
-            "<div class='tr'><span class='td'><strong>Average</strong><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1);
-    if(activity === "Cyc") { rData += "</span><span class='td'><strong>" + oaStats.AvgCycSpeedAvg.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedAvg.toFixed(1); }
-            "</span></div>" +
-            "<div class='tr'><span class='td'><strong>Maximum</strong><span class='td'>" + (Math.max(pu_Speed).toFixed(1));
-    if(activity === "Cyc") { rData += "</span><span class='td'><strong>" + oaStats.AvgCycSpeedMax.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedMax.toFixed(1); }
+            "<div class='tr'><span class='td'><strong>Average</strong></span><span class='td'>" + (getSum(pu_Speed)/pu_Speed.length).toFixed(1);
+    if(activity === "Cyc") { rData += "</span><span class='td'>" + oaStats.AvgCycSpeedAvg.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedAvg.toFixed(1); }
+    rData += "</span></div>" +
+            "<div class='tr'><span class='td'><strong>Maximum</strong></span><span class='td'>" + (Math.max(pu_Speed).toFixed(1));
+    if(activity === "Cyc") { rData += "</span><span class='td'>" + oaStats.AvgCycSpeedMax.toFixed(1) + "</span><span class='td'>" + oaStats.MaxCycSpeedMax.toFixed(1); }
     rData += "</span></div>" +
             "</div>" +
             "</div></div></span>" +

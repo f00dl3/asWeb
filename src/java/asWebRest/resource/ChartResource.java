@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 18 Jun 2018
+Updated: 19 Jun 2018
  */
 
 package asWebRest.resource;
@@ -157,15 +157,18 @@ public class ChartResource extends ServerResource {
                         default: gpsDataGlob = getFitnessAction.getJsonLogRun(dbc, qParams); break;
                     }
                     GpsData gpsData = new GpsData();
-                    JSONObject gpsSpeedGlob = gpsData.getGpsSpeed(gpsDataGlob);
-                    JSONObject gpsElevationGlob = gpsData.getGpsElevation(gpsDataGlob);
-                    JSONObject gpsHeartRateGlob = gpsData.getGpsHeartRate(gpsDataGlob);
-                    JSONObject gpsPowerGlob = gpsData.getGpsPower(gpsDataGlob);
-                    JSONObject gpsTemperatureGlob = gpsData.getGpsTemperature(gpsDataGlob);
-                    try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    JSONObject gpsCadenceGlob = gpsData.getGpsElement(gpsDataGlob, "Cadence", "RPM", "Cadence");
+                    JSONObject gpsElevationGlob = gpsData.getGpsElement(gpsDataGlob, "Elevation", "Feet", "AltitudeFt");
+                    JSONObject gpsHeartRateGlob = gpsData.getGpsElement(gpsDataGlob, "HeartRate", "BPM", "HeartRate");
+                    JSONObject gpsPowerGlob = gpsData.getGpsElement(gpsDataGlob, "Power", "Watts", "PowerWatts");
+                    JSONObject gpsSpeedGlob = gpsData.getGpsElement(gpsDataGlob, "Speed", "MPH", "SpeedMPH");
+                    JSONObject gpsTemperatureGlob = gpsData.getGpsElement(gpsDataGlob, "Temperature", "Degrees F", "TemperatureF");
+                    
+                    try { dynChart.LineChart(gpsCadenceGlob); returnData += "Chart generated - GPS Cadence!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsElevationGlob); returnData += "Chart generated - GPS Elevation!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsHeartRateGlob); returnData += "Chart generated - GPS Heart Rate!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsPowerGlob); returnData += "Chart generated - GPS Power!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsTemperatureGlob); returnData += "Chart generated - GPS Temperature!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     

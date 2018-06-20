@@ -176,9 +176,9 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
     switch(inAct) {
         case "Alt": longAct = "Alternate"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSRun"; break;
         case "Run": longAct = "Running"; letAct = "R"; icAct = inAct; newAction = "RouteGeoJSONRun"; gpsAction = "RouteGPSRun"; break;
-        case "Ru2": longAct = "Running 2"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSON"; gpsAction = "RouteGPSRun2"; break;
+        case "Ru2": longAct = "Running 2"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSON"; gpsAction = "RouteGPSRun"; break;
         case "Cyc": longAct = "Cycling"; letAct = "C"; icAct= inAct; newAction = "RouteGeoJSONCyc"; gpsAction = "RouteGPSCyc";  break;
-        case "Cy2": longAct = "Cycling 2"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc2"; break;
+        case "Cy2": longAct = "Cycling 2"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc"; break;
     }
     switch(inType) {
         case "gpsJSON": iconBack = getBasePath("icon") + "/ic_" + icAct.toLowerCase() + "J.jpeg"; typeDesc = "GPS JSON"; letAct = inAct; newAction = gpsAction; break;

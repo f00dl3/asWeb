@@ -41,10 +41,9 @@ function postProcessOptions(map) {
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
+            case "RouteGPSAlt": getGpsFromDatabase(map, dataInput, "Run"); break;
             case "RouteGPSCyc": getGpsFromDatabase(map, dataInput, "Cyc"); break;
-            case "RouteGPSCyc2": getGpsFromDatabase(map, dataInput, "Cyc2"); break;
             case "RouteGPSRun": getGpsFromDatabase(map, dataInput, "Run"); break;
-            case "RouteGPSRun2": getGpsFromDatabase(map, dataInput, "Run2"); break;
             //https://localhost:8444/asWeb/OLMap.jsp?Action=RouteGPSTest&Input=Test
             case "RouteGPSTest": getGpsFromDatabase(map, "2018-06-06", "Run"); break;
         }
