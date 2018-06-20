@@ -107,6 +107,7 @@ public class FitnessResource extends ServerResource {
                     JSONArray gpsData = new JSONArray();
                     JSONArray oaStats = getFitnessAction.getOverallStats(dbc);
                     JSONArray oaSensors = getFitnessAction.getOverallSensors(dbc);
+                    JSONArray fitToday = getFitnessAction.getDay(dbc);
                     if(actDate != null && actType != null) {
                         qParams.add(0, actDate);
                         switch(actType) {
@@ -118,7 +119,8 @@ public class FitnessResource extends ServerResource {
                         mergedResults
                             .put("gpsLog", gpsData.toString())
                             .put("oaStats", oaStats.toString())
-                            .put("oaSensors", oaSensors.toString());
+                            .put("oaSensors", oaSensors.toString())
+                            .put("fitToday", fitToday.toString());
                         returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";

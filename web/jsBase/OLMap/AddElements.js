@@ -21,8 +21,8 @@ function actOnPointDrop(event) {
     window.alert("To build out!");
 }
 
-function addGpsInfo(activity, oaStats, oaSensors) {
-    console.log(pu_Dists);
+function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
+    var calsBurned = "Unknown";
     var gpsThumbSize = "th_icon";
     var gpsPopScale = 3;
     var gpsPopOClass = "mGPSPopO";
@@ -47,6 +47,7 @@ function addGpsInfo(activity, oaStats, oaSensors) {
         labelS = "Speed";
         labelT = "Temps";
     }
+    var thisDayWeight = fitToday.Weight;
     var thisActivityTimeMins = Math.round(Math.max.apply(Math, pu_Times)/100/60);
     var rData = "<div class='GpsInfo'>" +
             "<div class='table'>" +
@@ -120,7 +121,19 @@ function addGpsInfo(activity, oaStats, oaSensors) {
             "</div>" +
             "</div>" +
             "<strong> " + activity + ", " + (Math.max.apply(Math, pu_Dists).toFixed(2)) + " mi.<br/>" +
-            thisActivityTimeMins + " min." +
+            thisActivityTimeMins + " min.";
+    switch(activity) {
+        case "Cyc":
+            if(isSet(pu_Power) && Math.max.apply(Math, pu_Power) !== 0) {
+                calsBurned = Math.round(((getSum(pu_Power)/pu_Power.length) * Math.max.apply(Math, pu_Times)/60/60) * 3.6);
+            } break;
+        case "Run":
+            if(isSet(pu_Heart) && Math.max.apply(Math, pu_Heart) !== 0) {
+                var thisAvgHr = (getSum(pu_Heart)/pu_Heart.length).toFixed(1);
+                calsBurned = (((myAge * 0.2017) + (thisDayWeight * 0.09036) + (thisAvgHr * 0.6309) - 55.0969) * thisActivityTimeMins / 4.184).toFixed(1);
+            } break;
+    }
+    rData += "<br/><strong>" + calsBurned + " calories";
             "</div>" +
             "</div>";
     dojo.byId("mapEx").innerHTML += rData;
@@ -168,6 +181,7 @@ function addGpsToMap(map, inData, activity, metric) {
     if(isSet(jsonData)) { gJsonData = jsonData; }
     var oaStats = JSON.parse(inData.oaStats)[0];
     var oaSensors = JSON.parse(inData.oaSensors)[0];
+    var fitToday = JSON.parse(inData.fitToday)[0];
     gActivity = activity;
     showNotice(gActivity + " test activated!");
     var keyCount = Object.keys(gJsonData).length;
@@ -251,7 +265,7 @@ function addGpsToMap(map, inData, activity, metric) {
             overlay.setPosition(eCoord);
         }
     });
-    addGpsInfo(activity, oaStats, oaSensors);
+    addGpsInfo(activity, oaStats, oaSensors, fitToday);
     addGpsSelectDrop();
 }
 
