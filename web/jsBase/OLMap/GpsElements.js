@@ -247,7 +247,6 @@ function addGpsToMap(map, inData, activity, metric) {
         if(feature) {
             $("#popup").toggle();
             var eCoord = evt.coordinate;
-            console.log("Clicked valid feature!");
             content.innerHTML = "<strong>Point ID: </strong> " + feature.get("id") + "<br/>" +
                     "<strong>Source:</strong> " + feature.get("source") + "<br/>" +
                     "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
@@ -255,8 +254,8 @@ function addGpsToMap(map, inData, activity, metric) {
                     "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
                     "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + "F</span><br/>" +
                     "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
-                    "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
-                    "<strong>Latitude:</strong> " + feature.get("latitude");
+                    "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
+                    "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
             if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
                 content.innerHTML += "<br/><strong>Heart Rate:</strong>" + feature.get("heart").toFixed(1) + " bpm";
             }
