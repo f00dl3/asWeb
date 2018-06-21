@@ -584,7 +584,7 @@ public class FitnessDAO {
     }
     
     public JSONArray getRelatedPhotos(Connection dbc, List<String> qParams) {
-        final String query_Fitness_RelatedPhotos = "SELECT Path, File, GeoData, Resolution, WarDeploy" +
+        final String query_Fitness_RelatedPhotos = "SELECT Path, File, Description, GeoData, Resolution, WarDeploy" +
                 " FROM Core.MediaServer WHERE (Description LIKE '%run%' OR Description LIKE '%cycling%' OR Description LIKE '%bike%' OR Description LIKE '%hiking%')" +
                 " AND ContentDate=? AND GeoData IS NOT NULL;";
         JSONArray tContainer = new JSONArray();
@@ -595,6 +595,7 @@ public class FitnessDAO {
                 tObject
                     .put("Path", resultSet.getString("Path"))
                     .put("File", resultSet.getString("File"))
+                    .put("Description", resultSet.getString("Description"))
                     .put("GeoData", resultSet.getString("GeoData"))
                     .put("Resolution", resultSet.getString("Resolution"))
                     .put("WarDeploy", resultSet.getInt("WarDeploy"));

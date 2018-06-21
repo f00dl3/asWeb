@@ -162,6 +162,21 @@ function addGpsMarkers(map, jsonData, pointId) {
     return iconFeature;
 }
 
+function addPhotoMarker(map, jsonData) {
+    var tCoord = jsonData.GeoPoint;
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var photoResourceLocation = jsonData.Path + "/" + jsonData.File;
+    var photoIcon = new ol.Feature({
+        url: photoResourceLocation,
+        name: jsonData.File,
+        path: jsonData.Path,
+        resolution: jsonData.Resolution,
+        description: jsonData.Description        
+    });
+    return photoIcon;
+}   
+
 function addGpsSelectDrop() {
     var rData = "<div class='GPSTopDrop'>" +
             "<form id='DoGPSPointsForm'>";
@@ -190,6 +205,7 @@ function addGpsToMap(map, inData, activity, metric) {
     var tMetrics = [];
     var coords = [];
     var vectorSource = new ol.source.Vector({});
+    var photoVector = new ol.source.Vector({});
     var j = 0;
     switch(metric) {
         case "Altitude":
@@ -208,6 +224,15 @@ function addGpsToMap(map, inData, activity, metric) {
     var tMetricsMax = Math.max.apply(Math, tMetrics);
     var tMetricsMin = Math.min.apply(Math, tMetrics);
     var tMetricsAvg = getSum(tMetrics) / tMetrics.length;
+    if(isSet(photoRelations)) {
+        photoRelations.forEach(function (photoRelation) {
+            var tPhotoIcon = addPhotoMarker(map, photoRelation);
+            thisColor = "#ffffff";
+            tPhotoIcon.setStyle(svgIconStyle("c", 50, thisColor, 1));
+            photoVector.addFeature(tPhotoIcon);
+            console.log(tPhotoIcon);
+        });
+    }
     for(var i = 0; i < keyCount; i++) {
         if(i % 5 === 0) {
             var t2Metric;
@@ -239,8 +264,10 @@ function addGpsToMap(map, inData, activity, metric) {
         }
     }
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
+    var photoLayer = new ol.layer.Vector({ source: photoVector });
     addLineStringToMap(map, coords, null);
     map.addLayer(vectorLayer);
+    map.addLayer(photoLayer);
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
             return feature;

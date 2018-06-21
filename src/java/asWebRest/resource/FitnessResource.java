@@ -122,7 +122,7 @@ public class FitnessResource extends ServerResource {
                             .put("oaStats", oaStats.toString())
                             .put("oaSensors", oaSensors.toString())
                             .put("fitToday", fitToday.toString())
-                            .put("relatedPhotos", relatedPhotos.toString());
+                            .put("relatedPhotos", relatedPhotos);
                         returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";
@@ -141,7 +141,7 @@ public class FitnessResource extends ServerResource {
                         JSONArray foj = getFitnessAction.getGeoJSON(dbc, qParams);
                         mergedResults
                             .put("foj", foj.toString())
-                            .put("relatedPhotos", relatedPhotos.toString());
+                            .put("relatedPhotos", relatedPhotos);
                         returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";
