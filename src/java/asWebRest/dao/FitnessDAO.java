@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 Jun 2018
+Updated: 21 Jun 2018
 */
 
 package asWebRest.dao;
@@ -583,13 +583,13 @@ public class FitnessDAO {
         return tContainer;
     }
     
-    public JSONArray getRelatedPhotos(List<String> qParams) {
+    public JSONArray getRelatedPhotos(Connection dbc, List<String> qParams) {
         final String query_Fitness_RelatedPhotos = "SELECT Path, File, GeoData, Resolution, WarDeploy" +
                 " FROM Core.MediaServer WHERE (Description LIKE '%run%' OR Description LIKE '%cycling%' OR Description LIKE '%bike%' OR Description LIKE '%hiking%')" +
                 " AND ContentDate=? AND GeoData IS NOT NULL;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Fitness_RelatedPhotos, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RelatedPhotos, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 Jun 2018
+Updated: 21 Jun 2018
  */
 
 package asWebRest.resource;
@@ -110,6 +110,7 @@ public class FitnessResource extends ServerResource {
                     JSONArray fitToday = getFitnessAction.getDay(dbc);
                     if(actDate != null && actType != null) {
                         qParams.add(0, actDate);
+                        JSONArray relatedPhotos = getFitnessAction.getRelatedPhotos(dbc, qParams);
                         switch(actType) {
                             case "Run": gpsData = getFitnessAction.getJsonLogRun(dbc, qParams); break;
                             case "Run2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
@@ -120,7 +121,8 @@ public class FitnessResource extends ServerResource {
                             .put("gpsLog", gpsData.toString())
                             .put("oaStats", oaStats.toString())
                             .put("oaSensors", oaSensors.toString())
-                            .put("fitToday", fitToday.toString());
+                            .put("fitToday", fitToday.toString())
+                            .put("relatedPhotos", relatedPhotos.toString());
                         returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";
@@ -131,10 +133,16 @@ public class FitnessResource extends ServerResource {
                     String xdt1a = argsInForm.getFirstValue("XDT1");
                     String xdt2a = argsInForm.getFirstValue("XDT2");
                     if(xdt1a != null && xdt2a != null) {
+                        List<String> qParams2 = new ArrayList<>();
                         qParams.add(xdt1a);
                         qParams.add(xdt2a);
+                        qParams2.add(xdt1a);
+                        JSONArray relatedPhotos = getFitnessAction.getRelatedPhotos(dbc, qParams2);
                         JSONArray foj = getFitnessAction.getGeoJSON(dbc, qParams);
-                        returnData += foj.toString();
+                        mergedResults
+                            .put("foj", foj.toString())
+                            .put("relatedPhotos", relatedPhotos.toString());
+                        returnData += mergedResults;
                     } else {
                         returnData += "ERROR!";
                     }

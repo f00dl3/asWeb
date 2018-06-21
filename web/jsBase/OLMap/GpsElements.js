@@ -184,6 +184,7 @@ function addGpsToMap(map, inData, activity, metric) {
     var oaStats = JSON.parse(inData.oaStats)[0];
     var oaSensors = JSON.parse(inData.oaSensors)[0];
     var fitToday = JSON.parse(inData.fitToday)[0];
+    var photoRelations = inData.relatedPhotos;
     gActivity = activity;
     var keyCount = Object.keys(gJsonData).length;
     var tMetrics = [];
@@ -238,7 +239,7 @@ function addGpsToMap(map, inData, activity, metric) {
         }
     }
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
-    addLineStringToMap(map, coords, null, true);
+    addLineStringToMap(map, coords, null);
     map.addLayer(vectorLayer);
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
@@ -359,6 +360,35 @@ function getRouteHistoryFromDatabase(map) {
     });
 }
 
+function getRouteFromDatabase(map, date, type) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getOnlyFitnessGeoJSON",
+        "XDT1": date,
+        "XDT2": date
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    gjd = JSON.parse(data.foj)[0];
+                    switch(type) {
+                        case "R": addLineStringToMap(map, JSON.parse(gjd.RunGeoJSON), "Run route on " + date); break;
+                        case "C": addLineStringToMap(map, JSON.parse(gjd.CycGeoJSON), "Bike ride on " + date); break;
+                        case "A": addLineStringToMap(map, JSON.parse(gjd.AltGeoJSON), "Alt route on " + date); break;
+                    }
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Route FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function getRoutePlanFromDatabase(map, dataInput) {
     aniPreload("on");
     var thePostData = {
@@ -375,7 +405,7 @@ function getRoutePlanFromDatabase(map, dataInput) {
                     aniPreload("off");
                     var tObj = data[0];
                     var routeData = JSON.parse(tObj.GeoJSON);
-                    addLineStringToMap(map, routeData, tObj.Description, true);
+                    addLineStringToMap(map, routeData, tObj.Description);
                     showNotice("Plan: " + tObj.Description + " (" + tObj.DistKm + "km)");
                 },
                 function(error) { 
