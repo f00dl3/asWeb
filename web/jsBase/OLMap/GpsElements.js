@@ -270,10 +270,13 @@ function addGpsToMap(map, inData, activity, metric) {
 }
 
 function addHistoryArrayToMap(map, arrayIn) {
+    var ic = 0;
     arrayIn.forEach(function (sgj) {
-        var thisCaption = sgj.Date + " (" + sgj.Type + ")";
-        addLineStringToMap(map, sgj.GeoJSON, thisCaption, false);
-    })
+        var thisCaption = "#" + ic + ": " + sgj.Date + " (" + sgj.Type + ")";
+        tGeoJSON = JSON.parse(sgj.GeoJSON);
+        addLineStringToMap(map, tGeoJSON, thisCaption, false);
+        ic++;
+    });
 }
 
 function getGpsFromDatabase(map, date, type) {
