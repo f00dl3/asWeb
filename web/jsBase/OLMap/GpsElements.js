@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 20 Jun 2018
+Updated: 21 Jun 2018
  */
 
 var gActivity;
@@ -238,7 +238,7 @@ function addGpsToMap(map, inData, activity, metric) {
         }
     }
     var vectorLayer = new ol.layer.Vector({ source: vectorSource });
-    addLineStringToMap(map, coords, null);
+    addLineStringToMap(map, coords, null, true);
     map.addLayer(vectorLayer);
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
@@ -268,6 +268,13 @@ function addGpsToMap(map, inData, activity, metric) {
     });
     addGpsInfo(activity, oaStats, oaSensors, fitToday);
     addGpsSelectDrop();
+}
+
+function addHistoryArrayToMap(map, arrayIn) {
+    arrayIn.forEach(function (sgj) {
+        var thisCaption = sgj.Date + " (" + sgj.Type + ")";
+        addLineStringToMap(map, sgj.GeoJSON, thisCaption, false);
+    })
 }
 
 function getGpsFromDatabase(map, date, type) {
@@ -332,6 +339,7 @@ function getRouteHistoryFromDatabase(map) {
             }).then(
                 function(data) {
                     aniPreload("off");
+                    addHistoryArrayToMap(map, data);
                     showNotice("Data pull success!");
                 },
                 function(error) { 
@@ -357,7 +365,7 @@ function getRoutePlanFromDatabase(map, dataInput) {
                     aniPreload("off");
                     var tObj = data[0];
                     var routeData = JSON.parse(tObj.GeoJSON);
-                    addLineStringToMap(map, routeData, tObj.Description);
+                    addLineStringToMap(map, routeData, tObj.Description, true);
                     showNotice("Plan: " + tObj.Description + " (" + tObj.DistKm + "km)");
                 },
                 function(error) { 
