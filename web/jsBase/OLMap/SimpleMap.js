@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 20 Jun 2018
+Updated: 21 Jun 2018
  */
 
 function postProcessOptions(map) {
