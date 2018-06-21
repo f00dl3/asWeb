@@ -157,22 +157,28 @@ function addGpsMarkers(map, jsonData, pointId) {
         power: jsonData.PowerWatts,
         source: jsonData.SpeedSource,
         speed: jsonData.SpeedMPH,
-        temperature: jsonData.TemperatureF
+        temperature: jsonData.TemperatureF,
+        type: "Coordinate"
     });
     return iconFeature;
 }
 
 function addPhotoMarker(map, jsonData) {
-    var tCoord = jsonData.GeoPoint;
+    var tCoord = JSON.parse(jsonData.GeoData);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
-    var photoResourceLocation = jsonData.Path + "/" + jsonData.File;
+    var parentFolder = (jsonData.Path).replace("Pics/20","asWeb/x/PicsL");
+    var photoResourceLocation = parentFolder + "/size/" + jsonData.File;
     var photoIcon = new ol.Feature({
-        url: photoResourceLocation,
+        description: jsonData.Description,
         name: jsonData.File,
+        type: "Photo",
+        geometry: point,
+        location: jsonData.GeoData,
         path: jsonData.Path,
         resolution: jsonData.Resolution,
-        description: jsonData.Description        
+        urlThumb: photoResourceLocation.replace("size", "thumb"),
+        urlFull: photoResourceLocation.replace("size", "full").replace("asWeb/x", "asWeb/OLMap.jsp?Action=Image&Input=/asWeb/x") + "&Resolution=" + jsonData.Resolution
     });
     return photoIcon;
 }   
@@ -228,7 +234,7 @@ function addGpsToMap(map, inData, activity, metric) {
         photoRelations.forEach(function (photoRelation) {
             var tPhotoIcon = addPhotoMarker(map, photoRelation);
             thisColor = "#ffffff";
-            tPhotoIcon.setStyle(svgIconStyle("c", 50, thisColor, 1));
+            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1));
             photoVector.addFeature(tPhotoIcon);
             console.log(tPhotoIcon);
         });
@@ -255,7 +261,7 @@ function addGpsToMap(map, inData, activity, metric) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkers(map, tJson, j);
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
-                tIconFeature.setStyle(svgIconStyle("c", 10, thisColor, 1));
+                tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1));
                 vectorSource.addFeature(tIconFeature);
                 j++;
             } else {
@@ -275,20 +281,27 @@ function addGpsToMap(map, inData, activity, metric) {
         if(feature) {
             $("#popup").toggle();
             var eCoord = evt.coordinate;
-            content.innerHTML = "<strong>Point ID: </strong> " + feature.get("id") + "<br/>" +
-                    "<strong>Source:</strong> " + feature.get("source") + "<br/>" +
-                    "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
-                    "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
-                    "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
-                    "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + "F</span><br/>" +
-                    "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
-                    "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
-                    "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
-            if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
-                content.innerHTML += "<br/><strong>Heart Rate:</strong>" + feature.get("heart").toFixed(1) + " bpm";
-            }
-            if(isSet(feature.get("power")) && feature.get("power") !== 0) {
-                content.innerHTML += "<br/><strong>Power:</strong>" + feature.get("power").toFixed(1) + " wt";
+            switch(feature.get("type")) {
+                case "Coordinate":
+                    content.innerHTML = "<strong>Point ID: </strong> " + feature.get("id") + "<br/>" +
+                        "<strong>Source:</strong> " + feature.get("source") + "<br/>" +
+                        "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
+                        "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
+                        "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
+                        "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + "F</span><br/>" +
+                        "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
+                        "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
+                        "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
+                    if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
+                        content.innerHTML += "<br/><strong>Heart Rate:</strong>" + feature.get("heart").toFixed(1) + " bpm";
+                    }
+                    if(isSet(feature.get("power")) && feature.get("power") !== 0) {
+                        content.innerHTML += "<br/><strong>Power:</strong>" + feature.get("power").toFixed(1) + " wt";
+                    }
+                    break;
+                case "Photo":
+                    content.innerHTML = "<a href='" + feature.get("urlFull") + "' target='newPhotoPop'><img class='th_small' src='" + feature.get("urlThumb") + "'/></a><br/>" + feature.get("name");
+                    break;
             }
             overlay.setPosition(eCoord);
         }
