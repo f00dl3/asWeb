@@ -271,12 +271,20 @@ function addGpsToMap(map, inData, activity, metric) {
 
 function addHistoryArrayToMap(map, arrayIn) {
     var ic = 0;
+    var rFeatures = [];
     arrayIn.forEach(function (sgj) {
         var thisCaption = "#" + ic + ": " + sgj.Date + " (" + sgj.Type + ")";
-        tGeoJSON = JSON.parse(sgj.GeoJSON);
-        addLineStringToMap(map, tGeoJSON, thisCaption, false);
+        var pointsToAdd = JSON.parse(sgj.GeoJSON);
+        var polyLine = new ol.geom.LineString(pointsToAdd);
+        polyLine.transform('EPSG:4326', 'EPSG:3857');
+        var rFeature = new ol.Feature({ geometry: polyLine });
+        rFeature.setStyle(routeStyle);
+        rFeatures.push(rFeature);
         ic++;
     });
+    var vSource = new ol.source.Vector({ features: rFeatures });
+    var vLayer = new ol.layer.Vector({ source: vSource });
+    map.addLayer(vLayer);
 }
 
 function getGpsFromDatabase(map, date, type) {
