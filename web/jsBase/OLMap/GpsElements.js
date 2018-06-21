@@ -70,8 +70,8 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
             "<div class='" + gpsPopOClass + "'><h3>Elevation</h3>" +
             "<a href='" + doCh("j", "gpsElevation", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsElevation", null) + "'/></a><br/>" +
-            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Altitude) + " ft<br/>" +
-            "<strong>Minimum: </strong> " + Math.min(pu_Altitude) + " ft<br/>" +
+            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Altitude).toFixed(1) + " ft<br/>" +
+            "<strong>Minimum: </strong> " + Math.min(pu_Altitude).toFixed(1) + " ft<br/>" +
             "</div>" +
             "</div></span>";
     if(pu_Heart.length !== 0 && Math.max.apply(Math, pu_Heart) !== 0) {
@@ -80,7 +80,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
                 "<div class='" + gpsPopOClass + "'><h3>Heart Rate</h3>" +
                 "<a href='" + doCh("j", "gpsHeartRate", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsHeartRate", null) + "'/></a><br/>" +
                 "<strong>Average: </strong> " + (getSum(pu_Heart)/pu_Heart.length).toFixed(1) + " bpm<br/>" +
-                "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Heart) + " bpm<br/>" +
+                "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Heart).toFixed(1) + " bpm<br/>" +
                 "</div>" +
                 "</div></span>";
     }
@@ -116,13 +116,13 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsTemperature", "th") + "'/>" +   
             "<div class='" + gpsPopOClass + "'><h3>Temperature</h3>" +
             "<a href='" + doCh("j", "gpsTemperature", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsTemperature", null) + "'/></a><br/>" +
-            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Temps) + " degrees F<br/>" +
-            "<strong>Minimum: </strong> " + Math.min(pu_Temps) + " degrees F<br/>" +
+            "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Temps).toFixed(1) + " degrees F<br/>" +
+            "<strong>Minimum: </strong> " + Math.min(pu_Temps).toFixed(1) + " degrees F<br/>" +
             "</div>" +
             "</div></span>" +
             "</div>" +
             "</div>" +
-            "<strong> " + activity + ", " + (Math.max.apply(Math, pu_Dists).toFixed(2)) + " mi.<br/>" +
+            "<strong> " + activity + ", " + (Math.max.apply(Math, pu_Dists).toFixed(1)) + " mi.<br/>" +
             thisActivityTimeMins + " min.";
     switch(activity) {
         case "Cyc":
@@ -253,7 +253,7 @@ function addGpsToMap(map, inData, activity, metric) {
                     "<strong>Elapsed:</strong> " + (feature.get("elapsed")/100/60).toFixed(1) + " min<br/>" +
                     "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
                     "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
-                    "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + " F</span><br/>" +
+                    "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + "F</span><br/>" +
                     "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
                     "<strong>Longitude:</strong> " + feature.get("longitude") + "<br/>" +
                     "<strong>Latitude:</strong> " + feature.get("latitude");
