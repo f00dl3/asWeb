@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 19 Jun 2018
+Updated: 21 Jun 2018
  */
 
 var myHeight = 68;
@@ -123,7 +123,7 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
             yb2 + ": <strong>" + yearStats.yb2oa + "</strong> mi<br/>" +
             yb3 + ": <strong>" + yearStats.yb3oa + "</strong> mi<br/>" +
             yb4 + ": <strong>" + yearStats.yb4oa + "</strong> mi<br/>" +
-            "<p><a href='" + getBasePath("old") + "/OutMap.php?AllRoutes=1'>" +
+            "<p><a href='" + getBasePath("ui") + "/OLMap.jsp?Action=RouteHistory'>" +
             "<button class='UButton'>All Routes</button></a>" +
             "</div></div>";
     var returnData = boxRun + boxCyc + boxTot;
