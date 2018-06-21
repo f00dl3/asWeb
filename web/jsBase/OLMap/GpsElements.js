@@ -277,7 +277,7 @@ function addHistoryArrayToMap(map, arrayIn) {
         var pointsToAdd = JSON.parse(sgj.GeoJSON);
         var polyLine = new ol.geom.LineString(pointsToAdd);
         polyLine.transform('EPSG:4326', 'EPSG:3857');
-        var rFeature = new ol.Feature({ geometry: polyLine });
+        var rFeature = new ol.Feature({ geometry: polyLine, name: thisCaption });
         rFeature.setStyle(routeStyle);
         rFeatures.push(rFeature);
         ic++;
