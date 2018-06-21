@@ -57,7 +57,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     if(pu_Cadence.length !== 0 && Math.max.apply(Math, pu_Cadence) !== 0) {
         rData += "<span class='td'><div class='GPSPop'>" + labelC + "<br/>" +
                 "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsCadence", "th") + "'/>" +
-                "<div class='" + gpsPopOClass + "'>" +
+                "<div class='" + gpsPopOClass + "'><h3>Cadence</h3>" +
                 "<a href='" + doCh("j", "gpsCadence", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsCadence", null) + "'/></a><br/>" +
                 "<div class='table'>" +
                 "<div class='tr'><span class='td'><em>RPM</em></span><span class='td'><strong>This</strong></span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong></span></div>" +
@@ -68,7 +68,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     }
     rData += "<span class='td'><div class='GPSPop'>" + labelE + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsElevation", "th") + "'/>" +
-            "<div class='" + gpsPopOClass + "'>" +
+            "<div class='" + gpsPopOClass + "'><h3>Elevation</h3>" +
             "<a href='" + doCh("j", "gpsElevation", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsElevation", null) + "'/></a><br/>" +
             "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Altitude) + " ft<br/>" +
             "<strong>Minimum: </strong> " + Math.min(pu_Altitude) + " ft<br/>" +
@@ -77,7 +77,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     if(pu_Heart.length !== 0 && Math.max.apply(Math, pu_Heart) !== 0) {
         rData += "<span class='td'><div class='GPSPop'>" + labelH + "<br/>" +
                 "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHeartRate", "th") + "'/>" +
-                "<div class='" + gpsPopOClass + "'>" +
+                "<div class='" + gpsPopOClass + "'><h3>Heart Rate</h3>" +
                 "<a href='" + doCh("j", "gpsHeartRate", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsHeartRate", null) + "'/></a><br/>" +
                 "<strong>Average: </strong> " + (getSum(pu_Heart)/pu_Heart.length).toFixed(1) + " bpm<br/>" +
                 "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Heart) + " bpm<br/>" +
@@ -87,7 +87,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     if(pu_Power.length !== 0 && Math.max.apply(Math, pu_Power) !== 0) {
         rData += "<span class='td'><div class='GPSPop'>" + labelP + "<br/>" +
                 "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsPower", "th") + "'/>" +
-                "<div class='" + gpsPopOClass + "'>" +
+                "<div class='" + gpsPopOClass + "'><h3>Power</h3>" +
                 "<a href='" + doCh("j", "gpsPower", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsPower", null) + "'/></a><br/>" +
                 "<div class='table'>" +
                 "<div class='tr'><span class='td'><em>RPM</em></span><span class='td'><strong>This</strong></span><span class='td'><strong>AVG</strong></span><span class='td'><strong>MAX</strong></span></div>" +
@@ -114,7 +114,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
             "</div></div></span>" +
             "<span class='td'><div class='GPSPop'>" + labelT + "<br/>" +
             "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsTemperature", "th") + "'/>" +   
-            "<div class='" + gpsPopOClass + "'>" +
+            "<div class='" + gpsPopOClass + "'><h3>Temperature</h3>" +
             "<a href='" + doCh("j", "gpsTemperature", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsTemperature", null) + "'/></a><br/>" +
             "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Temps) + " degrees F<br/>" +
             "<strong>Minimum: </strong> " + Math.min(pu_Temps) + " degrees F<br/>" +
