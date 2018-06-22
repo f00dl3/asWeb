@@ -416,10 +416,22 @@ function getRouteFromDatabase(map, date, type) {
                 function(data) {
                     aniPreload("off");
                     gjd = JSON.parse(data.foj)[0];
+                    var photoRelations = data.relatedPhotos;
                     switch(type) {
                         case "R": addLineStringToMap(map, JSON.parse(gjd.RunGeoJSON), "Run route on " + date); break;
                         case "C": addLineStringToMap(map, JSON.parse(gjd.CycGeoJSON), "Bike ride on " + date); break;
                         case "A": addLineStringToMap(map, JSON.parse(gjd.AltGeoJSON), "Alt route on " + date); break;
+                    }
+                    if(isSet(photoRelations)) {
+                        var photoVector = new ol.source.Vector({});
+                        photoRelations.forEach(function (photoRelation) {
+                            var tPhotoIcon = addPhotoMarker(map, photoRelation);
+                            thisColor = "#ffffff";
+                            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1));
+                            photoVector.addFeature(tPhotoIcon);
+                        });
+                        var photoLayer = new ol.layer.Vector({ source: photoVector });
+                        map.addLayer(photoLayer);
                     }
                 },
                 function(error) { 
