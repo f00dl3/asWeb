@@ -22,7 +22,8 @@ function actOnPointDrop(event) {
     var thisFormData = dojo.formToObject(this.form);
     dojo.byId("map").innerHTML = "<strong>REINITATING!...</strong>";
     putSimpleMap(true);
-    window.alert("To build out!");
+    //addGpsToMap(map, inData, activity, metric);
+    window.alert("WORK IN PROGRESS - NOT FINISHED!");
 }
 
 function addGpsInfo(activity, oaStats, oaSensors, fitToday) {

@@ -49,10 +49,10 @@ function displayMediaServer() {
 function getIndex(target, updateFlag) {
     var isMobile = "no";
     var aContent = 0;
-    var estimatedLoadSize = "Desktop client estimated compressed JSON size under 1 MB.";
+    var estimatedLoadSize = "Desktop client compressed JSON size under 1 MB.";
     if(checkMobile()) {
         isMobile = "yes";
-        estimatedLoadSize = "Mobile client estimated compressed JSON size under 1 MB.";
+        estimatedLoadSize = "Mobile client compressed JSON size under 1 MB.";
     }
     if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize; }
     aniPreload("on");
