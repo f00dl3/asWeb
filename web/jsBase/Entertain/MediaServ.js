@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 14 Jun 2018
+Updated: 23 Jun 2018
  */
 
 var msIndex;
@@ -49,10 +49,10 @@ function displayMediaServer() {
 function getIndex(target, updateFlag) {
     var isMobile = "no";
     var aContent = 0;
-    var estimatedLoadSize = "Desktop client estimated JSON size 3.9 to 5.6 MBs.";
+    var estimatedLoadSize = "Desktop client estimated compressed JSON size under 1 MB.";
     if(checkMobile()) {
         isMobile = "yes";
-        estimatedLoadSize = "Mobile client estimated JSON size 3.9 to 4.2 MBs.";
+        estimatedLoadSize = "Mobile client estimated compressed JSON size under 1 MB.";
     }
     if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize; }
     aniPreload("on");
@@ -125,7 +125,7 @@ function playMediaFile(whatFile, dbxFlag) {
     if(isSet(dbxFlag)) { 
         filePath = getBasePath("chartCache") + "/" + whatFile;
     } else {
-        filePath = getBasePath("oldRoot") + whatFile;
+        filePath = getBasePath("ui") + whatFile;
     }
     switch(mediaType) {
         case "mp3":
@@ -282,7 +282,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
         }
         thisMsInfoString += "<div class='UPopO'>" +
-                "<input type='hidden' name='FilePath' value='/MediaServ" + tm.Path + "/" + tm.File + "'/>" +
+                "<input type='hidden' name='FilePath' value='/MediaServer" + tm.Path + "/" + tm.File + "'/>" +
                 dbDipInfo +
                 "</div></div>";
         if(isSet(tm.TrackListingASON)) {

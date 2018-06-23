@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 21 Jun 2018
+Updated: 23 Jun 2018
  */
 
 var gActivity;
@@ -15,10 +15,12 @@ var pu_Power = [];
 var pu_Speed = [];
 var pu_Temps = [];
 var pu_Times = [];
+var overlayLayer;
 
 function actOnPointDrop(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
+    map.remove(overlayLayer);
     window.alert("To build out!");
 }
 
@@ -269,10 +271,10 @@ function addGpsToMap(map, inData, activity, metric) {
             }
         }
     }
-    var vectorLayer = new ol.layer.Vector({ source: vectorSource });
+    overlayLayer = new ol.layer.Vector({ source: vectorSource });
     var photoLayer = new ol.layer.Vector({ source: photoVector });
     addLineStringToMap(map, coords, null);
-    map.addLayer(vectorLayer);
+    map.addLayer(overlayLayer);
     map.addLayer(photoLayer);
     map.on('click', function(evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
@@ -423,9 +425,11 @@ function getRouteFromDatabase(map, date, type) {
                         case "A": addLineStringToMap(map, JSON.parse(gjd.AltGeoJSON), "Alt route on " + date); break;
                     }
                     if(isSet(photoRelations)) {
+                        // Does not work yet, 6/23/18
                         var photoVector = new ol.source.Vector({});
                         photoRelations.forEach(function (photoRelation) {
                             var tPhotoIcon = addPhotoMarker(map, photoRelation);
+                            console.log(tPhotoIcon.get("geometry"));
                             thisColor = "#ffffff";
                             tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1));
                             photoVector.addFeature(tPhotoIcon);
