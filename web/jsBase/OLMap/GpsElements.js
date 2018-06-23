@@ -20,7 +20,8 @@ var overlayLayer;
 function actOnPointDrop(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    map.remove(overlayLayer);
+    dojo.byId("map").innerHTML = "<strong>REINITATING!...</strong>";
+    putSimpleMap(true);
     window.alert("To build out!");
 }
 

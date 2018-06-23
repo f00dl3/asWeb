@@ -22,7 +22,7 @@ function postProcessOptions(map) {
     }
 }
 
-function putSimpleMap() {
+function putSimpleMap(doOverride) {
     overlay = new ol.Overlay({
         element: container,
         autoPan: true,
@@ -36,13 +36,13 @@ function putSimpleMap() {
         return false;
     };
     var raster = tileSource;
+    dojo.byId("map").innerHTML = "";
     map = new ol.Map({
         target: 'map',
         layers: [ raster ],
         overlays: [ overlay ],
         view: homeView
     });
-    console.log("map Object created!")
-    postProcessOptions(map);
+    if(!isSet(doOverride)) { postProcessOptions(map); }
 }
 
