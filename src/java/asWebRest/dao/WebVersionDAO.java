@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Jun 2018
 */
 
 package asWebRest.dao;
@@ -53,5 +53,10 @@ public class WebVersionDAO {
         return webVersions;
     }
     
+    public JSONArray getWebVersionAuto(Connection dbc) throws Exception {
+        final String query_WebVersion = "SELECT Version, Date, Changes FROM Core.WebVersion ORDER BY Date DESC LIMIT 5;";
+        JSONArray webVersions = wc.query2json(dbc, query_WebVersion, null);
+        return webVersions;
+    }
    
 }

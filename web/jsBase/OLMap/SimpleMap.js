@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 21 Jun 2018
+Updated: 23 Jun 2018
  */
 
 function postProcessOptions(map) {
@@ -36,12 +36,13 @@ function putSimpleMap() {
         return false;
     };
     var raster = tileSource;
-    var map = new ol.Map({
+    map = new ol.Map({
         target: 'map',
         layers: [ raster ],
         overlays: [ overlay ],
         view: homeView
     });
+    console.log("map Object created!")
     postProcessOptions(map);
 }
 

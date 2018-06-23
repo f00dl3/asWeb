@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Jun 2018
  */
 
 package asWebRest.resource;
@@ -23,7 +23,8 @@ public class WebVersionResource extends ServerResource {
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         GetWebVersionAction getWebVersionAction = new GetWebVersionAction(new WebVersionDAO());
-        JSONArray webVersions = getWebVersionAction.getWebVersion(dbc);  
+        JSONArray webVersions = new JSONArray();
+        try { webVersions = getWebVersionAction.getWebVersionAuto(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         return webVersions.toString();
     }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Jun 2018
  */
 
 package asWebRest.action;
@@ -17,5 +17,6 @@ public class GetWebVersionAction {
     
     public JSONArray getCurrentVer(Connection dbc) { return webVersionDAO.getCurrentVer(dbc); }
     public JSONArray getWebVersion(Connection dbc) { return webVersionDAO.getWebVersion(dbc); }
+    public JSONArray getWebVersionAuto(Connection dbc) throws Exception { return webVersionDAO.getWebVersionAuto(dbc); }
     
 }

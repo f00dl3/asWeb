@@ -185,7 +185,7 @@ function addPhotoMarker(map, jsonData) {
     return photoIcon;
 }   
 
-function addGpsSelectDrop() {
+function addGpsSelectDrop(map) {
     var rData = "<div class='GPSTopDrop'>" +
             "<form id='DoGPSPointsForm'>";
     if(checkMobile()) { rData += ""; } else { rData += "<strong>Points: </strong>"; }
@@ -291,7 +291,7 @@ function addGpsToMap(map, inData, activity, metric) {
                         "<strong>Distance:</strong> " + (feature.get("distance").toFixed(2)) + " mi<br/>" +
                         "<strong>Speed:</strong> " + feature.get("speed").toFixed(2) + " MPH<br/>" +
                         "<strong>Temperature:</strong> <span style='" + styleTemp(feature.get("temperature")) + "'>" + feature.get("temperature").toFixed(1) + "F</span><br/>" +
-                        "<strong>Altitude:</strong> " + feature.get("altitude") + " ft<br/>" +
+                        "<strong>Altitude:</strong> " + feature.get("altitude").toFixed(1) + " ft<br/>" +
                         "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
                         "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
                     if(isSet(feature.get("heart")) && feature.get("heart") !== 0) {
@@ -309,7 +309,7 @@ function addGpsToMap(map, inData, activity, metric) {
         }
     });
     addGpsInfo(activity, oaStats, oaSensors, fitToday);
-    addGpsSelectDrop();
+    addGpsSelectDrop(map);
 }
 
 function addHistoryArrayToMap(map, arrayIn) {

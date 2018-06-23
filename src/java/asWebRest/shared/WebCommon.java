@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 23 May 2018
+Updated: 23 Jun 2018
 */
 
 package asWebRest.shared;
@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -319,6 +320,45 @@ public class WebCommon {
         }
         ResultSet resultSet = pStatement.executeQuery();
         return resultSet;
+    }
+    
+    public static JSONArray query2json(Connection connection, String query, List<String> params) throws Exception {
+        JSONArray tContainer = new JSONArray();
+        PreparedStatement pStatement = connection.prepareStatement(query);
+        int pit = 1;
+        if(params != null) {
+            for (String param : params) {
+                try {
+                    double paramAsDouble = Double.parseDouble(param);
+                    try {
+                        int paramAsInt = Integer.parseInt(param);
+                        pStatement.setInt(pit, paramAsInt);
+                    } catch (NumberFormatException e) {
+                        pStatement.setDouble(pit, paramAsDouble);
+                    }
+                } catch (NumberFormatException e) {
+                    pStatement.setString(pit, param);
+                }
+                pit++;
+            }
+        }
+        ResultSet resultSet = pStatement.executeQuery();
+        ResultSetMetaData rsmd = resultSet.getMetaData();
+        try {
+            int colLength = rsmd.getColumnCount();
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                for(int i = 1; i < colLength; i++) {
+                    // Works, 6/23/18. To-do: Get data type
+                    resultSet.getString(i);
+                    String keyName = rsmd.getColumnName(i);
+                    tObject.put(keyName, resultSet.getString(i));
+                }
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
     }
 
     public static double tempC2F(double tempC) { return tempC * 9/5 + 32; }
