@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 21 Jun 2018
+Updated: 24 Jun 2018
  */
 
 var myHeight = 68;
@@ -393,8 +393,7 @@ function populateSleepChart() {
 
 function populateSearchBox() {
     var tElement = "<div class='UBox'><form id='SearchByDateForm'>" +
-            "<span><a href='" + getBasePath("old") + "/Fitness.php'>Legacy</a> " +
-            "<button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
+            "<span><button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
             "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/>";
     if(!checkMobile()) { tElement += " | "; } else { tElement += "<br/>"; }
     tElement += "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +

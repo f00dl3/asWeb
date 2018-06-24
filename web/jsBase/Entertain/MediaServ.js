@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 23 Jun 2018
+Updated: 24 Jun 2018
  */
 
 var msIndex;
@@ -49,10 +49,10 @@ function displayMediaServer() {
 function getIndex(target, updateFlag) {
     var isMobile = "no";
     var aContent = 0;
-    var estimatedLoadSize = "Desktop client compressed JSON size under 1 MB.";
+    var estimatedLoadSize = "Desktop compressed JSON size under 1 MB.";
     if(checkMobile()) {
         isMobile = "yes";
-        estimatedLoadSize = "Mobile client compressed JSON size under 1 MB.";
+        estimatedLoadSize = "Mobile compressed JSON size under 1 MB.";
     }
     if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "Loading Media Server Index...<p>" + estimatedLoadSize; }
     aniPreload("on");
