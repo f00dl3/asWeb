@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    20 Jun 2018
+    Updated:    25 Jun 2018
     Author     : astump
 --%>
 
@@ -59,6 +59,7 @@
         "OLMap/PointClick",
         "OLMap/RenderImage",
         "OLMap/SimpleMap",
+        "OLMap/WeatherMap",
         "Weather/WxFunctions"
     };
     

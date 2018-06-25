@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 20 Jun 2018
+Updated: 25 Jun 2018
  */
 
 function generateMapHolder() {
@@ -16,6 +16,7 @@ function generateMapHolder() {
             "<div id='popup' class='ol-popup'>" +
             "<a href='#' id='popup-closer' class='ol-popup-closer'></a>" +
             "<div id='popup-content'></div>" +
+            "<div id='animationElement'></div>" +
             "</div>";
     if(!checkMobile()) {
         rData += "<br/><div id='MessageHolder'></div>";
