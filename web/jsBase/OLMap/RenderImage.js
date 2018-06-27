@@ -39,11 +39,11 @@ function renderImage(arguments) {
         })
     });
     if(animation) {
-        // Does not work - 6/25/18
+        // Bugs - 6/26/18 - and very poor performance. Open Layers may not be the best solution for this purpose.
         dojo.byId("animationElement").innerHTML = "<img id='innerAnimation' src='" + imageFile + "'/>";
         $("#innerAnimation").show();
-        //var posA = Math.round(-Math.abs(resolution[0]/2));
-        //var posB = Math.round(Math.abs(resolution[1]/2));
+        //var posA = Math.round(-resolution[0]/2));
+        //var posB = Math.round(resolution[1]/2);
         var posA = 0, posB = 0;
         var pos = ol.proj.fromLonLat([ posA, posB ]);
         var marker = new ol.Overlay({

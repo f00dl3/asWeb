@@ -11,15 +11,20 @@ DEVELOPMENT THOUGHTS:
 
 */
         
-function doWeatherOLMap(wxStations, obsIndoor, obsData, obsDataRapid) {
+function doWeatherOLMap(stations, obsIndoor, obsData, obsDataRapid) {
     console.log("Map main worker called!");
     var rData = "";
-    var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor.TempCase)/1000));
-    var jsonData = obsData.jsonSet; obsData = false;
-    var jsonDataRapid = obsDataRapid.jsonSet; obsDataRapid = false;
+    var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
+    var jsonData = obsData[0].jsonData; obsData = false;
+    var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
+    console.log(stations);
+    var wxStations = stations[0]; stations = false;
+    console.log(wxStations);
     if(isSet(jsonData)) {
         jsonDataMerged = jsonData.concat(jsonDataRapid);
+        console.log(jsonDataMerged);
+        
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (station) {
             console.log("HIT DATA FOR: " + station);
@@ -315,12 +320,13 @@ function getJsonWeatherGlob() {
                 handleAs: "json"
             }).then(
                 function(data) {
+                    console.log(data);
                     aniPreload("off");
                     doWeatherOLMap(
-                            data.wxStations,
-                            data.obsIndoor,
-                            data.obsData,
-                            data.obsDataRapid
+                            data.stations,
+                            data.indoorObs,
+                            data.wxObsJson,
+                            data.wxObsJsonRapid
                     );
                 },
                 function(error) { 

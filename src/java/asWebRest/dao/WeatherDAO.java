@@ -745,7 +745,7 @@ public class WeatherDAO {
                 " st.SfcMB as SfcMB, st.Priority as Priority, st.Region as Region, cs.Description as Description" +
                 " FROM WxObs.Stations st" +
                 " LEFT OUTER JOIN WxObs.CountryStates2 cs ON cs.Region = st.Region AND SUBSTRING(cs.CCSC,3,2) = st.State" +
-                " WHERE Active=1 AND Station=?" +
+                " WHERE Active=1 AND Station LIKE ?" +
                 " GROUP BY st.Station;";
         JSONArray tContainer = new JSONArray();
         try {
