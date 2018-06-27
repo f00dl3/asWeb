@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 26 Jun 2018
+Updated: 27 Jun 2018
  */
 
 var tppCallback;
@@ -81,7 +81,7 @@ function generateGallery(argsIn, fileList) {
         var iRes = "";
         switch(argsIn.flagOut) {
             case "tp":
-                relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM/");
+                relativePath = fullPath.replace(getServerPath("mediaServer"), getBasePath("media"));
                 thisFFN = argsIn.params + "/" + fileName;
                 getTpPicsCallback(thisFFN);
                 // wait for it
@@ -138,12 +138,8 @@ function initGallery(flagsIn, firstArgIn, tpGlob) {
         case "tc":
             thisPath = getServerPath("tomcat") + "/asWeb#x#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/";
             break;
-        case "tp": 
-            if(isSet(tpGlob)) {
-                thisPath = getServerPath("tomcat") + "/TPM#Glob" + tpGlob + "/" + firstArgIn + "/full/";
-            } else {
-                thisPath = getServerPath("tomcat") + "/TPM#" + firstArgIn + "/full/";
-            }
+        case "tp":
+            thisPath = getServerPath("mediaServer") + "/Adult/TP/" + firstArgIn + "/full/";
             break;
         case "none":
             thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/";
