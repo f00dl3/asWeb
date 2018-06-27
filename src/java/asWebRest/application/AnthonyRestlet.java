@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 20 Jun 2018
+Updated: 26 Jun 2018
  */
 
 package asWebRest.application;
@@ -59,7 +59,6 @@ public class AnthonyRestlet extends Application {
     
     @Override
     public synchronized Restlet createInboundRoot() {
-        // Encoder does nothing! 6/20/2018
         Filter encoder = new Encoder(getContext(), false, true, new EncoderService(true));
         Router router = new Router(getContext());
         router.attach("/Addresses", AddressResource.class);

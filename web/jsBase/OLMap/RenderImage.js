@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Jun 2018
-Updated: 25 Jun 2018
+Updated: 26 Jun 2018
  */
 
 function renderImage(arguments) {
@@ -42,13 +42,14 @@ function renderImage(arguments) {
         // Does not work - 6/25/18
         dojo.byId("animationElement").innerHTML = "<img id='innerAnimation' src='" + imageFile + "'/>";
         $("#innerAnimation").show();
-        var posA = Math.round(-Math.abs(resolution[0]/2));
-        var posB = Math.round(Math.abs(resolution[1]/2));
+        //var posA = Math.round(-Math.abs(resolution[0]/2));
+        //var posB = Math.round(Math.abs(resolution[1]/2));
+        var posA = 0, posB = 0;
         var pos = ol.proj.fromLonLat([ posA, posB ]);
         var marker = new ol.Overlay({
             position: pos,
             positioning: 'center-center',
-            element: document.getElementById("innerAnimation"),
+            element: dojo.byId("innerAnimation"),
             stopEvent: false
         });
         map.addOverlay(marker);

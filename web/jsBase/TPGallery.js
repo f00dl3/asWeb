@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 19 Apr 2018
+Updated: 26 Jun 2018
  */
 
 var tpSearchableData, tpIndexedImages, tpMatcher;
@@ -18,7 +18,7 @@ function actOnTpSelect(event) {
     var target = "TPGalleryHolderPElement";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    initGallery("tp", thisFormData.TPHash);
+    initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob);
 }
 
 function getSearchableData() {
@@ -130,7 +130,12 @@ function populateSearchPopup(searchableData) {
             tpImageTotal += (tpImageTotal + tpData.FinalCount);
             hosTable += "<form id='TPFormGallery' class='tr'>" +
                     "<span class='td'>";
-            if(tpData.OffDisc === 0) { hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>"; } else { hosTable += "N/A"; }
+            if(tpData.OffDisc === 0) {
+                hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>" +
+                        "<input type='hidden' name='TPGlob' value='" + tpData.Glob + "'/>";
+            } else {
+                hosTable += "N/A";
+            }
             hosTable += "</span>" +
                     "<span class='td'><div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet +
                     "<div class='UPopO'>" +

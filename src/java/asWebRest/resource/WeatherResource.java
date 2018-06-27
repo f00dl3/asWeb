@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 25 May 2018
+Updated: 26 Jun 2018
  */
 
 package asWebRest.resource;
@@ -122,7 +122,7 @@ public class WeatherResource extends ServerResource {
                     returnData = newsFeeds.toString();
                     break;
                     
-                case "getObjsJson":
+                case "getObsJson":
                     inParams.add(0, "DESC");
                     try {
                         qParams.add(0, argsInForm.getFirstValue("startTime"));
@@ -134,6 +134,29 @@ public class WeatherResource extends ServerResource {
                     JSONArray wxObs = getWeatherAction.getObsJson(dbc, qParams, inParams);
                     returnData = wxObs.toString();
                     break;
+                    
+                case "getObsJsonGlob":
+                    try {
+                        inParams.add(0, "DESC");
+                        qParams.add(0, argsInForm.getFirstValue("startTime"));
+                        qParams.add(1, argsInForm.getFirstValue("endTime"));
+                        qParams.add(2, argsInForm.getFirstValue("limit"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    List<String> qParams2 = new ArrayList<>();
+                    qParams2.add(0, "%");
+                    JSONArray wxObsJson = getWeatherAction.getObsJson(dbc, qParams, inParams);
+                    JSONArray wxObsJsonRapid = getWeatherAction.getObsJsonRapid(dbc, qParams, inParams);
+                    JSONArray indorObsB = getSnmpAction.getMergedLastTemp(dbc);
+                    JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
+                    mergedResults
+                        .put("wxObsJson", wxObsJson)
+                        .put("wxObsJsonRapid", wxObsJsonRapid)
+                        .put("indoorObs", indorObsB)
+                        .put("stations", stations);
+                    returnData = mergedResults.toString();
+                    break;          
                     
                 case "getObsJsonMerged":
                     try {

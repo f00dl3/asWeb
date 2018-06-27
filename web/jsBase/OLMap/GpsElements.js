@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 23 Jun 2018
+Updated: 26 Jun 2018
  */
 
 var gActivity;
@@ -238,7 +238,7 @@ function addGpsToMap(map, inData, activity, metric) {
         photoRelations.forEach(function (photoRelation) {
             var tPhotoIcon = addPhotoMarker(map, photoRelation);
             thisColor = "#ffffff";
-            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1));
+            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1, null, null));
             photoVector.addFeature(tPhotoIcon);
             console.log(tPhotoIcon);
         });
@@ -265,7 +265,7 @@ function addGpsToMap(map, inData, activity, metric) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkers(map, tJson, j);
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
-                tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1));
+                tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
                 vectorSource.addFeature(tIconFeature);
                 j++;
             } else {
@@ -433,7 +433,7 @@ function getRouteFromDatabase(map, date, type) {
                             var tPhotoIcon = addPhotoMarker(map, photoRelation);
                             console.log(tPhotoIcon.get("geometry"));
                             thisColor = "#ffffff";
-                            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1));
+                            tPhotoIcon.setStyle(svgIconStyle("c", 30, thisColor, 1, null, null));
                             photoVector.addFeature(tPhotoIcon);
                         });
                         var photoLayer = new ol.layer.Vector({ source: photoVector });

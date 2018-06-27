@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 6 Jun 2018
+Updated: 26 Jun 2018
  */
 
 var tppCallback;
@@ -79,7 +79,6 @@ function generateGallery(argsIn, fileList) {
         var fullPath = fileList[tFile].Path;
         var relativePath = "";
         var iRes = "";
-        console.log(argsIn.flagOut);
         switch(argsIn.flagOut) {
             case "tp":
                 relativePath = fullPath.replace("/var/lib/tomcat8/webapps/TPM#", "/TPM/");
@@ -122,7 +121,7 @@ function generateGallery(argsIn, fileList) {
     dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
-function initGallery(flagsIn, firstArgIn) {
+function initGallery(flagsIn, firstArgIn, tpGlob) {
     var flagsOut;
     var rData, thisPath, path;
     rData = thisPath = path = "";
@@ -136,10 +135,22 @@ function initGallery(flagsIn, firstArgIn) {
         flagsOut = "tp";
     }
     switch(flagsOut) {
-        case "tc": thisPath = getServerPath("tomcat") + "/asWeb#x#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/"; break;
-        case "tp": thisPath = getServerPath("tomcat") + "/TPM#" + firstArgIn + "/full/"; break;
-        case "none": thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/"; break;
-        default: window.alert("No flags in!"); break;
+        case "tc":
+            thisPath = getServerPath("tomcat") + "/asWeb#x#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/";
+            break;
+        case "tp": 
+            if(isSet(tpGlob)) {
+                thisPath = getServerPath("tomcat") + "/TPM#Glob" + tpGlob + "/" + firstArgIn + "/full/";
+            } else {
+                thisPath = getServerPath("tomcat") + "/TPM#" + firstArgIn + "/full/";
+            }
+            break;
+        case "none":
+            thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/";
+            break;
+        default:
+            window.alert("No flags in!");
+            break;
     }
     var varToPass = {
         "rData" : rData,
