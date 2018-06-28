@@ -6,7 +6,6 @@ Updated: 28 Jun 2018
 
 function addLineStringToMap(map, pointsToAdd, caption) {
     if(!isSet(caption)) { var caption = pointsToAdd; }
-    console.log(caption);
     var polyLine = new ol.geom.LineString(pointsToAdd);
     polyLine.transform('EPSG:4326', 'EPSG:3857');
     var rFeature = new ol.Feature({

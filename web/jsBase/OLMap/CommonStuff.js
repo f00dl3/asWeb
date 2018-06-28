@@ -19,15 +19,15 @@ function getOLPopup() {
 
 function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
     var svgData = "";
-    var svgSize = size * 2;
     switch(type) {
         case "c":
-            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '">' +
+            var svgSize = size * 2;
+            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
                     '<circle cx="' + size + '" cy="' + size + '" r="' + size + '" fill="' + thisColor + '"/>' +
                     '</svg>';
             break;
         case "s":
-            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '">' +
+            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
                     '<rect x="' + size + '" y="' + size + '" width="' + svgSize + '" height="' + svgSize + '" style="fill:' + thisColor + ';stroke:' + thisColor + ';stroke-width:0;fill-opacity:' + opacity + ';stoke-opacity: 1"/>' +
                     '<text x="' + svgSize/2 + '" y="' + svgSize/2 + '" fill="' + labelColor + '" text-anchor="middle" alignment-baseline="middle">' + label + '</text>' +
                     '</svg>';

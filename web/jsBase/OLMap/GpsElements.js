@@ -168,6 +168,7 @@ function addGpsMarkers(map, jsonData, pointId) {
         temperature: jsonData.TemperatureF,
         type: "Coordinate"
     });
+    console.log(iconFeature);
     return iconFeature;
 }
 
@@ -254,7 +255,7 @@ function addGpsToMap(map, inData, activity, metric) {
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = gJsonData[i.toString()];
             if(isSet(tJson.AltitudeFt)) { pu_Altitude.push(tJson.AltitudeFt); } else { pu_Altitude.push(0); }
-            if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0); }
+            if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0);  }
             if(isSet(tJson.DistTotMiles)) { pu_Dists.push(tJson.DistTotMiles); } else { pu_Dists.push(0); }
             if(isSet(tJson.HeartRate)) { pu_Heart.push(tJson.HeartRate); } else { pu_Heart.push(0); }
             if(isSet(tJson.PowerWatts)) { pu_Power.push(tJson.PowerWatts); } else { pu_Power.push(0); }
@@ -265,7 +266,7 @@ function addGpsToMap(map, inData, activity, metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
-            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1]) && tCoords[0] !== 0 && tCoords[1] !== 0) {
+            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkers(map, tJson, j);
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
@@ -327,7 +328,6 @@ function addHistoryArrayToMap(map, arrayIn) {
     arrayIn.forEach(function (sgj) {
         var thisCaption = "#" + ic + ": " + sgj.Date + " (" + sgj.Type + ")";
         var fixedGeoJson = sgj.GeoJSON.replace(/\[0\, 0\]\,/g,'');
-        if(sgj.Date === '2018-06-27') { console.log(fixedGeoJson); }
         var pointsToAdd = JSON.parse(fixedGeoJson);
         var polyLine = new ol.geom.LineString(pointsToAdd);
         polyLine.transform('EPSG:4326', 'EPSG:3857');
@@ -436,7 +436,7 @@ function getRouteFromDatabase(map, date, type) {
                         case "A": addLineStringToMap(map, JSON.parse(gjd.AltGeoJSON), "Alt route on " + date); break;
                     }
                     if(isSet(photoRelations)) {
-                        // Does not work yet, 6/23/18
+                        // Does not fully work yet, 6/23/18
                         var photoVector = new ol.source.Vector({});
                         photoRelations.forEach(function (photoRelation) {
                             var tPhotoIcon = addPhotoMarker(map, photoRelation);

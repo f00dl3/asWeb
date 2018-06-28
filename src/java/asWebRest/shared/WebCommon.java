@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 23 Jun 2018
+Updated: 28 Jun 2018
 */
 
 package asWebRest.shared;
@@ -348,8 +348,7 @@ public class WebCommon {
             int colLength = rsmd.getColumnCount();
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                for(int i = 1; i < colLength; i++) {
-                    // Works, 6/23/18. To-do: Get data type
+                for(int i = 1; i <= colLength; i++) {
                     resultSet.getString(i);
                     String keyName = rsmd.getColumnName(i);
                     tObject.put(keyName, resultSet.getString(i));
