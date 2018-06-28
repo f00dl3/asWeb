@@ -22,10 +22,9 @@ function actOnPointDrop(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var metric = thisFormData.GPSPoints;
-    var map = dojo.byId("map");
+    map.innerHTML = "PLEASE WAIT WHILE REFRESHING...";
     putSimpleMap(true);
     addGpsToMap(map, null, activity, metric);
-    //window.alert("WORK IN PROGRESS - NOT FINISHED!");
 }
 
 function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
@@ -270,6 +269,7 @@ function addGpsToMap(map, inData, activity, metric) {
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
                 tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
                 vectorSource.addFeature(tIconFeature);
+                console.log(vectorSource);
                 j++;
             } else {
                 console.log("ERROR @ " + tCoords);
@@ -316,8 +316,10 @@ function addGpsToMap(map, inData, activity, metric) {
             overlay.setPosition(eCoord);
         }
     });
-    addGpsInfo(activity, oaStats, oaSensors, fitToday);
-    addGpsSelectDrop(map);
+    if(isSet(inData)) {
+        addGpsInfo(activity, oaStats, oaSensors, fitToday);
+        addGpsSelectDrop(map);
+    }    
 }
 
 function addHistoryArrayToMap(map, arrayIn) {
