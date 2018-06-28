@@ -168,26 +168,6 @@ function addGpsMarkers(map, jsonData, pointId) {
     return iconFeature;
 }
 
-function addPhotoMarker(map, jsonData) {
-    var tCoord = JSON.parse(jsonData.GeoData);
-    var point = new ol.geom.Point(tCoord);
-    point.transform('EPSG:4326', 'EPSG:3857');
-    var parentFolder = (jsonData.Path).replace("Pics/20","asWeb/x/PicsL");
-    var photoResourceLocation = parentFolder + "/size/" + jsonData.File;
-    var photoIcon = new ol.Feature({
-        description: jsonData.Description,
-        name: jsonData.File,
-        type: "Photo",
-        geometry: point,
-        location: jsonData.GeoData,
-        path: jsonData.Path,
-        resolution: jsonData.Resolution,
-        urlThumb: photoResourceLocation.replace("size", "thumb"),
-        urlFull: photoResourceLocation.replace("size", "full").replace("asWeb/x", "asWeb/OLMap.jsp?Action=Image&Input=/asWeb/x") + "&Resolution=" + jsonData.Resolution
-    });
-    return photoIcon;
-}   
-
 function addGpsSelectDrop(map) {
     var rData = "<div class='GPSTopDrop'>" +
             "<form id='DoGPSPointsForm'>";
@@ -265,11 +245,14 @@ function addGpsToMap(map, inData, activity, metric) {
             }
             if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 coords.push(tCoords);
-                var tIconFeature = addGpsMarkers(map, tJson, j);
-                thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
-                tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
-                vectorSource.addFeature(tIconFeature);
-                console.log(vectorSource);
+                try {
+                    var tIconFeature = addGpsMarkers(map, tJson, j);
+                    thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
+                    tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
+                    vectorSource.addFeature(tIconFeature);
+                } catch (err) {
+                    console.log("Error on #" + j + "/~" + Math.round(keyCount/5) + " ---> " + err.message);
+                }
                 j++;
             } else {
                 console.log("ERROR @ " + tCoords);
