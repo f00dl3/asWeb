@@ -1,8 +1,12 @@
 /* 
+ 
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
 Updated: 26 Jun 2018
+
+JUN 27 BUG: Handle null GPS coords not implemented!
+
  */
 
 var gActivity;
@@ -261,7 +265,7 @@ function addGpsToMap(map, inData, activity, metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
-            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
+            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1]) && tCoords[0] !== 0 && tCoords[1] !== 0) {
                 coords.push(tCoords);
                 var tIconFeature = addGpsMarkers(map, tJson, j);
                 thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
@@ -319,7 +323,9 @@ function addHistoryArrayToMap(map, arrayIn) {
     var rFeatures = [];
     arrayIn.forEach(function (sgj) {
         var thisCaption = "#" + ic + ": " + sgj.Date + " (" + sgj.Type + ")";
-        var pointsToAdd = JSON.parse(sgj.GeoJSON);
+        var fixedGeoJson = sgj.GeoJSON.replace(/\[0\, 0\]\,/g,'');
+        if(sgj.Date === '2018-06-27') { console.log(fixedGeoJson); }
+        var pointsToAdd = JSON.parse(fixedGeoJson);
         var polyLine = new ol.geom.LineString(pointsToAdd);
         polyLine.transform('EPSG:4326', 'EPSG:3857');
         var rFeature = new ol.Feature({ geometry: polyLine, name: thisCaption });
