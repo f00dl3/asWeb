@@ -3,9 +3,9 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 26 Jun 2018
+Updated: 28 Jun 2018
 
-JUN 27 BUG: Handle null GPS coords not implemented!
+JUN 28: OpenLayers vector layer broke! Boo!
 
  */
 
@@ -279,7 +279,7 @@ function addGpsToMap(map, inData, activity, metric) {
     }
     overlayLayer = new ol.layer.Vector({ source: vectorSource });
     var photoLayer = new ol.layer.Vector({ source: photoVector });
-    addLineStringToMap(map, coords, null);
+    addLineStringToMap(map, coords, "Route");
     map.addLayer(overlayLayer);
     map.addLayer(photoLayer);
     map.on('click', function(evt) {
@@ -309,6 +309,9 @@ function addGpsToMap(map, inData, activity, metric) {
                     break;
                 case "Photo":
                     content.innerHTML = "<a href='" + feature.get("urlFull") + "' target='newPhotoPop'><img class='th_small' src='" + feature.get("urlThumb") + "'/></a><br/>" + feature.get("name");
+                    break;
+                case "Route":
+                    content.innerHTML = "<strong>" + feature.get("captionText") + "</strong>";
                     break;
             }
             overlay.setPosition(eCoord);
