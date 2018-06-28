@@ -22,9 +22,14 @@ function actOnPointDrop(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var metric = thisFormData.GPSPoints;
-    map.innerHTML = "PLEASE WAIT WHILE REFRESHING...";
-    putSimpleMap(true);
-    addGpsToMap(map, null, activity, metric);
+    if(overlayLayer) {
+        window.map.removeLayer(overlayLayer);
+        window.map.removeLayer(routeLayer);
+        console.log("Removed layers!");
+    } else {
+        console.log("No layers!");
+    }
+    addGpsToMap(window.map, null, activity, metric);
 }
 
 function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
@@ -172,7 +177,7 @@ function addGpsSelectDrop(map) {
     var rData = "<div class='GPSTopDrop'>" +
             "<form id='DoGPSPointsForm'>";
     if(checkMobile()) { rData += ""; } else { rData += "<strong>Points: </strong>"; }
-    var options = [ "Speed", "Altitude" ];
+    var options = [ "Speed", "Altitude", "Temperature" ];
     rData += "<select id='GPSPointsDD' name='GPSPoints'>" +
             "<option value=''>Points...</option>";
     for(var i = 0; i < options.length; i++) { rData += "<option value='" + options[i] + "'>" + options[i] + "</option>"; }
@@ -204,6 +209,12 @@ function addGpsToMap(map, inData, activity, metric) {
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
                 if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); }
+            }
+            break;
+        case "Temperature":
+            for (var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); }
             }
             break;
         case "Speed": default: 
@@ -241,21 +252,23 @@ function addGpsToMap(map, inData, activity, metric) {
             if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
             switch(metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
+                case "Temperature": t2Metric = tJson.TemperatureF; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
             if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
-                coords.push(tCoords);
                 try {
+                    coords.push(tCoords);
                     var tIconFeature = addGpsMarkers(map, tJson, j);
                     thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
                     tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
                     vectorSource.addFeature(tIconFeature);
                 } catch (err) {
-                    console.log("Error on #" + j + "/~" + Math.round(keyCount/5) + " ---> " + err.message);
+                    console.log(
+                        "Error on " + j + "/~" + Math.round(keyCount/5) + " ---> " +
+                        err.message + "(" + t2Metric + " @ " + tCoords[0] + "," + tCoords[1] + ")"
+                    );
                 }
                 j++;
-            } else {
-                console.log("ERROR @ " + tCoords);
             }
         }
     }

@@ -4,6 +4,8 @@ Created: 31 May 2018
 Updated: 28 Jun 2018
 */
 
+var routeLayer;
+
 function addLineStringToMap(map, pointsToAdd, caption) {
     if(!isSet(caption)) { var caption = pointsToAdd; }
     var polyLine = new ol.geom.LineString(pointsToAdd);
@@ -15,8 +17,8 @@ function addLineStringToMap(map, pointsToAdd, caption) {
     });
     rFeature.setStyle(routeStyle);
     var vSource = new ol.source.Vector({ features: [rFeature] });
-    var vLayer = new ol.layer.Vector({ source: vSource });
-    map.addLayer(vLayer);
+    routeLayer = new ol.layer.Vector({ source: vSource });
+    map.addLayer(routeLayer);
     map.getView().fit(vSource.getExtent(), map.getSize());
 }
 
