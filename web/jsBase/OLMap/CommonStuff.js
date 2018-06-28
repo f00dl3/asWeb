@@ -44,7 +44,10 @@ function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
     return style;
 }
 
-var container, content, closer;
+var activity;
+var container;
+var content;
+var closer;
 var map;
 var overlay;
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";

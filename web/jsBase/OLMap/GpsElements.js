@@ -1,16 +1,13 @@
 /* 
- 
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
 Updated: 28 Jun 2018
-
-JUN 28: OpenLayers vector layer broke! Boo!
-
  */
 
 var gActivity;
 var gJsonData;
+var gInData;
 var pu_Altitude = [];
 var pu_Cadence = [];
 var pu_Dists= [];
@@ -24,10 +21,11 @@ var overlayLayer;
 function actOnPointDrop(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    dojo.byId("map").innerHTML = "<strong>REINITATING!...</strong>";
+    var metric = thisFormData.GPSPoints;
+    var map = dojo.byId("map");
     putSimpleMap(true);
-    //addGpsToMap(map, inData, activity, metric);
-    window.alert("WORK IN PROGRESS - NOT FINISHED!");
+    addGpsToMap(map, null, activity, metric);
+    //window.alert("WORK IN PROGRESS - NOT FINISHED!");
 }
 
 function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
@@ -168,7 +166,6 @@ function addGpsMarkers(map, jsonData, pointId) {
         temperature: jsonData.TemperatureF,
         type: "Coordinate"
     });
-    console.log(iconFeature);
     return iconFeature;
 }
 
@@ -209,12 +206,13 @@ function addGpsSelectDrop(map) {
 }
 
 function addGpsToMap(map, inData, activity, metric) {
-    jsonData = JSON.parse(inData.gpsLog)[0].gpsLog;
+    if(isSet(inData)) { gInData = inData; }
+    jsonData = JSON.parse(gInData.gpsLog)[0].gpsLog;
     if(isSet(jsonData)) { gJsonData = jsonData; }
-    var oaStats = JSON.parse(inData.oaStats)[0];
-    var oaSensors = JSON.parse(inData.oaSensors)[0];
-    var fitToday = JSON.parse(inData.fitToday)[0];
-    var photoRelations = inData.relatedPhotos;
+    var oaStats = JSON.parse(gInData.oaStats)[0];
+    var oaSensors = JSON.parse(gInData.oaSensors)[0];
+    var fitToday = JSON.parse(gInData.fitToday)[0];
+    var photoRelations = gInData.relatedPhotos;
     gActivity = activity;
     var keyCount = Object.keys(gJsonData).length;
     var tMetrics = [];

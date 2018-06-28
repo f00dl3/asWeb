@@ -2,20 +2,21 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 23 Jun 2018
+Updated: 28 Jun 2018
  */
 
 function postProcessOptions(map) {
     var dataInputOverride = [[-94.66923, 38.91598], [-94.66923, 38.91598], [-94.66803, 38.91628]];
+    var defaultMetric = "Speed";
     if(isSet(doAction)) {
         switch(doAction) {
             case "Route": addLineStringToMap(map, dataInputOverride); break;
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
-            case "RouteGPSAlt": getGpsFromDatabase(map, dataInput, "Run"); break;
-            case "RouteGPSCyc": getGpsFromDatabase(map, dataInput, "Cyc"); break;
-            case "RouteGPSRun": getGpsFromDatabase(map, dataInput, "Run"); break;
+            case "RouteGPSAlt": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSCyc": activity = "Cyc"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSRun": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteHistory": getRouteHistoryFromDatabase(map); break;
             case "RoutePlan": getRoutePlanFromDatabase(map, dataInput); break;
         }
@@ -43,6 +44,7 @@ function putSimpleMap(doOverride) {
         overlays: [ overlay ],
         view: homeView
     });
+    console.log("OL Map Initiated!");
     if(!isSet(doOverride)) { postProcessOptions(map); }
 }
 
