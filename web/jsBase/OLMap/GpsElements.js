@@ -173,11 +173,10 @@ function addGpsMarkers(map, jsonData, pointId) {
     return iconFeature;
 }
 
-function addGpsSelectDrop(map) {
+function addGpsSelectDrop(map, options) {
     var rData = "<div class='GPSTopDrop'>" +
             "<form id='DoGPSPointsForm'>";
     if(checkMobile()) { rData += ""; } else { rData += "<strong>Points: </strong>"; }
-    var options = [ "Speed", "Altitude", "Temperature" ];
     rData += "<select id='GPSPointsDD' name='GPSPoints'>" +
             "<option value=''>Points...</option>";
     for(var i = 0; i < options.length; i++) { rData += "<option value='" + options[i] + "'>" + options[i] + "</option>"; }
@@ -208,19 +207,37 @@ function addGpsToMap(map, inData, activity, metric) {
         case "Altitude":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); }
+                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
+            }
+            break;
+        case "Cadence":
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                if(isSet(tJson.Cadence)) { tMetrics.push(Number(tJson.Cadence)); } else { tMetrics.push(0); }
+            }
+            break;
+        case "HeartRate":
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                if(isSet(tJson.HeartRate)) { tMetrics.push(Number(tJson.HeartRate)); } else { tMetrics.push(0); }
+            }
+            break;
+        case "Power":
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                if(isSet(tJson.PowerWatts)) { tMetrics.push(Number(tJson.PowerWatts)); } else { tMetrics.push(0); }
             }
             break;
         case "Temperature":
             for (var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); }
+                if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); } else { tMetrics.push(0); }
             }
             break;
         case "Speed": default: 
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); }
+                if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); } else { tMetrics.push(0); }
             }
             break;
     }
@@ -252,6 +269,9 @@ function addGpsToMap(map, inData, activity, metric) {
             if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
             switch(metric) {
                 case "Altitude": t2Metric = tJson.AltitudeFt; break;
+                case "Cadence": t2Metric = tJson.Cadence; break;
+                case "HeartRate": t2Metric = tJson.HeartRate; break;
+                case "Power": t2Metric = tJson.PowerWatts; break;
                 case "Temperature": t2Metric = tJson.TemperatureF; break;
                 case "Speed": default: t2Metric = tJson.SpeedMPH; break;
             }
@@ -259,7 +279,11 @@ function addGpsToMap(map, inData, activity, metric) {
                 try {
                     coords.push(tCoords);
                     var tIconFeature = addGpsMarkers(map, tJson, j);
-                    thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
+                    if(metric === "Temperature") {
+                        thisColor = styleTemp(t2Metric, true);
+                    } else {
+                        thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
+                    }
                     tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
                     vectorSource.addFeature(tIconFeature);
                 } catch (err) {
@@ -313,8 +337,19 @@ function addGpsToMap(map, inData, activity, metric) {
         }
     });
     if(isSet(inData)) {
+        var dropOptions = [ "Speed", "Altitude", "Temperature" ];
+        if(isSet(pu_Heart) && pu_Heart.length !== 0 && Math.max.apply(Math, pu_Heart) !== 0) { console.log(pu_Heart.length); dropOptions.push("HeartRate"); }
+        switch(activity) {
+            case "Cyc":
+                if(isSet(pu_Cadence) && pu_Cadence.length !== 0 && Math.max.apply(Math, pu_Cadence) !== 0) { dropOptions.push("Cadence"); }
+                if(isSet(pu_Power) && pu_Power.length !== 0 && Math.max.apply(Math, pu_Power) !== 0) { dropOptions.push("Power"); }
+                break;
+            case "Run":
+                //Stub incase next unit has run only features.
+                break;
+        }
         addGpsInfo(activity, oaStats, oaSensors, fitToday);
-        addGpsSelectDrop(map);
+        addGpsSelectDrop(map, dropOptions);
     }    
 }
 

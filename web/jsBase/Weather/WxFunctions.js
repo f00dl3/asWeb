@@ -454,7 +454,7 @@ function styleRh(rh) {
     return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
 }
 
-function styleTemp(tT) {
+function styleTemp(tT, tempOnly) {
     var bg, tc, fw;
     tT = Math.round(tT);
     switch(true) {
@@ -500,7 +500,11 @@ function styleTemp(tT) {
         case (tT <= 114) && (tT >= 110): bg = "ffccff"; tc = "black"; fw = "bold"; break;
         case (tT >= 115): bg = "ffffff"; tc = "black"; fw = "bold"; break;
     }
-    return "background-color: #" + bg + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
+    if(tempOnly) {
+        return "#" + bg;
+    } else {
+        return "background-color: #" + bg + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
+    }
 }
 
 function styleLiquid(liqText) {
