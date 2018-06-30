@@ -26,16 +26,24 @@ function folderFileListing(holder, data) {
             "<form class='folderSelect'><input type='hidden' name='folder' value='../'/><strong>[Parent]</strong></form><p>";
             "<ul type='dot'>";
     shortFiles = data.Results.ShortNameFiles;
+    fullFiles = data.Results.FullPathsFiles;
     shortFolders = data.Results.ShortNameFolders;
+    fullFolders = data.Results.FullPathsFolders;
+    var i = 0;
+    var j = 0;
     if(shortFolders.length !== 0 || shortFiles.length !== 0) {
         if(shortFolders.length !== 0) {
             shortFolders.forEach(function (folder) {
-                elementData += "<li><form class='folderSelect'><input type='hidden' name='folder' value='" + folder + "'/><strong>" + folder + "</strong></form></li>";
+                thisFullFolder = fullFolders[i];
+                elementData += "<li><form class='folderSelect'><input type='hidden' name='folder' value='" + thisFullFolder + "'/><strong>" + folder + "</strong></form></li>";
+                i++;
             });
         }
         if(shortFiles.length !== 0) {
             shortFiles.forEach(function (file) {
-                elementData += "<li><form class='resourceSelect'><input type='hidden' name='fileToRequest' value='" + file + "'/>" + file + "</form></li>";
+                thisFullFile = fullFolders[j];
+                elementData += "<li><form class='resourceSelect'><input type='hidden' name='fileToRequest' value='" + thisFullFile + "'/>" + file + "</form></li>";
+                j++;
             });
         }
     } else {
