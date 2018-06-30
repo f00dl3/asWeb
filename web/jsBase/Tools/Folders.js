@@ -1,14 +1,16 @@
 /* 
 by Anthony Stump
 Created: 29 Jun 2018
+Updated: 30 Jun 2018
  */
+
+var targetDiv = dojo.byId("ffListHolder");
 
 function actOnFolderSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
     window.alert(thisFormDataJ);
-    //
 }
 
 function folderFileListing(holder, data) {
@@ -41,8 +43,8 @@ function folderFileListing(holder, data) {
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
 }
 
-function lukeFolderWalker(pathToScan) {
-    var target = dojo.byId("ffListHolder");;
+function lukeFolderWalker(pathToScan, divContainer) {
+    if(isSet(divContainer)) { targetDiv = divContainer; }
     var elementData = "<strong>RETREIVING FOLDER LIST...</strong>";
     target.innerHTML = elementData;
     var thePostData = {
