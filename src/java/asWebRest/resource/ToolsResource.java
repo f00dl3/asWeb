@@ -54,6 +54,13 @@ public class ToolsResource extends ServerResource {
                             argsInForm.getFirstValue("identifier")
                     );
                     break;
+                    
+                case "RequestResource":
+                    if(wc.isSet(argsInForm.getFirstValue("fileToTransfer"))) {
+                        String fileToTransfer = argsInForm.getFirstValue("fileToTransfer");
+                        returnData += "REQUESTED [ " + fileToTransfer + " ]";
+                    }
+                    break;
                 
                 case "LukeFolderWalker":
                     JSONObject errorEncapsulator = new JSONObject();
