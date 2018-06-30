@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 28 Jun 2018
+Updated: 29 Jun 2018
 */
 
 package asWebRest.shared;
@@ -191,6 +191,37 @@ public class WebCommon {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
+    }
+    
+    public static JSONObject lukePathWalker(String folderToWalk) {
+        JSONObject resultSet = new JSONObject();
+        JSONArray fullPathsFiles = new JSONArray();
+        JSONArray shortNameFiles = new JSONArray();
+        JSONArray fullPathsFolders = new JSONArray();
+        JSONArray shortNameFolders = new JSONArray();
+        try {
+            File folderToScan = new File(folderToWalk);
+            File[] fileListing = folderToScan.listFiles();        
+            for (int i = 0; i < fileListing.length; i++) {
+                String fileName = fileListing[i].getName();
+                String fullPath = fileListing[i].toString();
+                if (fileListing[i].isDirectory()) {
+                    if(isSet(fullPath)) { fullPathsFolders.put(fullPath); }
+                    if(isSet(fileName)) { shortNameFolders.put(fileName); }
+                } else if (fileListing[i].isFile()) {
+                    if(isSet(fullPath)) { fullPathsFiles.put(fullPath); }
+                    if(isSet(fileName)) { shortNameFiles.put(fileName); }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        resultSet
+                .put("ShortNameFiles", shortNameFiles)
+                .put("FullPathsFiles", fullPathsFiles)
+                .put("ShortNameFolders", shortNameFolders)
+                .put("FullPathsFolders", fullPathsFolders);
+        return resultSet;
     }
     
     private String nowDate() {
