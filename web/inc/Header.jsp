@@ -51,7 +51,6 @@
     };
     
     String[] folScripts = {
-        "Tools/Folders"
     };
     
     String[] olMapScripts = {
