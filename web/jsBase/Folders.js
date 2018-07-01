@@ -10,7 +10,7 @@ function actOnFolderSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this);
     var thisFormDataJ = dojo.formToJson(this);
-    lukeFolderWalker(thisFormData.folder, targetDiv);
+    lukeFolderWalker2(thisFormData.folder, targetDiv);
 }
 
 function actOnResourceSelect(event) {
@@ -70,27 +70,36 @@ function folderFileListing2(holder, data) {
             "<strong>Errors:</strong> " + data.Errors + "<p>";
     if(data.Results.ScanFolder !== "/") {
         var pathElements = (data.Results.Folder).split("/");
-        var parentFolder = "/";
+        var parentFolder = "";
         for(i = 0; i < (pathElements.length-1); i++) {
             parentFolder += pathElements[i] + "/";
         }
-        elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
+        elementData += "<form class='folderSelect'>" +
+                "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
+                "<strong>[Parent]</strong>" + 
+                "</form><p>";
     }
     var dirObj = (data.Results.InnerChildren);
+    elementData += "<div class='table'>";
     Object.keys(dirObj).forEach(function (k) {
-        if(dirObj[k].type = "folder") {
-            elementData += "<form class='folderSelect'>" +
+        console.log(dirObj[k]);
+        if(dirObj[k].type === "folder") {
+            console.log(k + " IS A FOLDER!");
+            elementData += "<form class='tr folderSelect'>" +
                     "<input type='hidden' name='folder' value='" + dirObj[k].path + "'/>" +
-                    "<strong>" + k + "</strong>" +
+                    "<span class='td'><strong>" + k + "</strong></span>" +
+                    "<span class='td'>-</span>" +
                     "</form>";
         } else {
-            elementData += "<form class='resourceSelect'>" +
+            console.log(k + " IS A FILE!");
+            elementData += "<form class='tr resourceSelect'>" +
                         "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
-                        k + " <span style='color: red;'>" + dirObj[k].size + "</span>" +
+                        "<span class='td'>" + k + "</span>" +
+                        "<span class='td'>" + dirObj[k].size + "</span>" +
                         "</form>";
         }
-        elementData += "<br/>";
     });
+    elementData += "</div>";
     holder.innerHTML = elementData;
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
