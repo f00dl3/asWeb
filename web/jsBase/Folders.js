@@ -159,15 +159,16 @@ function lukeFolderWalker(pathToScan, divContainer) {
 
 function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
     var lsTimeout = getRefresh("medium");
+    var elementData = ""
     if(refreshOverride) {
         lsTimeout = getRefresh("rapid");
     } else {
+        var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
+        targetDiv.innerHTML = elementData;
         var refreshOverride = false;
     }
     if(isSet(divContainer)) { targetDiv = dojo.byId(divContainer); }
     folderOverride = pathToScan;
-    var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
-    targetDiv.innerHTML = elementData;
     var thePostData = {
         "doWhat": "LukeFolderWalker2",
         "scanPath": folderOverride
