@@ -6,6 +6,7 @@ Updated: 1 Jul 2018
 
 package asWebRest.resource;
 
+import asWebRest.hookers.FolderTools;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
@@ -28,6 +29,7 @@ public class ToolsResource extends ServerResource {
         MyDBConnector mdb = new MyDBConnector();
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
+        FolderTools ft = new FolderTools();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
@@ -77,12 +79,33 @@ public class ToolsResource extends ServerResource {
                     } else {
                         folderToScan = cb.getPathTomcat().toString();
                     }
-                    try { folderResults = wc.lukePathWalker(folderToScan); } catch (Exception e) { errorMessage = e.getMessage(); }
+                    try { folderResults = ft.lukePathWalker(folderToScan); } catch (Exception e) { errorMessage = e.getMessage(); }
                     errorEncapsulator
                             .put("InFolder", folderToScan)
                             .put("Errors", errorMessage)
                             .put("Results", folderResults);
                     returnData = errorEncapsulator.toString();
+                    break;
+                    
+                case "LukeFolderWalker2":
+                    JSONObject errorEncapsulator2 = new JSONObject();
+                    JSONObject folderResults2 = new JSONObject();
+                    String folderToScan2 = "";
+                    if(wc.isSet(argsInForm.getFirstValue("scanPath"))) { 
+                        try {
+                            folderToScan2 = argsInForm.getFirstValue("scanPath");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        folderToScan2 = cb.getPathTomcat().toString();
+                    }
+                    try { folderResults = ft.lukePathWalker2(folderToScan2); } catch (Exception e) { errorMessage = e.getMessage(); }
+                    errorEncapsulator2
+                            .put("InFolder", folderToScan2)
+                            .put("Errors", errorMessage)
+                            .put("Results", folderResults2);
+                    returnData = errorEncapsulator2.toString();
                     break;
                     
             }

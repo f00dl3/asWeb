@@ -6,7 +6,6 @@ Updated: 1 Jul 2018
 
 package asWebRest.shared;
 
-import asWebRest.shared.MyDBConnector;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,13 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import javax.activation.MimetypesFileTypeMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.restlet.data.Disposition;
-import org.restlet.data.MediaType;
-import org.restlet.representation.FileRepresentation;
 
 public class WebCommon {
         
@@ -156,22 +151,6 @@ public class WebCommon {
         if (i > p) { fileExtension = fileString.substring(i+1); }
         return fileExtension;
     }
-    
-    public void getFolderListing(String directoryName, ArrayList<File> files) {
-        File directory = new File(directoryName);
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                try {
-                    files.add(file);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (file.isDirectory()) {
-                getFolderListing(file.getAbsolutePath(), files);
-            }
-        }
-    }
 
     public static byte[] hashIt(String passwordIn) throws Exception {
         
@@ -195,40 +174,6 @@ public class WebCommon {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
-    }
-    
-    public static JSONObject lukePathWalker(String folderToWalk) {
-        String scanFolder = "";
-        JSONObject resultSet = new JSONObject();
-        JSONArray fullPathsFiles = new JSONArray();
-        JSONArray shortNameFiles = new JSONArray();
-        JSONArray fullPathsFolders = new JSONArray();
-        JSONArray shortNameFolders = new JSONArray();
-        try {
-            File folderToScan = new File(folderToWalk);
-            scanFolder = folderToScan.toString();
-            File[] fileListing = folderToScan.listFiles();        
-            for (int i = 0; i < fileListing.length; i++) {
-                String fileName = fileListing[i].getName();
-                String fullPath = fileListing[i].toString();
-                if (fileListing[i].isDirectory()) {
-                    if(isSet(fullPath)) { fullPathsFolders.put(fullPath); }
-                    if(isSet(fileName)) { shortNameFolders.put(fileName); }
-                } else if (fileListing[i].isFile()) {
-                    if(isSet(fullPath)) { fullPathsFiles.put(fullPath); }
-                    if(isSet(fileName)) { shortNameFiles.put(fileName); }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        resultSet
-                .put("ScanFolder", scanFolder)
-                .put("ShortNameFiles", shortNameFiles)
-                .put("FullPathsFiles", fullPathsFiles)
-                .put("ShortNameFolders", shortNameFolders)
-                .put("FullPathsFolders", fullPathsFolders);
-        return resultSet;
     }
     
     private String nowDate() {
