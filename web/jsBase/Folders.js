@@ -69,49 +69,31 @@ function folderFileListing2(holder, data) {
     var elementData = "<strong>Current path:</strong> " + data.Results.Folder + "<br/>" +
             "<strong>Errors:</strong> " + data.Errors + "<p>";
     if(data.Results.ScanFolder !== "/") {
-        var pathElements = (data.Results.ScanFolder).split("/");
+        var pathElements = (data.Results.Folder).split("/");
         var parentFolder = "/";
         for(i = 0; i < (pathElements.length-1); i++) {
             parentFolder += pathElements[i] + "/";
         }
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
-    /*
-    shortFiles = (data.Results.ShortNameFiles).sort();
-    fullFiles = (data.Results.FullPathsFiles).sort();
-    shortFolders = (data.Results.ShortNameFolders).sort();
-    fullFolders = (data.Results.FullPathsFolders).sort();
-    var i = 0;
-    var j = 0;
-    if(shortFolders.length !== 0 || shortFiles.length !== 0) {
-        if(shortFolders.length !== 0) {
-            shortFolders.forEach(function (folder) {
-                thisFullFolder = fullFolders[i];
-                elementData += "<form class='folderSelect'>" +
-                        "<input type='hidden' name='folder' value='" + thisFullFolder + "'/>" +
-                        "<strong>" + folder + "</strong>" +
+    var dirObjects = (data.Results.InnerChildren);
+    Object.keys(dirObjects).forEach(function (k) {
+        if(dirObjects[k].type = "folder") {
+            elementData += "<form class='folderSelect'>" +
+                    "<input type='hidden' name='folder' value='" + dirObjects[k].path + "'/>" +
+                    "<strong>" + k + "</strong>" +
+                    "</form>";
+        } else {
+            elementData += "<form class='resourceSelect'>" +
+                        "<input type='hidden' name='fileToRequest' value='" + dirObjects[k].path + "'/>" +
+                        k +
                         "</form><br/>";
-                i++;
-            });
         }
-        if(shortFiles.length !== 0) {
-            shortFiles.forEach(function (file) {
-                thisFullFile = fullFiles[j];
-                elementData += "<form class='resourceSelect'>" +
-                        "<input type='hidden' name='fileToRequest' value='" + thisFullFile + "'/>" +
-                        file +
-                        "</form><br/>";
-                j++;
-            });
-        }
-    } else {
-        elementData += "<strong>No files or folders found!</strong>";
-    }
+        elementData += "<br/>";
+    });
     holder.innerHTML = elementData;
-    
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
-    */
 }
 
 function lukeFolderWalker(pathToScan, divContainer) {
@@ -149,7 +131,7 @@ function lukeFolderWalker2(pathToScan, divContainer) {
         request
             .post(getResource("Tools"), {
                 data: thePostData,
-                handleAs: "text"
+                handleAs: "json"
             }).then(
                 function(data) {
                     elementData = folderFileListing2(targetDiv, data);

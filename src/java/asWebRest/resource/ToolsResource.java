@@ -100,7 +100,7 @@ public class ToolsResource extends ServerResource {
                     } else {
                         folderToScan2 = cb.getPathTomcat().toString();
                     }
-                    try { folderResults = ft.lukePathWalker2(folderToScan2); } catch (Exception e) { errorMessage = e.getMessage(); }
+                    try { folderResults2 = ft.lukePathWalker2(folderToScan2); } catch (Exception e) { errorMessage = e.getMessage(); }
                     errorEncapsulator2
                             .put("InFolder", folderToScan2)
                             .put("Errors", errorMessage)

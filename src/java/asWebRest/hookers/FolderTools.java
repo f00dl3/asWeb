@@ -100,7 +100,7 @@ public class FolderTools {
         }
         resultSet
                 .put("Folder", scanFolder)
-                .put("Results", fContainer);
+                .put("InnerChildren", fContainer);
         return resultSet;
     }
     
