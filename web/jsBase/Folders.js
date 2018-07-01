@@ -76,18 +76,18 @@ function folderFileListing2(holder, data) {
         }
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
-    var dirObjects = (data.Results.InnerChildren);
-    Object.keys(dirObjects).forEach(function (k) {
-        if(dirObjects[k].type = "folder") {
+    var dirObj = (data.Results.InnerChildren);
+    Object.keys(dirObj).forEach(function (k) {
+        if(dirObj[k].type = "folder") {
             elementData += "<form class='folderSelect'>" +
-                    "<input type='hidden' name='folder' value='" + dirObjects[k].path + "'/>" +
+                    "<input type='hidden' name='folder' value='" + dirObj[k].path + "'/>" +
                     "<strong>" + k + "</strong>" +
                     "</form>";
         } else {
             elementData += "<form class='resourceSelect'>" +
-                        "<input type='hidden' name='fileToRequest' value='" + dirObjects[k].path + "'/>" +
-                        k +
-                        "</form><br/>";
+                        "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
+                        k + " <span style='color: red;'>" + dirObj[k].size + "</span>" +
+                        "</form>";
         }
         elementData += "<br/>";
     });

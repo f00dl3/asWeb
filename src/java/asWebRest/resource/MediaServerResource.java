@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.UpdateMediaServerAction;
 import asWebRest.dao.MediaServerDAO;
+import asWebRest.hookers.FolderTools;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -33,6 +34,7 @@ public class MediaServerResource extends ServerResource {
         
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
+        FolderTools ft = new FolderTools();
         
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -71,7 +73,7 @@ public class MediaServerResource extends ServerResource {
                     if(wc.isSet(argsInForm.getFirstValue("folderPath"))) {
                         File folderToList = new File(argsInForm.getFirstValue("folderPath"));
                         ArrayList<File> folderListing = new ArrayList<>();
-                        wc.getFolderListing(folderToList.toString(), folderListing);
+                        ft.getFolderListing(folderToList.toString(), folderListing);
                         folderListing.forEach((file) -> {
                             String name = file.getName();
                             String extension = wc.getFileExtension(file);
