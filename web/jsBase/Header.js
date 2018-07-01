@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 30 Jun 2018
+Updated: 1 Jul 2018
  */
 
 var annMaint = 910.66;
@@ -292,6 +292,7 @@ function getServerPath(what) {
     switch(what) {
         case "apache2": return "/var/www"; break;
         case "mediaServer": return "/extra1/MediaServer"; break;
+        case "rawGet": return "/var/www/Get"; break;
         case "tomcat": return "/var/lib/tomcat8/webapps"; break;
     }
 }

@@ -73,7 +73,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
     var rData = "<h3>GRIB2 JSON Model Output Data</h3>" +
             "<em>For KOJC / Olathe Johnson County<br/>" +
             "Auto-updated hourly</em><p>" +
-            "<a href='" + getBasePath("g2OutOld") + "' target='new'>Automatic model image output</a>";
+            "<a href='" + getBasePath("ui") + "/Folders.jsp?folderInput=" + getServerPath("apache2") + "/G2Out' target='new'>Automatic model image output</a>";
     var models = [ "CMC", "GFS", "HRRR", "NAM", "RAP", "HRWA", "HRWN", "SRFA", "SRFN" ];
     var heights = [];
     heightsIn.forEach(function (hgt) {

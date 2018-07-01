@@ -36,7 +36,7 @@ function populateKilaeuaData() {
             "<span id='kCamHolder'></span>" +
             "<span id='kSpectHolder'></span><br/>" +
             "<span id='vLinkHolder'></span><br/>" +
-            "<a href='" + getBasePath("oldGet") + "/Kilaeua' target='kca'>Kilauea Cam Archives</a><br/>";
+            "<a href='" + getBasePath("ui") + "/Folders.jsp?folderInput=" + getServerPath("rawGet") + "/Kilaeua' target='kca'>Kilauea Cam Archives</a><br/>";
     dojo.byId("vHolder").innerHTML = rData;
     getWebLinks("Volcano", "vLinkHolder", null);
     popKilaeuaCam();

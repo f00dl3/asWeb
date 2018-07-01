@@ -66,20 +66,28 @@ function folderFileListing(holder, data) {
 }
 
 function folderFileListing2(holder, data) {
-    var elementData = "<strong>Current path:</strong> " + data.Results.Folder + "<br/>" +
-            "<strong>Errors:</strong> " + data.Errors + "<p>";
+    var elementData = "<h4>" + data.Results.Folder + "</h4>";
+    if(isSet(data.Errors)) { elementData += "<br/><strong>Errors:</strong> " + data.Errors; }
     if(data.Results.ScanFolder !== "/") {
         var pathElements = (data.Results.Folder).split("/");
         var parentFolder = "";
         for(i = 0; i < (pathElements.length-1); i++) {
             parentFolder += pathElements[i] + "/";
         }
-        elementData += "<form class='folderSelect'>" +
+        elementData += "<div class='table'><div class='tr'>" +
+                "<span class='td'>" +
+                "<form class='folderSelect'>" +
                 "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
-                "<strong>[Parent]</strong>" + 
-                "</form><p>";
+                "<button class='UButton'>^ UP ^</button>" + 
+                "</form>" +
+                "</span><span class='td'><strong>Size</strong><br/>" +
+                "<span id='folderSizeHolder'></span>" +
+                "</span>" +
+                "</div></div>";
     }
+    elementData += "<p>";
     var dirObj = (data.Results.InnerChildren);
+    var totalFolderSize = 0;
     elementData += "<div class='table'>";
     Object.keys(dirObj).forEach(function (k) {
         if(dirObj[k].type === "folder") {
@@ -94,12 +102,14 @@ function folderFileListing2(holder, data) {
                         "<span class='td'>" + k + "</span>" +
                         "<span class='td'>" + autoUnits(dirObj[k].size) + "</span>" +
                         "</form>";
+            totalFolderSize += Number(dirObj[k].size);
         }
     });
     elementData += "</div>";
     holder.innerHTML = elementData;
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
+    dojo.byId("folderSizeHolder").innerHTML = autoUnits(totalFolderSize);
 }
 
 function lukeFolderWalker(pathToScan, divContainer) {
