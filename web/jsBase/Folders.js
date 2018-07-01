@@ -31,10 +31,10 @@ function folderFileListing(holder, data) {
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
     elementData += "<ul type='dot'>";
-    shortFiles = data.Results.ShortNameFiles;
-    fullFiles = data.Results.FullPathsFiles;
-    shortFolders = data.Results.ShortNameFolders;
-    fullFolders = data.Results.FullPathsFolders;
+    shortFiles = (data.Results.ShortNameFiles).sort();
+    fullFiles = (data.Results.FullPathsFiles).sort();
+    shortFolders = (data.Results.ShortNameFolders).sort();
+    fullFolders = (data.Results.FullPathsFolders).sort();
     var i = 0;
     var j = 0;
     if(shortFolders.length !== 0 || shortFiles.length !== 0) {

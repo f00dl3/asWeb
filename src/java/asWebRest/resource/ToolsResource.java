@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 9 May 2018
-Updated: 30 Jun 2018
+Updated: 1 Jul 2018
  */
 
 package asWebRest.resource;
@@ -60,7 +60,7 @@ public class ToolsResource extends ServerResource {
                     String fileToTransfer = null;
                     if(wc.isSet(argsInForm.getFirstValue("fileToTransfer"))) {
                         fileToTransfer = argsInForm.getFirstValue("fileToTransfer");
-                        returnData += "REQUESTED [ " + fileToTransfer + " ]";
+                        returnData += "REQUESTED [ " + fileToTransfer + " ]\nUSE THE SERVLET TO DO THIS!";
                     }
                     break;
                 
