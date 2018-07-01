@@ -76,7 +76,7 @@ function folderFileListing(holder, data) {
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
 }
 
-function folderFileListing2(holder, data) {
+function folderFileListing2(holder, data, refreshOverride) {
     var elementData = "<h4>" + data.Results.Folder + "</h4>";
     if(isSet(data.Errors)) { elementData += "<br/><strong>Errors:</strong> " + data.Errors; }
     if(data.Results.ScanFolder !== "/") {
@@ -85,7 +85,8 @@ function folderFileListing2(holder, data) {
         for(i = 0; i < (pathElements.length-1); i++) {
             parentFolder += pathElements[i] + "/";
         }
-        elementData += "<div class='table'><div class='tr'>" +
+        if(!refreshOverride) {
+            elementData += "<div class='table'><div class='tr'>" +
                 "<span class='td'>" +
                 "<form class='folderSelect'>" +
                 "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
@@ -99,6 +100,7 @@ function folderFileListing2(holder, data) {
                 "<input type='hidden' name='path' value='" + data.Results.Folder + "'/>" +
                 "<input id='sftpUpload' type='file' name='file' style='width: 240px;' /><br/>" +
                 "</form>";
+        }
     }
     elementData += "<p>";
     var dirObj = (data.Results.InnerChildren);
@@ -177,7 +179,7 @@ function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    elementData = folderFileListing2(targetDiv, data);
+                    elementData = folderFileListing2(targetDiv, data, refreshOverride);
                 },
                 function(error) { 
                     window.alert("request for Folder Listing V2 FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
