@@ -16,7 +16,9 @@ import asWebRest.shared.WebCommon;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -141,6 +144,15 @@ public class Controller extends HttpServlet {
                 request.setAttribute("sessionVariables", sessionVariables.toString());
                 break;
 
+            case "Upload":
+                if(wc.isSet(request.getParameter("path"))) {
+                    String pathString = request.getParameter("path");
+                    Part filePart = request.getPart("file");
+                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    String locationToSave = pathString + "/" + fileName;
+                    InputStream fileContent = filePart.getInputStream();
+                }
+                break;
             default:
                 dispatchUrl = "/login.jsp";
                 break;

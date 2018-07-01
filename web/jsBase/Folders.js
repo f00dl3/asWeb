@@ -19,6 +19,12 @@ function actOnResourceSelect(event) {
     requestResource(thisFormData.fileToRequest);
 }
 
+function actOnSftpUpload(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    uploadResource(thisFormData);
+}
+
 function folderFileListing(holder, data) {
     var elementData = "<strong>Current path:</strong> " + data.Results.ScanFolder + "<br/>" +
             "<strong>Errors:</strong> " + data.Errors + "<p>";
@@ -82,7 +88,11 @@ function folderFileListing2(holder, data) {
                 "</form>" +
                 "</span><span class='td'><strong>Size</strong><br/>" +
                 "<span id='folderSizeHolder'></span>" +
-                "</span>" +
+                "</span><span class='td'>" +
+                "<form action='upload' method='post' enctype='multipart/form-data'>" +
+                "<input type='hidden' name='path' value='" + data.Results.Folder + "'/>" +
+                "<input id='sftpUpload' type='file' name='file' style='width: 240px;' /><br/>" +
+                "</form>" +
                 "</div></div>";
     }
     elementData += "<p>";
@@ -110,6 +120,8 @@ function folderFileListing2(holder, data) {
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
     dojo.byId("folderSizeHolder").innerHTML = autoUnits(totalFolderSize);
+    var sftpUp = dojo.byId("sftpUpload");
+    dojo.connect(sftpUp, "change", actOnSftpUpload);
 }
 
 function lukeFolderWalker(pathToScan, divContainer) {
@@ -162,6 +174,11 @@ function lukeFolderWalker2(pathToScan, divContainer) {
 
 function requestResource(item) {
     window.location.href = getResource("Download") + "?fileToDownload=" + item;
+}
+
+function uploadResource(item) {
+    window.alert("NOT BUILT YET - TO DO / NICE TO HAVE!");
+    //window.location.href = getResource("Upload") + "?fileToDownload=" + item;
 }
 
 function init() {
