@@ -9,8 +9,13 @@ var targetDiv = dojo.byId("ffListHolder");
 function actOnFolderSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this);
-    var thisFormDataJ = dojo.formToJson(this);
     lukeFolderWalker2(thisFormData.folder, targetDiv);
+}
+
+function actOnRapidRefresh(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    lukeFolderWalker2(folderOverride, targetDiv, true);
 }
 
 function actOnResourceSelect(event) {
@@ -85,7 +90,8 @@ function folderFileListing2(holder, data) {
                 "<form class='folderSelect'>" +
                 "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
                 "<button class='UButton'>UP</button>" + 
-                "</form>" +
+                "</form><br/>" +
+                "<form><input id='rapidCheck' type='checkbox' name='refreshRapid' value=''/>Rapid</form>" +
                 "</span><span class='td'><strong>Size</strong><br/>" +
                 "<span id='folderSizeHolder'></span>" +
                 "</span></div></div><br/>" +
@@ -120,11 +126,14 @@ function folderFileListing2(holder, data) {
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
     dojo.byId("folderSizeHolder").innerHTML = autoUnits(totalFolderSize);
     var sftpUp = dojo.byId("sftpUpload");
+    var rapidCheck = dojo.byId("rapidCheck");
     dojo.connect(sftpUp, "change", actOnSftpUpload);
+    dojo.connect(rapidCheck, "onclick", actOnRapidRefresh);
 }
 
 function lukeFolderWalker(pathToScan, divContainer) {
     if(isSet(divContainer)) { targetDiv = dojo.byId(divContainer); }
+    if(isSet(pathToScan)) { pathToScan = pathToScan; }
     var elementData = "<strong>RETREIVING FOLDER LIST...</strong>";
     targetDiv.innerHTML = elementData;
     var thePostData = {
@@ -146,14 +155,20 @@ function lukeFolderWalker(pathToScan, divContainer) {
     });
 }
 
-function lukeFolderWalker2(pathToScan, divContainer) {
+function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
     var lsTimeout = getRefresh("medium");
+    if(refreshOverride) {
+        lsTimeout = getRefresh("rapid");
+    } else {
+        var refreshOverride = false;
+    }
     if(isSet(divContainer)) { targetDiv = dojo.byId(divContainer); }
+    folderOverride = pathToScan;
     var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
     targetDiv.innerHTML = elementData;
     var thePostData = {
         "doWhat": "LukeFolderWalker2",
-        "scanPath": pathToScan
+        "scanPath": folderOverride
     };
     require(["dojo/request"], function(request) {
         request
@@ -168,7 +183,7 @@ function lukeFolderWalker2(pathToScan, divContainer) {
                     window.alert("request for Folder Listing V2 FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
                 });
     });
-    setTimeout(function () { lukeFolderWalker2(pathToScan, divContainer); }, lsTimeout);
+    setTimeout(function () { lukeFolderWalker2(folderOverride, divContainer, refreshOverride); }, lsTimeout);
 }
 
 function requestResource(item) {
