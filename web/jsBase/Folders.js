@@ -159,7 +159,7 @@ function lukeFolderWalker(pathToScan, divContainer) {
 
 function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
     var lsTimeout = getRefresh("medium");
-    var elementData = ""
+    var elementData = "";
     if(refreshOverride) {
         lsTimeout = getRefresh("rapid");
     } else {
