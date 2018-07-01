@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 5 Jun 2018
+Updated: 1 Jul 2018
  */
 
 package asWebRest.resource;
@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.hookers.SnmpWalk;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class TestResource extends ServerResource {
         JsonWorkers jw = new JsonWorkers();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
+        CommonBeans cb = new CommonBeans();
+        
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
@@ -74,7 +77,9 @@ public class TestResource extends ServerResource {
         String testDate = "2018-05-13";
         LocalDate convertedDate = LocalDate.parse(testDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         convertedDate = convertedDate.withDayOfMonth(convertedDate.getMonth().length(convertedDate.isLeapYear()));
-        testData += "\nTest date end of month: " + convertedDate;
+        testData += "\nTest date end of month: " + convertedDate + "\n\n";
+        
+        testData += cb.getCatalinaHome();
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
                     

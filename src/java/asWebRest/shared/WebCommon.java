@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 29 Jun 2018
+Updated: 1 Jul 2018
 */
 
 package asWebRest.shared;
@@ -31,9 +31,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.activation.MimetypesFileTypeMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.restlet.data.Disposition;
+import org.restlet.data.MediaType;
+import org.restlet.representation.FileRepresentation;
 
 public class WebCommon {
         
@@ -194,6 +198,7 @@ public class WebCommon {
     }
     
     public static JSONObject lukePathWalker(String folderToWalk) {
+        String scanFolder = "";
         JSONObject resultSet = new JSONObject();
         JSONArray fullPathsFiles = new JSONArray();
         JSONArray shortNameFiles = new JSONArray();
@@ -201,6 +206,7 @@ public class WebCommon {
         JSONArray shortNameFolders = new JSONArray();
         try {
             File folderToScan = new File(folderToWalk);
+            scanFolder = folderToScan.toString();
             File[] fileListing = folderToScan.listFiles();        
             for (int i = 0; i < fileListing.length; i++) {
                 String fileName = fileListing[i].getName();
@@ -217,6 +223,7 @@ public class WebCommon {
             e.printStackTrace();
         }
         resultSet
+                .put("ScanFolder", scanFolder)
                 .put("ShortNameFiles", shortNameFiles)
                 .put("FullPathsFiles", fullPathsFiles)
                 .put("ShortNameFolders", shortNameFolders)

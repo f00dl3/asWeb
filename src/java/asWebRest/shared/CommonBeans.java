@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 2 May 2018
+Updated: 1 Jul 2018
  */
 
 package asWebRest.shared;
 
 public class CommonBeans {
     
+    private String catalinaHome = System.getenv("CATALINA_HOME");
     private int chartMaxHeight = 1080;
     private int chartMaxWidth = 1920;
     private String defaultNotRanYet = "Query has not ran or has failed!";
@@ -22,6 +23,7 @@ public class CommonBeans {
     private String query_SetRT120K = "SET @runtot := 120000;";
     private String ramPath = "/dev/shm";
     
+    public String getCatalinaHome() { return catalinaHome; }
     public int getChartMaxHeight() { return chartMaxHeight; }
     public int getChartMaxWidth() { return chartMaxWidth; }
     public String getDefaultNotRanYet() { return defaultNotRanYet; }

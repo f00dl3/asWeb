@@ -264,6 +264,7 @@ function getResource(what) {
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
         case "DBInfo": return getBasePath("rest") + "/DBInfo"; break;
+        case "Download": return getBasePath("serv") + "/Download"; break;
         case "Emily": return getBasePath("ui") + "/Emily.jsp"; break;
         case "Entertainment": return getBasePath("rest") + "/Entertainment"; break;
         case "Fitness": return getBasePath("rest") + "/Fitness"; break;

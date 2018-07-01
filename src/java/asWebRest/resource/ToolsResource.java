@@ -10,6 +10,7 @@ import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
+import java.io.File;
 import java.sql.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,8 +57,9 @@ public class ToolsResource extends ServerResource {
                     break;
                     
                 case "RequestResource":
+                    String fileToTransfer = null;
                     if(wc.isSet(argsInForm.getFirstValue("fileToTransfer"))) {
-                        String fileToTransfer = argsInForm.getFirstValue("fileToTransfer");
+                        fileToTransfer = argsInForm.getFirstValue("fileToTransfer");
                         returnData += "REQUESTED [ " + fileToTransfer + " ]";
                     }
                     break;
@@ -82,7 +84,7 @@ public class ToolsResource extends ServerResource {
                             .put("Results", folderResults);
                     returnData = errorEncapsulator.toString();
                     break;
-                
+                    
             }
         }
         

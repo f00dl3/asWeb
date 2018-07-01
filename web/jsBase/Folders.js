@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 Jun 2018
-Updated: 30 Jun 2018
+Updated: 1 Jul 2018
  */
 
 var targetDiv = dojo.byId("ffListHolder");
@@ -16,15 +16,21 @@ function actOnFolderSelect(event) {
 function actOnResourceSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this);
-    var thisFormDataJ = dojo.formToJson(this);
-    window.alert(thisFormDataJ);
+    requestResource(thisFormData.fileToRequest);
 }
 
 function folderFileListing(holder, data) {
-    var elementData = "<strong>Base:</strong> " + data.InFolder + "<br/>" +
-            "<strong>Errors:</strong> " + data.Errors + "<p>" +
-            "<form class='folderSelect'><input type='hidden' name='folder' value='../'/><strong>[Parent]</strong></form><p>";
-            "<ul type='dot'>";
+    var elementData = "<strong>Current path:</strong> " + data.Results.ScanFolder + "<br/>" +
+            "<strong>Errors:</strong> " + data.Errors + "<p>";
+    if(data.Results.ScanFolder !== "/") {
+        var pathElements = (data.Results.ScanFolder).split("/");
+        var parentFolder = "/";
+        for(i = 0; i < (pathElements.length-1); i++) {
+            parentFolder += pathElements[i] + "/";
+        }
+        elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
+    }
+    elementData += "<ul type='dot'>";
     shortFiles = data.Results.ShortNameFiles;
     fullFiles = data.Results.FullPathsFiles;
     shortFolders = data.Results.ShortNameFolders;
@@ -41,7 +47,7 @@ function folderFileListing(holder, data) {
         }
         if(shortFiles.length !== 0) {
             shortFiles.forEach(function (file) {
-                thisFullFile = fullFolders[j];
+                thisFullFile = fullFiles[j];
                 elementData += "<li><form class='resourceSelect'><input type='hidden' name='fileToRequest' value='" + thisFullFile + "'/>" + file + "</form></li>";
                 j++;
             });
@@ -79,23 +85,7 @@ function lukeFolderWalker(pathToScan, divContainer) {
 }
 
 function requestResource(item) {
-    var thePostData = {
-        "doWhat": "RequestResource",
-        "fileToTransfer": item
-    };
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("Tools"), {
-                data: thePostData,
-                handleAs: "json"
-            }).then(
-                function(data) {
-                    showNotice("Requested: " + item);
-                },
-                function(error) { 
-                    window.alert("request for Resource FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-                });
-    });
+    window.location.href = getResource("Download") + "?fileToDownload=" + item;
 }
 
 function init() {

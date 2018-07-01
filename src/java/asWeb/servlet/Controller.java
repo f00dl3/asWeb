@@ -14,9 +14,12 @@ import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +59,29 @@ public class Controller extends HttpServlet {
         session.setAttribute("sessionInitiated", true);
         
         switch(action) {
+            
+            case "Download":
+                if(wc.isSet(request.getParameter("fileToDownload"))) {
+                    String fileString = request.getParameter("fileToDownload");
+                    File fileToDownload = new File(fileString);
+                    FileInputStream inStream = new FileInputStream(fileToDownload);
+                    ServletContext context = getServletContext();
+                    String mimeType = context.getMimeType(fileString);
+                    if(mimeType == null) { mimeType = "application/octet-stream"; }
+                    System.out.println("MIME type: " + mimeType);
+                    response.setContentType(mimeType);
+                    response.setContentLength((int) fileToDownload.length());
+                    String headerKey = "Content-Disposition";
+                    String headerValue = String.format("attachment; filename=\"%s\"", fileToDownload.getName());
+                    response.setHeader(headerKey, headerValue);
+                    OutputStream outStream = response.getOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int bytesRead = -1;
+                    while((bytesRead = inStream.read(buffer)) != -1) { outStream.write(buffer, 0, bytesRead); }
+                    inStream.close();
+                    outStream.close();
+                }
+                break;
            
             case "Session":
                 dispatchUrl = "/Session.jsp";
