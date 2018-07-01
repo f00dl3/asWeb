@@ -2,7 +2,7 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 26 Jun 2018
+Updated: 1 Jul 2018
 RESOURCE HOG ALERT!
 
 DEVELOPMENT THOUGHTS:
@@ -18,9 +18,7 @@ function doWeatherOLMap(stations, obsIndoor, obsData, obsDataRapid) {
     var jsonData = obsData[0].jsonData; obsData = false;
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
-    console.log(stations);
     var wxStations = stations[0]; stations = false;
-    console.log(wxStations);
     if(isSet(jsonData)) {
         jsonDataMerged = jsonData.concat(jsonDataRapid);
         console.log(jsonDataMerged);
@@ -320,7 +318,6 @@ function getJsonWeatherGlob() {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    console.log(data);
                     aniPreload("off");
                     doWeatherOLMap(
                             data.stations,

@@ -84,16 +84,15 @@ function folderFileListing2(holder, data) {
                 "<span class='td'>" +
                 "<form class='folderSelect'>" +
                 "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
-                "<button class='UButton'>^ UP ^</button>" + 
+                "<button class='UButton'>UP</button>" + 
                 "</form>" +
                 "</span><span class='td'><strong>Size</strong><br/>" +
                 "<span id='folderSizeHolder'></span>" +
-                "</span><span class='td'>" +
+                "</span></div></div><br/>" +
                 "<form action='upload' method='post' enctype='multipart/form-data'>" +
                 "<input type='hidden' name='path' value='" + data.Results.Folder + "'/>" +
                 "<input id='sftpUpload' type='file' name='file' style='width: 240px;' /><br/>" +
-                "</form>" +
-                "</div></div>";
+                "</form>";
     }
     elementData += "<p>";
     var dirObj = (data.Results.InnerChildren);
