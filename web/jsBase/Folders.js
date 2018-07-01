@@ -82,20 +82,17 @@ function folderFileListing2(holder, data) {
     var dirObj = (data.Results.InnerChildren);
     elementData += "<div class='table'>";
     Object.keys(dirObj).forEach(function (k) {
-        console.log(dirObj[k]);
         if(dirObj[k].type === "folder") {
-            console.log(k + " IS A FOLDER!");
             elementData += "<form class='tr folderSelect'>" +
                     "<input type='hidden' name='folder' value='" + dirObj[k].path + "'/>" +
                     "<span class='td'><strong>" + k + "</strong></span>" +
                     "<span class='td'>-</span>" +
                     "</form>";
         } else {
-            console.log(k + " IS A FILE!");
             elementData += "<form class='tr resourceSelect'>" +
                         "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
                         "<span class='td'>" + k + "</span>" +
-                        "<span class='td'>" + dirObj[k].size + "</span>" +
+                        "<span class='td'>" + autoUnits(dirObj[k].size) + "</span>" +
                         "</form>";
         }
     });
@@ -129,6 +126,7 @@ function lukeFolderWalker(pathToScan, divContainer) {
 }
 
 function lukeFolderWalker2(pathToScan, divContainer) {
+    var lsTimeout = getRefresh("medium");
     if(isSet(divContainer)) { targetDiv = dojo.byId(divContainer); }
     var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
     targetDiv.innerHTML = elementData;
@@ -149,6 +147,7 @@ function lukeFolderWalker2(pathToScan, divContainer) {
                     window.alert("request for Folder Listing V2 FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
                 });
     });
+    setTimeout(function () { lukeFolderWalker2(pathToScan, divContainer); }, lsTimeout);
 }
 
 function requestResource(item) {
