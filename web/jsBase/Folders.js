@@ -91,10 +91,10 @@ function folderFileListing2(holder, data, refreshOverride) {
                 "<form class='folderSelect'>" +
                 "<input type='hidden' name='folder' value='" + parentFolder + "'/>" +
                 "<button class='UButton'>UP</button>" + 
-                "</form><br/>" +
+                "</form></span><span class='td'>" +
                 "<form><input id='rapidCheck' type='checkbox' name='refreshRapid' value=''/>Rapid</form>" +
                 "</span><span class='td'><strong>Size</strong><br/>" +
-                "<span id='folderSizeHolder'></span>" +
+                "<span id='folderStats'></span>" +
                 "</span></div></div><br/>" +
                 "<form action='upload' method='post' enctype='multipart/form-data'>" +
                 "<input type='hidden' name='path' value='" + data.Results.Folder + "'/>" +
@@ -105,6 +105,8 @@ function folderFileListing2(holder, data, refreshOverride) {
     elementData += "<p>";
     var dirObj = (data.Results.InnerChildren);
     var totalFolderSize = 0;
+    var itemsFolders = 0;
+    var itemsFiles = 0;
     elementData += "<div class='table'>";
     Object.keys(dirObj).forEach(function (k) {
         if(dirObj[k].type === "folder") {
@@ -113,6 +115,7 @@ function folderFileListing2(holder, data, refreshOverride) {
                     "<span class='td'><strong>" + k + "</strong></span>" +
                     "<span class='td'>-</span>" +
                     "</form>";
+            itemsFolders++;
         } else {
             elementData += "<form class='tr resourceSelect'>" +
                         "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
@@ -120,13 +123,15 @@ function folderFileListing2(holder, data, refreshOverride) {
                         "<span class='td'>" + autoUnits(dirObj[k].size) + "</span>" +
                         "</form>";
             totalFolderSize += Number(dirObj[k].size);
+            itemsFiles++;
         }
     });
     elementData += "</div>";
+    var folderStatContents = autoUnits(totalFolderSize) + "<br/>" + itemsFiles + " (<strong>" + itemsFolders + "</strong>)";
     holder.innerHTML = elementData;
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
-    dojo.byId("folderSizeHolder").innerHTML = autoUnits(totalFolderSize);
+    dojo.byId("folderStats").innerHTML = folderStatContents;
     var sftpUp = dojo.byId("sftpUpload");
     var rapidCheck = dojo.byId("rapidCheck");
     dojo.connect(sftpUp, "change", actOnSftpUpload);
@@ -159,16 +164,15 @@ function lukeFolderWalker(pathToScan, divContainer) {
 
 function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
     var lsTimeout = getRefresh("medium");
-    var elementData = "";
     if(refreshOverride) {
         lsTimeout = getRefresh("rapid");
     } else {
-        var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
-        targetDiv.innerHTML = elementData;
         var refreshOverride = false;
     }
     if(isSet(divContainer)) { targetDiv = dojo.byId(divContainer); }
     folderOverride = pathToScan;
+    var elementData = "<strong>RETREIVING FOLDER LIST V2...</strong>";
+    targetDiv.innerHTML = elementData;
     var thePostData = {
         "doWhat": "LukeFolderWalker2",
         "scanPath": folderOverride
