@@ -172,7 +172,11 @@ function lukeFolderWalker(pathToScan, divContainer) {
 function lukeFolderWalker2(pathToScan, divContainer, refreshOverride) {
     var lsTimeout = getRefresh("medium");
     if(refreshOverride) {
-        lsTimeout = getRefresh("rapid");
+        if(checkMobile()) {
+            lsTimeout = getRefresh("semiRapid");
+        } else {
+            lsTimeout = getRefresh("rapid");
+        }
     } else {
         var refreshOverride = false;
     }

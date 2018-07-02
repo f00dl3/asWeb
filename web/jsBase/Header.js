@@ -234,6 +234,7 @@ function getGetParams() {
 function getRefresh(measure) {
     switch(measure) {
         case "rapid": return 1 * 1000;
+        case "semiRapid": return 4 * 1000;
         case "short": return 30 * 1000;
         case "medium": return 90 * 1000;
         case "long": return 300 * 1000;
