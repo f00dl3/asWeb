@@ -100,6 +100,12 @@ function folderFileListing2(holder, data, refreshOverride) {
                 "<input type='hidden' name='path' value='" + data.Results.Folder + "'/>" +
                 "<input id='sftpUpload' type='file' name='file' style='width: 240px;' /><br/>" +
                 "</form>";
+        } else {
+            elementData += "<div class='table'><div class='tr'>" +
+                "<span class='td'><strong>Size</strong><br/>" +
+                "<span id='folderStats'></span>" +
+                "</span></div></div>";
+                    
         }
     }
     elementData += "<p>";
@@ -108,6 +114,7 @@ function folderFileListing2(holder, data, refreshOverride) {
     var itemsFolders = 0;
     var itemsFiles = 0;
     elementData += "<div class='table'>";
+    //dirObj.sort(function (a, b) { return compareStrings(a.name, b.name); });
     Object.keys(dirObj).forEach(function (k) {
         if(dirObj[k].type === "folder") {
             elementData += "<form class='tr folderSelect'>" +
@@ -127,15 +134,15 @@ function folderFileListing2(holder, data, refreshOverride) {
         }
     });
     elementData += "</div>";
-    var folderStatContents = autoUnits(totalFolderSize) + "<br/>" + itemsFiles + " (<strong>" + itemsFolders + "</strong>)";
     holder.innerHTML = elementData;
     dojo.query(".folderSelect").connect("onclick", actOnFolderSelect);
     dojo.query(".resourceSelect").connect("onclick", actOnResourceSelect);
-    dojo.byId("folderStats").innerHTML = folderStatContents;
     var sftpUp = dojo.byId("sftpUpload");
     var rapidCheck = dojo.byId("rapidCheck");
     dojo.connect(sftpUp, "change", actOnSftpUpload);
     dojo.connect(rapidCheck, "onclick", actOnRapidRefresh);
+    var folderStatContents = autoUnits(totalFolderSize) + "<br/>" + itemsFiles + " (<strong>" + itemsFolders + "</strong>)";
+    dojo.byId("folderStats").innerHTML = folderStatContents;
 }
 
 function lukeFolderWalker(pathToScan, divContainer) {

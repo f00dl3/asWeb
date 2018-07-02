@@ -120,6 +120,12 @@ function checkMobile() {
     }
 }
 
+function compareStrings(a, b) {
+    var a = a.toLowerCase();
+    var b = b.toLowerCase();
+    return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
 function deg2rad(degrees) {
     return degrees * Math.PI/180;
 }
