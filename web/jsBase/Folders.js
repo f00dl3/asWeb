@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 Jun 2018
-Updated: 1 Jul 2018
+Updated: 4 Jul 2018
  */
 
 var targetDiv = dojo.byId("ffListHolder");
@@ -41,7 +41,13 @@ function folderFileListing(holder, data) {
         }
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
-    /* shortFile = (data.Results.ShortNameFiles).sort(arraySort('')) */
+    var ffObjArr = data.Results;
+    ffObjArr = ffObjArr.sort(arraySorter('name', false, function(a) { return a.toLowerCase() }));
+    console.log(ffObjArr);
+    shortFiles = ffObjArr.ShortNameFiles;
+    fullFiles = ffObjArr.FullPathsFiles;
+    shortFolders = ffObjArr.ShortNameFolders;
+    fullFolders = ffObjArr.FullPathsFolders;
     var i = 0;
     var j = 0;
     if(shortFolders.length !== 0 || shortFiles.length !== 0) {
