@@ -41,10 +41,7 @@ function folderFileListing(holder, data) {
         }
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
-    shortFiles = (data.Results.ShortNameFiles).sort();
-    fullFiles = (data.Results.FullPathsFiles).sort();
-    shortFolders = (data.Results.ShortNameFolders).sort();
-    fullFolders = (data.Results.FullPathsFolders).sort();
+    /* shortFile = (data.Results.ShortNameFiles).sort(arraySort('')) */
     var i = 0;
     var j = 0;
     if(shortFolders.length !== 0 || shortFiles.length !== 0) {

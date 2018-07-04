@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 Jul 2018
+Updated: 4 Jul 2018
  */
 
 var annMaint = 910.66;
@@ -62,6 +62,14 @@ function aniPreloadGetSize() {
     }, 250);
 }
 
+function arraySort(field, reverse, primer) {
+    var key = primer ? function(x) { return primer(x[field])} : function(x) { return x[field] };
+    reverse = !reverse ? 1 : -1;
+    return function(a, b) {
+        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+    }
+}
+
 function autoColorScale(tData,tMax,tMin,tForcedAvg) { 
     var tAverage, tJump, tColor;
     var tAverage = tJump = 0;
@@ -120,6 +128,7 @@ function checkMobile() {
     }
 }
 
+// remove for array sort working
 function compareStrings(a, b) {
     var a = a.toLowerCase();
     var b = b.toLowerCase();
