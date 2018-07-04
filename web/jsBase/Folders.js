@@ -41,13 +41,10 @@ function folderFileListing(holder, data) {
         }
         elementData += "<form class='folderSelect'><input type='hidden' name='folder' value='" + parentFolder + "'/><strong>[Parent]</strong></form><p>";
     }
-    var ffObjArr = data.Results;
-    ffObjArr = ffObjArr.sort(arraySorter('name', false, function(a) { return a.toLowerCase() }));
-    console.log(ffObjArr);
-    shortFiles = ffObjArr.ShortNameFiles;
-    fullFiles = ffObjArr.FullPathsFiles;
-    shortFolders = ffObjArr.ShortNameFolders;
-    fullFolders = ffObjArr.FullPathsFolders;
+    var shortFiles = data.Results.ShortNameFiles;
+    var fullFiles = data.Results.FullPathsFiles;
+    var shortFolders = data.Results.ShortNameFolders;
+    var fullFolders = data.Results.FullPathsFolders;
     var i = 0;
     var j = 0;
     if(shortFolders.length !== 0 || shortFiles.length !== 0) {
@@ -112,12 +109,11 @@ function folderFileListing2(holder, data, refreshOverride) {
         }
     }
     elementData += "<p>";
-    var dirObj = (data.Results.InnerChildren);
+    var dirObj = data.Results.InnerChildren;    
     var totalFolderSize = 0;
     var itemsFolders = 0;
     var itemsFiles = 0;
     elementData += "<div class='table'>";
-    //dirObj.sort(function (a, b) { return compareStrings(a.name, b.name); });
     Object.keys(dirObj).forEach(function (k) {
         if(dirObj[k].type === "folder") {
             elementData += "<form class='tr folderSelect'>" +
