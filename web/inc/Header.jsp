@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    30 Jun 2018
+    Updated:    5 Jul 2018
     Author     : astump
 --%>
 
@@ -63,6 +63,7 @@
         "OLMap/RenderImage",
         "OLMap/SimpleMap",
         "OLMap/WeatherMap",
+        "Weather/ObsFeed",
         "Weather/WxFunctions"
     };
     
@@ -140,7 +141,8 @@
     
     String olMapScriptPack = "";
     for(int i=0; i < olMapScripts.length; i++) {
-        olMapScriptPack += "<script src='"+rootPath+"/jsBase/"+olMapScripts[i]+".js'></script>";
+        olMapScriptPack += "<script src='"+rootPath+"/jsBase/"+olMapScripts[i]+".js'></script>" +
+                "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";
     }
         
     String snmpScriptPack = "";

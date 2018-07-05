@@ -2,131 +2,121 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 1 Jul 2018
+Updated: 5 Jul 2018
 RESOURCE HOG ALERT!
 
 DEVELOPMENT THOUGHTS:
---> merge the JSON in java, wouldn't have to do this!
 --> tIconFeature.setStyle(svgIconStyle("s", 24, [[ div Color ]], 1, [[temperature Text]], [[text Color]]));
 
 */
         
-function doWeatherOLMap(stations, obsIndoor, obsData, obsDataRapid) {
-    console.log("Map main worker called!");
+function doWeatherOLMap(wxStations, obsIndoor, obsData, obsDataRapid) {
+    var wxDataType = "SfcT";
     var rData = "";
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
     var jsonData = obsData[0].jsonData; obsData = false;
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
-    var wxStations = stations[0]; stations = false;
     if(isSet(jsonData)) {
-        jsonDataMerged = jsonData.concat(jsonDataRapid);
-        console.log(jsonDataMerged);
-        
+        jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
-        wxStations.forEach(function (station) {
-            console.log("HIT DATA FOR: " + station);
-            /* 
-            //if(station.Priority !== 1) { continue; } --- for testing
-            var stationId = wxStations.StationId;
-            var thisObsWx = "Unknown Weather";
-            if(checkMobile()) {
-                var skipper = Math.rand(0, 3);
-                if(skipper !== 0 && station.Priority < 2) {
-                    return false;
-                }
-            }
-            // loop through if key matches, data = stationData
-            var stationData = obsData[stationId];
-            var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
-            if(!isSet(stationData.Temperature) || stationData.Temperature < -100) { return false; }
-            if(!isSet(stationData.Dewpoint)) {
-                if(!isSet(stationData.D0)) {
-                    stationData.Dewpoint = conv2Tf(stationData.D0);
-                } else {
-                    stationData.Dewpoint = stationData.Temperature;
-                }
-            }
-            if(wxStations.Priority === 5) {
-                stationData.Temperature = conv2Tf(stationData.Temperature);
-                stationData.Dewpoint = conv2Tf(stationData.Dewpoint);
-            }
-            if(isSet(stationData.Weather)) { thisObsWx = stationData.Weather; }
-            if(isSet(wxStations.Point)) {
-                var shortTime = wxShortTime(stationData.TimeString);
-                var content = "";
-                var theStation = stationId;
-                var bElevMb = wxStations.SfcMB;
-                if(wxStations.Priority < 4) {
-                    var tarEleTemp = "#Sh"+theStation+"TableT";
-                    var tarEleHumi = "#Sh"+theStation+"TableH";
-                    var tarEleWind = "#Sh"+theStation+"TableW";
-                    dojo.connect(tarEleTemp, "onclick", showTableTemp(stationId));
-                    dojo.connect(tarEleHumi, "onclick", showTableHumi(stationId));
-                    dojo.connect(tarEleWind, "onclick", showTableWind(stationId));
-                    content += processUpperAirData(null, stationData) +
-                            "<strong>" + theStation + "</strong><br/>";
-                    if(isSet(wxStations.Description)) { content += wxStations.Description; } else { content += wxStations.State; }
-                    content += "<br/>" + shortTime + "<br/>" +
-                            "<table>" +
-                            "<tr><td><a href='" + doCh("p", "WxXML", "TLev=SFC&Station="+theStation) + "' target='new'>" +
-                            "<img class='th_small' src='" + wxIcon + "' />" +
-                            "</a></td>" +
-                            "<td>" + thisObsWx + "<br/>";
-                    if(isSet(stationData.Temperature)) { content += "<strong>Temp</strong>: <span style='" + styleTemp(stationData.Temperature) + "'>" + (stationData.Temperature).toFixed(1) + "F</span><br/>"; }
-                    if(isSet(stationData.Dewpoint)) { content += "<strong>Dwpt</strong>: <span style='" + styleTemp(stationData.Dewpoint) + "'>" + (stationData.Dewpoint).toFixed(1) + "F</span><br/>"; }
-                    if(isSet(stationData.WindSpeed)) { content += "<strong>Wind</strong>: <span style='" + styleWind(stationData.WindSpeed) + "'>" + (stationData.WindSpeed).toFixed(1) + " MPH</span><br/>"; }
-                    if(isSet(stationData.WindGust)) { content += "<strong>Gusts</strong>: <span style='" + styleWind(stationData.WindGust) + "'>" + (stationData.WindGust).toFixed(1) + " MPH</span><br/>"; }
-                    if(isSet(stationData.Pressure)) {
-                        content += "<strong>MSLP</strong>: " + (stationData.Pressure).toFixed(1) + " mb</span><br/>";
+        wxStations.forEach(function (thisWxStation) {
+            if(thisWxStation.Priority === 1) {
+                // check mobile filter to 1:3 stations if performance issues
+                var stationId = thisWxStation.Station;
+                var thisObsWx = "Unknown Weather";
+                var stationData = jsonDataMerged[stationId];
+                if(!isSet(stationData.Temperature) || stationData.Temperature < -100) { return false; }
+                if(!isSet(stationData.Dewpoint)) {
+                    if(!isSet(stationData.D0)) {
+                        stationData.Dewpoint = conv2Tf(stationData.D0);
                     } else {
-                        if(isSet(stationData.PressureIn)) {
-                            content += "<strong>Altim HG</strong>: " + (stationData.PressureIn).toFixed(2) + " in</span><br/>";
-                        }
+                        stationData.Dewpoint = stationData.Temperature;
                     }
-                    if(wxStations.Priority === 6 || wxStations.Priority === 7) {
-                        if(isSet(stationData.WaterColumnHeight)) { content += "<strong>Column</strong>: " + stationData.WaterColumnHeight + " m</span><br/>"; }
-                        if(isSet(stationData.WaterTemp)) { content += "<strong>Water</strong>: <span style='" + styleTemp(stationData.WaterTemp) + "'>" + (stationData.WaterTemp).toFixed(1) + "F</span><br/>"; }
-                        if(isSet(stationData.WaveHeight)) { content += "<strong>Waves</strong>: " + (stationData.WaveHeight * 3.28084).toFixed(1) + " ft<br/>"; }
-                        if(isSet(stationData.WavePeriodDominant)) {
-                            content += "<strong>Period</strong>: " + Math.round(stationData.WavePeriodDominant) +
-                                    " (" + (stationData.WavePeriodAverage).toFixed(1) + "s)<br/>";
+                }
+                if(wxStations.Priority === 5) {
+                    stationData.Temperature = conv2Tf(stationData.Temperature);
+                    stationData.Dewpoint = conv2Tf(stationData.Dewpoint);
+                }
+                if(isSet(stationData.Weather)) { thisObsWx = stationData.Weather; }
+                var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
+                if(isSet(thisWxStation.Point)) {
+                    var shortTime = wxShortTime(stationData.TimeString);
+                    var content = "";
+                    var theStation = stationId;
+                    var bElevMb = thisWxStation.SfcMB;
+                    if(thisWxStation.Priority < 4) {
+                        var tarEleTemp = "#Sh"+theStation+"TableT";
+                        var tarEleHumi = "#Sh"+theStation+"TableH";
+                        var tarEleWind = "#Sh"+theStation+"TableW";
+                        /* dojo.connect(tarEleTemp, "onclick", showTableTemp(stationId));
+                        dojo.connect(tarEleHumi, "onclick", showTableHumi(stationId));
+                        dojo.connect(tarEleWind, "onclick", showTableWind(stationId)); */
+                        content += processUpperAirData(null, stationData) +
+                                "<strong>" + theStation + "</strong><br/>";
+                        if(isSet(thisWxStation.Description)) { content += thisWxStation.Description; } else { content += thisWxStation.State; }
+                        content += "<br/>" + shortTime + "<br/>" +
+                                "<table>" +
+                                "<tr><td><a href='" + doCh("p", "WxXML", "TLev=SFC&Station="+theStation) + "' target='new'>" +
+                                "<img class='th_small' src='" + wxIcon + "' />" +
+                                "</a></td>" +
+                                "<td>" + thisObsWx + "<br/>";
+                        if(isSet(stationData.Temperature)) { content += "<strong>Temp</strong>: <span style='" + styleTemp(stationData.Temperature) + "'>" + Number(stationData.Temperature).toFixed(1) + "F</span><br/>"; }
+                        if(isSet(stationData.Dewpoint)) { content += "<strong>Dwpt</strong>: <span style='" + styleTemp(stationData.Dewpoint) + "'>" + Number(stationData.Dewpoint).toFixed(1) + "F</span><br/>"; }
+                        if(isSet(stationData.WindSpeed)) { content += "<strong>Wind</strong>: <span style='" + styleWind(stationData.WindSpeed) + "'>" + Number(stationData.WindSpeed).toFixed(1) + " MPH</span><br/>"; }
+                        if(isSet(stationData.WindGust)) { content += "<strong>Gusts</strong>: <span style='" + styleWind(stationData.WindGust) + "'>" + Number(stationData.WindGust).toFixed(1) + " MPH</span><br/>"; }
+                        if(isSet(stationData.Pressure)) {
+                            content += "<strong>MSLP</strong>: " + Number(stationData.Pressure).toFixed(1) + " mb</span><br/>";
+                        } else {
+                            if(isSet(stationData.PressureIn)) {
+                                content += "<strong>Altim HG</strong>: " + Number(stationData.PressureIn).toFixed(2) + " in</span><br/>";
+                            }
                         }
-                        if(isSet(stationData.WaveDirection)) { content += "<strong>Wave Dir.</strong>: " + stationData.WaveDirection + "<br/>"; }
-                        content += "</table>";
-                        if(wxStations.Priority < 4) {
-                            content += "<button id='Sh" + theStation + "TableT' class='UButton'>TMP</button>" +
-                                    "<button id='Sh" + theStation + "TableH' class='UButton'>HUM</button>" +
-                                    "<button id='Sh" + theStation + "TableW' class='UButton'>WND</button>";
-                            // do sounding min trim() on doSoundingMin.replace("/\s\s+/", "");
+                        if(thisWxStation.Priority === 6 || thisWxStation.Priority === 7) {
+                            if(isSet(stationData.WaterColumnHeight)) { content += "<strong>Column</strong>: " + stationData.WaterColumnHeight + " m</span><br/>"; }
+                            if(isSet(stationData.WaterTemp)) { content += "<strong>Water</strong>: <span style='" + styleTemp(stationData.WaterTemp) + "'>" + Number(stationData.WaterTemp).toFixed(1) + "F</span><br/>"; }
+                            if(isSet(stationData.WaveHeight)) { content += "<strong>Waves</strong>: " + Number(stationData.WaveHeight * 3.28084).toFixed(1) + " ft<br/>"; }
+                            if(isSet(stationData.WavePeriodDominant)) {
+                                content += "<strong>Period</strong>: " + Math.round(stationData.WavePeriodDominant) +
+                                        " (" + (stationData.WavePeriodAverage).toFixed(1) + "s)<br/>";
+                            }
+                            if(isSet(stationData.WaveDirection)) { content += "<strong>Wave Dir.</strong>: " + stationData.WaveDirection + "<br/>"; }
+                            content += "</table>";
+                            if(thisWxStation.Priority < 4) {
+                                content += "<button id='Sh" + theStation + "TableT' class='UButton'>TMP</button>" +
+                                        "<button id='Sh" + theStation + "TableH' class='UButton'>HUM</button>" +
+                                        "<button id='Sh" + theStation + "TableW' class='UButton'>WND</button>";
+                                // do sounding min trim() on doSoundingMin.replace("/\s\s+/", "");
+                            }
+                            var station = theStation;
+                            rData += content + "</script>";
                         }
-                        var station = theStation;
-                        rData += content + "</script>";
-                    }
-                    var obsSpan = smallDivs(wxDataType ?, station, stationData) + "</script>";
-                    if(isSet(loopNo)) {
-                        $(function() {
-                            var els = $("span[id^="+theStation+"_]").hide().toArray();
-                            if(!els.length) return;
-                            $(els[0]).show();
-                            setInterval(function() {
-                                $(els[0]).hide();
-                                els.push(els.shift());
-                                $(els[0]).fadeIn();
-                            }, 5);
+                        var obsSpan = smallDivs(wxDataType, station, stationData) + "</script>";
+                        if(isSet(loopNo)) {
+                            $(function() {
+                                var els = $("span[id^="+theStation+"_]").hide().toArray();
+                                if(!els.length) return;
+                                $(els[0]).show();
+                                setInterval(function() {
+                                    $(els[0]).hide();
+                                    els.push(els.shift());
+                                    $(els[0]).fadeIn();
+                                }, 5);
+                            });
+                        }
+                        var obsIcon = L.divIcon({
+                            iconSize: new L.point(16, 16),
+                            html: obsSpan
                         });
                     }
-                    var obsIcon = L.divIcon({
-                        iconSize: new L.point(16, 16),
-                        html: obsSpan
-                    });
                 }
-            } */
+                //generateIcons(); 
+            }
         });
-        //generateIcons();
     } else {
         rData = "<div class='Notice'>No data!</div>";
     }
+    console.log(rData);
     return rData;
 }
 

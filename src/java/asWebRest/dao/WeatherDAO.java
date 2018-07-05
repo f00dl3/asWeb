@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Jun 2018
+Updated: 5 Jul 2018
  */
 
 package asWebRest.dao;
@@ -687,7 +687,7 @@ public class WeatherDAO {
                 tObject
                     .put("ObsID", resultSet.getLong("ObsID"))
                     .put("GetTime", resultSet.getString("GetTime"))
-                    .put("jsonData", resultSet.getString("jsonData"));
+                    .put("jsonData", new JSONObject(resultSet.getString("jsonData")));
                 tContainer.put(tObject);
             }
             resultSet.close();
