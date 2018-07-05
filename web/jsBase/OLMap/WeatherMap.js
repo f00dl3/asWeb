@@ -92,7 +92,7 @@ function doWeatherOLMap(wxStations, obsIndoor, obsData, obsDataRapid) {
                             rData += content + "</script>";
                         }
                         var obsSpan = smallDivs(wxDataType, station, stationData) + "</script>";
-                        if(isSet(loopNo)) {
+                        /* if(isSet(loopNo)) {
                             $(function() {
                                 var els = $("span[id^="+theStation+"_]").hide().toArray();
                                 if(!els.length) return;
@@ -103,11 +103,9 @@ function doWeatherOLMap(wxStations, obsIndoor, obsData, obsDataRapid) {
                                     $(els[0]).fadeIn();
                                 }, 5);
                             });
-                        }
-                        var obsIcon = L.divIcon({
-                            iconSize: new L.point(16, 16),
-                            html: obsSpan
-                        });
+                        } */
+                        var obsIcon = "";
+                        console.log(obsSpan);
                     }
                 }
                 //generateIcons(); 
@@ -154,7 +152,7 @@ function showTableWind(stationId) {
 }
 
 function smallDivs(dataType, wxStations, stationData) {
-    var sessVars = getSessionVariables();
+    var sessVars = window.localStorage.getItem("sessionVars");
     var gfHour; if(isSet(sessVars.wxDataHour)) { gFHour = sessVars.gfHour; } else { gFHour = false; }
     var gImgType; if(isSet(sessVars.gImgType)) { gImgType = sessVars.gImgType; } else { gImgType = "tmp2m"; }
     var sfcT, sfcD, obsPlotData, obsSpan;

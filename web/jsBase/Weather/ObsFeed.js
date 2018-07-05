@@ -314,7 +314,6 @@ function processUpperAirData(baseEle, stationData) {
                     "<td style='" + styleRh(obsData.SfcH) + "'>" + obsData.SfcH + "</td>" +
                     "<td style='" + styleWind(obsData.SfcWS) + "'>" + obsData.SfcWV + " " + obsData.SfcWS + "</td>" +
                     "</tr>";
-                console.log(tASurface);
             }
             if(isSet(stationData.CAPE)) {
                 doSoundingMin += "</table><table>" +

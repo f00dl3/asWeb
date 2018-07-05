@@ -45,7 +45,6 @@ function color2Grad(type, direct, vals) {
         style += ", " + vStr3;
     }
     style += ");";
-    console.log(style);
     return style;
             
 }
