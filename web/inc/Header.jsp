@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    5 Jul 2018
+    Updated:    7 Jul 2018
     Author     : astump
 --%>
 
@@ -140,9 +140,9 @@
     }
     
     String olMapScriptPack = "";
+    olMapScriptPack += "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";
     for(int i=0; i < olMapScripts.length; i++) {
-        olMapScriptPack += "<script src='"+rootPath+"/jsBase/"+olMapScripts[i]+".js'></script>" +
-                "<script src='"+rootPath+"/jsLib/sun-js-master/sun.js'></script>";
+        olMapScriptPack += "<script src='"+rootPath+"/jsBase/"+olMapScripts[i]+".js'></script>";
     }
         
     String snmpScriptPack = "";

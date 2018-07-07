@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 26 Jun 2018
+Updated: 7 Jul 2018
  */
 
 function generateMapHolder() {
@@ -41,7 +41,6 @@ function initMap() {
         case "G16VIS": renderImage("G16VIS"); break;
         case "Image": renderImage(); break;
         case "PointClick": putPointClickMap(); break;
-        case "Wx": initWxMap(); break;
         default: putSimpleMap(); break;
     }
 }
