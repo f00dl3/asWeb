@@ -11,7 +11,6 @@ DEVELOPMENT THOUGHTS:
 */   
 
 function addObsMarkers(map, stationData) {
-    console.log("Attempting to render station data for " + stationData.Station);
     var tCoord = JSON.parse(stationData.Point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
@@ -34,13 +33,14 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (thisWxStation) {
             if(thisWxStation.Priority === 1) {
-                var tIconFeature = addObsMarkers(map, thisWxStation, null);
-                tIconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
-                vectorSource.addFeature(tIconFeature);
-                // check mobile filter to 1:3 stations if performance issues
+                // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
                 var stationId = thisWxStation.Station;
                 var thisObsWx = "Unknown Weather";
                 var stationData = jsonDataMerged[stationId];
+                console.log("Attempting to render station data for " + thisWxStation.Station);
+                var tIconFeature = addObsMarkers(map, thisWxStation, null);
+                tIconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
+                vectorSource.addFeature(tIconFeature);
                 if(!isSet(stationData.Temperature) || stationData.Temperature < -100) { return false; }
                 if(!isSet(stationData.Dewpoint)) {
                     if(!isSet(stationData.D0)) {
@@ -124,12 +124,13 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
                 }
                 //generateIcons(); 
             }
-            overlayLayer = new ol.layer.Vector({ source: vectorSource });
-            map.addLayer(overlayLayer);
         });
     } else {
         rData = "<div class='Notice'>No data!</div>";
     }
+    overlayLayer = new ol.layer.Vector({ source: vectorSource });
+    map.addLayer(overlayLayer);
+    console.log(overlayLayer);
     console.log(rData);
     return rData;
 }
