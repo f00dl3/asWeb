@@ -150,11 +150,13 @@ public class WeatherResource extends ServerResource {
                     JSONArray wxObsJsonRapid = getWeatherAction.getObsJsonRapid(dbc, qParams, inParams);
                     JSONArray indorObsB = getSnmpAction.getMergedLastTemp(dbc);
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
+                    JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     mergedResults
                         .put("wxObsJson", wxObsJson)
                         .put("wxObsJsonRapid", wxObsJsonRapid)
                         .put("indoorObs", indorObsB)
-                        .put("stations", stations);
+                        .put("stations", stations)
+                        .put("mobiLoc", mobiLoc);
                     returnData = mergedResults.toString();
                     break;          
                     

@@ -1,8 +1,8 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 30 Apr 2018
- */
+Updated: 8 Jul 2018
+*/
 
 package asWebRest.dao;
 
@@ -448,16 +448,16 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getNote3Geo() {
+    public JSONArray getNote3Geo(Connection dbc) {
         final String query_SNMP_Note3_Geo = "SELECT WalkTime, Location, BattLevel, BattTemp FROM net_snmp.Note3 ORDER BY WalkTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_SNMP_Note3_Geo, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Note3_Geo, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("WalkTime", resultSet.getString("WalkTime"))
-                    .put("Location", resultSet.getString("ExtTemp"))
+                    .put("Location", resultSet.getString("Location"))
                     .put("BattLevel", resultSet.getInt("BattLevel"))
                     .put("BattTemp", resultSet.getInt("BattTemp"));
                 tContainer.put(tObject);

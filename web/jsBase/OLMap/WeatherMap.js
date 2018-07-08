@@ -52,7 +52,9 @@ function addObsMarkers(map, stationInfo, stationData) {
     return iconFeature;
 }
 
-function addLocationMarkers(map, description, point) {
+function addObsLocationMarkers(map, description, point) {
+    var shortName = "X";
+    console.log(point);
     var tCoord = JSON.parse(point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
@@ -63,11 +65,15 @@ function addLocationMarkers(map, description, point) {
         longitude: tCoord[0],
         type: "Location"
     });
-    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, "HO", "#000000"));
+    switch(description) {
+        case "Home": shortName = "H"; break;
+        case "Note3": shortName = "A"; break;
+    }
+    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
     return iconFeature;
 }
 
-function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
+function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc) {
     var wxDataType = "SfcT";
     var rData = "";
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
@@ -75,7 +81,8 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
     var vectorSource = new ol.source.Vector({});
-    vectorSource.addFeature(addLocationMarkers(map, "Home", getHomeGeo("geoJSON")));
+    vectorSource.addFeature(addObsLocationMarkers(map, "Home", getHomeGeo("geoJSON")));
+    vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiLoc[0].Location));
     if(isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
@@ -417,7 +424,8 @@ function getJsonWeatherGlob(map) {
                             data.stations,
                             data.indoorObs,
                             data.wxObsJson,
-                            data.wxObsJsonRapid
+                            data.wxObsJsonRapid,
+                            data.mobiLoc
                     );
                 },
                 function(error) { 
