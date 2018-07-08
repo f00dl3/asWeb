@@ -2,21 +2,33 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 7 Jul 2018
+Updated: 8 Jul 2018
 RESOURCE HOG ALERT!
-
-DEVELOPMENT THOUGHTS:
---> tIconFeature.setStyle(svgIconStyle("s", 24, [[ div Color ]], 1, [[temperature Text]], [[text Color]]));
 
 */   
 
-function addObsMarkers(map, stationData) {
-    var tCoord = JSON.parse(stationData.Point);
+function addObsMarkers(map, stationInfo, stationData) {
+    var tCoord = JSON.parse(stationInfo.Point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
+        geometry: point,
         type: "Coordinate"
     });
+    //iconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
+    iconFeature.setStyle(svgIconStyle("s", 24, "#ffffff", 1, stationData.Temperature, "#000000"));
+    return iconFeature;
+}
+
+function addLocationMarkers(map, description, point) {
+    var tCoord = JSON.parse(point);
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var iconFeature = new ol.Feature({
+        geometry: point,
+        type: "Coordinate"
+    });
+    iconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
     return iconFeature;
 }
 
@@ -28,6 +40,35 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
     var vectorSource = new ol.source.Vector({});
+    vectorSource.addFeature(addLocationMarkers(map, "home", getHomeGeo("geoJSON")));
+    if(isSet(jsonData)) {
+        jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
+        jsonData = jsonDataRapid = false;
+        wxStations.forEach(function (thisWxStation) {
+            if(thisWxStation.Priority === 1) {
+                // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
+                var stationId = thisWxStation.Station;
+                var stationData = jsonDataMerged[stationId];
+                console.log("Attempting to render station data for " + stationId);
+                console.log(stationData);
+                var tIconFeature = addObsMarkers(map, thisWxStation, stationData);
+                vectorSource.addFeature(tIconFeature);
+            }
+        });
+    }
+    overlayLayer = new ol.layer.Vector({ source: vectorSource });
+    map.addLayer(overlayLayer);
+    console.log(overlayLayer);
+    console.log(rData);
+}
+
+function doWeatherMapFromOldStuff(map, wxStations, obsIndoor, obsData, obsDataRapid) {
+    var wxDataType = "SfcT";
+    var rData = "";
+    var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
+    var jsonData = obsData[0].jsonData; obsData = false;
+    var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
+    var jsonDataMerged;
     if(isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
@@ -37,10 +78,6 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
                 var stationId = thisWxStation.Station;
                 var thisObsWx = "Unknown Weather";
                 var stationData = jsonDataMerged[stationId];
-                console.log("Attempting to render station data for " + thisWxStation.Station);
-                var tIconFeature = addObsMarkers(map, thisWxStation, null);
-                tIconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
-                vectorSource.addFeature(tIconFeature);
                 if(!isSet(stationData.Temperature) || stationData.Temperature < -100) { return false; }
                 if(!isSet(stationData.Dewpoint)) {
                     if(!isSet(stationData.D0)) {
@@ -128,10 +165,6 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
     } else {
         rData = "<div class='Notice'>No data!</div>";
     }
-    overlayLayer = new ol.layer.Vector({ source: vectorSource });
-    map.addLayer(overlayLayer);
-    console.log(overlayLayer);
-    console.log(rData);
     return rData;
 }
 
