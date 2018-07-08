@@ -3,7 +3,8 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Updated: 8 Jul 2018
-RESOURCE HOG ALERT!
+POSSIBLE DESKTOP RESOURCE HOG ALERT!
+DEFINTATE MOBILE RESOURCE HOG!
 
 */   
 
@@ -27,9 +28,9 @@ function addObsMarkers(map, stationInfo, stationData) {
     }
     if(isSet(stationData.Weather)) { thisObsWx = stationData.Weather; }
     if(isSet(stationInfo.Description)) {
-        stationDescription = stationInfo.City + " " + stationInfo.Description;
+        stationDescription = stationInfo.City + ", " + stationInfo.Description;
     } else {
-        stationDescription = stationInfo.City + " " + stationInfo.State;
+        stationDescription = stationInfo.City + ", " + stationInfo.State;
     }
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
@@ -38,11 +39,15 @@ function addObsMarkers(map, stationInfo, stationData) {
         geometry: point,
         latitude: tCoord[1],
         longitude: tCoord[0],
+        pressureMb: stationData.Pressure,
+        pressureIn: stationData.PressureIn,
         stationId: stationInfo.Station,
         stationDescription: stationDescription,
         temperature: stationData.Temperature,
         timeString: shortTime,
         type: "Observation",
+        windGusts: stationData.WindGusts,
+        windSpeed: stationData.WindSpeed,
         wx: thisObsWx,
         wxIcon: wxIcon
     });
@@ -52,10 +57,8 @@ function addObsMarkers(map, stationInfo, stationData) {
     return iconFeature;
 }
 
-function addObsLocationMarkers(map, description, point) {
+function addObsLocationMarkers(map, description, tCoord) {
     var shortName = "X";
-    console.log(point);
-    var tCoord = JSON.parse(point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
@@ -67,31 +70,40 @@ function addObsLocationMarkers(map, description, point) {
     });
     switch(description) {
         case "Home": shortName = "H"; break;
-        case "Note3": shortName = "A"; break;
+        case "Note3":
+            shortName = "A";
+            //overlay.setPosition(point);
+            break;
     }
     iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
     return iconFeature;
 }
 
 function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc) {
-    var wxDataType = "SfcT";
-    var rData = "";
+    var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
     var jsonData = obsData[0].jsonData; obsData = false;
-    var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
+    var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
+    var mobiCoord = JSON.parse(mobiLoc[0].Location);
+    console.log(mobiCoord);
+    var rData = "";
     var vectorSource = new ol.source.Vector({});
-    vectorSource.addFeature(addObsLocationMarkers(map, "Home", getHomeGeo("geoJSON")));
-    vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiLoc[0].Location));
+    var wxDataType = "SfcT";
+    vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
+    if(mobiCoord[0].toFixed(2) !== homeCoord[0].toFixed(2) &&
+        mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)) {
+        vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
+        map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
+    }
     if(isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (thisWxStation) {
             if(thisWxStation.Priority !== 0) {
-                // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
                 var stationId = thisWxStation.Station;
                 var stationData = jsonDataMerged[stationId];
-                if(isSet(stationData)) {
+                if(isSet(stationData) && isSet(stationData.Temperature)) {
                     var tIconFeature = addObsMarkers(map, thisWxStation, stationData); 
                     vectorSource.addFeature(tIconFeature);
                 }
@@ -118,8 +130,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     }
                     break;
                 case "Observation":
-                    var temp = feature.get("temperature");
-                    var dewpoint = feature.get("dewpoint");
+                    var temp = Number(feature.get("temperature"));
                     eiData = "<table><tr><td colspan='2'>" +
                             feature.get("stationId") + "<br/>" +
                             feature.get("timeString") + "<br/>" +
@@ -128,9 +139,26 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                             "<img class='th_small' src='" + feature.get("wxIcon") + "' /><br/>" +
                             feature.get("wx") +
                             "</td><td>" +
-                            "<strong>T: </strong><span style='" + styleTemp(temp) + "'>" + Math.round(temp) + "F</span><br/>" +
-                            "<strong>D: </strong><span style='" + styleTemp(dewpoint) + "'>" + Math.round(dewpoint) + "F</span><br/>" +
-                            "</td></tr></table>";
+                            "Temp: <span style='" + styleTemp(temp) + "'>" + Math.round(temp) + "F</span><br/>";
+                    if(isSet(feature.get("dewpoint"))) {
+                        var dewpoint = Number(feature.get("dewpoint")); 
+                        eiData += "Dwpt: <span style='" + styleTemp(dewpoint) + "'>" + Math.round(dewpoint) + "F</span><br/>";
+                    }
+                    if(isSet(feature.get("windSpeed"))) {
+                        var windSpeed = Number(feature.get("windSpeed"));
+                        eiData += "Wind: <span style='" + styleWind(windSpeed) + "'>" + windSpeed.toFixed(1) + " MPH</span><br/>";
+                    }
+                    if(isSet(feature.get("windGusts"))) {
+                        var windGust = Number(feature.get("windGusts"));
+                        eiData += "Gusts: <span style='" + styleWind(windGusts) + "'>" + windGusts.toFixed(1) + " MPH</span><br/>";
+                    }
+                    if(isSet(feature.get("pressureMb"))) { 
+                        eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>";
+                    }
+                    if(isSet(feature.get("pressureIn"))) {
+                        eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>";
+                    }
+                    eiData += "</td></tr></table>";
                     break;
             }
             content.innerHTML = eiData;

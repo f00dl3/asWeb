@@ -18,9 +18,10 @@
     border: 1px solid #cccccc;
     bottom: 12px;
     left: -50px;
-    width: 160px;
-    max-width: 320px;
+    width: 280px;
+    max-width: 420px;
     display: none;
+    overflow: scroll;
 }
 
 .ol-popup:after, .ol-popup:before {

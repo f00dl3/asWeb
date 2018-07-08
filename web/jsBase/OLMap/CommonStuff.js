@@ -77,7 +77,7 @@ var remoteTiles = new ol.layer.Tile({ source: new ol.source.OSM() });
 
 var homeView = new ol.View({
     center: wmGeoJson,
-    zoom: 15,
+    zoom: 14,
     maxZoom: 16
 });
 
