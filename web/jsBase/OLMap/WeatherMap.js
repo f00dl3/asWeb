@@ -124,12 +124,15 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     var description = feature.get("description");
                     eiData = "<strong>" + description + "</strong><br/>";
                     if(description === "Home") {
-                        var actualIndoorTemp = Number(conv2Tf(obsIndoor[0].ExtTemp/10)); // Does not work, 7/8/18
+                        var rawIndoorTemp = obsIndoor[0].ExtTemp;
+                        var actualGarageTemp = obsIndoor[1].ExtTemp;
+                        var actualIndoorTemp = conv2Tf(rawIndoorTemp/1000);
                         eiData += "<table><tr>" +
                                 "<td><a href='" + getResource("Cams") + "' target='cams'>" +
-                                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a></td>" +
+                                "<img class='th_sm_med' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a></td>" +
                                 "<td><strong>Indoors</strong><br/>" +
-                                "Desktop: <span style='" + styleTemp(actualIndoorTemp) + "'>" + actualIndoorTemp.toFixed(1) + "</span>" +
+                                "Desktop: <span style='" + styleTemp(actualIndoorTemp) + "'>" + Math.round(actualIndoorTemp) + "F</span><br/>" +
+                                "Garage: <span style='" + styleTemp(actualGarageTemp) + "'>" + Math.round(actualGarageTemp) + "F</span>" +
                                 "</td></tr></table>";
                     }
                     break;

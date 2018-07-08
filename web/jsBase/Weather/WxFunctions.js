@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 22 May 2018
+Updated: 8 Jul 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -237,6 +237,14 @@ function conv2Mph(wsKt) {
 	return Math.round(wsKt*1.15078);
 }
 
+function conv2Tf(tCel) {
+    if((isSet(tCel)) && (tCel < 150)) {	
+        return Math.round(tCel * 9/5 + 32);
+    } else {
+        return '';
+    }
+}
+
 function colorSnow(snText) {
     var sn = snText.valueOf();
     switch(sn) {
@@ -248,14 +256,6 @@ function colorSnow(snText) {
         case inRange(sn, 5.0, 7.9): return "C6SG50";
         case inRange(sn, 8.0, 99.9): return "CSG80";
         default: return "C6ZERO";
-    }
-}
-
-function conv2Tf(tCel) {
-    if((isSet(tCel)) && (tCel < 150)) {	
-        return Math.round(tCel * 9/5 + 32);
-    } else {
-        return '';
     }
 }
 
