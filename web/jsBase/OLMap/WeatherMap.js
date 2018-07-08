@@ -86,7 +86,6 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
     var jsonDataMerged;
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
-    console.log(mobiCoord);
     var rData = "";
     var vectorSource = new ol.source.Vector({});
     var wxDataType = "SfcT";
@@ -125,8 +124,13 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     var description = feature.get("description");
                     eiData = "<strong>" + description + "</strong><br/>";
                     if(description === "Home") {
-                        eiData += "<a href='" + getResource("Cams") + "' target='cams'>" +
-                                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>";
+                        var actualIndoorTemp = Number(conv2Tf(obsIndoor[0].ExtTemp/10)); // Does not work, 7/8/18
+                        eiData += "<table><tr>" +
+                                "<td><a href='" + getResource("Cams") + "' target='cams'>" +
+                                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a></td>" +
+                                "<td><strong>Indoors</strong><br/>" +
+                                "Desktop: <span style='" + styleTemp(actualIndoorTemp) + "'>" + actualIndoorTemp.toFixed(1) + "</span>" +
+                                "</td></tr></table>";
                     }
                     break;
                 case "Observation":
