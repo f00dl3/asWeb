@@ -26,6 +26,14 @@ function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
                     '<circle cx="' + size + '" cy="' + size + '" r="' + size + '" fill="' + thisColor + '"/>' +
                     '</svg>';
             break;
+        case "ct":
+            var svgSize = size * 2;
+            var fontSize = size;
+            svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
+                    '<circle cx="' + size + '" cy="' + size + '" r="' + size + '" fill="' + thisColor + '"/>' +
+                    '<text x="' + svgSize/2 + '" y="' + svgSize/2 + '" fill="' + labelColor + '" text-anchor="middle" alignment-baseline="middle" style="font-size:' + fontSize + 'px;">' + label + '</text>' +
+                    '</svg>';
+            break;
         case "s":
             svgData += '<svg width="' + svgSize + '" height="' + svgSize + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
                     '<rect x="' + size + '" y="' + size + '" width="' + svgSize + '" height="' + svgSize + '" style="fill:' + thisColor + ';stroke:' + thisColor + ';stroke-width:0;fill-opacity:' + opacity + ';stoke-opacity: 1"/>' +
@@ -41,7 +49,7 @@ function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
             scale: 0.3
         })
     });
-    console.log(style);
+    console.log(genSvgUrl);
     return style;
 }
 

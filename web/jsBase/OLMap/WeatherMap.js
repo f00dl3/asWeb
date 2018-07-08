@@ -13,10 +13,14 @@ function addObsMarkers(map, stationInfo, stationData) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         geometry: point,
-        type: "Coordinate"
+        latitude: tCoord[1],
+        longitude: tCoord[0],
+        stationId: stationInfo.Station,
+        type: "Observation"
     });
-    //iconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
-    iconFeature.setStyle(svgIconStyle("s", 24, "#ffffff", 1, stationData.Temperature, "#000000"));
+    var icLabelTemp = Math.round(stationData.Temperature);
+    var icColorTemp = styleTemp(stationData.Temperature, true);
+    iconFeature.setStyle(svgIconStyle("ct", 35, icColorTemp, 1, icLabelTemp, "#000000"));
     return iconFeature;
 }
 
@@ -26,9 +30,11 @@ function addLocationMarkers(map, description, point) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         geometry: point,
-        type: "Coordinate"
+        latitude: tCoord[1],
+        longitude: tCoord[0],
+        type: "Location"
     });
-    iconFeature.setStyle(svgIconStyle("c", 15, "#ffffff", 1, null, null));
+    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, "HO", "#000000"));
     return iconFeature;
 }
 
@@ -45,12 +51,10 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (thisWxStation) {
-            if(thisWxStation.Priority === 1) {
+            if(thisWxStation.Priority < 3) {
                 // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
                 var stationId = thisWxStation.Station;
                 var stationData = jsonDataMerged[stationId];
-                console.log("Attempting to render station data for " + stationId);
-                console.log(stationData);
                 var tIconFeature = addObsMarkers(map, thisWxStation, stationData);
                 vectorSource.addFeature(tIconFeature);
             }
@@ -58,8 +62,23 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
     }
     overlayLayer = new ol.layer.Vector({ source: vectorSource });
     map.addLayer(overlayLayer);
-    console.log(overlayLayer);
-    console.log(rData);
+    map.on('click', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return feature;
+        });
+        if(feature) {
+            $("#popup").toggle();
+            var eCoord = evt.coordinate;
+            switch(feature.get("type")) {
+                case "Observation":
+                    content.innerHTML = "<strong>Station ID: </strong> " + feature.get("stationId") + "<br/>" +
+                        "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
+                        "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
+                    break;
+            }
+            overlay.setPosition(eCoord);
+        }
+    });
 }
 
 function doWeatherMapFromOldStuff(map, wxStations, obsIndoor, obsData, obsDataRapid) {
