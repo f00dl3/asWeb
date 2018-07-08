@@ -49,7 +49,6 @@ function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
             scale: 0.3
         })
     });
-    console.log(genSvgUrl);
     return style;
 }
 

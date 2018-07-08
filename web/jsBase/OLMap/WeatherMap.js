@@ -10,13 +10,41 @@ RESOURCE HOG ALERT!
 function addObsMarkers(map, stationInfo, stationData) {
     var tCoord = JSON.parse(stationInfo.Point);
     var point = new ol.geom.Point(tCoord);
+    var stationDescription = stationInfo.Station;
+    var thisObsWx = "Unknown Weather";
+    var shortTime = stationData.TimeString;
+    if(isSet(stationData.TimeString)) { wxShortTime(stationData.TimeString); }
+    if(!isSet(stationData.Dewpoint)) {
+        if(!isSet(stationData.D0)) {
+            stationData.Dewpoint = conv2Tf(stationData.D0);
+        } else {
+            stationData.Dewpoint = stationData.Temperature;
+        }
+    }
+    if(stationInfo.Priority === 5) {
+        stationData.Temperature = conv2Tf(stationData.Temperature);
+        stationData.Dewpoint = conv2Tf(stationData.Dewpoint);
+    }
+    if(isSet(stationData.Weather)) { thisObsWx = stationData.Weather; }
+    if(isSet(stationInfo.Description)) {
+        stationDescription = stationInfo.City + " " + stationInfo.Description;
+    } else {
+        stationDescription = stationInfo.City + " " + stationInfo.State;
+    }
+    var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
+        dewpoint: stationData.Dewpoint,
         geometry: point,
         latitude: tCoord[1],
         longitude: tCoord[0],
         stationId: stationInfo.Station,
-        type: "Observation"
+        stationDescription: stationDescription,
+        temperature: stationData.Temperature,
+        timeString: shortTime,
+        type: "Observation",
+        wx: thisObsWx,
+        wxIcon: wxIcon
     });
     var icLabelTemp = Math.round(stationData.Temperature);
     var icColorTemp = styleTemp(stationData.Temperature, true);
@@ -29,6 +57,7 @@ function addLocationMarkers(map, description, point) {
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
+        description: description,
         geometry: point,
         latitude: tCoord[1],
         longitude: tCoord[0],
@@ -46,17 +75,19 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
     var jsonDataRapid = obsDataRapid[0].jsonData; obsDataRapid = false;
     var jsonDataMerged;
     var vectorSource = new ol.source.Vector({});
-    vectorSource.addFeature(addLocationMarkers(map, "home", getHomeGeo("geoJSON")));
+    vectorSource.addFeature(addLocationMarkers(map, "Home", getHomeGeo("geoJSON")));
     if(isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);        
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (thisWxStation) {
-            if(thisWxStation.Priority < 3) {
+            if(thisWxStation.Priority !== 0) {
                 // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
                 var stationId = thisWxStation.Station;
                 var stationData = jsonDataMerged[stationId];
-                var tIconFeature = addObsMarkers(map, thisWxStation, stationData);
-                vectorSource.addFeature(tIconFeature);
+                if(isSet(stationData)) {
+                    var tIconFeature = addObsMarkers(map, thisWxStation, stationData); 
+                    vectorSource.addFeature(tIconFeature);
+                }
             }
         });
     }
@@ -69,13 +100,33 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid) {
         if(feature) {
             $("#popup").toggle();
             var eCoord = evt.coordinate;
+            var eiData = "";
             switch(feature.get("type")) {
+                case "Location":
+                    var description = feature.get("description");
+                    eiData = "<strong>" + description + "</strong><br/>";
+                    if(description === "Home") {
+                        eiData += "<a href='" + getResource("Cams") + "' target='cams'>" +
+                                "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>";
+                    }
+                    break;
                 case "Observation":
-                    content.innerHTML = "<strong>Station ID: </strong> " + feature.get("stationId") + "<br/>" +
-                        "<strong>Longitude:</strong> " + feature.get("longitude").toFixed(4) + "<br/>" +
-                        "<strong>Latitude:</strong> " + feature.get("latitude").toFixed(4);
+                    var temp = feature.get("temperature");
+                    var dewpoint = feature.get("dewpoint");
+                    eiData = "<table><tr><td colspan='2'>" +
+                            feature.get("stationId") + "<br/>" +
+                            feature.get("timeString") + "<br/>" +
+                            feature.get("stationDescription") +
+                            "</td></tr><tr><td>" +
+                            "<img class='th_small' src='" + feature.get("wxIcon") + "' /><br/>" +
+                            feature.get("wx") +
+                            "</td><td>" +
+                            "<strong>T: </strong><span style='" + styleTemp(temp) + "'>" + Math.round(temp) + "F</span><br/>" +
+                            "<strong>D: </strong><span style='" + styleTemp(dewpoint) + "'>" + Math.round(dewpoint) + "F</span><br/>" +
+                            "</td></tr></table>";
                     break;
             }
+            content.innerHTML = eiData;
             overlay.setPosition(eCoord);
         }
     });
@@ -95,24 +146,10 @@ function doWeatherMapFromOldStuff(map, wxStations, obsIndoor, obsData, obsDataRa
             if(thisWxStation.Priority === 1) {
                 // check mobile filter to 1:3 stations if performance issues for non Priority 1 stations
                 var stationId = thisWxStation.Station;
-                var thisObsWx = "Unknown Weather";
                 var stationData = jsonDataMerged[stationId];
                 if(!isSet(stationData.Temperature) || stationData.Temperature < -100) { return false; }
-                if(!isSet(stationData.Dewpoint)) {
-                    if(!isSet(stationData.D0)) {
-                        stationData.Dewpoint = conv2Tf(stationData.D0);
-                    } else {
-                        stationData.Dewpoint = stationData.Temperature;
-                    }
-                }
-                if(wxStations.Priority === 5) {
-                    stationData.Temperature = conv2Tf(stationData.Temperature);
-                    stationData.Dewpoint = conv2Tf(stationData.Dewpoint);
-                }
-                if(isSet(stationData.Weather)) { thisObsWx = stationData.Weather; }
-                var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
+
                 if(isSet(thisWxStation.Point)) {
-                    var shortTime = wxShortTime(stationData.TimeString);
                     var content = "";
                     var theStation = stationId;
                     var bElevMb = thisWxStation.SfcMB;
@@ -125,11 +162,9 @@ function doWeatherMapFromOldStuff(map, wxStations, obsIndoor, obsData, obsDataRa
                         dojo.connect(tarEleWind, "onclick", showTableWind(stationId)); */
                         content += processUpperAirData(null, stationData) +
                                 "<strong>" + theStation + "</strong><br/>";
-                        if(isSet(thisWxStation.Description)) { content += thisWxStation.Description; } else { content += thisWxStation.State; }
                         content += "<br/>" + shortTime + "<br/>" +
                                 "<table>" +
                                 "<tr><td><a href='" + doCh("p", "WxXML", "TLev=SFC&Station="+theStation) + "' target='new'>" +
-                                "<img class='th_small' src='" + wxIcon + "' />" +
                                 "</a></td>" +
                                 "<td>" + thisObsWx + "<br/>";
                         if(isSet(stationData.Temperature)) { content += "<strong>Temp</strong>: <span style='" + styleTemp(stationData.Temperature) + "'>" + Number(stationData.Temperature).toFixed(1) + "F</span><br/>"; }
@@ -360,6 +395,7 @@ function smallDivs(dataType, wxStations, stationData) {
              
 function getJsonWeatherGlob(map) {
     aniPreload("on");
+    var dataRefresh = getRefresh("medium");
     var jsonDataTimeout = getRefresh("medium");
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
@@ -389,6 +425,7 @@ function getJsonWeatherGlob(map) {
                     window.alert("request for ObsJson data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getJsonWeatherGlob(map); }, dataRefresh);
 }
 
 function initWxMap(map) {
