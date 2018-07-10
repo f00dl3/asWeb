@@ -2,11 +2,13 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 8 Jul 2018
+Updated: 9 Jul 2018
 POSSIBLE DESKTOP RESOURCE HOG ALERT!
 DEFINTATE MOBILE RESOURCE HOG!
 
 */   
+
+var overlayLayer;
 
 function addObsMarkers(map, stationInfo, stationData) {
     var tCoord = JSON.parse(stationInfo.Point);
@@ -14,7 +16,7 @@ function addObsMarkers(map, stationInfo, stationData) {
     var stationDescription = stationInfo.Station;
     var thisObsWx = "Unknown Weather";
     var shortTime = stationData.TimeString;
-    if(isSet(stationData.TimeString)) { wxShortTime(stationData.TimeString); }
+    if(isSet(stationData.TimeString)) { shortTime = wxShortTime(stationData.TimeString); }
     if(!isSet(stationData.Dewpoint)) {
         if(!isSet(stationData.D0)) {
             stationData.Dewpoint = conv2Tf(stationData.D0);
@@ -41,11 +43,15 @@ function addObsMarkers(map, stationInfo, stationData) {
         longitude: tCoord[0],
         pressureMb: stationData.Pressure,
         pressureIn: stationData.PressureIn,
+        priority: stationInfo.Priority,
         stationId: stationInfo.Station,
         stationDescription: stationDescription,
         temperature: stationData.Temperature,
         timeString: shortTime,
         type: "Observation",
+        waterColumnHeight: stationData.WaterColumnHeight,
+        waterTemp: stationData.WaterTemp,
+        waveHeight: stationData.WaveHeight,
         windGusts: stationData.WindGusts,
         windSpeed: stationData.WindSpeed,
         wx: thisObsWx,
@@ -140,8 +146,8 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     var temp = Number(feature.get("temperature"));
                     eiData = "<table><tr><td colspan='2'>" +
                             feature.get("stationId") + "<br/>" +
-                            feature.get("timeString") + "<br/>" +
-                            feature.get("stationDescription") +
+                            feature.get("stationDescription") + "<br/>" +
+                            feature.get("timeString") +
                             "</td></tr><tr><td>" +
                             "<img class='th_small' src='" + feature.get("wxIcon") + "' /><br/>" +
                             feature.get("wx") +
@@ -159,11 +165,19 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                         var windGust = Number(feature.get("windGusts"));
                         eiData += "Gusts: <span style='" + styleWind(windGusts) + "'>" + windGusts.toFixed(1) + " MPH</span><br/>";
                     }
-                    if(isSet(feature.get("pressureMb"))) { 
-                        eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>";
-                    }
-                    if(isSet(feature.get("pressureIn"))) {
-                        eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>";
+                    if(isSet(feature.get("pressureMb"))) { eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>"; }
+                    if(isSet(feature.get("pressureIn"))) { eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>"; }
+                    // Features not showing? 7/9/18
+                    if(feature.get("priority") === 6 || feature.get("priority") === 7) {
+                        if(isSet(feature.get("waterColumnHeight"))) { eiData += "Column: " + feature.get("waterColumnHeight") + "m<br/>"; }
+                        if(isSet(feature.get("waterTemp"))) {
+                            var waterTemp = Number(feature.get("waterTemp"));
+                            eiData += "Water: <span style='" + styleTemp(waterTemp) + "'>" + Math.round(waterTemp) + "F</span><br/>";
+                        }
+                        if(isSet(feature.get("waveHeight"))) {
+                            var waveHeightFt = Number(stationData.WaveHeight * 3.28084).toFixed(1);
+                            eiData += "Waves: " + waveHeightFt + " ft<br/>";
+                        }
                     }
                     eiData += "</td></tr></table>";
                     break;
@@ -437,6 +451,12 @@ function smallDivs(dataType, wxStations, stationData) {
              
 function getJsonWeatherGlob(map) {
     aniPreload("on");
+    if(overlayLayer) {
+        map.removeLayer(overlayLayer);
+        console.log("Removed layers!");
+    } else {
+        console.log("No layers!");
+    }
     var dataRefresh = getRefresh("medium");
     var jsonDataTimeout = getRefresh("medium");
     var thePostData = {
