@@ -184,7 +184,10 @@ function colorLi(li, valueOnly) {
         case (li <= -6): bg = 'ff00ff'; tc = 'white'; break;
     }
     if(valueOnly) {
-        return "#" + bg;
+        switch(valueOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
+        }
     } else {
         return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
     }
@@ -419,27 +422,30 @@ function snowRatio(liqPrecip,tF) {
 }
 
 function styleCape(cape, valueOnly) {	
-        var tc, bg;
-	switch(true) {
-		case (cape < 10): bg = "cccccc"; tc = "black"; break;
-		case (cape < 100) && (cape >= 10): bg = "99ff66"; tc = "black"; break;
-		case (cape < 250) && (cape >= 100): bg = "66ff33"; tc = "black"; break;
-		case (cape < 500) && (cape >= 250): bg = "00ff00"; tc = "black"; break; 
-		case (cape < 750) && (cape >= 500): bg = "003300"; tc = "white"; break;
-		case (cape < 1000) && (cape >= 750): bg = "cccc00"; tc = "black"; break;
-		case (cape < 1500) && (cape >= 1000): bg = "ffff00"; tc = "black"; break;
-		case (cape < 2000) && (cape >= 1500): bg = "ff9900"; tc = "black"; break;
-		case (cape < 2500) && (cape >= 2000): bg = "ff0000"; tc = "black"; break;
-		case (cape < 3000) && (cape >= 2500): bg = "990000"; tc = "white"; break;
-		case (cape < 3500) && (cape >= 3000): bg = "660000"; tc = "white"; break;
-		case (cape < 4000) && (cape >= 3500): bg = "ff00ff"; tc = "white"; break;
-		case (cape >= 4000): bg = "660099"; tc = "white"; break;
-	}
-        if(valueOnly) {
-            return "#" + bg;
-        } else {
-            return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    var tc, bg;
+    switch(true) {
+        case (cape < 10): bg = "cccccc"; tc = "black"; break;
+        case (cape < 100) && (cape >= 10): bg = "99ff66"; tc = "black"; break;
+        case (cape < 250) && (cape >= 100): bg = "66ff33"; tc = "black"; break;
+        case (cape < 500) && (cape >= 250): bg = "00ff00"; tc = "black"; break; 
+        case (cape < 750) && (cape >= 500): bg = "003300"; tc = "white"; break;
+        case (cape < 1000) && (cape >= 750): bg = "cccc00"; tc = "black"; break;
+        case (cape < 1500) && (cape >= 1000): bg = "ffff00"; tc = "black"; break;
+        case (cape < 2000) && (cape >= 1500): bg = "ff9900"; tc = "black"; break;
+        case (cape < 2500) && (cape >= 2000): bg = "ff0000"; tc = "black"; break;
+        case (cape < 3000) && (cape >= 2500): bg = "990000"; tc = "white"; break;
+        case (cape < 3500) && (cape >= 3000): bg = "660000"; tc = "white"; break;
+        case (cape < 4000) && (cape >= 3500): bg = "ff00ff"; tc = "white"; break;
+        case (cape >= 4000): bg = "660099"; tc = "white"; break;
+    }
+    if(valueOnly) {
+        switch(valueOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
         }
+    } else {
+        return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    }
 }
 
 function styleRh(rh, valueOnly) {
@@ -459,7 +465,10 @@ function styleRh(rh, valueOnly) {
         case (rh > 95): bg = "0000ff"; tc = "white"; break;
     }
     if(valueOnly) {
-        return "#" + bg;
+        switch(valueOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
+        }
     } else {
         return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
     }
@@ -512,7 +521,10 @@ function styleTemp(tT, tempOnly) {
         case (tT >= 115): bg = "ffffff"; tc = "black"; fw = "bold"; break;
     }
     if(tempOnly) {
-        return "#" + bg;
+        switch(tempOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
+        }
     } else {
         return "background-color: #" + bg + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
     }
@@ -532,7 +544,10 @@ function styleLiquid(liqText, valueOnly) {
         default: bg = "363636"; tc = "grey"; break;
     }
     if(valueOnly) {
-        return "#" + bg;
+        switch(valueOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
+        }
     } else {
         return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
     }
@@ -562,7 +577,10 @@ function styleWind(wMax, valueOnly) {
         default: bg = "2a2a2a"; tc = "black"; st = tc; fw = "normal"; break;
     }
     if(valueOnly) {
-        return "#" + bg;
+        switch(valueOnly) {
+            case "text": return tc; break;
+            default: return "#" + bg; break;
+        }
     } else {
         return "background-color: #" + bg + "; stroke: " + st + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
     }

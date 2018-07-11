@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 7 Jul 2018
+Updated: 11 Jul 2018
  */
 
 function postProcessOptions(map) {
@@ -19,7 +19,7 @@ function postProcessOptions(map) {
             case "RouteGPSRun": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteHistory": getRouteHistoryFromDatabase(map); break;
             case "RoutePlan": getRoutePlanFromDatabase(map, dataInput); break;
-            case "Wx": initWxMap(map); break;
+            case "Wx": map.getView().setZoom(map.getView().getZoom() - 4); initWxMap(map); break;
         }
     }
 }

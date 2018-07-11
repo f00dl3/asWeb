@@ -111,11 +111,13 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     var icLabel = "";
     var icColor = "";
     var icOpacity = "";
+    var icLabelColor = "#000000";
     switch (markerType) {
         case "CAPE":
             if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
                 icLabel = Math.round(stationData.CAPE);
                 icColor = styleCape(stationData.CAPE, true);
+                icLabelColor = styleCape(stationData.CAPE, "text");
                 icOpacity = 1;
             } break;
         case "JSWM":
@@ -124,6 +126,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 var uljMax = Math.max.apply(Math, uljPoints);
                 icLabel = "-"; //windDirSvg(Number(stationData.WD200));
                 icColor = styleWind(conv2Mph(uljMax), true);
+                icLabelColor = styleWind(conv2Mph(uljMax), "text");
                 icOpacity = 1;
             } break;
         case "LI":
@@ -132,6 +135,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 var lftIndx = Number(stationData.LI);
                 icLabel = lftIndx.toFixed(1);
                 icColor = colorLi(lftIndx, true);
+                icLabelColor = colorLi(lftIndx, "text");
                 icOpacity = 1;
             } break;
         case "LLJM":
@@ -140,6 +144,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 var lljMax = Math.max.apply(Math, lljPoints);
                 icLabel = "-"; //windDirSvg(Number(stationData.WD850));
                 icColor = styleWind(conv2Mph(lljMax), true);
+                icLabelColor = styleWind(conv2Mph(lljMax), "text");
                 icOpacity = 1;
             } break;
         case "PWAT":
@@ -147,6 +152,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
                 icLabel = stationData.PWAT;
                 icColor = styleLiquid(Number(stationData.PWAT), true);
+                icLabelolor = styleLiquid(Number(stationData.PWAT), "text");
                 icOpacity = 1;
             } break;
         case "SfcE":
@@ -159,6 +165,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             if(isSet(stationData.Temperature) && isSet(stationData.Dewpoint)) {
                 icLabel = feelsLike;
                 icColor = styleTemp(feelsLike, true);
+                icLabelColor = styleTemp(feelsLike, "text");
                 icOpacity = 1;
             } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "SfcH":
@@ -166,6 +173,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 var relHum = relativeHumidity(Number(stationData.Temperature), Number(stationData.Dewpoint));
                 icLabel = relHum;
                 icColor = styleRh(relHum, true);
+                icLabelColor = styleRh(relHum, "text");
                 icOpacity = 1;
             } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "SfcP":
@@ -179,6 +187,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 var sWindSpeed = Number(stationData.WindSpeed);
                 icLabel = Math.round(sWindSpeed); //windDirSvg(stationData.WindDegrees);
                 icColor = styleWind(sWindSpeed, true);
+                icLabelColor = styleWind(sWindSpeed, "text");
                 icOpacity = 1;
             } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "WatP":
@@ -191,6 +200,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             if(!isSet(stationData.WaterTemp)) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
                 icLabel = Math.round(Number(stationData.WaterTemp));
                 icColor = styleTemp(Number(stationData.WaterTemp), true);
+                icLabelColor = styleTemp(Number(stationData.WaterTemp), "text");
                 icOpacity = 1;
             } break;
         case "WatW":
@@ -210,10 +220,12 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
         case "SfcT": default:
             icLabel = Math.round(stationData.Temperature);
             icColor = styleTemp(stationData.Temperature, true);
+            icLabelColor = styleTemp(stationData.Temperature, "text");
             icOpacity = 1;
             break;
     }
-    iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, "#000000"));
+    iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, icLabelColor));
+    if(stationInfo.Priority === 1) { console.log(iconFeature); }
     return iconFeature;
 }
 
@@ -239,6 +251,24 @@ function addObsLocationMarkers(map, description, tCoord) {
     }
     iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
     return iconFeature;
+}
+
+// Testing, 7/11/2018
+function doModelBasemap(map) {
+    var extent = [0, 0, 1024, 968];
+    var projection = new ol.proj.Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+    });
+    var imageLayer = new ol.layer.Image({
+        source: new ol.source.ImageStatic({
+            url: getBasePath("g2OutOld") + "/xsOut/tmp2m/20180711_2008_tmp2m.png",
+            projection: projection,
+            imageExtent: extent
+        })
+    });
+    map.addLayer(imageLayer);
 }
 
 function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
@@ -267,7 +297,6 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
             mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)
             ) {
         vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
-        map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
     }
     if (isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);
@@ -285,6 +314,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
+    if(isSet(mobiCoord)) { map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857')); }
     map.on('click', function (evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
             return feature;
@@ -382,6 +412,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
             overlay.setPosition(eCoord);
         }
     });
+    //doModelBasemap(map);
 }
 
 function showTableHumi(stationId) {
