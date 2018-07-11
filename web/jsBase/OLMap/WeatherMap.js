@@ -38,26 +38,14 @@ function addObsMarkers(map, stationInfo, stationData) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         rawData: stationData,
-        dewpoint: stationData.Dewpoint,
         geometry: point,
         latitude: tCoord[1],
         longitude: tCoord[0],
-        pressureMb: stationData.Pressure,
-        pressureIn: stationData.PressureIn,
         priority: stationInfo.Priority,
         stationId: stationInfo.Station,
         stationDescription: stationDescription,
-        temperature: stationData.Temperature,
         timeString: shortTime,
         type: "Observation",
-        waterColumnHeight: stationData.WaterColumnHeight,
-        waterTemp: stationData.WaterTemp,
-        waveDirection: stationData.WaveDirection,
-        waveHeight: stationData.WaveHeight,
-        wavePeriodAverage: stationData.WavePeriodAverage,
-        wavePeriodDominant: stationData.WavePeriodDominant,
-        windGusts: stationData.WindGusts,
-        windSpeed: stationData.WindSpeed,
         wx: thisObsWx,
         wxIcon: wxIcon
     });
@@ -151,7 +139,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     break;
                 case "Observation":
                     var passedData = feature.get("rawData");
-                    var temp = Number(feature.get("temperature"));
+                    var temp = Number(passedData.Temperature);
                     eiData = "<table><tr><td colspan='2'>" +
                             feature.get("stationId") + "<br/>" +
                             feature.get("stationDescription") + "<br/>" +
@@ -161,40 +149,40 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                             feature.get("wx") +
                             "</td><td>" +
                             "Temp: <span style='" + styleTemp(temp) + "'>" + Math.round(temp) + "F</span><br/>";
-                    if(isSet(feature.get("dewpoint"))) {
-                        var dewpoint = Number(feature.get("dewpoint")); 
+                    if(isSet(passedData.Dewpoint)) {
+                        var dewpoint = Number(passedData.Dewpoint); 
                         eiData += "Dwpt: <span style='" + styleTemp(dewpoint) + "'>" + Math.round(dewpoint) + "F</span><br/>";
                     }
-                    if(isSet(feature.get("windSpeed"))) {
-                        var windSpeed = Number(feature.get("windSpeed"));
+                    if(isSet(passedData.WindSpeed)) {
+                        var windSpeed = Number(passedData.WindSpeed);
                         eiData += "Wind: <span style='" + styleWind(windSpeed) + "'>" + windSpeed.toFixed(1) + " MPH</span><br/>";
                     }
-                    if(isSet(feature.get("windGusts"))) {
-                        var windGust = Number(feature.get("windGusts"));
+                    if(isSet(passedData.WindGusts)) {
+                        var windGust = Number(passedData.WindGusts);
                         eiData += "Gusts: <span style='" + styleWind(windGusts) + "'>" + windGusts.toFixed(1) + " MPH</span><br/>";
                     }
-                    if(isSet(feature.get("pressureMb"))) { eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>"; }
-                    if(isSet(feature.get("pressureIn"))) { eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>"; }
-                    if(isSet(feature.get("waterColumnHeight"))) { eiData += "Column: " + feature.get("waterColumnHeight") + "m<br/>"; }
-                    if(isSet(feature.get("waterTemp"))) {
-                        var waterTemp = Number(feature.get("waterTemp"));
+                    if(isSet(passedData.Pressure)) { eiData += "MSLP: " + Math.round(Number(passedData.Pressure)) + " mb<br/>"; }
+                    if(isSet(passedData.PressureIn)) { eiData += "Altim: " + Number(passedData.PressureIn).toFixed(2) + " in</span><br/>"; }
+                    if(isSet(passedData.WaterColumnHeight)) { eiData += "Column: " + passedData.WaterColumnHeight + "m<br/>"; }
+                    if(isSet(passedData.WaterTemp)) {
+                        var waterTemp = Number(passedData.WaterTemp);
                         eiData += "Water: <span style='" + styleTemp(waterTemp) + "'>" + Math.round(waterTemp) + "F</span><br/>";
                     }
                     if(isSet(feature.get("waveHeight"))) {
                         var waveHeightFt = Number(stationData.WaveHeight * 3.28084).toFixed(1);
                         eiData += "Waves: " + waveHeightFt + " ft<br/>";
                     }
-                    if(isSet(feature.get("wavePeriodDominant"))) {
-                        var wavePeriodDominant = Number(feature.get("wavePeriodDominant"));
+                    if(isSet(passedData.WavePeriodDominant)) {
+                        var wavePeriodDominant = Number(passedData.WavePeriodDominant);
                         eiData += "<strong>Period</strong>: " + Math.round(wavePeriodDominant);
-                        if(isSet(feature.get("wavePeriodAverage"))) {
-                            var wavePeriodAverage = Number(feature.get("wavePeriodAverage"));
+                        if(isSet(passedData.WavePeriodAverage)) {
+                            var wavePeriodAverage = Number(passedData.WavePeriodAverage);
                             eiData += " (" + wavePeriodAverage.toFixed(1) + "s)<br/>";
                         } else {
                             eiDataa += "s<br/>";
                         }
                     }
-                    if(isSet(feature.get("waveDirection"))) { eiData += "Wave Dir: " + feature.get("waveDirection") + "<br/>"; }
+                    if(isSet(passedData.WaveDirection)) { eiData += "Wave Dir: " + passedData.WaveDirection + "<br/>"; }
                     eiData += "</td></tr></table>";
                     if(feature.get("priority") < 4) {
                                 var upperAirData = processUpperAirData(null, passedData, true).replace("/\s\s+/", "");
