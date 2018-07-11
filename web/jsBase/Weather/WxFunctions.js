@@ -171,7 +171,7 @@ function colorLcl(lcl) {
     }
 }
 
-function colorLi(li) {
+function colorLi(li, valueOnly) {
     var bg, tc;
     switch(true) {
         case (li > 10): bg = 'cccccc'; tc = 'black'; break;
@@ -183,7 +183,11 @@ function colorLi(li) {
         case (li <= -4) && (li > -6): bg = '660000'; tc = 'white'; break;
         case (li <= -6): bg = 'ff00ff'; tc = 'white'; break;
     }
-    return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    if(valueOnly) {
+        return "#" + bg;
+    } else {
+        return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    }
 }
 
 function colorMmr(mmr) {
