@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 8 Jul 2018
+Updated: 11 Jul 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -414,7 +414,7 @@ function snowRatio(liqPrecip,tF) {
     return ratio;
 }
 
-function styleCape(cape) {	
+function styleCape(cape, valueOnly) {	
         var tc, bg;
 	switch(true) {
 		case (cape < 10): bg = "cccccc"; tc = "black"; break;
@@ -431,10 +431,14 @@ function styleCape(cape) {
 		case (cape < 4000) && (cape >= 3500): bg = "ff00ff"; tc = "white"; break;
 		case (cape >= 4000): bg = "660099"; tc = "white"; break;
 	}
-	return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+        if(valueOnly) {
+            return "#" + bg;
+        } else {
+            return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+        }
 }
 
-function styleRh(rh) {
+function styleRh(rh, valueOnly) {
     var bg, tc;
     switch(true) {
         case (rh <= 5): bg = "ff0000"; tc = "white"; break;
@@ -450,7 +454,11 @@ function styleRh(rh) {
         case (rh <= 95) && (rh > 90): bg = "00ffff"; tc = "black"; break;
         case (rh > 95): bg = "0000ff"; tc = "white"; break;
     }
-    return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    if(valueOnly) {
+        return "#" + bg;
+    } else {
+        return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    }
 }
 
 function styleTemp(tT, tempOnly) {
@@ -522,7 +530,7 @@ function styleLiquid(liqText) {
     return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
 }
 
-function styleWind(wMax) {
+function styleWind(wMax, valueOnly) {
     var bg, tc, st, fw;
     switch(true) {
         case (wMax < 5): bg = "ffffff"; tc = "black"; st = tc; fw = "normal"; break;
@@ -545,7 +553,11 @@ function styleWind(wMax) {
         case (wMax >= 195): bg = "0000ff"; tc = "white"; st = tc; fw = "bold"; break;
         default: bg = "2a2a2a"; tc = "black"; st = tc; fw = "normal"; break;
     }
-    return "background-color: #" + bg + "; stroke: " + st + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
+    if(valueOnly) {
+        return "#" + bg;
+    } else {
+        return "background-color: #" + bg + "; stroke: " + st + "; color: " + tc + "; font-weight: " + fw + "; text-align: center;";
+    }
 }
 
 function timeDay() {

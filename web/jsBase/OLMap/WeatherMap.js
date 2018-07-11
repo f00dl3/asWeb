@@ -4,13 +4,14 @@ by Anthony Stump
 Created: 25 Jun 2018
 Updated: 11 Jul 2018
 POSSIBLE DESKTOP RESOURCE HOG ALERT!
-DEFINTATE MOBILE RESOURCE HOG!
+DEFINTATE MmarkerType, OBILE RESOURCE HOG!
 
 */   
 
 var overlayLayer;
+var pointType;
 
-function addObsMarkers(map, stationInfo, stationData) {
+function addObsMarkers(map, stationInfo, stationData, markerType) {
     var tCoord = JSON.parse(stationInfo.Point);
     var point = new ol.geom.Point(tCoord);
     var stationDescription = stationInfo.Station;
@@ -49,9 +50,41 @@ function addObsMarkers(map, stationInfo, stationData) {
         wx: thisObsWx,
         wxIcon: wxIcon
     });
-    var icLabelTemp = Math.round(stationData.Temperature);
-    var icColorTemp = styleTemp(stationData.Temperature, true);
-    iconFeature.setStyle(svgIconStyle("ct", 35, icColorTemp, 1, icLabelTemp, "#000000"));
+    var icLabel = "";
+    var icColor = "";
+    var icOpacity = "";
+    switch(markerType) {
+        case "CAPE":
+            if(stationInfo.Priority > 3) {
+                icLabel = "";
+                icColor = "#000000";
+                icOpacity = 0;
+            } else {
+                icLabel = Math.round(stationData.CAPE);
+                icColor = styleCape(stationData.CAPE, true);
+                icOpacity = 1;
+            }
+            break;
+        case "JSWM":
+            if(stationInfo.Priority > 3) {
+                icLabel = "";
+                icColor = "#000000";
+                icOpacity = 0;
+            } else {
+                var uljPoints = [ Number(stationData.WS150), Number(stationData.WS200), Number(stationData.WS250), Number(stationData.WS300) ];
+                var uljMax = Math.max.apply(Math, uljPoints);
+                icLabel = "-"; //windDirSvg(Number(stationData.WD200));
+                icColor = styleWind(conv2Mph(uljMax), true);
+                icOpacity = 1;
+            }
+            break;
+        case "SfcT": default:
+            icLabel = Math.round(stationData.Temperature);
+            icColor = styleTemp(stationData.Temperature, true);
+            icOpacity = 1;
+            break;
+    }
+    iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, "#000000"));
     return iconFeature;
 }
 
@@ -77,7 +110,7 @@ function addObsLocationMarkers(map, description, tCoord) {
     return iconFeature;
 }
 
-function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc) {
+function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp)/1000));
     var jsonData = obsData[0].jsonData; obsData = false;
@@ -104,7 +137,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                 var stationId = thisWxStation.Station;
                 var stationData = jsonDataMerged[stationId];
                 if(isSet(stationData) && isSet(stationData.Temperature)) {
-                    var tIconFeature = addObsMarkers(map, thisWxStation, stationData); 
+                    var tIconFeature = addObsMarkers(map, thisWxStation, stationData, markerType); 
                     vectorSource.addFeature(tIconFeature);
                 }
             }
@@ -234,25 +267,6 @@ function smallDivs(dataType, wxStations, stationData) {
         obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
     } else {
         switch(dataType) {
-            case "CAPE":
-                setSessionVariable("gImgType", "cape");
-                if(wxStations.Priority > 3) { obsPlotData = obsPlotEmpty; }
-                else { obsPlotData = stationData.CAPE + "<br/><span style='" + styleLi(stationData.CIN) + "'>" + stationData.CIN + "</span>"; }
-                obsPlotStyle = styleCape(stationData.CAPE);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "JSWM":
-                setSessionVariable("gImgType", "wm0500");
-                var uljMax = 0;
-                if(wxStations.Priority > 3) { obsPlotData = obsPlotEmpty; }
-                else {
-                    var uljPoints = [ stationData.WS150, stationData.WS200, stationData.WS250, stationData.WS300 ];
-                    uljMax = Math.max(uljPoints);
-                    obsPlotData = windDirSvg(stationData.WD200);
-                }
-                obsPlotStyle = defBlock100 + styleWind(conv2Mph(uljMax));
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
             case "LI":
                 setSessionVariable("gImgType", "lftx");
                 if(wxStations.Priority > 3) { obsPlotData = obsPlotEmpty; }
@@ -380,7 +394,8 @@ function getJsonWeatherGlob(map) {
                             data.indoorObs,
                             data.wxObsJson,
                             data.wxObsJsonRapid,
-                            data.mobiLoc
+                            data.mobiLoc,
+                            "SfcT"
                     );
                 },
                 function(error) { 
