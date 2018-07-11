@@ -8,6 +8,7 @@
  
  */
 
+var dataRefresh = getRefresh("medium");
 var overlayLayer;
 var pointType;
 
@@ -73,12 +74,36 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 icOpacity = 1;
             } break;
         case "LI":
+            // Does not work properly. 7/11/18
             if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
                 var lftIndx = Number(stationData.LI);
                 icLabel = lftIndx.toFixed(1);
                 icColor = colorLi(lftIndx, true);
                 icOpacity = 1;
             } break;
+        case "LLJM":
+            if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                var lljPoints = [ Number(stationData.WS900), Number(stationData.WS850), Number(stationData.WS800) ];
+                var lljMax = Math.max.apply(Math, lljPoints);
+                icLabel = "-"; //windDirSvg(Number(stationData.WD850));
+                icColor = styleWind(conv2Mph(lljMax), true);
+                icOpacity = 1;
+            } break;
+        case "PWAT":
+            // Does not work proplerly. 7/11/18. Data undefined.
+            if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                icLabel = stationData.PWAT;
+                icColor = styleLiquid(Number(stationData.PWAT), true);
+                icOpacity = 1;
+            } break;
+        case "SfcH":
+            if(isSet(stationData.Dewpoint) && stationData.Dewpoint !== "") {
+                var relHum = relativeHumidity(Number(stationData.Temperature), Number(stationData.Dewpoint));
+                icLabel = relHum;
+                icColor = styleRh(relHum, true);
+                icOpacity = 1;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } 
+            break;
         case "SfcT": default:
             icLabel = Math.round(stationData.Temperature);
             icColor = styleTemp(stationData.Temperature, true);
@@ -290,35 +315,6 @@ function smallDivs(dataType, wxStations, stationData) {
         obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
     } else {
         switch (dataType) {
-            case "LLJM":
-                setSessionVariable("gImgType", "wm0900");
-                var lljMax = 0;
-                if (wxStations.Priority > 3) {
-                    obsPlotData = obsPlotEmpty;
-                } else {
-                    var lljPoints = [stationData.WS900, stationData.WS850, stationData.WS800];
-                    lljMax = Math.max(lljPoints);
-                    obsPlotData = windDirSvg(stationData.WD0800);
-                }
-                obsPlotStyle = defBlock100 + styleWind(conv2Mph(lljMax));
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "PWAT":
-                setSessionVariable("gImgType", "pwat");
-                if (wxStations.Priority > 3) {
-                    obsPlotData = obsPlotEmpty;
-                } else {
-                    obsPlotData = (stationData.PWAT).toFixed(1);
-                }
-                obsPlotStyle = defBlock100 + styleLiquid(stationData.PWAT);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "SfcH":
-                setSessionVariable("gImgType", "rh2m");
-                obsPlotData = relativeHumidity(stationData.Temperature, stationData.Dewpoint);
-                obsPlotStyle = defBlock100 + styleRh(obsPlotData);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
             case "SfcE":
                 setSessionVariable("gImgType", "sfce");
                 obsPlotData = wxStations.SfcMB;
@@ -401,8 +397,6 @@ function getJsonWeatherGlob(map) {
     } else {
         console.log("No layers!");
     }
-    var dataRefresh = getRefresh("medium");
-    var jsonDataTimeout = getRefresh("medium");
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
@@ -425,7 +419,7 @@ function getJsonWeatherGlob(map) {
                             data.wxObsJson,
                             data.wxObsJsonRapid,
                             data.mobiLoc,
-                            "LI"
+                            "SfcH"
                             );
                 },
                 function (error) {

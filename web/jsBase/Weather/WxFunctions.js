@@ -518,7 +518,7 @@ function styleTemp(tT, tempOnly) {
     }
 }
 
-function styleLiquid(liqText) {
+function styleLiquid(liqText, valueOnly) {
     var liq = liqText.valueOf();
     var bg, tc;
     switch(liq) {
@@ -531,7 +531,11 @@ function styleLiquid(liqText) {
         case inRange(liq, 2.00, 99.99): bg = "004400"; tc = "white"; break;
         default: bg = "363636"; tc = "grey"; break;
     }
-    return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    if(valueOnly) {
+        return "#" + bg;
+    } else {
+        return "background-color: #" + bg + "; color: " + tc + "; text-align: center;";
+    }
 }
 
 function styleWind(wMax, valueOnly) {
