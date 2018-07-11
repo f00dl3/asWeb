@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 23 May 2018
+Updated: 11 Jul 2018
  */
 
 function displayModelData() {
@@ -98,7 +98,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
     var mroTable = "<div class='table'>" +
             "<span class='td'>" +
             "<a href='" + getBasePath("g2OutOld") + "/MergedJ/Loops/FOCUS_Loop.mp4' target='new'>" +
-            "<video id='FocusLoop' class='th_sm_med' autoplay controls loop>" +
+            "<video id='FocusLoop' class='th_sm_med' autoplay muted controls loop>" +
             "<source src='" + getBasePath("g2OutOld") + "/MergedJ/Loops/FOCUS_Loop.mp4?ts=" + getDate("day", 0, "full") + "'></source>" +
             "</video></a><br/>Focus</span>" +
             "<span class='td'>" +
