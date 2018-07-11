@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 2 May 2018
+Updated: 11 Jul 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -225,7 +225,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
     dojo.byId(targetDiv).innerHTML = returnData;
 }
 
-function processUpperAirData(baseEle, stationData) {
+function processUpperAirData(baseEle, stationData, noWrappingDiv) {
     var stId = stationData.Station;
     var sfcFt = 0.0;
     var h2eMap = heights2Elevations("elev", "b2t");
@@ -328,9 +328,11 @@ function processUpperAirData(baseEle, stationData) {
                 doSoundingMin += "</table><a href='" + doCh("p", "WxLevel", "Station="+stId) + " target='new'>Height Levels</a>";
             }
         }
-        doSounding = "<div class='UPopNMO'>" + doSoundingMin + "</div>";
+        doSounding = doSoundingMin;
+        if(!isSet(noWrappingDiv)) { doSounding = "<div class='UPopNMO'>" + doSounding + "</div>"; }
     } else {
-        doSounding = "<div class='UPopNMO'>DATA ERROR FOR HOUR</div>";
+        doSounding = "DATA ERROR FOR HOUR";
+        if(!isSet(noWrappingDiv)) { doSounding = "<div class='UPopNMO'>" + doSounding + "</div>"; }
     }
     return doSounding;
 }

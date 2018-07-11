@@ -2,7 +2,7 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 10 Jul 2018
+Updated: 11 Jul 2018
 POSSIBLE DESKTOP RESOURCE HOG ALERT!
 DEFINTATE MOBILE RESOURCE HOG!
 
@@ -37,7 +37,7 @@ function addObsMarkers(map, stationInfo, stationData) {
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
-        //rawData: stationData,
+        rawData: stationData,
         dewpoint: stationData.Dewpoint,
         geometry: point,
         latitude: tCoord[1],
@@ -150,6 +150,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     }
                     break;
                 case "Observation":
+                    var passedData = feature.get("rawData");
                     var temp = Number(feature.get("temperature"));
                     eiData = "<table><tr><td colspan='2'>" +
                             feature.get("stationId") + "<br/>" +
@@ -174,7 +175,6 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     }
                     if(isSet(feature.get("pressureMb"))) { eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>"; }
                     if(isSet(feature.get("pressureIn"))) { eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>"; }
-                    // Features not showing? 7/9/18
                     if(isSet(feature.get("waterColumnHeight"))) { eiData += "Column: " + feature.get("waterColumnHeight") + "m<br/>"; }
                     if(isSet(feature.get("waterTemp"))) {
                         var waterTemp = Number(feature.get("waterTemp"));
@@ -197,12 +197,14 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     if(isSet(feature.get("waveDirection"))) { eiData += "Wave Dir: " + feature.get("waveDirection") + "<br/>"; }
                     eiData += "</td></tr></table>";
                     if(feature.get("priority") < 4) {
+                                var upperAirData = processUpperAirData(null, passedData, true).replace("/\s\s+/", "");
                                 eiData += "<button id='Sh" + feature.get("stationId") + "TableT' class='UButton'>TMP</button>" +
                                         "<button id='Sh" + feature.get("stationId") + "TableH' class='UButton'>HUM</button>" +
-                                        "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button>";
-                                // do sounding min trim() on doSoundingMin.replace("/\s\s+/", "");
+                                        "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button><br/>" +
+                                        upperAirData;
+                                console.log(upperAirData);
                     }
-                    if(isSet(feature.get("rawData"))) { eiData += JSON.stringify(feature.get("rawData")); }
+                    //if(isSet(feature.get("rawData"))) { eiData += JSON.stringify(feature.get("rawData")); }
                     break;
             }
             content.innerHTML = eiData;
