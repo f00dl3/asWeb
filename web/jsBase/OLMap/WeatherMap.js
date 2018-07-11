@@ -12,6 +12,12 @@ var dataRefresh = getRefresh("medium");
 var overlayLayer;
 var pointType;
 
+// Working on, 7/11/18
+function addTopSelectDrop(map, options) {
+    var rData = "<div class='GPSTopDrop'>" +
+            "<form id='DoWxModelData'>";
+}
+
 function addObsMarkers(map, stationInfo, stationData, markerType) {
     var tCoord = JSON.parse(stationInfo.Point);
     var point = new ol.geom.Point(tCoord);
@@ -367,7 +373,7 @@ function getJsonWeatherGlob(map) {
                             data.wxObsJson,
                             data.wxObsJsonRapid,
                             data.mobiLoc,
-                            "WxOb"
+                            "SfcT"
                             );
                 },
                 function (error) {
