@@ -40,10 +40,12 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     } else {
         stationDescription = stationInfo.City + ", " + stationInfo.State;
     }
+    var feelsLike = wxObs("Feel", stationData.TimeString, stationData.Temperature, stationData.WindSpeed, stationData.RelativeHumidity, stationData.Weather);
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         rawData: stationData,
+        feelsLike: feelsLike,
         geometry: point,
         latitude: tCoord[1],
         longitude: tCoord[0],
@@ -96,14 +98,63 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 icColor = styleLiquid(Number(stationData.PWAT), true);
                 icOpacity = 1;
             } break;
+        case "SfcE":
+            if(isSet(stationInfo.SfcMB)) {
+                icLabel = stationInfo.SfcMB;
+                icColor = autoColorScale(stationInfo.SfcMB, 1015, 800, null);
+                icOpacity = 1;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
+        case "SfcF":
+            if(isSet(stationData.Temperature) && isSet(stationData.Dewpoint)) {
+                icLabel = feelsLike;
+                icColor = styleTemp(feelsLike, true);
+                icOpacity = 1;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "SfcH":
             if(isSet(stationData.Dewpoint) && stationData.Dewpoint !== "") {
                 var relHum = relativeHumidity(Number(stationData.Temperature), Number(stationData.Dewpoint));
                 icLabel = relHum;
                 icColor = styleRh(relHum, true);
                 icOpacity = 1;
-            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } 
-            break;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
+        case "SfcP":
+            if(isSet(stationData.Pressure)) {
+                icLabel = stationData.Pressure;
+                icColor = autoColorScale(stationData.Pressure, 1040, 970, null);
+                icOpacity = 1;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
+        case "SfcW":
+            if(isSet(stationData.WindSpeed)) {
+                icLabel = stationData.WindSpeed; //windDirSvg(stationData.WindDegrees);
+                icColor = styleWind(stationData.WindSpeed, true);
+                icOpacity = 1;
+            } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
+        case "WatP":
+            if(!isSet(stationData.WavePeriodDominant)) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                icLabel = stationData.WavePeriodDominant;
+                icColor = "#ffffff";
+                icOpacity = 1;
+            } break;
+        case "WatT":
+            if(!isSet(stationData.WaterTemp)) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                icLabel = Math.round(Number(stationData.WaterTemp));
+                icColor = styleTemp(Number(stationData.WaterTemp), true);
+                icOpacity = 1;
+            } break;
+        case "WatW":
+            if(!isSet(stationData.WaveHeight)) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                var waveHeightFt = Number(stationData.WaterTemp)*3.28084;
+                icLabel = waveHeightFt.toFixed(1);
+                icColor = styleCape((waveHeightFt*100), true);
+                icOpacity = 1;
+            } break;
+        case "WxOb":
+            // Does not work, 7/11/18
+            if(!isSet(thisObsWx)) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
+                icLabel = "<img class='th_icon' src='" + wxIcon + "'/>";
+                icColor = "#000000";
+                icOpacity = 1;
+            } break;
         case "SfcT": default:
             icLabel = Math.round(stationData.Temperature);
             icColor = styleTemp(stationData.Temperature, true);
@@ -207,14 +258,18 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                             feature.get("stationId") + "<br/>" +
                             feature.get("stationDescription") + "<br/>" +
                             feature.get("timeString") +
-                            "</td></tr><tr><td>" +
+                            "</td></tr><tr><td width='40%'>" +
                             "<img class='th_small' src='" + feature.get("wxIcon") + "' /><br/>" +
                             feature.get("wx") +
-                            "</td><td>" +
+                            "</td><td width='60%'>" +
                             "Temp: <span style='" + styleTemp(temp) + "'>" + Math.round(temp) + "F</span><br/>";
                     if (isSet(passedData.Dewpoint)) {
                         var dewpoint = Number(passedData.Dewpoint);
                         eiData += "Dwpt: <span style='" + styleTemp(dewpoint) + "'>" + Math.round(dewpoint) + "F</span><br/>";
+                    }
+                    if (isSet(feature.get("feelsLike"))) {
+                        var feel = feature.get("feelsLike");
+                        eiData += "Feel: <span style='" + styleTemp(feel) + "'>" + feel + "F</span><br/>";
                     }
                     if (isSet(passedData.WindSpeed)) {
                         var windSpeed = Number(passedData.WindSpeed);
@@ -238,7 +293,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                         eiData += "Water: <span style='" + styleTemp(waterTemp) + "'>" + Math.round(waterTemp) + "F</span><br/>";
                     }
                     if (isSet(feature.get("waveHeight"))) {
-                        var waveHeightFt = Number(stationData.WaveHeight * 3.28084).toFixed(1);
+                        var waveHeightFt = (Number(stationData.WaveHeight)*3.28084).toFixed(1);
                         eiData += "Waves: " + waveHeightFt + " ft<br/>";
                     }
                     if (isSet(passedData.WavePeriodDominant)) {
@@ -282,113 +337,6 @@ function showTableWind(stationId) {
     //xhrRequest to wxTableGen table
 }
 
-function smallDivs(dataType, wxStations, stationData) {
-    var sessVars = window.localStorage.getItem("sessionVars");
-    var gfHour;
-    if (isSet(sessVars.wxDataHour)) {
-        gFHour = sessVars.gfHour;
-    } else {
-        gFHour = false;
-    }
-    var gImgType;
-    if (isSet(sessVars.gImgType)) {
-        gImgType = sessVars.gImgType;
-    } else {
-        gImgType = "tmp2m";
-    }
-    var sfcT, sfcD, obsPlotData, obsSpan;
-    sfcT = sfcD = obsPlotData = obsSpan = "";
-    var theStation = stationData.Station;
-    var obsPlotEmpty = "<img class='th_icon' src='" + getBasePath("icon") + "/wx/xx.png'/>";
-    var defBlock100 = "display: inline-block; width: 100%; ";
-    if (!isSet(stationData.Temperature)) {
-        obsPlotData = obsPlotEmpty;
-    } else {
-        sfcT = Math.round(stationData.Temperature);
-        sfcD = Math.round(stationData.Dewpoint);
-        obsPlotData = sfcT;
-    }
-    var obsPlotStyle = "display: inline-block; width: 100%; ";
-    if (isSet(stationData.Temperature)) {
-        var passArray = {"v1": sfcT, "v2": sfcD};
-        obsPlotStyle += color2Grad("T", "right", passArray);
-        obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-    } else {
-        switch (dataType) {
-            case "SfcE":
-                setSessionVariable("gImgType", "sfce");
-                obsPlotData = wxStations.SfcMB;
-                obsPlotStyle = "width: 100%; background-color: " + autoColorScale(wxStations.SfcMB, 1015, 800, null);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "SfcF":
-                setSessionVariable("gImgType", "tmp2m");
-                obsPlotData = wxObs("Feel", stationData.TimeString, stationData.Temperature, stationData.WindSpeed, stationData.RelativeHumidity, stationData.Weather);
-                obsPlotStyle = defBlock100 + styleTemp(obsPlotData);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "SfcP":
-                setSessionVariable("gImgType", "mslp");
-                obsPlotData = stationData.Pressure;
-                obsPlotStyle = "width: 100%; background-color: " + autoColorScale(stationData.Pressure, 1040, 970, null);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "SfcW":
-                setSessionVariable("gImgType", "wm10m");
-                obsPlotData = windDirSvg(stationData.WindDegrees);
-                obsPlotStyle = defBlock100 + styleWind(stationData.WindSpeed);
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "WatP":
-                if (wxStations.Priority < 4) {
-                    obsPlotData = obsPlotEmpty;
-                }
-                if (!isSet(stationData.WavePeriodDominant)) {
-                    obsPlotData = obsPlotEmpty;
-                } else {
-                    obsPlotData = stationData.WavePeriodDominant;
-                }
-                obsPlotStyle = defBlock100;
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "WatT":
-                setSessionVariable("gImgType", "tmp2m");
-                if (wxStations.Priority < 4) {
-                    obsPlotData = obsPlotEmpty;
-                }
-                if (!isSet(stationData.WaterTemp)) {
-                    obsPlotStyle = defBlock100;
-                    obsPlotData = obsPlotEmpty;
-                } else {
-                    obsPlotData = (stationData.WaterTemp).toFixed(1);
-                    obsPlotStyle = defBlock100 + styleTemp(stationData.WaterTemp);
-                }
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "WatW":
-                if (wxStations.Priority < 4) {
-                    obsPlotData = obsPlotEmpty;
-                }
-                obsPlotStyle = defBlock100;
-                if (!isSet(stationData.WaveHeight)) {
-                    obsPlotData = obsPlotEmpty;
-                } else {
-                    obsPlotData = (stationData.WaveHeight * 3.28084).toFixed(1);
-                    obsPlotStyle += styleCape((stationData.WaveHeight * 3.28084 * 100));
-                }
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-            case "WxOb":
-                setSessionVariable("gImgType", "radar");
-                obsPlotData = "<img class='th_icon' src='" + wxIcon + "'/>";
-                obsPlotStyle = defBlock100;
-                obsSpan = "<span class='StationSpan' id='" + theStation + "' style='" + obsPlotStyle + "'>" + obsPlotData + "</span>";
-                break;
-        }
-    }
-    return obsSpan;
-}
-
 function getJsonWeatherGlob(map) {
     aniPreload("on");
     if (overlayLayer) {
@@ -419,7 +367,7 @@ function getJsonWeatherGlob(map) {
                             data.wxObsJson,
                             data.wxObsJsonRapid,
                             data.mobiLoc,
-                            "SfcH"
+                            "WxOb"
                             );
                 },
                 function (error) {
