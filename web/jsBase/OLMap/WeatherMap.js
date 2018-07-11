@@ -12,10 +12,55 @@ var dataRefresh = getRefresh("medium");
 var overlayLayer;
 var pointType;
 
+var wxDataTypes = [
+    { "name": "CAPE/CIN", "matcher": "CAPE" },
+    { "name": "Jet Stream Winds", "matcher": "JSWM" },
+    { "name": "Lifted Index", "matcher": "LI" },
+    { "name": "Low Level Jet", "matcher": "LLJ" },
+    { "name": "Precipitable Water", "matcher": "PWAT" },
+    { "name": "Surface Elevation", "matcher": "SfcE" },
+    { "name": "Surface Feels Like", "matcher": "SfcF" },
+    { "name": "Surface Humidity", "matcher": "SfcH" },
+    { "name": "Surface Pressure", "matcher": "SfcP" },
+    { "name": "Surface Temperature", "matcher": "SfcT" },
+    { "name": "Surface Winds", "matcher": "SfcW" },
+    { "name": "Water Temperature", "matcher": "WatT" },
+    { "name": "Water Wave Height", "matcher": "WatW" },
+    { "name": "Water Wave Period", "matcher": "WatP" },
+    { "name": "Weather Observed", "matcher": "WxOb" }
+];
+
+function actOnSubmitModelQuery(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    getJsonWeatherGlob(map, thisFormData.WxDataType);
+}
+
 // Working on, 7/11/18
-function addTopSelectDrop(map, options) {
+function addTopSelectDrop(jsonModelLast, gfsFha) {
+    var lastString = jsonModelLast[0].RunString;
+    console.log(lastString);
     var rData = "<div class='GPSTopDrop'>" +
-            "<form id='DoWxModelData'>";
+            "<form id='DoWxModelData'>" +
+            "<select id='WxDataHourDrop' name='WxDataHour'>" +
+            "<option value=''>Analysis</option>";
+    gfsFha.forEach(function (hour) {
+        var tFHour2Pass = Number(hour.FHour) + 2;
+        rData += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + "TIMESTRING (+" + hour.FHour + "h)</option>";
+    });
+    rData += "</select><br/>" +
+            "<button name='SubmitModelQuery' id='SubmitModelQueryButton'>Go!</button>" +
+            "<select id='WxDataTypeDrop' name='WxDataType'>" +
+            "<option value='SfcT'>Select...</option>";
+    wxDataTypes.forEach(function (xdType) {
+        rData += "<option value='" + xdType.matcher + "'>" + xdType.name + "</option>";
+    });
+    rData += "</select>" +
+            "</form>" +
+            "</div>";
+    dojo.byId("mapEx").innerHTML = rData;
+    var submitModelQueryButton = dojo.byId("SubmitModelQueryButton");
+    dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
 }
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
@@ -131,8 +176,9 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "SfcW":
             if(isSet(stationData.WindSpeed)) {
-                icLabel = stationData.WindSpeed; //windDirSvg(stationData.WindDegrees);
-                icColor = styleWind(stationData.WindSpeed, true);
+                var sWindSpeed = Number(stationData.WindSpeed);
+                icLabel = Math.round(sWindSpeed); //windDirSvg(stationData.WindDegrees);
+                icColor = styleWind(sWindSpeed, true);
                 icOpacity = 1;
             } else { icLabel = ""; icColor = "#000000"; icOpacity = 0; } break;
         case "WatP":
@@ -196,6 +242,13 @@ function addObsLocationMarkers(map, description, tCoord) {
 }
 
 function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
+    var timestamp = getDate("hour", 0, "timestamp");
+    if (overlayLayer) {
+        map.removeLayer(overlayLayer);
+        console.log(timestamp + ": Removed layers!");
+    } else {
+        console.log(timestamp + ": No layers!");
+    }
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp) / 1000));
     var jsonData = obsData[0].jsonData;
@@ -343,14 +396,9 @@ function showTableWind(stationId) {
     //xhrRequest to wxTableGen table
 }
 
-function getJsonWeatherGlob(map) {
+function getJsonWeatherGlob(map, lPointType) {
+    if(isSet(lPointType)) { pointType = lPointType; }
     aniPreload("on");
-    if (overlayLayer) {
-        map.removeLayer(overlayLayer);
-        console.log("Removed layers!");
-    } else {
-        console.log("No layers!");
-    }
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
@@ -373,7 +421,7 @@ function getJsonWeatherGlob(map) {
                             data.wxObsJson,
                             data.wxObsJsonRapid,
                             data.mobiLoc,
-                            "SfcT"
+                            pointType
                             );
                 },
                 function (error) {
@@ -386,6 +434,29 @@ function getJsonWeatherGlob(map) {
     }, dataRefresh);
 }
 
+function getModelRunInfo() {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getMosData"
+    };
+    require(["dojo/request"], function (request) {
+        request
+                .post(getResource("Wx"), {
+                    data: thePostData,
+                    handleAs: "json"
+                }).then(
+                function (data) {
+                    aniPreload("off");
+                    addTopSelectDrop(data.last, data.hours);
+                },
+                function (error) {
+                    aniPreload("off");
+                    window.alert("request for ModelRunInfo data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function initWxMap(map) {
     getJsonWeatherGlob(map);
+    getModelRunInfo();
 }
