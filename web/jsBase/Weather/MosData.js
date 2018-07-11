@@ -374,6 +374,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
     });
     mosTable += "</div>";
     rData += mosTable;
+    dojo.byId("FocusLoop").play();
     dojo.byId("WxLocalModel").innerHTML = rData;
 }
 

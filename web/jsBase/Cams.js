@@ -15,6 +15,7 @@ function popCamHolder() {
             "<a href='" + getBasePath("ui") + "/Folders.jsp?folderInput=" + getCamRawFolder + "' target='new'>/GetCams</a> Directory Listing (" +
             "<a href='" + getGDrivePath("Cams") + "' target='new'>Google Drive</a>)";
     dojo.byId("camHolder").innerHTML = rData;
+    dojo.byId("CamLoop").play();
     setTimeout(function() { popCamHolder(); }, timeout);
 }
 
