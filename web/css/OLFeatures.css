@@ -1,6 +1,6 @@
 /* 
     Created on : Jun 7, 2018, 8:20:04 AM
-    Updated: 8 Jul 2018
+    Updated: 10 Jul 2018
     Author     : astump
 */
 
@@ -18,7 +18,7 @@
     border: 1px solid #cccccc;
     bottom: 12px;
     left: -50px;
-    width: 280px;
+    width: 260px;
     max-width: 420px;
     display: none;
     overflow: scroll;

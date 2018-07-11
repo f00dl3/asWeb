@@ -2,7 +2,7 @@
 
 by Anthony Stump
 Created: 25 Jun 2018
-Updated: 9 Jul 2018
+Updated: 10 Jul 2018
 POSSIBLE DESKTOP RESOURCE HOG ALERT!
 DEFINTATE MOBILE RESOURCE HOG!
 
@@ -37,6 +37,7 @@ function addObsMarkers(map, stationInfo, stationData) {
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
+        //rawData: stationData,
         dewpoint: stationData.Dewpoint,
         geometry: point,
         latitude: tCoord[1],
@@ -51,7 +52,10 @@ function addObsMarkers(map, stationInfo, stationData) {
         type: "Observation",
         waterColumnHeight: stationData.WaterColumnHeight,
         waterTemp: stationData.WaterTemp,
+        waveDirection: stationData.WaveDirection,
         waveHeight: stationData.WaveHeight,
+        wavePeriodAverage: stationData.WavePeriodAverage,
+        wavePeriodDominant: stationData.WavePeriodDominant,
         windGusts: stationData.WindGusts,
         windSpeed: stationData.WindSpeed,
         wx: thisObsWx,
@@ -96,8 +100,11 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
     var vectorSource = new ol.source.Vector({});
     var wxDataType = "SfcT";
     vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
-    if(mobiCoord[0].toFixed(2) !== homeCoord[0].toFixed(2) &&
-        mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)) {
+    if(
+        (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
+        mobiCoord[0].toFixed(2) !== homeCoord[0].toFixed(2) &&
+        mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)
+    ) {
         vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
         map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
     }
@@ -168,18 +175,34 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
                     if(isSet(feature.get("pressureMb"))) { eiData += "MSLP: " + Number(feature.get("pressureMb")).toFixed(1) + " mb<br/>"; }
                     if(isSet(feature.get("pressureIn"))) { eiData += "Altim: " + Number(feature.get("pressureIn")).toFixed(2) + " in</span><br/>"; }
                     // Features not showing? 7/9/18
-                    if(feature.get("priority") === 6 || feature.get("priority") === 7) {
-                        if(isSet(feature.get("waterColumnHeight"))) { eiData += "Column: " + feature.get("waterColumnHeight") + "m<br/>"; }
-                        if(isSet(feature.get("waterTemp"))) {
-                            var waterTemp = Number(feature.get("waterTemp"));
-                            eiData += "Water: <span style='" + styleTemp(waterTemp) + "'>" + Math.round(waterTemp) + "F</span><br/>";
-                        }
-                        if(isSet(feature.get("waveHeight"))) {
-                            var waveHeightFt = Number(stationData.WaveHeight * 3.28084).toFixed(1);
-                            eiData += "Waves: " + waveHeightFt + " ft<br/>";
+                    if(isSet(feature.get("waterColumnHeight"))) { eiData += "Column: " + feature.get("waterColumnHeight") + "m<br/>"; }
+                    if(isSet(feature.get("waterTemp"))) {
+                        var waterTemp = Number(feature.get("waterTemp"));
+                        eiData += "Water: <span style='" + styleTemp(waterTemp) + "'>" + Math.round(waterTemp) + "F</span><br/>";
+                    }
+                    if(isSet(feature.get("waveHeight"))) {
+                        var waveHeightFt = Number(stationData.WaveHeight * 3.28084).toFixed(1);
+                        eiData += "Waves: " + waveHeightFt + " ft<br/>";
+                    }
+                    if(isSet(feature.get("wavePeriodDominant"))) {
+                        var wavePeriodDominant = Number(feature.get("wavePeriodDominant"));
+                        eiData += "<strong>Period</strong>: " + Math.round(wavePeriodDominant);
+                        if(isSet(feature.get("wavePeriodAverage"))) {
+                            var wavePeriodAverage = Number(feature.get("wavePeriodAverage"));
+                            eiData += " (" + wavePeriodAverage.toFixed(1) + "s)<br/>";
+                        } else {
+                            eiDataa += "s<br/>";
                         }
                     }
+                    if(isSet(feature.get("waveDirection"))) { eiData += "Wave Dir: " + feature.get("waveDirection") + "<br/>"; }
                     eiData += "</td></tr></table>";
+                    if(feature.get("priority") < 4) {
+                                eiData += "<button id='Sh" + feature.get("stationId") + "TableT' class='UButton'>TMP</button>" +
+                                        "<button id='Sh" + feature.get("stationId") + "TableH' class='UButton'>HUM</button>" +
+                                        "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button>";
+                                // do sounding min trim() on doSoundingMin.replace("/\s\s+/", "");
+                    }
+                    if(isSet(feature.get("rawData"))) { eiData += JSON.stringify(feature.get("rawData")); }
                     break;
             }
             content.innerHTML = eiData;

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 9 Jul 2018
+Updated: 10 Jul 2018
  */
 
 function actOnShowFeed() {
@@ -212,13 +212,12 @@ function popLiveLinks3d(irsLinks, df7Links) {
         irsBubbleCopy = irs.Bubble.replace("Image=", "Action=");
         var tElem = "";
         if(irs.Bubble === "RadarMode=B") {
-            tElem = "<a styleReplace href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='new'" +
-                    "<img " + cubeRes + " src='" + newImgURL + "'/></a>";
+            tElem = "<a styleReplace href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='new'";
         } else {
-            var tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>" +
+            tElem = "<a styleReplace href='" + getBasePath("old") + "/OutMap.php?" + irs.Bubble + "' target='new'>";
                     /* "<a styleReplace href='" + getBasePath("ui") + "/OLMap.jsp?" + irsBubbleCopy + "' target='new'>" + NEED TO FIGURE ANIMATION 6/6/18 */
-                    "<img " + cubeRes + " src='" + newImgURL + "'/></a>";
         }
+        tElem += "<img " + cubeRes + " src='" + newImgURL + "'/></a>";
         elementListWx1.push(tElem);
     });
     var df7Elems = df7Links.length;
