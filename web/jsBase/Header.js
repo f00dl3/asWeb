@@ -301,6 +301,7 @@ function getResource(what) {
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
         case "WebVersion": return getBasePath("rest") + "/WebVersion"; break;
         case "Wx": return getBasePath("rest") + "/Wx"; break;
+        case "WxStation": return getBasePath("ui") + "/WxStation.jsp"; break;
     }
 }
 

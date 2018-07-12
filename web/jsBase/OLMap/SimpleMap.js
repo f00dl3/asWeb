@@ -19,7 +19,7 @@ function postProcessOptions(map) {
             case "RouteGPSRun": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteHistory": getRouteHistoryFromDatabase(map); break;
             case "RoutePlan": getRoutePlanFromDatabase(map, dataInput); break;
-            case "Wx": map.getView().setZoom(map.getView().getZoom() - 4); initWxMap(map); break;
+            case "Wx": map.getView().setZoom(map.getView().getZoom() - 6); initWxMap(map); break;
         }
     }
 }

@@ -11,6 +11,8 @@
 var dataRefresh = getRefresh("medium");
 var overlayLayer;
 var pointType;
+var searchDateStart;
+var searchDateEnd;
 
 var wxDataTypes = [
     { "name": "CAPE/CIN", "matcher": "CAPE" },
@@ -37,28 +39,43 @@ function actOnSubmitModelQuery(event) {
 }
 
 // Working on, 7/11/18
-function addTopSelectDrop(jsonModelLast, gfsFha) {
+function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
+    if(!isSet(searchDateStart)) { searchDateStart = getDate("hour", -1, "full"); }
+    if(!isSet(searchDateEnd)) { searchDateEnd = getDate("hour", 0, "full"); }
     var lastString = jsonModelLast[0].RunString;
+    var stationCount = stationCount[0].StationCount;
     console.log(lastString);
-    var rData = "<div class='GPSTopDrop'>" +
+    var topPop = "<div class='GPSTopDrop'>" +
             "<form id='DoWxModelData'>" +
             "<select id='WxDataHourDrop' name='WxDataHour'>" +
             "<option value=''>Analysis</option>";
     gfsFha.forEach(function (hour) {
         var tFHour2Pass = Number(hour.FHour) + 2;
-        rData += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + "TIMESTRING (+" + hour.FHour + "h)</option>";
+        topPop += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + "TIMESTRING (+" + hour.FHour + "h)</option>";
     });
-    rData += "</select><br/>" +
+    topPop += "</select><br/>" +
             "<button name='SubmitModelQuery' id='SubmitModelQueryButton'>Go!</button>" +
             "<select id='WxDataTypeDrop' name='WxDataType'>" +
             "<option value='SfcT'>Select...</option>";
     wxDataTypes.forEach(function (xdType) {
-        rData += "<option value='" + xdType.matcher + "'>" + xdType.name + "</option>";
+        topPop += "<option value='" + xdType.matcher + "'>" + xdType.name + "</option>";
     });
-    rData += "</select>" +
+    topPop += "</select>" +
             "</form>" +
             "</div>";
-    dojo.byId("mapEx").innerHTML = rData;
+    var lowLeftPop = "<div class='MapLowLeftPop'><img src='" + getBasePath("icon") + "/ic_map.jpeg' class=th_icon'/>Search data..." +
+            "<div class='MapLowLeftPopO'>" +
+            "<form><table><th align='center' colspan='2'>Data Range - <a href='" + getResource("WxStation") + "' target='new'>" + stationCount + " stations</th></thead>" +
+            "<tr><td>Start</td><td><input type='text' name='wxSearchStart' value='" + searchDateStart + "'/></td></tr>" +
+            "<tr><td>End</td><td><input type='text' name='wxSearchEnd' value='" + searchDateEnd + "'/></td></tr>" +
+            "<input type='hidden' name='DoObsSearch' value='Yes'/>" +
+            "<tr><td align='center' colspan='2'><input id='xmlRangeButton' type='submit' name='DoObsSearch'></td></tr>" +
+            "</table></form></div></div>";
+    var lowRightPop = "<div class='MapLowRight' style='background: black;'>More<br/>" +
+            "<a href='http://weather.cod.edu/satrad/nexrad/index.php?type=EAX-N0Q-0-6' target='newRadar'>CoD Radar</a><br/>" +
+            "<a href='" + getResource("Cams") + "' target='newRadar'>Home Cams</a>" +
+            "</div>";
+    dojo.byId("mapEx").innerHTML = topPop + lowLeftPop + lowRightPop;
     var submitModelQueryButton = dojo.byId("SubmitModelQueryButton");
     dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
 }
@@ -478,7 +495,7 @@ function getModelRunInfo() {
                 }).then(
                 function (data) {
                     aniPreload("off");
-                    addTopSelectDrop(data.last, data.hours);
+                    addWxMapPops(data.last, data.hours, data.stationCount);
                 },
                 function (error) {
                     aniPreload("off");

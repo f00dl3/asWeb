@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 5 Jul 2018
+Updated: 11 Jul 2018
  */
 
 package asWebRest.dao;
@@ -767,7 +767,25 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
+       
+    public JSONArray getObsJsonStationCount(Connection dbc) {
+        final String query_ObsJSON_StationCount = "SELECT COUNT(Station) as StationCount" +
+                " FROM WxObs.Stations" +
+                " WHERE Active=1;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_StationCount, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("StationCount", resultSet.getLong("StationCount"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getObsXmlGeo(Connection dbc) {
         final String query_ObsXML_Geo = "SELECT" +
                 " st.Station as Station, st.Point as Point, st.City as City, st.State as State," +

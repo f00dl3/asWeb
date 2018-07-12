@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 17 May 2018
+Updated: 11 Jul 2018
 */
 
 var chartArray;
@@ -174,7 +174,7 @@ function populateCharts() {
     for (var i = 0; i < chartArray.length; i++) {
         rData += "<span id='CHART_" + chartArray[i] + "'></span>";
     }
-    rData += "<a href='" + getBasePath("old") + "/OutMap.php?RadarMode=B' target='nChartR'>" +
+    rData += "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='nChartR'>" +
             "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
             "<a href='" + getResource("Cams") + "' target='nChartC'>" +
             "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 

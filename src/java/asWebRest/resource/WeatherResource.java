@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Jun 2018
+Updated: 11 Jul 2018
  */
 
 package asWebRest.resource;
@@ -108,11 +108,13 @@ public class WeatherResource extends ServerResource {
                     JSONArray hours = getWeatherAction.getGfsFha(dbc);
                     JSONArray runs = getWeatherAction.getJsonModelRuns(dbc);
                     JSONArray jsonModelData = getWeatherAction.getJsonModelData(dbc, qParams);
+                    JSONArray stationCount = getWeatherAction.getObsJsonStationCount(dbc);
                     mergedResults
                         .put("last", lastRun)
                         .put("heights", heights)
                         .put("hours", hours)
                         .put("runs", runs)
+                        .put("stationCount", stationCount)
                         .put("jsonModelData", jsonModelData);
                     returnData = mergedResults.toString();
                     break;
