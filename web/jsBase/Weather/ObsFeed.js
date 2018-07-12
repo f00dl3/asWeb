@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 11 Jul 2018
+Updated: 12 Jul 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -65,7 +65,7 @@ function getObsData(targetDiv, displayType) {
 
 
 function getObsDataMerged(targetDiv, displayType) {
-    var timeout = 90*1000;
+    var timeout = getRefresh("medium");
     aniPreload("on");
     var dateOverrideStart = getDate("hour", -1, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
@@ -85,9 +85,9 @@ function getObsDataMerged(targetDiv, displayType) {
         load: function(data) {
             var lastData;
             var theData = JSON.parse(data.wxObsNow[0].jsonSet);
+            var nowObsId = data.wxObsNow[0].ObsID;
             if(isSet(data.wxObsM1H[0])) { lastData = JSON.parse(data.wxObsM1H[0].jsonSet); } else { lastData = theData; }
             var indoorObs = data.indoorObs;
-            var nowObsId = lastData.ObsID;
             switch(displayType) {
                 case "marquee":
                     processMarqueeData(theData, lastData, targetDiv);
@@ -162,7 +162,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
     if(lastData === "") { console.log("ERROR fetching LastObsData"); }
     var returnData = "";
     var theTemperature = theData.Temperature;
-    var stationId = theData.Station;
+    var stationId = "KOJC"; // forced
     var getTime = theData.GetTime;
     var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs[0].ExtTemp/1000));
     var indoorPiTemp = Math.round(indoorObs[1].ExtTemp);

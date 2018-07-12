@@ -258,13 +258,8 @@ function addObsLocationMarkers(map, description, tCoord) {
         type: "Location"
     });
     switch (description) {
-        case "Home":
-            shortName = "H";
-            break;
-        case "Note3":
-            shortName = "A";
-            //overlay.setPosition(point);
-            break;
+        case "Home": shortName = "H"; break;
+        case "Note3": shortName = "A"; break;
     }
     iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
     return iconFeature;
@@ -331,7 +326,10 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
-    if(isSet(mobiCoord)) { map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857')); }
+    console.log(mobiCoord);
+    if(isSet(mobiCoord) && mobiCoord[0] !== 0 && mobiCoord[1] !== 0) {
+        map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
+    }
     map.on('click', function (evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
             return feature;
