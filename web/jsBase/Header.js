@@ -1,7 +1,6 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 13 Jul 2018
  */
 
 var annMaint = 910.66;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 11 Jul 2018
+Updated: 14 Jul 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -771,6 +771,7 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
         case 'Sandstorm': case 'SS': factor = 0; icon = 'du'; break;
         case 'Snow Freezing Fog': factor = -3; icon = 'sn'; break; 
         case 'Thunderstorm': case 'TS': factor = -4; icon = 'ts'; break;
+        case 'Thunderstorm Haze': factor = -5; icon = 'ts'; break;
         case 'Thunderstorm Heavy Rain and Breezy': factor = -5; icon = 'ts'; break;
         case 'Thunderstorm Heavy Rain Fog/Mist': factor = -5; icon = 'ts'; break;
         case 'Thunderstorm Heavy Rain Fog and Breezy': factor = -5; icon = 'ts'; break;
