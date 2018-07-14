@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 24 May 2018
+Updated: 14 Jul 2018
  */
 
 function actOnPlayedGameHours(event) {
@@ -125,12 +125,14 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
             "</span>" +
             "</form>";
     rData += ghe + "<div class='UPopNMO'>";
+    var standings = 0;
     gameHours.forEach(function (game) {
+        standings++;
         var playing = "";
         if(game.Active === 1) { playing = "<strong> (Playing!)</strong>)"; }
         gheA += "<form class='tr'>" +
                 "<span class='td'><input type='checkbox' class='doHours'/></span>" +
-                "<span class='td'>" + game.Name + playing + "<input type='hidden' name='gameName' value='" + game.Name + "'/></span>" +
+                "<span class='td'><span style='color: yellow;'>" + standings + ":</span> " + game.Name + playing + "<input type='hidden' name='gameName' value='" + game.Name + "'/></span>" +
                 "<span class='td'><div class='UPop'>" + game.Hours +
                 "<div class='UPopO'>Last played: " + game.Last +
                 "</div></div></span>" +
