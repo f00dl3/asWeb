@@ -53,15 +53,15 @@ public class WeatherDAO {
                 "     FROM WxObs.LiveWarnings lw" +
                 "     LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
                 "     WHERE" +
-                "         CASE WHEN lwc.ExtendDisplayTime = 0" +
-                "             THEN" +
-                "                 (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
-                "                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
-                "                     AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
-                "             ELSE" +
-                "                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
-                "         END" +
-                "         AND lw.title IS NOT NULL" +
+                //"         CASE WHEN lwc.ExtendDisplayTime = 0" +
+                //"             THEN" +
+                //"                 (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
+                //"                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
+                //"                     AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
+                //"             ELSE" +
+                //"                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
+                //"         END" +
+                "         lw.title IS NOT NULL" +
                 "         AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
                 "         AND ( lw.capgeocode REGEXP '" + stationA + "' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))" +
                 "         AND lw.id REGEXP '" + idMatch + "'" +
@@ -70,6 +70,7 @@ public class WeatherDAO {
                 " CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
                 " CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
                 " CASE WHEN cappolygon IS NULL AND cap12polygon IS NULL THEN CONCAT(capevent,FIPSCodes,cap12same) END" +
+                " ORDER BY published DESC" +
                 " LIMIT " + limit + ";";
         JSONArray tContainer = new JSONArray();
         try {
@@ -91,7 +92,7 @@ public class WeatherDAO {
                     .put("capevent", resultSet.getString("capevent"))
                     .put("ColorRGB", resultSet.getString("ColorRGB"))
                     .put("ColorHEX", resultSet.getString("ColorHEX"))
-                    .put("ExtendedDisplayTime", resultSet.getInt("ExtendedDisplayTime"))
+                    //.put("ExtendedDisplayTime", resultSet.getInt("ExtendedDisplayTime"))
                     .put("ShowIt", resultSet.getInt("ShowIt"))
                     .put("GetTime", resultSet.getString("GetTime"))
                     .put("FIPSCodes", resultSet.getString("FIPSCodes"))
@@ -103,11 +104,10 @@ public class WeatherDAO {
             resultSet.close();
         } catch (Exception e) {
             e.printStackTrace();
-            tContainer.put(e.getMessage());
-        } finally {
+        }/* finally {
             tContainer
                     .put(query_LiveWarnings);
-        }
+        }*/
         return tContainer;
     }
     

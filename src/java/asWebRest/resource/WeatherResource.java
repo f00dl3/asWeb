@@ -90,7 +90,6 @@ public class WeatherResource extends ServerResource {
                     break;
                     
                 case "getLiveWarnings":
-                    returnData = "getLiveWarnings:\n";
                     inParams.add(0, argsInForm.getFirstValue("xdt1"));
                     inParams.add(1, argsInForm.getFirstValue("xdt2"));
                     inParams.add(2, argsInForm.getFirstValue("xExp"));
