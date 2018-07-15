@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 12 Jul 2018
+Updated: 15 Jul 2018
  */
 
 function getObsData(targetDiv, displayType) {
@@ -194,7 +194,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
             "<br/><div class='UPopNM'>" +
             "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
-            processUpperAirData(null, theData) + "</div><br/>" +
+            processUpperAirData(998, theData) + "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +
             "<div class='UPopO'>" +
             "Visibility: " + theData.Visibility + " mi.<br/>" +
@@ -231,11 +231,8 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
     var h2eMap = heights2Elevations("elev", "b2t");
     var heights = heights2Elevations("height", "b2t");
     var theLastT, theLastD, theLastW, theLastH, doSounding;
-    if(isSet(baseEle)) {
-        sfcFt = ((((1-Math.pow(baseEle/1013.25), 0.190284))*145366.45)/1000).toFixed(1);
-    } else {
-        baseEle = 1013;
-    }
+    if(!isSet(baseEle)) { baseEle = 1013; }
+    //sfcFt = ((((1-Math.pow(baseEle/1013.25), 0.190284))*145366.45)/1000).toFixed(1);
     if(isSet(stationData.T950)) {
         if(!isSet(stationData.T975)) { 
             stationData.T975 = stationData.T1000;
@@ -243,6 +240,7 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
         var obsData = parseWxObs(stationData);
         var doSoundingMin = "<table>";
         if(isSet(obsData.H900T)) {
+            obsData.H1000T = conv2Tf(obsData.H1000T);
             var tA100 = [ obsData.H100T ]; var dA100 = [ obsData.H100D ];
             var hA100 = [ obsData.H100H ]; var wA100 = [ obsData.H100WS ];
             var hA150 = [ obsData.H100H, obsData.H125H, obsData.H150H ]; var wA150 = [ obsData.H100WS, obsData.H125WS, obsData.H150WS ];

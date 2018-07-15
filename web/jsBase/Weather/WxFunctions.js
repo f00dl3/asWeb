@@ -740,7 +740,7 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
         case 'Light Freezing Rain and Breezy': factor = -1; icon = 'zr'; break;
         case 'Light Freezing Rain Fog/Mist': factor = -1; icon = 'zr'; break;
         case 'Light Freezing Rain Fog/Mist and Breezy': factor = -1; icon = 'zr'; break;
-        case 'Light Rain' && '-RA': factor = -1; icon = 'sh'; break;
+        case 'Light Rain': case '-RA': factor = -1; icon = 'sh'; break;
         case 'Light Rain and Breezy': factor = -1; icon = 'sh'; break;
         case 'Light Rain and Windy': factor = -1; icon = 'sh'; break;
         case 'Light Rain Fog': factor = -1; icon = 'lr'; break;

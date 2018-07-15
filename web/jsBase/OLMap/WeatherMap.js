@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 11 Jul 2018
+ Updated: 15 Jul 2018
  POSSIBLE DESKTOP RESOURCE HOG ALERT!
  DEFINTATE MmarkerType, OBILE RESOURCE HOG!
  
@@ -235,10 +235,14 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 icOpacity = 1;
             } break;
         case "SfcT": default:
-            icLabel = Math.round(stationData.Temperature);
-            icColor = styleTemp(stationData.Temperature, true);
-            icLabelColor = styleTemp(stationData.Temperature, "text");
-            icOpacity = 1;
+            if(!isSet(stationData.Temperature) || stationData.Temperature < -100) {
+                icLabel = ""; icColor = "#000000"; icOpacity = 0;
+            } else {
+                icLabel = Math.round(stationData.Temperature);
+                icColor = styleTemp(stationData.Temperature, true);
+                icLabelColor = styleTemp(stationData.Temperature, "text");
+                icOpacity = 1;
+            }
             break;
     }
     iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, icLabelColor));
@@ -265,8 +269,10 @@ function addObsLocationMarkers(map, description, tCoord) {
     return iconFeature;
 }
 
-// Testing, 7/11/2018
-function doModelBasemap(map) {
+// Testing, 7/15/2018
+function doModelBasemap(map, lastModelImage) {
+    var fixedLmiPath = lastModelImage.replace("/var/www/G2Out", getBasePath("g2OutOld"));
+    console.log(lastModelImage + " ==> " + fixedLmiPath);
     var extent = [0, 0, 1024, 968];
     var projection = new ol.proj.Projection({
         code: 'xkcd-image',
@@ -275,7 +281,7 @@ function doModelBasemap(map) {
     });
     var imageLayer = new ol.layer.Image({
         source: new ol.source.ImageStatic({
-            url: getBasePath("g2OutOld") + "/xsOut/tmp2m/20180711_2008_tmp2m.png",
+            url: fixedLmiPath,
             projection: projection,
             imageExtent: extent
         })
@@ -283,7 +289,7 @@ function doModelBasemap(map) {
     map.addLayer(imageLayer);
 }
 
-function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
+function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
     if (overlayLayer) {
         map.removeLayer(overlayLayer);
@@ -427,7 +433,7 @@ function doWeatherOLMap(map, wxStations, obsIndoor, obsData, obsDataRapid, mobiL
             overlay.setPosition(eCoord);
         }
     });
-    //doModelBasemap(map);
+    doModelBasemap(map, lastModelImage);
 }
 
 function showTableHumi(stationId) {
@@ -449,7 +455,8 @@ function getJsonWeatherGlob(map, lPointType) {
         "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
         "endTime": getDate("hour", 0, "full"),
-        "limit": 1
+        "limit": 1,
+        "moiType": "tmp2m"
     };
     // if can get dynamic updating divs to work, could increase limit. This would be major resource hog.
     require(["dojo/request"], function (request) {
@@ -462,6 +469,7 @@ function getJsonWeatherGlob(map, lPointType) {
                     aniPreload("off");
                     doWeatherOLMap(
                             map,
+                            data.lmmi,
                             data.stations,
                             data.indoorObs,
                             data.wxObsJson,

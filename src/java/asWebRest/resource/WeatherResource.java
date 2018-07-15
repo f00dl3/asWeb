@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 11 Jul 2018
+Updated: 15 Jul 2018
  */
 
 package asWebRest.resource;
@@ -13,6 +13,7 @@ import asWebRest.action.UpdateWeatherAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -30,6 +31,7 @@ public class WeatherResource extends ServerResource {
     @Post
     public String represent(Representation argsIn) {
         
+        CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
@@ -146,6 +148,15 @@ public class WeatherResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    String lmmi = "";
+                    String hrrrOutPath = cb.getPathApache() + "/G2Out/xsOut";
+                    try {
+                        hrrrOutPath += "/" + argsInForm.getFirstValue("moiType");
+                        lmmi = wc.lastModifiedFile(hrrrOutPath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        lmmi = e.getMessage();
+                    }
                     List<String> qParams2 = new ArrayList<>();
                     qParams2.add(0, "%");
                     JSONArray wxObsJson = getWeatherAction.getObsJson(dbc, qParams, inParams);
@@ -154,6 +165,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     mergedResults
+                        .put("lmmi", lmmi)
                         .put("wxObsJson", wxObsJson)
                         .put("wxObsJsonRapid", wxObsJsonRapid)
                         .put("indoorObs", indorObsB)

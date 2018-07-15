@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 11 Jul 2018
+Updated: 14 Jul 2018
  */
 
 function displayModelData() {
@@ -374,8 +374,8 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
     });
     mosTable += "</div>";
     rData += mosTable;
-    dojo.byId("FocusLoop").play();
     dojo.byId("WxLocalModel").innerHTML = rData;
+    dojo.byId("FocusLoop").play();
 }
 
 

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 1 Jul 2018
+Updated: 15 Jul 2018
 */
 
 package asWebRest.shared;
@@ -9,6 +9,7 @@ package asWebRest.shared;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -174,6 +175,24 @@ public class WebCommon {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
+    }
+    
+    public static String lastModifiedFile(String path2Check) {
+        File fl = new File(path2Check);
+        File[] files = fl.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                return file.isFile();
+            }
+        });
+        long lastMod = Long.MIN_VALUE;
+        File choice = null;
+        for (File file : files) {
+            if(file.lastModified() > lastMod) {
+                choice = file;
+                lastMod = file.lastModified();
+            }
+        }
+        return choice.toString();
     }
     
     private String nowDate() {
