@@ -5,17 +5,23 @@
 
 var radarImage;
 
-function generateRadarKml(radarList, mobiLocObj) {
+function generateRadarKml(radarList, mobiLocObj, timestamp) {
+    if(radarImage) {
+        map.removeLayer(radarImage);
+        console.log(timestamp + ": REMOVED RADAR IMAGE!");
+    } else {
+        console.log(timestamp + ": RADAR IMAGE NOT RENDERED YET!");
+    }
     mobiLoc = JSON.parse(mobiLocObj[0].Location);
-    var inBoundsN = 0;
-    var inBoundsS = 0;
-    var inBoundsE = 0;
-    var inBoundsW = 0;
-    var opacity = 0.3;
-    var inBounds = "";
     var mobLon = Number(mobiLoc[0]);
     var mobLat = Number(mobiLoc[1]);
     radarList.forEach(function (tRad) {
+        var inBoundsN = 0;
+        var inBoundsS = 0;
+        var inBoundsE = 0;
+        var inBoundsW = 0;
+        var opacity = 0.2;
+        var inBounds = "";
         var bounds = JSON.parse(tRad.BoundsNSEW);
         bounds0 = Number(bounds[0]);
         bounds1 = Number(bounds[1]);
@@ -28,6 +34,7 @@ function generateRadarKml(radarList, mobiLocObj) {
         if(inBoundsN === 1 && inBoundsS === 1 && inBoundsE === 1 && inBoundsW === 1) {
             opacity = 0.5;
             inBounds = "yes";
+            console.log("IN BOUNDS FOR [" + tRad.Site + "]!");
         } else {
             inBounds = "no";
         }
@@ -35,15 +42,8 @@ function generateRadarKml(radarList, mobiLocObj) {
                 "S: " + inBoundsS + " " + sCheck +"," +
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
-        if(tRad.Site === "EAX") {
-            if(radarImage) {
-                map.removeLayer(radarImage);
-                console.log("REMOVED RADAR IMAGE!");
-            } else {
-                console.log("RADAR IMAGE NOT RENDERED YET!");
-            }
+        if(!checkMobile() || opacity === 0.5) {
             var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
-            console.log(debugString);
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],
                     ol.proj.getTransform('EPSG:4326', 'EPSG:3857')

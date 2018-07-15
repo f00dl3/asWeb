@@ -329,7 +329,7 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     var rData = "";
     var vectorSource = new ol.source.Vector({});
     doModelBasemap(map, lastModelImage);
-    generateRadarKml(radarList, mobiLoc);
+    generateRadarKml(radarList, mobiLoc, timestamp);
     vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
     if (
             (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
