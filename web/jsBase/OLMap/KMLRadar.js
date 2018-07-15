@@ -9,7 +9,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
     if(radarImage) {
         for(var i = 0; i < radarImage.length; i++) {
             if(radarImage[i]) {
-                map.removeLayer(radarImage);
+                map.removeLayer(radarImage[i]);
                 console.log(timestamp + ": Removed radar image " + i + "!");
             } else {
                 console.log(timestamp + ": No radar image layer " + i + " exists!");
@@ -21,7 +21,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
     mobiLoc = JSON.parse(mobiLocObj[0].Location);
     var mobLon = Number(mobiLoc[0]);
     var mobLat = Number(mobiLoc[1]);
-    var i = 0;
+    var j = 0;
     radarList.forEach(function (tRad) {
         var inBoundsN = 0;
         var inBoundsS = 0;
@@ -50,7 +50,6 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
         if(!checkMobile() || opacity === 0.5) {
-            i++;
             var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],
@@ -61,7 +60,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 units: 'pixels',
                 extent: extent
             });
-            radarImage[i] = new ol.layer.Image({
+            radarImage[j] = new ol.layer.Image({
                 opacity: opacity,
                 source: new ol.source.ImageStatic({
                     attributions: [ imageSource ],
@@ -71,7 +70,8 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                     imageExtent: extent
                 })
             });
-            map.addLayer(radarImage[i]);
+            map.addLayer(radarImage[j]);
+            j++;
         }
     });
 }
