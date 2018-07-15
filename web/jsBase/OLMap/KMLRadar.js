@@ -3,27 +3,32 @@
  Created: 15 Jul 2018
  */
 
-function generateRadarKml(radarList, mobiLoc) {
+var radarImage;
+
+function generateRadarKml(radarList, mobiLocObj) {
+    mobiLoc = JSON.parse(mobiLocObj[0].Location);
     var inBoundsN = 0;
     var inBoundsS = 0;
     var inBoundsE = 0;
     var inBoundsW = 0;
-    var opacity = 0;
-    var oColor = 0;
+    var opacity = 0.3;
     var inBounds = "";
+    var mobLon = Number(mobiLoc[0]);
+    var mobLat = Number(mobiLoc[1]);
     radarList.forEach(function (tRad) {
         var bounds = JSON.parse(tRad.BoundsNSEW);
-        if(mobiLoc[0] < bounds[0] - 2) { inBoundsN = 1; } var nCheck = "[if " + mobiLoc[0] + " vs " + bounds[0] - 2 + "]";
-        if(mobiLoc[0] > bounds[1] + 2) { inBoundsS = 1; } var sCheck = "[if " + mobiLoc[0] + " vs " + bounds[1] + 2 + "]";
-        if(mobiLoc[1] < bounds[2] - 2) { inBoundsE = 1; } var eCheck = "[if " + mobiLoc[1] + " vs " + bounds[2] - 2 + "]";
-        if(mobiLoc[1] > bounds[3] + 2) { inBoundsW = 1; } var wCheck = "[if " + mobiLoc[1] + " vs " + bounds[3] + 2 + "]";
+        bounds0 = Number(bounds[0]);
+        bounds1 = Number(bounds[1]);
+        bounds2 = Number(bounds[2]);
+        bounds3 = Number(bounds[3]);
+        if(mobLat < (bounds0 - 2)) { inBoundsN = 1; } var nCheck = "[if " + mobLat + " < " + (bounds0 - 2) + "]";
+        if(mobLat > (bounds1 + 2)) { inBoundsS = 1; } var sCheck = "[if " + mobLat + " > " + (bounds1 + 2) + "]";
+        if(mobLon < (bounds2 - 2)) { inBoundsE = 1; } var eCheck = "[if " + mobLon + " < " + (bounds2 - 2) + "]";
+        if(mobLon > (bounds3 + 2)) { inBoundsW = 1; } var wCheck = "[if " + mobLon + " > " + (bounds3 + 2) + "]";
         if(inBoundsN === 1 && inBoundsS === 1 && inBoundsE === 1 && inBoundsW === 1) {
-            opacity = 1;
-            oColor = 73;
+            opacity = 0.5;
             inBounds = "yes";
         } else {
-            opacity = 0.8;
-            oColor = 26;
             inBounds = "no";
         }
         var debugString = "(N: " + inBoundsN + " " + nCheck +"," +
@@ -31,9 +36,13 @@ function generateRadarKml(radarList, mobiLoc) {
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
         if(tRad.Site === "EAX") {
-            console.log(tRad.Site + " @ " + tRad.BoundsNSEW);
-            var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLoop.gif";
-            console.log(imageSource);
+            if(radarImage) {
+                map.removeLayer(radarImage);
+                console.log("REMOVED RADAR IMAGE!");
+            } else {
+                console.log("RADAR IMAGE NOT RENDERED YET!");
+            }
+            var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
             console.log(debugString);
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],
@@ -45,7 +54,7 @@ function generateRadarKml(radarList, mobiLoc) {
                 extent: extent
             });
             radarImage = new ol.layer.Image({
-                opacity: 0.5,
+                opacity: opacity,
                 source: new ol.source.ImageStatic({
                     attributions: [ imageSource ],
                     url: imageSource,
