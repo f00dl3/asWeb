@@ -45,7 +45,7 @@ public class GetWeatherAction {
     public JSONArray getObsJsonStationCount(Connection dbc) { return weatherDAO.getObsJsonStationCount(dbc); }
     public JSONArray getObsXmlGeo(Connection dbc) { return weatherDAO.getObsXmlGeo(dbc); }
     public JSONArray getObsXmlReg(Connection dbc) { return weatherDAO.getObsXmlReg(dbc); }
-    public JSONArray getRadarList() { return weatherDAO.getRadarList(); }
+    public JSONArray getRadarList(Connection dbc) { return weatherDAO.getRadarList(dbc); }
     public JSONArray getReanalysis(List qParams) { return weatherDAO.getReanalysis(qParams); }
     public JSONArray getSpcLive(Connection dbc, List qParams) { return weatherDAO.getSpcLive(dbc, qParams); }
     public JSONArray getStormReportsByDate(Connection dbc, List inParams) { return weatherDAO.getStormReportsByDate(dbc, inParams); }

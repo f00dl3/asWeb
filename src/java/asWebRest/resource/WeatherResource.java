@@ -165,6 +165,7 @@ public class WeatherResource extends ServerResource {
                     }
                     List<String> qParams2 = new ArrayList<>();
                     qParams2.add(0, "%");
+                    JSONArray radarList = getWeatherAction.getRadarList(dbc);
                     JSONArray wxObsJson = getWeatherAction.getObsJson(dbc, qParams, inParams);
                     JSONArray wxObsJsonRapid = getWeatherAction.getObsJsonRapid(dbc, qParams, inParams);
                     JSONArray indorObsB = getSnmpAction.getMergedLastTemp(dbc);
@@ -172,6 +173,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     mergedResults
                         .put("lmmi", lmmi)
+                        .put("radarList", radarList)
                         .put("wxObsJson", wxObsJson)
                         .put("wxObsJsonRapid", wxObsJsonRapid)
                         .put("indoorObs", indorObsB)

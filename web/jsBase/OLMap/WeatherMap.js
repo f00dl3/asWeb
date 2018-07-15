@@ -304,7 +304,7 @@ function doModelBasemap(map, lmmi) {
     map.addLayer(imageLayer);
 }
 
-function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
+function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
     if (imageLayer) {
         map.removeLayer(imageLayer);
@@ -328,7 +328,8 @@ function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obs
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
     var rData = "";
     var vectorSource = new ol.source.Vector({});
-    var wxDataType = "SfcT";
+    doModelBasemap(map, lastModelImage);
+    generateRadarKml(radarList, mobiLoc);
     vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
     if (
             (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
@@ -453,7 +454,6 @@ function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obs
             overlay.setPosition(eCoord);
         }
     });
-    doModelBasemap(map, lastModelImage);
 }
 
 function showTableHumi(stationId) {
@@ -502,6 +502,7 @@ function getJsonWeatherGlob(map, lPointType) {
                     doWeatherOLMap(
                             map,
                             data.lmmi,
+                            data.radarList,
                             data.stations,
                             data.indoorObs,
                             data.wxObsJson,

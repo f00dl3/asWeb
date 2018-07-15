@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 11 Jul 2018
+Updated: 15 Jul 2018
  */
 
 package asWebRest.dao;
@@ -831,11 +831,11 @@ public class WeatherDAO {
         return tContainer;
     }
         
-    public JSONArray getRadarList() {
+    public JSONArray getRadarList(Connection dbc) {
         final String query_RadarList = "SELECT Site, BoundsNSEW FROM WxObs.RadarList WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_RadarList, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RadarList, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
