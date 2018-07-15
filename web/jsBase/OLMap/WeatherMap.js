@@ -4,7 +4,7 @@
  Created: 25 Jun 2018
  Updated: 15 Jul 2018
  POSSIBLE DESKTOP RESOURCE HOG ALERT!
- DEFINTATE MmarkerType, OBILE RESOURCE HOG!
+ DEFINTATE MOBILE RESOURCE HOG!
  
  */
 
@@ -246,7 +246,6 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             break;
     }
     iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, icLabelColor));
-    if(stationInfo.Priority === 1) { console.log(iconFeature); }
     return iconFeature;
 }
 
@@ -269,20 +268,24 @@ function addObsLocationMarkers(map, description, tCoord) {
     return iconFeature;
 }
 
-// Testing, 7/15/2018
 function doModelBasemap(map, lastModelImage) {
     var fixedLmiPath = lastModelImage.replace("/var/www/G2Out", getBasePath("g2OutOld"));
-    console.log(lastModelImage + " ==> " + fixedLmiPath);
-    var extent = [0, 0, 1024, 968];
+    var extent = ol.extent.applyTransform(
+            [-128, 24, -65, 50],
+            ol.proj.getTransform('EPSG:4326', 'EPSG:3857')
+    );      
     var projection = new ol.proj.Projection({
-        code: 'xkcd-image',
+        code: 'local_image',
         units: 'pixels',
         extent: extent
     });
     var imageLayer = new ol.layer.Image({
+        opacity: 0.33,
         source: new ol.source.ImageStatic({
+            attributions: [ fixedLmiPath ],
             url: fixedLmiPath,
-            projection: projection,
+            imageSize: [ 2904, 1440 ],
+            projection: map.getView().getProjection(),
             imageExtent: extent
         })
     });
@@ -332,7 +335,6 @@ function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obs
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
-    console.log(mobiCoord);
     if(isSet(mobiCoord) && mobiCoord[0] !== 0 && mobiCoord[1] !== 0) {
         map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
     }
