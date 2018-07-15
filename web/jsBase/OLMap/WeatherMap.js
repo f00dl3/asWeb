@@ -292,7 +292,7 @@ function doModelBasemap(map, lmmi) {
         extent: extent
     });
     imageLayer = new ol.layer.Image({
-        opacity: 0.4,
+        opacity: 0.25,
         source: new ol.source.ImageStatic({
             attributions: [ fixedLmiPath ],
             url: fixedLmiPath,

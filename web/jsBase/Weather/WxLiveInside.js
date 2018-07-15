@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 11 Jul 2018
+Updated: 15 Jul 2018
  */
 
 function actOnShowFeed() {
@@ -76,7 +76,7 @@ function getLiveWarnings() {
     aniPreload("on");
     var thePostData = {
         "doWhat": "getLiveWarnings",
-        "xdt1": getDate("day", -7, "full"),
+        "xdt1": getDate("day", -31, "full"),
         "xdt2": getDate("day", 0, "full"),
         "xExp": getDate("day", 0, "full"),
         "limit": "5",
@@ -87,10 +87,10 @@ function getLiveWarnings() {
         request
             .post(getResource("Wx"), {
                 data: thePostData,
-                handleAs: "json"
+                handleAs: "text"
             }).then(
                 function(data) {
-                    popLiveWarnings();
+                    popLiveWarnings(data);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -187,10 +187,10 @@ function popLiveContainer() {
     var rData = "<div id='liveButtonNavi'></div><p>" +
             "<div id='WxLive'>" +
             "<h4>Observations/Forecasts</h4>" +
-            "<div id='LiveWarnings'></div><p>" +
-            "<div id='ObsCurrent'></div><p>" +
-            "<div id='ObsLinks3D'></div>" +
-            "<div id='ObsLinksList'></div>" +
+            "<div id='LiveWarnings'>Loading watch/warning/advisories...</div><p>" +
+            "<div id='ObsCurrent'>Loading observations...</div><p>" +
+            "<div id='ObsLinks3D'>Loading 3D observation links...</div>" +
+            "<div id='ObsLinksList'>Loading list of links...</div>" +
             "</div>" +
             "<div id='WxFeeds'></div>" +
             "<div id='WxQuakes'></div>" +
@@ -244,14 +244,18 @@ function popLiveLinksList() {
     getWebLinks("Weather.php-Observations", "obsLinks", "list");
 }
 
-function putLiveWarnings(liveWarnings) {
+function popLiveWarnings(liveWarnings) {
     var liveWarns = "";
-    liveWarnings.forEach(function(lw) {
-        liveWarns += "<div class='UPop'>" +
-                "<a href='" + lw.id + "' target='top'>" + lw.title + "</a>" +
-                "<div class='UPopO'>" + lw.summary + "</div>" +
-                "</div><br/>";
-    });
+    if(isSet(liveWarnings) && liveWarnings.length !== 0) {
+        liveWarnings.forEach(function(lw) {
+            liveWarns += "<div class='UPop'>" +
+                    "<a href='" + lw.id + "' target='top'>" + lw.title + "</a>" +
+                    "<div class='UPopO'>" + lw.summary + "</div>" +
+                    "</div><br/>";
+        });
+    } else {
+        liveWarns = "<em>No active watches/warnings/advsiories found!</em>";
+    }
     dojo.byId("LiveWarnings").innerHTML = liveWarns;
 }
 
