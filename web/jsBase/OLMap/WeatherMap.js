@@ -9,6 +9,7 @@
  */
 
 var dataRefresh = getRefresh("medium");
+var imageLayer;
 var overlayLayer;
 var pointType;
 var searchDateStart;
@@ -268,8 +269,8 @@ function addObsLocationMarkers(map, description, tCoord) {
     return iconFeature;
 }
 
-function doModelBasemap(map, lastModelImage) {
-    var fixedLmiPath = lastModelImage.replace("/var/www/G2Out", getBasePath("g2OutOld"));
+function doModelBasemap(map, lmmi) {
+    var fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
     var extent = ol.extent.applyTransform(
             [-128, 24, -65, 50],
             ol.proj.getTransform('EPSG:4326', 'EPSG:3857')
@@ -279,12 +280,12 @@ function doModelBasemap(map, lastModelImage) {
         units: 'pixels',
         extent: extent
     });
-    var imageLayer = new ol.layer.Image({
-        opacity: 0.33,
+    imageLayer = new ol.layer.Image({
+        opacity: 0.4,
         source: new ol.source.ImageStatic({
             attributions: [ fixedLmiPath ],
             url: fixedLmiPath,
-            imageSize: [ 2904, 1440 ],
+            imageSize: [ lmmi.mediaInfo.imageWidth, lmmi.mediaInfo.imageHeight ],
             projection: map.getView().getProjection(),
             imageExtent: extent
         })
@@ -294,11 +295,17 @@ function doModelBasemap(map, lastModelImage) {
 
 function doWeatherOLMap(map, lastModelImage, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
+    if (imageLayer) {
+        map.removeLayer(imageLayer);
+        console.log(timestamp + ": Removed image layer!");
+    } else {
+        console.log(timestamp + ": No image layer yet!");
+    }
     if (overlayLayer) {
         map.removeLayer(overlayLayer);
-        console.log(timestamp + ": Removed layers!");
+        console.log(timestamp + ": Removed overlay layer!");
     } else {
-        console.log(timestamp + ": No layers!");
+        console.log(timestamp + ": No overlay layer yet!");
     }
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp) / 1000));
@@ -451,16 +458,19 @@ function showTableWind(stationId) {
 }
 
 function getJsonWeatherGlob(map, lPointType) {
-    if(isSet(lPointType)) { pointType = lPointType; }
+    var baseType;
+    if(isSet(lPointType)) { pointType = lPointType; } else { pointType = "SfcT"; }
+    switch(pointType) {
+        case "SfcT": if(checkMobile()) { baseType = "tmp2m"; } else { baseType = "js2tmp"; } break;
+    }
     aniPreload("on");
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
-        "moiType": "tmp2m"
+        "moiType": baseType
     };
-    // if can get dynamic updating divs to work, could increase limit. This would be major resource hog.
     require(["dojo/request"], function (request) {
         request
                 .post(getResource("Wx"), {

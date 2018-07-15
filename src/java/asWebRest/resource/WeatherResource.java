@@ -13,6 +13,7 @@ import asWebRest.action.UpdateWeatherAction;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.WeatherDAO;
+import asWebRest.hookers.MediaTools;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -32,6 +33,7 @@ public class WeatherResource extends ServerResource {
     public String represent(Representation argsIn) {
         
         CommonBeans cb = new CommonBeans();
+        MediaTools mt = new MediaTools();
         WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
@@ -148,14 +150,18 @@ public class WeatherResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    String lmmi = "";
+                    String lmmiPath = "";
                     String hrrrOutPath = cb.getPathApache() + "/G2Out/xsOut";
+                    JSONObject lmmi = new JSONObject();
                     try {
                         hrrrOutPath += "/" + argsInForm.getFirstValue("moiType");
-                        lmmi = wc.lastModifiedFile(hrrrOutPath);
+                        lmmiPath = wc.lastModifiedFile(hrrrOutPath);
+                        lmmi
+                            .put("lastFile", lmmiPath)
+                            .put("mediaInfo", mt.getImageInfo(lmmiPath));
                     } catch (Exception e) {
                         e.printStackTrace();
-                        lmmi = e.getMessage();
+                        lmmiPath = e.getMessage();
                     }
                     List<String> qParams2 = new ArrayList<>();
                     qParams2.add(0, "%");
