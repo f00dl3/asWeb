@@ -28,38 +28,49 @@ public class WeatherDAO {
         final String idMatch = inParams.get(4);
         final int limit = Integer.parseInt(inParams.get(5));
         final String query_LiveWarnings = "SELECT * FROM (" +
-                " SELECT" +
-                "   lw.capVersion, lw.id, lw.published, lw.updated, lw.title," +
-		"   SUBSTRING(lw.summary,1,320) AS briefSummary, lw.summary," +
-		"   lw.cappolygon, lw.cap12polygon, lw.capgeocode, lw.capparameter, lw.capevent," +
-		"   lwc.ColorRGB, lwc.ColorHEX, lwc.ExtendDisplayTime, lwc.ShowIt, lw.GetTime," +
-		"   CASE WHEN lw.capgeocode IS NOT NULL " +
-                "       THEN REPLACE(REPLACE(REPLACE(substring_index(substring_index(lw.capgeocode, 'FIPS6', -1), 'UGC', 1),'\r\n\t ',' '),'  ',''),' ',',')" +
-                "       ELSE ''" +
-		"   END as FIPSCodes," +
-		"   lw.cap12same, lw.cap12ugc, lw.cap12vtec" +
-                " FROM WxObs.LiveWarnings lw" +
-                " LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
-                " WHERE" +
-		"   CASE WHEN lwc.ExtendDisplayTime = 0" +
-                "       THEN" +
-		"           (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
-                "           OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"')" +
-                "           AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
-		"       ELSE" +
-		"           CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '"+xExp+"'" +
-		"   END" +
-		" AND lw.title IS NOT NULL" +
-		" AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
-                " AND ( lw.capgeocode REGEXP '%"+stationA+"%' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))" +
-		//" AND ( lw.capgeocode REGEXP '%"+stationA+"%' OR lw.cap12same REGEXP '%"+stationA+"%' )" +
-		" AND lw.id REGEXP '"+idMatch+"'" +
-                " ORDER BY lw.published DESC ) as lwm" +
+                "    SELECT" +
+                "         lw.capVersion," +
+                "         lw.id," +
+                "         lw.published," +
+                "         lw.updated," +
+                "         lw.title," +
+                "         SUBSTRING(lw.summary,1,320) AS briefSummary," +
+                "         lw.summary," +
+                "         lw.cappolygon," +
+                "         lw.cap12polygon," +
+                "         lw.capgeocode," +
+                "         lw.capparameter," +
+                "         lw.capevent," +
+                "         lwc.ColorRGB," +
+                "         lwc.ColorHEX, lwc.ExtendDisplayTime, lwc.ShowIt, lw.GetTime," +
+                "         CASE WHEN lw.capgeocode IS NOT NULL " +
+                "             THEN REPLACE(REPLACE(REPLACE(substring_index(substring_index(lw.capgeocode, 'FIPS6', -1), 'UGC', 1),'\r\n\t ',' '),'  ',''),' ',',')" +
+                "             ELSE ''" +
+                "         END as FIPSCodes," +
+                "         lw.cap12same," +
+                "         lw.cap12ugc," +
+                "         lw.cap12vtec" +
+                "     FROM WxObs.LiveWarnings lw" +
+                "     LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
+                "     WHERE" +
+                "         CASE WHEN lwc.ExtendDisplayTime = 0" +
+                "             THEN" +
+                "                 (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
+                "                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
+                "                     AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
+                "             ELSE" +
+                "                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
+                "         END" +
+                "         AND lw.title IS NOT NULL" +
+                "         AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
+                "         AND ( lw.capgeocode REGEXP '" + stationA + "' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))" +
+                "         AND lw.id REGEXP '" + idMatch + "'" +
+                "     ORDER BY lw.published DESC ) as lwm" +
                 " GROUP BY " +
-                "   CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
-                "   CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
-                "   CASE WHEN cappolygon IS NULL AND cap12polygon IS NULL THEN CONCAT(capevent,FIPSCodes,cap12same) END" +
-                " LIMIT "+limit+";";
+                " CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
+                " CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
+                " CASE WHEN cappolygon IS NULL AND cap12polygon IS NULL THEN CONCAT(capevent,FIPSCodes,cap12same) END" +
+                " LIMIT " + limit + ";";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings, null);
@@ -90,7 +101,13 @@ public class WeatherDAO {
                 tContainer.put(tObject);
             }
             resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); } 
+        } catch (Exception e) {
+            e.printStackTrace();
+            tContainer.put(e.getMessage());
+        } finally {
+            tContainer
+                    .put(query_LiveWarnings);
+        }
         return tContainer;
     }
     

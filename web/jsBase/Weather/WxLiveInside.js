@@ -76,7 +76,7 @@ function getLiveWarnings() {
     aniPreload("on");
     var thePostData = {
         "doWhat": "getLiveWarnings",
-        "xdt1": getDate("day", -31, "full"),
+        "xdt1": getDate("year", -1, "full"),
         "xdt2": getDate("day", 0, "full"),
         "xExp": getDate("day", 0, "full"),
         "limit": "5",
