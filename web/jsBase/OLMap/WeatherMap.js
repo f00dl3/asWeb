@@ -21,6 +21,7 @@ var wxDataTypes = [
     { "name": "Lifted Index", "matcher": "LI" },
     { "name": "Low Level Jet", "matcher": "LLJ" },
     { "name": "Precipitable Water", "matcher": "PWAT" },
+    { "name": "Surface Dewpoint", "matcher": "SfcD" },
     { "name": "Surface Elevation", "matcher": "SfcE" },
     { "name": "Surface Feels Like", "matcher": "SfcF" },
     { "name": "Surface Humidity", "matcher": "SfcH" },
@@ -173,6 +174,16 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 icLabelolor = styleLiquid(Number(stationData.PWAT), "text");
                 icOpacity = 1;
             } break;
+        case "SfcD":
+            if(!isSet(stationData.Dewpoint) || stationData.Dewpoint < -100) {
+                icLabel = ""; icColor = "#000000"; icOpacity = 0;
+            } else {
+                icLabel = Math.round(stationData.Dewpoint);
+                icColor = styleTemp(stationData.Dewpoint, true);
+                icLabelColor = styleTemp(stationData.Dewpoint, "text");
+                icOpacity = 1;
+            }
+            break;
         case "SfcE":
             if(isSet(stationInfo.SfcMB)) {
                 icLabel = stationInfo.SfcMB;
@@ -461,7 +472,16 @@ function getJsonWeatherGlob(map, lPointType) {
     var baseType;
     if(isSet(lPointType)) { pointType = lPointType; } else { pointType = "SfcT"; }
     switch(pointType) {
-        case "SfcT": if(checkMobile()) { baseType = "tmp2m"; } else { baseType = "js2tmp"; } break;
+        case "CAPE": baseType = "cape"; break;
+        case "JSWM": baseType = "wm0500"; break;
+        case "LI": baseType = "lftx"; break;
+        case "LLJM": baseType = "wm0850"; break;
+        case "PWAT": baseType = "pwat"; break;
+        case "SfcD": baseType = null; break;
+        case "SfcH": baseType = "rh2m"; break;
+        case "SfcW": baseType = "wm10m"; break;
+        case "WxOb": baseType = "apcp"; break;
+        case "SfcT": default: if(checkMobile()) { baseType = "tmp2m"; } else { baseType = "js2tmp"; } break;
     }
     aniPreload("on");
     var thePostData = {

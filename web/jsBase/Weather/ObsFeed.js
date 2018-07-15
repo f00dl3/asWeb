@@ -219,7 +219,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             returnData += "Wind: "; if(isSet(theData.WindDirection)) { returnData += theData.WindDirection + " at "; }
             returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine + "<br/>";
         }
-        if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CAPE) + ">" + theData.CAPE + "</span><br/>"; }
+        if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;
