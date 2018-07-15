@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    7 Jul 2018
+    Updated:    15 Jul 2018
     Author     : astump
 --%>
 
@@ -58,6 +58,7 @@
         "OLMap/CommonStuff",
         "OLMap/DrawPathMap",
         "OLMap/GpsElements",
+        "OLMap/KMLRadar",
         "OLMap/LocationListener",
         "OLMap/PointClick",
         "OLMap/RenderImage",

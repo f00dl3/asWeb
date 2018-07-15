@@ -104,7 +104,7 @@ function generateGallery(argsIn, fileList) {
         rData += "<div class='UPop'>" +
                 /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
                 "<a href='" + relativePath + "' target='new'>"; */
-                "<a href='" + olMapImageLink(relativePath, iRes) + "' target'tpPic'>";
+                "<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>";
         if(checkMobile()) {
             rData += "<img class='th_small' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         } else {
