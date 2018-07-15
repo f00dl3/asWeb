@@ -3,18 +3,25 @@
  Created: 15 Jul 2018
  */
 
-var radarImage;
+var radarImage = [];
 
 function generateRadarKml(radarList, mobiLocObj, timestamp) {
     if(radarImage) {
-        map.removeLayer(radarImage);
-        console.log(timestamp + ": REMOVED RADAR IMAGE!");
+        for(var i = 0; i < radarImage.length; i++) {
+            if(radarImage[i]) {
+                map.removeLayer(radarImage);
+                console.log(timestamp + ": Removed radar image " + i + "!");
+            } else {
+                console.log(timestamp + ": No radar image layer " + i + " exists!");
+            }
+        }
     } else {
-        console.log(timestamp + ": RADAR IMAGE NOT RENDERED YET!");
+        console.log(timestamp + ": No radar image layer array exists!");
     }
     mobiLoc = JSON.parse(mobiLocObj[0].Location);
     var mobLon = Number(mobiLoc[0]);
     var mobLat = Number(mobiLoc[1]);
+    var i = 0;
     radarList.forEach(function (tRad) {
         var inBoundsN = 0;
         var inBoundsS = 0;
@@ -43,6 +50,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
         if(!checkMobile() || opacity === 0.5) {
+            i++;
             var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],
@@ -53,7 +61,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 units: 'pixels',
                 extent: extent
             });
-            radarImage = new ol.layer.Image({
+            radarImage[i] = new ol.layer.Image({
                 opacity: opacity,
                 source: new ol.source.ImageStatic({
                     attributions: [ imageSource ],
@@ -63,7 +71,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                     imageExtent: extent
                 })
             });
-            map.addLayer(radarImage);
+            map.addLayer(radarImage[i]);
         }
     });
 }
