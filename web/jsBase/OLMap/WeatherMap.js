@@ -15,6 +15,7 @@ var overlayLayer;
 var pointType;
 var searchDateStart;
 var searchDateEnd;
+var warnLayer;
 
 var wxDataTypes = [
     { "name": "CAPE/CIN", "matcher": "CAPE" },
@@ -85,18 +86,7 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
 
 function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
-    if (imageLayer) {
-        map.removeLayer(imageLayer);
-        console.log(timestamp + ": Removed image layer!");
-    } else {
-        console.log(timestamp + ": No image layer yet!");
-    }
-    if (overlayLayer) {
-        map.removeLayer(overlayLayer);
-        console.log(timestamp + ": Removed overlay layer!");
-    } else {
-        console.log(timestamp + ": No overlay layer yet!");
-    }
+    removeLayers(map, timestamp);
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp) / 1000));
     var jsonData = obsData[0].jsonData;
@@ -134,12 +124,18 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     }
     if(isSet(liveWarns)) {
         console.log(liveWarns);
-        var warnLayer = addWarnPolys(liveWarns);
+        warnLayer = addWarnPolys(liveWarns);
         map.addLayer(warnLayer);
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
-    if(isSet(mobiCoord) && mobiCoord[0] !== 0 && mobiCoord[1] !== 0) {
+    if(
+            isSet(mobiCoord) &&
+            mobiCoord[0] !== 0 &&
+            mobiCoord[1] !== 0 &&
+            mobiCoord[0] !== null &&
+            mobiCoord[1] !== null
+    ) {
         map.getView().setCenter(ol.proj.transform(mobiCoord, 'EPSG:4326', 'EPSG:3857'));
     }
     map.on('click', function (evt) {
@@ -235,26 +231,15 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                     }
                     break;
                 case "WarnPoly": 
-                    eiData += "<strong>" + feature.get("event") + "</strong><br/>" +
-                            feature.get("briefSummary");
+                    eiData += "<strong>" + feature.get("event") + "</strong><p>" +
+                            feature.get("briefSummary") + "<p>" +
+                            "<button class='UButton warnFullButton'>Full Text</button>"; // Hook it up to something!
                     break;
             }
             content.innerHTML = eiData;
             overlay.setPosition(eCoord);
         }
     });
-}
-
-function showTableHumi(stationId) {
-    //xhrRequest to wxTableGen table
-}
-
-function showTableTemp(stationId) {
-    //xhrRequest to wxTableGen table
-}
-
-function showTableWind(stationId) {
-    //xhrRequest to wxTableGen table
 }
 
 function getJsonWeatherGlob(map, lPointType) {
@@ -339,4 +324,37 @@ function getModelRunInfo() {
 function initWxMap(map) {
     getJsonWeatherGlob(map);
     getModelRunInfo();
+}
+
+function removeLayers(map, timestamp) {
+    if (imageLayer) {
+        map.removeLayer(imageLayer);
+        console.log(timestamp + ": Removed image layer!");
+    } else {
+        console.log(timestamp + ": No image layer yet!");
+    }
+    if (overlayLayer) {
+        map.removeLayer(overlayLayer);
+        console.log(timestamp + ": Removed overlay layer!");
+    } else { 
+        console.log(timestamp + ": No overlay layer yet!");
+    }
+    if (warnLayer) {
+        map.removeLayer(warnLayer);
+        console.log(timestamp + ": Removed warn layer!");
+    } else {
+        console.log(timestamp + ": No warn layer yet!");
+    }
+}
+
+function showTableHumi(stationId) {
+    //xhrRequest to wxTableGen table
+}
+
+function showTableTemp(stationId) {
+    //xhrRequest to wxTableGen table
+}
+
+function showTableWind(stationId) {
+    //xhrRequest to wxTableGen table
 }
