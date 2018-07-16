@@ -221,3 +221,26 @@ function addWarnPolys(liveWarns) {
     var vLayer = new ol.layer.Vector({ source: vSource });
     return vLayer;
 }
+
+function getSameBounds(sameCode) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getSameBounds",
+        "sameCode": sameCode
+    };
+    require(["dojo/request"], function (request) {
+        request
+                .post(getResource("Wx"), {
+                    data: thePostData,
+                    handleAs: "json"
+                }).then(
+                function (data) {
+                    aniPreload("off");
+                    addWxMapPops(data.last, data.hours, data.stationCount);
+                },
+                function (error) {
+                    aniPreload("off");
+                    window.alert("request for SameBounds data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}

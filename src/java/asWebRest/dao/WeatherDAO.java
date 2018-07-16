@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 15 Jul 2018
+Updated: 16 Jul 2018
  */
 
 package asWebRest.dao;
@@ -571,7 +571,7 @@ public class WeatherDAO {
     
     public JSONArray getLiveWarnings(Connection dbc, List<String> inParams) { return liveWarnings(dbc, inParams); }
     
-    public JSONArray getLiveWarningsFipsBounds(List<String> qParams) {
+    public JSONArray getLiveWarningsFipsBounds(Connection dbc, List<String> qParams) {
         final String query_LiveWarnings_FIPSBounds = "SELECT" +
                 " fips.State, fips.Description, REPLACE(cg.coordinates, ',0 ',' ') as coords" +
                 " FROM WxObs.FIPSCodes fips" +
@@ -580,7 +580,7 @@ public class WeatherDAO {
                 " WHERE FIPS = SUBSTRING(?,2,5);"; //fipsCode
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_LiveWarnings_FIPSBounds, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings_FIPSBounds, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -594,14 +594,14 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getLiveWarningsSameBounds(List<String> qParams) {
+    public JSONArray getLiveWarningsSameBounds(Connection dbc, List<String> qParams) {
         final String query_LiveWarnings_SAMEBounds = "SELECT same.State, same.County, REPLACE(cg.coordinates, ',0 ',' ') as coords" +
                 " FROM WxObs.SAMECodes same" +
                 " LEFT JOIN WxObs.USCountyGeoBounds cg ON cg.name = CONCAT(same.State,'_',REPLACE(REPLACE(REPLACE(same.County,' County',''),' Parish',''),' Borough',''))" +
                 " WHERE SAME = ?;"; // sameCode
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_LiveWarnings_SAMEBounds, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings_SAMEBounds, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

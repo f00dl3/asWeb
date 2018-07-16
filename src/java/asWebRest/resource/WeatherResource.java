@@ -220,6 +220,16 @@ public class WeatherResource extends ServerResource {
                     returnData = latestObs.toString();
                     break;
                     
+                case "getSameBounds":
+                    try {
+                        qParams.add(0, argsInForm.getFirstValue("sameCode"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray bounds = getWeatherAction.getLiveWarningsSameBounds(dbc, qParams);
+                    returnData = bounds.toString();
+                    break;
+                    
                 case "getSpcFeed":
                     qParams.add(0, "%");
                     qParams.add(1, "%");
