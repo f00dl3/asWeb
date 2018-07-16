@@ -123,7 +123,6 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
         });
     }
     if(isSet(liveWarns)) {
-        console.log(liveWarns);
         warnLayer = addWarnPolys(liveWarns);
         map.addLayer(warnLayer);
     }
@@ -329,18 +328,21 @@ function initWxMap(map) {
 function removeLayers(map, timestamp) {
     if (imageLayer) {
         map.removeLayer(imageLayer);
+        imageLayer = null;
         console.log(timestamp + ": Removed image layer!");
     } else {
         console.log(timestamp + ": No image layer yet!");
     }
     if (overlayLayer) {
         map.removeLayer(overlayLayer);
+        overlayLayer = null;
         console.log(timestamp + ": Removed overlay layer!");
     } else { 
         console.log(timestamp + ": No overlay layer yet!");
     }
     if (warnLayer) {
         map.removeLayer(warnLayer);
+        warnLayer = null;
         console.log(timestamp + ": Removed warn layer!");
     } else {
         console.log(timestamp + ": No warn layer yet!");

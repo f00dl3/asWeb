@@ -10,6 +10,7 @@ import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,6 +80,7 @@ public class WeatherDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
+                JSONArray tSameBounds = new JSONArray();
                 tObject
                     .put("capVersion", resultSet.getDouble("capVersion"))
                     .put("id", resultSet.getString("id"))
@@ -101,6 +103,15 @@ public class WeatherDAO {
                     .put("cap12same", resultSet.getString("cap12same"))
                     .put("cap12ugc", resultSet.getString("cap12ugc"))
                     .put("cap12vtec", resultSet.getString("cap12vtec"));
+                JSONArray subIterateSameCodes = new JSONArray(tObject.getString("cap12same"));
+		for (int i = 0; i < subIterateSameCodes.length(); i++) {
+			List<String> tSameCode = new ArrayList<>();
+                        tSameCode.add(0, subIterateSameCodes.getString(i));
+                        tSameBounds.put(getLiveWarningsSameBounds(dbc, tSameCode));
+                }
+                tObject
+                        .put("subIterateSameCodes", subIterateSameCodes)
+                        .put("tSameBounds", tSameBounds);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -604,11 +615,14 @@ public class WeatherDAO {
             ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWarnings_SAMEBounds, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject
-                    .put("State", resultSet.getString("State"))
-                    .put("County", resultSet.getString("County"))
-                    .put("coords", resultSet.getString("coords"));
-                tContainer.put(tObject);
+                if(wc.isSet(resultSet.getString("coords"))) {
+                    String tCoordArray = ("[[" + resultSet.getString("coords").replace(" ", "],[") + "]]").replace("[]", "");
+                    tObject
+                        .put("State", resultSet.getString("State"))
+                        .put("County", resultSet.getString("County"))
+                        .put("coords", new JSONArray(tCoordArray));
+                    tContainer.put(tObject);
+                }
             }
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }

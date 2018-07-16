@@ -209,7 +209,31 @@ function addWarnPolys(liveWarns) {
                 rFeature.setStyle(wpStyle);
                 rFeatures.push(rFeature);
             } else if(isSet(warn.cap12same)) {
-                console.log(warn.id + ": No polygon SAME data exists!");
+                var arrayOfBounds = warn.tSameBounds;
+                arrayOfBounds.forEach(function (cgj) {
+                    if(isSet(cgj[0]) && isSet(cgj[0].coords) && cgj[0].coords.length > 2) {
+                        var bounds = cgj[0].coords.slice(0, -1);
+                        var polyLine = new ol.geom.LineString(bounds);
+                        var colors = warn.ColorRGB.split(" ");
+                        polyLine.transform('EPSG:4326', 'EPSG:3857');
+                        var rFeature = new ol.Feature({
+                            event: warn.capevent,
+                            briefSummary: warn.briefSummary,
+                            geometry: polyLine,
+                            warnId: warn.id,
+                            title: warn.title,
+                            type: "WarnPoly"
+                        });
+                        var wpStyle = new ol.style.Style({
+                            stroke: new ol.style.Stroke({
+                                color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.4)',
+                                width: 3
+                            })
+                        });
+                        rFeature.setStyle(wpStyle);
+                        rFeatures.push(rFeature);
+                    }
+                });
             } else {
                 console.log(warn.id + ": No polygon or SAME data!");
             }
