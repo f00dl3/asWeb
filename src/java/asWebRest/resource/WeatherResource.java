@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 15 Jul 2018
+Updated: 16 Jul 2018
  */
 
 package asWebRest.resource;
@@ -165,12 +165,24 @@ public class WeatherResource extends ServerResource {
                     }
                     List<String> qParams2 = new ArrayList<>();
                     qParams2.add(0, "%");
+                    List<String> qParams3 = new ArrayList<>();
+                    try {
+                        qParams3.add(0, argsInForm.getFirstValue("startTime"));
+                        qParams3.add(1, argsInForm.getFirstValue("endTime"));
+                        qParams3.add(2, argsInForm.getFirstValue("endTime"));
+                        qParams3.add(3, "0");
+                        qParams3.add(4, "/");
+                        qParams3.add(5, "25");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     JSONArray radarList = getWeatherAction.getRadarList(dbc);
                     JSONArray wxObsJson = getWeatherAction.getObsJson(dbc, qParams, inParams);
                     JSONArray wxObsJsonRapid = getWeatherAction.getObsJsonRapid(dbc, qParams, inParams);
                     JSONArray indorObsB = getSnmpAction.getMergedLastTemp(dbc);
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
+                    JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -178,7 +190,8 @@ public class WeatherResource extends ServerResource {
                         .put("wxObsJsonRapid", wxObsJsonRapid)
                         .put("indoorObs", indorObsB)
                         .put("stations", stations)
-                        .put("mobiLoc", mobiLoc);
+                        .put("mobiLoc", mobiLoc)
+                        .put("liveWarns", liveWarns);
                     returnData = mergedResults.toString();
                     break;          
                     
