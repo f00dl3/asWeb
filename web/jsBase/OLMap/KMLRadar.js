@@ -5,6 +5,30 @@
 
 var radarImage = [];
 
+function doModelBasemap(map, lmmi) {
+    var fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
+    var extent = ol.extent.applyTransform(
+            [-128, 24, -65, 50],
+            ol.proj.getTransform('EPSG:4326', 'EPSG:3857')
+    );      
+    var projection = new ol.proj.Projection({
+        code: 'local_image',
+        units: 'pixels',
+        extent: extent
+    });
+    imageLayer = new ol.layer.Image({
+        opacity: 0.25,
+        source: new ol.source.ImageStatic({
+            attributions: [ fixedLmiPath ],
+            url: fixedLmiPath,
+            imageSize: [ lmmi.mediaInfo.imageWidth, lmmi.mediaInfo.imageHeight ],
+            projection: map.getView().getProjection(),
+            imageExtent: extent
+        })
+    });
+    map.addLayer(imageLayer);
+}
+
 function generateRadarKml(radarList, mobiLocObj, timestamp) {
     if(radarImage) {
         for(var i = 0; i < radarImage.length; i++) {
