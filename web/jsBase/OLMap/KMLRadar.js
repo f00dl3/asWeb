@@ -99,5 +99,3 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
         }
     });
 }
-
-

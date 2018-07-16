@@ -132,6 +132,11 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
             }
         });
     }
+    if(isSet(liveWarns)) {
+        console.log(liveWarns);
+        var warnLayer = addWarnPolys(liveWarns);
+        map.addLayer(warnLayer);
+    }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
     if(isSet(mobiCoord) && mobiCoord[0] !== 0 && mobiCoord[1] !== 0) {
@@ -228,6 +233,10 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                                 "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button><br/>" +
                                 upperAirData;
                     }
+                    break;
+                case "WarnPoly": 
+                    eiData += "<strong>" + feature.get("event") + "</strong><br/>" +
+                            feature.get("briefSummary");
                     break;
             }
             content.innerHTML = eiData;

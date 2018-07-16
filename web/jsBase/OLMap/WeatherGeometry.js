@@ -182,3 +182,42 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
+
+function addWarnPolys(liveWarns) {
+    var rFeatures = [];
+    liveWarns.forEach(function (warn) {
+        //if(warn.showIt === 1) {
+            if(isSet(warn.cap12polygon)) {
+                var geoJSON = JSON.parse(warn.cap12polygon);
+                var polyLine = new ol.geom.LineString(geoJSON);
+                var colors = warn.ColorRGB.split(" ");
+                polyLine.transform('EPSG:4326', 'EPSG:3857');
+                var rFeature = new ol.Feature({
+                    event: warn.capevent,
+                    briefSummary: warn.briefSummary,
+                    geometry: polyLine,
+                    warnId: warn.id,
+                    title: warn.title,
+                    type: "WarnPoly"
+                });
+                var wpStyle = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.4)',
+                        width: 3
+                    })
+                });
+                rFeature.setStyle(wpStyle);
+                rFeatures.push(rFeature);
+            } else if(isSet(warn.cap12same)) {
+                console.log(warn.id + ": No polygon SAME data exists!");
+            } else {
+                console.log(warn.id + ": No polygon or SAME data!");
+            }
+        //} else {
+        //    console.log("ERROR - showIt not set to 1 - value: " + warn.showIt);
+        //}
+    });
+    var vSource = new ol.source.Vector({ features: rFeatures });
+    var vLayer = new ol.layer.Vector({ source: vSource });
+    return vLayer;
+}
