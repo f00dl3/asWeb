@@ -1,7 +1,8 @@
 /* 
 by Anthony Stump
 Created: 20 Jun 2018
-TESTING - not a priority yet!
+Updated: 16 Jul 2018
+SOME FEATURES FOR LIVE TRACKING IN TESTING - not a priority yet!
  */
 
 function actOnTrackMe() {
@@ -11,6 +12,25 @@ function actOnTrackMe() {
         showNotice("Location: " + geolocation.getLongitude() + ", " + geolocation.getLatitude());
     });
     plotLocation();
+}
+
+function addObsLocationMarkers(map, description, tCoord) {
+    var shortName = "X";
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var iconFeature = new ol.Feature({
+        description: description,
+        geometry: point,
+        latitude: tCoord[1],
+        longitude: tCoord[0],
+        type: "Location"
+    });
+    switch (description) {
+        case "Home": shortName = "H"; break;
+        case "Note3": shortName = "A"; break;
+    }
+    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
+    return iconFeature;
 }
 
 function plotLocation() {

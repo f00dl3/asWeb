@@ -172,7 +172,7 @@ public class WeatherResource extends ServerResource {
                         qParams3.add(2, argsInForm.getFirstValue("endTime"));
                         qParams3.add(3, "0");
                         qParams3.add(4, "/");
-                        qParams3.add(5, "25");
+                        qParams3.add(5, argsInForm.getFirstValue("wpLimit"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

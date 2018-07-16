@@ -27,7 +27,7 @@ public class WeatherDAO {
         final String stationA = inParams.get(3);
         final String idMatch = inParams.get(4);
         final int limit = Integer.parseInt(inParams.get(5));
-        final String query_LiveWarnings = "SELECT * FROM (" +
+        String query_LiveWarnings = "SELECT * FROM (" +
                 "    SELECT" +
                 "         lw.capVersion," +
                 "         lw.id," +
@@ -62,9 +62,11 @@ public class WeatherDAO {
                 "                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
                 "         END" +
                 "         AND lw.title IS NOT NULL" +
-                "         AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
-                "         AND ( lw.capgeocode REGEXP '" + stationA + "' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))" +
-                "         AND lw.id REGEXP '" + idMatch + "'" +
+                "         AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )";
+        if(stationA != "0") {
+            query_LiveWarnings += "         AND ( lw.capgeocode REGEXP '" + stationA + "' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))";
+        }
+        query_LiveWarnings += "         AND lw.id REGEXP '" + idMatch + "'" +
                 "     ORDER BY lw.GetTime DESC ) as lwm" +
                 " GROUP BY " +
                 " CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +

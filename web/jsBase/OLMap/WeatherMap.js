@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 15 Jul 2018
+ Updated: 16 Jul 2018
  POSSIBLE DESKTOP RESOURCE HOG ALERT!
  DEFINTATE MOBILE RESOURCE HOG!
  
@@ -262,25 +262,6 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     return iconFeature;
 }
 
-function addObsLocationMarkers(map, description, tCoord) {
-    var shortName = "X";
-    var point = new ol.geom.Point(tCoord);
-    point.transform('EPSG:4326', 'EPSG:3857');
-    var iconFeature = new ol.Feature({
-        description: description,
-        geometry: point,
-        latitude: tCoord[1],
-        longitude: tCoord[0],
-        type: "Location"
-    });
-    switch (description) {
-        case "Home": shortName = "H"; break;
-        case "Note3": shortName = "A"; break;
-    }
-    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
-    return iconFeature;
-}
-
 function doModelBasemap(map, lmmi) {
     var fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
     var extent = ol.extent.applyTransform(
@@ -305,7 +286,7 @@ function doModelBasemap(map, lmmi) {
     map.addLayer(imageLayer);
 }
 
-function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, mobiLoc, markerType) {
+function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
     if (imageLayer) {
         map.removeLayer(imageLayer);
@@ -327,6 +308,7 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
+    console.log(mobiCoord);
     var rData = "";
     var vectorSource = new ol.source.Vector({});
     doModelBasemap(map, lastModelImage);
@@ -485,12 +467,15 @@ function getJsonWeatherGlob(map, lPointType) {
         case "SfcT": default: if(checkMobile()) { baseType = "tmp2m"; } else { baseType = "js2tmp"; } break;
     }
     aniPreload("on");
+    var wpLimit = 1024;
+    if(!checkMobile()) { wpLimit = 8192; }
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
-        "moiType": baseType
+        "moiType": baseType,
+        "wpLimit": wpLimit
     };
     require(["dojo/request"], function (request) {
         request
@@ -508,6 +493,7 @@ function getJsonWeatherGlob(map, lPointType) {
                             data.indoorObs,
                             data.wxObsJson,
                             data.wxObsJsonRapid,
+                            data.liveWarns,
                             data.mobiLoc,
                             pointType
                             );
