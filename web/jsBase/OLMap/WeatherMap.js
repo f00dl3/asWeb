@@ -8,7 +8,8 @@
  
  */
 
-var dataRefresh = getRefresh("medium");
+var dataRefresh = getRefresh("long");
+if(!checkMobile) { dataRefresh = getRefresh("medium"); }
 var imageLayer;
 var overlayLayer;
 var pointType;

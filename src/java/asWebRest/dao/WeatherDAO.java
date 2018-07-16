@@ -19,8 +19,8 @@ public class WeatherDAO {
     private CommonBeans wcb = new CommonBeans();
     
     private JSONArray liveWarnings(Connection dbc, List<String> inParams) {
-        // This fails right now. 5/23/18. 7/15/18.
-        // Reason: Worked when CAP data was in TEXT but now it's in JSON, REGEX does not work on JSON.
+        // 5/23/18: This fails right now. Worked when CAP data was in TEXT but now it's in JSON, REGEX does not work on JSON.
+        // 7/15/18: Reason being is something changed with the published/updated/capexpires date comparative strings.
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String xExp = inParams.get(2);
@@ -53,19 +53,19 @@ public class WeatherDAO {
                 "     FROM WxObs.LiveWarnings lw" +
                 "     LEFT JOIN WxObs.LiveWarningColors lwc ON lw.capevent = lwc.WarnType" +
                 "     WHERE" +
-                //"         CASE WHEN lwc.ExtendDisplayTime = 0" +
-                //"             THEN" +
-                //"                 (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
-                //"                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
+                "         CASE WHEN lwc.ExtendDisplayTime = 0" +
+                "             THEN" +
+                "                  (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
+                "                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
                 //"                     AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
-                //"             ELSE" +
-                //"                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
-                //"         END" +
-                "         lw.title IS NOT NULL" +
+                "             ELSE" +
+                "                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
+                "         END" +
+                "         AND lw.title IS NOT NULL" +
                 "         AND ( lwc.ShowIt = 1 OR lwc.ShowIt IS NULL )" +
                 "         AND ( lw.capgeocode REGEXP '" + stationA + "' OR JSON_CONTAINS(lw.cap12same, '[\"" + stationA + "\"]'))" +
                 "         AND lw.id REGEXP '" + idMatch + "'" +
-                "     ORDER BY lw.published DESC ) as lwm" +
+                "     ORDER BY lw.GetTime DESC ) as lwm" +
                 " GROUP BY " +
                 " CASE WHEN cap12polygon IS NOT NULL THEN CONCAT(capevent,cap12polygon) END," +
                 " CASE WHEN cappolygon IS NOT NULL THEN CONCAT(capevent,cappolygon) END," +
@@ -92,7 +92,7 @@ public class WeatherDAO {
                     .put("capevent", resultSet.getString("capevent"))
                     .put("ColorRGB", resultSet.getString("ColorRGB"))
                     .put("ColorHEX", resultSet.getString("ColorHEX"))
-                    //.put("ExtendedDisplayTime", resultSet.getInt("ExtendedDisplayTime"))
+                    .put("ExtendDisplayTime", resultSet.getInt("ExtendDisplayTime"))
                     .put("ShowIt", resultSet.getInt("ShowIt"))
                     .put("GetTime", resultSet.getString("GetTime"))
                     .put("FIPSCodes", resultSet.getString("FIPSCodes"))

@@ -244,9 +244,9 @@ function getRefresh(measure) {
         case "rapid": return 1 * 1000;
         case "semiRapid": return 4 * 1000;
         case "short": return 30 * 1000;
-        case "medium": return 90 * 1000;
-        case "long": return 300 * 1000;
-        case "veryLong": return 500 * 1000;
+        case "medium": return 1.5 * 60 * 1000;
+        case "long": return 2.5 * 60 * 1000;
+        case "veryLong": return 5 * 60 * 1000;
         default: return 90 * 1000;
     }
 }

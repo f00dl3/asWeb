@@ -76,7 +76,7 @@ function getLiveWarnings() {
     aniPreload("on");
     var thePostData = {
         "doWhat": "getLiveWarnings",
-        "xdt1": getDate("day", -1, "full"),
+        "xdt1": getDate("day", -7, "full"),
         "xdt2": getDate("day", 0, "full"),
         "xExp": getDate("day", 0, "full"),
         "limit": "5",
@@ -248,8 +248,8 @@ function popLiveWarnings(liveWarnings) {
     var liveWarns = "";
     if(isSet(liveWarnings) && liveWarnings.length !== 0) {
         liveWarnings.forEach(function(lw) {
-            liveWarns += "<div class='UPop'>" +
-                    "<a href='" + lw.id + "' target='top'>" + lw.title + "</a>" +
+            liveWarns += "<div class='UPop'>" + lw.title +
+                    " (<a href='" + lw.id + "' target='top'>Source</a>)" +
                     "<div class='UPopO'>" + lw.summary + "</div>" +
                     "</div><br/>";
         });
