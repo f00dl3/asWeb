@@ -1,6 +1,7 @@
 /* 
- by Anthony Stump
- Created: 15 Jul 2018
+by Anthony Stump
+Created: 15 Jul 2018
+Updated: 16 Jul 2018
  */
 
 var radarImage = [];
@@ -58,10 +59,10 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
         bounds1 = Number(bounds[1]);
         bounds2 = Number(bounds[2]);
         bounds3 = Number(bounds[3]);
-        if(mobLat < (bounds0 - 2)) { inBoundsN = 1; } var nCheck = "[if " + mobLat + " < " + (bounds0 - 2) + "]";
-        if(mobLat > (bounds1 + 2)) { inBoundsS = 1; } var sCheck = "[if " + mobLat + " > " + (bounds1 + 2) + "]";
-        if(mobLon < (bounds2 - 2)) { inBoundsE = 1; } var eCheck = "[if " + mobLon + " < " + (bounds2 - 2) + "]";
-        if(mobLon > (bounds3 + 2)) { inBoundsW = 1; } var wCheck = "[if " + mobLon + " > " + (bounds3 + 2) + "]";
+        if(mobLat < (bounds0)) { inBoundsN = 1; } var nCheck = "[if " + mobLat + " < " + (bounds0) + "]";
+        if(mobLat > (bounds1)) { inBoundsS = 1; } var sCheck = "[if " + mobLat + " > " + (bounds1) + "]";
+        if(mobLon < (bounds2)) { inBoundsE = 1; } var eCheck = "[if " + mobLon + " < " + (bounds2) + "]";
+        if(mobLon > (bounds3)) { inBoundsW = 1; } var wCheck = "[if " + mobLon + " > " + (bounds3) + "]";
         if(inBoundsN === 1 && inBoundsS === 1 && inBoundsE === 1 && inBoundsW === 1) {
             opacity = 0.5;
             inBounds = "yes";
@@ -73,7 +74,8 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 "S: " + inBoundsS + " " + sCheck +"," +
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
-        if(!checkMobile() || opacity === 0.5) {
+        //if(!checkMobile() || opacity === 0.5) {
+        /* EXPERIMENTAL */ if(1 === 1) {
             var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],
