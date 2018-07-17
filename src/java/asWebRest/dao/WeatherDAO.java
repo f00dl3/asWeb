@@ -523,7 +523,7 @@ public class WeatherDAO {
         return tContainer;
     }
         
-    public JSONArray getLiveReports(List<String> inParams) {
+    public JSONArray getLiveReports(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final int limit = Integer.parseInt(inParams.get(2));                
@@ -559,7 +559,7 @@ public class WeatherDAO {
                 " ORDER BY CONCAT(Date,' ',Time) DESC LIMIT "+limit+";";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_LiveReports, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_LiveReports, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject

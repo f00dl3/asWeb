@@ -100,6 +100,14 @@ public class WeatherResource extends ServerResource {
                     returnData += liveWarnings.toString();
                     break;
                     
+                case "getLiveReports":
+                    inParams.add(0, argsInForm.getFirstValue("xdt1"));
+                    inParams.add(1, argsInForm.getFirstValue("xdt2"));
+                    inParams.add(2, argsInForm.getFirstValue("limit"));
+                    JSONArray liveReports = getWeatherAction.getLiveReports(dbc, inParams);
+                    returnData += liveReports.toString();
+                    break;
+                    
                 case "getMosData":
                     JSONArray lastRun = getWeatherAction.getJsonModelLast(dbc);
                     JSONObject lastRunObj = lastRun.getJSONObject(0);
@@ -183,6 +191,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
+                    //JSONArray liveReports = getWeatherAction.getLiveReports(dbc, qParams); <--- hangs!
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -191,7 +200,8 @@ public class WeatherResource extends ServerResource {
                         .put("indoorObs", indorObsB)
                         .put("stations", stations)
                         .put("mobiLoc", mobiLoc)
-                        .put("liveWarns", liveWarns);
+                        .put("liveWarns", liveWarns)
+                        /*.put("liveReports", liveReports)*/;
                     returnData = mergedResults.toString();
                     break;          
                     

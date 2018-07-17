@@ -31,7 +31,7 @@ public class GetWeatherAction {
     public JSONArray getJsonModelData(Connection dbc, List qParams) { return weatherDAO.getJsonModelData(dbc, qParams); }
     public JSONArray getJsonModelLast(Connection dbc) { return weatherDAO.getJsonModelLast(dbc); }
     public JSONArray getJsonModelRuns(Connection dbc) { return weatherDAO.getJsonModelRuns(dbc); }
-    public JSONArray getLiveReports(List inParams) { return weatherDAO.getLiveReports(inParams); }
+    public JSONArray getLiveReports(Connection dbc, List inParams) { return weatherDAO.getLiveReports(dbc, inParams); }
     public JSONArray getLiveWarnings(Connection dbc, List inParams) { return weatherDAO.getLiveWarnings(dbc, inParams); }
     public JSONArray getLiveWarningsFipsBounds(Connection dbc, List qParams) { return weatherDAO.getLiveWarningsFipsBounds(dbc, qParams); }
     public JSONArray getLiveWarningsSameBounds(Connection dbc, List qParams) { return weatherDAO.getLiveWarningsSameBounds(dbc, qParams); }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 11 Jul 2018
+Updated: 16 Jul 2018
  */
 
 var msIndex;
@@ -167,7 +167,14 @@ function playDbxFile(formData) {
 function putFileResults(msData, hitCount, matchLimitHit) {
     var noticeMessage = "";
     var thumbSize = "";
-    if(checkMobile()) { thumbSize = "th_small"; } else { thumbSize = "th_sm_med"; }
+    var firstThumbSize = "";
+    if(checkMobile()) {
+        thumbSize = "th_small";
+        firstThumbSize = "th_icon";
+    } else {
+        thumbSize = "th_sm_med";
+        firstThumbSize = "th_sm_med";
+    }
     var fileTable = "<div class='table id='FileTable'>" +
             "<div class='tr'>" +
             "<span class='td'><img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png'/></span>" +
@@ -227,7 +234,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 case "JPG":
                     if(isSet(tm.Archived)) {
                         thisAddCheckbox += "<a href='" + getBasePath("old") + "/Images/Memories/Archived/" + tm.Archived + ".war'>" +
-                                "<img src='th_icon' src='" + getBasePath("icon") + "/ic_zip.png' /></a>";
+                                "<img src='" + firstThumbSize + "' src='" + getBasePath("icon") + "/ic_zip.png' /></a>";
                     } else {
                         var imageAttribs = tm.Resolution.split("x");
                         var imageWidth = imageAttribs[0];
@@ -241,13 +248,13 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                             thisAddCheckbox += /* "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" + 
                                     "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" + */
                                     "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
-                                    "<img class='th_icon' src='" + olPicPath + "'/>";
+                                    "<img class='" + firstThumbSize + "' src='" + olPicPath + "'/>";
                         } else {
                             thisYear = (tm.Path).substr((tm.Path).length - 4);
                             olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
                             thisAddCheckbox += "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" +
                                     /* "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" + */
-                                    "<img class='th_icon' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
+                                    "<img class='" + firstThumbSize + "' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
                         }
                         thisAddCheckbox += "</a>";
                     }
@@ -259,7 +266,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             thisAddCheckbox += "</div>";
         } else {
             thisAddCheckbox += "<div class='UPopNM'>" +
-                    "<img class='th_icon' src='" + getBasePath("icon") + "/ic_lck.jpeg'/>" +
+                    "<img class='" + firstThumbSize + "' src='" + getBasePath("icon") + "/ic_lck.jpeg'/>" +
                     "<div class='UPopNMO'>" +
                     "Viewed: <input class='PlaySong' type='checkbox' name='FilePlay' value='Yes'/>" +
                     "</div></div>";
@@ -276,7 +283,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 "<div class='UPop'>" +
                 "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File;
         if(tm.PlayCount > 1) { thisMsInfoString += " <tt>(" + tm.PlayCount + ")</tt> "; }
-        thisMsInfoString += "<img class='th_th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
+        thisMsInfoString += "<img class='th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";

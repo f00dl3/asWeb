@@ -183,6 +183,10 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     return iconFeature;
 }
 
+function addQuakes(quakes) {
+    
+}
+
 function addWarnPolys(liveWarns) {
     var rFeatures = [];
     liveWarns.forEach(function (warn) {
