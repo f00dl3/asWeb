@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 8 Jul 2018
+Updated: 18 Jul 2018
  */
 
 function getOSMAttribution() {
@@ -55,6 +55,7 @@ function svgIconStyle(type, size, thisColor, opacity, label, labelColor) {
 var activity;
 var container;
 var content;
+var content2;
 var closer;
 var map;
 var overlay;

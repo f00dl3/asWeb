@@ -87,7 +87,7 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
 }
 
-function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, mobiLoc, markerType) {
+function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, mobiLoc, markerType) {
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
@@ -262,18 +262,12 @@ function getJsonWeatherGlob(map, lPointType) {
     var wpLimit = 1024;
     if(!checkMobile()) { wpLimit = 8192; }
     var thePostData = {
-        "doWhat": "getObsJsonGlob",
+        "doWhat": "getObsJsonGlob", // build out to include also station list
         "startTime": getDate("hour", -1, "full"),
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
         "moiType": baseType,
         "wpLimit": wpLimit
-    };
-    var thePostData2 = {
-        "doWhat": "getObsJsonGlob2",
-        "startTime": getDate("day", -31, "full"),
-        "endTime": getDate("hour", 0, "full"),
-        "watchLimit": 255
     };
     require(["dojo/request"], function (request) {
         request
@@ -292,6 +286,7 @@ function getJsonWeatherGlob(map, lPointType) {
                             data.wxObsJson,
                             data.wxObsJsonRapid,
                             data.liveWarns,
+                            data.liveWatches,
                             data.mobiLoc,
                             pointType
                             );
@@ -304,21 +299,6 @@ function getJsonWeatherGlob(map, lPointType) {
     setTimeout(function () {
         getJsonWeatherGlob(map);
     }, dataRefresh);
-    require(["dojo/request"], function (request) {
-        request
-                .post(getResource("Wx"), {
-                    data: thePostData2,
-                    handleAs: "json"
-                }).then(
-                function (data) {
-                    aniPreload("off");
-                    console.log(data);
-                },
-                function (error) {
-                    aniPreload("off");
-                    window.alert("request for ObsJson data II FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });
 }
 
 function getModelRunInfo() {

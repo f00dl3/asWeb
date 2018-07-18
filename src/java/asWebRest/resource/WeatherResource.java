@@ -184,6 +184,14 @@ public class WeatherResource extends ServerResource {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    List<String> qParams4 = new ArrayList<>();
+                    try {
+                        qParams4.add(0, qParams3.get(0));
+                        qParams4.add(1, qParams3.get(1));
+                        qParams4.add(2, qParams3.get(5));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     JSONArray radarList = getWeatherAction.getRadarList(dbc);
                     JSONArray wxObsJson = getWeatherAction.getObsJson(dbc, qParams, inParams);
                     JSONArray wxObsJsonRapid = getWeatherAction.getObsJsonRapid(dbc, qParams, inParams);
@@ -191,6 +199,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
+                    JSONArray liveWatches = getWeatherAction.getLiveWatches(dbc, qParams4);
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -199,23 +208,8 @@ public class WeatherResource extends ServerResource {
                         .put("indoorObs", indorObsB)
                         .put("stations", stations)
                         .put("mobiLoc", mobiLoc)
-                        .put("liveWarns", liveWarns);
-                    returnData = mergedResults.toString();
-                    break;          
-                    
-                case "getObsJsonGlob2":
-                    try {
-                        qParams.add(0, argsInForm.getFirstValue("startTime"));
-                        qParams.add(1, argsInForm.getFirstValue("endTime"));
-                        qParams.add(2, argsInForm.getFirstValue("watchLimit"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    //JSONArray liveReports = getWeatherAction.getLiveReports(dbc, qParams); <--- hangs!
-                    JSONArray liveWatches = getWeatherAction.getLiveWatches(dbc, qParams);
-                    mergedResults
+                        .put("liveWarns", liveWarns)
                         .put("liveWatches", liveWatches);
-                        /*.put("liveReports", liveReports)*/;
                     returnData = mergedResults.toString();
                     break;
                     
