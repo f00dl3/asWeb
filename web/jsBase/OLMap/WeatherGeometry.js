@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Split off from OLMap/WeatherMap.js 16 Jul 2018
+Updated: 28 Jul 2018
  */
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
