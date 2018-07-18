@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 11 Jul 2018
+Updated: 18 Jul 2018
 */
 
 var chartArray;
@@ -26,9 +26,8 @@ function actOnChartDateSelect(event) {
     getCharts(chartArray, stepIn, dateIn);
 }
 
-function getCharts(chartArray) {
+function getCharts(chartArray, timestamp) {
     aniPreload("on");
-    var timeout = 5*60*1000;
     var thePostData = {
         "doWhat": "SysMonCharts",
         "step": stepIn,
@@ -42,7 +41,7 @@ function getCharts(chartArray) {
             }).then(
                 function(data) {
                     getEDiscovery("eDiscoveryHolder");
-                    populateChartHolders(chartArray);
+                    populateChartHolders(chartArray, timestamp);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -53,7 +52,6 @@ function getCharts(chartArray) {
     for(var i = 0; i < chartArray.length; i++) {
         dojo.byId("CHART_" + chartArray[i]).innerHTML = chartArray[i] + " ";
     }
-    setTimeout(function () { getCharts(chartArray); }, timeout);
 }
 
 function getEDiscovery(target) {
@@ -117,14 +115,15 @@ function onCheck(timestamp, node) {
     }
 }
 
-function populateChartHolders(chartArray) {
+function populateChartHolders(chartArray, timestamp) {
     for(var i = 0; i < chartArray.length; i++) {
-        var thisChartObject = "<a href='" + getBasePath("chartCache") + "/" + chartArray[i] + ".png' target='xChart'><img class='th_small' src='" + getBasePath("chartCache") + "/th_" + chartArray[i] + ".png'/></a>";
+        var thisChartObject = "<a href='" + getBasePath("chartCache") + "/" + chartArray[i] + ".png' target='xChart'><img class='th_small' src='" + getBasePath("chartCache") + "/th_" + chartArray[i] + ".png?ts=" + timestamp + "'/></a>";
         dojo.byId("CHART_"+chartArray[i]).innerHTML = thisChartObject;
     }
 }
 
 function populateCharts() {
+    var timestamp = getDate("day", 0, "timestamp");
     var rData = "";
     var chartList1 = [
         "mSysLoad", // done 4/29/18
@@ -175,11 +174,12 @@ function populateCharts() {
         rData += "<span id='CHART_" + chartArray[i] + "'></span>";
     }
     rData += "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='nChartR'>" +
-            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif'/></a>" +
+            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/></a>" +
             "<a href='" + getResource("Cams") + "' target='nChartC'>" +
-            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg'/></a>"; 
+            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg?ts=" + timestamp + "'/></a>"; 
     dojo.byId("chartPlacement").innerHTML = rData;
     getCharts(chartArray, stepIn, dateIn);
+    setTimeout(function () {  populateCharts(); }, getRefresh("veryLong"));
 }
 
 function populateEDiscovery(lastSsh) {
