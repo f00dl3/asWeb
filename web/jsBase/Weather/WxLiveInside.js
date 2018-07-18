@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 15 Jul 2018
+Updated: 17 Jul 2018
  */
 
 function actOnShowFeed() {
@@ -76,10 +76,10 @@ function getLiveWarnings() {
     aniPreload("on");
     var thePostData = {
         "doWhat": "getLiveWarnings",
-        "xdt1": getDate("day", -7, "full"),
+        "xdt1": getDate("day", -1, "full"),
         "xdt2": getDate("day", 0, "full"),
         "xExp": getDate("day", 0, "full"),
-        "limit": "5",
+        "limit": "3",
         "stationA": "020091",
         "idMatch": "/"
     };

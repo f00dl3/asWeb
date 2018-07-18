@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 16 Jul 2018
+Updated: 17 Jul 2018
  */
 
 var radarImage = [];
@@ -64,7 +64,6 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
         if(mobLon < (bounds2)) { inBoundsE = 1; } var eCheck = "[if " + mobLon + " < " + (bounds2) + "]";
         if(mobLon > (bounds3)) { inBoundsW = 1; } var wCheck = "[if " + mobLon + " > " + (bounds3) + "]";
         if(inBoundsN === 1 && inBoundsS === 1 && inBoundsE === 1 && inBoundsW === 1) {
-            opacity = 0.5;
             inBounds = "yes";
             console.log("IN BOUNDS FOR [" + tRad.Site + "]!");
         } else {
@@ -74,8 +73,8 @@ function generateRadarKml(radarList, mobiLocObj, timestamp) {
                 "S: " + inBoundsS + " " + sCheck +"," +
                 "E: " + inBoundsE + " " + eCheck +"," +
                 "W: " + inBoundsW + " " + wCheck +")";
-        //if(!checkMobile() || opacity === 0.5) {
-        /* EXPERIMENTAL */ if(1 === 1) {
+        //if(!checkMobile() || opacity === 0.2) {
+        /* Can get away with this now - OL performance much better than Leaflet! */ if(1 === 1) {
             var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
             var extent = ol.extent.applyTransform(
                     [bounds[3], bounds[1], bounds[2], bounds[0]],

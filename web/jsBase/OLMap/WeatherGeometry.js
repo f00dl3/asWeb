@@ -179,7 +179,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             }
             break;
     }
-    iconFeature.setStyle(svgIconStyle("ct", 35, icColor, icOpacity, icLabel, icLabelColor));
+    iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
 
