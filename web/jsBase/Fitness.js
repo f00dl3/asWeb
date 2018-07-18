@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 24 Jun 2018
+Updated: 18 Jul 2018
  */
 
 var myHeight = 68;
@@ -356,6 +356,7 @@ function populateCalorieChart() {
 }
 
 function populateFitnessChart(chartSource) {
+    var timestamp = getDate("day", 0, "timestamp");
     var tElement = "";
     switch(chartSource) {
         
@@ -374,7 +375,7 @@ function populateFitnessChart(chartSource) {
         case "jFree":
             tElement = "<div class='trafcam'>" +
                     "<div class='UPopNM'>" +
-                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.png'/>" +
+                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.png?ts=" + timestamp + "'/>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
                     "<a href='" + getBasePath("chartCache") + "/WeightRange.png' target='pChart'><button class='UButton'>Range</button></a>" +
