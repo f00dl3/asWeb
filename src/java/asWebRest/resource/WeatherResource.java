@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 16 Jul 2018
+Updated: 18 Jul 2018
  */
 
 package asWebRest.resource;
@@ -191,7 +191,6 @@ public class WeatherResource extends ServerResource {
                     JSONArray stations = getWeatherAction.getObsJsonStations(dbc, qParams2);
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
-                    //JSONArray liveReports = getWeatherAction.getLiveReports(dbc, qParams); <--- hangs!
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -200,10 +199,25 @@ public class WeatherResource extends ServerResource {
                         .put("indoorObs", indorObsB)
                         .put("stations", stations)
                         .put("mobiLoc", mobiLoc)
-                        .put("liveWarns", liveWarns)
-                        /*.put("liveReports", liveReports)*/;
+                        .put("liveWarns", liveWarns);
                     returnData = mergedResults.toString();
                     break;          
+                    
+                case "getObsJsonGlob2":
+                    try {
+                        qParams.add(0, argsInForm.getFirstValue("startTime"));
+                        qParams.add(1, argsInForm.getFirstValue("endTime"));
+                        qParams.add(2, argsInForm.getFirstValue("watchLimit"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //JSONArray liveReports = getWeatherAction.getLiveReports(dbc, qParams); <--- hangs!
+                    JSONArray liveWatches = getWeatherAction.getLiveWatches(dbc, qParams);
+                    mergedResults
+                        .put("liveWatches", liveWatches);
+                        /*.put("liveReports", liveReports)*/;
+                    returnData = mergedResults.toString();
+                    break;
                     
                 case "getObsJsonMerged":
                     try {

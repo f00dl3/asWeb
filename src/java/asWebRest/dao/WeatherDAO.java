@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 16 Jul 2018
+Updated: 18 Jul 2018
  */
 
 package asWebRest.dao;
@@ -629,7 +629,7 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getLiveWatches(List<String> inParams) {
+    public JSONArray getLiveWatches(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final int limit = Integer.parseInt(inParams.get(2));                
@@ -653,7 +653,7 @@ public class WeatherDAO {
                 " ORDER BY STR_TO_DATE(REPLACE(pubDate,' +0000',''), '%a, %d %b %Y %H:%i%s') DESC LIMIT "+limit+";";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_LiveWatches, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_LiveWatches, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
