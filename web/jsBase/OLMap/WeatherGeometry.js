@@ -250,7 +250,8 @@ function addWarnPolys(liveWarns) {
 function addWatchPolys(liveWatches) {
     var rFeatures = [];
     liveWatches.forEach(function (watch) {
-        if(isSet(watch.WatchBox) && watch.WatchBox !== "[]") {
+        //Ignore mesoscale discussions until projection is fixed.
+        if(isSet(watch.WatchBox) && watch.WatchBox !== "[]" && watch.Type !== "MD") {
             console.log("SUCCESS!" + watch.ShortWID);
             var geoJSON = JSON.parse(watch.WatchBox);
             console.log(geoJSON);
