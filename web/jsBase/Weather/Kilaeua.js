@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 May 2018
-Updated: 3 Jun 2018
+Updated: 18 Jul 2018
  */
 
 function popKilaeuaCam() {
@@ -20,7 +20,6 @@ function popKilaueaSpectro() {
     var timestamp = getDate("minute", 0, "timestamp");
     var spectHolder = "";
     var volcLinks = [
-        "https://volcanoes.usgs.gov/vsc/captures/kilauea/summit_uwe_tilt_2weeks.png",
         "https://volcanoes.usgs.gov/vsc/captures/kilauea/PAUD-6h.png",
         "https://volcanoes.usgs.gov/vsc/captures/kilauea/UWB-6h.png"
     ];

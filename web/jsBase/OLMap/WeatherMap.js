@@ -217,7 +217,7 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                             var wavePeriodAverage = Number(passedData.WavePeriodAverage);
                             eiData += " (" + wavePeriodAverage.toFixed(1) + "s)<br/>";
                         } else {
-                            eiDataa += "s<br/>";
+                            eiData += "s<br/>";
                         }
                     }
                     if (isSet(passedData.WaveDirection)) {
@@ -233,9 +233,9 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                     }
                     break;
                 case "WarnPoly": 
+                    var passedData = feature.get("rawData");
                     eiData += "<strong>" + feature.get("event") + "</strong><p>" +
-                            feature.get("briefSummary") + "<p>" +
-                            "<button class='UButton warnFullButton'>Full Text</button>"; // Hook it up to something!
+                            passedData.summary;
                     break;
             }
             content.innerHTML = eiData;
