@@ -660,7 +660,7 @@ public class WeatherDAO {
                     .put("WatchID", resultSet.getString("WatchID"))
                     .put("WatchBox", resultSet.getString("WatchBox"))
                     .put("Type", resultSet.getString("Type"))
-                    .put("description", resultSet.getString("description"))
+                    .put("description", wc.htmlStripTease(resultSet.getString("description")))
                     .put("GetTime", resultSet.getString("GetTime"))
                     .put("ShortWID", resultSet.getString("ShortWID"));
                 tContainer.put(tObject);

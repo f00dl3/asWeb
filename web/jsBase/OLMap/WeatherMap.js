@@ -19,6 +19,7 @@ var pointType;
 var searchDateStart;
 var searchDateEnd;
 var warnLayer;
+var watchLayer;
 
 var wxDataTypes = [
     { "name": "CAPE/CIN", "matcher": "CAPE" },
@@ -128,6 +129,10 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     if(isSet(liveWarns)) {
         warnLayer = addWarnPolys(liveWarns);
         map.addLayer(warnLayer);
+    }
+    if(isSet(liveWatches)) {
+        watchLayer = addWatchPolys(liveWatches);
+        map.addLayer(watchLayer);
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
     map.addLayer(overlayLayer);
@@ -263,7 +268,7 @@ function getJsonWeatherGlob(map, lPointType) {
     if(!checkMobile()) { wpLimit = 8192; }
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
-        "startTime": getDate("hour", -1, "full"),
+        "startTime": getDate("hour", -3, "full"),
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
         "moiType": baseType,
@@ -349,6 +354,13 @@ function removeLayers(map, timestamp) {
         console.log(timestamp + ": Removed warn layer!");
     } else {
         console.log(timestamp + ": No warn layer yet!");
+    }
+    if (watchLayer) {
+        map.removeLayer(watchLayer);
+        watchLayer = null;
+        console.log(timestamp + ": Removed watch layer!");
+    } else {
+        console.log(timestamp + ": No watch layer yet!");
     }
 }
 

@@ -183,10 +183,6 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     return iconFeature;
 }
 
-function addQuakes(quakes) {
-    
-}
-
 function addWarnPolys(liveWarns) {
     var rFeatures = [];
     liveWarns.forEach(function (warn) {
@@ -245,6 +241,47 @@ function addWarnPolys(liveWarns) {
             console.log(warn.id + ": No polygon or SAME data!");
         }
     });
+    var vSource = new ol.source.Vector({ features: rFeatures });
+    var vLayer = new ol.layer.Vector({ source: vSource });
+    return vLayer;
+}
+
+function addWatchPolys(liveWatches) {
+    var rFeatures = [];
+    liveWatches.forEach(function (watch) {
+        if(isSet(watch.WatchBox) && watch.WatchBox !== "[]") {
+            console.log("SUCCESS!");
+            console.log(watch);
+            var geoJSON = JSON.parse(watch.WatchBox);
+            var polyLine = new ol.geom.LineString(geoJSON);
+            var colors = "255 255 255";
+            switch(watch.Type) {
+                case "MD": default: break;
+            }
+            if(isSet(watch.ColorRGB)) { colors = watch.ColorRGB; }
+            colors = colors.split(" ");
+            polyLine.transform('EPSG:4326', 'EPSG:3857');
+            var rFeature = new ol.Feature({
+                event: watch.Type,
+                geometry: polyLine,
+                summary: watch.description,
+                warnId: watch.WatchID,
+                title: watch.ShortWID,
+                type: "WarnPoly"
+            });
+            var wpStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.4)',
+                    width: 4
+                })
+            });
+            rFeature.setStyle(wpStyle);
+            rFeatures.push(rFeature);
+        } else {
+            console.log("FAIL!" + watch);
+        }
+    });
+    console.log(liveWatches);
     var vSource = new ol.source.Vector({ features: rFeatures });
     var vLayer = new ol.layer.Vector({ source: vSource });
     return vLayer;
