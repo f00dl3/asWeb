@@ -233,9 +233,8 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                     }
                     break;
                 case "WarnPoly": 
-                    var passedData = feature.get("rawData");
                     eiData += "<strong>" + feature.get("event") + "</strong><p>" +
-                            passedData.summary;
+                            feature.get("summary");
                     break;
             }
             content.innerHTML = eiData;

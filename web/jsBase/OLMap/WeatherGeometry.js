@@ -198,10 +198,9 @@ function addWarnPolys(liveWarns) {
             colors = colors.split(" ");
             polyLine.transform('EPSG:4326', 'EPSG:3857');
             var rFeature = new ol.Feature({
-                rawData: warn,
                 event: warn.capevent,
-                briefSummary: warn.briefSummary,
                 geometry: polyLine,
+                summary: warn.summary,
                 warnId: warn.id,
                 title: warn.title,
                 type: "WarnPoly"
@@ -225,9 +224,9 @@ function addWarnPolys(liveWarns) {
                     colors = colors.split(" ");
                     polyLine.transform('EPSG:4326', 'EPSG:3857');
                     var rFeature = new ol.Feature({
-                        rawData: warn,
                         event: warn.capevent,
                         geometry: polyLine,
+                        summary: warn.summary,
                         warnId: warn.id,
                         title: warn.title,
                         type: "WarnPoly"
