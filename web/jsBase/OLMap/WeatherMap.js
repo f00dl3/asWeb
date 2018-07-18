@@ -268,7 +268,7 @@ function getJsonWeatherGlob(map, lPointType) {
     if(!checkMobile()) { wpLimit = 8192; }
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
-        "startTime": getDate("hour", -3, "full"),
+        "startTime": getDate("hour", -1, "full"),
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
         "moiType": baseType,

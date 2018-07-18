@@ -251,9 +251,9 @@ function addWatchPolys(liveWatches) {
     var rFeatures = [];
     liveWatches.forEach(function (watch) {
         if(isSet(watch.WatchBox) && watch.WatchBox !== "[]") {
-            console.log("SUCCESS!");
-            console.log(watch);
+            console.log("SUCCESS!" + watch.ShortWID);
             var geoJSON = JSON.parse(watch.WatchBox);
+            console.log(geoJSON);
             var polyLine = new ol.geom.LineString(geoJSON);
             var colors = "255 255 255";
             switch(watch.Type) {
@@ -279,10 +279,9 @@ function addWatchPolys(liveWatches) {
             rFeature.setStyle(wpStyle);
             rFeatures.push(rFeature);
         } else {
-            console.log("FAIL!" + watch);
+            console.log("FAIL!" + watch.ShortWID);
         }
     });
-    console.log(liveWatches);
     var vSource = new ol.source.Vector({ features: rFeatures });
     var vLayer = new ol.layer.Vector({ source: vSource });
     return vLayer;
