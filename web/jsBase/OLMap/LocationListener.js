@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Jun 2018
-Updated: 16 Jul 2018
+Updated: 18 Jul 2018
 SOME FEATURES FOR LIVE TRACKING IN TESTING - not a priority yet!
  */
 
@@ -29,7 +29,7 @@ function addObsLocationMarkers(map, description, tCoord) {
         case "Home": shortName = "H"; break;
         case "Note3": shortName = "A"; break;
     }
-    iconFeature.setStyle(svgIconStyle("ct", 35, "#ffffff", 1, shortName, "#000000"));
+    iconFeature.setStyle(svgIconStyle("ct", 30, "#ffffff", 1, shortName, "#000000"));
     return iconFeature;
 }
 

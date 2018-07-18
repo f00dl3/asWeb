@@ -256,10 +256,8 @@ function addWatchPolys(liveWatches) {
             console.log(geoJSON);
             var polyLine = new ol.geom.LineString(geoJSON);
             var colors = "255 255 255";
-            switch(watch.Type) {
-                case "MD": default: break;
-            }
-            if(isSet(watch.ColorRGB)) { colors = watch.ColorRGB; }
+            if((watch.ShortWID).includes("TORNADO")) { colors = "255 225 0"; }
+            if((watch.ShortWID).includes("SEVERE")) { colors = "255 0 255"; }
             colors = colors.split(" ");
             polyLine.transform('EPSG:4326', 'EPSG:3857');
             var rFeature = new ol.Feature({
