@@ -272,7 +272,8 @@ function getJsonWeatherGlob(map, lPointType) {
         "endTime": getDate("hour", 0, "full"),
         "limit": 1,
         "moiType": baseType,
-        "wpLimit": wpLimit
+        "wpLimit": wpLimit,
+        "watchStartTime": getDate("hour", -10, "full")
     };
     require(["dojo/request"], function (request) {
         request

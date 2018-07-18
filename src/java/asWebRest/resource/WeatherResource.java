@@ -186,7 +186,7 @@ public class WeatherResource extends ServerResource {
                     }
                     List<String> qParams4 = new ArrayList<>();
                     try {
-                        qParams4.add(0, qParams3.get(0));
+                        qParams4.add(0, argsInForm.getFirstValue("watchStartTime"));
                         qParams4.add(1, qParams3.get(1));
                         qParams4.add(2, qParams3.get(5));
                     } catch (Exception e) {
