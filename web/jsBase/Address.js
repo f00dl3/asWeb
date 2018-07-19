@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 25 Apr 2018
+Updated: 19 Jul 2018
  */
 
 var addresses;
@@ -30,7 +30,7 @@ function getAddresses() {
 function populateHead() {
     var rData = "";
     if(isSet(hiddenFeatures)) { rData += "<a href='" + getBasePath("ui") + "/Congress.jsp' target='new'>Congress DNC Hack</a><br/>"; }
-    rData += "<a href='" + getBasePath("old") + "/OutMap.php?AllPoints=Addresses' target='new'>Map them all!</a><p>";
+    rData += "<a href='" + getResource("Map.Addresses") + "' target='new'>Map them all!</a><p>";
     dojo.byId("HeadHolder").innerHTML = rData;
 }
 

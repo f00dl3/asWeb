@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Jul 2018
+Updated: 19 Jul 2018
  */
 
 function addAddressMarker(map, thisAddress) {
@@ -16,8 +17,10 @@ function addAddressMarker(map, thisAddress) {
     } else {
         pointName = thisAddress.Business;
     }
+    var fullAddress = thisAddress.Address + ", " + thisAddress.City + ", " + thisAddress.State + " " + thisAddress.Zip;
     var iconFeature = new ol.Feature({
         rawData: thisAddress,
+        fullAddress: fullAddress,
         geometry: point,
         name: pointName,
         type: "Address"
@@ -50,7 +53,8 @@ function addAddresses(map, addressData) {
             var eiData = "";
             switch (feature.get("type")) {
                 case "Address":
-                    eiData = "<strong>" + feature.get("name") + "</strong><br/>";
+                    eiData = "<strong>" + feature.get("name") + "</strong><br/>" +
+                            "<strong>Address</strong>: " + feature.get("addressFull") + "<br/>";                    
                     break;
             }
             content.innerHTML = eiData;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 18 Jul 2018
+Updated: 19 Jul 2018
  */
 
 var annMaint = 910.66;
@@ -290,6 +290,9 @@ function getResource(what) {
         case "Landing": return getBasePath("ui"); break;
         case "Login": return getBasePath("rest") + "/Login"; break;
         case "Logs": return getBasePath("rest") + "/Logs"; break;
+        case "Map.Addresses": return getBasePath("ui") + "/OLMap.jsp?Action=Addresses"; break;
+        case "Map.Homicide": return getBasePath("ui") + "/OLMap.jsp?Action=Homicide"; break;
+        case "Map.Wx": return getBasePath("ui") + "/OLMap.jsp?Action=Wx"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "NewsFeed": return getBasePath("rest") + "/NewsFeed"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
