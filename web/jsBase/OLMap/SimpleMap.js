@@ -10,6 +10,7 @@ function postProcessOptions(map) {
     var defaultMetric = "Speed";
     if(isSet(doAction)) {
         switch(doAction) {
+            case "Addresses": getAddresses(map); break;
             case "Homicide": getHomicides(map); break;
             case "Route": addLineStringToMap(map, dataInputOverride); break;
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
