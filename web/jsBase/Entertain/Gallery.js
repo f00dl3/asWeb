@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 27 Jun 2018
+Updated: 19 Jul 2018
  */
 
 var tppCallback;
@@ -184,7 +184,7 @@ function populateGallery(target) {
     varsToPass.relativeUrlPath = getBasePath("old") + subPath;
     varsToPass.args2Pass = "archive";
     var rData = "<h4>Photos</h4>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?PhotoGeo=true' target='photoGeo'>Map GeoCoded Photos</a><p>" +
+            "<a href='" + getResource("Map.Media") + "' target='photoGeo'>Map GeoCoded Photos</a><p>" +
             "<strong>Select Year:</strong>" +
             "<form id='PicForm'>" +
             "<select name='YearPicker' id='YearPicker'>" +

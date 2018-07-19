@@ -292,6 +292,7 @@ function getResource(what) {
         case "Logs": return getBasePath("rest") + "/Logs"; break;
         case "Map.Addresses": return getBasePath("ui") + "/OLMap.jsp?Action=Addresses"; break;
         case "Map.Homicide": return getBasePath("ui") + "/OLMap.jsp?Action=Homicide"; break;
+        case "Map.Media": return getBasePath("ui") + "/OLMap.jsp?Action=Media"; break;
         case "Map.Wx": return getBasePath("ui") + "/OLMap.jsp?Action=Wx"; break;
         case "MediaServer": return getBasePath("rest") + "/MediaServer"; break;
         case "NewsFeed": return getBasePath("rest") + "/NewsFeed"; break;
