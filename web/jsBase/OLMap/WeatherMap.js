@@ -257,8 +257,7 @@ function getJsonWeatherGlob(map, lPointType) {
         case "LI": baseType = "lftx"; break;
         case "LLJM": baseType = "wm0850"; break;
         case "PWAT": baseType = "pwat"; break;
-        case "SfcD": baseType = null; break;
-        case "SfcH": baseType = "rh2m"; break;
+        case "SfcD": case "SfcH": baseType = "rh2m"; break;
         case "SfcW": baseType = "wm10m"; break;
         case "WxOb": baseType = "apcp"; break;
         case "SfcT": default: if(checkMobile()) { baseType = "tmp2m"; } else { baseType = "js2tmp"; } break;

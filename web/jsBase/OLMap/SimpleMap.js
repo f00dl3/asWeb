@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 11 Jul 2018
+Updated: 18 Jul 2018
  */
 
 function postProcessOptions(map) {
@@ -10,6 +10,7 @@ function postProcessOptions(map) {
     var defaultMetric = "Speed";
     if(isSet(doAction)) {
         switch(doAction) {
+            case "Homicide": getHomicides(map); break;
             case "Route": addLineStringToMap(map, dataInputOverride); break;
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
