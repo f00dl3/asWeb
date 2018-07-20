@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 14 Jul 2018
+Updated: 20 Jul 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -590,13 +590,15 @@ function timeDay() {
     // Does not work properly.
     dojo.require("dojo.date");
     var now = new Date();
+    console.log(now);
     var p1d = getDate("day", +1, "js");
     var sunset = new Date().sunset(getHomeGeo("lat"), getHomeGeo("lon"));
     var sunrise = new Date().sunrise(getHomeGeo("lat"), getHomeGeo("lon"));
     var toSunrise = dojo.date.compare(now, sunrise, "datetime");
     var toSunset = dojo.date.compare(p1d, sunset, "datetime");
     if(toSunrise === 1 && toSunset === 0) { isDaylight = 1; } else { isDaylight = 0; }
-    return isDaylight;
+    console.log(isDaylight);
+    return 1; // override until this is figured out.
 }
 
 function windDirSvg(tDir) {
