@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 16 Jul 2018
+Updated: 21 Jul 2018
  */
 
 var msIndex;
@@ -130,7 +130,7 @@ function playMediaFile(whatFile, dbxFlag) {
     switch(mediaType) {
         case "mp3":
             mediaMime = "audio/mpeg";
-            mpo += "<audio controls autoplay loop>" +
+            mpo += "<audio id='mediaServerAudoPlayer' controls autoplay loop>" +
                     "<source src='" + filePath + "' type='" + mediaMime + "'>" +
                     "</audio>";
             break;
@@ -140,6 +140,7 @@ function playMediaFile(whatFile, dbxFlag) {
     }
     mpo += "</div>";
     dojo.byId("ETSPlayer").innerHTML = mpo;
+    dojo.byId("mediaServerAudoPlayer").play();
 }
 
 function playDbxFile(formData) {

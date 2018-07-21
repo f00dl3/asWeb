@@ -587,18 +587,24 @@ function styleWind(wMax, valueOnly) {
 }
 
 function timeDay() {
-    // Does not work properly.
+    // Testing functionality
     dojo.require("dojo.date");
     var now = new Date();
-    console.log(now);
     var p1d = getDate("day", +1, "js");
     var sunset = new Date().sunset(getHomeGeo("lat"), getHomeGeo("lon"));
     var sunrise = new Date().sunrise(getHomeGeo("lat"), getHomeGeo("lon"));
     var toSunrise = dojo.date.compare(now, sunrise, "datetime");
     var toSunset = dojo.date.compare(p1d, sunset, "datetime");
-    if(toSunrise === 1 && toSunset === 0) { isDaylight = 1; } else { isDaylight = 0; }
-    console.log(isDaylight);
-    return 1; // override until this is figured out.
+    if((toSunrise === 1 && toSunset === 0) || (toSunrise === 1 && toSunset === 1)) { isDaylight = 1; } else { isDaylight = 0; }
+    /* console.log("var isDaylight: " + isDaylight + "\n" +
+            "var sunset: " + sunset + "\n" +
+            "var toSunset: " + toSunset + "\n" +
+            "var now: " + now + "\n" +
+            "var p1d: " + p1d + "\n" +
+            "var sunrise: " + sunrise + "\n" +
+            "var toSunrise: " + toSunrise + "\n");
+    return 1; override until this is figured out. */
+    return isDaylight;
 }
 
 function windDirSvg(tDir) {
