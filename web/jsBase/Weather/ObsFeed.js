@@ -220,6 +220,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine + "<br/>";
         }
         if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
+        console.log(convertToJsDate(shortTime));
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;

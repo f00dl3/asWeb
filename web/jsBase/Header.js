@@ -128,6 +128,18 @@ function checkMobile() {
     }
 }
 
+function convertToJsDate(inDate) {
+    // https://dojotoolkit.org/reference-guide/1.9/dojo/date/locale/format.html 
+    // http://dojotoolkit.org/reference-guide/1.8/dojo//date/locale/parse.html
+    // for formatting datetime in Dojo
+    console.log(inDate);
+    var outputDate;
+    require(["dojo/date/locale"], function(locale) {
+        outputDate = locale.parse(inDate);
+    });
+    return outputDate;
+}
+
 // remove for array sort working
 function compareStrings(a, b) {
     var a = a.toLowerCase();
@@ -214,7 +226,7 @@ function getDate(inType, inInput, rdFormat, initialDate) {
     dojo.require("dojo.date");
     var initDate = new Date();
     if(isSet(initialDate)) {
-        initDate = formatDate(initialDate, rdFormat);
+        console.log(convertToJsDate(initialDate));
     }
     var retDate = formatDate(dojo.date.add(initDate, inType, inInput), rdFormat);
     return retDate;
