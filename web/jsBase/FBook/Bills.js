@@ -63,12 +63,12 @@ function putBills(billData) {
     var rData = "<h3>Bills</h3>";
     var bCols = [
         "Month",
-        "<div class='UPop'>ELE<div class='UPopO'><a href='" + doCh("j", "kWhByDay", null) + "' target='uuChart'><img src='" + doCh("j", "kWhByDay", "th") + "' class='ch_small'/></a></div></div>",
-        "<div class='UPop'>GAS<div class='UPopO'><a href='" + doCh("j", "gasByMonth", null) + "' target='uuChart'><img src='" + doCh("j", "gasByMonth", "th") + "' class='ch_small'/></a></div></div>",
+        "ELE",
+        "GAS",
         "WAT",
         "SWR",
         "TRA",
-        "<div class='UPop'>WEB<div class='UPopO'><a href='" + doCh("j", "webByMonth", null) + "' target='uuChart'><img src='" + doCh("j", "webByMonth", "th") + "' class='ch_small'/></a></div></div>",
+        "WEB",
         "PHO",
         "GYM",
         "OTH",

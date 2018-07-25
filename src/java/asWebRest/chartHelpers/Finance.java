@@ -97,52 +97,6 @@ public class Finance {
         return enw_Glob;
     }
     
-    private static JSONObject gasUse(JSONArray dataIn) {
-        String ch_Name = "Gas Use by Month";
-        JSONObject ch_Glob = new JSONObject();
-        JSONObject ch_Props = new JSONObject();
-        JSONArray ch_Labels = new JSONArray();
-        JSONArray ch_Data = new JSONArray();
-        ch_Props
-                .put("dateFormat", "yyyy-MM")
-                .put("chartName", ch_Name).put("chartFileName", "gasByMonth")
-                .put("sName", "MCF").put("sColor", "White")
-                .put("xLabel", "Month").put("yLabel", "MCF");
-        for(int i = 0; i < dataIn.length(); i++) {
-            JSONObject thisObject = dataIn.getJSONObject(i);
-            ch_Labels.put(thisObject.getString("Month"));
-            ch_Data.put(thisObject.getDouble("TotalMCF"));
-        }
-        ch_Glob
-                .put("labels", ch_Labels)
-                .put("data", ch_Data)
-                .put("props", ch_Props);
-        return ch_Glob;
-    }
-    
-    private static JSONObject kWhUse(JSONArray dataIn) {
-        String ch_Name = "kWh Use by Day";
-        JSONObject kWh_Glob = new JSONObject();
-        JSONObject kWh_Props = new JSONObject();
-        JSONArray kWh_Labels = new JSONArray();
-        JSONArray kWh_Data = new JSONArray();
-        kWh_Props
-                .put("dateFormat", "yyyy-MM-dd")
-                .put("chartName", ch_Name).put("chartFileName", "kWhByDay")
-                .put("sName", "kWh").put("sColor", "White")
-                .put("xLabel", "Date").put("yLabel", "kWh");
-        for (int i = 0; i < dataIn.length(); i++) {
-            JSONObject thisObject = dataIn.getJSONObject(i);
-            kWh_Labels.put(thisObject.getString("Date"));
-            kWh_Data.put(thisObject.getDouble("kWh"));
-        }
-        kWh_Glob
-                .put("labels", kWh_Labels)
-                .put("data", kWh_Data)
-                .put("props", kWh_Props);
-        return kWh_Glob;
-    }
-
     private static JSONObject savingsOpt(JSONArray dataIn) {
         String svChart_Name = "Savings Balance";
         JSONObject svChart_Glob = new JSONObject();
@@ -165,35 +119,9 @@ public class Finance {
                 .put("props", svChart_Props);
         return svChart_Glob;
     }
-
-    private static JSONObject webUse(JSONArray dataIn) {
-        String ch_Name = "Web Use by Month";
-        JSONObject ch_Glob = new JSONObject();
-        JSONObject ch_Props = new JSONObject();
-        JSONArray ch_Labels = new JSONArray();
-        JSONArray ch_Data = new JSONArray();
-        ch_Props
-                .put("dateFormat", "yyyy-MM")
-                .put("chartName", ch_Name).put("chartFileName", "webByMonth")
-                .put("sName", "MB").put("sColor", "White")
-                .put("xLabel", "Month").put("yLabel", "MB");
-        for(int i = 0; i < dataIn.length(); i++) {
-            JSONObject thisObject = dataIn.getJSONObject(i);
-            ch_Labels.put(thisObject.getString("Month"));
-            ch_Data.put(thisObject.getDouble("MBData"));
-        }
-        ch_Glob
-                .put("labels", ch_Labels)
-                .put("data", ch_Data)
-                .put("props", ch_Props);
-        return ch_Glob;
-    }
     
     public static JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
     public static JSONObject getFinEnw(JSONArray dataIn) { return finEnw(dataIn); }
-    public static JSONObject getGasUse(JSONArray dataIn) { return gasUse(dataIn); }
-    public static JSONObject getKwhUse(JSONArray dataIn) { return kWhUse(dataIn); }
     public static JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
-    public static JSONObject getWebUse(JSONArray dataIn) { return webUse(dataIn); }
 
 }

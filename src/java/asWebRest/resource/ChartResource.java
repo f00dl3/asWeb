@@ -115,17 +115,8 @@ public class ChartResource extends ServerResource {
                 case "FinanceBills":
                     genericCharts = false;
                     JSONArray bill_Raw = getFinanceAction.getBills(dbc);
-                    JSONArray gas_Raw = getUtilityUseAction.getChUseGas(dbc);
-                    JSONArray kWh_Raw = getUtilityUseAction.getChUseElecD(dbc);
-                    JSONArray web_Raw = getUtilityUseAction.getChWebData(dbc);
                     JSONObject bill_Glob = fin.getBillCh(bill_Raw);
-                    JSONObject gas_Glob = fin.getGasUse(gas_Raw);
-                    JSONObject kWh_Glob = fin.getKwhUse(kWh_Raw);
-                    JSONObject web_Glob = fin.getWebUse(web_Raw);
                     try { dynChart.LineChart(bill_Glob); returnData += "Chart generated - Bills!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(gas_Glob); returnData += "Chart generated - gasByMonth!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(kWh_Glob); returnData += "Chart generated - kWhByDay!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(web_Glob); returnData += "Chart generated - webByMonth!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                 
                 case "FinanceOverviewCharts":
