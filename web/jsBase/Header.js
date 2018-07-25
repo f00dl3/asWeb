@@ -144,6 +144,7 @@ function convertToJsDate(inDate) {
 function compareStrings(a, b) {
     var a = a.toLowerCase();
     var b = b.toLowerCase();
+    
     return (a < b) ? -1 : (a > b) ? 1 : 0;
 }
 

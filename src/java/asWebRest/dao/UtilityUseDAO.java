@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 May 2018
+Updated: 25 Jul 2018
 */
 
 package asWebRest.dao;
@@ -49,7 +49,7 @@ public class UtilityUseDAO {
     public JSONArray getChCellUse(Connection dbc) { return chCellUse(dbc); }
     
     public JSONArray getChUseElecD(Connection dbc) {
-        final String query_ch_UseElecD = "SELECT Date, kWh FROM Core.UseElecD WHERE Date > CURRENT_DATE - INTERVAL '120' DAY ORDER BY Date;;";
+        final String query_ch_UseElecD = "SELECT Date, kWh FROM Core.UseElecD WHERE Date > CURRENT_DATE - INTERVAL '120' DAY ORDER BY Date;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ch_UseElecD, null);

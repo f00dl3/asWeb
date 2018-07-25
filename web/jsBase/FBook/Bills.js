@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Bills.js Split: 4 Apr 2018
-Updated: 16 May 2018
+Updated: 25 Jul 2018
  */
 
 function displayBills() {
@@ -61,7 +61,19 @@ function getBills() {
 
 function putBills(billData) {
     var rData = "<h3>Bills</h3>";
-    var bCols = ["Month", "ELE", "GAS", "WAT", "SWR", "TRA", "WEB", "PHO", "GYM", "OTH", "Total"];
+    var bCols = [
+        "Month",
+        "<div class='UPop'>ELE<div class='UPopO'><a href='" + doCh("j", "kWhByDay", null) + "' target='uuChart'><img src='" + doCh("j", "kWhByDay", "th") + "' class='ch_small'/></a></div></div>",
+        "<div class='UPop'>GAS<div class='UPopO'><a href='" + doCh("j", "gasByMonth", null) + "' target='uuChart'><img src='" + doCh("j", "gasByMonth", "th") + "' class='ch_small'/></a></div></div>",
+        "WAT",
+        "SWR",
+        "TRA",
+        "WEB",
+        "PHO",
+        "GYM",
+        "OTH",
+        "Total"
+    ];
     var bCharts = "<div id='billChHolder'>Loading Chart...</div>";
     rData += bCharts + "<p>";
     var bTable = "<table>" +
