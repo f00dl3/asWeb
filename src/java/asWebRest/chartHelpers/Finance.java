@@ -166,10 +166,34 @@ public class Finance {
         return svChart_Glob;
     }
 
+    private static JSONObject webUse(JSONArray dataIn) {
+        String ch_Name = "Web Use by Month";
+        JSONObject ch_Glob = new JSONObject();
+        JSONObject ch_Props = new JSONObject();
+        JSONArray ch_Labels = new JSONArray();
+        JSONArray ch_Data = new JSONArray();
+        ch_Props
+                .put("dateFormat", "yyyy-MM")
+                .put("chartName", ch_Name).put("chartFileName", "webByMonth")
+                .put("sName", "MB").put("sColor", "White")
+                .put("xLabel", "Month").put("yLabel", "MB");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            ch_Labels.put(thisObject.getString("Month"));
+            ch_Data.put(thisObject.getDouble("MBData"));
+        }
+        ch_Glob
+                .put("labels", ch_Labels)
+                .put("data", ch_Data)
+                .put("props", ch_Props);
+        return ch_Glob;
+    }
+    
     public static JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
     public static JSONObject getFinEnw(JSONArray dataIn) { return finEnw(dataIn); }
     public static JSONObject getGasUse(JSONArray dataIn) { return gasUse(dataIn); }
     public static JSONObject getKwhUse(JSONArray dataIn) { return kWhUse(dataIn); }
     public static JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
+    public static JSONObject getWebUse(JSONArray dataIn) { return webUse(dataIn); }
 
 }

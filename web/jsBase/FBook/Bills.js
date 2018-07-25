@@ -68,7 +68,7 @@ function putBills(billData) {
         "WAT",
         "SWR",
         "TRA",
-        "WEB",
+        "<div class='UPop'>WEB<div class='UPopO'><a href='" + doCh("j", "webByMonth", null) + "' target='uuChart'><img src='" + doCh("j", "webByMonth", "th") + "' class='ch_small'/></a></div></div>",
         "PHO",
         "GYM",
         "OTH",
