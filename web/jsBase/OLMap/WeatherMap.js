@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 18 Jul 2018
+ Updated: 25 Jul 2018
  
  WARNING: STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE 32GB MEMORY LEAK
@@ -88,7 +88,8 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
 }
 
-function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, mobiLoc, markerType) {
+function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, liveReports, mobiLoc, markerType) {
+    console.log(liveReports);
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
@@ -292,6 +293,7 @@ function getJsonWeatherGlob(map, lPointType) {
                             data.wxObsJsonRapid,
                             data.liveWarns,
                             data.liveWatches,
+                            data.liveReports,
                             data.mobiLoc,
                             pointType
                             );

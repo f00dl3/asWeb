@@ -238,8 +238,6 @@ function addWarnPolys(liveWarns) {
                     rFeatures.push(rFeature);
                 }
             });
-        } else {
-            console.log(warn.id + ": No polygon or SAME data!");
         }
     });
     var vSource = new ol.source.Vector({ features: rFeatures });
@@ -252,9 +250,7 @@ function addWatchPolys(liveWatches) {
     liveWatches.forEach(function (watch) {
         //Ignore mesoscale discussions until projection is fixed.
         if(isSet(watch.WatchBox) && watch.WatchBox !== "[]" && watch.Type !== "MD") {
-            console.log("SUCCESS!" + watch.ShortWID);
             var geoJSON = JSON.parse(watch.WatchBox);
-            console.log(geoJSON);
             var polyLine = new ol.geom.LineString(geoJSON);
             var colors = "255 255 255";
             if((watch.ShortWID).includes("TORNADO")) { colors = "255 225 0"; }
@@ -277,8 +273,6 @@ function addWatchPolys(liveWatches) {
             });
             rFeature.setStyle(wpStyle);
             rFeatures.push(rFeature);
-        } else {
-            console.log("FAIL!" + watch.ShortWID);
         }
     });
     var vSource = new ol.source.Vector({ features: rFeatures });

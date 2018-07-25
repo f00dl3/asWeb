@@ -175,9 +175,9 @@ public class WeatherResource extends ServerResource {
                     qParams2.add(0, "%");
                     List<String> qParams3 = new ArrayList<>();
                     try {
-                        qParams3.add(0, argsInForm.getFirstValue("startTime"));
-                        qParams3.add(1, argsInForm.getFirstValue("endTime"));
-                        qParams3.add(2, argsInForm.getFirstValue("endTime"));
+                        qParams3.add(0, qParams.get(0));
+                        qParams3.add(1, qParams.get(1));
+                        qParams3.add(2, qParams.get(1));
                         qParams3.add(3, "0");
                         qParams3.add(4, "/");
                         qParams3.add(5, argsInForm.getFirstValue("wpLimit"));
@@ -187,8 +187,16 @@ public class WeatherResource extends ServerResource {
                     List<String> qParams4 = new ArrayList<>();
                     try {
                         qParams4.add(0, argsInForm.getFirstValue("watchStartTime"));
-                        qParams4.add(1, qParams3.get(1));
+                        qParams4.add(1, qParams.get(1));
                         qParams4.add(2, qParams3.get(5));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    List<String> qParams5 = new ArrayList<>();
+                    try {
+                        qParams5.add(0, qParams.get(0));
+                        qParams5.add(1, qParams.get(1));
+                        qParams5.add(2, qParams3.get(5));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -200,6 +208,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray mobiLoc = getSnmpAction.getNote3Geo(dbc);
                     JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
                     JSONArray liveWatches = getWeatherAction.getLiveWatches(dbc, qParams4);
+                    JSONArray liveReportsB = getWeatherAction.getLiveReports(dbc, qParams5);
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -209,7 +218,8 @@ public class WeatherResource extends ServerResource {
                         .put("stations", stations)
                         .put("mobiLoc", mobiLoc)
                         .put("liveWarns", liveWarns)
-                        .put("liveWatches", liveWatches);
+                        .put("liveWatches", liveWatches)
+                        .put("liveReports", liveReportsB);
                     returnData = mergedResults.toString();
                     break;
                     

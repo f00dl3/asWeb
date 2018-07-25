@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 18 Jul 2018
+Updated: 25 Jul 2018
  */
 
 package asWebRest.dao;
@@ -12,6 +12,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -526,9 +530,16 @@ public class WeatherDAO {
     public JSONArray getLiveReports(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
+        final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        final DateTime xdt1_dto_in = theDateFormat.parseDateTime(xdt1).withZone(DateTimeZone.forID("America/Chicago"));
+        final DateTime xdt2_dto_in = theDateFormat.parseDateTime(xdt2).withZone(DateTimeZone.forID("America/Chicago"));
+        final DateTime xdt1_dto_out = xdt1_dto_in.minusHours(24).toDateTime(DateTimeZone.UTC);
+        final DateTime xdt2_dto_out = xdt2_dto_in.toDateTime(DateTimeZone.UTC);
+        final String xdt1_utc = theDateFormat.print(xdt1_dto_out);
+        final String xdt2_utc = theDateFormat.print(xdt2_dto_out);
         final int limit = Integer.parseInt(inParams.get(2));                
         final String query_LiveReports = "SELECT Date, Time, Type, Magnitude, Lat, Lon, Location, Comments, County, State FROM (" +
-                " SELECT" +
+                " /* SELECT" +
                 "   CASE" +
 		"       WHEN Time BETWEEN '0' AND '1200' THEN" +
 		"           SUBSTRING(CONVERT_TZ(CONCAT(DATE_ADD(Date, INTERVAL +0 DAY), ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10)" +
@@ -547,16 +558,16 @@ public class WeatherDAO {
                 "   CZ_NAME as County, STATE as State" +
                 " FROM WxObs.NCDCStormEvents" +
                 " WHERE CONVERT_TZ(STR_TO_DATE(CONCAT(SUBSTRING(BEGIN_YEARMONTH,1,4),'-',SUBSTRING(BEGIN_YEARMONTH,5,2),'-',BEGIN_DAY,' ',BEGIN_TIME), '%Y-%m-%e %H%i'), '+00:00', '-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
-                " UNION ALL SELECT" +
+                " UNION ALL */ SELECT" +
                 "   SUBSTRING(CONVERT_TZ(STR_TO_DATE(SUBSTRING(time,1,19),'%Y-%m-%dT%H:%i:%s'), '+00:00', '-05:00'), 1, 10) AS Date," +
                 "   SUBSTRING(CONVERT_TZ(STR_TO_DATE(SUBSTRING(time,1,19),'%Y-%m-%dT%H:%i:%s'), '+00:00', '-05:00'), 12, 5) AS Time," +
                 "   'Q' as Type," +
                 "   mag as Magnitude, latitude as Lat, longitude as Lon, place as Location, NULL as County, NULL as State, type AS Comments" +
                 " FROM WxObs.ANSSQuakes" +
-                " WHERE type = 'earthquake'" +
-                " AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(time,1,19),'%Y-%m-%dT%H:%i:%s'), '+00:00', '-05:00') BETWEEN '"+xdt1+"' AND '"+xdt2+"'" +
+                " WHERE time BETWEEN '"+xdt1_utc+"' AND '"+xdt2_utc+"'" +
                 " ) as tmp" +
                 " ORDER BY CONCAT(Date,' ',Time) DESC LIMIT "+limit+";";
+        System.out.println(query_LiveReports);
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_LiveReports, null);
