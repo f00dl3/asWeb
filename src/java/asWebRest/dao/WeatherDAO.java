@@ -10,7 +10,6 @@ import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
@@ -61,7 +60,7 @@ public class WeatherDAO {
                 "             THEN" +
                 "                  (CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.published,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.published,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "'" +
                 "                     OR CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.updated,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.updated,20,5),'-05:00') BETWEEN '" + xdt1 + "' AND '" + xdt2 + "')" +
-                //"                     AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
+                //"FAILS - NOT NEEDED? --> AND CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xdt2 + "'" +
                 "             ELSE" +
                 "                 CONVERT_TZ(STR_TO_DATE(SUBSTRING(lw.capexpires,1,19),'%Y-%m-%dT%H:%i:%s'),SUBSTRING(lw.capexpires,20,5),'-05:00') > '" + xExp + "'" +
                 "         END" +
@@ -703,6 +702,9 @@ public class WeatherDAO {
         final String xmlBindTheRest = xmlBindTheRest(order);
         final String query_ObsJSON = "SELECT ObsID, GetTime, jsonData" +
                 " FROM WxObs.StationDataIndexed" + xmlBindTheRest;
+        System.out.println("query_ObsJSON:qParams(0) --> " + qParams.get(0));
+        System.out.println("query_ObsJSON:qParams(1) --> " + qParams.get(1));
+        System.out.println("query_ObsJSON --> " + query_ObsJSON);
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON, qParams);
