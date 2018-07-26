@@ -248,9 +248,10 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                     break;
                 case "Quake":
                     eiData += "Earthquake: <strong>" + feature.get("magnitude") + "</strong></p>" +
-                            "<strong>Location</strong>: " + feature.get("friendlyLocation") + "<br/>" +
+                            "<strong>Time</strong>: " + feature.get("friendlyTime") + "<br/>" +
                             "<strong>Longitude</strong>: " + feature.get("longitude") + "<br/>" +
-                            "<strong>Latitude</strong>: " + feature.get("latitude") + "<br/>";
+                            "<strong>Latitude</strong>: " + feature.get("latitude") + "<p>" +
+                            feature.get("friendlyLocation");
                     break;
                 case "WarnPoly": 
                     eiData += "<strong>" + feature.get("event") + "</strong><p>" +

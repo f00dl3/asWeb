@@ -190,6 +190,7 @@ function addQuakeMarkers(map, quakeData) {
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
         friendlyLocation: quakeData.Location,
+        friendlyTime: quakeData.Date + " @ " + quakeData.Time,
         geometry: point,
         latitude: quakeData.Lat,
         longitude: quakeData.Lon,
@@ -201,7 +202,6 @@ function addQuakeMarkers(map, quakeData) {
     var icColor = "#ffffff";
     var icOpacity = 1;
     var icLabelColor = "#000000";
-    console.log(cirDiam);
     iconFeature.setStyle(svgIconStyle("ct", cirDiam, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
