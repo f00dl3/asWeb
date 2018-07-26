@@ -196,7 +196,7 @@ function addQuakeMarkers(map, quakeData) {
         magnitude: quakeData.Magnitude,
         type: "Quake"
     });
-    var cirDiam = Math.round((Math.abs(Number(quakeData.Magnitude)) * 8)) + 1;
+    var cirDiam = Math.round((Math.abs(Number(quakeData.Magnitude)) * 10)) + 1;
     var icLabel = "+";
     var icColor = "#ffffff";
     var icOpacity = 1;
