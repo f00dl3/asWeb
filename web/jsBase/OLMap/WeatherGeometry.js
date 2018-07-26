@@ -184,23 +184,25 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     return iconFeature;
 }
 
-function addQuakeMarkers(quakeData) {
-    var tCoord = [ quakeData.Lon, quakeData.Lat ];
+function addQuakeMarkers(map, quakeData) {
+    var tCoord = [ Number(quakeData.Lon), Number(quakeData.Lat) ];
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
+        friendlyLocation: quakeData.Location,
         geometry: point,
         latitude: quakeData.Lat,
         longitude: quakeData.Lon,
         magnitude: quakeData.Magnitude,
         type: "Quake"
     });
+    var cirDiam = Math.round((Math.abs(Number(quakeData.Magnitude)) * 8)) + 1;
     var icLabel = "+";
     var icColor = "#ffffff";
     var icOpacity = 1;
     var icLabelColor = "#000000";
-    iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
-    console.log(quakeData);
+    console.log(cirDiam);
+    iconFeature.setStyle(svgIconStyle("ct", cirDiam, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
 

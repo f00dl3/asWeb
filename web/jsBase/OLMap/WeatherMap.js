@@ -129,8 +129,8 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     }
     liveReports.forEach(function (report) {
         if(report.Type === "Q" && isSet(report.Lat) && isSet(report.Lon)) {
-            var tQuakeIconFeature = addQuakeMarkers(report);
-            //vectorSourceReports.addFeature(tQuakeIconFeature);
+            var tQuakeIconFeature = addQuakeMarkers(map, report);
+            vectorSourceReports.addFeature(tQuakeIconFeature);
         }
     });
     if(isSet(liveWarns)) {
@@ -247,7 +247,10 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                     }
                     break;
                 case "Quake":
-                    eiData += "<strong>" + feature.get("magnitude") + "</strong></p>";
+                    eiData += "Earthquake: <strong>" + feature.get("magnitude") + "</strong></p>" +
+                            "<strong>Location</strong>: " + feature.get("friendlyLocation") + "<br/>" +
+                            "<strong>Longitude</strong>: " + feature.get("longitude") + "<br/>" +
+                            "<strong>Latitude</strong>: " + feature.get("latitude") + "<br/>";
                     break;
                 case "WarnPoly": 
                     eiData += "<strong>" + feature.get("event") + "</strong><p>" +
