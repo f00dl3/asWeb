@@ -2,12 +2,13 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 18 Jul 2018
+Updated: 25 Jul 2018
  */
 
 function getOSMAttribution() {
     var currentYear = getDate("day", 0, "yearOnly");
-    var rString = "Anthony Stump, 2015-" + currentYear;
+    var rString = "Anthony Stump, 2015-" + currentYear + "<br/>" +
+            "GeoServer Docs: <a href='/geoserver-doc/user' target='gsDoc'>USR</a> <a href='/geoserver-doc/developer' target='gsDoc'>DEV</a>";
     return rString;
 }
 
