@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 25 May 2018
+Updated: 26 Jul 2018
  */
 
 var ffxivQuests;
@@ -143,12 +143,22 @@ function putFfxivQuestList(target, questData) {
 
 function putFfxivQuests(target, questData) {
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
+    var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var qCount = ffxivQuests.length;
     var compCounter = 0;
     ffxivQuests.forEach(function (ffxq) {
         if(ffxq.Completed === 1) { compCounter++; }
     });
-    var rData = "<a href='" + charProfLink + "' target='new'>Foodle Faddle</a>" +
+    var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
+            "<strong>Maps</strong>:" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Shroud.jpg' target='ffxivMap'>SHR</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Thanalan.jpg' target='ffxivMap'>THA</a>]<br/>" +
+            "<strong>Screens</strong>:" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Arc33.jpg' target='ffxivMap'>ARC-33</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Arc36.jpg' target='ffxivMap'>ARC-36</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Min1.jpg' target='ffxivMap'>MIN-1</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Min13.jpg' target='ffxivMap'>MIN-13</a>]" +
             "<h3>Quests</h3><strong>Indexed quests: " + qCount + "<br/>" +
             "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +

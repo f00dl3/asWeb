@@ -25,8 +25,6 @@ public class WeatherDAO {
     private CommonBeans wcb = new CommonBeans();
     
     private JSONArray liveWarnings(Connection dbc, List<String> inParams) {
-        // 5/23/18: This fails right now. Worked when CAP data was in TEXT but now it's in JSON, REGEX does not work on JSON.
-        // 7/15/18: Reason being is something changed with the published/updated/capexpires date comparative strings.
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final String xExp = inParams.get(2);
