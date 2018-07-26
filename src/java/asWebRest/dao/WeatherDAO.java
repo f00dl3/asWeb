@@ -10,6 +10,7 @@ import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
@@ -531,12 +532,13 @@ public class WeatherDAO {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
         final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        final DateTimeFormatter theDateTimestampFormat = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         final DateTime xdt1_dto_in = theDateFormat.parseDateTime(xdt1).withZone(DateTimeZone.forID("America/Chicago"));
         final DateTime xdt2_dto_in = theDateFormat.parseDateTime(xdt2).withZone(DateTimeZone.forID("America/Chicago"));
-        final DateTime xdt1_dto_out = xdt1_dto_in.minusHours(15).toDateTime(DateTimeZone.UTC);
-        final DateTime xdt2_dto_out = xdt2_dto_in.toDateTime(DateTimeZone.UTC);
-        final String xdt1_utc = theDateFormat.print(xdt1_dto_out);
-        final String xdt2_utc = theDateFormat.print(xdt2_dto_out);
+        final DateTime xdt1_dto_out = xdt1_dto_in; // .toDateTime(DateTimeZone.UTC);
+        final DateTime xdt2_dto_out = xdt2_dto_in; // .toDateTime(DateTimeZone.UTC);
+        final String xdt1_utc = theDateTimestampFormat.print(xdt1_dto_out);
+        final String xdt2_utc = theDateTimestampFormat.print(xdt2_dto_out);
         final int limit = Integer.parseInt(inParams.get(2));                
         final String query_LiveReports = "SELECT Date, Time, Type, Magnitude, Lat, Lon, Location, Comments, County, State FROM (" +
                 " /* SELECT" +
