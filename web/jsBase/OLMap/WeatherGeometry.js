@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Split off from OLMap/WeatherMap.js 16 Jul 2018
-Updated: 28 Jul 2018
+Updated: 26 Jul 2018
  */
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
@@ -181,6 +181,26 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
             break;
     }
     iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
+    return iconFeature;
+}
+
+function addQuakeMarkers(quakeData) {
+    var tCoord = [ quakeData.Lon, quakeData.Lat ];
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var iconFeature = new ol.Feature({
+        geometry: point,
+        latitude: quakeData.Lat,
+        longitude: quakeData.Lon,
+        magnitude: quakeData.Magnitude,
+        type: "Quake"
+    });
+    var icLabel = "+";
+    var icColor = "#ffffff";
+    var icOpacity = 1;
+    var icLabelColor = "#000000";
+    iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
+    console.log(quakeData);
     return iconFeature;
 }
 

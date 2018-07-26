@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 25 Jul 2018
+Updated: 26 Jul 2018
  */
 
 package asWebRest.dao;
@@ -533,7 +533,7 @@ public class WeatherDAO {
         final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         final DateTime xdt1_dto_in = theDateFormat.parseDateTime(xdt1).withZone(DateTimeZone.forID("America/Chicago"));
         final DateTime xdt2_dto_in = theDateFormat.parseDateTime(xdt2).withZone(DateTimeZone.forID("America/Chicago"));
-        final DateTime xdt1_dto_out = xdt1_dto_in.minusHours(24).toDateTime(DateTimeZone.UTC);
+        final DateTime xdt1_dto_out = xdt1_dto_in.minusHours(15).toDateTime(DateTimeZone.UTC);
         final DateTime xdt2_dto_out = xdt2_dto_in.toDateTime(DateTimeZone.UTC);
         final String xdt1_utc = theDateFormat.print(xdt1_dto_out);
         final String xdt2_utc = theDateFormat.print(xdt2_dto_out);

@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 25 Jul 2018
+ Updated: 26 Jul 2018
  
  WARNING: STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE 32GB MEMORY LEAK
@@ -16,6 +16,7 @@ if(!checkMobile) { dataRefresh = getRefresh("medium"); }
 var imageLayer;
 var overlayLayer;
 var pointType;
+var reportLayer;
 var searchDateStart;
 var searchDateEnd;
 var warnLayer;
@@ -88,8 +89,7 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
 }
 
-function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, liveReports, mobiLoc, markerType) {
-    console.log(liveReports);
+function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, liveReports, mobiLoc, markerType) {   
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
@@ -100,9 +100,9 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
-    console.log(mobiCoord);
     var rData = "";
     var vectorSource = new ol.source.Vector({});
+    var vectorSourceReports = new ol.source.Vector({});
     doModelBasemap(map, lastModelImage);
     generateRadarKml(radarList, mobiLoc, timestamp);
     vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
@@ -113,7 +113,7 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
             ) {
         vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
     }
-    if (isSet(jsonData)) {
+    if(isSet(jsonData)) {
         jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);
         jsonData = jsonDataRapid = false;
         wxStations.forEach(function (thisWxStation) {
@@ -127,6 +127,12 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
             }
         });
     }
+    liveReports.forEach(function (report) {
+        if(report.Type === "Q" && isSet(report.Lat) && isSet(report.Lon)) {
+            var tQuakeIconFeature = addQuakeMarkers(report);
+            //vectorSourceReports.addFeature(tQuakeIconFeature);
+        }
+    });
     if(isSet(liveWarns)) {
         warnLayer = addWarnPolys(liveWarns);
         map.addLayer(warnLayer);
@@ -136,7 +142,9 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
         map.addLayer(watchLayer);
     }
     overlayLayer = new ol.layer.Vector({source: vectorSource});
+    reportLayer = new ol.layer.Vector({source: vectorSourceReports});
     map.addLayer(overlayLayer);
+    map.addLayer(reportLayer);
     if(
             isSet(mobiCoord) &&
             mobiCoord[0] !== 0 &&
@@ -237,6 +245,9 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
                                 "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button><br/>" +
                                 upperAirData;
                     }
+                    break;
+                case "Quake":
+                    eiData += "<strong>" + feature.get("magnitude") + "</strong></p>";
                     break;
                 case "WarnPoly": 
                     eiData += "<strong>" + feature.get("event") + "</strong><p>" +
@@ -349,6 +360,13 @@ function removeLayers(map, timestamp) {
         console.log(timestamp + ": Removed overlay layer!");
     } else { 
         console.log(timestamp + ": No overlay layer yet!");
+    }
+    if (reportLayer) {
+        map.removeLayer(reportLayer);
+        reportLayer = null;
+        console.log(timestamp + ": Removed report layer!");
+    } else { 
+        console.log(timestamp + ": No report layer yet!");
     }
     if (warnLayer) {
         map.removeLayer(warnLayer);
