@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 17 Jul 2018
+Updated: 27 Jul 2018
  */
 
 var radarImage = [];
