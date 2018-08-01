@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Jun 2018
+Updated: 31 Jul 2018
 */
 
 package asWebRest.dao;
@@ -237,9 +237,9 @@ public class FitnessDAO {
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain = 1) AND Bicycle='"+bike+"') AS MilesChain," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Bicycle='"+bike+"') AS MilesBike," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkOH = 1) AND Bicycle='"+bike+"') AS MilesOverhaul," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF = 1) AND BkStudT = 0 AND Bicycle='"+bike+"') AS MilesTireFront," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireF = 1 AND BkStudT = 0 AND Bicycle='"+bike+"')) AS MilesTireFront," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireFS = 1) AND BkStudT = 1) AS MilesTireFrontStudded," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR = 1) AND BkStudT = 0 AND Bicycle='"+bike+"') AS MilesTireRear," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireR = 1 AND BkStudT = 0 AND Bicycle='"+bike+"')) AS MilesTireRear," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNTireRS = 1) AND BkStudT = 1) AS MilesTireRearStudded," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF = 1) AND Bicycle='"+bike+"') AS MilesWheelFront," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR = 1) AND Bicycle='"+bike+"') AS MilesWheelRear" +

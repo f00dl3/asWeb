@@ -48,7 +48,7 @@ function animatedArrow(thisArrow) {
 }
 
 function aniPreload(turn) {
-    if(!checkMobile()) { aniPreloadGetSize(); }
+    //if(!checkMobile()) { aniPreloadGetSize(); }
     switch(turn) {
         case "on": $(".preload").fadeIn("slow", function() { $(this).show(); }); break;
         case "off": $(".preload").fadeOut("slow", function() { $(this).hide(); }); break;

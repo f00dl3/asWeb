@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 21 Jul 2018
+Updated: 29 Jul 2018
  */
 
 var msIndex;
@@ -369,6 +369,7 @@ function searchAheadMediaServer(value) {
                 (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Artist) && (sr.Artist).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Resolution) && (sr.Resolution).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
