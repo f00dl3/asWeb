@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 25 Jul 2018
+Updated: 12 Aug 2018
  */
 
 function getOSMAttribution() {
@@ -83,11 +83,13 @@ var homeView = new ol.View({
     maxZoom: 16
 });
 
+var routeColorBlack = 'rgba(0,0,0,0.4)';
+var routeColorYellow = 'rgba(255,255,0,0.4)';
 var routeStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
-        color: 'rgba(255,255,0,0.4)',
+        color: routeColorBlack,
         width: 5
     })
 });
 
-var tileSource = localTiles;
+var tileSource = remoteTiles;

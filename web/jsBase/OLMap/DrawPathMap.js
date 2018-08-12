@@ -2,9 +2,11 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
+Updated: 12 Aug 2018
  */
 
 function putDrawPathMap() {
+    var lineColor = "black";
     window.app = {};
     var app = window.app;
     app.exportJson = function(opt_options) {
@@ -37,7 +39,7 @@ function putDrawPathMap() {
     var style = {
         'LineString': new ol.style.Style({
             stroke: new ol.style.Stroke({
-                color: 'yellow',
+                color: lineColor,
                 width: 5
             })
         })
