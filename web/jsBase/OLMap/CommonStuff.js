@@ -60,6 +60,8 @@ var content2;
 var closer;
 var map;
 var overlay;
+var routeColorBlack = 'rgba(0,0,0,0.4)';
+var routeColorYellow = 'rgba(255,255,0,0.4)';
 var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
 
@@ -83,8 +85,6 @@ var homeView = new ol.View({
     maxZoom: 16
 });
 
-var routeColorBlack = 'rgba(0,0,0,0.4)';
-var routeColorYellow = 'rgba(255,255,0,0.4)';
 var routeStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
         color: routeColorBlack,
