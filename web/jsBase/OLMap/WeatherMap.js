@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 14 Aug 2018
+ Updated: 15 Aug 2018
  
  WARNING: AS OF 14 AUG 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
@@ -61,13 +61,12 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     var lastStringSanitized = lastString.replace("_"," ").replace("Z","");
     var djLastString = "test";
     require(["dojo/date/locale"], function(locale) {
-        djLastString = locale.parse("20180511 18", {
-            datePattern: 'yyyyMMdd',
+        djLastString = locale.parse(lastStringSanitized, {
+            datePattern: 'yyyyMMdd HH',
             timePattern: 'HH',
             selector: 'date'
         });
     });
-    console.log(djLastString);
     var stationCount = stationCount[0].StationCount;
     var topPop = "<div class='GPSTopDrop'>" +
             "<form id='DoWxModelData'>" +
