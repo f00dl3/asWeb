@@ -1,6 +1,7 @@
 <%-- 
     Document   : TPGallery.jsp
     Created on : Apr 17, 2018
+	Updated: 14 Aug 2018
     Author     : Anthony Stump
 --%>
 
@@ -24,16 +25,7 @@
     
     <div id="TPSearchBoxHolder"></div><br/>
         
-    <div class="table">
-        <div class="tr">
-            <span class="td" style="width: 25%;">
-                <div id="TPSearchPopupHolder"></div>
-            </span>
-            <span class="td" style="width: 75%;">
-                <div id="TPGalleryHolder"></div>
-            </span>
-        </div>
-    </div>
+	<div id="TPLayoutHolder"></div>
     
 </body>
 

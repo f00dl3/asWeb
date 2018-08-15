@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 19 Jul 2018
+Updated: 14 Aug 2018
  */
 
 var annMaint = 910.66;
@@ -190,6 +190,11 @@ function formatDate(inDate, request) {
         default: fmtDate = dojo.date.locale.format(inDate, { datePattern: request, selector: "date"}); break;
     }
     return fmtDate;
+}
+
+function formatNumber(number, padding) {
+    number = ("000000000" + number).slice(-padding);
+    return number;
 }
 
 function getBasePath(opt) {

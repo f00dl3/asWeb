@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 26 Jun 2018
+Updated: 14 Aug 2018
  */
 
 var tpSearchableData, tpIndexedImages, tpMatcher;
@@ -19,6 +19,38 @@ function actOnTpSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob);
+}
+
+function genLayout() {
+	var rData = "";
+	if(!checkMobile()) {
+            rData = "<div class='table'>" +
+                    "<div class='tr'>" +
+                    "<span class='td' style='width: 25%;'>" +
+                    "<div id='TPSearchPopupHolder'></div>" +
+                    "</span>"
+                    "<span class='td' style='width: 75%;'>" +
+                    "<div id='TPGalleryHolder'></div>" +
+                    "</span>" +
+                    "</div>" +
+                    "</div>";
+	} else {
+            rData = "<div class='table'>" +
+                    "<div class='tr'>" +
+                    "<span class='td'>" +
+                    "<div class='UPop'><button class='UButton'>Selector...</button>" +
+                    "<div class='UPopO'>" +
+                    "<div id='TPSearchPopupHolder'></div>" +
+                    "</div></div><br/>" +
+                    "<div id='TPGalleryHolder'></div>" +
+                    "</span>" +
+                    "</div>" +
+                    "</div>";
+	}
+	dojo.byId("TPLayoutHolder").innerHTML = rData;
+    getSearchableData();
+    getQueueSize();
+    populateGalleryHolder();
 }
 
 function getSearchableData() {
@@ -137,19 +169,26 @@ function populateSearchPopup(searchableData) {
                 hosTable += "N/A";
             }
             hosTable += "</span>" +
-                    "<span class='td'><div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet +
-                    "<div class='UPopO'>" +
-                    "<strong>Submitted: </strong>" + tpData.AddedOn + "<br/>" +
-                    "<strong>Hash Path: </strong>" + tpData.HashPath + "<br/>" +
-                    "<strong>Description: </strong>" + tpData.Description + "<br/>" + 
-                    "<strong>Tags: </strong> " + tpData.Tags + "<br/>" +
-                    "</div></div></span>" +
-                    "<span class='td'><div class='UPop'>" + tpData.FinalCount +
-                    "<div class='UPopO'>" +
-                    "<strong>Original: </strong>" + tpData.ImageCount + "<br/>" +
-                    "<strong>Indexed: </strong>" + done + "<br/>" +
-                    "</div></div></span>" +
-                    "</form>";
+                    "<span class='td'>" +
+                    "<div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet;
+            if(!checkMobile()) {
+                hosTable += "<div class='UPopO'>" +
+                        "<strong>Submitted: </strong>" + tpData.AddedOn + "<br/>" +
+                        "<strong>Hash Path: </strong>" + tpData.HashPath + "<br/>" +
+                        "<strong>Description: </strong>" + tpData.Description + "<br/>" + 
+                        "<strong>Tags: </strong> " + tpData.Tags + "<br/>" +
+                        "</div>";
+            }
+            hosTable += "</div></span>" +
+                    "<span class='td'><div class='UPop'>" + tpData.FinalCount;
+            if(!checkMobile()) {
+                hosTable += "<div class='UPopO'>" +
+                        "<strong>Original: </strong>" + tpData.ImageCount + "<br/>" +
+                        "<strong>Indexed: </strong>" + done + "<br/>" +
+                        "</div>";
+            }
+            hosTable += "</div></span>" +
+                        "</form>";
         }
     });
     if(tpGallery <= 50) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying 50 of " + tpGallery + " results!"); }
@@ -186,9 +225,7 @@ function tpShowHint(value) {
 }
 
 function init() {
-    getSearchableData();
-    getQueueSize();
-    populateGalleryHolder();
+	genLayout();
 }
 
 dojo.ready(init);

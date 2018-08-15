@@ -1,9 +1,12 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 22 Apr 2018
+Updated: 14 Aug 2018
  */
     
+var wxStations;
+var stationData;
+
 function externalLink(station) {
     return "<a href='http://weather.gladstonefamily.net/site/" + station + "' target='top'>" + station + "</a>";
 }

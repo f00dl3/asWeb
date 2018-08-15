@@ -2,8 +2,11 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 12 Aug 2018
+Updated: 14 Aug 2018
  */
+
+// SET TILE SOURCE HERE! == R for REMOTE, L for LOCAL
+var tileSourceFlag = "R";
 
 function getOSMAttribution() {
     var currentYear = getDate("day", 0, "yearOnly");
@@ -85,11 +88,20 @@ var homeView = new ol.View({
     maxZoom: 16
 });
 
+switch(tileSourceFlag) {
+    case "R": 
+        tileSource = remoteTiles;
+        routeColor = routeColorBlack;
+        break;
+    case "L":
+        tileSource = localTiles;
+        routeColor = routeColorYellow;
+        break;
+}
+
 var routeStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
-        color: routeColorBlack,
+        color: routeColor,
         width: 5
     })
 });
-
-var tileSource = remoteTiles;

@@ -2,12 +2,12 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 26 Jul 2018
+ Updated: 14 Aug 2018
  
- WARNING: STABILITY ISSUES
- AT THE CURRENT STAGE THIS WILL CAUSE 32GB MEMORY LEAK
- UBUNTU BECOMES UNSTABLE DUE TO EXCESSIVE SWAPPING
- OPERA MOBILE ON ANDROID SIMPLY CRASHES THE TAB
+ WARNING: AS OF 14 AUG 2018 -- STABILITY ISSUES
+ AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
+  - UBUNTU BECOMES UNSTABLE DUE TO EXCESSIVE SWAPPING
+  - OPERA MOBILE ON ANDROID SIMPLY CRASHES THE TAB
  
  */
 
@@ -44,7 +44,13 @@ var wxDataTypes = [
 function actOnSubmitModelQuery(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    getJsonWeatherGlob(map, thisFormData.WxDataType);
+    getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour);
+}
+
+function actOnSubmitXmlSearch(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    getJsonWeatherGlob(map, pointType, thisFormData.wxSearchStart, thisFormData.wxSearchEnd, 0);
 }
 
 // Working on, 7/11/18
@@ -52,15 +58,26 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     if(!isSet(searchDateStart)) { searchDateStart = getDate("hour", -1, "full"); }
     if(!isSet(searchDateEnd)) { searchDateEnd = getDate("hour", 0, "full"); }
     var lastString = jsonModelLast[0].RunString;
+    var lastStringSanitized = lastString.replace("_"," ").replace("Z","");
+    var djLastString = "test";
+    require(["dojo/date/locale"], function(locale) {
+        djLastString = locale.parse("20180511 18", {
+            datePattern: 'yyyyMMdd',
+            timePattern: 'HH',
+            selector: 'date'
+        });
+    });
+    console.log(djLastString);
     var stationCount = stationCount[0].StationCount;
-    console.log(lastString);
     var topPop = "<div class='GPSTopDrop'>" +
             "<form id='DoWxModelData'>" +
             "<select id='WxDataHourDrop' name='WxDataHour'>" +
             "<option value=''>Analysis</option>";
     gfsFha.forEach(function (hour) {
         var tFHour2Pass = Number(hour.FHour) + 2;
-        topPop += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + "TIMESTRING (+" + hour.FHour + "h)</option>";
+        //var thisDjLastString = djLastString.add(tFHour2Pass);
+        var validForecastTime = "RUN" //formatDate(thisDjLastString, "yyyyMMdd HH");
+        topPop += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + validForecastTime + " (+" + hour.FHour + "h)</option>";
     });
     topPop += "</select><br/>" +
             "<button name='SubmitModelQuery' id='SubmitModelQueryButton'>Go!</button>" +
@@ -86,24 +103,30 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
             "</div>";
     dojo.byId("mapEx").innerHTML = topPop + lowLeftPop + lowRightPop;
     var submitModelQueryButton = dojo.byId("SubmitModelQueryButton");
+    var xmlRangeButton = dojo.byId("xmlRangeButton");
     dojo.connect(submitModelQueryButton, "onclick", actOnSubmitModelQuery);
+    dojo.connect(xmlRangeButton, "onclick", actOnSubmitXmlSearch);
 }
 
-function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, obsData, obsDataRapid, liveWarns, liveWatches, liveReports, mobiLoc, markerType) {   
+function doWeatherOLMap(
+        map, lastModelImage, radarList,
+        wxStations, obsIndoor, obsData, obsDataRapid,
+        liveWarns, liveWatches, liveReports,
+        mobiLoc, markerType,
+        fHour4Digit, baseType, lastModelRunString
+    ) {   
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
-    var indoorTemp = Math.round(0.93 * conv2Tf((obsIndoor[0].ExtTemp) / 1000));
     var jsonData = obsData[0].jsonData;
     obsData = false;
     var jsonDataMerged;
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
-    var rData = "";
     var vectorSource = new ol.source.Vector({});
     var vectorSourceReports = new ol.source.Vector({});
-    doModelBasemap(map, lastModelImage);
+    doModelBasemap(map, lastModelImage, fHour4Digit, baseType, lastModelRunString);
     generateRadarKml(radarList, mobiLoc, timestamp);
     vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
     if (
@@ -264,9 +287,12 @@ function doWeatherOLMap(map, lastModelImage, radarList, wxStations, obsIndoor, o
     });
 }
 
-function getJsonWeatherGlob(map, lPointType) {
+function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
+    if(isSet(xdt1)) { searchDateStart = xdt1; } else { searchDateStart = getDate("hour", -1, "full"); }
+    if(isSet(xdt2)) { searchDateEnd = xdt2; } else { searchDateEnd = getDate("hour", 0, "full"); }
+    var fHour4Digit = formatNumber(fHour, 4);
     var baseType;
-    if(isSet(lPointType)) { pointType = lPointType; } else { pointType = "SfcT"; }
+    pointType = lPointType;
     switch(pointType) {
         case "CAPE": baseType = "cape"; break;
         case "JSWM": baseType = "wm0500"; break;
@@ -283,8 +309,8 @@ function getJsonWeatherGlob(map, lPointType) {
     if(!checkMobile()) { wpLimit = 8192; }
     var thePostData = {
         "doWhat": "getObsJsonGlob", // build out to include also station list
-        "startTime": getDate("hour", -1, "full"),
-        "endTime": getDate("hour", 0, "full"),
+        "startTime": searchDateStart,
+        "endTime": searchDateEnd,
         "limit": 1,
         "moiType": baseType,
         "wpLimit": wpLimit,
@@ -310,7 +336,10 @@ function getJsonWeatherGlob(map, lPointType) {
                             data.liveWatches,
                             data.liveReports,
                             data.mobiLoc,
-                            pointType
+                            pointType,
+                            fHour4Digit,
+                            baseType,
+                            null // data.lastModelRunString <-- build out!
                             );
                 },
                 function (error) {
@@ -319,7 +348,7 @@ function getJsonWeatherGlob(map, lPointType) {
                 });
     });
     setTimeout(function () {
-        getJsonWeatherGlob(map);
+        getJsonWeatherGlob(map, "SfcT", null, null, 0);
     }, dataRefresh);
 }
 
@@ -346,7 +375,7 @@ function getModelRunInfo() {
 }
 
 function initWxMap(map) {
-    getJsonWeatherGlob(map);
+    getJsonWeatherGlob(map, "SfcT", null, null, 0);
     getModelRunInfo();
 }
 
