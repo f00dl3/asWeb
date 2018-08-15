@@ -9,11 +9,11 @@ var radarImage = [];
 function doModelBasemap(map, lmmi, fHour, baseType, lastRunString) {
     // do not delete Images files for HRRR model output! That breaks this! Will have to modify Model Image Worker.
     var fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
-    if(fHour !== "000") {
+    if(fHour !== "0000") {
         // Replace to make the image under Images folder. If 4x day run image, use that!
         fixedLmiPath = fixedLmiPath.replace("xsOut", "ImagesJ/Images");
-        console.log(fixedLmiPath); // for debug
     }
+    console.log(fixedLmiPath); // for debug
     var extent = ol.extent.applyTransform(
             [-128, 24, -65, 50],
             ol.proj.getTransform('EPSG:4326', 'EPSG:3857')
@@ -24,7 +24,7 @@ function doModelBasemap(map, lmmi, fHour, baseType, lastRunString) {
         extent: extent
     });
     imageLayer = new ol.layer.Image({
-        opacity: 0.25,
+        opacity: 0.35,
         source: new ol.source.ImageStatic({
             attributions: [ fixedLmiPath ],
             url: fixedLmiPath,

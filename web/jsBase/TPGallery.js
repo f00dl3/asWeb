@@ -4,6 +4,7 @@ Created: 17 Apr 2018
 Updated: 14 Aug 2018
  */
 
+var maxListing = 50;
 var tpSearchableData, tpIndexedImages, tpMatcher;
 
 function actOnDoXTag(event) {
@@ -141,7 +142,7 @@ function populateSearchPopup(searchableData) {
     hosTable += "</div>";
     searchableData.forEach(function (tpData) {
         tpGallery++;
-        if(tpGallery <= 50) {
+        if(tpGallery < maxListing) {
             /* tpMatcher.forEach(function (tpMatch) {
                 if(tpMatch.HashPath === tpData.HashPath) {
                     done = tpMatch.Indexed;
@@ -184,7 +185,7 @@ function populateSearchPopup(searchableData) {
                         "</form>";
         }
     });
-    if(tpGallery <= 50) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying 50 of " + tpGallery + " results!"); }
+    if(tpGallery < maxListing) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying " + maxListing + " of " + tpGallery + " results!"); }
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
     dojo.query(".TPSelect").connect("onchange", actOnTpSelect);
@@ -206,7 +207,7 @@ function tpShowHint(value) {
                 (isSet(sr.AddedOn) && (sr.AddedOn).includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 99) {
+                if(matchingRows.length < maxListing) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
