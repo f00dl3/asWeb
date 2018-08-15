@@ -22,32 +22,25 @@ function actOnTpSelect(event) {
 }
 
 function genLayout() {
-	var rData = "";
-	if(!checkMobile()) {
-            rData = "<div class='table'>" +
-                    "<div class='tr'>" +
-                    "<span class='td' style='width: 25%;'>" +
-                    "<div id='TPSearchPopupHolder'></div>" +
-                    "</span>"
-                    "<span class='td' style='width: 75%;'>" +
-                    "<div id='TPGalleryHolder'></div>" +
-                    "</span>" +
-                    "</div>" +
-                    "</div>";
-	} else {
-            rData = "<div class='table'>" +
-                    "<div class='tr'>" +
-                    "<span class='td'>" +
-                    "<div class='UPop'><button class='UButton'>Selector...</button>" +
-                    "<div class='UPopO'>" +
-                    "<div id='TPSearchPopupHolder'></div>" +
-                    "</div></div><br/>" +
-                    "<div id='TPGalleryHolder'></div>" +
-                    "</span>" +
-                    "</div>" +
-                    "</div>";
-	}
-	dojo.byId("TPLayoutHolder").innerHTML = rData;
+    var rData = "<div class='table'>" +
+                "<div class='tr'>";
+    if(!checkMobile()) {
+        rData = 
+                "<span class='td' style='width: 25%;'>" +
+                "<div id='TPSearchPopupHolder'></div>" +
+                "</span>" +
+                "<span class='td' style='width: 75%;'>";
+    } else {
+        rData = "<span class='td'>" +
+                "<div class='UPop'><button class='UButton'>Selector...</button>" +
+                "<div class='UPopO'>" +
+                "<div id='TPSearchPopupHolder'></div>" +
+                "</div></div><br/>";
+    }
+    rData += "<div id='TPGalleryHolder'></div>";
+                "</span>" +
+                "</div>";
+    dojo.byId("TPLayoutHolder").innerHTML = rData;
     getSearchableData();
     getQueueSize();
     populateGalleryHolder();

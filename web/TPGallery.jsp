@@ -25,7 +25,7 @@
     
     <div id="TPSearchBoxHolder"></div><br/>
         
-	<div id="TPLayoutHolder"></div>
+    <div id="TPLayoutHolder"></div>
     
 </body>
 
