@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 26 Jul 2018
+Updated: 16 Aug 2018
  */
 
 var ffxivQuests;
@@ -13,10 +13,19 @@ function actOnFfxivQuestDone(event) {
     setFfxivQuestDone(thisFormData);
 }
 
+function displayGameFf14d() {
+    var target = "ETGFF14D";
+    getGameFf14d(target);
+    $("#ETGHours").hide();
+    $("#ETGFF14Q").hide();
+    $("#ETGIndex").hide();
+}
+
 function displayGameFf14q() {
     var target = "ETGFF14Q";
     getGameFf14q(target);
     $("#ETGHours").hide();
+    $("#ETGFF14D").hide();
     $("#ETGIndex").hide();
 }
 
@@ -52,6 +61,26 @@ function putFfxivQuestSearchBox(target) {
     dojo.byId(target).innerHTML = rData;
 }
 
+function getGameFf14d(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getFfxivDungeons" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putFfxivDungeonList(target, data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for FFXIV Dungeons FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function getGameFf14q(target) {
     var timeout = 2 * 60 * 1000;
     aniPreload("on");
@@ -72,6 +101,10 @@ function getGameFf14q(target) {
                 });
     });
     setTimeout(function () { getGameFf14q(target); }, timeout);
+}
+
+function getGaemFf14dData(target) {
+    // Build!
 }
 
 function getGameFf14qData(target) {
@@ -95,6 +128,22 @@ function getGameFf14qData(target) {
                     window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+}
+
+function putFfxivDungeonList(target, dungeonData) {
+    var dCols = [ "Name", "Level", "Rewards" ];
+    var rData = "<div class='table'><div class='tr'>";
+    for (var i = 0; i < dCols.length; i++) { rData += "<span class='td'><strong>" + dCols[i] + "</strong></span>"; }
+    rData += "</div>";
+    dungeonData.forEach(function (ff14d) {
+        rData += "<div class='tr'>" +
+                "<span class='td'>" + ff14d.Name + "</span>" +
+                "<span class='td'>" + ff14d.MinLevel + "</span>" +
+                "<span class='td'>BUILD</span>" +
+                "</div>";
+    });
+    rData += "</div>";
+    dojo.byId(target).innerHTML = rData;    
 }
 
 function putFfxivQuestList(target, questData) {

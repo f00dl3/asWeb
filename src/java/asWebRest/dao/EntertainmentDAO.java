@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 13 Jun 2018
+Updated: 16 Aug 2018
 */
 
 package asWebRest.dao;
@@ -18,6 +18,34 @@ public class EntertainmentDAO {
     
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
+    
+    private JSONArray ffxivDungeons(Connection dbc) {
+        final String query_FfxivDungeons = "SELECT Name, MinLevel, MinItemLevel, MaxItemLevel," +
+                "Roulette, TomesPoetics, TomesCreation, TomesMendacity, UnlockQuest, PartySize" +
+                " FROM Core.FFXIV_Dungeons" +
+                " ORDER BY MinLevel ASC;"; // join in Quests to see if unlocked!
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivDungeons, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Name", resultSet.getString("Name"))
+                    .put("MinLevel", resultSet.getInt("MinLevel"))
+                    .put("MinItemLevel", resultSet.getInt("MinItemLevel"))
+                    .put("MaxItemLevel", resultSet.getInt("MaxItemLevel"))
+                    .put("Roulette", resultSet.getString("Roulette"))
+                    .put("TomesPoetics", resultSet.getInt("TomesPoetics"))
+                    .put("TomesCreation", resultSet.getInt("TomesCreation"))
+                    .put("TomesMendacity", resultSet.getInt("TomesMendacity"))
+                    .put("UnlockQuest", resultSet.getString("UnlockQuest"))
+                    .put("PartySize", resultSet.getInt("PartySize"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     private JSONArray ffxivQuestsByDate(Connection dbc) {
         final String query_FfxivQuestByDate = "SELECT OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
@@ -80,6 +108,8 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+    
+    public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     
     public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +

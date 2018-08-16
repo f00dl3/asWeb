@@ -1,7 +1,7 @@
 <%-- 
     Document   : MediaServ
     Created on : Mar 19, 2018, 7:35:15 AM
-    Updated: 15 Apr 2018
+    Updated: 16 Aug 2018
     Author     : Anthony Stump
 --%>
 
@@ -32,10 +32,12 @@
         <div id="ETGameAll">
             <button class="SButton" id="ShETGHours">Hours</button>
             <button class="SButton" id="ShETGIndex">Index</button>
+            <button class="SButton" id="ShETGFF14D">FF14D</button>
             <button class="SButton" id="ShETGFF14Q">FF14Q</button>
             <p>
             <div id="ETGHours"></div>
             <div id="ETGIndex"></div>
+            <div id="ETGFF14D"></div>
             <div id="ETGFF14Q"></div>
         </div>
         <div id="ETLego"></div>
