@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Split off from OLMap/WeatherMap.js 16 Jul 2018
-Updated: 14 Aug 2018
+Updated: 16 Aug 2018
  */
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
@@ -225,7 +225,7 @@ function addWarnPolys(liveWarns) {
             });
             var wpStyle = new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.4)',
+                    color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.6)',
                     width: 4
                 })
             });
@@ -251,7 +251,7 @@ function addWarnPolys(liveWarns) {
                     });
                     var wpStyle = new ol.style.Style({
                         stroke: new ol.style.Stroke({
-                            color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.4)',
+                            color: 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.6)',
                             width: 3
                         })
                     });
