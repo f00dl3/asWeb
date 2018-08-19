@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 16 Aug 2018
+Updated: 19 Aug 2018
  */
 
 var ffxivQuests;
@@ -136,10 +136,32 @@ function putFfxivDungeonList(target, dungeonData) {
     for (var i = 0; i < dCols.length; i++) { rData += "<span class='td'><strong>" + dCols[i] + "</strong></span>"; }
     rData += "</div>";
     dungeonData.forEach(function (ff14d) {
+        var tomes = "";
+        if(ff14d.TomesPoetics !== 0) {
+            tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Poetics_icon1.png'/>" +
+                    "<div class='UPopO'>Poetics: " + ff14d.TomesPoetics + "</div></div>";
+        }
+        if(ff14d.TomesCreation !== 0) {
+            tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Creation_icon1.png'/>" +
+                    "<div class='UPopO'>Creation: " + ff14d.TomesCreation + "</div></div>";
+        }
+        if(ff14d.TomesMendacity !== 0) {
+            tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Mendacity.png'/>" +
+                    "<div class='UPopO'>Mendacity: " + ff14d.TomesMendacity + "</div></div>";
+        }
         rData += "<div class='tr'>" +
-                "<span class='td'>" + ff14d.Name + "</span>" +
-                "<span class='td'>" + ff14d.MinLevel + "</span>" +
-                "<span class='td'>BUILD</span>" +
+                "<span class='td'><div class='UPop'>" + ff14d.Name +
+                "<div class='UPopO'>" +
+                "<strong>Players</strong>: " + ff14d.PartySize + "<br/>" +
+                "<strong>Unlocking</strong>: " + ff14d.UnlockQuest + "<br/>" +
+                "<strong>Roulette</strong>: " + ff14d.Roulette + "<br/>" +
+                "</div></div></span>" +
+                "<span class='td'><div class='UPop'>" + ff14d.MinLevel +
+                "<div class='UPopO'>" +
+                "<strong>Min. ILEV</strong>: " + ff14d.MinItemLevel + "<br/>" +
+                "<strong>Synch ILEV</strong>: " + ff14d.MaxItemLevel + "<br/>" +
+                "</div></div></span>" +
+                "<span class='td'>" + tomes + "</span>" +
                 "</div>";
     });
     rData += "</div>";

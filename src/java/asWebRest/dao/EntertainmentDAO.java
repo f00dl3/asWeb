@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 16 Aug 2018
+Updated: 19 Aug 2018
 */
 
 package asWebRest.dao;
@@ -20,9 +20,11 @@ public class EntertainmentDAO {
     CommonBeans wcb = new CommonBeans();
     
     private JSONArray ffxivDungeons(Connection dbc) {
-        final String query_FfxivDungeons = "SELECT Name, MinLevel, MinItemLevel, MaxItemLevel," +
-                "Roulette, TomesPoetics, TomesCreation, TomesMendacity, UnlockQuest, PartySize" +
-                " FROM Core.FFXIV_Dungeons" +
+        final String query_FfxivDungeons = "SELECT d.Name, d.MinLevel, d.MinItemLevel, d.MaxItemLevel," +
+                " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
+                " q.OrigCompDate, q.Completed" +
+                " FROM Core.FFXIV_Dungeons d" +
+                " LEFT JOIN Core.FFXIV_Quests q ON d.Name = q.Name" +
                 " ORDER BY MinLevel ASC;"; // join in Quests to see if unlocked!
         JSONArray tContainer = new JSONArray();
         try {
@@ -39,7 +41,9 @@ public class EntertainmentDAO {
                     .put("TomesCreation", resultSet.getInt("TomesCreation"))
                     .put("TomesMendacity", resultSet.getInt("TomesMendacity"))
                     .put("UnlockQuest", resultSet.getString("UnlockQuest"))
-                    .put("PartySize", resultSet.getInt("PartySize"));
+                    .put("PartySize", resultSet.getInt("PartySize"))
+                    .put("OrigCompDate", resultSet.getString("OrigCompDate"))
+                    .put("Completed", resultSet.getInt("Completed"));
                 tContainer.put(tObject);
             }
             resultSet.close();
