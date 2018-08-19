@@ -115,7 +115,7 @@ function doWeatherOLMap(
         liveWarns, liveWatches, liveReports,
         mobiLoc, markerType,
         fHour4Digit, baseType, lastModelRunString,
-        hideElements, disableImageOverlays, hideRadar
+        hideElements, disableImageOverlays
     ) {   
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
@@ -129,7 +129,7 @@ function doWeatherOLMap(
     if(!disableImageOverlays) {
         doModelBasemap(map, lastModelImage, fHour4Digit, baseType, lastModelRunString);
     }
-    generateRadarKml(radarList, mobiLoc, timestamp, hideRadar);
+    generateRadarKml(radarList, mobiLoc, timestamp, disableImageOverlays);
     if(!hideElements) {
         var vectorSource = new ol.source.Vector({});
         var vectorSourceReports = new ol.source.Vector({});
@@ -294,10 +294,8 @@ function doWeatherOLMap(
 }
 
 function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, setDisableRefresh, disableImageOverlays) {
-    var disableRadar = false;
     var disableImageOverlays = false;
     disableRefresh = setDisableRefresh;
-    if(disableRefresh) { disableRadar = true; }
     if(isSet(xdt1)) { searchDateStart = xdt1; } else { searchDateStart = getDate("hour", -1, "full"); }
     if(isSet(xdt2)) { searchDateEnd = xdt2; } else { searchDateEnd = getDate("hour", 0, "full"); }
     var fHour4Digit = formatNumber(fHour, 4);
@@ -351,8 +349,7 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, se
                             baseType,
                             data.lastRun,
                             hideElements,
-                            disableImageOverlays,
-                            disableRadar
+                            disableImageOverlays
                             );
                 },
                 function (error) {
