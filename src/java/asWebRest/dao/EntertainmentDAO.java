@@ -24,7 +24,7 @@ public class EntertainmentDAO {
                 " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
                 " q.OrigCompDate, q.Completed" +
                 " FROM Core.FFXIV_Dungeons d" +
-                " LEFT JOIN Core.FFXIV_Quests q ON d.Name = q.Name" +
+                " LEFT JOIN Core.FFXIV_Quests q ON d.UnlockQuest = q.Name" +
                 " ORDER BY MinLevel ASC;"; // join in Quests to see if unlocked!
         JSONArray tContainer = new JSONArray();
         try {

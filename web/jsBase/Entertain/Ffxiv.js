@@ -137,6 +137,8 @@ function putFfxivDungeonList(target, dungeonData) {
     rData += "</div>";
     dungeonData.forEach(function (ff14d) {
         var tomes = "";
+        var unlockStyle = "color: red;";
+        if(ff14d.Completed === 1) { unlockStyle = "color: white;"; }
         if(ff14d.TomesPoetics !== 0) {
             tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Poetics_icon1.png'/>" +
                     "<div class='UPopO'>Poetics: " + ff14d.TomesPoetics + "</div></div>";
@@ -150,7 +152,7 @@ function putFfxivDungeonList(target, dungeonData) {
                     "<div class='UPopO'>Mendacity: " + ff14d.TomesMendacity + "</div></div>";
         }
         rData += "<div class='tr'>" +
-                "<span class='td'><div class='UPop'>" + ff14d.Name +
+                "<span class='td'><div class='UPop'><span style='" + unlockStyle + "'>" + ff14d.Name + "</span>" +
                 "<div class='UPopO'>" +
                 "<strong>Players</strong>: " + ff14d.PartySize + "<br/>" +
                 "<strong>Unlocking</strong>: " + ff14d.UnlockQuest + "<br/>" +
@@ -177,14 +179,14 @@ function putFfxivQuestList(target, questData) {
     questData.forEach(function (ff14q) {
         if(qNum <= 249) {
             var qComplete = "No";
-            var fontColor = "White";
-            var tdsStyle = "style='color: " + fontColor + ";'";
+            var fontColor = "Red";
             var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";
             if(ff14q.Completed === 1) {
                 qComplete = "Yes";
-                fontColor = "Gray";
+                fontColor = "White";
                 updateCheckbox = "NA";
             }
+            var tdsStyle = "style='color: " + fontColor + ";'";
             rData += "<form class='tr' id='ffxivQuestSubmitForm'>" +
                     "<span class='td' " + tdsStyle + ">" + updateCheckbox + "</span>" +
                     "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.Name +
