@@ -4,7 +4,7 @@
  Created: 25 Jun 2018
  Updated: 19 Aug 2018
  
- WARNING: AS OF 14 AUG 2018 -- STABILITY ISSUES
+ WARNING: AS OF 19 AUG 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
   - UBUNTU BECOMES UNSTABLE DUE TO EXCESSIVE SWAPPING
   - OPERA MOBILE ON ANDROID SIMPLY CRASHES THE TAB
@@ -13,6 +13,7 @@
 
 var dataRefresh = getRefresh("long");
 if(!checkMobile) { dataRefresh = getRefresh("medium"); }
+var disableRefresh = false;
 var imageLayer;
 var overlayLayer;
 var pointType;
@@ -44,13 +45,13 @@ var wxDataTypes = [
 function actOnSubmitModelQuery(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour, true, true);
+    getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour, true, true, false);
 }
 
 function actOnSubmitXmlSearch(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    getJsonWeatherGlob(map, pointType, thisFormData.wxSearchStart, thisFormData.wxSearchEnd, 0, false, true);
+    getJsonWeatherGlob(map, pointType, thisFormData.wxSearchStart, thisFormData.wxSearchEnd, 0, false, true, true);
 }
 
 // Working on, 7/11/18
@@ -114,7 +115,7 @@ function doWeatherOLMap(
         liveWarns, liveWatches, liveReports,
         mobiLoc, markerType,
         fHour4Digit, baseType, lastModelRunString,
-        hideElements
+        hideElements, disableImageOverlays, hideRadar
     ) {   
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
@@ -125,11 +126,13 @@ function doWeatherOLMap(
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
-    doModelBasemap(map, lastModelImage, fHour4Digit, baseType, lastModelRunString);
+    if(!disableImageOverlays) {
+        doModelBasemap(map, lastModelImage, fHour4Digit, baseType, lastModelRunString);
+    }
+    generateRadarKml(radarList, mobiLoc, timestamp, hideRadar);
     if(!hideElements) {
         var vectorSource = new ol.source.Vector({});
         var vectorSourceReports = new ol.source.Vector({});
-        generateRadarKml(radarList, mobiLoc, timestamp);
         vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
         if (
                 (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
@@ -290,7 +293,11 @@ function doWeatherOLMap(
     });
 }
 
-function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, disableRefresh) {
+function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, setDisableRefresh, disableImageOverlays) {
+    var disableRadar = false;
+    var disableImageOverlays = false;
+    disableRefresh = setDisableRefresh;
+    if(disableRefresh) { disableRadar = true; }
     if(isSet(xdt1)) { searchDateStart = xdt1; } else { searchDateStart = getDate("hour", -1, "full"); }
     if(isSet(xdt2)) { searchDateEnd = xdt2; } else { searchDateEnd = getDate("hour", 0, "full"); }
     var fHour4Digit = formatNumber(fHour, 4);
@@ -343,7 +350,9 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, di
                             fHour4Digit,
                             baseType,
                             data.lastRun,
-                            hideElements
+                            hideElements,
+                            disableImageOverlays,
+                            disableRadar
                             );
                 },
                 function (error) {
@@ -353,7 +362,7 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, di
     });
     if(!disableRefresh) {
         setTimeout(function () {
-        getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false);
+        getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false, disableImageOverlays);
         }, dataRefresh);
     } else {
         showNotice("Refresh disabled!");
@@ -383,7 +392,7 @@ function getModelRunInfo() {
 }
 
 function initWxMap(map) {
-    getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false);
+    getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false, false);
     getModelRunInfo();
 }
 
