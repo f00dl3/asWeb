@@ -44,14 +44,13 @@ var wxDataTypes = [
 function actOnSubmitModelQuery(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    window.alert(thisFormData.WxDataType);
-    getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour);
+    getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour, true, true);
 }
 
 function actOnSubmitXmlSearch(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    getJsonWeatherGlob(map, pointType, thisFormData.wxSearchStart, thisFormData.wxSearchEnd, 0);
+    getJsonWeatherGlob(map, pointType, thisFormData.wxSearchStart, thisFormData.wxSearchEnd, 0, false, true);
 }
 
 // Working on, 7/11/18
@@ -76,9 +75,9 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     gfsFha.forEach(function (hour) {
         var tFHour2Pass = Number(hour.FHour) + 2;
         var thisDjLastString = dojo.date.add(djLastString, "hour", tFHour2Pass);
-        var validForecastTime = formatDate(thisDjLastString, "yyyyMMdd HH");
+        var validForecastTime = formatDate(thisDjLastString, "yyyy-MM-dd HH");
         var paddedNumber = formatNumber(tFHour2Pass, 4);
-        topPop += "<option value='" + paddedNumber + "'>" + validForecastTime + " (+" + hour.FHour + "h)</option>";
+        topPop += "<option value='" + paddedNumber + "'>" + validForecastTime + "z (+" + hour.FHour + "h)</option>";
     });
     topPop += "</select><br/>" +
             "<button name='SubmitModelQuery' id='SubmitModelQueryButton'>Go!</button>" +
@@ -114,7 +113,8 @@ function doWeatherOLMap(
         wxStations, obsIndoor, obsData, obsDataRapid,
         liveWarns, liveWatches, liveReports,
         mobiLoc, markerType,
-        fHour4Digit, baseType, lastModelRunString
+        fHour4Digit, baseType, lastModelRunString,
+        hideElements
     ) {   
     var timestamp = getDate("hour", 0, "timestamp");
     removeLayers(map, timestamp);
@@ -125,50 +125,52 @@ function doWeatherOLMap(
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
-    var vectorSource = new ol.source.Vector({});
-    var vectorSourceReports = new ol.source.Vector({});
     doModelBasemap(map, lastModelImage, fHour4Digit, baseType, lastModelRunString);
-    generateRadarKml(radarList, mobiLoc, timestamp);
-    vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
-    if (
-            (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
-            mobiCoord[0].toFixed(2) !== homeCoord[0].toFixed(2) &&
-            mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)
-            ) {
-        vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
-    }
-    if(isSet(jsonData)) {
-        jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);
-        jsonData = jsonDataRapid = false;
-        wxStations.forEach(function (thisWxStation) {
-            if (thisWxStation.Priority !== 0) {
-                var stationId = thisWxStation.Station;
-                var stationData = jsonDataMerged[stationId];
-                if (isSet(stationData) && isSet(stationData.Temperature)) {
-                    var tIconFeature = addObsMarkers(map, thisWxStation, stationData, markerType);
-                    vectorSource.addFeature(tIconFeature);
+    if(!hideElements) {
+        var vectorSource = new ol.source.Vector({});
+        var vectorSourceReports = new ol.source.Vector({});
+        generateRadarKml(radarList, mobiLoc, timestamp);
+        vectorSource.addFeature(addObsLocationMarkers(map, "Home", homeCoord));
+        if (
+                (isSet(mobiCoord[0]) && isSet(mobiCoord[1])) &&
+                mobiCoord[0].toFixed(2) !== homeCoord[0].toFixed(2) &&
+                mobiCoord[1].toFixed(2) !== homeCoord[1].toFixed(2)
+                ) {
+            vectorSource.addFeature(addObsLocationMarkers(map, "Note3", mobiCoord));
+        }
+        if(isSet(jsonData)) {
+            jsonDataMerged = Object.assign({}, jsonData, jsonDataRapid);
+            jsonData = jsonDataRapid = false;
+            wxStations.forEach(function (thisWxStation) {
+                if (thisWxStation.Priority !== 0) {
+                    var stationId = thisWxStation.Station;
+                    var stationData = jsonDataMerged[stationId];
+                    if (isSet(stationData) && isSet(stationData.Temperature)) {
+                        var tIconFeature = addObsMarkers(map, thisWxStation, stationData, markerType);
+                        vectorSource.addFeature(tIconFeature);
+                    }
                 }
+            });
+        }
+        liveReports.forEach(function (report) {
+            if(report.Type === "Q" && isSet(report.Lat) && isSet(report.Lon)) {
+                var tQuakeIconFeature = addQuakeMarkers(map, report);
+                vectorSourceReports.addFeature(tQuakeIconFeature);
             }
         });
-    }
-    liveReports.forEach(function (report) {
-        if(report.Type === "Q" && isSet(report.Lat) && isSet(report.Lon)) {
-            var tQuakeIconFeature = addQuakeMarkers(map, report);
-            vectorSourceReports.addFeature(tQuakeIconFeature);
+        if(isSet(liveWarns)) {
+            warnLayer = addWarnPolys(liveWarns);
+            map.addLayer(warnLayer);
         }
-    });
-    if(isSet(liveWarns)) {
-        warnLayer = addWarnPolys(liveWarns);
-        map.addLayer(warnLayer);
+        if(isSet(liveWatches)) {
+            watchLayer = addWatchPolys(liveWatches);
+            map.addLayer(watchLayer);
+        }
+        overlayLayer = new ol.layer.Vector({source: vectorSource});
+        reportLayer = new ol.layer.Vector({source: vectorSourceReports});
+        map.addLayer(overlayLayer);
+        map.addLayer(reportLayer);
     }
-    if(isSet(liveWatches)) {
-        watchLayer = addWatchPolys(liveWatches);
-        map.addLayer(watchLayer);
-    }
-    overlayLayer = new ol.layer.Vector({source: vectorSource});
-    reportLayer = new ol.layer.Vector({source: vectorSourceReports});
-    map.addLayer(overlayLayer);
-    map.addLayer(reportLayer);
     if(
             isSet(mobiCoord) &&
             mobiCoord[0] !== 0 &&
@@ -288,7 +290,7 @@ function doWeatherOLMap(
     });
 }
 
-function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
+function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, disableRefresh) {
     if(isSet(xdt1)) { searchDateStart = xdt1; } else { searchDateStart = getDate("hour", -1, "full"); }
     if(isSet(xdt2)) { searchDateEnd = xdt2; } else { searchDateEnd = getDate("hour", 0, "full"); }
     var fHour4Digit = formatNumber(fHour, 4);
@@ -340,7 +342,8 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
                             pointType,
                             fHour4Digit,
                             baseType,
-                            data.lastRun
+                            data.lastRun,
+                            hideElements
                             );
                 },
                 function (error) {
@@ -348,9 +351,13 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
                     window.alert("request for ObsJson data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () {
-        getJsonWeatherGlob(map, "SfcT", null, null, 0);
-    }, dataRefresh);
+    if(!disableRefresh) {
+        setTimeout(function () {
+        getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false);
+        }, dataRefresh);
+    } else {
+        showNotice("Refresh disabled!");
+    }
 }
 
 function getModelRunInfo() {
@@ -376,7 +383,7 @@ function getModelRunInfo() {
 }
 
 function initWxMap(map) {
-    getJsonWeatherGlob(map, "SfcT", null, null, 0);
+    getJsonWeatherGlob(map, "SfcT", null, null, 0, false, false);
     getModelRunInfo();
 }
 
