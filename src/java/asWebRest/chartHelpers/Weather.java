@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 25 May 2018
+Updated: 19 Aug 2018
  */
 
 package asWebRest.chartHelpers;
 
 import asWebRest.shared.WebCommon;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -130,7 +131,13 @@ public class Weather {
                 .put("s9Name", "HRRR TF").put("s9Color", "White")
                 .put("s10Name", "HRRR DF").put("s10Color", "Gray")
                 .put("xLabel", "Date").put("yLabel", "degrees F");
-        List<Integer> hourList = wc.arrayListIntegerFromJson(hourSet);
+        List<Integer> hourList = new ArrayList<>();
+        for(int i = 0; i < hourSet.length(); i++) {
+            JSONObject thisObject = hourSet.getJSONObject(i);
+            int thisHour = thisObject.getInt("FHour");
+            hourList.add(thisHour);
+        }
+        //Good here! --> System.out.println(hourList.toString());
         JSONObject thisObject = dataIn.getJSONObject(0);
         JSONObject thisCMC = new JSONObject();
         JSONObject thisGFS = new JSONObject();
@@ -143,7 +150,7 @@ public class Weather {
         String thisRunString = thisObject.getString("RunString");
         thisRunString = thisRunString.replace("_", "").replace("Z", "");
         mosTemps_Labels.put(thisRunString);
-        for(Integer hour : hourList) {
+        for(int hour : hourList) {
             if(hour != 0) {
                 double cmcTf = -999.9;
                 double cmcDf = -999.9;

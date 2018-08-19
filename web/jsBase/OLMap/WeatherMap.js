@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 15 Aug 2018
+ Updated: 19 Aug 2018
  
  WARNING: AS OF 14 AUG 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
@@ -44,6 +44,7 @@ var wxDataTypes = [
 function actOnSubmitModelQuery(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
+    window.alert(thisFormData.WxDataType);
     getJsonWeatherGlob(map, thisFormData.WxDataType, null, null, thisFormData.WxDataHour);
 }
 
@@ -74,9 +75,10 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
             "<option value=''>Analysis</option>";
     gfsFha.forEach(function (hour) {
         var tFHour2Pass = Number(hour.FHour) + 2;
-        //var thisDjLastString = djLastString.add(tFHour2Pass);
-        var validForecastTime = "RUN" //formatDate(thisDjLastString, "yyyyMMdd HH");
-        topPop += "<option value='" + lastString + "_" + tFHour2Pass + "'>" + validForecastTime + " (+" + hour.FHour + "h)</option>";
+        var thisDjLastString = dojo.date.add(djLastString, "hour", tFHour2Pass);
+        var validForecastTime = formatDate(thisDjLastString, "yyyyMMdd HH");
+        var paddedNumber = formatNumber(tFHour2Pass, 4);
+        topPop += "<option value='" + paddedNumber + "'>" + validForecastTime + " (+" + hour.FHour + "h)</option>";
     });
     topPop += "</select><br/>" +
             "<button name='SubmitModelQuery' id='SubmitModelQueryButton'>Go!</button>" +
@@ -296,7 +298,7 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
         case "CAPE": baseType = "cape"; break;
         case "JSWM": baseType = "wm0500"; break;
         case "LI": baseType = "lftx"; break;
-        case "LLJM": baseType = "wm0850"; break;
+        case "LLJ": case "LLJM": baseType = "wm0850"; break;
         case "PWAT": baseType = "pwat"; break;
         case "SfcD": case "SfcH": baseType = "rh2m"; break;
         case "SfcW": baseType = "wm10m"; break;
@@ -338,7 +340,7 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour) {
                             pointType,
                             fHour4Digit,
                             baseType,
-                            null // data.lastModelRunString <-- build out!
+                            data.lastRun
                             );
                 },
                 function (error) {

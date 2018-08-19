@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Split off from OLMap/WeatherMap.js 16 Jul 2018
-Updated: 16 Aug 2018
+Updated: 19 Aug 2018
  */
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
@@ -80,7 +80,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
                 icLabelColor = colorLi(lftIndx, "text");
                 icOpacity = 1;
             } break;
-        case "LLJM":
+        case "LLJ": case "LLJM":
             if (stationInfo.Priority > 3) { icLabel = ""; icColor = "#000000"; icOpacity = 0; } else {
                 var lljPoints = [ Number(stationData.WS900), Number(stationData.WS850), Number(stationData.WS800) ];
                 var lljMax = Math.max.apply(Math, lljPoints);

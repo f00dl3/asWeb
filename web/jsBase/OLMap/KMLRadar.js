@@ -1,17 +1,39 @@
 /* 
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 14 Aug 2018
+Updated: 19 Aug 2018
  */
 
 var radarImage = [];
 
-function doModelBasemap(map, lmmi, fHour, baseType, lastRunString) {
+function doModelBasemap(map, lmmi, fHour, baseType, lastRunData) {
     // do not delete Images files for HRRR model output! That breaks this! Will have to modify Model Image Worker.
-    var fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
+    var lastRunString = lastRunData[0].RunString.replace("Z", "");
+    var lastRun4String = lastRunData[0].RunString4.replace("Z", "");
+    var fixedLmiPath = "";
+    var fhAn = Number(fHour);
+    var iFolder = "Images";
     if(fHour !== "0000") {
-        // Replace to make the image under Images folder. If 4x day run image, use that!
-        fixedLmiPath = fixedLmiPath.replace("xsOut", "ImagesJ/Images");
+        fixedLmiPath = getBasePath("g2OutOld");
+        var model = "HRRR";
+        if(fhAn > 16) {
+            if (fhAn >= 82) { 
+                fHour = formatNumber((fhAn - 2), 4);
+            }
+            if (fhAn <= 84) {
+                model = "NAM";
+            } else {
+                model = "GFS";
+            }
+            lastRunString = lastRun4String;
+            iFolder = "Images4";
+        }
+        fixedLmiPath += "/MergedJ/" + iFolder + "/" + lastRunString + "_" + model + "_US_" + baseType + "_" + fHour + ".png";
+        fixedLmiPath = fixedLmiPath
+                .replace("js2tmp", "tmp2m")
+                .replace("wm0850", "wm0800");
+    } else {
+        fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
     }
     console.log(fixedLmiPath); // for debug
     var extent = ol.extent.applyTransform(
@@ -24,7 +46,7 @@ function doModelBasemap(map, lmmi, fHour, baseType, lastRunString) {
         extent: extent
     });
     imageLayer = new ol.layer.Image({
-        opacity: 0.35,
+        opacity: 0.45,
         source: new ol.source.ImageStatic({
             attributions: [ fixedLmiPath ],
             url: fixedLmiPath,

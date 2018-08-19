@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 18 Jul 2018
+Updated: 19 Aug 2018
  */
 
 package asWebRest.resource;
@@ -209,6 +209,7 @@ public class WeatherResource extends ServerResource {
                     JSONArray liveWarns = getWeatherAction.getLiveWarnings(dbc, qParams3);
                     JSONArray liveWatches = getWeatherAction.getLiveWatches(dbc, qParams4);
                     JSONArray liveReportsB = getWeatherAction.getLiveReports(dbc, qParams5);
+                    JSONArray lastRunB = getWeatherAction.getJsonModelLast(dbc);
                     mergedResults
                         .put("lmmi", lmmi)
                         .put("radarList", radarList)
@@ -219,7 +220,8 @@ public class WeatherResource extends ServerResource {
                         .put("mobiLoc", mobiLoc)
                         .put("liveWarns", liveWarns)
                         .put("liveWatches", liveWatches)
-                        .put("liveReports", liveReportsB);
+                        .put("liveReports", liveReportsB)
+                        .put("lastRun", lastRunB);
                     returnData = mergedResults.toString();
                     break;
                     

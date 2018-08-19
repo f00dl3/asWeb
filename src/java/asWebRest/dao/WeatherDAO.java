@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Jul 2018
+Updated: 19 Aug 2018
  */
 
 package asWebRest.dao;
@@ -496,16 +496,25 @@ public class WeatherDAO {
     }
     
     public JSONArray getJsonModelLast(Connection dbc) {
-        final String query_JSONModelLast = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
+        JSONObject tObject = new JSONObject();
+        final String query_JSONModelLast = "SELECT RunString FROM WxObs.MOS_Index ORDER BY RunID DESC LIMIT 1;";
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_JSONModelLast, null);
             while (resultSet.next()) {
-                JSONObject tObject = new JSONObject();
                 tObject.put("RunString", resultSet.getString("RunString"));
                 tContainer.put(tObject);
             }
             resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        final String query_JSONModelLast4 = "SELECT RunString FROM WxObs.MOS_Index WHERE GFS=1 ORDER BY RunID DESC LIMIT 1;";
+        try {
+            ResultSet resultSetA = wc.q2rs1c(dbc, query_JSONModelLast4, null);
+            while (resultSetA.next()) {
+                tObject.put("RunString4", resultSetA.getString("RunString"));
+                tContainer.put(tObject);
+            }
+            resultSetA.close();
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
