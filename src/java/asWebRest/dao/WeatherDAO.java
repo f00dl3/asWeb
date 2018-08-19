@@ -575,7 +575,7 @@ public class WeatherDAO {
                 " WHERE time BETWEEN '"+xdt1_utc+"' AND '"+xdt2_utc+"'" +
                 " ) as tmp" +
                 " ORDER BY CONCAT(Date,' ',Time) DESC LIMIT "+limit+";";
-        System.out.println(query_LiveReports);
+        //System.out.println(query_LiveReports); <<< for debug - not needed now 8/19/2018
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_LiveReports, null);
