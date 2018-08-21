@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 23 May 2018
+Updated: 20 Aug 2018
  */
 
 package asWebRest.hookers;
@@ -114,7 +114,7 @@ public class DynChartX {
         try {
             XYSeries series = chart.addSeries(jp.getString("sName"), xData, yData); series.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
             XYSeries thSeries = thChart.addSeries(jp.getString("sName"), xData, yData); thSeries.setMarker(SeriesMarkers.NONE).setLineColor(sColor);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { }
         
         try { if(wc.isSet(jp.getString("s2Name")) && wc.isSet(jp.getString("s2Color"))) {
             try { 

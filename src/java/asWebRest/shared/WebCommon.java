@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 15 Jul 2018
+Updated: 20 Aug 2018
 */
 
 package asWebRest.shared;
@@ -82,7 +82,14 @@ public class WebCommon {
         ArrayList<Date> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
             try {
-                Date tDate = outFormat.parse(inJsonArray.getString(i));
+                String tDateString = inJsonArray.getString(i);
+                int tDateStringLength = tDateString.length();
+                if(tDateStringLength != 14) {
+                    switch(tDateStringLength) {
+                        case 12: tDateString = tDateString + "00"; break;
+                    }
+                }
+                Date tDate = outFormat.parse(tDateString);
                 newArrayList.add(tDate);
             } catch (Exception e) {
                 e.printStackTrace();
