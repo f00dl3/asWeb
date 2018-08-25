@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 22 Aug 2018
+Updated: 24 Aug 2018
  */
 
 var searchableData;
@@ -55,7 +55,7 @@ function getCheckbook() {
         }
     };
     dojo.xhrPost(xhArgs);
-    setTimeout(function() { getCheckbook(); }, getRefresh("medium"));
+    //setTimeout(function() { getCheckbook(); }, getRefresh("medium"));
 }
 
 function getCheckbookDeep() {
