@@ -139,8 +139,8 @@ function stationsNearMe() {
             stationGeoJSON = JSON.parse(sr.Point);
             var stationLat = stationGeoJSON[1];
             var stationLon = stationGeoJSON[0];
-            if((Math.abs(stationLat-myLat) <= 1.75) && (Math.abs(stationLon-myLon) <= 1.75)) { 
-                matchingRows.push(sr); 
+            if((Math.abs(stationLat-myLat) + Math.abs(stationLon-myLon)) <= 3) { 
+                matchingRows.push(sr);
             }
         }
     });

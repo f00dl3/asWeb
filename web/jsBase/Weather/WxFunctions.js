@@ -423,7 +423,16 @@ function snowRatio(liqPrecip,tF) {
 
 function stationDataTable(overrideData, target) {
     var jsonGlob = jmwsData[0].jsonData;
-    var tCols = [ "Station", "Location", "Observations" ];
+    overrideData.forEach(function (odps) {
+        var stationGeoJSON = JSON.parse(odps.Point);
+        var stationLat = stationGeoJSON[1];
+        var stationLon = stationGeoJSON[0];
+        odps.DistanceFromMe = (Math.abs(myLat-stationLat) + Math.abs(myLon-stationLon));
+    });
+    overrideData.sort(function(a, b) {
+        return a.DistanceFromMe - b.DistanceFromMe;
+    });
+    var tCols = [ "Station Location", "Observations" ];
     var rData = "<div class='table'><div class='tr'>";
     for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
     rData += "</div>";
@@ -442,11 +451,13 @@ function stationDataTable(overrideData, target) {
                     tDPTemp = conv2Tf(tDPTemp);
                 }
                 rData += "<div class='tr'>" +
-                        "<span class='td'>" + od.Station + "</span>" +
                         "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
                         "<div class='UPopO'>" + 
+                        "<strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>Map it!</a></strong><br/>" +
+                        "<strong>Station ID: </strong>" + od.Station + "<br/>" +
                         "<strong>Priority: </strong>" + od.Priority + "<br/>" +
-                        "<strong>Point: </strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>" + od.Point + "</a><br/>" +
+                        "<strong>Distance: </strong>" + (od.DistanceFromMe).toFixed(2) + "d<br/>" +
+                        "<strong>Point:</strong> " + od.Point + "</a><br/>" +
                         "</div></div>" +
                         "</span>" +
                         "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + Math.round(tTemp) + " / " + 
@@ -789,6 +800,7 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
         case 'Fog/Mist': case 'BR': factor = -1; icon = 'fg'; break;
         case 'Fog/Mist and Windy': factor = -1; icon = 'fg'; break;
         case 'Freezing Fog': factor = 0; icon = 'fg'; break;
+        case 'Haze': case 'HZ': case 'HZ FU': factor = -1; icon = 'hz'; break;
         case 'Heavy Rain': factor = -5; icon = 'ra'; break;
         case 'Heavy Rain Fog/Mist': factor = -5; icon = 'ra'; break;
         case 'Heavy Rain Fog/Mist and Breezy': factor = -5; icon = 'ra'; break;
@@ -824,7 +836,7 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
         case 'Partly Cloudy': factor = 3; icon = 'pc'; break;
         case 'Partly Cloudy and Breezy': factor = 3; icon = 'wp'; break;
         case 'Partly Cloudy and Windy': factor = 3; icon = 'wp'; break;
-        case 'Rain': factor = -3; icon = 'ra'; break;
+        case 'Rain': case 'RA': factor = -3; icon = 'ra'; break;
         case 'Rain and Breezy': factor = -3; icon = 'ra'; break;
         case 'Rain and Windy': factor = -3; icon = 'ra'; break;
         case 'Rain Fog': factor = -3; icon = 'ra'; break;
@@ -838,11 +850,11 @@ function wxObs(doWhat, obsTime, temp, wind, humid, wxThis) {
         case 'Thunderstorm Heavy Rain Fog/Mist': factor = -5; icon = 'ts'; break;
         case 'Thunderstorm Heavy Rain Fog and Breezy': factor = -5; icon = 'ts'; break;
         case 'Thunderstorm Heavy Rain Fog Squalls and Windy': factor = -5; icon = 'ts'; break;
-        case 'Thunderstorm in Vicinity': factor = 0; icon = 'tv'; break;
+        case 'Thunderstorm in Vicinity': case 'VCTS': factor = 0; icon = 'tv'; break;
         case 'Thunderstorm in Vicinity and Breezy': factor = 0; icon = 'tv'; break;
         case 'Thunderstorm in Vicinity Fog/Mist': factor = 0; icon = 'tv'; break;
         case 'Thunderstorm in Vicinity Heavy Rain Fog/Mist': factor = -5; icon='ts'; break;
-        case 'Thunderstorm in Vicinity Light Rain': case 'TS VCSH': factor = -1; icon = 'th'; break;
+        case 'Thunderstorm in Vicinity Light Rain': case 'VCSH': case 'TS VCSH': factor = -1; icon = 'th'; break;
         case 'Thunderstorm in Vicinity Light Rain and Windy': factor = -3; icon = 'th'; break;
         case 'Thunderstorm in Vicinity Light Rain Fog/Mist': factor = -1; icon = 'th'; break;
         case 'Thunderstorm in Vicinity Light Rain Fog/Mist and Breezy': factor = -3; icon = 'th'; break;
