@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 20 Jul 2018
+Updated: 26 Aug 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -419,6 +419,60 @@ function snowRatio(liqPrecip,tF) {
         case (tF < -20): ratio = 6.0; break;
     }
     return ratio;
+}
+
+function stationDataTable(overrideData, target) {
+    var jsonGlob = jmwsData[0].jsonData;
+    var tCols = [ "Station", "Location", "Observations" ];
+    var rData = "<div class='table'><div class='tr'>";
+    for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
+    rData += "</div>";
+    var j = 0;
+    overrideData.forEach(function (od) {
+        if(jsonGlob[od.Station]) {
+            if(j <= 100) {
+                var tJson = jsonGlob[od.Station];
+                var tTemp = tJson.Temperature;
+                var tDPTemp = tJson.Dewpoint;
+                var shortTime = wxShortTime(tJson.TimeString);
+                var tsWeather;
+                if(!isSet(tJson.Weather)) { tsWeather = "Missing"; } else { tsWeather = tJson.Weather; }
+                if(od.Priority === 5) {
+                    tTemp = conv2Tf(tTemp);
+                    tDPTemp = conv2Tf(tDPTemp);
+                }
+                rData += "<div class='tr'>" +
+                        "<span class='td'>" + od.Station + "</span>" +
+                        "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
+                        "<div class='UPopO'>" + 
+                        "<strong>Priority: </strong>" + od.Priority + "<br/>" +
+                        "<strong>Point: </strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>" + od.Point + "</a><br/>" +
+                        "</div></div>" +
+                        "</span>" +
+                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + Math.round(tTemp) + " / " + 
+                        " <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span>" +
+                        " <img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' />" +
+                        "<div class='UPopO'>" +
+                        "<strong>" + shortTime + "</strong><br/>" +
+                        "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' /><br/>" +
+                        "<strong>Weather:</strong> " + tsWeather + "</br>" +
+                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + Math.round(tTemp) + "</span><br/>" +
+                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span><br/>" +
+                        "<strong>Wind:</strong> <span style='" + styleWind(tJson.WindSpeed) + "'>" + tJson.WindSpeed + " mph</span><br/>";
+                if(isSet(tJson.WindGust)) {
+                        "<strong>Gusting:</strong> <span style='" + styleWind(tJson.WindGust) + "'>" + tJson.WindGust + " mph</span><br/>";
+                    
+                }
+                rData += "</div></div>" +
+                        "</span>" +
+                        "</div>";
+            }
+            j++;
+        }
+    });
+    rData += "</div>";
+    dojo.byId(target).innerHTML = rData;
+    if(j > 100) { showNotice("Over 100 results found (" + j + ")!"); }
 }
 
 function styleCape(cape, valueOnly) {	

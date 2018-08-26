@@ -8,6 +8,7 @@ var jmwsData;
 var jmwsStations;
 var myLat;
 var myLon;
+var sdTimeout = getRefresh("medium");
 
 function externalLink(station) {
     return "<a href='http://weather.gladstonefamily.net/site/" + station + "' target='top'>" + station + "</a>";
@@ -20,10 +21,13 @@ function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
     var lastDuration = Number(logXmlObs[0].Duration);
     var stationCount = jmwsStations.length;
     var unCount = autoStations.length;
+    var unStations = "<div class='UPop'><button class='UButton'>Unconfigured: " + unCount + "</button><div class='UPopO'>";
+    autoStations.forEach(function (auto) { unStations += externalLink(auto.Station) + ", "; });
+    unStations += "</div></div>";
     var rData = "<h4>Active Weather Stations</h4>" +
             "<strong>Last update took " + (lastDuration/60).toFixed(2) + " minutes." +
             " (<a href='" + doCh("j", "WxXml", null) + "' target='charts'>Trend</a>)<br/>" +
-            "Location: [ " + myLon + " , " + myLat + " ] <button class='UButton' id='localStations'>Nearby</button><p>";
+            "Location: [ " + myLon + " , " + myLat + " ]<p>";
     var onKeySearch = "<div class='table'>" +
             "<form class='tr' id='WxStationSearchForm'>" +
             "<span class='td'><input type='text' id='SearchBox' name='StationSearchField' onkeyup='searchAheadStations(this.value)' /></span>" +
@@ -33,74 +37,18 @@ function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
     var hideOnSearch = "<div id='jmwsSearchResults'>" +
             stationCount + " stations are active. Please search for one!<br/>" +
             "To search by state, use S; or to search by region use R<p>" +
-            "<strong>Region Maps</strong><br/>" +
-            "<div class='table'><div class='tr'>" +
+            "<div class='UPop'><button class='UButton'>Region Maps</button>" +
+            "<div class='UPopO'><div class='table'><div class='tr'>" +
             "<span class='td'><a href='" + getBasePath("ui") + "/img/Regions.png'><img class='th_small' src='" + getBasePath("ui") + "/img/Regions.png'/></a></span>" + 
             "<span class='td'>";
     regions.forEach(function (region) {
         hideOnSearch += "[<a href='" + getBasePath("old") + "/OutMap.php?AllPoints=WxStation&WxReg=" + region.Code + "' target='wxinc'>" + region.Code + "</a>] ";
     });
-    hideOnSearch += "</span></div></div><p>";
-    var unStations = "<h3>Unconfigured stations: " + unCount + "</h3>";
-    autoStations.forEach(function (auto) { unStations += externalLink(auto.Station) + ", "; });
+    hideOnSearch += "</span></div></div></div></div>" + unStations + "<p>" +
+            "<div id='StationsNearMe'>Loading...</div><p>";
     rData += onKeySearch + searchPopupHolder + hideOnSearch + unStations + "</div>";
     dojo.byId("stationDataHolder").innerHTML = rData;
-    var localStationButton = dojo.byId("localStations");
-    dojo.connect(localStationButton, "onclick", stationsNearMe);
-}
-
-function populateAfterSearch(overrideData) {
-    var jsonGlob = jmwsData[0].jsonData;
-    var tCols = [ "Station", "Location", "Observations" ];
-    var rData = "<div class='table'><div class='tr'>";
-    for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
-    rData += "</div>";
-    var j = 0;
-    overrideData.forEach(function (od) {
-        if(jsonGlob[od.Station]) {
-            if(j <= 100) {
-                var tJson = jsonGlob[od.Station];
-                var tTemp = tJson.Temperature;
-                var tDPTemp = tJson.Dewpoint;
-                var shortTime = wxShortTime(tJson.TimeString);
-                var tsWeather;
-                if(!isSet(tJson.Weather)) { tsWeather = "Missing"; } else { tsWeather = tJson.Weather; }
-                if(od.Priority === 5) {
-                    tTemp = conv2Tf(tTemp);
-                    tDPTemp = conv2Tf(tDPTemp);
-                }
-                rData += "<div class='tr'>" +
-                        "<span class='td'>" + od.Station + "</span>" +
-                        "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
-                        "<div class='UPopO'>" + 
-                        "<strong>Priority: </strong>" + od.Priority + "<br/>" +
-                        "<strong>Point: </strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>" + od.Point + "</a><br/>" +
-                        "</div></div>" +
-                        "</span>" +
-                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + Math.round(tTemp) + " / " + 
-                        " <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span>" +
-                        " <img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' />" +
-                        "<div class='UPopO'>" +
-                        "<strong>" + shortTime + "</strong><br/>" +
-                        "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' /><br/>" +
-                        "<strong>Weather:</strong> " + tsWeather + "</br>" +
-                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + Math.round(tTemp) + "</span><br/>" +
-                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span><br/>" +
-                        "<strong>Wind:</strong> <span style='" + styleWind(tJson.WindSpeed) + "'>" + tJson.WindSpeed + " mph</span><br/>";
-                if(isSet(tJson.WindGust)) {
-                        "<strong>Gusting:</strong> <span style='" + styleWind(tJson.WindGust) + "'>" + tJson.WindGust + " mph</span><br/>";
-                    
-                }
-                rData += "</div></div>" +
-                        "</span>" +
-                        "</div>";
-            }
-            j++;
-        }
-    });
-    rData += "</div>";
-    dojo.byId("jmwsSearchResults").innerHTML = rData;
-    if(j > 100) { showNotice("Over 100 results found (" + j + ")!"); }
+    stationsNearMe();
 }
 
 function getJMWS(xdt1, xdt2) {
@@ -135,6 +83,7 @@ function getJMWS(xdt1, xdt2) {
                     window.alert("request for JMWS Glob data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function() { getJMWS(xdt1, xdt2); }, sdTimeout);
 }
 
 function getJMWSChart() {
@@ -156,6 +105,7 @@ function getJMWSChart() {
                     window.alert("request for JMWS Chart FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function() { getJMWSChart(); }, sdTimeout);
 }
 
 function searchAheadStations(value) {
@@ -172,7 +122,7 @@ function searchAheadStations(value) {
                 matchingRows.push(sr);
             }
         });
-        populateAfterSearch(matchingRows);
+        stationDataTable(matchingRows, "jmwsSearchResults");
         //getKeyedUpStationData(matchingRows);
     }
 }
@@ -184,12 +134,12 @@ function stationsNearMe() {
             stationGeoJSON = JSON.parse(sr.Point);
             var stationLat = stationGeoJSON[1];
             var stationLon = stationGeoJSON[0];
-            if((Math.abs(stationLat-myLat) <= 2.5) && (Math.abs(stationLon-myLon) <= 2.5)) { 
+            if((Math.abs(stationLat-myLat) <= 1.75) && (Math.abs(stationLon-myLon) <= 1.75)) { 
                 matchingRows.push(sr); 
             }
         }
     });
-    populateAfterSearch(matchingRows);
+    stationDataTable(matchingRows, "StationsNearMe");
 }
 
 function init() {
