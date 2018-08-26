@@ -16,8 +16,13 @@ function externalLink(station) {
 
 function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
     var locGeoJSON = JSON.parse(mobiLoc[0].Location);
-    myLat = locGeoJSON[1];
-    myLon = locGeoJSON[0];
+    if(isSet(locGeoJSON[0]) && isSet(locGeoJSON[1])) {
+        myLat = locGeoJSON[1];
+        myLon = locGeoJSON[0];
+    } else {
+        myLat = getHomeGeo("lat");
+        myLon = getHomeGeo("lon");
+    }
     var lastDuration = Number(logXmlObs[0].Duration);
     var stationCount = jmwsStations.length;
     var unCount = autoStations.length;
@@ -46,7 +51,7 @@ function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
     });
     hideOnSearch += "</span></div></div></div></div>" + unStations + "<p>" +
             "<div id='StationsNearMe'>Loading...</div><p>";
-    rData += onKeySearch + searchPopupHolder + hideOnSearch + unStations + "</div>";
+    rData += onKeySearch + searchPopupHolder + hideOnSearch + "</div>";
     dojo.byId("stationDataHolder").innerHTML = rData;
     stationsNearMe();
 }
