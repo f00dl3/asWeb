@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 19 Jun 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.resource;
@@ -366,6 +366,14 @@ public class ChartResource extends ServerResource {
                     } catch (Exception e) { e.printStackTrace(); } 
                     // Troubleshoot 5/23/18
                     break;
+                    
+                case "WxXml":
+                    genericCharts = false;
+                    JSONArray xmlLogs = getWeatherAction.getLogsXmlWxObs(dbc);
+                    JSONObject xmlGlob = log.getWxXml(xmlLogs);
+                    try { dynChart.LineChart(xmlGlob); returnData += "Chart generated - WxXml!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    break;
+                    
                     
             }
             

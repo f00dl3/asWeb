@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 19 Aug 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.dao;
@@ -287,11 +287,11 @@ public class WeatherDAO {
         return tContainer;
     }    
     
-    public JSONArray getAutoStations() {
+    public JSONArray getAutoStations(Connection dbc) {
         final String query_AutoStations = "SELECT Station FROM WxObs.Stations WHERE Region IN ('AUT', 'XA1', 'XA2', 'XA3');";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_AutoStations, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoStations, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("Station", resultSet.getString("Station"));
@@ -689,15 +689,15 @@ public class WeatherDAO {
         return tContainer;
     }
     
-    public JSONArray getLogsXmlWxObs() {
-        final String query_Logs_XMLWxObs = "SELECT EndRunTime, Duration FROM Logs ORDER BY EndRunTime DESC LIMIT 1;";
+    public JSONArray getLogsXmlWxObs(Connection dbc) {
+        final String query_Logs_XMLWxObs = "SELECT EndRunTime, Duration FROM WxObs.Logs ORDER BY EndRunTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs(query_Logs_XMLWxObs, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Logs_XMLWxObs, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("EndRunTime", resultSet.getInt("EndRunTime"))
+                    .put("EndRunTime", resultSet.getString("EndRunTime"))
                     .put("Duration", resultSet.getLong("Duration"));
                 tContainer.put(tObject);
             }

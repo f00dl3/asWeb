@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 19 Aug 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.resource;
@@ -242,6 +242,31 @@ public class WeatherResource extends ServerResource {
                         .put("wxObsM1H", latestObsB)
                         .put("wxObsNow", wxObsB)
                         .put("indoorObs", indorObs);
+                    returnData = mergedResults.toString();
+                    break;          
+                      
+                case "getObsJMWS":
+                    try {
+                        inParams.add(0, "DESC");
+                        qParams.add(0, argsInForm.getFirstValue("startTime"));
+                        qParams.add(1, argsInForm.getFirstValue("endTime"));
+                        qParams.add(2, argsInForm.getFirstValue("limit"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    List<String> qParams2a = new ArrayList<>();
+                    qParams2a.add(0, "%");
+                    JSONArray autoStations = getWeatherAction.getAutoStations(dbc);
+                    JSONArray regions = getWeatherAction.getObsXmlReg(dbc);
+                    JSONArray stationsJMWS = getWeatherAction.getObsJsonStations(dbc, qParams2a);
+                    JSONArray wxObsJMWS = getWeatherAction.getObsJson(dbc, qParams, inParams);
+                    JSONArray xmlLogs = getWeatherAction.getLogsXmlWxObs(dbc);
+                    mergedResults
+                        .put("autoStations", autoStations)
+                        .put("logs", xmlLogs)
+                        .put("regions", regions)
+                        .put("stations", stationsJMWS)
+                        .put("wxObs", wxObsJMWS);
                     returnData = mergedResults.toString();
                     break;          
                     

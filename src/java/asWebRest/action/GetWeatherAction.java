@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 18 Jul 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.action;
@@ -20,7 +20,7 @@ public class GetWeatherAction {
     public JSONArray getAlmanacHOpt(List qParams) { return weatherDAO.getAlmanacHOpt(qParams); }
     public JSONArray getAlmanacLOpt(List qParams) { return weatherDAO.getAlmanacLOpt(qParams); }
     public JSONArray getAlmanacWxOpt(List qParams) { return weatherDAO.getAlmanacWxOpt(qParams); }
-    public JSONArray getAutoStations() { return weatherDAO.getAutoStations(); }
+    public JSONArray getAutoStations(Connection dbc) { return weatherDAO.getAutoStations(dbc); }
     public JSONArray getCf6Main(Connection dbc, List qParams, String order) { return weatherDAO.getCf6MciMain(dbc, qParams, order); }
     public JSONArray getChXmlWxObs() { return weatherDAO.getChXmlWxObs(); }
     public JSONArray getGfsFha(Connection dbc) { return weatherDAO.getGfsFha(dbc); }
@@ -36,7 +36,7 @@ public class GetWeatherAction {
     public JSONArray getLiveWarningsFipsBounds(Connection dbc, List qParams) { return weatherDAO.getLiveWarningsFipsBounds(dbc, qParams); }
     public JSONArray getLiveWarningsSameBounds(Connection dbc, List qParams) { return weatherDAO.getLiveWarningsSameBounds(dbc, qParams); }
     public JSONArray getLiveWatches(Connection dbc, List inParams) { return weatherDAO.getLiveWatches(dbc, inParams); }
-    public JSONArray getLogsXmlWxObs() { return weatherDAO.getLogsXmlWxObs(); }
+    public JSONArray getLogsXmlWxObs(Connection dbc) { return weatherDAO.getLogsXmlWxObs(dbc); }
     public JSONArray getObsJson(Connection dbc, List qParams, List inParams) { return weatherDAO.getObsJson(dbc, qParams, inParams); }
     public JSONArray getObsJsonRapid(Connection dbc, List qParams, List inParams) { return weatherDAO.getObsJsonRapid(dbc, qParams, inParams); }
     public JSONArray getObsJsonLast(Connection dbc) { return weatherDAO.getObsJsonLast(dbc); }

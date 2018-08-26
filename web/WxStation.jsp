@@ -1,6 +1,7 @@
 <%-- 
     Document   : WxStation.jsp
     Created on : 22 Apr 2018
+    Updated:    26 Aug 2018
     Author     : astump
 --%>
 
@@ -17,9 +18,9 @@
 
     <body>
               
+        <h1>Weather Station Inventory Search</h1>
         
-            
-    </div>
+        <div id="stationDataHolder">LOADING... <em>(~2 MB Compressed JSON)</em></div><p>
              
     </body>
 

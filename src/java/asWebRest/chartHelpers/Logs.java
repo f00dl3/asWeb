@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Jun 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.chartHelpers;
@@ -33,6 +34,30 @@ public class Logs {
         return cmp4_Glob;
     }
     
+    private JSONObject wxXml(JSONArray dataIn) {
+        final String tName = "Weather XML/JSON Parsing";
+        JSONObject tGlob = new JSONObject();
+        JSONObject tProps = new JSONObject();
+        JSONArray tLabels = new JSONArray();
+        JSONArray tData = new JSONArray();
+        tProps
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", tName).put("chartFileName", "WxXml")
+                .put("sName", "Elapsed").put("sColor", "White")
+                .put("xLabel", "Timestamp").put("yLabel", "Seconds");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            tLabels.put(thisObject.getString("EndRunTime"));
+            tData.put(thisObject.getDouble("Duration")/1024);
+        }
+        tGlob
+                .put("labels", tLabels)
+                .put("data", tData)
+                .put("props", tProps);
+        return tGlob;
+    }
+    
     public JSONObject getCmp4(JSONArray dataIn) { return cmp4(dataIn); }
+    public JSONObject getWxXml(JSONArray dataIn) { return wxXml(dataIn); }
         
 }
