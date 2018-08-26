@@ -51,7 +51,7 @@ function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
 
 function populateAfterSearch(overrideData) {
     var jsonGlob = jmwsData[0].jsonData;
-    var tCols = [ "Station", "Location", "Temp" ];
+    var tCols = [ "Station", "Location", "Observations" ];
     var rData = "<div class='table'><div class='tr'>";
     for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
     rData += "</div>";
