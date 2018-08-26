@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 8 Jul 2018
+Updated: 26 Aug 2018
 */
 
 package asWebRest.dao;
@@ -215,6 +215,7 @@ public class SnmpDAO {
                 " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // qp3 = DateTest, qp4 = Date
                 " ORDER BY WalkTime DESC" +
                 " LIMIT 720) ORDER BY WalkTime ASC;";
+        //System.out.println(qParams.toString() + "\n" + wcb.getQSetRT0() + "\n" + query_SNMP_Main);
         JSONArray tContainer = new JSONArray();     
         try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {

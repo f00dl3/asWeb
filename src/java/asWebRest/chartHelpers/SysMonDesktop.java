@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 20 May 2018
+Updated: 26 Aug 2018
  */
 
 package asWebRest.chartHelpers;
@@ -30,7 +30,8 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Lines");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
+            JSONObject thisExpanded = new JSONObject();
+            try { thisExpanded = thisObject.getJSONObject("dtExpandedJSONData"); } catch (Exception e) { }
             float mJavaCodeLines_asUtils = 0.0f;
             float mJavaCodeLines_asWebTotal = 0.0f;
             String walkTime = "00000000000000";
