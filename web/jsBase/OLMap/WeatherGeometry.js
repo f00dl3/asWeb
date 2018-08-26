@@ -36,12 +36,12 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     var feelsLike = wxObs("Feel", stationData.TimeString, stationData.Temperature, stationData.WindSpeed, stationData.RelativeHumidity, stationData.Weather);
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
-    var iconFeature = new ol.Feature({
-        rawData: stationData,
-        feelsLike: feelsLike,
-        geometry: point,
-        latitude: tCoord[1],
-        longitude: tCoord[0],
+        var iconFeature = new ol.Feature({
+            rawData: stationData,
+            feelsLike: feelsLike,
+            geometry: point,
+            latitude: tCoord[1],
+            longitude: tCoord[0],
         priority: stationInfo.Priority,
         stationId: stationInfo.Station,
         stationDescription: stationDescription,

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 31 May 2018
-Updated: 28 Jun 2018
+Updated: 26 Aug 2018
 */
 
 var routeLayer;
@@ -41,3 +41,23 @@ function addPhotoMarker(map, jsonData) {
     });
     return photoIcon;
 }   
+
+function addPointToMap(map, tPoint) {
+    var tCoord = JSON.parse(tPoint);
+    var point = new ol.geom.Point(tCoord);
+    point.transform('EPSG:4326', 'EPSG:3857');
+    var iconFeature = new ol.Feature({
+        geometry: point,
+        type: "Point"
+    });
+    var icLabel = "+";
+    var icColor = "#ffffff";
+    var icOpacity = "1";
+    var icLabelColor = "#000000";
+    iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
+    var vectorSource = new ol.source.Vector({});
+    vectorSource.addFeature({ iconFeature });
+    overlayLayer = new ol.layer.Vector({source: vectorSource});
+    map.addLayer(overlayLayer);
+    map.getView().fit(vectorSource.getExtent(), map.getSize());
+}

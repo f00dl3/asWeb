@@ -74,7 +74,7 @@ function populateAfterSearch(overrideData) {
                         "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
                         "<div class='UPopO'>" + 
                         "<strong>Priority: </strong>" + od.Priority + "<br/>" +
-                        "<strong>Point: </strong>" + od.Point + "<br/>" +
+                        "<strong>Point: </strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='new'>" + od.Point + "</a><br/>" +
                         "</div></div>" +
                         "</span>" +
                         "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + tTemp +
