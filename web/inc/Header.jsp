@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    19 Jul 2018
+    Updated:    26 Aug 2018
     Author     : astump
 --%>
 
@@ -217,6 +217,10 @@
                 break;
             case "WxLive":
                 fullTitle = "Weather Live";
+                scripts2Load += wxScriptPack;
+                break;
+            case "WxStation":
+                fullTitle = "Weather Stations";
                 scripts2Load += wxScriptPack;
                 break;
         }

@@ -42,86 +42,54 @@ function getActiveStationData(logXmlObs, regions, autoStations) {
 }
 
 function populateAfterSearch(overrideData) {
-    var jsonGlob = jmwsData.jsonData;
-    console.log(jsonGlob);
-    var tCols = [ "Station", "Location" ];
+    var jsonGlob = jmwsData[0].jsonData;
+    var tCols = [ "Station", "Location", "Temp" ];
     var rData = "<div class='table'><div class='tr'>";
     for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
     rData += "</div>";
     var j = 0;
     overrideData.forEach(function (od) {
-        if(j <= 100) {
-            rData += "<div class='tr'>" +
-                    "<span class='td'>" + od.Station + "</span>" +
-                    "<span class='td'>" + od.City + ", " + od.Description + "</span>" +
-                    "</div>";
+        if(jsonGlob[od.Station]) {
+            if(j <= 100) {
+                var tJson = jsonGlob[od.Station];
+                var tTemp = tJson.Temperature;
+                var tDPTemp = tJson.Dewpoint;
+                var shortTime = wxShortTime(tJson.TimeString);
+                var tsWeather;
+                if(!isSet(tJson.Weather)) { tsWeather = "Missing"; } else { tsWeather = tJson.Weather; }
+                if(od.Priority === 5) {
+                    tTemp = conv2Tf(tTemp);
+                    tDPTemp = conv2Tf(tDPTemp);
+                }
+                rData += "<div class='tr'>" +
+                        "<span class='td'>" + od.Station + "</span>" +
+                        "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
+                        "<div class='UPopO'>" + 
+                        "<strong>Priority: </strong>" + od.Priority + "<br/>" +
+                        "</div></div>" +
+                        "</span>" +
+                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + tTemp +
+                        "<div class='UPopO'>" +
+                        "<strong>" + shortTime + "</strong><br/>" +
+                        "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' /><br/>" +
+                        "<strong>Weather:</strong> " + tsWeather + "</br>" +
+                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + tTemp + "</span><br/>" +
+                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + tDPTemp + "</span><br/>" +
+                        "<strong>Wind:</strong> <span style='" + styleWind(tJson.WindSpeed) + "'>" + tJson.WindSpeed + " mph</span><br/>";
+                if(isSet(tJson.WindGust)) {
+                        "<strong>Gusting:</strong> <span style='" + styleWind(tJson.WindGust) + "'>" + tJson.WindGust + " mph</span><br/>";
+                    
+                }
+                rData += "</div></div>" +
+                        "</span>" +
+                        "</div>";
+            }
+            j++;
         }
-        j++;
     });
     rData += "</div>";
     dojo.byId("jmwsSearchResults").innerHTML = rData;
     if(j > 100) { showNotice("Over 100 results found (" + j + ")!"); }
-}
-
-
-function getKeyedUpStationData(wxStations) {
-    // add keyUpMatcherFunction
-    var wxTableGen = ""; //SET ME UP!
-    var terms = basicInputFilter(input);
-    var tsWeather, tsTemperature, tsDewpoint, tsGradient, doTable;
-    tsGradient = "";
-    var doWindBarb = "Missing";
-    var items, itemsTable;
-    items = itemsTable = [];
-    // map the data. Line 53 in WxStations.php stationData as key-val
-    wxStations.forEach(function (station) {
-        if(!isSet(stationData.Weather)) { tsWeather = "Missing"; } else { tsWeather = stationData.Weather; }
-        if(isSet(stationData.Temperature)) {
-            tsTemperature = (stationData.Temperature).toFixed(1);
-            if(isSet(stationData.Dewpoint)) {
-                tsDewpoint = (stationData.Dewpoint).toFixed(1);
-                var c2gJson = [ stationData.Temperature, stationData.Dewpoint ];
-                tsGradient = color2Grad("T", "right", c2gJson);
-            } else {
-                tsDewpoint = "MM";
-            }
-        } else {
-            tsTemperature = "MM";
-        }
-        if(isSet(stationData.WindDegrees) && isSet(stationData.WindSpeed)) {
-            doWindBarb = windDirSvg(stationData.WindDegrees) + " at " + stationData.WindSpeed;
-        }
-        if(wxStations.Priority < 4) {
-            // pass params Station and tElevation if needed
-            doTable = "<a href='" + wxTableGen + "'>T</>";
-        }
-        var coordArrayTemp = (wxStations.point).substring(1,((wxStations.point).length)-1);
-        var coordArray = coordArrayTemp.split(",");
-        var pushableItems = (wxStations.City).toUppercase() + " S:" + wxStations.State + " " +
-                wxStations.Station + ", R:" + wxStations.Region + " " + wxStations.Description;
-        items.push(pushableItems);
-        var pushableItemsTable = "<div class='tr'>" +
-                "<span class='td'>" + wxStations.Station + "</span>" +
-                "<span class='td'><div class='UPop'>" + wxStations.City + ", " + wxStations.State +
-                "<div class='UPopO'>" +
-                "<strong>Coords</strong>: " + coordArray[1] + ", " + coordArray[0] + "<br/>" +
-                "<strong>Priority</strong>: " + wxStations.Priority + "<br/>" +
-                "<strong>Region</strong>: " + wxStations.Region + "<br/>" + 
-                "<strong>Elevation Mb</strong>: " + wxStations.SfcMB +
-                "</div></div></span>" +
-                "<span class='td' style='" + tsGradient + "'><div class='UPopO'>" + tsTemperature +
-                "<div class='UPopO'>" +
-                "<strong>Updated</strong>: " + stationData.TimeString + "<br/>" +
-                "<strong>Dewpoint</strong>: " + tsDewpoint + "<br/>" +
-                "<strong>Weather</strong>: " + tsWeather + "<br/>" +
-                "<strong>Winds</strong>: " + doWindBarb +
-                "</div></div></span>" +
-                "<span class='td'>" +
-                "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + wxStations.Station + "&Point=" + wxStations.Point + "' target='wxinc'>M</a>" +
-                "<a href='" + doCh("p", "WxXML", "TLev=SFC&Station=" + wxStations.Station) + "' target='wxinc'>G</a>" + doTable + "</span>" +
-                "</div>";
-        itemsTable.push(pushableItemsTable);
-    });
 }
 
 function getJMWS(xdt1, xdt2) {

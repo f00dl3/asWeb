@@ -368,6 +368,7 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "WxXml":
+                    // Troubleshoot 8/26/18
                     genericCharts = false;
                     JSONArray xmlLogs = getWeatherAction.getLogsXmlWxObs(dbc);
                     JSONObject xmlGlob = log.getWxXml(xmlLogs);
