@@ -6,18 +6,24 @@ Updated: 26 Aug 2018
     
 var jmwsData;
 var jmwsStations;
+var myLat;
+var myLon;
 
 function externalLink(station) {
     return "<a href='http://weather.gladstonefamily.net/site/" + station + "' target='top'>" + station + "</a>";
 }
 
-function getActiveStationData(logXmlObs, regions, autoStations) {
+function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
+    var locGeoJSON = JSON.parse(mobiLoc[0].Location);
+    myLat = locGeoJSON[1];
+    myLon = locGeoJSON[0];
     var lastDuration = Number(logXmlObs[0].Duration);
     var stationCount = jmwsStations.length;
     var unCount = autoStations.length;
     var rData = "<h4>Active Weather Stations</h4>" +
             "<strong>Last update took " + (lastDuration/60).toFixed(2) + " minutes." +
-            " (<a href='" + doCh("j", "WxXml", null) + "' target='charts'>Trend</a>)<p>";
+            " (<a href='" + doCh("j", "WxXml", null) + "' target='charts'>Trend</a>)<br/>" +
+            "Location: [ " + myLon + " , " + myLat + " ] <button class='UButton' id='localStations'>Nearby</button><p>";
     var onKeySearch = "<div class='table'>" +
             "<form class='tr' id='WxStationSearchForm'>" +
             "<span class='td'><input type='text' id='SearchBox' name='StationSearchField' onkeyup='searchAheadStations(this.value)' /></span>" +
@@ -39,6 +45,8 @@ function getActiveStationData(logXmlObs, regions, autoStations) {
     autoStations.forEach(function (auto) { unStations += externalLink(auto.Station) + ", "; });
     rData += onKeySearch + searchPopupHolder + hideOnSearch + unStations + "</div>";
     dojo.byId("stationDataHolder").innerHTML = rData;
+    var localStationButton = dojo.byId("localStations");
+    dojo.connect(localStationButton, "onclick", stationsNearMe);
 }
 
 function populateAfterSearch(overrideData) {
@@ -66,6 +74,7 @@ function populateAfterSearch(overrideData) {
                         "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
                         "<div class='UPopO'>" + 
                         "<strong>Priority: </strong>" + od.Priority + "<br/>" +
+                        "<strong>Point: </strong>" + od.Point + "<br/>" +
                         "</div></div>" +
                         "</span>" +
                         "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + tTemp +
@@ -115,7 +124,8 @@ function getJMWS(xdt1, xdt2) {
                     getActiveStationData(
                         data.logs,
                         data.regions,
-                        data.autoStations
+                        data.autoStations,
+                        data.mobiLoc
                     );
                 },
                 function (error) {
@@ -147,7 +157,6 @@ function getJMWSChart() {
 }
 
 function searchAheadStations(value) {
-    console.log(value);
     if(value.length > 2) {
         var matchingRows = [];
         jmwsStations.forEach(function (sr) {
@@ -164,6 +173,22 @@ function searchAheadStations(value) {
         populateAfterSearch(matchingRows);
         //getKeyedUpStationData(matchingRows);
     }
+}
+
+function stationsNearMe(event) {
+    dojo.stopEvent(event);
+    var matchingRows = [];
+    jmwsStations.forEach(function (sr) {
+        if(isSet(sr.Point)) {
+            stationGeoJSON = JSON.parse(sr.Point);
+            var stationLat = stationGeoJSON[1];
+            var stationLon = stationGeoJSON[0];
+            if((Math.abs(stationLat-myLat) <= 2.5) && (Math.abs(stationLon-myLon) <= 2.5)) { 
+                matchingRows.push(sr); 
+            }
+        }
+    });
+    populateAfterSearch(matchingRows);
 }
 
 function init() {
