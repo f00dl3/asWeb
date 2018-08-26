@@ -18,7 +18,7 @@
 
     <body>
               
-        <h1>Weather Station Inventory Search</h1>
+        <h1>Weather Station Inventory</h1>
         
         <div id="stationDataHolder">LOADING... <em>(~2 MB Compressed JSON)</em></div><p>
              

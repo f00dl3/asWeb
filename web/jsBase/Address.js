@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 19 Jul 2018
+Updated: 26 Aug 2018
  */
 
 var addresses;
@@ -82,7 +82,7 @@ function populateResults(addressData) {
                         "<div class='UPopO'><a href='mailto:" + ab.EMail + "' target='new'>" + ab.EMail + "</a></div></div>";
             }
             if(isSet(ab.Point)) {
-                point = "[<a href='" + getBasePath("old") + "/OutMap.php?Title=" + displayName + "&Point=" + ab.Point + "' target='new'>Local</a>] "
+                point = "[<a href='" + getResource("Map.Point") + "&Input=" + ab.Point + "' target='new'>Local</a>] "
             }
             if(isSet(ab.Zip)) {
                 address = "<div class='UPopNM'><img class='th_icon' src='" + getBasePath("icon") + "/ic_map.jpeg'/>" +
