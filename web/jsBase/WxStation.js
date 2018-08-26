@@ -77,13 +77,15 @@ function populateAfterSearch(overrideData) {
                         "<strong>Point: </strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>" + od.Point + "</a><br/>" +
                         "</div></div>" +
                         "</span>" +
-                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + tTemp +
+                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + Math.round(tTemp) + " / " + 
+                        " <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span>" +
+                        " <img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' />" +
                         "<div class='UPopO'>" +
                         "<strong>" + shortTime + "</strong><br/>" +
                         "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' /><br/>" +
                         "<strong>Weather:</strong> " + tsWeather + "</br>" +
-                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + tTemp + "</span><br/>" +
-                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + tDPTemp + "</span><br/>" +
+                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + Math.round(tTemp) + "</span><br/>" +
+                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span><br/>" +
                         "<strong>Wind:</strong> <span style='" + styleWind(tJson.WindSpeed) + "'>" + tJson.WindSpeed + " mph</span><br/>";
                 if(isSet(tJson.WindGust)) {
                         "<strong>Gusting:</strong> <span style='" + styleWind(tJson.WindGust) + "'>" + tJson.WindGust + " mph</span><br/>";
