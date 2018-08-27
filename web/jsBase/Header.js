@@ -143,8 +143,7 @@ function convertToJsDate(inDate) {
 // remove for array sort working
 function compareStrings(a, b) {
     var a = a.toLowerCase();
-    var b = b.toLowerCase();
-    
+    var b = b.toLowerCase();    
     return (a < b) ? -1 : (a > b) ? 1 : 0;
 }
 

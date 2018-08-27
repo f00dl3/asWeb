@@ -75,7 +75,9 @@ function getJMWS(xdt1, xdt2) {
                 function (data) {
                     aniPreload("off");
                     jmwsData = data.wxObs;
+                    jmwsData = jmwsData.concat(data.wxObsR);
                     jmwsStations = data.stations;
+                    
                     getActiveStationData(
                         data.logs,
                         data.regions,
