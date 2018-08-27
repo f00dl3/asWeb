@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 23 Apr 2018
+Updated: 27 Aug 2018
 */
 
 /* Hidden DIVs */
@@ -120,6 +120,10 @@ Updated: 23 Apr 2018
 	left: 0px;
 	bottom: 0px;
 	z-index: 9999 ! important;
+	width: 320px;
+        max-height: 90%;
+        max-width: 90%;
+        overflow: scroll;
 }
 
 .MapLowLeftPop:hover .MapLowLeftPopO {
@@ -134,7 +138,9 @@ Updated: 23 Apr 2018
 	left: 0px;
 	position: fixed;
 	margin: 0;
-	overflow: hide;
+        max-height: 90%;
+        max-width: 90%;
+        overflow: scroll;
 	bottom: 0px;
 	padding: 6px;
 	width: auto;

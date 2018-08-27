@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 19 Aug 2018
+ Updated: 27 Aug 2018
  
  WARNING: AS OF 19 AUG 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
@@ -15,6 +15,7 @@ var dataRefresh = getRefresh("long");
 if(!checkMobile) { dataRefresh = getRefresh("medium"); }
 var disableRefresh = false;
 var imageLayer;
+var jsonDataMerged;
 var overlayLayer;
 var pointType;
 var reportLayer;
@@ -22,6 +23,7 @@ var searchDateStart;
 var searchDateEnd;
 var warnLayer;
 var watchLayer;
+var wxStations;
 
 var wxDataTypes = [
     { "name": "CAPE/CIN", "matcher": "CAPE" },
@@ -97,7 +99,9 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
             "<tr><td>End</td><td><input type='text' name='wxSearchEnd' value='" + searchDateEnd + "'/></td></tr>" +
             "<input type='hidden' name='DoObsSearch' value='Yes'/>" +
             "<tr><td align='center' colspan='2'><input id='xmlRangeButton' type='submit' name='DoObsSearch'></td></tr>" +
-            "</table></form></div></div>";
+            "</table></form><br/>" +
+            "<div id='SDIHolder'>Loading SDI...</div>" +
+            "</div></div>";
     var lowRightPop = "<div class='MapLowRight' style='background: black;'>More<br/>" +
             "<a href='http://weather.cod.edu/satrad/nexrad/index.php?type=EAX-N0Q-0-6' target='newRadar'>CoD Radar</a><br/>" +
             "<a href='" + getResource("Cams") + "' target='newRadar'>Home Cams</a>" +
@@ -111,7 +115,7 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
 
 function doWeatherOLMap(
         map, lastModelImage, radarList,
-        wxStations, obsIndoor, obsData, obsDataRapid,
+        obsIndoor, obsData, obsDataRapid,
         liveWarns, liveWatches, liveReports,
         mobiLoc, markerType,
         fHour4Digit, baseType, lastModelRunString,
@@ -122,7 +126,6 @@ function doWeatherOLMap(
     var homeCoord = JSON.parse(getHomeGeo("geoJSON"));
     var jsonData = obsData[0].jsonData;
     obsData = false;
-    var jsonDataMerged;
     var jsonDataRapid = obsDataRapid[0].jsonData;
     obsDataRapid = false;
     var mobiCoord = JSON.parse(mobiLoc[0].Location);
@@ -291,6 +294,7 @@ function doWeatherOLMap(
             overlay.setPosition(eCoord);
         }
     });
+    stationDataIndexGen(mobiLoc);
 }
 
 function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, setDisableRefresh, disableImageOverlays) {
@@ -332,11 +336,11 @@ function getJsonWeatherGlob(map, lPointType, xdt1, xdt2, fHour, hideElements, se
                 }).then(
                 function (data) {
                     aniPreload("off");
+                    wxStations = data.stations;
                     doWeatherOLMap(
                             map,
                             data.lmmi,
                             data.radarList,
-                            data.stations,
                             data.indoorObs,
                             data.wxObsJson,
                             data.wxObsJsonRapid,
@@ -441,4 +445,128 @@ function showTableTemp(stationId) {
 
 function showTableWind(stationId) {
     //xhrRequest to wxTableGen table
+}
+
+function searchAheadStations(value) {
+    if(value.length > 2) {
+        var matchingRows = [];
+        wxStations.forEach(function (sr) {
+            if(
+                (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Station) && (sr.Station).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
+                (value.includes("S:") && isSet(sr.State) && (sr.State).toLowerCase().includes(value.replace("S:", "").toLowerCase())) ||
+                (value.includes("R:") && isSet(sr.Region) && (sr.Region).toLowerCase().includes(value.replace("R:", "").toLowerCase()))
+            ) { 
+                matchingRows.push(sr);
+            }
+        });
+        stationDataTableMini(matchingRows, "jmwsMiniSearchResults");
+    }
+}
+
+function stationDataIndexGen(mobiLoc) {
+    var locGeoJSON = JSON.parse(mobiLoc[0].Location);
+    if(isSet(locGeoJSON[0]) && isSet(locGeoJSON[1])) {
+        myLat = locGeoJSON[1];
+        myLon = locGeoJSON[0];
+    } else {
+        myLat = getHomeGeo("lat");
+        myLon = getHomeGeo("lon");
+    }
+    var onKeySearch = "<div class='table'>" +
+            "<form class='tr' id='WxStationSearchForm'>" +
+            "<span class='td'><input type='text' id='SearchBox' name='StationSearchField' onkeyup='searchAheadStations(this.value)' /></span>" +
+            "<span class='td'><strong>Search</strong></span>" +
+            "</form></div>";
+    var hideOnSearch = "<div id='jmwsMiniSearchResults'><div id='StationsNearMe'>Loading... Part 1<br/>" + myLon + ", " + myLat + "</div></div>";
+    var rData = onKeySearch + hideOnSearch;
+    dojo.byId("SDIHolder").innerHTML = rData;
+    stationsNearMeMM();
+}
+
+function stationDataTableMini(overrideData, target) {
+    dojo.byId(target).innerHTML = "<div id='" + target + "'>Loading... Part 3<br/>" + myLat + ", " + myLon + "</div>";
+    overrideData.forEach(function (odps) {
+        var stationGeoJSON = JSON.parse(odps.Point);
+        var stationLat = stationGeoJSON[1];
+        var stationLon = stationGeoJSON[0];
+        odps.DistanceFromMe = (Math.abs(myLat-stationLat) + Math.abs(myLon-stationLon));
+    });
+    overrideData.sort(function(a, b) {
+        return a.DistanceFromMe - b.DistanceFromMe;
+    });
+    var tCols = [ "Station Location", "Observations" ];
+    var rData = "<div class='table'><div class='tr'>";
+    for(var i = 0; i < tCols.length; i++) { rData += "<span class='td'><strong>" + tCols[i] + "</strong></span>"; }
+    rData += "</div>";
+    var j = 0;
+    overrideData.forEach(function (od) {
+        if(jsonDataMerged[od.Station]) {
+            if(j <= 100) {
+                var tJson = jsonDataMerged[od.Station];
+                var tTemp = tJson.Temperature;
+                var tDPTemp = tJson.Dewpoint;
+                var tsWeather;
+                var shortTime = wxShortTime(tJson.TimeString);
+                if(!isSet(tJson.Weather)) { tsWeather = "Missing"; } else { tsWeather = tJson.Weather; }
+                if(od.Priority === 5) {
+                    tTemp = conv2Tf(tTemp);
+                    tDPTemp = conv2Tf(tDPTemp);
+                }
+                rData += "<div class='tr'>" +
+                        "<span class='td'><div class='UPop'>" + od.City + ", " + od.Description +
+                        "<div class='UPopO'>" + 
+                        "<strong><a href='" + getResource("Map.Point") + "&Input=" + od.Point + "' target='pMap'>Map it!</a></strong><br/>" +
+                        "<strong>Station ID: </strong>" + od.Station + "<br/>" +
+                        "<strong>Priority: </strong>" + od.Priority + "<br/>" +
+                        "<strong>Distance: </strong>" + (od.DistanceFromMe).toFixed(2) + "d<br/>" +
+                        "<strong>Point:</strong> " + od.Point + "</a><br/>" +
+                        "</div></div>" +
+                        "</span>" +
+                        "<span class='td' style='" + styleTemp(tTemp) + "'><div class='UPop'>" + Math.round(tTemp) + " / " + 
+                        " <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span>" +
+                        " <img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' />" +
+                        "<div class='UPopO'>" +
+                        "<strong>" + shortTime + "</strong><br/>" +
+                        "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", tJson.TimeString, null, null, null, tJson.Weather) + ".png' /><br/>" +
+                        "<strong>Weather:</strong> " + tsWeather + "</br>" +
+                        "<strong>Tempterature:</strong> <span style='" + styleTemp(tTemp) + "'>" + Math.round(tTemp) + "</span><br/>" +
+                        "<strong>Dewpoint:</strong> <span style='" + styleTemp(tDPTemp) + "'>" + Math.round(tDPTemp) + "</span><br/>" +
+                        "<strong>Wind:</strong> <span style='" + styleWind(tJson.WindSpeed) + "'>" + tJson.WindSpeed + " mph</span><br/>";
+                if(isSet(tJson.WindGust)) {
+                        "<strong>Gusting:</strong> <span style='" + styleWind(tJson.WindGust) + "'>" + tJson.WindGust + " mph</span><br/>";
+                    
+                }
+                rData += "</div></div>" +
+                        "</span>" +
+                        "</div>";
+            }
+            j++;
+        }
+    });
+    rData += "</div>";
+    dojo.byId(target).innerHTML = rData;
+    if(j > 100) { showNotice("Over 100 nearby stations! (" + j + ")"); }
+}
+
+function stationsNearMeMM() {
+    //dojo.byId("StationsNearMe").innerHTML = "<div id='StationsNearMe'>Loading... Part 2<br/>" + myLon + ", " + myLat + "</div>";
+    var matchingRows = [];
+    if(wxStations) {
+        //dojo.byId("StationsNearMe").innerHTML = "<div id='StationsNearMe'>Loading... Part 2<br/>" + myLon + ", " + myLat + "<br/>Station list loop!</div>";
+        wxStations.forEach(function (sr) {
+            if(isSet(sr.Point)) {
+                stationGeoJSON = JSON.parse(sr.Point);
+                var stationLat = stationGeoJSON[1];
+                var stationLon = stationGeoJSON[0];
+                if((Math.abs(stationLat-myLat) + Math.abs(stationLon-myLon)) <= 2.5) { 
+                    matchingRows.push(sr);
+                }
+            }
+        });
+    } else {
+        dojo.byId("StationsNearMe").innerHTML = "ERROR! Station list empty!";
+    }
+    stationDataTableMini(matchingRows, "StationsNearMe");
 }
