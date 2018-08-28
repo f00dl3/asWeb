@@ -109,7 +109,8 @@ function folderFileListing2(holder, data, refreshOverride) {
         }
     }
     elementData += "<p>";
-    var dirObj = data.Results.InnerChildren;    
+    var dirObj = data.Results.InnerChildren;   
+    console.log(dirObj);
     var totalFolderSize = 0;
     var itemsFolders = 0;
     var itemsFiles = 0;
