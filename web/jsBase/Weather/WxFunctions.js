@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 26 Aug 2018
+Updated: 27 Aug 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -244,8 +244,16 @@ function conv2Mph(wsKt) {
 	return Math.round(wsKt*1.15078);
 }
 
+function conv2Tc(tF) {
+    if(isSet(tF)) {	
+        return Math.round((tF - 32) * 9/5);
+    } else {
+        return '';
+    }
+}
+
 function conv2Tf(tCel) {
-    if((isSet(tCel)) && (tCel < 150)) {	
+    if((isSet(tCel)) && (tCel < 51)) {	
         return Math.round(tCel * 9/5 + 32);
     } else {
         return '';

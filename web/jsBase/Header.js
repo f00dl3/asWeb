@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 26 Aug 2018
+Updated: 28 Aug 2018
  */
 
 var annMaint = 910.66;
@@ -145,6 +145,13 @@ function compareStrings(a, b) {
     var a = a.toLowerCase();
     var b = b.toLowerCase();    
     return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
+function deg2mi(latDiff, lonDiff) {
+    //Latitude: 1 deg = 110.54 km
+    //Longitude: 1 deg = 111.320*cos(latitude) km
+    var diffLatKm = latDiff * 110.54;
+    var diffLonKm = (1 / (111.319 * Math.cos(currentLat))) * longTraveledKM;
 }
 
 function deg2rad(degrees) {

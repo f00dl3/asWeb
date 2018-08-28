@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 26 Aug 2018
+Updated: 28 Aug 2018
  */
     
 var jmwsData;
@@ -41,7 +41,7 @@ function getActiveStationData(logXmlObs, regions, autoStations, mobiLoc) {
     var searchPopupHolder = "<div class='table' id='searchPopup'></div><p>";
     var hideOnSearch = "<div id='jmwsSearchResults'>" +
             stationCount + " stations are active. Please search for one!<br/>" +
-            "To search by state, use S; or to search by region use R<p>" +
+            "To search by state, use S; or to search by region use R:<p>" +
             "<div class='UPop'><button class='UButton'>Region Maps</button>" +
             "<div class='UPopO'><div class='table'><div class='tr'>" +
             "<span class='td'><a href='" + getBasePath("ui") + "/img/Regions.png'><img class='th_small' src='" + getBasePath("ui") + "/img/Regions.png'/></a></span>" + 

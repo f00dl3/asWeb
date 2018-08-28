@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 Jun 2018
-Updated: 4 Jul 2018
+Updated: 28 Aug 2018
  */
 
 var targetDiv = dojo.byId("ffListHolder");
@@ -114,6 +114,10 @@ function folderFileListing2(holder, data, refreshOverride) {
     var itemsFolders = 0;
     var itemsFiles = 0;
     elementData += "<div class='table'>";
+    // Testing - 8/28/18
+    /* dirObj.sort(function(a, b) {
+        return a.path - b.path;
+    }); */
     Object.keys(dirObj).forEach(function (k) {
         if(dirObj[k].type === "folder") {
             elementData += "<form class='tr folderSelect'>" +
@@ -122,12 +126,15 @@ function folderFileListing2(holder, data, refreshOverride) {
                     "<span class='td'>-</span>" +
                     "</form>";
             itemsFolders++;
-        } else {
-            elementData += "<form class='tr resourceSelect'>" +
-                        "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
-                        "<span class='td'>" + k + "</span>" +
-                        "<span class='td'>" + autoUnits(dirObj[k].size) + "</span>" +
-                        "</form>";
+        }
+    });
+    Object.keys(dirObj).forEach(function (k) {
+       if(dirObj[k].type === "file") {
+           elementData += "<form class='tr resourceSelect'>" +
+                    "<input type='hidden' name='fileToRequest' value='" + dirObj[k].path + "'/>" +
+                    "<span class='td'>" + k + "</span>" +
+                    "<span class='td'>" + autoUnits(dirObj[k].size) + "</span>" +
+                    "</form>";
             totalFolderSize += Number(dirObj[k].size);
             itemsFiles++;
         }

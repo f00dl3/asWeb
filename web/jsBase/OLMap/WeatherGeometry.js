@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Jun 2018
 Split off from OLMap/WeatherMap.js 16 Jul 2018
-Updated: 19 Aug 2018
+Updated: 28 Aug 2018
  */
 
 function addObsMarkers(map, stationInfo, stationData, markerType) {
@@ -33,7 +33,7 @@ function addObsMarkers(map, stationInfo, stationData, markerType) {
     } else {
         stationDescription = stationInfo.City + ", " + stationInfo.State;
     }
-    var feelsLike = wxObs("Feel", stationData.TimeString, stationData.Temperature, stationData.WindSpeed, stationData.RelativeHumidity, stationData.Weather);
+    var feelsLike = stationData.FeelsLike;
     var wxIcon = getBasePath("icon") + "/wx/" + wxObs("Icon", stationData.TimeString, null, null, null, thisObsWx) + ".png";
     point.transform('EPSG:4326', 'EPSG:3857');
         var iconFeature = new ol.Feature({

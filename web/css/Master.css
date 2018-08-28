@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 27 Aug 2018
+Updated: 28 Aug 2018
 */
 
 /* Hidden DIVs */
@@ -138,7 +138,7 @@ Updated: 27 Aug 2018
 	left: 0px;
 	position: fixed;
 	margin: 0;
-        max-height: 90%;
+        max-height: 75%;
         max-width: 90%;
         overflow: scroll;
 	bottom: 0px;
