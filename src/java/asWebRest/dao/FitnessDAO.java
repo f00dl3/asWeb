@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 31 Jul 2018
+Updated: 28 Aug 2018
 */
 
 package asWebRest.dao;
@@ -688,21 +688,21 @@ public class FitnessDAO {
         int yb3 = yearInt-3;
         int yb4 = yearInt-4;
         final String query_Fitness_Year = "SELECT" +
-                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0rw," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0cy," +
-                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%') AS yb0oa," +
-                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1rw," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1cy," +
-                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%') AS yb1oa," +
-                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2rw," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2cy," +
-                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%') AS yb2oa," +
-                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3rw," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3cy," +
-                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%') AS yb3oa," +
-                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4rw," +
-                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4cy," +
-                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%') AS yb4oa" +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%' AND RunWalk IS NOT NULL) AS yb0rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%' AND Cycling IS NOT NULL) AS yb0cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yearInt+"-%' AND (RunWalk IS NOT NULL OR Cycling IS NOT NULL)) AS yb0oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%' AND RunWalk IS NOT NULL) AS yb1rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%' AND Cycling IS NOT NULL) AS yb1cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb1+"-%' AND (RunWalk IS NOT NULL OR Cycling IS NOT NULL)) AS yb1oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%' AND RunWalk IS NOT NULL) AS yb2rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%' AND Cycling IS NOT NULL) AS yb2cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb2+"-%' AND RunWalk IS NOT NULL) AS yb2oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%' AND RunWalk IS NOT NULL) AS yb3rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%' AND Cycling IS NOT NULL) AS yb3cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb3+"-%' AND (RunWalk IS NOT NULL OR Cycling IS NOT NULL)) AS yb3oa," +
+                " (SELECT SUM(RunWalk) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%' AND RunWalk IS NOT NULL) AS yb4rw," +
+                " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%' AND Cycling IS NOT NULL) AS yb4cy," +
+                " (SELECT SUM(RunWalk)+SUM(Cycling) FROM Core.Fitness WHERE Date LIKE '"+yb4+"-%' AND (RunWalk IS NOT NULL OR Cycling IS NOT NULL)) AS yb4oa" +
                 " FROM Core.Fitness LIMIT 1";
         JSONArray tContainer = new JSONArray();
         try {
