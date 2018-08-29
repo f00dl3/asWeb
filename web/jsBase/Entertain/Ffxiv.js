@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 19 Aug 2018
+Updated: 29 Aug 2018
  */
 
 var ffxivQuests;
@@ -40,7 +40,7 @@ function ffxivQuestHint(value) {
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 249) {
+                if(matchingRows.length < 99) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
@@ -103,10 +103,6 @@ function getGameFf14q(target) {
     setTimeout(function () { getGameFf14q(target); }, timeout);
 }
 
-function getGaemFf14dData(target) {
-    // Build!
-}
-
 function getGameFf14qData(target) {
     getDivLoadingMessage(target);
     aniPreload("on");
@@ -131,6 +127,7 @@ function getGameFf14qData(target) {
 }
 
 function putFfxivDungeonList(target, dungeonData) {
+    $("#"+target).show();
     var dCols = [ "Name", "Level", "Rewards" ];
     var rData = "<div class='table'><div class='tr'>";
     for (var i = 0; i < dCols.length; i++) { rData += "<span class='td'><strong>" + dCols[i] + "</strong></span>"; }
@@ -223,15 +220,24 @@ function putFfxivQuests(target, questData) {
         if(ffxq.Completed === 1) { compCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
-            "<strong>Maps</strong>:" +
+            " <div class='UPop'><button class='UButton'>Maps</button>" +
+            "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Shroud.jpg' target='ffxivMap'>SHR</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Thanalan.jpg' target='ffxivMap'>THA</a>]<br/>" +
-            "<strong>Screens</strong>:" +
+            "</div></div>" +
+            " <div class='UPop'><button class='UButton'>Screens</button>" +
+            "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Arc33.jpg' target='ffxivMap'>ARC-33</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Arc36.jpg' target='ffxivMap'>ARC-36</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Arc51.jpg' target='ffxivMap'>ARC-51</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Arc52.jpg' target='ffxivMap'>ARC-52</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Min1.jpg' target='ffxivMap'>MIN-1</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Min13.jpg' target='ffxivMap'>MIN-13</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj1.jpg' target='ffxivMap'>CNJ-1</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj4.jpg' target='ffxivMap'>CNJ-4</a>]" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj4a.jpg' target='ffxivMap'>CNJ-4A</a>]" +
+            "</div></div>" +
             "<h3>Quests</h3><strong>Indexed quests: " + qCount + "<br/>" +
             "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
