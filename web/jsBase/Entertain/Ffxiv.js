@@ -2,14 +2,10 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 29 Aug 2018
-
-FFXIV Item Table Descr:
-
-	Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, Defense, MagicDefense, MateriaSlots, Stats
-
+Updated: 30 Aug 2018
  */
 
+var ffxivItems;
 var ffxivQuests;
 
 function actOnFfxivQuestDone(event) {
@@ -22,8 +18,20 @@ function displayGameFf14d() {
     var target = "ETGFF14D";
     getGameFf14d(target);
     $("#ETGHours").hide();
+    $("#ETGFF14I").hide();
     $("#ETGFF14Q").hide();
     $("#ETGIndex").hide();
+}
+
+function displayGameFf14i() {
+    var target = "ETGFF14I";
+    console.log("Entered displayGameFf14i");
+    getGameFf14i(target);
+    $("#ETGHours").hide();
+    $("#ETGFF14D").hide();
+    $("#ETGFF14Q").hide();
+    $("#ETGIndex").hide();
+    $("#"+target).show();
 }
 
 function displayGameFf14q() {
@@ -31,7 +39,29 @@ function displayGameFf14q() {
     getGameFf14q(target);
     $("#ETGHours").hide();
     $("#ETGFF14D").hide();
+    $("#ETGFF14I").hide();
     $("#ETGIndex").hide();
+}
+
+function ffxivItemHint(value) {
+    if(value.length > 2) {
+        var hitCount = 0;
+        var matchLimitHit = 0;
+        var matchingRows = [];
+        ffxivItems.forEach(function (sr) {
+            if(
+                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
+            ) { 
+                hitCount++;
+                if(matchingRows.length < 49) {
+                    matchingRows.push(sr);
+                } else {
+                   matchLimitHit = 1;
+                }
+            }
+        });
+        putFfxivItemList("itemList", matchingRows);    
+    }
 }
 
 function ffxivQuestHint(value) {
@@ -45,7 +75,7 @@ function ffxivQuestHint(value) {
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 99) {
+                if(matchingRows.length < 49) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
@@ -54,6 +84,16 @@ function ffxivQuestHint(value) {
         });
         putFfxivQuestList("questList", matchingRows);    
     }
+}
+
+function putFfxivItemSearchBox(target) {
+    var rData = "<div class='table'>" +
+        "<form class='tr' id='ffxivItemSearchForm'>" +
+        "<span class='td'><input type='text' id='SearchItems' name='ItemSearchField' onkeyup='ffxivItemHint(this.value)' /></span>" +
+        "<span class='td'><strong>Search</strong></span>" +
+        "</form>" +
+        "</div>";
+    dojo.byId(target).innerHTML = rData;
 }
 
 function putFfxivQuestSearchBox(target) {
@@ -82,6 +122,27 @@ function getGameFf14d(target) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for FFXIV Dungeons FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getGameFf14i(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getFfxivItems" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    ffxivItems = data;
+                    putFfxivItems(target, data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for FFXIV Items FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
@@ -172,6 +233,53 @@ function putFfxivDungeonList(target, dungeonData) {
     dojo.byId(target).innerHTML = rData;    
 }
 
+function putFfxivItemList(target, itemData) {
+    $("#"+target).show();
+    var iNum = 0;
+    var iCols = [ "Name", "ILEV" ];
+    var rData = "<div class='table'><div class='tr'>";
+    for (var i = 0; i < iCols.length; i++) { rData += "<span class='td'><strong>" + iCols[i] + "</strong></span>"; }
+    rData += "</div>";
+    itemData.forEach(function (ff14i) {
+        if(iNum <= 50) {
+            rData += "<div class='tr'>" +
+                    "<span class='td'><div class='UPop'>" + ff14i.Name +
+                    "<div class='UPopO'>" +
+                    "<strong>Category: </strong>" + ff14i.Category + "<br/>" +
+                    "<strong>Classes: </strong>" + ff14i.Classes + "<br/>" +
+                    "</div></div>" +
+                    "</span>" +
+                    "<span class='td'><div class='UPop'>" + ff14i.ILEV +
+                    "<div class='UPopO'>" +
+                    "<strong>Level: </strong>" + ff14i.Level + "<br/>";
+            if(isSet(ff14i.Damage)) { rData += "<strong>Damage: </strong>" + ff14i.Damage + " (" + ff14i.DamageType + ")<br/>"; }
+            if(isSet(ff14i.Delay)) { rData += "<strong>Delay: </strong>" + ff14i.Delay + "<br/>"; }
+            if(isSet(ff14i.AutoAttack)) { rData += "<strong>Auto Attack: </strong>" + ff14i.AutoAttack + "<br/>"; }
+            if(isSet(ff14i.Defense)) { rData += "<strong>Defense: </strong>" + ff14i.Defense + "<br/>"; }
+            if(isSet(ff14i.MagicDefense)) { rData += "<strong>Magic Def.: </strong>" + ff14i.MagicDefense + "<br/>"; }
+            if(isSet(ff14i.MateriaSlots)) { rData += "<strong>Materia Slots: </strong>" + ff14i.MateriaSlots + "<br/>"; }
+            if(isSet(ff14i.Stats)) { rData += "<strong>Stats: </strong>" + ff14i.Stats + "<br/>"; }
+            rData += "</div></div>" +
+                    "</span>" +
+                    "</div>";
+        }
+        iNum++;
+    });
+    rData += "</div>";
+    console.log(target);
+    dojo.byId(target).innerHTML = rData;
+}
+
+function putFfxivItems(target, itemData) {
+    var iCount = ffxivItems.length;
+    var rData = "<h3>Items</h3><strong>Indexed items: " + iCount + "<br/>" +
+            "<p><div id='iSearchHolder'></div>" +
+            "<p><div id='itemList'></div>";
+    dojo.byId(target).innerHTML = rData;
+    putFfxivItemSearchBox("iSearchHolder");
+    putFfxivItemList("itemList", itemData);
+}
+
 function putFfxivQuestList(target, questData) {
     var qNum = 0;
     var qCols = [ "Up", "Name", "LV" ];
@@ -179,7 +287,7 @@ function putFfxivQuestList(target, questData) {
     for (var i = 0; i < qCols.length; i++) { rData += "<span class='td'><strong>" + qCols[i] + "</strong></span>"; }
     rData += "</div>";
     questData.forEach(function (ff14q) {
-        if(qNum <= 249) {
+        if(qNum <= 50) {
             var qComplete = "No";
             var fontColor = "Red";
             var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";

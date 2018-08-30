@@ -1,7 +1,7 @@
 <%-- 
     Document   : MediaServ
     Created on : Mar 19, 2018, 7:35:15 AM
-    Updated: 16 Aug 2018
+    Updated: 30 Aug 2018
     Author     : Anthony Stump
 --%>
 
@@ -32,12 +32,19 @@
         <div id="ETGameAll">
             <button class="SButton" id="ShETGHours">Hours</button>
             <button class="SButton" id="ShETGIndex">Index</button>
-            <button class="SButton" id="ShETGFF14D">FF14D</button>
-            <button class="SButton" id="ShETGFF14Q">FF14Q</button>
+            <div class="UPop">
+                <button class="SButton">FFXIV</button>
+                <div class="UPopO">
+                    <button class="SButton" id="ShETGFF14D">Duties</button>
+                    <button class="SButton" id="ShETGFF14I">Items</button>
+                    <button class="SButton" id="ShETGFF14Q">Quests</button>
+                </div>
+            </div>
             <p>
             <div id="ETGHours"></div>
             <div id="ETGIndex"></div>
             <div id="ETGFF14D"></div>
+            <div id="ETGFF14I"></div>
             <div id="ETGFF14Q"></div>
         </div>
         <div id="ETLego"></div>

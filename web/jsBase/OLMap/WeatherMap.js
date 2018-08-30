@@ -2,9 +2,9 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 28 Aug 2018
+ Updated: 30 Aug 2018
  
- WARNING: AS OF 28 AUG 2018 -- STABILITY ISSUES
+ WARNING: AS OF 30 AUG 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
   - UBUNTU BECOMES UNSTABLE DUE TO EXCESSIVE SWAPPING
   - OPERA MOBILE ON ANDROID SIMPLY CRASHES THE TAB
@@ -18,7 +18,7 @@ var imageLayer;
 var jsonDataMerged;
 var overlayLayer;
 var pointType;
-var refreshTime;
+var refreshTime = getDate("hour", 0, "timestamp");
 var reportLayer;
 var searchDateStart;
 var searchDateEnd;
@@ -64,7 +64,7 @@ function actOnSubmitXmlSearch(event) {
 }
 
 // Working on, 7/11/18
-function addWxMapPops(jsonModelLast, gfsFha, stationCount, refreshTime) {
+function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
     if(!isSet(searchDateStart)) { searchDateStart = getDate("hour", -1, "full"); }
     if(!isSet(searchDateEnd)) { searchDateEnd = getDate("hour", 0, "full"); }
     var lastString = jsonModelLast[0].RunString;
