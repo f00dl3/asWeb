@@ -570,8 +570,8 @@ function stationDataTableMini(overrideData, target) {
     dojo.byId(target).innerHTML = rData;
     if(j > 100) { showNotice("Over 100 nearby stations! (" + j + ")"); }
     dojo.query(".stationFocuser").connect("onclick", actOnStationFocus);
-    var rtMax = Math.max(regionalTempArray);
-    var rtMin = Math.min(regionalTempArray);
+    var rtMax = Math.max.apply(Math, regionalTempArray);
+    var rtMin = Math.min.apply(Math, regionalTempArray);
     var rtSpread = Math.abs(rtMax - rtMin);
     var regionalSummary = "<em>Regional</em> Max " + rtMax + ", Min " + rtMin + ", Spread " + rtSpread;
     dojo.byId("regionalInfoHolder").innerHTML = regionalSummary;
