@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 19 Aug 2018
+Updated: 29 Aug 2018
 */
 
 package asWebRest.dao;
@@ -44,6 +44,38 @@ public class EntertainmentDAO {
                     .put("PartySize", resultSet.getInt("PartySize"))
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
                     .put("Completed", resultSet.getInt("Completed"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+      
+    private JSONArray ffxivItems(Connection dbc) {
+        final String query_FfxivItems = "SELECT * FROM (" +
+            " SELECT Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, NULL AS Defece, NULL AS MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Weapons" +
+            " UNION ALL" +
+            " SELECT Name, Level, ILEV, Classes, Slot AS Category, NULL AS Damage, NULL AS DamageType, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Wearable" +
+            ") as tmp;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivItems, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Name", resultSet.getString("Name"))
+                    .put("Level", resultSet.getInt("Level"))
+                    .put("ILEV", resultSet.getInt("ILEV"))
+                    .put("Classes", resultSet.getString("Classes"))
+                    .put("Category", resultSet.getString("Category"))
+                    .put("Damage", resultSet.getDouble("Damage"))
+                    .put("DamageType", resultSet.getString("DamageType"))
+                    .put("Delay", resultSet.getDouble("Delay"))
+                    .put("AutoAttack", resultSet.getDouble("AutoAttack"))
+                    .put("Defense", resultSet.getInt("Defece"))
+                    .put("MagicDefense", resultSet.getInt("MagicDefense"))
+                    .put("MateriaSlots", resultSet.getInt("MateriaSlots"))
+                    .put("Stats", resultSet.getString("Stats"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -114,6 +146,7 @@ public class EntertainmentDAO {
     }
     
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
+    public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     
     public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +

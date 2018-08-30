@@ -3,6 +3,11 @@ Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
 Updated: 29 Aug 2018
+
+FFXIV Item Table Descr:
+
+	Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, Defense, MagicDefense, MateriaSlots, Stats
+
  */
 
 var ffxivQuests;
