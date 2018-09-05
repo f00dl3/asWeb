@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 30 Aug 2018
+Updated: 31 Aug 2018
  */
 
 var ffxivItems;
@@ -329,6 +329,11 @@ function putFfxivQuests(target, questData) {
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var qCount = ffxivQuests.length;
     var compCounter = 0;
+    var availImages = [
+        "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
+        "Min1", "Min13",
+        "Cnj1", "Cnj4a", "Cnj9"
+    ];
     ffxivQuests.forEach(function (ffxq) {
         if(ffxq.Completed === 1) { compCounter++; }
     });
@@ -340,17 +345,11 @@ function putFfxivQuests(target, questData) {
             " [<a href='" + getBasePath("image") + "/ffxiv/Thanalan.jpg' target='ffxivMap'>THA</a>]<br/>" +
             "</div></div>" +
             " <div class='UPop'><button class='UButton'>Screens</button>" +
-            "<div class='UPopO'>" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Arc33.jpg' target='ffxivMap'>ARC-33</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Arc36.jpg' target='ffxivMap'>ARC-36</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Arc51.jpg' target='ffxivMap'>ARC-51</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Arc52.jpg' target='ffxivMap'>ARC-52</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Min1.jpg' target='ffxivMap'>MIN-1</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Min13.jpg' target='ffxivMap'>MIN-13</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj1.jpg' target='ffxivMap'>CNJ-1</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj4.jpg' target='ffxivMap'>CNJ-4</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Cnj4a.jpg' target='ffxivMap'>CNJ-4A</a>]" +
-            "</div></div>" +
+            "<div class='UPopO'>";
+    for(var i = 0; i < availImages.length; i++) {
+        rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
+    }
+    rData += "</div></div>" +
             "<h3>Quests</h3><strong>Indexed quests: " + qCount + "<br/>" +
             "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
