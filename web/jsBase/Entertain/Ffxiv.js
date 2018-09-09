@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 31 Aug 2018
+Updated: 8 Sep 2018
  */
 
 var ffxivItems;
@@ -338,6 +338,7 @@ function putFfxivQuests(target, questData) {
         if(ffxq.Completed === 1) { compCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
+            "<strong>House:</strong> Mist Ward 1 Plot 39 (2.83m Gil)<br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
