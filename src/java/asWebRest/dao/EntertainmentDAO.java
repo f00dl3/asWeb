@@ -154,7 +154,7 @@ public class EntertainmentDAO {
                 " FROM FFXIV_Quests" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'";
         if(completed.equals("0")) {
-            query_FFXIV_Quests += " AND QuestOrder NOT LIKE '%EV' AND Type != 'MS' AND Classes IS NULL"; 
+            query_FFXIV_Quests += " AND QuestOrder NOT LIKE '%EV' AND (Classes IS NULL OR Classes = '')"; 
         }
         query_FFXIV_Quests += " ORDER BY MinLevel, QuestOrder";
         System.out.println(query_FFXIV_Quests);
