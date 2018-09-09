@@ -59,8 +59,15 @@ public class EntertainmentResource extends ServerResource {
                     break;
                     
                 case "getFfxivQuests":
-                    JSONArray ffxivQ = getEntertainmentAction.getFfxivQuests(dbc);
+                    JSONArray ffxivQ = getEntertainmentAction.getFfxivQuests(dbc, 1, 9999, "%");
                     returnData += ffxivQ.toString();
+                    break;
+                    
+                case "getFfxivQuestsInRange":
+                    int minLevel = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
+                    int maxLevel = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
+                    JSONArray ffxivQr = getEntertainmentAction.getFfxivQuests(dbc, minLevel, maxLevel, "0");
+                    returnData += ffxivQr.toString();
                     break;
                 
                 case "getGameData":

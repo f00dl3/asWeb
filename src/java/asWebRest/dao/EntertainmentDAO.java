@@ -148,10 +148,13 @@ public class EntertainmentDAO {
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     
-    public JSONArray getFfxivQuests(Connection dbc) {
+    public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
                 " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version, Event, Type" +
-                " FROM FFXIV_Quests ORDER BY MinLevel, QuestOrder;";
+                " FROM FFXIV_Quests" +
+                " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'" +
+                " ORDER BY MinLevel, QuestOrder";
+        System.out.println(query_FFXIV_Quests);
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIV_Quests, null);

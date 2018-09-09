@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 29 Aug 2018
+Updated: 9 Sep 2018
  */
 
 package asWebRest.action;
 
 import asWebRest.dao.EntertainmentDAO;
 import java.sql.Connection;
+import java.util.List;
 import org.json.JSONArray;
 
 public class GetEntertainmentAction {
@@ -17,7 +18,7 @@ public class GetEntertainmentAction {
     
     public JSONArray getFfxivDungeons(Connection dbc) { return entertainmentDAO.getFfxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return entertainmentDAO.getFfxivItems(dbc); }
-    public JSONArray getFfxivQuests(Connection dbc) { return entertainmentDAO.getFfxivQuests(dbc); }
+    public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) { return entertainmentDAO.getFfxivQuests(dbc, minRange, maxRange, completed); }
     public JSONArray getFfxivQuestsByDate(Connection dbc) { return entertainmentDAO.getFfxivQuestsByDate(dbc); }
     public JSONArray getGameHours(Connection dbc) { return entertainmentDAO.getGameHours(dbc); }
     public JSONArray getGameHoursLatest(Connection dbc) { return entertainmentDAO.getGameHoursLatest(dbc); }

@@ -14,6 +14,18 @@ function actOnFfxivQuestDone(event) {
     setFfxivQuestDone(thisFormData);
 }
 
+function actOnFfxivQuestRangeSearch(event) {
+    dojo.stopEvent(event);
+    var target = "ETGFF14Q";
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    if(isSet(thisFormData.LevelRangeMin) && isSet(thisFormData.LevelRangeMax)) {
+        getGameFf14qDataInRange(target, thisFormData);
+    } else {
+        window.alert("Invalid search range!");
+    }
+}
+
 function displayGameFf14d() {
     var target = "ETGFF14D";
     getGameFf14d(target);
@@ -102,8 +114,17 @@ function putFfxivQuestSearchBox(target) {
         "<span class='td'><input type='text' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /></span>" +
         "<span class='td'><strong>Search</strong></span>" +
         "</form>" +
+        "</div><br/>" +
+        "<div class='table'>" +
+        "<form class='tr' id='ffxivRangeForm'>" +
+        "<span class='td'><input type='number' style='width: 36px;' id='MinLevel' name='LevelRangeMin'/></span>" +
+        "<span class='td'><input type='number' style='width: 36px;'  id='MaxLevel' name='LevelRangeMax'/></span>" +
+        "<span class='td'><button class='UButton' id='LevelRangeSubmit'>Range</button></span>" +
+        "</form>" +
         "</div>";
     dojo.byId(target).innerHTML = rData;
+    var ffxivRangeButton = dojo.byId("LevelRangeSubmit");
+    dojo.connect(ffxivRangeButton, "onclick", actOnFfxivQuestRangeSearch);
 }
 
 function getGameFf14d(target) {
@@ -188,6 +209,33 @@ function getGameFf14qData(target) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function getGameFf14qDataInRange(target, formData) {
+    getDivLoadingMessage(target);
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getFfxivQuestsInRange",
+        "minLevel": formData.LevelRangeMin,
+        "maxLevel": formData.LevelRangeMax
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    ffxivQuests = data;
+                    putFfxivQuests(target, data);
+                    $("#"+target).show();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for FFXIV Quests IN RANGE FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
