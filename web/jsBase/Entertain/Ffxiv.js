@@ -299,8 +299,16 @@ function putFfxivQuestList(target, questData) {
             var tdsStyle = "style='color: " + fontColor + ";'";
             rData += "<form class='tr' id='ffxivQuestSubmitForm'>" +
                     "<span class='td' " + tdsStyle + ">" + updateCheckbox + "</span>" +
-                    "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.Name +
-                    "<div class='UPopO'>" +
+                    "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.Name;
+            if(isSet(ff14q.Type)) {
+                switch(ff14q.Type) {
+                    case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
+                    case "MS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
+                    case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
+                    default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
+                }
+            }
+            rData += "<div class='UPopO'>" +
                     "Zone: " + ff14q.Zone + "<br/>" +
                     "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>";
             if(isSet(ff14q.GivingNPC)) { rData += "Giving NPC: " + ff14q.GivingNPC + "<br/>"; }
@@ -308,8 +316,10 @@ function putFfxivQuestList(target, questData) {
             if(isSet(ff14q.Version)) { rData += "Patch Level: " + ff14q.Version + "<br/>"; }
             if(isSet(ff14q.Event)) { rData += "Event: " + ff14q.Event + "<br/>"; }
             if(isSet(ff14q.OrigCompDate)) { rData += "1st Completed: " + ff14q.OrigCompDate + "<br/>"; }
-            rData += "Quest Order: " + ff14q.QuestOrder + "<br/>" +
-                    "</div></div></span>" +
+            rData += "Quest Order: " + ff14q.QuestOrder + "<br/>";
+            if(isSet(ff14q.Exp)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/XP.png'/>" + ff14q.Exp; }
+            if(isSet(ff14q.Gil)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" + ff14q.Gil; }
+            rData += "</div></div></span>" +
                     "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.MinLevel +
                     "<div class='UPopO'>";
             if(isSet(ff14q.Exp)) { "XP: " + ff14q.Exp + "<br/>"; }

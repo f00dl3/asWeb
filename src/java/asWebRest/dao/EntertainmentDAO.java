@@ -150,7 +150,7 @@ public class EntertainmentDAO {
     
     public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
-                " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version, Event" +
+                " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version, Event, Type" +
                 " FROM FFXIV_Quests ORDER BY MinLevel, QuestOrder;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -172,7 +172,8 @@ public class EntertainmentDAO {
                     .put("GivingNPC", resultSet.getString("GivingNPC"))
                     .put("Seals", resultSet.getInt("Seals"))
                     .put("Version", resultSet.getDouble("Version"))
-                    .put("Event", resultSet.getString("Event"));
+                    .put("Event", resultSet.getString("Event"))
+                    .put("Type", resultSet.getString("Type"));
                 tContainer.put(tObject);
             }
             resultSet.close();
