@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 29 Aug 2018
+Updated: 9 Sep 2018
 */
 
 package asWebRest.dao;
@@ -150,7 +150,7 @@ public class EntertainmentDAO {
     
     public JSONArray getFfxivQuests(Connection dbc) {
         final String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
-                " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version" +
+                " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version, Event" +
                 " FROM FFXIV_Quests ORDER BY MinLevel, QuestOrder;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -171,7 +171,8 @@ public class EntertainmentDAO {
                     .put("Completed", resultSet.getInt("Completed"))
                     .put("GivingNPC", resultSet.getString("GivingNPC"))
                     .put("Seals", resultSet.getInt("Seals"))
-                    .put("Version", resultSet.getDouble("Version"));
+                    .put("Version", resultSet.getDouble("Version"))
+                    .put("Event", resultSet.getString("Event"));
                 tContainer.put(tObject);
             }
             resultSet.close();
