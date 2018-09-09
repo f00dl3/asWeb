@@ -111,14 +111,9 @@ function putFfxivItemSearchBox(target) {
 function putFfxivQuestSearchBox(target) {
     var rData = "<div class='table'>" +
         "<form class='tr' id='ffxivSearchForm'>" +
-        "<span class='td'><input type='text' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /></span>" +
-        "<span class='td'><strong>Search</strong></span>" +
-        "</form>" +
-        "</div><br/>" +
-        "<div class='table'>" +
-        "<form class='tr' id='ffxivRangeForm'>" +
-        "<span class='td'><input type='number' style='width: 36px;' id='MinLevel' name='LevelRangeMin'/></span>" +
-        "<span class='td'><input type='number' style='width: 36px;'  id='MaxLevel' name='LevelRangeMax'/></span>" +
+        "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone)</div></div></span>" +
+        "<span class='td'><div class='UPop'><input type='number' style='width: 36px;' id='MinLevel' name='LevelRangeMin'/><div class='UPopO'>Min. Level</div></div></span>" +
+        "<span class='td'><div class='UPop'><input type='number' style='width: 36px;'  id='MaxLevel' name='LevelRangeMax'/><div class='UPopO'>Max. Level</div></div></span>" +
         "<span class='td'><button class='UButton' id='LevelRangeSubmit'>Range</button></span>" +
         "</form>" +
         "</div>";
@@ -397,7 +392,7 @@ function putFfxivQuests(target, questData) {
         if(ffxq.Completed === 1) { compCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
-            "<strong>House:</strong> Mist Ward 1 Plot 39 (2.83m Gil)<br/>" +
+            "<strong>House:</strong> Mist Ward 1 Plot 39 (2.83m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
