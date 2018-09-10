@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 26 Aug 2018
+Updated: 9 Sep 2018
  */
 
 package asWebRest.resource;
@@ -226,6 +226,7 @@ public class ChartResource extends ServerResource {
                     JSONArray pi2Glob = getSnmpAction.getPi2(dbc, qParams);
                     JSONArray routerGlob = getSnmpAction.getRouter(dbc, qParams);
                     
+                    // Will need to try to declare to try {} catch Exception e / and define objects before assigning.
                     JSONObject mCellBattCPU_Glob = smCell.getCellBattCPU(note3Glob, intLen, step);
                     JSONObject mCellNet_Glob = smCell.getCellNet(note3Glob, intLen, step);
                     JSONObject mCellSig_Glob = smCell.getCellSig(note3Glob, intLen, step);
