@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 9 Sep 2018
+Updated: 10 Sep 2018
  */
 
 package asWebRest.resource;
@@ -219,49 +219,91 @@ public class ChartResource extends ServerResource {
                     int step = Integer.valueOf(stepIn);
                     int intLen = 60 * 2;
                     
-                    JSONArray mainGlob = getSnmpAction.getMain(dbc, qParams);
-                    JSONArray note3Glob = getSnmpAction.getNote3(dbc, qParams);
-                    JSONArray emS4Glob = getSnmpAction.getEmS4(dbc, qParams);
-                    JSONArray piGlob = getSnmpAction.getPi(dbc, qParams);
-                    JSONArray pi2Glob = getSnmpAction.getPi2(dbc, qParams);
-                    JSONArray routerGlob = getSnmpAction.getRouter(dbc, qParams);
-                    
-                    // Will need to try to declare to try {} catch Exception e / and define objects before assigning.
-                    JSONObject mCellBattCPU_Glob = smCell.getCellBattCPU(note3Glob, intLen, step);
-                    JSONObject mCellNet_Glob = smCell.getCellNet(note3Glob, intLen, step);
-                    JSONObject mCellSig_Glob = smCell.getCellSig(note3Glob, intLen, step);
-                    JSONObject mCellTemp_Glob = smCell.getCellTemp(note3Glob, intLen, step);
-                    JSONObject mCellTempRapid_Glob = smCell.getCellTempRapid(note3Glob, intLen, step);
-                    JSONObject mJavaCodeLines_Glob = smDesktop.getJavaCodeLines(mainGlob, intLen, step);
-                    JSONObject mPiAmb_Glob = smPi.getPiAmb(piGlob, intLen, step);
-                    JSONObject mPiCPU_Glob = smPi.getPiCPU(piGlob, intLen, step);
-                    JSONObject mPiLoad_Glob = smPi.getPiLoad(piGlob, intLen, step);
-                    JSONObject mPiMemory_Glob = smPi.getPiMemory(piGlob, intLen, step);
-                    JSONObject mPiTemp_Glob = smPi.getPiTemp(piGlob, intLen, step);
-                    JSONObject mPi2CPU_Glob = smPi2.getPi2CPU(pi2Glob, intLen, step);
-                    JSONObject mPi2GPSSpeed_Glob = smPi2.getPi2GPSSpeed(pi2Glob, intLen, step);
-                    JSONObject mPi2Light_Glob = smPi2.getPi2Light(pi2Glob, intLen, step);
-                    JSONObject mPi2Load_Glob = smPi2.getPi2Load(pi2Glob, intLen, step);
-                    JSONObject mPi2Memory_Glob = smPi2.getPi2Memory(pi2Glob, intLen, step);
-                    JSONObject mPi2Temp_Glob = smPi2.getPi2Temp(pi2Glob, intLen, step);
-                    JSONObject mRouterCPU_Glob = smRouter.getRouterCPU(routerGlob, intLen, step);
-                    JSONObject mRouterMemory_Glob = smRouter.getRouterMemory(routerGlob, intLen, step);
-                    JSONObject mRouterNet_Glob = smRouter.getRouterNet(routerGlob, intLen, step);
-                    JSONObject mSysFans_Glob = smDesktop.getSysFans(mainGlob, intLen, step);
-                    JSONObject mSysLoad_Glob = smDesktop.getSysLoad(mainGlob, intLen, step);
-                    JSONObject mSysCams_Glob = smDesktop.getSysCams(mainGlob, intLen, step);
-                    JSONObject mSysCPU_Glob = smDesktop.getSysCPU(mainGlob, intLen, step);
-                    JSONObject mSysDiskIO_Glob = smDesktop.getSysDiskIO(mainGlob, intLen, step);
-                    JSONObject mSysMemory_Glob = smDesktop.getSysMemory(mainGlob, intLen, step);
-                    JSONObject mSysMySQLSize_Glob = smDesktop.getSysMySQLSize(mainGlob, intLen, step);
-                    JSONObject mSysNet_Glob = smDesktop.getSysNet(mainGlob, intLen, step);
-                    JSONObject mSysNumUsers_Glob = smDesktop.getSysNumUsers(mainGlob, intLen, step);
-                    JSONObject mSysStorage_Glob = smDesktop.getSysStorage(mainGlob, intLen, step);
-                    JSONObject mSysTemp_Glob = smDesktop.getSysTemp(mainGlob, intLen, step);
-                    JSONObject mSysTomcatDeploy_Glob = smDesktop.getSysTomcatDeploy(mainGlob, intLen, step);
-                    JSONObject mSysUPSLoad_Glob = smDesktop.getSysUPSLoad(mainGlob, intLen, step);
-                    JSONObject mSysUPSTimeLeft_Glob = smDesktop.getSysUPSTimeLeft(mainGlob, intLen, step);
-                    JSONObject mSysVolt_Glob = smDesktop.getSysVolt(mainGlob, intLen, step);
+                    JSONArray mainGlob = new JSONArray();
+                    JSONArray note3Glob = new JSONArray();
+                    JSONArray emS4Glob = new JSONArray();
+                    JSONArray piGlob = new JSONArray();
+                    JSONArray pi2Glob = new JSONArray();
+                    JSONArray routerGlob = new JSONArray();
+					
+                    try { mainGlob = getSnmpAction.getMain(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { note3Glob = getSnmpAction.getNote3(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { emS4Glob = getSnmpAction.getEmS4(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { piGlob = getSnmpAction.getPi(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { pi2Glob = getSnmpAction.getPi2(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { routerGlob = getSnmpAction.getRouter(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+					
+                    JSONObject mCellBattCPU_Glob = new JSONObject();
+                    JSONObject mCellNet_Glob = new JSONObject();
+                    JSONObject mCellSig_Glob = new JSONObject();
+                    JSONObject mCellTemp_Glob = new JSONObject();
+                    JSONObject mCellTempRapid_Glob = new JSONObject();
+                    JSONObject mJavaCodeLines_Glob = new JSONObject();
+                    JSONObject mPiAmb_Glob = new JSONObject();
+                    JSONObject mPiCPU_Glob = new JSONObject();
+                    JSONObject mPiLoad_Glob = new JSONObject();
+                    JSONObject mPiMemory_Glob = new JSONObject();
+                    JSONObject mPiTemp_Glob = new JSONObject();
+                    JSONObject mPi2CPU_Glob = new JSONObject();
+                    JSONObject mPi2GPSSpeed_Glob = new JSONObject();
+                    JSONObject mPi2Light_Glob = new JSONObject();
+                    JSONObject mPi2Load_Glob = new JSONObject();
+                    JSONObject mPi2Memory_Glob = new JSONObject();
+                    JSONObject mPi2Temp_Glob = new JSONObject();
+                    JSONObject mRouterCPU_Glob = new JSONObject();
+                    JSONObject mRouterMemory_Glob = new JSONObject();
+                    JSONObject mRouterNet_Glob = new JSONObject();
+                    JSONObject mSysFans_Glob = new JSONObject();
+                    JSONObject mSysLoad_Glob = new JSONObject();
+                    JSONObject mSysCams_Glob = new JSONObject();
+                    JSONObject mSysCPU_Glob = new JSONObject();
+                    JSONObject mSysDiskIO_Glob = new JSONObject();
+                    JSONObject mSysMemory_Glob = new JSONObject();
+                    JSONObject mSysMySQLSize_Glob = new JSONObject();
+                    JSONObject mSysNet_Glob = new JSONObject();
+                    JSONObject mSysNumUsers_Glob = new JSONObject();
+                    JSONObject mSysStorage_Glob = new JSONObject();
+                    JSONObject mSysTemp_Glob = new JSONObject();
+                    JSONObject mSysTomcatDeploy_Glob = new JSONObject();
+                    JSONObject mSysUPSLoad_Glob = new JSONObject();
+                    JSONObject mSysUPSTimeLeft_Glob = new JSONObject();
+                    JSONObject mSysVolt_Glob = new JSONObject();
+					
+                    try { mCellBattCPU_Glob = smCell.getCellBattCPU(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mCellNet_Glob = smCell.getCellNet(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mCellSig_Glob = smCell.getCellSig(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mCellTemp_Glob = smCell.getCellTemp(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mCellTempRapid_Glob = smCell.getCellTempRapid(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mJavaCodeLines_Glob = smDesktop.getJavaCodeLines(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiAmb_Glob = smPi.getPiAmb(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiCPU_Glob = smPi.getPiCPU(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiLoad_Glob = smPi.getPiLoad(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiMemory_Glob = smPi.getPiMemory(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiTemp_Glob = smPi.getPiTemp(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2CPU_Glob = smPi2.getPi2CPU(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2GPSSpeed_Glob = smPi2.getPi2GPSSpeed(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2Light_Glob = smPi2.getPi2Light(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2Load_Glob = smPi2.getPi2Load(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2Memory_Glob = smPi2.getPi2Memory(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPi2Temp_Glob = smPi2.getPi2Temp(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mRouterCPU_Glob = smRouter.getRouterCPU(routerGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mRouterMemory_Glob = smRouter.getRouterMemory(routerGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mRouterNet_Glob = smRouter.getRouterNet(routerGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysFans_Glob = smDesktop.getSysFans(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysLoad_Glob = smDesktop.getSysLoad(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysCams_Glob = smDesktop.getSysCams(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysCPU_Glob = smDesktop.getSysCPU(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysDiskIO_Glob = smDesktop.getSysDiskIO(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysMemory_Glob = smDesktop.getSysMemory(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysMySQLSize_Glob = smDesktop.getSysMySQLSize(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysNet_Glob = smDesktop.getSysNet(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysNumUsers_Glob = smDesktop.getSysNumUsers(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysStorage_Glob = smDesktop.getSysStorage(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysTemp_Glob = smDesktop.getSysTemp(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysTomcatDeploy_Glob = smDesktop.getSysTomcatDeploy(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysUPSLoad_Glob = smDesktop.getSysUPSLoad(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysUPSTimeLeft_Glob = smDesktop.getSysUPSTimeLeft(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysVolt_Glob = smDesktop.getSysVolt(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     
                     try { dynChart.LineChart(mCellBattCPU_Glob); returnData += "Chart generated - mCellBattCPU!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mCellNet_Glob); returnData += "Chart generated - mCellNet!\n"; } catch (Exception e) { e.printStackTrace(); } 
