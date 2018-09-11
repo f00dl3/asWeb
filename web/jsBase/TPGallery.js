@@ -1,10 +1,10 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 14 Aug 2018
+Updated: 11 Sep 2018
  */
 
-var maxListing = 50;
+var maxListing = 250;
 var tpSearchableData, tpIndexedImages, tpMatcher;
 
 function actOnDoXTag(event) {
@@ -140,6 +140,7 @@ function populateSearchPopup(searchableData) {
     var hosTable = "<div class='table HideOnSearch'><div class='tr'>";
     for (var i = 0; i < cols.length; i++) { hosTable += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
     hosTable += "</div>";
+    var tpGalleryResults = searchableData.length();
     searchableData.forEach(function (tpData) {
         tpGallery++;
         if(tpGallery < maxListing) {
@@ -185,7 +186,7 @@ function populateSearchPopup(searchableData) {
                         "</form>";
         }
     });
-    if(tpGallery < maxListing) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying " + maxListing + " of " + tpGallery + " results!"); }
+    if(tpGallery < maxListing) { showNotice(tpGallery + " results returned!") } else { showNotice("Displaying " + maxListing + " of " + tpGalleryResults + " results!"); }
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
     dojo.query(".TPSelect").connect("onchange", actOnTpSelect);

@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 9 Sep 2018
+Updated: 11 Sep 2018
  */
 
 var ffxivItems;
@@ -84,6 +84,8 @@ function ffxivQuestHint(value) {
         ffxivQuests.forEach(function (sr) {
             if(
                 (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
@@ -111,7 +113,7 @@ function putFfxivItemSearchBox(target) {
 function putFfxivQuestSearchBox(target) {
     var rData = "<div class='table'>" +
         "<form class='tr' id='ffxivSearchForm'>" +
-        "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone)</div></div></span>" +
+        "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone, Code Description)</div></div></span>" +
         "<span class='td'><div class='UPop'><input type='number' style='width: 36px;' id='MinLevel' name='LevelRangeMin'/><div class='UPopO'>Min. Level</div></div></span>" +
         "<span class='td'><div class='UPop'><input type='number' style='width: 36px;'  id='MaxLevel' name='LevelRangeMax'/><div class='UPopO'>Max. Level</div></div></span>" +
         "<span class='td'><button class='UButton' id='LevelRangeSubmit'>Range</button></span>" +
@@ -354,6 +356,7 @@ function putFfxivQuestList(target, questData) {
             rData += "<div class='UPopO'>" +
                     "Zone: " + ff14q.Zone + "<br/>" +
                     "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>";
+            if(isSet(ff14q.qcDesc)) { rData += "Chain: " + ff14q.qcDesc + "<br/>"; }
             if(isSet(ff14q.GivingNPC)) { rData += "Giving NPC: " + ff14q.GivingNPC + "<br/>"; }
             if(isSet(ff14q.Classes)) { rData += "Class/Jobs: " + ff14q.Classes + "<br/>"; }
             if(isSet(ff14q.Version)) { rData += "Patch Level: " + ff14q.Version + "<br/>"; }

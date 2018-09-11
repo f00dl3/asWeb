@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 28 Aug 2018
+Updated: 11 Sep 2018
 */
 
 /* Hidden DIVs */
@@ -38,6 +38,23 @@ Updated: 28 Aug 2018
 #WxTableT, #WxTableH, #WxTableW { font-size: 50%; }
 
 .arrow { height: 18px; width: 10px; }
+
+.bigBoxSpan {
+	background-color: #2A2A2A;
+	border: 2px solid white;
+	border-radius: 13px;
+	clear: both;
+	color: white;
+	display: inline-block;
+	font-size: 18px;
+        min-width: 160px;
+        min-height: 90px;
+	height: auto;
+	padding: 3px;
+	text-align: center;
+	width: auto;
+}
+
 .ch_large { height: 180px; width: 321px; }
 .ch_small { height: 120px; width: 214px; }
 .Click2Update { width: 10px; height: 10px; }

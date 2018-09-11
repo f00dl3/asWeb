@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 9 Sep 2018
+Updated: 11 Sep 2018
 */
 
 package asWebRest.dao;
@@ -149,9 +149,11 @@ public class EntertainmentDAO {
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     
     public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) {
-        String query_FFXIV_Quests = "SELECT MinLevel, Name, CoordX, CoordY, Zone, Exp, Gil," +
-                " Classes, QuestOrder, OrigCompDate, Completed, GivingNPC, QuestOrder, Seals, Version, Event, Type" +
-                " FROM FFXIV_Quests" +
+        String query_FFXIV_Quests = "SELECT q.MinLevel, q.Name, q.CoordX, q.CoordY, q.Zone, q.Exp, q.Gil," +
+                " q.Classes, q.QuestOrder, q.OrigCompDate, q.Completed, q.GivingNPC, q.Seals, q.Version, q.Event, q.Type," +
+                " c.Description as qcDesc" +
+                " FROM FFXIV_Quests q" +
+        	" LEFT JOIN Core.FFXIV_QuestCodes c ON c.Code = SUBSTRING(q.QuestOrder, 4, 6)" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'";
         if(completed.equals("0")) {
             query_FFXIV_Quests += " AND QuestOrder NOT LIKE '%EV' AND (Classes IS NULL OR Classes = '')"; 
@@ -179,7 +181,8 @@ public class EntertainmentDAO {
                     .put("Seals", resultSet.getInt("Seals"))
                     .put("Version", resultSet.getDouble("Version"))
                     .put("Event", resultSet.getString("Event"))
-                    .put("Type", resultSet.getString("Type"));
+                    .put("Type", resultSet.getString("Type"))
+                    .put("qcDesc", resultSet.getString("qcDesc"));
                 tContainer.put(tObject);
             }
             resultSet.close();

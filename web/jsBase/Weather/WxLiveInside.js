@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 26 Aug 2018
+Updated: 11 Sep 2018
  */
 
 function actOnShowFeed() {
@@ -187,7 +187,6 @@ function popLiveContainer() {
     var rData = "<div id='liveButtonNavi'></div><p>" +
             "<div id='WxLive'>" +
             "<h4>Observations/Forecasts</h4>" +
-            "<a href='" + getResource("WxStation") + "' target='topNew'>Regional Summary</a><br/>" +
             "<div id='LiveWarnings'>Loading watch/warning/advisories...</div><p>" +
             "<div id='ObsCurrent'>Loading observations...</div><p>" +
             "<div id='ObsLinks3D'>Loading 3D observation links...</div>" +
