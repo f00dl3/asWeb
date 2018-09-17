@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 9 Sep 2018
+Updated: 17 Sep 2018
  */
 
 package asWebRest.resource;
@@ -48,6 +48,11 @@ public class EntertainmentResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
                 
+                case "getFfxivCrafting":
+                    JSONArray ffxivC = getEntertainmentAction.getFfxivCrafting(dbc);
+                    returnData += ffxivC.toString();
+                    break;
+                    
                 case "getFfxivDungeons":
                     JSONArray ffxivD = getEntertainmentAction.getFfxivDungeons(dbc);
                     returnData += ffxivD.toString();

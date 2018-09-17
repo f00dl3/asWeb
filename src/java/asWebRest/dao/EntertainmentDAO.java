@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 11 Sep 2018
+Updated: 17 Sep 2018
 */
 
 package asWebRest.dao;
@@ -18,7 +18,32 @@ public class EntertainmentDAO {
     
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
-    
+       
+    private JSONArray ffxivCrafting(Connection dbc) {
+        final String query_ffxivCrafting = "SELECT Recipie, Level, Crafted, Difficulty," +
+                " Durability, MaxQuality, Crystals, Materials" +
+                " FROM Core.FFXIV_Crafting ORDER BY Level DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ffxivCrafting, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Recipie", resultSet.getString("Recipie"))
+                    .put("Level", resultSet.getInt("Level"))
+                    .put("Crafted", resultSet.getInt("Crafted"))
+                    .put("Difficulty", resultSet.getInt("Difficulty"))
+                    .put("Durability", resultSet.getInt("Durability"))
+                    .put("MaxQuality", resultSet.getInt("MaxQuality"))
+                    .put("Crystals", resultSet.getString("Crystals"))
+                    .put("Materials", resultSet.getString("Materials"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+        
     private JSONArray ffxivDungeons(Connection dbc) {
         final String query_FfxivDungeons = "SELECT d.Name, d.MinLevel, d.MinItemLevel, d.MaxItemLevel," +
                 " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
@@ -145,6 +170,7 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     
