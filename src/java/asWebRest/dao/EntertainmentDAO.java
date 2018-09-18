@@ -21,7 +21,7 @@ public class EntertainmentDAO {
        
     private JSONArray ffxivCrafting(Connection dbc) {
         final String query_ffxivCrafting = "SELECT Recipie, Level, Crafted, Difficulty," +
-                " Durability, MaxQuality, Crystals, Materials" +
+                " Durability, MaxQuality, Crystals, Materials, Class" +
                 " FROM Core.FFXIV_Crafting ORDER BY Level DESC;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -36,7 +36,8 @@ public class EntertainmentDAO {
                     .put("Durability", resultSet.getInt("Durability"))
                     .put("MaxQuality", resultSet.getInt("MaxQuality"))
                     .put("Crystals", resultSet.getString("Crystals"))
-                    .put("Materials", resultSet.getString("Materials"));
+                    .put("Materials", resultSet.getString("Materials"))
+                    .put("Class", resultSet.getString("Class"));
                 tContainer.put(tObject);
             }
             resultSet.close();
