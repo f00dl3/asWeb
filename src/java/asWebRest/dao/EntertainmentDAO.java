@@ -45,7 +45,7 @@ public class EntertainmentDAO {
     
     private JSONArray ffxivCrafting(Connection dbc) {
         final String query_ffxivCrafting = "SELECT Recipie, Level, Crafted, Difficulty," +
-                " Durability, MaxQuality, Crystals, Materials, Class" +
+                " Durability, MaxQuality, Crystals, Materials, Class, Completed, OrigCompDate" +
                 " FROM Core.FFXIV_Crafting" +
                 " ORDER BY Level ASC;";
         JSONArray tContainer = new JSONArray();
@@ -62,7 +62,9 @@ public class EntertainmentDAO {
                     .put("MaxQuality", resultSet.getInt("MaxQuality"))
                     .put("Crystals", resultSet.getString("Crystals"))
                     .put("Materials", resultSet.getString("Materials"))
-                    .put("Class", resultSet.getString("Class"));
+                    .put("Class", resultSet.getString("Class"))
+                    .put("Completed", resultSet.getInt("Completed"))
+                    .put("OrigCompDate", resultSet.getString("OrigCompDate"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -150,7 +152,7 @@ public class EntertainmentDAO {
         }
         query_FFXIV_Merged += " UNION ALL" +
                 " SELECT Level as MinLevel, Recipie as Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
-                " Class as Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " Class as Classes, NULL AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'C' as MasterType, NULL AS qcDesc," +
                 " Crystals, Materials, Durability, MaxQuality, Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
