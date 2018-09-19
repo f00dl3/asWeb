@@ -438,9 +438,9 @@ function putFfxivMergedList(target, questData) {
                     "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.Name;
             if(isSet(ff14q.Type)) {
                 switch(ff14q.Type) {
-                    case "QFT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
-                    case "QMS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
-                    case "QLV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
+                    case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
+                    case "MS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
+                    case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
                     default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
                 }
             }
@@ -486,7 +486,8 @@ function putFfxivMergedList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivMerged(target, mergedData, counts) {
+function putFfxivMerged(target, mergedData, countIn) {
+    var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var mCount = ffxivMerged.length;
@@ -497,7 +498,7 @@ function putFfxivMerged(target, mergedData, counts) {
         "Min1", "Min13",
         "Cnj1", "Cnj4a", "Cnj9"
     ];
-    console.log(mergedData);
+    console.log(counts);
     mergedData.forEach(function (ffxq) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Q") { compCounter++; }
     });
@@ -534,7 +535,7 @@ function putFfxivMerged(target, mergedData, counts) {
 function putFfxivMergedSearchBox(target) {
     var rData = "<div class='table'>" +
         "<form class='tr' id='ffxivSearchForm'>" +
-        "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone, Code Description)</div></div></span>" +
+        "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivMergedHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone, Code Description)</div></div></span>" +
         "<span class='td'><div class='UPop'><input type='number' style='width: 36px;' id='MinLevel' name='LevelRangeMin'/><div class='UPopO'>Min. Level</div></div></span>" +
         "<span class='td'><div class='UPop'><input type='number' style='width: 36px;'  id='MaxLevel' name='LevelRangeMax'/><div class='UPopO'>Max. Level</div></div></span>" +
         "<span class='td'><button class='UButton' id='LevelRangeSubmit'>Range</button></span>" +

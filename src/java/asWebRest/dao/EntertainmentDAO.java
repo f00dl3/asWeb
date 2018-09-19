@@ -24,7 +24,7 @@ public class EntertainmentDAO {
                 " COUNT(Name) AS Quests," +
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
-                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
+                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables" +
                 " FROM Core.FFXIV_Quests;";
         JSONArray tContainer = new JSONArray();
         try {
