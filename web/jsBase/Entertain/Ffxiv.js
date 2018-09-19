@@ -16,7 +16,7 @@ function actOnFfxivQuestDone(event) {
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
-        case "Hunting": setFfxivHuntingDone(thisFormData); break;
+        case "Hunt": setFfxivHuntingDone(thisFormData); break;
         default: window.alert("TYPE NOT SET!\n" + thisFormDataJ); break;
     }
 }
@@ -465,6 +465,7 @@ function putFfxivMergedList(target, questData) {
                 }
             }
             rData += "<div class='UPopO'>";
+            if(isSet(ff14q.MasterType)) { rData += "Master Type: " + ff14q.MasterType + "<br/>"; }
             if(isSet(ff14q.Zone)) { rData += "Zone: " + ff14q.Zone + "<br/>"; }
             if(isSet(ff14q.CoordX)) { rData += "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>"; }
             if(isSet(ff14q.qcDesc)) { rData += "Chain: " + ff14q.qcDesc + "<br/>"; }
