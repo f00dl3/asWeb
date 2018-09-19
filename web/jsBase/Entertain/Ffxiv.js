@@ -13,7 +13,6 @@ function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToObject(this.form);
-    console.log(thisFormDataJ);
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
@@ -571,7 +570,7 @@ function setFfxivCraftingDone(formData) {
     aniPreload("on");
     var thePostData = {
         "doWhat": "setFfxivCraftingDone",
-        "questOrder": formData.Name
+        "recipieName": formData.Name
     };
     require(["dojo/request"], function(request) {
         request
