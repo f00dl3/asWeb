@@ -424,6 +424,8 @@ function putFfxivMergedList(target, questData) {
     rData += "</div>";
     questData.forEach(function (ff14q) {
         if(qNum <= 50) {
+            var shortName = ff14q.Name;
+            if(ff14q.MasterType === 'C') { shortName = shortName.substring(4); }
             var qComplete = "No";
             var fontColor = "Red";
             var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";
@@ -435,7 +437,7 @@ function putFfxivMergedList(target, questData) {
             var tdsStyle = "style='color: " + fontColor + ";'";
             rData += "<form class='tr' id='ffxivQuestSubmitForm'>" +
                     "<span class='td' " + tdsStyle + ">" + updateCheckbox + "</span>" +
-                    "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.Name;
+                    "<span class='td' " + tdsStyle + "><div class='UPop'>" + shortName;
             if(isSet(ff14q.Type)) {
                 switch(ff14q.Type) {
                     case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
@@ -444,9 +446,9 @@ function putFfxivMergedList(target, questData) {
                     default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
                 }
             }
-            rData += "<div class='UPopO'>" +
-                    "Zone: " + ff14q.Zone + "<br/>" +
-                    "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>";
+            rData += "<div class='UPopO'>";
+            if(isSet(ff14q.Zone)) { rData += "Zone: " + ff14q.Zone + "<br/>"; }
+            if(isSet(ff14q.CoordX)) { rData += "Coords: X" + ff14q.CoordX + ", Y" + ff14q.CoordY + "<br/>"; }
             if(isSet(ff14q.qcDesc)) { rData += "Chain: " + ff14q.qcDesc + "<br/>"; }
             if(isSet(ff14q.GivingNPC)) { rData += "Giving NPC: " + ff14q.GivingNPC + "<br/>"; }
             if(isSet(ff14q.Classes)) { rData += "Class/Jobs: " + ff14q.Classes + "<br/>"; }
@@ -466,16 +468,15 @@ function putFfxivMergedList(target, questData) {
             if(isSet(ff14q.MagicDefense)) { rData += "<strong>Magic Def.: </strong>" + ff14q.MagicDefense + "<br/>"; }
             if(isSet(ff14q.MateriaSlots)) { rData += "<strong>Materia Slots: </strong>" + ff14q.MateriaSlots + "<br/>"; }
             if(isSet(ff14q.Stats)) { rData += "<strong>Stats: </strong>" + ff14q.Stats + "<br/>"; }
-            rData += "Quest Order: " + ff14q.QuestOrder + "<br/>";
+            if(isSet(ff14q.QuestOrder)) { rData += "Quest Order: " + ff14q.QuestOrder + "<br/>"; }
             if(isSet(ff14q.Exp)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/XP.png'/>" + ff14q.Exp; }
             if(isSet(ff14q.Gil)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" + ff14q.Gil; }
             rData += "</div></div></span>" +
                     "<span class='td' " + tdsStyle + "><div class='UPop'>" + ff14q.MinLevel +
                     "<div class='UPopO'>";
-            if(isSet(ff14q.Exp)) { "XP: " + ff14q.Exp + "<br/>"; }
-            if(isSet(ff14q.Gil)) { "Gil: " + ff14q.Gil + "<br/>"; }
+            if(isSet(ff14q.Version)) { "Patch: " + ff14q.Version + "<br/>"; }
             if(isSet(ff14q.Seals)) { "Seals: " + ff14q.Seals + "<br/>"; }
-            if(isSet(ff14q.ILEV)) { "Seals: " + ff14q.ILEV + "<br/>"; }
+            if(isSet(ff14q.ILEV)) { "ILEV: " + ff14q.ILEV + "<br/>"; }
             rData += "</div></div></span>" +
                     "</form>";
         }
