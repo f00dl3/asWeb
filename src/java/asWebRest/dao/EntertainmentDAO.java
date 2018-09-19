@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 17 Sep 2018
+Updated: 18 Sep 2018
 */
 
 package asWebRest.dao;
@@ -79,7 +79,7 @@ public class EntertainmentDAO {
       
     private JSONArray ffxivItems(Connection dbc) {
         final String query_FfxivItems = "SELECT * FROM (" +
-            " SELECT Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, NULL AS Defece, NULL AS MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Weapons" +
+            " SELECT Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Weapons" +
             " UNION ALL" +
             " SELECT Name, Level, ILEV, Classes, Slot AS Category, NULL AS Damage, NULL AS DamageType, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Wearable" +
             ") as tmp;";
@@ -98,7 +98,7 @@ public class EntertainmentDAO {
                     .put("DamageType", resultSet.getString("DamageType"))
                     .put("Delay", resultSet.getDouble("Delay"))
                     .put("AutoAttack", resultSet.getDouble("AutoAttack"))
-                    .put("Defense", resultSet.getInt("Defece"))
+                    .put("Defense", resultSet.getInt("Defence"))
                     .put("MagicDefense", resultSet.getInt("MagicDefense"))
                     .put("MateriaSlots", resultSet.getInt("MateriaSlots"))
                     .put("Stats", resultSet.getString("Stats"));                    
@@ -108,7 +108,95 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-    
+        
+    private JSONArray ffxivMerged(Connection dbc, int minRange, int maxRange, String completed) {
+        String query_FFXIV_Merged = "SELECT * FROM (" +
+                " SELECT q.MinLevel, q.Name, q.CoordX, q.CoordY, q.Zone, q.Exp, q.Gil," +
+                " q.Classes, q.QuestOrder, q.OrigCompDate, q.Completed, q.GivingNPC, q.Seals, q.Version, q.Event, q.Type," +
+                " 'Q' as MasterType, c.Description as qcDesc, NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality," +
+                " NULL AS Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, NULL AS Stats" +
+                " FROM FFXIV_Quests q" +
+        	" LEFT JOIN Core.FFXIV_QuestCodes c ON c.Code = SUBSTRING(q.QuestOrder, 4, 6)" +
+                " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'";
+        if(completed.equals("0")) {
+            query_FFXIV_Merged += " AND QuestOrder NOT LIKE '%EV' AND (Classes IS NULL OR Classes = '')"; 
+        }
+        query_FFXIV_Merged += " UNION ALL" +
+                " SELECT Level as MinLevel, Recipie as Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
+                " Class as Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'C' as MasterType, NULL AS qcDesc," +
+                " Crystals, Materials, Durability, MaxQuality, Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, NULL AS Stats" +
+                " FROM Core.FFXIV_Crafting" +
+                " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
+                " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'W' as MasterType, NULL AS qcDesc," + 
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
+                " Category, DamageType, Damage, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats" +
+                " FROM Core.FFXIV_Items_Weapons" +
+                " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
+                " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'W' as MasterType, NULL AS qcDesc," + 
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
+                " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats" +
+                " FROM Core.FFXIV_Items_Wearable" +
+                " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
+                " ) as tmp" +
+                " ORDER BY MinLevel";
+        System.out.println(query_FFXIV_Merged);
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIV_Merged, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Name", resultSet.getString("Name"))
+                    .put("MinLevel", resultSet.getInt("MinLevel"))
+                    .put("CoordX", resultSet.getInt("CoordX"))
+                    .put("CoordY", resultSet.getInt("CoordY"))
+                    .put("Zone", resultSet.getString("Zone"))
+                    .put("Exp", resultSet.getInt("Exp"))
+                    .put("Gil", resultSet.getInt("Gil"))
+                    .put("Classes", resultSet.getString("Classes"))
+                    .put("QuestOrder", resultSet.getString("QuestOrder"))
+                    .put("OrigCompDate", resultSet.getString("OrigCompDate"))
+                    .put("Completed", resultSet.getInt("Completed"))
+                    .put("GivingNPC", resultSet.getString("GivingNPC"))
+                    .put("Seals", resultSet.getInt("Seals"))
+                    .put("Version", resultSet.getDouble("Version"))
+                    .put("Event", resultSet.getString("Event"))
+                    .put("Type", resultSet.getString("Type"))
+                    .put("qcDesc", resultSet.getString("qcDesc"))
+                    .put("MasterType", resultSet.getString("MasterType"))
+                    .put("Crystals", resultSet.getString("Crystals"))
+                    .put("Materials", resultSet.getString("Materials"))
+                    .put("MaxQuality", resultSet.getInt("MaxQuality"))
+                    .put("Durability", resultSet.getInt("Durability"))
+                    .put("Difficulty", resultSet.getInt("Difficulty"))
+                    .put("ILEV", resultSet.getInt("ILEV"))
+                    .put("Category", resultSet.getString("Category"))
+                    .put("Damage", resultSet.getDouble("Damage"))
+                    .put("DamageType", resultSet.getString("DamageType"))
+                    .put("Delay", resultSet.getDouble("Delay"))
+                    .put("AutoAttack", resultSet.getDouble("AutoAttack"))
+                    .put("Defense", resultSet.getInt("Defence"))
+                    .put("MagicDefense", resultSet.getInt("MagicDefense"))
+                    .put("MateriaSlots", resultSet.getInt("MateriaSlots"))
+                    .put("Stats", resultSet.getString("Stats"));;
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+        
     private JSONArray ffxivQuestsByDate(Connection dbc) {
         final String query_FfxivQuestByDate = "SELECT OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
                 " FROM FFXIV_Quests WHERE OrigCompDate IS NOT NULL GROUP BY OrigCompDate;";
@@ -174,6 +262,7 @@ public class EntertainmentDAO {
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
+    public JSONArray getFfxivMerged(Connection dbc,  int minRange, int maxRange, String completed) { return ffxivMerged(dbc, minRange, maxRange, completed); }
     
     public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) {
         String query_FFXIV_Quests = "SELECT q.MinLevel, q.Name, q.CoordX, q.CoordY, q.Zone, q.Exp, q.Gil," +

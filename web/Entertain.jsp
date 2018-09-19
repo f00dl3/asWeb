@@ -1,7 +1,7 @@
 <%-- 
     Document   : MediaServ
     Created on : Mar 19, 2018, 7:35:15 AM
-    Updated: 30 Aug 2018
+    Updated: 17 Sep 2018
     Author     : Anthony Stump
 --%>
 
@@ -35,6 +35,7 @@
             <div class="UPop">
                 <button class="SButton">FFXIV</button>
                 <div class="UPopO">
+                    <button class="SButton" id="ShETGFF14C">Crafting</button>
                     <button class="SButton" id="ShETGFF14D">Duties</button>
                     <button class="SButton" id="ShETGFF14I">Items</button>
                     <button class="SButton" id="ShETGFF14Q">Quests</button>
@@ -43,6 +44,7 @@
             <p>
             <div id="ETGHours"></div>
             <div id="ETGIndex"></div>
+            <div id="ETGFF14C"></div>
             <div id="ETGFF14D"></div>
             <div id="ETGFF14I"></div>
             <div id="ETGFF14Q"></div>

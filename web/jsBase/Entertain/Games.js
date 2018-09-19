@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 30 Aug 2018
+Updated: 17 Sep 2018
  */
 
 function actOnPlayedGameHours(event) {
@@ -23,6 +23,7 @@ function displayGames() {
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
+    $("#ETGFF14C").hide();
     $("#ETGFF14D").hide();
     $("#ETGFF14I").hide();
     $("#ETGFF14Q").hide();
@@ -32,6 +33,7 @@ function displayGameHours() {
 function displayGameIndex() {
     var target = "ETGIndex";
     getGameIndex(target);
+    $("#ETGFF14C").hide();
     $("#ETGFF14D").hide();
     $("#ETGFF14I").hide();
     $("#ETGFF14Q").hide();
@@ -41,11 +43,13 @@ function displayGameIndex() {
 function gameButtonListeners() {
     var btnShowHours = dojo.byId("ShETGHours");
     var btnShowIndex = dojo.byId("ShETGIndex");
+    var btnShowFF14C = dojo.byId("ShETGFF14C");
     var btnShowFF14D = dojo.byId("ShETGFF14D");
     var btnShowFF14I = dojo.byId("ShETGFF14I");
     var btnShowFF14Q = dojo.byId("ShETGFF14Q");
     dojo.connect(btnShowHours, "click", displayGameHours);
     dojo.connect(btnShowIndex, "click", displayGameIndex);
+    dojo.connect(btnShowFF14C, "click", displayGameFf14c);
     dojo.connect(btnShowFF14D, "click", displayGameFf14d);
     dojo.connect(btnShowFF14I, "click", displayGameFf14i);
     dojo.connect(btnShowFF14Q, "click", displayGameFf14q);

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 17 Sep 2018
+Updated: 18 Sep 2018
  */
 
 package asWebRest.resource;
@@ -63,11 +63,23 @@ public class EntertainmentResource extends ServerResource {
                     returnData += ffxivI.toString();
                     break;
                     
+                case "getFfxivMerged":
+                    JSONArray ffxivM = getEntertainmentAction.getFfxivMerged(dbc, 1, 9999, "%");
+                    returnData += ffxivM.toString();
+                    break;
+
+                case "getFfxivMergedInRange":
+                    int minLevelM = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
+                    int maxLevelM = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
+                    JSONArray ffxivMr = getEntertainmentAction.getFfxivMerged(dbc, minLevelM, maxLevelM, "0");
+                    returnData += ffxivMr.toString();
+                    break;
+                    
                 case "getFfxivQuests":
                     JSONArray ffxivQ = getEntertainmentAction.getFfxivQuests(dbc, 1, 9999, "%");
                     returnData += ffxivQ.toString();
                     break;
-                    
+
                 case "getFfxivQuestsInRange":
                     int minLevel = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
                     int maxLevel = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
