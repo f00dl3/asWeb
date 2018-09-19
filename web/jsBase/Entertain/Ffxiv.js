@@ -478,7 +478,6 @@ function putFfxivMergedList(target, questData) {
             if(isSet(ff14q.Materials)) { rData += "Materials: " + ff14q.Materials + "<br/>"; }
             if(isSet(ff14q.Durability)) { rData += "Durability: " + ff14q.Durability + "<br/>"; }
             if(isSet(ff14q.MaxQuality)) { rData += "Max. Quality: " + ff14q.MaxQuality + "<br/>"; }
-            if(isSet(ff14q.OrigCompDate)) { rData += "1st Completed: " + ff14q.OrigCompDate + "<br/>"; }
             if(isSet(ff14q.Damage)) { rData += "<strong>Damage: </strong>" + ff14q.Damage + " (" + ff14q.DamageType + ")<br/>"; }
             if(isSet(ff14q.Delay)) { rData += "<strong>Delay: </strong>" + ff14q.Delay + "<br/>"; }
             if(isSet(ff14q.AutoAttack)) { rData += "<strong>Auto Attack: </strong>" + ff14q.AutoAttack + "<br/>"; }
