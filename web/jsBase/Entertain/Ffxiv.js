@@ -127,6 +127,7 @@ function ffxivMergedHint(value) {
                 (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.MasterType) && (sr.MasterType).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.Stats) && (sr.Stats).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
@@ -514,22 +515,24 @@ function putFfxivMerged(target, mergedData, countIn) {
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
     var cCount = counts.Crafting;
+    var hCount = counts.Hunting;
     var compCounter = 0;
     var craftCounter = 0;
     var huntCounter = 0;
+    var totalCompletionCount = 0;
+    var tCount = mCount + qCount + cCount;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
         "Min1", "Min13",
         "Cnj1", "Cnj4a", "Cnj9"
     ];
     mergedData.forEach(function (ffxq) {
-        if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; }
-        if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; }
-        if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; totalCompletionCount++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
-            "<strong>House:</strong> Mist Ward 1 Plot 39 (" + houseValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
-            "<strong>Assets:</strong> " + totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/><br/>" +
+            "<strong>Non-Gil Assets:</strong> " + totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> -- Mist Ward 1 Plot 39<br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
@@ -542,19 +545,17 @@ function putFfxivMerged(target, mergedData, countIn) {
         rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
     }
     rData += "</div></div>" +
-            "<h3>Merged FFXIV Data</h3><strong><div class='UPop'>Index size: " + mCount +
+            "<h3>Merged FFXIV Data</h3><strong><div class='UPop'>" +
+            "Index size: " + mCount + "<br/>" +
+            "Completed: " + totalCompletionCount + " (" + ((totalCompletionCount/tCount)*100).toFixed(1) + "%)" +
             "<div class='UPopO'>" +
-            "<strong>Quests:</strong> " + qCount + "<br/>" +
-            "<strong>Crafting:</strong> " + counts.Crafting + "<br/>" +
-            "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
-            "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
-            "<strong>Hunting:</strong> " + counts.Hunting + "<br/>" +
+            "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Gathering:</strong> " + counts.Gathering + "<br/>" +
+            "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
+            "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
+            "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
+            "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
             "</div></div><br/>" +
-            "Completed: " +
-            compCounter + " (" + ((compCounter/qCount)*100).toFixed(1) + "%) quests, " +
-            craftCounter + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%) crafting." +            
-            "<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
             "<p><div id='mSearchHolder'></div>" +
             "<p><div id='mergedList'></div>";
