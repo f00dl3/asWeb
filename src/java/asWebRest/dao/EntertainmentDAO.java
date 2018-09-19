@@ -75,7 +75,14 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
+    
+    private String ffxivCraftingDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_CraftingDone = "UPDATE Core.FFXIV_Crafting SET Completed=1, OrigCompDate=CURDATE() WHERE Recipie=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_CraftingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray ffxivDungeons(Connection dbc) {
         final String query_FfxivDungeons = "SELECT d.Name, d.MinLevel, d.MinItemLevel, d.MaxItemLevel," +
                 " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
@@ -108,6 +115,13 @@ public class EntertainmentDAO {
         return tContainer;
     }
       
+    private String ffxivHuntingDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_HuntingDone = "UPDATE Core.FFXIV_Hunting SET Completed=1, OrigCompDate=CURDATE() WHERE HuntCode=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_HuntingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray ffxivItems(Connection dbc) {
         final String query_FfxivItems = "SELECT * FROM (" +
             " SELECT Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Weapons" +
@@ -262,13 +276,6 @@ public class EntertainmentDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
-    }
-    
-    private String ffxivCraftingDone(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        final String query_FFXIV_CraftingDone = "UPDATE Core.FFXIV_Crafting SET Completed=1, OrigCompDate=CURDATE() WHERE Recipie=?;";
-        try { returnData = wc.q2do1c(dbc, query_FFXIV_CraftingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
     }
         
     private String ffxivQuestDone(Connection dbc, List<String> qParams) {
@@ -605,6 +612,7 @@ public class EntertainmentDAO {
  
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
+    public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }
     
 }

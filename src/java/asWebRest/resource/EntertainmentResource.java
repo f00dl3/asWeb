@@ -146,6 +146,11 @@ public class EntertainmentResource extends ServerResource {
                     returnData += updateEntertainmentAction.setFfxivCraftingDone(dbc, qParams);
                     break;
                     
+                case "setFfxivHuntingDone":
+                    qParams.add(0, argsInForm.getFirstValue("huntCode"));
+                    returnData += updateEntertainmentAction.setFfxivHuntingDone(dbc, qParams);
+                    break;
+                    
                 case "setFfxivQuestDone":
                     qParams.add(0, argsInForm.getFirstValue("questOrder"));
                     returnData += updateEntertainmentAction.setFfxivQuestDone(dbc, qParams);

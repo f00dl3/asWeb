@@ -16,6 +16,7 @@ function actOnFfxivQuestDone(event) {
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
+        case "Hunting": setFfxivHuntingDone(thisFormData); break;
         default: window.alert("TYPE NOT SET!\n" + thisFormDataJ); break;
     }
 }
@@ -443,7 +444,8 @@ function putFfxivMergedList(target, questData) {
                     ff14q.Completed === 1 ||
                     (
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting'
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
                     )
             ) {
                 qComplete = "Yes";
@@ -514,6 +516,7 @@ function putFfxivMerged(target, mergedData, countIn) {
     var cCount = counts.Crafting;
     var compCounter = 0;
     var craftCounter = 0;
+    var huntCounter = 0;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
         "Min1", "Min13",
@@ -522,6 +525,7 @@ function putFfxivMerged(target, mergedData, countIn) {
     mergedData.forEach(function (ffxq) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
             "<strong>House:</strong> Mist Ward 1 Plot 39 (" + houseValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
@@ -594,6 +598,31 @@ function setFfxivCraftingDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Crafting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivHuntingDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivHuntingDone",
+        "huntCode": formData.QuestOrder
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Hunting " + formData.Name + " complete!");
+                    getGameFf14q(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Hunting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
