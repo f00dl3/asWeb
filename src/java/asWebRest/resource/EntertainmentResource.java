@@ -65,14 +65,22 @@ public class EntertainmentResource extends ServerResource {
                     
                 case "getFfxivMerged":
                     JSONArray ffxivM = getEntertainmentAction.getFfxivMerged(dbc, 1, 9999, "%");
-                    returnData += ffxivM.toString();
+                    JSONArray ffxivCountsM = getEntertainmentAction.getFfxivCounts(dbc);
+                    mergedResults
+                        .put("ffxivMerged", ffxivM)
+                        .put("ffxivCount", ffxivCountsM);
+                    returnData += mergedResults.toString();
                     break;
 
                 case "getFfxivMergedInRange":
                     int minLevelM = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
                     int maxLevelM = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
                     JSONArray ffxivMr = getEntertainmentAction.getFfxivMerged(dbc, minLevelM, maxLevelM, "0");
-                    returnData += ffxivMr.toString();
+                    JSONArray ffxivCounts = getEntertainmentAction.getFfxivCounts(dbc);
+                    mergedResults
+                        .put("ffxivMerged", ffxivMr)
+                        .put("ffxivCount", ffxivCounts);
+                    returnData += mergedResults.toString();
                     break;
                     
                 case "getFfxivQuests":

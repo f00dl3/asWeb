@@ -19,10 +19,35 @@ public class EntertainmentDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
        
+    private JSONArray ffxivCounts(Connection dbc) {
+        final String query_ffxivCounts = "SELECT" +
+                " COUNT(Name) AS Quests," +
+                " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
+                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
+                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
+                " FROM Core.FFXIV_Quests;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ffxivCounts, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Quests", resultSet.getInt("Quests"))
+                    .put("Weapons", resultSet.getInt("Weapons"))
+                    .put("Crafting", resultSet.getInt("Crafting"))
+                    .put("Wearables", resultSet.getInt("Wearables"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     private JSONArray ffxivCrafting(Connection dbc) {
         final String query_ffxivCrafting = "SELECT Recipie, Level, Crafted, Difficulty," +
                 " Durability, MaxQuality, Crystals, Materials, Class" +
-                " FROM Core.FFXIV_Crafting ORDER BY Level DESC;";
+                " FROM Core.FFXIV_Crafting" +
+                " ORDER BY Level ASC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ffxivCrafting, null);
@@ -150,7 +175,7 @@ public class EntertainmentDAO {
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " ) as tmp" +
                 " ORDER BY MinLevel";
-        System.out.println(query_FFXIV_Merged);
+        //System.out.println(query_FFXIV_Merged);
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIV_Merged, null);
@@ -259,6 +284,7 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    public JSONArray getFfxivCounts(Connection dbc) { return ffxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }

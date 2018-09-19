@@ -7,7 +7,7 @@ Updated: 18 Sep 2018
 
 var ffxivCrafting;
 var ffxivItems;
-var ffxivQuests;
+var ffxivMerged;
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
@@ -15,7 +15,7 @@ function actOnFfxivQuestDone(event) {
     setFfxivQuestDone(thisFormData);
 }
 
-function actOnFfxivQuestRangeSearch(event) {
+function actOnFfxivMergedRangeSearch(event) {
     dojo.stopEvent(event);
     var target = "ETGFF14Q";
     var thisFormData = dojo.formToObject(this.form);
@@ -85,7 +85,7 @@ function ffxivCraftingHint(value) {
                 }
             }
         });
-        putFfxivItemList("craftingList", matchingRows);    
+        putFfxivCraftingList("craftingList", matchingRows);    
     }
 }
 
@@ -110,12 +110,12 @@ function ffxivItemHint(value) {
     }
 }
 
-function ffxivQuestHint(value) {
+function ffxivMergedHint(value) {
     if(value.length > 2) {
         var hitCount = 0;
         var matchLimitHit = 0;
         var matchingRows = [];
-        ffxivQuests.forEach(function (sr) {
+        ffxivMerged.forEach(function (sr) {
             if(
                 (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
@@ -130,7 +130,7 @@ function ffxivQuestHint(value) {
                 }
             }
         });
-        putFfxivQuestList("questList", matchingRows);    
+        putFfxivMergedList("mergedList", matchingRows);    
     }
 }
 
@@ -212,7 +212,7 @@ function getGameFf14q(target) {
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for FFXIV Quests by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request for FFXIV Quest Graph by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
     setTimeout(function () { getGameFf14q(target); }, timeout);
@@ -230,13 +230,13 @@ function getGameFf14qData(target) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    ffxivQuests = data;
-                    putFfxivQuests(target, data);
+                    ffxivMerged = data.ffxivMerged;
+                    putFfxivMerged(target, data.ffxivMerged, data.ffxivCount);
                     $("#"+target).show();
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for FFXIV Quests FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request for FFXIV Merged FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
@@ -245,7 +245,7 @@ function getGameFf14qDataInRange(target, formData) {
     getDivLoadingMessage(target);
     aniPreload("on");
     var thePostData = {
-        "doWhat": "getFfxivQuestsInRange",
+        "doWhat": "getFfxivMergedInRange",
         "minLevel": formData.LevelRangeMin,
         "maxLevel": formData.LevelRangeMax
     };
@@ -257,13 +257,13 @@ function getGameFf14qDataInRange(target, formData) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    ffxivQuests = data;
-                    putFfxivQuests(target, data);
+                    ffxivMerged = data.ffxivMerged;
+                    putFfxivMerged(target, data.ffxivMerged, data.ffxivCount);
                     $("#"+target).show();
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for FFXIV Quests IN RANGE FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request for FFXIV Merged IN RANGE FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
@@ -280,25 +280,29 @@ function putFfxivCrafting(target, craftingData) {
 
 function putFfxivCraftingList(target, craftingData) {
     $("#"+target).show();
+    var cNum = 0;
     var dCols = [ "Recipie", "Level" ];
     var rData = "<div class='table'><div class='tr'>";
     for (var i = 0; i < dCols.length; i++) { rData += "<span class='td'><strong>" + dCols[i] + "</strong></span>"; }
     rData += "</div>";
     craftingData.forEach(function (ff14c) {
-        var rNameShort = (ff14c.Recipie).substring(4); // work on table without char prefix
-        rData += "<div class='tr'>" +
-                "<span class='td'><div class='UPop'>" + rNameShort + "</span>" +
-                "<div class='UPopO'>" +
-                "<strong>Crystals</strong>: " + ff14c.Crystals + "<br/>" +
-                "<strong>Materials</strong>: " + ff14c.Materials + "<br/>" +
-                "<strong>Class</strong>: " + ff14c.Class + "<br/>" +
-                "</div></div></span>" +
-                "<span class='td'><div class='UPop'>" + ff14c.Level +
-                "<div class='UPopO'>" +
-                "<strong>Durability</strong>: " + ff14c.Durability + "<br/>" +
-                "<strong>Max Quality</strong>: " + ff14c.MaxQuality + "<br/>" +
-                "</div></div></span>" +
-                "</div>";
+        if(cNum <= 50) {
+            var rNameShort = (ff14c.Recipie).substring(4); // work on table without char prefix
+            rData += "<div class='tr'>" +
+                    "<span class='td'><div class='UPop'>" + rNameShort + "</span>" +
+                    "<div class='UPopO'>" +
+                    "<strong>Crystals</strong>: " + ff14c.Crystals + "<br/>" +
+                    "<strong>Materials</strong>: " + ff14c.Materials + "<br/>" +
+                    "<strong>Class</strong>: " + ff14c.Class + "<br/>" +
+                    "</div></div></span>" +
+                    "<span class='td'><div class='UPop'>" + ff14c.Level +
+                    "<div class='UPopO'>" +
+                    "<strong>Durability</strong>: " + ff14c.Durability + "<br/>" +
+                    "<strong>Max Quality</strong>: " + ff14c.MaxQuality + "<br/>" +
+                    "</div></div></span>" +
+                    "</div>";
+        }
+        cNum++;
     });
     rData += "</div>";
     dojo.byId(target).innerHTML = rData;    
@@ -412,7 +416,7 @@ function putFfxivItemSearchBox(target) {
     dojo.byId(target).innerHTML = rData;
 }
 
-function putFfxivQuestList(target, questData) {
+function putFfxivMergedList(target, questData) {
     var qNum = 0;
     var qCols = [ "Up", "Name", "LV" ];
     var rData = "<div class='table'><div class='tr'>";
@@ -482,18 +486,20 @@ function putFfxivQuestList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivQuests(target, questData) {
+function putFfxivMerged(target, mergedData, counts) {
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
-    var qCount = ffxivQuests.length;
+    var mCount = ffxivMerged.length;
+    var qCount = counts.Quests;
     var compCounter = 0;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
         "Min1", "Min13",
         "Cnj1", "Cnj4a", "Cnj9"
     ];
-    ffxivQuests.forEach(function (ffxq) {
-        if(ffxq.Completed === 1) { compCounter++; }
+    console.log(mergedData);
+    mergedData.forEach(function (ffxq) {
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Q") { compCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
             "<strong>House:</strong> Mist Ward 1 Plot 39 (2.83m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
@@ -509,17 +515,23 @@ function putFfxivQuests(target, questData) {
         rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
     }
     rData += "</div></div>" +
-            "<h3>Quests</h3><strong>Index size: " + qCount + "<br/>" +
-            "Completed quests: " + compCounter + " *(" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
+            "<h3>Quest/Crafting/Items</h3><strong><div class='UPop'>Index size: " + mCount +
+            "<div class='UPopO'>" +
+            "<strong>Quests:</strong> " + qCount + "<br/>" +
+            "<strong>Crafting:</strong> " + counts.Crafting + "<br/>" +
+            "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
+            "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
+            "</div></div><br/>" +
+            "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
-            "<p><div id='qSearchHolder'></div>" +
-            "<p><div id='questList'></div>";
+            "<p><div id='mSearchHolder'></div>" +
+            "<p><div id='mergedList'></div>";
     dojo.byId(target).innerHTML = rData;
-    putFfxivQuestSearchBox("qSearchHolder");
-    putFfxivQuestList("questList", questData);
+    putFfxivMergedSearchBox("mSearchHolder");
+    putFfxivMergedList("mergedList", mergedData);
 }
 
-function putFfxivQuestSearchBox(target) {
+function putFfxivMergedSearchBox(target) {
     var rData = "<div class='table'>" +
         "<form class='tr' id='ffxivSearchForm'>" +
         "<span class='td'><div class='UPop'><input type='text' style='width: 128px;' id='SearchBrix' name='StationSearchField' onkeyup='ffxivQuestHint(this.value)' /><div class='UPopO'>Text search (Name, QuestCode, Zone, Code Description)</div></div></span>" +
@@ -530,7 +542,7 @@ function putFfxivQuestSearchBox(target) {
         "</div>";
     dojo.byId(target).innerHTML = rData;
     var ffxivRangeButton = dojo.byId("LevelRangeSubmit");
-    dojo.connect(ffxivRangeButton, "onclick", actOnFfxivQuestRangeSearch);
+    dojo.connect(ffxivRangeButton, "onclick", actOnFfxivMergedRangeSearch);
 }
 
 function setFfxivQuestDone(formData) {

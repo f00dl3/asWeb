@@ -35,10 +35,10 @@
             <div class="UPop">
                 <button class="SButton">FFXIV</button>
                 <div class="UPopO">
-                    <button class="SButton" id="ShETGFF14C">Crafting</button>
+                    <button class="SButton" id="ShETGFF14Q">All</button>
+                    <button class="SButton" id="ShETGFF14C">Craft</button>
                     <button class="SButton" id="ShETGFF14D">Duties</button>
                     <button class="SButton" id="ShETGFF14I">Items</button>
-                    <button class="SButton" id="ShETGFF14Q">Quests</button>
                 </div>
             </div>
             <p>

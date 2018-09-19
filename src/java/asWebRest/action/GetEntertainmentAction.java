@@ -15,6 +15,7 @@ public class GetEntertainmentAction {
     private EntertainmentDAO entertainmentDAO;
     public GetEntertainmentAction(EntertainmentDAO entertainmentDAO) { this.entertainmentDAO = entertainmentDAO; }
     
+    public JSONArray getFfxivCounts(Connection dbc) { return entertainmentDAO.getFfxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return entertainmentDAO.getFfxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return entertainmentDAO.getFfxivDungeons(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return entertainmentDAO.getFfxivItems(dbc); }
