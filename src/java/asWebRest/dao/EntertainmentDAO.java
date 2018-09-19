@@ -25,7 +25,8 @@ public class EntertainmentDAO {
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
-                " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting" +
+                " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting," +
+                " (SELECT Count(NodeCode) FROM Core.FFXIV_GatherNodes) AS Gathering" +
                 " FROM Core.FFXIV_Quests;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -37,7 +38,8 @@ public class EntertainmentDAO {
                     .put("Weapons", resultSet.getInt("Weapons"))
                     .put("Crafting", resultSet.getInt("Crafting"))
                     .put("Wearables", resultSet.getInt("Wearables"))
-                    .put("Hunting", resultSet.getInt("Hunting"));
+                    .put("Hunting", resultSet.getInt("Hunting"))
+                    .put("Gathering", resultSet.getInt("Gathering"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -186,6 +188,15 @@ public class EntertainmentDAO {
                 " NULL AS MateriaSlots, NULL AS Stats" +
                 " FROM Core.FFXIV_Hunting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT MinLevel, CONCAT(Name, ' ', MinLevel) AS Name, CoordX, CoordY, Zone, NULL AS Exp, NULL AS Gil," +
+                " Class as Classes, NodeCode AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Gathering' AS MasterType, NULL AS qcDesc," +
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats" +
+                " FROM Core.FFXIV_GatherNodes" +
+                " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
         //System.out.println(query_FFXIV_Merged);

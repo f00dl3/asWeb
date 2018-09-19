@@ -538,13 +538,14 @@ function putFfxivMerged(target, mergedData, countIn) {
         rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
     }
     rData += "</div></div>" +
-            "<h3>Quest/Crafting/Items</h3><strong><div class='UPop'>Index size: " + mCount +
+            "<h3>Merged FFXIV Data</h3><strong><div class='UPop'>Index size: " + mCount +
             "<div class='UPopO'>" +
             "<strong>Quests:</strong> " + qCount + "<br/>" +
             "<strong>Crafting:</strong> " + counts.Crafting + "<br/>" +
             "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
             "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
             "<strong>Hunting:</strong> " + counts.Hunting + "<br/>" +
+            "<strong>Gathering:</strong> " + counts.Gathering + "<br/>" +
             "</div></div><br/>" +
             "Completed: " +
             compCounter + " (" + ((compCounter/qCount)*100).toFixed(1) + "%) quests, " +
