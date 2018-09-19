@@ -437,7 +437,7 @@ function putFfxivMergedList(target, questData) {
             var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='do'/>" +
                     "<input type='hidden' name='Type' value='" + ff14q.MasterType + "'/>" +
                     "<input type='hidden' name='Name' value='" + ff14q.Name + "'/>" +
-                    "<input type='hidden' name='Order' value='" + ff14q.QuestOrder + "'/>" +
+                    "<input type='hidden' name='QuestOrder' value='" + ff14q.QuestOrder + "'/>" +
                     "</span>";
             if(
                     ff14q.Completed === 1 ||
@@ -511,7 +511,9 @@ function putFfxivMerged(target, mergedData, countIn) {
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
+    var cCount = counts.Crafting;
     var compCounter = 0;
+    var craftCounter = 0;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
         "Min1", "Min13",
@@ -519,6 +521,7 @@ function putFfxivMerged(target, mergedData, countIn) {
     ];
     mergedData.forEach(function (ffxq) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
             "<strong>House:</strong> Mist Ward 1 Plot 39 (" + houseValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
@@ -542,7 +545,10 @@ function putFfxivMerged(target, mergedData, countIn) {
             "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
             "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
             "</div></div><br/>" +
-            "Completed quests: " + compCounter + " (" + ((compCounter/qCount)*100).toFixed(2) + "%)<br/>" +
+            "Completed: " +
+            compCounter + " (" + ((compCounter/qCount)*100).toFixed(1) + "%) quests, " +
+            craftCounter + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%) crafting." +            
+            "<br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
             "<p><div id='mSearchHolder'></div>" +
             "<p><div id='mergedList'></div>";
