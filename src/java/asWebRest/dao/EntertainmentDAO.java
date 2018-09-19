@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 18 Sep 2018
+Updated: 19 Sep 2018
 */
 
 package asWebRest.dao;
@@ -176,7 +176,7 @@ public class EntertainmentDAO {
                 " FROM Core.FFXIV_Items_Wearable" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " ) as tmp" +
-                " ORDER BY MinLevel";
+                " ORDER BY MinLevel, QuestOrder";
         //System.out.println(query_FFXIV_Merged);
         JSONArray tContainer = new JSONArray();
         try {
