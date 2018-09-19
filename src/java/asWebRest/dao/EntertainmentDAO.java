@@ -140,7 +140,7 @@ public class EntertainmentDAO {
         String query_FFXIV_Merged = "SELECT * FROM (" +
                 " SELECT q.MinLevel, q.Name, q.CoordX, q.CoordY, q.Zone, q.Exp, q.Gil," +
                 " q.Classes, q.QuestOrder, q.OrigCompDate, q.Completed, q.GivingNPC, q.Seals, q.Version, q.Event, q.Type," +
-                " 'Q' as MasterType, c.Description as qcDesc, NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality," +
+                " 'Quest' as MasterType, c.Description as qcDesc, NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality," +
                 " NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
                 " NULL AS MateriaSlots, NULL AS Stats" +
@@ -153,7 +153,7 @@ public class EntertainmentDAO {
         query_FFXIV_Merged += " UNION ALL" +
                 " SELECT Level as MinLevel, Recipie as Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
                 " Class as Classes, NULL AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
-                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'C' as MasterType, NULL AS qcDesc," +
+                " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Crafting' as MasterType, NULL AS qcDesc," +
                 " Crystals, Materials, Durability, MaxQuality, Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
                 " NULL AS MateriaSlots, NULL AS Stats" +
@@ -162,7 +162,7 @@ public class EntertainmentDAO {
                 " UNION ALL" +
                 " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
                 " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
-                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'W' as MasterType, NULL AS qcDesc," + 
+                " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Weapon' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Category, DamageType, Damage, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats" +
                 " FROM Core.FFXIV_Items_Weapons" +
@@ -170,7 +170,7 @@ public class EntertainmentDAO {
                 " UNION ALL" +
                 " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
                 " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
-                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'W' as MasterType, NULL AS qcDesc," + 
+                " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Wearable' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats" +
                 " FROM Core.FFXIV_Items_Wearable" +
@@ -240,6 +240,13 @@ public class EntertainmentDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
+    }
+    
+    private String ffxivCraftingDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_CraftingDone = "UPDATE Core.FFXIV_Crafting SET Completed=1, OrigCompDate=CURDATE() WHERE Recipie=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_CraftingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
     }
         
     private String ffxivQuestDone(Connection dbc, List<String> qParams) {
@@ -575,6 +582,7 @@ public class EntertainmentDAO {
     }
  
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
+    public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
     public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }
     
 }

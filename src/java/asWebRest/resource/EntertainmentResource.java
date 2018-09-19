@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 18 Sep 2018
+Updated: 19 Sep 2018
  */
 
 package asWebRest.resource;
@@ -139,6 +139,11 @@ public class EntertainmentResource extends ServerResource {
                 case "getXFiles":
                     JSONArray xf = getEntertainmentAction.getXFiles(dbc);
                     returnData += xf.toString();
+                    break;
+                    
+                case "setFfxivCraftingDone":
+                    qParams.add(0, argsInForm.getFirstValue("recipieName"));
+                    returnData += updateEntertainmentAction.setFfxivCraftingDone(dbc, qParams);
                     break;
                     
                 case "setFfxivQuestDone":

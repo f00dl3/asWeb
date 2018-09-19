@@ -12,7 +12,13 @@ var ffxivMerged;
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    setFfxivQuestDone(thisFormData);
+    var thisFormDataJ = dojo.formToObject(this.form);
+    console.log(thisFormDataJ);
+    switch(thisFormData.Type) {
+        case "Quest": setFfxivQuestDone(thisFormData); break;
+        case "Crafting": setFfxivCraftingDone(thisFormData); break;
+        default: window.alert("TYPE NOT SET!\n" + thisFormDataJ); break;
+    }
 }
 
 function actOnFfxivMergedRangeSearch(event) {
@@ -119,6 +125,7 @@ function ffxivMergedHint(value) {
             if(
                 (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.MasterType) && (sr.MasterType).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
             ) { 
@@ -425,11 +432,21 @@ function putFfxivMergedList(target, questData) {
     questData.forEach(function (ff14q) {
         if(qNum <= 50) {
             var shortName = ff14q.Name;
-            if(ff14q.MasterType === 'C') { shortName = shortName.substring(4); }
+            if(ff14q.MasterType === 'Crafting') { shortName = shortName.substring(4); }
             var qComplete = "No";
             var fontColor = "Red";
-            var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='" + ff14q.QuestOrder + "'/></span>";
-            if(ff14q.Completed === 1 || (isSet(ff14q.MasterType) && ff14q.MasterType !== 'Q')) {
+            var updateCheckbox = "<input class='ffxivQuestDone' type='checkbox' name='qUpdate' value='do'/>" +
+                    "<input type='hidden' name='Type' value='" + ff14q.MasterType + "'/>" +
+                    "<input type='hidden' name='Name' value='" + ff14q.Name + "'/>" +
+                    "<input type='hidden' name='Order' value='" + ff14q.QuestOrder + "'/>" +
+                    "</span>";
+            if(
+                    ff14q.Completed === 1 ||
+                    (
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting'
+                    )
+            ) {
                 qComplete = "Yes";
                 fontColor = "White";
                 updateCheckbox = "NA";
@@ -487,6 +504,9 @@ function putFfxivMergedList(target, questData) {
 }
 
 function putFfxivMerged(target, mergedData, countIn) {
+    var houseValue = 2.83;
+    var otherValue = 0.8;
+    var totalValue = houseValue + otherValue;
     var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
@@ -498,12 +518,12 @@ function putFfxivMerged(target, mergedData, countIn) {
         "Min1", "Min13",
         "Cnj1", "Cnj4a", "Cnj9"
     ];
-    console.log(counts);
     mergedData.forEach(function (ffxq) {
-        if(ffxq.Completed === 1 && ffxq.MasterType === "Q") { compCounter++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
-            "<strong>House:</strong> Mist Ward 1 Plot 39 (2.83m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
+            "<strong>House:</strong> Mist Ward 1 Plot 39 (" + houseValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>)<br/>" +
+            "<strong>Assets:</strong> " + totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/><br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
@@ -546,12 +566,37 @@ function putFfxivMergedSearchBox(target) {
     dojo.connect(ffxivRangeButton, "onclick", actOnFfxivMergedRangeSearch);
 }
 
+function setFfxivCraftingDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivCraftingDone",
+        "questOrder": formData.Name
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Crafting " + formData.Name + " complete!");
+                    getGameFf14q(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Crafting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function setFfxivQuestDone(formData) {
     var target = "ETGFF14Q";
     aniPreload("on");
     var thePostData = {
         "doWhat": "setFfxivQuestDone",
-        "questOrder": formData.qUpdate
+        "questOrder": formData.QuestOrder
     };
     require(["dojo/request"], function(request) {
         request
