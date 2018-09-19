@@ -544,6 +544,7 @@ function putFfxivMerged(target, mergedData, countIn) {
             "<strong>Crafting:</strong> " + counts.Crafting + "<br/>" +
             "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
             "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
+            "<strong>Hunting:</strong> " + counts.Hunting + "<br/>" +
             "</div></div><br/>" +
             "Completed: " +
             compCounter + " (" + ((compCounter/qCount)*100).toFixed(1) + "%) quests, " +
@@ -611,7 +612,7 @@ function setFfxivQuestDone(formData) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    showNotice("Quest " + formData.qUpdate + " complete!");
+                    showNotice("Quest " + formData.Name + " complete!");
                     getGameFf14q(target);
                 },
                 function(error) { 

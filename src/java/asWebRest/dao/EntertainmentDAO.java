@@ -24,7 +24,8 @@ public class EntertainmentDAO {
                 " COUNT(Name) AS Quests," +
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
-                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables" +
+                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
+                " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting" +
                 " FROM Core.FFXIV_Quests;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -35,7 +36,8 @@ public class EntertainmentDAO {
                     .put("Quests", resultSet.getInt("Quests"))
                     .put("Weapons", resultSet.getInt("Weapons"))
                     .put("Crafting", resultSet.getInt("Crafting"))
-                    .put("Wearables", resultSet.getInt("Wearables"));
+                    .put("Wearables", resultSet.getInt("Wearables"))
+                    .put("Hunting", resultSet.getInt("Hunting"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -174,6 +176,15 @@ public class EntertainmentDAO {
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats" +
                 " FROM Core.FFXIV_Items_Wearable" +
+                " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT Level AS MinLevel, CONCAT(Enemy, ' x', Quantity) as Name, CoordX, CoordY, Zone, Exp, NULL AS Gil," +
+                " Class as Classes, HuntCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Hunt' AS MasterType, NULL AS qcDesc," +
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, NULL AS Stats" +
+                " FROM Core.FFXIV_Hunting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
