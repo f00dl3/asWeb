@@ -531,8 +531,9 @@ function putFfxivMerged(target, mergedData, countIn) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
-    var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a><br/>" +
-            "<strong>Non-Gil Assets:</strong> " + totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> -- Mist Ward 1 Plot 39<br/>" +
+    var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a> " +
+            totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
+            "-- Mist Ward 1 Plot 39<br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
