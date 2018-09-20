@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 19 Sep 2018
+Updated: 20 Sep 2018
  */
 
 var ffxivCrafting;
@@ -520,7 +520,7 @@ function putFfxivMerged(target, mergedData, countIn) {
     var craftCounter = 0;
     var huntCounter = 0;
     var totalCompletionCount = 0;
-    var tCount = mCount + qCount + cCount;
+    var tCount = hCount + qCount + cCount;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
         "Min1", "Min13",
