@@ -114,7 +114,24 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-      
+    
+    private JSONArray ffxivEmotes(Connection dbc) {
+        final String query_FfxivEmotes = "SELECT Command, AcquiredBy FROM Core.FFXIV_Emotes;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivEmotes, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Command", resultSet.getString("Command"))
+                    .put("AcquiredBy", resultSet.getString("AcquiredBy"));                    
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     private String ffxivHuntingDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_FFXIV_HuntingDone = "UPDATE Core.FFXIV_Hunting SET Completed=1, OrigCompDate=CURDATE() WHERE HuntCode=?;";
@@ -325,6 +342,7 @@ public class EntertainmentDAO {
     public JSONArray getFfxivCounts(Connection dbc) { return ffxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
+    public JSONArray getFfxivEmotes(Connection dbc) { return ffxivEmotes(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     public JSONArray getFfxivMerged(Connection dbc,  int minRange, int maxRange, String completed) { return ffxivMerged(dbc, minRange, maxRange, completed); }
     
