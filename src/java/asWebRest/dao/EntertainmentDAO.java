@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 20 Sep 2018
+Updated: 23 Sep 2018
 */
 
 package asWebRest.dao;
@@ -211,7 +211,7 @@ public class EntertainmentDAO {
                 " FROM Core.FFXIV_Items_Wearable" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
-                " SELECT Level AS MinLevel, CONCAT(Class, ': ', Enemy, ' x', Quantity) as Name, CoordX, CoordY, Zone, Exp, NULL AS Gil," +
+                " SELECT Level AS MinLevel, CONCAT(SUBSTRING(HuntCode, 1, 3), ': ', Enemy, ' x', Quantity) as Name, CoordX, CoordY, Zone, Exp, NULL AS Gil," +
                 " Class as Classes, HuntCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Hunt' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
