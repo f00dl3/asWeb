@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 20 Sep 2018
+Updated: 23 Sep 2018
  */
 
 package asWebRest.action;
@@ -19,6 +19,7 @@ public class GetEntertainmentAction {
     public JSONArray getFfxivCrafting(Connection dbc) { return entertainmentDAO.getFfxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return entertainmentDAO.getFfxivDungeons(dbc); }
     public JSONArray getFfxivEmotes(Connection dbc) { return entertainmentDAO.getFfxivEmotes(dbc); }
+    public JSONArray getFfxivImageMaps(Connection dbc) { return entertainmentDAO.getFfxivImageMaps(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return entertainmentDAO.getFfxivItems(dbc); }
     public JSONArray getFfxivMerged(Connection dbc, int minRange, int maxRange, String completed) { return entertainmentDAO.getFfxivMerged(dbc, minRange, maxRange, completed); }
     public JSONArray getFfxivQuestsByDate(Connection dbc) { return entertainmentDAO.getFfxivQuestsByDate(dbc); }

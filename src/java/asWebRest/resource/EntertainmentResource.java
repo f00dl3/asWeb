@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 20 Sep 2018
+Updated: 23 Sep 2018
  */
 
 package asWebRest.resource;
@@ -59,7 +59,6 @@ public class EntertainmentResource extends ServerResource {
                     break;
                     
                 case "getFfxivEmotes":
-                    JSONArray ffxivE = getEntertainmentAction.getFfxivEmotes(dbc);
                     returnData += ffxivE.toString();
                     break;
                     
@@ -71,9 +70,13 @@ public class EntertainmentResource extends ServerResource {
                 case "getFfxivMerged":
                     JSONArray ffxivM = getEntertainmentAction.getFfxivMerged(dbc, 1, 9999, "%");
                     JSONArray ffxivCountsM = getEntertainmentAction.getFfxivCounts(dbc);
+                    JSONArray ffxivIm = getEntertainmentAction.getFfxivImageMaps(dbc);
+                    JSONArray ffxivE = getEntertainmentAction.getFfxivEmotes(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivM)
-                        .put("ffxivCount", ffxivCountsM);
+                        .put("ffxivCount", ffxivCountsM)
+                        .put("ffxivImageMaps", ffxivIm)
+                        .put("ffxivEmotes", ffxivE);
                     returnData += mergedResults.toString();
                     break;
 
@@ -82,9 +85,13 @@ public class EntertainmentResource extends ServerResource {
                     int maxLevelM = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
                     JSONArray ffxivMr = getEntertainmentAction.getFfxivMerged(dbc, minLevelM, maxLevelM, "0");
                     JSONArray ffxivCounts = getEntertainmentAction.getFfxivCounts(dbc);
+                    JSONArray ffxivImM = getEntertainmentAction.getFfxivImageMaps(dbc);
+                    JSONArray ffxivEM = getEntertainmentAction.getFfxivEmotes(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivMr)
-                        .put("ffxivCount", ffxivCounts);
+                        .put("ffxivCount", ffxivCounts)
+                        .put("ffxivImageMaps", ffxivImM)
+                        .put("ffxivEmotes", ffxivEM);
                     returnData += mergedResults.toString();
                     break;
                     

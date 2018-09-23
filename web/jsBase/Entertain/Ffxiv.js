@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 20 Sep 2018
+Updated: 23 Sep 2018
  */
 
 var ffxivCrafting;
@@ -239,7 +239,13 @@ function getGameFf14qData(target) {
                 function(data) {
                     aniPreload("off");
                     ffxivMerged = data.ffxivMerged;
-                    putFfxivMerged(target, data.ffxivMerged, data.ffxivCount);
+                    putFfxivMerged(
+                            target,
+                            data.ffxivMerged,
+                            data.ffxivCount,
+                            data.ffxivImageMaps,
+                            data.ffxivEmotes
+                    );
                     $("#"+target).show();
                 },
                 function(error) { 
@@ -266,7 +272,13 @@ function getGameFf14qDataInRange(target, formData) {
                 function(data) {
                     aniPreload("off");
                     ffxivMerged = data.ffxivMerged;
-                    putFfxivMerged(target, data.ffxivMerged, data.ffxivCount);
+                    putFfxivMerged(
+                            target,
+                            data.ffxivMerged,
+                            data.ffxivCount,
+                            data.ffxivImageMaps,
+                            data.ffxivEmotes
+                    );
                     $("#"+target).show();
                 },
                 function(error) { 
@@ -505,7 +517,7 @@ function putFfxivMergedList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivMerged(target, mergedData, countIn) {
+function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     var houseValue = 2.83;
     var otherValue = 0.8;
     var totalValue = houseValue + otherValue;
@@ -538,13 +550,26 @@ function putFfxivMerged(target, mergedData, countIn) {
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
             " [<a href='" + getBasePath("image") + "/ffxiv/Shroud.jpg' target='ffxivMap'>SHR</a>]" +
-            " [<a href='" + getBasePath("image") + "/ffxiv/Thanalan.jpg' target='ffxivMap'>THA</a>]<br/>" +
-            "</div></div>" +
+            " [<a href='" + getBasePath("image") + "/ffxiv/Thanalan.jpg' target='ffxivMap'>THA</a>]<br/>";
+    iMaps.forEach(function (ffIm) {
+        rData += "<a href='" + getBasePath("image") + "/ffxiv/" + ffIm.File + "' target='ffxivMap'>" + ffIm.Description + "</a><br/>";
+    });
+    rData += "</div></div>" +
             " <div class='UPop'><button class='UButton'>Screens</button>" +
             "<div class='UPopO'>";
     for(var i = 0; i < availImages.length; i++) {
         rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
     }
+    rData += "</div></div>" +
+            " <div class='UPop'><button class='UButton'>Emotes</button>" +
+            "<div class='UPopO'>";
+    emotes.forEach(function (tEm) {
+        rData += tEm.Command;
+        if(isSet(tEm.AcquiredBy)) {
+            rData += " (<em>" + tEm.AcquiredBy + "</em>)";
+        }
+        rData += "<br/>";
+    });
     rData += "</div></div>" +
             "<h3>Merged FFXIV Data</h3><strong><div class='UPop'>" +
             "Index size: " + mCount + "<br/>" +

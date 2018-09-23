@@ -116,7 +116,7 @@ public class EntertainmentDAO {
     }
     
     private JSONArray ffxivEmotes(Connection dbc) {
-        final String query_FfxivEmotes = "SELECT Command, AcquiredBy FROM Core.FFXIV_Emotes;";
+        final String query_FfxivEmotes = "SELECT Command, AquiredBy FROM Core.FFXIV_Emotes;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivEmotes, null);
@@ -124,7 +124,7 @@ public class EntertainmentDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Command", resultSet.getString("Command"))
-                    .put("AcquiredBy", resultSet.getString("AcquiredBy"));                    
+                    .put("AcquiredBy", resultSet.getString("AquiredBy"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -139,6 +139,23 @@ public class EntertainmentDAO {
         return returnData;
     }
     
+    private JSONArray ffxivImageMaps(Connection dbc) {
+        final String query_FfxivImageMaps = "SELECT File, Description FROM Core.FFXIV_ImageMaps;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivImageMaps, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("File", resultSet.getString("File"))
+                    .put("Description", resultSet.getString("Description"));                    
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    } 
+   
     private JSONArray ffxivItems(Connection dbc) {
         final String query_FfxivItems = "SELECT * FROM (" +
             " SELECT Name, Level, ILEV, Classes, Category, Damage, DamageType, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Weapons" +
@@ -343,6 +360,7 @@ public class EntertainmentDAO {
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivEmotes(Connection dbc) { return ffxivEmotes(dbc); }
+    public JSONArray getFfxivImageMaps(Connection dbc) { return ffxivImageMaps(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     public JSONArray getFfxivMerged(Connection dbc,  int minRange, int maxRange, String completed) { return ffxivMerged(dbc, minRange, maxRange, completed); }
     
