@@ -564,7 +564,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
             " <div class='UPop'><button class='UButton'>Emotes</button>" +
             "<div class='UPopO'>";
     emotes.forEach(function (tEm) {
-        rData += tEm.Command;
+        rData += "<span style='color: lightgreen;'>" + tEm.Command + "</span>";
         if(isSet(tEm.AcquiredBy)) {
             rData += " (<em>" + tEm.AcquiredBy + "</em>)";
         }
