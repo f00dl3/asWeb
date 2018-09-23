@@ -58,10 +58,6 @@ public class EntertainmentResource extends ServerResource {
                     returnData += ffxivD.toString();
                     break;
                     
-                case "getFfxivEmotes":
-                    returnData += ffxivE.toString();
-                    break;
-                    
                 case "getFfxivItems":
                     JSONArray ffxivI = getEntertainmentAction.getFfxivItems(dbc);
                     returnData += ffxivI.toString();
