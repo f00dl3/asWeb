@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 23 Sep 2018
+Updated: 26 Sep 2018
  */
 
 var ffxivCrafting;
@@ -16,8 +16,9 @@ function actOnFfxivQuestDone(event) {
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
+        case "Gathering": setFfxivGatheringDone(thisFormData); break;
         case "Hunt": setFfxivHuntingDone(thisFormData); break;
-        default: window.alert("TYPE NOT SET!\n" + thisFormDataJ); break;
+        default: window.alert("TYPE NOT SET!\n" + thisFormData.QuestOrder); break;
     }
 }
 
@@ -458,6 +459,7 @@ function putFfxivMergedList(target, questData) {
                     (
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Gathering' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
                     )
             ) {
@@ -531,6 +533,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     var compCounter = 0;
     var craftCounter = 0;
     var huntCounter = 0;
+    var gatherCounter = 0;
     var totalCompletionCount = 0;
     var tCount = hCount + qCount + cCount;
     var availImages = [
@@ -541,6 +544,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     mergedData.forEach(function (ffxq) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Gathering") { gatherCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
     var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a> " +
@@ -625,6 +629,31 @@ function setFfxivCraftingDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Crafting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivGatheringDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivGatheringDone",
+        "gatherCode": formData.QuestOrder
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Gathering " + formData.Name + " complete!");
+                    getGameFf14q(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Gathering Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

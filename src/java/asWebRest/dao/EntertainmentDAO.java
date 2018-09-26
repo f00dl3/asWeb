@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 23 Sep 2018
+Updated: 26 Sep 2018
 */
 
 package asWebRest.dao;
@@ -132,6 +132,14 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    private String ffxivGatheringDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_GatherDone = "UPDATE Core.FFXIV_GatherNodes SET Completed=1, OrigCompDate=CURDATE() WHERE NodeCode=?;";
+        System.out.println(query_FFXIV_GatherDone + "\n" + qParams.get(0));
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_GatherDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private String ffxivHuntingDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_FFXIV_HuntingDone = "UPDATE Core.FFXIV_Hunting SET Completed=1, OrigCompDate=CURDATE() WHERE HuntCode=?;";
@@ -238,7 +246,7 @@ public class EntertainmentDAO {
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
                 " SELECT MinLevel, CONCAT(Name, ' ', MinLevel) AS Name, CoordX, CoordY, Zone, NULL AS Exp, NULL AS Gil," +
-                " Class as Classes, NodeCode AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " Class as Classes, NodeCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Gathering' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
@@ -648,6 +656,7 @@ public class EntertainmentDAO {
  
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
+    public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }
     
