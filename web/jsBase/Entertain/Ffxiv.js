@@ -528,6 +528,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
+    var gCount = counts.Gathering;
     var cCount = counts.Crafting;
     var hCount = counts.Hunting;
     var compCounter = 0;
@@ -580,7 +581,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
             "Completed: " + totalCompletionCount + " (" + ((totalCompletionCount/tCount)*100).toFixed(1) + "%)" +
             "<div class='UPopO'>" +
             "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
-            "<strong>Gathering:</strong> " + counts.Gathering + "<br/>" +
+            "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
