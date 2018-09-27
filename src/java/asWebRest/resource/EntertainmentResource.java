@@ -154,6 +154,11 @@ public class EntertainmentResource extends ServerResource {
                     returnData += updateEntertainmentAction.setFfxivCraftingDone(dbc, qParams);
                     break;
                     
+                case "setFfxivDungeonDone":
+                    qParams.add(0, argsInForm.getFirstValue("dungeonName"));
+                    returnData += updateEntertainmentAction.setFfxivDungeonDone(dbc, qParams);
+                    break;
+                    
                 case "setFfxivGatheringDone":
                     qParams.add(0, argsInForm.getFirstValue("gatherCode"));
                     returnData += updateEntertainmentAction.setFfxivGatheringDone(dbc, qParams);

@@ -16,6 +16,7 @@ function actOnFfxivQuestDone(event) {
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
+        case "Dungeon": setFfxivDungeonDone(thisFormData); break;
         case "Gathering": setFfxivGatheringDone(thisFormData); break;
         case "Hunt": setFfxivHuntingDone(thisFormData); break;
         default: window.alert("TYPE NOT SET!\n" + thisFormData.QuestOrder); break;
@@ -462,6 +463,7 @@ function putFfxivMergedList(target, questData) {
                     ff14q.Completed === 1 ||
                     (
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Dungeon' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Gathering' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
@@ -532,11 +534,13 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
+    var dCount = counts.Dungeons;
     var gCount = counts.Gathering;
     var cCount = counts.Crafting;
     var hCount = counts.Hunting;
     var compCounter = 0;
     var craftCounter = 0;
+    var dungeonCounter = 0;
     var huntCounter = 0;
     var gatherCounter = 0;
     var totalCompletionCount = 0;
@@ -549,6 +553,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     mergedData.forEach(function (ffxq) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Dungeon") { dungeonCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Gathering") { gatherCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
@@ -585,7 +590,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
             "Completed: " + totalCompletionCount + " (" + ((totalCompletionCount/tCount)*100).toFixed(1) + "%)" +
             "<div class='UPopO'>" +
             "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
-            "<strong>Dungeons:</strong> " + counts.Dungeons + "<br/>" +
+            "<strong>Dungeons:</strong> " + dungeonCounter + " of " + counts.Dungeons + " (" + ((dungeonCounter/dCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
@@ -635,6 +640,31 @@ function setFfxivCraftingDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Crafting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivDungeonDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivDungeonDone",
+        "dungeonName": formData.Name
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Dungeon " + formData.Name + " complete!");
+                    getGameFf14q(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Dungeon Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

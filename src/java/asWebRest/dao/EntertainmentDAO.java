@@ -85,6 +85,13 @@ public class EntertainmentDAO {
         return returnData;
     }
     
+    private String ffxivDungeonDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_DungeonDone = "UPDATE Core.FFXIV_Dungeons SET Completed=1, OrigCompDate=CURDATE() WHERE Name=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_DungeonDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray ffxivDungeons(Connection dbc) {
         final String query_FfxivDungeons = "SELECT d.Name, d.MinLevel, d.MinItemLevel, d.MaxItemLevel," +
                 " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
@@ -258,7 +265,7 @@ public class EntertainmentDAO {
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
                 " SELECT MinLevel, Name, NULL AS CoordX, NULL AS CoordY, Roulette AS Zone, NULL AS Exp, NULL AS Gil," +
-                " NULL AS Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Classes, NULL AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, Version, UnlockQuest AS Event, NULL AS Type, 'Dungeon' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, MinItemLevel AS ILEV," +
                 " PartySize AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
@@ -668,6 +675,7 @@ public class EntertainmentDAO {
  
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
+    public String setFfxivDungeonDone(Connection dbc, List<String> qParams) { return ffxivDungeonDone(dbc, qParams); }
     public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }
