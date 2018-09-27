@@ -23,6 +23,7 @@ public class EntertainmentDAO {
         final String query_ffxivCounts = "SELECT" +
                 " COUNT(Name) AS Quests," +
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
+                " (SELECT Count(Name) FROM Core.FFXIV_Dungeons) AS Dungeons," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
                 " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting," +
@@ -39,7 +40,8 @@ public class EntertainmentDAO {
                     .put("Crafting", resultSet.getInt("Crafting"))
                     .put("Wearables", resultSet.getInt("Wearables"))
                     .put("Hunting", resultSet.getInt("Hunting"))
-                    .put("Gathering", resultSet.getInt("Gathering"));
+                    .put("Gathering", resultSet.getInt("Gathering"))
+                    .put("Dungeons", resultSet.getInt("Dungeons"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -86,7 +88,7 @@ public class EntertainmentDAO {
     private JSONArray ffxivDungeons(Connection dbc) {
         final String query_FfxivDungeons = "SELECT d.Name, d.MinLevel, d.MinItemLevel, d.MaxItemLevel," +
                 " d.Roulette, d.TomesPoetics, d.TomesCreation, d.TomesMendacity, d.UnlockQuest, d.PartySize," +
-                " q.OrigCompDate, q.Completed" +
+                " q.OrigCompDate, q.Completed, d.TomesGenesis" +
                 " FROM Core.FFXIV_Dungeons d" +
                 " LEFT JOIN Core.FFXIV_Quests q ON d.UnlockQuest = q.Name" +
                 " ORDER BY MinLevel ASC;"; // join in Quests to see if unlocked!
@@ -104,6 +106,7 @@ public class EntertainmentDAO {
                     .put("TomesPoetics", resultSet.getInt("TomesPoetics"))
                     .put("TomesCreation", resultSet.getInt("TomesCreation"))
                     .put("TomesMendacity", resultSet.getInt("TomesMendacity"))
+                    .put("TomesGenesis", resultSet.getInt("TomesGenesis"))
                     .put("UnlockQuest", resultSet.getString("UnlockQuest"))
                     .put("PartySize", resultSet.getInt("PartySize"))
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
@@ -252,6 +255,15 @@ public class EntertainmentDAO {
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
                 " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats" +
                 " FROM Core.FFXIV_GatherNodes" +
+                " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT MinLevel, Name, NULL AS CoordX, NULL AS CoordY, Roulette AS Zone, NULL AS Exp, NULL AS Gil," +
+                " NULL AS Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, Version, UnlockQuest AS Event, NULL AS Type, 'Dungeon' AS MasterType, NULL AS qcDesc," +
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, MinItemLevel AS ILEV," +
+                " PartySize AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, CONCAT('Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats" +
+                " FROM Core.FFXIV_Dungeons" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";

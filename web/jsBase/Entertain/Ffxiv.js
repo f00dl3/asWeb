@@ -361,6 +361,10 @@ function putFfxivDungeonList(target, dungeonData) {
             tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Mendacity.png'/>" +
                     "<div class='UPopO'>Mendacity: " + ff14d.TomesMendacity + "</div></div>";
         }
+        if(ff14d.TomesGenesis !== 0) {
+            tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Genesis.png'/>" +
+                    "<div class='UPopO'>Mendacity: " + ff14d.TomesGenesis + "</div></div>";
+        }
         rData += "<div class='tr'>" +
                 "<span class='td'><div class='UPop'><span style='" + unlockStyle + "'>" + ff14d.Name + "</span>" +
                 "<div class='UPopO'>" +
@@ -581,6 +585,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
             "Completed: " + totalCompletionCount + " (" + ((totalCompletionCount/tCount)*100).toFixed(1) + "%)" +
             "<div class='UPopO'>" +
             "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
+            "<strong>Dungeons:</strong> " + counts.Dungeons + "<br/>" +
             "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
