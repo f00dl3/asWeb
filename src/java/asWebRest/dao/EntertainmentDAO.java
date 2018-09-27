@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 26 Sep 2018
+Updated: 27 Sep 2018
 */
 
 package asWebRest.dao;
@@ -265,7 +265,7 @@ public class EntertainmentDAO {
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
                 " SELECT MinLevel, Name, NULL AS CoordX, NULL AS CoordY, Roulette AS Zone, NULL AS Exp, NULL AS Gil," +
-                " NULL AS Classes, NULL AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
+                " NULL AS Classes, DungeonCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, Version, UnlockQuest AS Event, NULL AS Type, 'Dungeon' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, MinItemLevel AS ILEV," +
                 " PartySize AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
