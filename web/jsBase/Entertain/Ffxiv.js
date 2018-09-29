@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 26 Sep 2018
+Updated: 27 Sep 2018
  */
 
 var ffxivCrafting;
@@ -649,7 +649,7 @@ function setFfxivDungeonDone(formData) {
     aniPreload("on");
     var thePostData = {
         "doWhat": "setFfxivDungeonDone",
-        "dungeonName": formData.Name
+        "dungeonCode": formData.QuestOrder
     };
     require(["dojo/request"], function(request) {
         request

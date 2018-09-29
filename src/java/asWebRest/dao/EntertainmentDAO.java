@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 27 Sep 2018
+Updated: 28 Sep 2018
 */
 
 package asWebRest.dao;
@@ -87,7 +87,7 @@ public class EntertainmentDAO {
     
     private String ffxivDungeonDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        final String query_FFXIV_DungeonDone = "UPDATE Core.FFXIV_Dungeons SET Completed=1, OrigCompDate=CURDATE() WHERE Name=?;";
+        final String query_FFXIV_DungeonDone = "UPDATE Core.FFXIV_Dungeons SET Completed=1, OrigCompDate=CURDATE() WHERE DungeonCode=?;";
         try { returnData = wc.q2do1c(dbc, query_FFXIV_DungeonDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
