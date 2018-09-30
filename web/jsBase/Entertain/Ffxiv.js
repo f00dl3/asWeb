@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 28 Sep 2018
+Updated: 30 Sep 2018
  */
 
 var ffxivCrafting;
@@ -364,7 +364,7 @@ function putFfxivDungeonList(target, dungeonData) {
         }
         if(ff14d.TomesGenesis !== 0) {
             tomes += " <div class='UPop'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Genesis.png'/>" +
-                    "<div class='UPopO'>Mendacity: " + ff14d.TomesGenesis + "</div></div>";
+                    "<div class='UPopO'>Genesis: " + ff14d.TomesGenesis + "</div></div>";
         }
         rData += "<div class='tr'>" +
                 "<span class='td'><div class='UPop'><span style='" + unlockStyle + "'>" + ff14d.Name + "</span>" +
