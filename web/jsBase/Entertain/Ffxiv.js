@@ -12,7 +12,6 @@ var ffxivMerged;
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToObject(this.form);
     switch(thisFormData.Type) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
