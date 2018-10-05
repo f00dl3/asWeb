@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 25 May 2018
+Updated: 4 Oct 2018
  */
 
 if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
@@ -142,14 +142,15 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
         }
         var spread = (cf6.High - cf6.Low);
         cf6Table += "<tr>" +
-                "<td class='C6DATE'><div class='UPop'>" + cf6.Date + "<div class='UPopO'>" +
-                "<strong>CPC AO:</strong> " + cf6.AO + "<br/>" +
-                "<strong>CPC AAO:</strong> " + cf6.AAO + "<br/>" +
-                "<strong>CPC NAO:</strong> " + cf6.NAO + "<br/>" +
-                "<strong>CPC PNA:</strong> " + cf6.PNA + "<br/>" +
-                "<strong>Run/Walk:</strong> " + cf6.RunWalk + "<br/>" +
-                "<strong>Cycling:</strong> " + cf6.Cycling +
-                "</div></div></td>" +
+                "<td class='C6DATE'><div class='UPop'>" + cf6.Date + "<div class='UPopO'>";
+        if(isSet(cf6.AutoAge)) { cf6Table += "<strong>Auto Fetch Age:</strong>" + cf6.AutoAge + "<br/>"; }
+        if(isSet(cf6.AO)) { cf6Table += "<strong>CPC AO:</strong> " + cf6.AO + "<br/>"; }
+        if(isSet(cf6.AAO)) { cf6Table += "<strong>CPC AAO:</strong> " + cf6.AAO + "<br/>"; }
+        if(isSet(cf6.NAO)) { cf6Table += "<strong>CPC NAO:</strong> " + cf6.NAO + "<br/>"; }
+        if(isSet(cf6.PNA)) { cf6Table += "<strong>CPC PNA:</strong> " + cf6.PNA + "<br/>"; }
+        if(isSet(cf6.RunWalk)) { cf6Table += "<strong>Run/Walk:</strong> " + cf6.RunWalk + "<br/>"; }
+        if(isSet(cf6.Cycling)) { cf6Table += "<strong>Cycling:</strong> " + cf6.Cycling + "<br/>"; }
+        cf6Table += "</div></div></td>" +
                 "<td><div style='" + styleTemp(cf6.High) + "'>" + cf6.High + "</div></td>" +
                 "<td><div style='" + styleTemp(cf6.Low) + "'>" + cf6.Low + "</div></td>" +
                 "<td><div class='UPop'><span class='" + colorTempDiff(cf6.DFNorm) + "'>" + cf6.DFNorm + "</span>" +

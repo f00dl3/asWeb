@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Aug 2018
+Updated: 4 Oct 2018
  */
 
 package asWebRest.dao;
@@ -303,7 +303,7 @@ public class WeatherDAO {
     }
     
     public JSONArray getCf6MciMain(Connection dbc, List<String> qParams, String order) {
-        String query_CF6MCI_Main = "SELECT cf6.Date," +
+        String query_CF6MCI_Main = "SELECT cf6.Date, cf6.Auto, cf6.AutoAge," +
             " ued.kWh, fit.RunWalk, fit.Cycling," +
             " cf6.High, cf6.Low, cf6.Average, cf6.DFNorm," +
             " cf6.HDD, cf6.CDD," +
@@ -328,6 +328,8 @@ public class WeatherDAO {
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
+                    .put("Auto", resultSet.getInt("Auto"))
+                    .put("AutoAge", resultSet.getInt("AutoAge"))
                     .put("AAO", resultSet.getDouble("AAO"))
                     .put("AO", resultSet.getDouble("AO"))
                     .put("Average", resultSet.getDouble("Average"))
