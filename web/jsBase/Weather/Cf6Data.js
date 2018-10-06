@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 4 Oct 2018
+Updated: 5 Oct 2018
  */
 
 if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
@@ -143,7 +143,7 @@ function popCf6Results(cf6Data, dateStart, dateEnd) {
         var spread = (cf6.High - cf6.Low);
         cf6Table += "<tr>" +
                 "<td class='C6DATE'><div class='UPop'>" + cf6.Date + "<div class='UPopO'>";
-        if(isSet(cf6.AutoAge)) { cf6Table += "<strong>Auto Fetch Age:</strong>" + cf6.AutoAge + "<br/>"; }
+        if(isSet(cf6.AutoAge)) { cf6Table += "<strong>Auto Fetch Age: </strong>" + cf6.AutoAge + "<br/>"; }
         if(isSet(cf6.AO)) { cf6Table += "<strong>CPC AO:</strong> " + cf6.AO + "<br/>"; }
         if(isSet(cf6.AAO)) { cf6Table += "<strong>CPC AAO:</strong> " + cf6.AAO + "<br/>"; }
         if(isSet(cf6.NAO)) { cf6Table += "<strong>CPC NAO:</strong> " + cf6.NAO + "<br/>"; }
