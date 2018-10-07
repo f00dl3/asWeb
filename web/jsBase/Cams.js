@@ -15,10 +15,9 @@ function actOnDoVideo(event) {
 }
 
 function displayLiveCams() {
-    var liveSnapshotImage = getBasePath("oldGet") + "/Cams/Live.jpeg";
-    console.log("ATTEMPTING TO LOAD: " + liveSnapshotImage);
-    var rData = "(URL: " + liveSnapshotImage + ")<br/>" +
-            "<a href='" + liveSnapshotImage + "><img src='" + liveSnapshotImage + "'/></a>";
+    var liveSnapshotImage = getBasePath("oldRoot") + "/Get/Cams/Live.jpeg";
+    var rData = "(URL: <a href='" + liveSnapshotImage + "'>" + liveSnapshotImage + "</a>)<br/>" +
+            "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "'/></a>";
     dojo.byId("whereCamsGo").innerHTML = rData;
 }
 
