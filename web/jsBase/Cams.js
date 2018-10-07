@@ -15,10 +15,13 @@ function actOnDoVideo(event) {
 }
 
 function displayLiveCams() {
+    var timeout = getRefresh("rapid");
+    if(checkMobile()) { timeout = getRefresh("semiRapid"); }
     var liveSnapshotImage = getBasePath("oldRoot") + "/Get/Cams/Live.jpeg";
     var rData = "(URL: <a href='" + liveSnapshotImage + "'>" + liveSnapshotImage + "</a>)<br/>" +
-            "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "'/></a>";
+            "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "' width='100%'/></a>";
     dojo.byId("whereCamsGo").innerHTML = rData;
+    setTimeout(function() { displayLiveCams(); }, timeout);
 }
 
 function displayVideoLoop() {
@@ -28,7 +31,7 @@ function displayVideoLoop() {
             "</video>";
     dojo.byId("whereCamsGo").innerHTML = vObj;
     dojo.byId("CamLoop").play();
-    setTimeout(function() { videoObject(); }, timeout);
+    setTimeout(function() { displayVideoLoop(); }, timeout);
 }
 
 function popCamHolder() {
