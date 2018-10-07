@@ -5,11 +5,13 @@ Updated: 7 Oct 2018
  */
 
 function actOnDoLive(event) {
+    delete displayVideoLoop;
     dojo.stopEvent(event);
     displayLiveCams();
 }
 
 function actOnDoVideo(event) {
+    delete displayLiveCams;
     dojo.stopEvent(event);
     displayVideoLoop();
 }
