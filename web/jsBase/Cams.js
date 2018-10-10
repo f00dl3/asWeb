@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 7 Oct 2018
+Updated: 8 Oct 2018
  */
 
 function actOnDoLive(event) {
@@ -20,8 +20,7 @@ function displayLiveCams() {
     var timeout = getRefresh("rapid");
     if(checkMobile()) { timeout = getRefresh("semiRapid"); }
     var liveSnapshotImage = getBasePath("oldRoot") + "/Get/Cams/Live.jpeg?ts=" + getDate("minute", 0, "timestamp");
-    var rData = "(URL: <a href='" + liveSnapshotImage + "'>" + liveSnapshotImage + "</a>)<br/>" +
-            "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "' width='100%'/></a>";
+    var rData = "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "' width='100%'/></a>";
     dojo.byId("whereCamsGo").innerHTML = rData;
     setTimeout(function() { displayLiveCams(); }, timeout);
 }
