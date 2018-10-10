@@ -1,6 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 30 Mar 2018
+    Updated:    10 Oct 2018
     Author     : astump
 --%>
 
@@ -21,9 +22,10 @@
             <div id='disHolderCAMS'></div>
         </div><p>
         
-        <div id="camHolder"></div><p>
+        <div id="snmpHolder"></div><p>
+        
+        <div id="camHolder"></div>
             
-        <div id="snmpHolder"></div>
              
     </body>
 
