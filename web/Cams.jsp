@@ -21,10 +21,9 @@
         <div id='MarqPH'>
             <div id='disHolderCAMS'></div>
         </div><p>
+        <div id="camHolder"></div><p>        
+        <div id="snmpHolder"></div>
         
-        <div id="snmpHolder"></div><p>
-        
-        <div id="camHolder"></div>
             
              
     </body>
