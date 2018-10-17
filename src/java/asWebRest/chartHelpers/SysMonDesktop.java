@@ -576,6 +576,8 @@ public class SysMonDesktop {
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
+                .put("data2", this_Data2)
+                .put("data3", this_Data3)
                 .put("props", this_Props);
         return this_Glob;
     }
