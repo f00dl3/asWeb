@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 26 Aug 2018
+Updated: 16 Oct 2018
  */
 
 package asWebRest.chartHelpers;
@@ -544,6 +544,42 @@ public class SysMonDesktop {
         return mSysNumUsers_Glob;
     }
 
+    private JSONObject mSysNvUtilization(JSONArray dataIn, int intLen, int step) {
+        String this_ChartName = "Desktop: NVIDIA Utilization";
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
+        JSONArray this_Data3 = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
+                .put("chartName", this_ChartName).put("chartFileName", "mSysNvUtilization")
+                .put("sName", "GPU").put("sColor", "Red")
+                .put("s2Name", "Memory").put("s2Color", "Blue")
+                .put("s3Name", "Fan").put("s3Color", "Yellow")
+                .put("xLabel", "WalkTime").put("yLabel", "% Use");    
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
+            double gpuUsed = 0.00;
+            double fanUsed = 0.00;
+            double vramUsed = 0.00;
+            try { gpuUsed = (double) thisExpanded.getInt("nvUtilization"); } catch (Exception e) { e.printStackTrace(); }
+            try { vramUsed = (double) 100.0 * ((double) thisExpanded.getInt("nvMemUse")/(double) thisExpanded.getInt("nvMemTotal")); } catch (Exception e) { e.printStackTrace(); }
+            try { fanUsed = (double) thisExpanded.getInt("nvFan"); } catch (Exception e) { e.printStackTrace(); }
+            this_Labels.put(thisObject.getString("WalkTime"));
+            this_Data.put(gpuUsed);
+            this_Data2.put(vramUsed);
+            this_Data3.put(fanUsed);
+        } 
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props);
+        return this_Glob;
+    }
+
     private JSONObject mSysStorage(JSONArray dataIn, int intLen, int step) {
         String mSysStorage_ChartName = "Desktop: Storage";
         JSONObject mSysStorage_Glob = new JSONObject();
@@ -587,6 +623,7 @@ public class SysMonDesktop {
         JSONArray mSysTemp_Data4 = new JSONArray();
         JSONArray mSysTemp_Data5 = new JSONArray();
         JSONArray mSysTemp_Data6 = new JSONArray(); 
+        JSONArray mSysTemp_Data7 = new JSONArray(); 
         mSysTemp_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysTemp_ChartName).put("chartFileName", "mSysTemp")
@@ -596,9 +633,12 @@ public class SysMonDesktop {
                 .put("s4Name", "Core 3/4").put("s4Color", "Gray")
                 .put("s5Name", "Core 5/6").put("s5Color", "Gray")
                 .put("s6Name", "Core 7/8").put("s6Color", "Gray")
+                .put("s7Name", "NVIDIA GPU").put("s7Color", "Blue")
                 .put("xLabel", "WalkTime").put("yLabel", "Temp F");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
+            JSONObject thisExpanded = new JSONObject();
+            try { thisExpanded = thisObject.getJSONObject("dtExpandedJSONData"); } catch (Exception e) { }
             mSysTemp_Labels.put(thisObject.getString("WalkTime"));
             mSysTemp_Data.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCPU")/1000)));
             mSysTemp_Data2.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCase")/1000)));
@@ -606,6 +646,7 @@ public class SysMonDesktop {
             mSysTemp_Data4.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore2")/1000)));
             mSysTemp_Data5.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore3")/1000)));
             mSysTemp_Data6.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore4")/1000)));
+            try { mSysTemp_Data7.put(0.93 * (wc.tempC2F(thisExpanded.getInt("nvTemp")))); } catch (Exception e) { e.printStackTrace(); }
         }
         mSysTemp_Glob
                 .put("labels", mSysTemp_Labels)
@@ -615,6 +656,7 @@ public class SysMonDesktop {
                 .put("data4", mSysTemp_Data4)
                 .put("data5", mSysTemp_Data5)
                 .put("data6", mSysTemp_Data6)
+                .put("data7", mSysTemp_Data7)
                 .put("props", mSysTemp_Props);
         return mSysTemp_Glob;
     }
@@ -757,6 +799,7 @@ public class SysMonDesktop {
     public JSONObject getSysMySQLSize(JSONArray dataIn, int intLen, int step) { return mSysMySQLSize(dataIn, intLen, step); }
     public JSONObject getSysNet(JSONArray dataIn, int intLen, int step) { return mSysNet(dataIn, intLen, step); }
     public JSONObject getSysNumUsers(JSONArray dataIn, int intLen, int step) { return mSysNumUsers(dataIn, intLen, step); }
+    public JSONObject getSysNvUtilization(JSONArray dataIn, int intLen, int step) { return mSysNvUtilization(dataIn, intLen, step); }
     public JSONObject getSysStorage(JSONArray dataIn, int intLen, int step) { return mSysStorage(dataIn, intLen, step); }
     public JSONObject getSysTemp(JSONArray dataIn, int intLen, int step) { return mSysTemp(dataIn, intLen, step); }
     public JSONObject getSysTomcatDeploy(JSONArray dataIn, int intLen, int step) { return mSysTomcatDeploy(dataIn, intLen, step); }

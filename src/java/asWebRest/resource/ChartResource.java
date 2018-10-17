@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 10 Sep 2018
+Updated: 16 Oct 2018
  */
 
 package asWebRest.resource;
@@ -262,6 +262,7 @@ public class ChartResource extends ServerResource {
                     JSONObject mSysMySQLSize_Glob = new JSONObject();
                     JSONObject mSysNet_Glob = new JSONObject();
                     JSONObject mSysNumUsers_Glob = new JSONObject();
+                    JSONObject mSysNvUtilization_Glob = new JSONObject();
                     JSONObject mSysStorage_Glob = new JSONObject();
                     JSONObject mSysTemp_Glob = new JSONObject();
                     JSONObject mSysTomcatDeploy_Glob = new JSONObject();
@@ -297,6 +298,7 @@ public class ChartResource extends ServerResource {
                     try { mSysMemory_Glob = smDesktop.getSysMemory(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysMySQLSize_Glob = smDesktop.getSysMySQLSize(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysNet_Glob = smDesktop.getSysNet(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mSysNvUtilization_Glob = smDesktop.getSysNvUtilization(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysNumUsers_Glob = smDesktop.getSysNumUsers(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysStorage_Glob = smDesktop.getSysStorage(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysTemp_Glob = smDesktop.getSysTemp(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
@@ -334,6 +336,7 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mSysMySQLSize_Glob); returnData += "Chart generated - mSysMySQLSize!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(mSysNet_Glob); returnData += "Chart generated - mSysNet!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(mSysNumUsers_Glob); returnData += "Chart generated - mSysNumUsers!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mSysNvUtilization_Glob); returnData += "Chart generated - mSysNvUtilization!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysStorage_Glob); returnData += "Chart generated - mSysStorage!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mSysTemp_Glob); returnData += "Chart generated - mSysTemp!\n"; } catch (Exception e) { e.printStackTrace(); }  
                     try { dynChart.LineChart(mSysTomcatDeploy_Glob); returnData += "Chart generated - mSysTomcatDeploy!\n"; } catch (Exception e) { e.printStackTrace(); }  

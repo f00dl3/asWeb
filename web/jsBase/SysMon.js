@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 18 Jul 2018
+Updated: 18 Oct 2018
 */
 
 var chartArray;
@@ -152,7 +152,8 @@ function populateCharts() {
         "mPiCPU", // done 4/30/18
         "mPiMemory", // axis label issues 4/30/18
         "mPiTemp", // done 4/30/18
-        "mJavaCodeLines" // done 4/29/18
+        "mJavaCodeLines", // done 4/29/18
+        "mSysNvUtilization" // new 10/16/18
     ];
     var UNIMP_chartList = [
         "mCellTempRapid", // json iteration not known 4/30/18
