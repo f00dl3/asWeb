@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 16 Oct 2018
+Updated: 23 Oct 2018
  */
 
 package asWebRest.chartHelpers;
@@ -156,28 +156,40 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysCPU_LoadAverage = 0.00f;
+            int mSysCPU1 = 0;
+            int mSysCPU2 = 0;
+            int mSysCPU3 = 0;
+            int mSysCPU4 = 0;
+            int mSysCPU5 = 0;
+            int mSysCPU6 = 0;
+            int mSysCPU7 = 0;
+            int mSysCPU8 = 0;
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad1")))) { try { mSysCPU1 = thisObject.getInt("dtCPULoad1"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad2")))) { try { mSysCPU2 = thisObject.getInt("dtCPULoad2"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad3")))) { try { mSysCPU3 = thisObject.getInt("dtCPULoad3"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad4")))) { try { mSysCPU4 = thisObject.getInt("dtCPULoad4"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad5")))) { try { mSysCPU5 = thisObject.getInt("dtCPULoad5"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad6")))) { try { mSysCPU6 = thisObject.getInt("dtCPULoad6"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad7")))) { try { mSysCPU7 = thisObject.getInt("dtCPULoad7"); } catch (Exception e) { } }
+            if(wc.isSet(Integer.toString(thisObject.getInt("dtCPULoad8")))) { try { mSysCPU8 = thisObject.getInt("dtCPULoad8"); } catch (Exception e) { } }
             try {
                 mSysCPU_LoadAverage = (
-                        (thisObject.getInt("dtCPULoad1") +
-                        thisObject.getInt("dtCPULoad2") +
-                        thisObject.getInt("dtCPULoad3") +
-                        thisObject.getInt("dtCPULoad4") +
-                        thisObject.getInt("dtCPULoad5") +
-                        thisObject.getInt("dtCPULoad6") +
-                        thisObject.getInt("dtCPULoad7") +
-                        thisObject.getInt("dtCPULoad8")) / 8
+                        (mSysCPU1 + mSysCPU2 +
+		mSysCPU3 + mSysCPU4 +
+		mSysCPU5 + mSysCPU6 +
+		mSysCPU7 + mSysCPU8) / 8
                 );
             } catch (Exception e) { e.printStackTrace(); }
             mSysCPU_Labels.put(thisObject.getString("WalkTime"));
             mSysCPU_Data.put(mSysCPU_LoadAverage);
-            mSysCPU_Data2.put(thisObject.getInt("dtCPULoad1"));
-            mSysCPU_Data3.put(thisObject.getInt("dtCPULoad2"));
-            mSysCPU_Data4.put(thisObject.getInt("dtCPULoad3"));
-            mSysCPU_Data5.put(thisObject.getInt("dtCPULoad4"));
-            mSysCPU_Data6.put(thisObject.getInt("dtCPULoad5"));
-            mSysCPU_Data7.put(thisObject.getInt("dtCPULoad6"));
-            mSysCPU_Data8.put(thisObject.getInt("dtCPULoad7"));
-            mSysCPU_Data9.put(thisObject.getInt("dtCPULoad8"));
+            mSysCPU_Data2.put(mSysCPU1);
+            mSysCPU_Data3.put(mSysCPU2);
+            mSysCPU_Data4.put(mSysCPU3);
+            mSysCPU_Data5.put(mSysCPU4);
+            mSysCPU_Data6.put(mSysCPU5);
+            mSysCPU_Data7.put(mSysCPU6);
+            mSysCPU_Data8.put(mSysCPU7);
+            mSysCPU_Data9.put(mSysCPU8);
         }
         mSysCPU_Glob
                 .put("labels", mSysCPU_Labels)
@@ -217,8 +229,8 @@ public class SysMonDesktop {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysDiskIO_ThisRead = 0;
             float mSysDiskIO_ThisWrite = 0;
-            if(thisObject.getFloat("dtDiskIOSysRead") != 0) { mSysDiskIO_ThisRead = thisObject.getFloat("dtDiskIOSysRead"); }
-            if(thisObject.getFloat("dtDiskIOSysWrite") != 0) { mSysDiskIO_ThisWrite = thisObject.getFloat("dtDiskIOSysWrite"); }
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtDiskIOSysRead"))) && thisObject.getFloat("dtDiskIOSysRead") != 0) { try { mSysDiskIO_ThisRead = thisObject.getFloat("dtDiskIOSysRead"); } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtDiskIOSysWrite"))) && thisObject.getFloat("dtDiskIOSysWrite") != 0) { try { mSysDiskIO_ThisWrite = thisObject.getFloat("dtDiskIOSysWrite"); } catch (Exception e) { } }
             float mSysDiskIO_ThisTotal = mSysDiskIO_ThisRead + mSysDiskIO_ThisWrite;
             if(mSysDiskIO_LastTotal <= mSysDiskIO_ThisTotal && mSysDiskIO_LastTotal != 0) {
                 if(mSysDiskIO_Cumulative != 0) { mSysDiskIO_Cumulative = mSysDiskIO_Cumulative + (mSysDiskIO_ThisTotal - mSysDiskIO_LastTotal); }
@@ -265,9 +277,15 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             mSysFans_Labels.put(thisObject.getString("WalkTime"));
-            mSysFans_Data.put(thisObject.getInt("dtFan1"));
-            mSysFans_Data2.put(thisObject.getInt("dtFan2"));
-            mSysFans_Data3.put(thisObject.getInt("dtFan3"));
+	int dtFan1 = 0;
+	int dtFan2 = 0;
+	int dtFan3 = 0;
+	if(wc.isSet(Integer.toString(thisObject.getInt("dtFan1")))) { try { dtFan1 = thisObject.getInt("dtFan1"); } catch (Exception e) { } }
+	if(wc.isSet(Integer.toString(thisObject.getInt("dtFan2")))) { try { dtFan2 = thisObject.getInt("dtFan2"); } catch (Exception e) { } }
+	if(wc.isSet(Integer.toString(thisObject.getInt("dtFan3")))) { try { dtFan3 = thisObject.getInt("dtFan3"); } catch (Exception e) { } }
+            mSysFans_Data.put(dtFan1);
+            mSysFans_Data2.put(dtFan2);
+            mSysFans_Data3.put(dtFan3);
         }
         mSysFans_Glob
                 .put("labels", mSysFans_Labels)
@@ -296,9 +314,15 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             mSysLoad_Labels.put(thisObject.getString("WalkTime"));
-            mSysLoad_Data.put(thisObject.getDouble("dtLoadIndex1"));
-            mSysLoad_Data2.put(thisObject.getDouble("dtLoadIndex5"));
-            mSysLoad_Data3.put(thisObject.getDouble("dtLoadIndex15"));
+	double mSysLoad1 = 0.00;
+	double mSysLoad5 = 0.00;
+	double mSysLoad15 = 0.00;
+	if(wc.isSet(Double.toString(thisObject.getDouble("dtLoadIndex1")))) { try { mSysLoad1 = thisObject.getDouble("dtLoadIndex1"); } catch (Exception e) { } }
+	if(wc.isSet(Double.toString(thisObject.getDouble("dtLoadIndex5")))) { try { mSysLoad5 = thisObject.getDouble("dtLoadIndex5"); } catch (Exception e) { } }
+	if(wc.isSet(Double.toString(thisObject.getDouble("dtLoadIndex15")))) { try { mSysLoad15 = thisObject.getDouble("dtLoadIndex15"); } catch (Exception e) { } }
+            mSysLoad_Data.put(mSysLoad1);
+            mSysLoad_Data2.put(mSysLoad5);
+            mSysLoad_Data3.put(mSysLoad15);
         }
         mSysLoad_Glob
                 .put("labels", mSysLoad_Labels)
@@ -433,22 +457,44 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            float mSysNet_ThisLapOctets = thisObject.getFloat("lapOctetsIn") + thisObject.getFloat("lapOctetsOut");
-            float mSysNet_ThisPiOctets = thisObject.getFloat("piOctetsIn") + thisObject.getFloat("piOctetsOut");
-            float mSysNet_ThisPi2Octets = thisObject.getFloat("pi2OctetsIn") + thisObject.getFloat("pi2OctetsOut");
+            float dtOctetsIn = 0.0f;
+            float dtOctetsOut = 0.0f;
+            float mSysNet_ThisLapOctets = 0.0f;
+            float mSysNet_ThisPiOctets = 0.0f;
+            float mSysNet_ThisPi2Octets = 0.0f;
+            float cmvmOctetsIn = 0.0f;
+            float cmvmOctetsOut = 0.0f;
+            float uvmOctetsIn = 0.0f;
+            float uvmOctetsOut = 0.0f;
+            float w12OctetsIn = 0.0f;
+            float w12OctetsOut = 0.0f;
+            float w16OctetsIn = 0.0f;
+            float w16OctetsOut = 0.0f;
+            float wxpOctetsIn = 0.0f;
+            float wxpOctetsOut = 0.0f;
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("lapOctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("lapOctetsOut")))) { try { mSysNet_ThisLapOctets = thisObject.getFloat("lapOctetsIn") + thisObject.getFloat("lapOctetsOut"); } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("piOctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("piOctetsOut")))) { try { mSysNet_ThisPiOctets = thisObject.getFloat("piOctetsIn") + thisObject.getFloat("piOctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("pi2OctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("pi2OctetsOut")))) { try { mSysNet_ThisPi2Octets = thisObject.getFloat("pi2OctetsIn") + thisObject.getFloat("pi2OctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("cmvmOctetsIn")))) { try { cmvmOctetsIn = thisObject.getFloat("cmvmOctetsIn");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("cmvmOctetsOut")))) { try { cmvmOctetsOut = thisObject.getFloat("cmvmOctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("uvmOctetsIn")))) { try { uvmOctetsIn = thisObject.getFloat("uvmOctetsIn");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("uvmOctetsOut")))) { try { uvmOctetsOut = thisObject.getFloat("uvmOctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("w12OctetsIn")))) { try { w12OctetsIn = thisObject.getFloat("w12OctetsIn");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("w12OctetsOut")))) { try { w12OctetsOut = thisObject.getFloat("w12OctetsOut");  } catch (Exception e) { }}
+            if(wc.isSet(Float.toString(thisObject.getFloat("w16OctetsIn")))) { try { w16OctetsIn = thisObject.getFloat("w16OctetsIn");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("w16OctetsOut")))) { try { w16OctetsOut = thisObject.getFloat("w16OctetsOut");  } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("wxpOctetsIn")))) { try { wxpOctetsIn = thisObject.getFloat("wxpOctetsIn"); } catch (Exception e) { } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("wxpOctetsOut")))) { try { wxpOctetsOut = thisObject.getFloat("wxpOctetsOut");  } catch (Exception e) { } }
             float mSysNet_ThisVirtualOctets = (
-                    thisObject.getFloat("cmvmOctetsIn") +
-                    thisObject.getFloat("cmvmOctetsOut") +
-                    thisObject.getFloat("uvmOctetsIn") +
-                    thisObject.getFloat("uvmOctetsOut") +
-                    thisObject.getFloat("w12OctetsIn") +
-                    thisObject.getFloat("w12OctetsOut") +
-                    thisObject.getFloat("w16OctetsIn") +
-                    thisObject.getFloat("w16OctetsOut") +
-                    thisObject.getFloat("wxpOctetsIn") +
-                    thisObject.getFloat("wxpOctetsOut")
+                    cmvmOctetsIn + cmvmOctetsOut +
+                    uvmOctetsIn + uvmOctetsOut +
+                    w12OctetsIn + w12OctetsOut +
+                    w16OctetsIn + w16OctetsOut +
+                    wxpOctetsIn + wxpOctetsOut
             );
-            float mSysNet_ThisOctetsTotal = thisObject.getFloat("dtOctetsIn") + thisObject.getFloat("dtOctetsOut");
+            float mSysNet_ThisOctetsTotal = dtOctetsIn + dtOctetsOut;           
             if(mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal && mSysNet_LastOctetsTotal != 0) {
                 mSysNet_Labels.put(thisObject.getString("WalkTime"));
                 mSysNet_Cumulative = mSysNet_Cumulative + (mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal);
@@ -464,8 +510,8 @@ public class SysMonDesktop {
                 returnData += "No data! - " + thisObject.getString("WalkTime");
             }
             mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
-            mSysNet_LastOctetsIn = thisObject.getFloat("dtOctetsIn");
-            mSysNet_LastOctetsOut = thisObject.getFloat("dtOctetsOut");
+            mSysNet_LastOctetsIn = dtOctetsIn;
+            mSysNet_LastOctetsOut = dtOctetsOut;
             mSysNet_LastLapOctets = mSysNet_ThisLapOctets;
             mSysNet_LastVirtualOctets = mSysNet_ThisVirtualOctets;
             mSysNet_LastPiOctets = mSysNet_ThisPiOctets;
