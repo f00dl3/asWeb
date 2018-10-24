@@ -311,7 +311,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
     if(matchLimitHit === 0) {
         noticeMessage = "<div class='Notice'>" + hitCount + " results found!</div>";
     } else {
-        noticeMessage = "<div class='Notice' style='background-color: red; color: white;'>Showing 25 of " + hitCount + " results!</div>";
+        noticeMessage = "<div class='Notice' style='background-color: red; color: white;'>Showing 250 of " + hitCount + " results!</div>";
     }
     if(checkMobile()) { fileTable += "<p>Space for player pop-up<p>More space!" + noticeMessage; }
     dojo.byId("ETSResults").innerHTML = fileTable;
@@ -373,7 +373,7 @@ function searchAheadMediaServer(value) {
                 (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 49) {
+                if(matchingRows.length < 249) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
