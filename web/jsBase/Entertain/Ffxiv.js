@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 30 Sep 2018
+Updated: 24 Oct 2018
  */
 
 var ffxivCrafting;
@@ -526,7 +526,7 @@ function putFfxivMergedList(target, questData) {
 
 function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
     var houseValue = 2.83;
-    var otherValue = 0.8;
+    var otherValue = 0.92;
     var totalValue = houseValue + otherValue;
     var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
