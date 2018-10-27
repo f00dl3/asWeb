@@ -8,6 +8,8 @@ Updated: 27 Oct 2018
 var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
+var houseAssets = 2.830;
+var nonHouseAssets = 1.818;
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
@@ -525,8 +527,8 @@ function putFfxivMergedList(target, questData) {
 }
 
 function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
-    var houseValue = 2.83;
-    var otherValue = 1.818;
+    var houseValue = houseAssets;
+    var otherValue = nonHouseAssets;
     var totalValue = (houseValue + otherValue).toFixed(2);
     var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
