@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 23 Sep 2018
+Updated: 28 Oct 2018
  */
 
 package asWebRest.action;
@@ -15,6 +15,7 @@ public class GetEntertainmentAction {
     private EntertainmentDAO entertainmentDAO;
     public GetEntertainmentAction(EntertainmentDAO entertainmentDAO) { this.entertainmentDAO = entertainmentDAO; }
     
+    public JSONArray getFfxivAssets(Connection dbc) { return entertainmentDAO.getFfxivAssets(dbc); }
     public JSONArray getFfxivCounts(Connection dbc) { return entertainmentDAO.getFfxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return entertainmentDAO.getFfxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return entertainmentDAO.getFfxivDungeons(dbc); }

@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 27 Oct 2018
+Updated: 28 Oct 2018
  */
 
 var ffxivCrafting;
@@ -247,7 +247,8 @@ function getGameFf14qData(target) {
                             data.ffxivMerged,
                             data.ffxivCount,
                             data.ffxivImageMaps,
-                            data.ffxivEmotes
+                            data.ffxivEmotes,
+                            data.ffxivAssets
                     );
                     $("#"+target).show();
                 },
@@ -281,6 +282,7 @@ function getGameFf14qDataInRange(target, formData) {
                             data.ffxivCount,
                             data.ffxivImageMaps,
                             data.ffxivEmotes
+                            data.ffxivAssets
                     );
                     $("#"+target).show();
                 },
@@ -526,10 +528,8 @@ function putFfxivMergedList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivMerged(target, mergedData, countIn, iMaps, emotes) {
-    var houseValue = houseAssets;
-    var otherValue = nonHouseAssets;
-    var totalValue = (houseValue + otherValue).toFixed(2);
+function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assetValue) {
+    var totalValue = (assetValue/1000000).toFixed(2);
     var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";

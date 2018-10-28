@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 28 Sep 2018
+Updated: 28 Oct 2018
 */
 
 package asWebRest.dao;
@@ -19,6 +19,24 @@ public class EntertainmentDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
        
+    private JSONArray ffxivAssets(Connection dbc) {
+        final String query_FfxivAssets = "SELECT What, Value, Purchased FROM Core.FFXIV_Assets;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivAssets, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("What", resultSet.getString("What"))
+                    .put("Value", resultSet.getInt("Value"))
+                    .put("Purchased", resultSet.getString("Purchased"));                    
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     private JSONArray ffxivCounts(Connection dbc) {
         final String query_ffxivCounts = "SELECT" +
                 " COUNT(Name) AS Quests," +
@@ -383,6 +401,7 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    public JSONArray getFfxivAssets(Connection dbc) { return ffxivAssets(dbc); }
     public JSONArray getFfxivCounts(Connection dbc) { return ffxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }

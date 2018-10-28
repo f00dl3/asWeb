@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 28 Sep 2018
+Updated: 28 Oct 2018
  */
 
 package asWebRest.resource;
@@ -68,11 +68,13 @@ public class EntertainmentResource extends ServerResource {
                     JSONArray ffxivCountsM = getEntertainmentAction.getFfxivCounts(dbc);
                     JSONArray ffxivIm = getEntertainmentAction.getFfxivImageMaps(dbc);
                     JSONArray ffxivE = getEntertainmentAction.getFfxivEmotes(dbc);
+                    JSONArray ffxivA = getEntertainmentAction.getFfxivAssets(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivM)
                         .put("ffxivCount", ffxivCountsM)
                         .put("ffxivImageMaps", ffxivIm)
-                        .put("ffxivEmotes", ffxivE);
+                        .put("ffxivEmotes", ffxivE)
+                        .put("ffxivAssets", ffxivA);
                     returnData += mergedResults.toString();
                     break;
 
@@ -83,11 +85,13 @@ public class EntertainmentResource extends ServerResource {
                     JSONArray ffxivCounts = getEntertainmentAction.getFfxivCounts(dbc);
                     JSONArray ffxivImM = getEntertainmentAction.getFfxivImageMaps(dbc);
                     JSONArray ffxivEM = getEntertainmentAction.getFfxivEmotes(dbc);
+                    JSONArray ffxivA2 = getEntertainmentAction.getFfxivAssets(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivMr)
                         .put("ffxivCount", ffxivCounts)
                         .put("ffxivImageMaps", ffxivImM)
-                        .put("ffxivEmotes", ffxivEM);
+                        .put("ffxivEmotes", ffxivEM)
+                        .put("ffxivAssets", ffxivA2);
                     returnData += mergedResults.toString();
                     break;
                     
