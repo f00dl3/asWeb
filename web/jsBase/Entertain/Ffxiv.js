@@ -580,7 +580,10 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     rData += "</div></div>" +
             " <div class='UPop'><button class='UButton'>Assets</button>" +
             "<div class='UPopO'>";
-    assets.forEach(function (tAs) { rData += "<span style='color: lightgreen;'>" + tAs.What + "</span> (<em>" + tAs.Value + "</em>)<br/>"; });
+    assets.forEach(function (tAs) {
+        rData += "<span style='color: lightgreen;'>" + tAs.What + "</span>" +
+                " (<em>" + autoUnits(tAs.Value) + "  <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/></em>)<br/>"; 
+    });
     rData += "</div></div>" +
             " <div class='UPop'><button class='UButton'>Emotes</button>" +
             "<div class='UPopO'>";
