@@ -281,7 +281,7 @@ function getGameFf14qDataInRange(target, formData) {
                             data.ffxivMerged,
                             data.ffxivCount,
                             data.ffxivImageMaps,
-                            data.ffxivEmotes
+                            data.ffxivEmotes,
                             data.ffxivAssets
                     );
                     $("#"+target).show();
@@ -528,8 +528,10 @@ function putFfxivMergedList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assetValue) {
-    var totalValue = (assetValue/1000000).toFixed(2);
+function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
+    var assetValues = 0;
+    assets.forEach(function (asset) { assetValues += asset.Value; });
+    var totalValue = (assetValues/1000000).toFixed(2);
     var counts = countIn[0];
     var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
     var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
@@ -575,6 +577,10 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assetValue) 
     for(var i = 0; i < availImages.length; i++) {
         rData += " [<a href='" + getBasePath("image") + "/ffxiv/" + availImages[i] + ".jpg' target='ffxivMap'>" + availImages[i] + "</a>]";
     }
+    rData += "</div></div>" +
+            " <div class='UPop'><button class='UButton'>Assets</button>" +
+            "<div class='UPopO'>";
+    assets.forEach(function (tAs) { rData += "<span style='color: lightgreen;'>" + tAs.What + "</span> (<em>" + tAs.Value + "</em>)<br/>"; });
     rData += "</div></div>" +
             " <div class='UPop'><button class='UButton'>Emotes</button>" +
             "<div class='UPopO'>";
