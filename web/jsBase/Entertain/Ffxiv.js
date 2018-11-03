@@ -2,14 +2,14 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 28 Oct 2018
+Updated: 2 Nov 2018
  */
 
 var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
-var houseAssets = 2.830;
-var nonHouseAssets = 1.818;
+//var houseAssets = 2.830;
+//var nonHouseAssets = 1.818;
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
