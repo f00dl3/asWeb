@@ -237,8 +237,14 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "</a></div></div>/" +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(theData.Dewpoint) + "'>" + Math.round(theData.Dewpoint) + "F</span>" +
-            "<div class='UPopO'>(" + diffDewpoint + "F/hr)</div></div>" +
-            "<br/>RH: <span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%</span>" +
+            "<div class='UPopO'>(" + diffDewpoint + "F/hr)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
+            "</a></div></div>" +
+            "<br/>RH: <div class='UPop'><span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%" +
+            "<div class='UPopO'>" +
+            "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumi", "th") + "'/></a>" +
+            "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
             "<button style='" + styleTemp(indoorTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_home.gif'/>" + indoorTemp + "F</button><br/>" +
@@ -248,8 +254,11 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button><br/>" +
             "<br/>As of: " + indoorObs[0].WalkTime + "</div></div>)<br/>"; 
         if(isSet(theData.WindSpeed)) {
-            returnData += "Wind: "; if(isSet(theData.WindDirection)) { returnData += theData.WindDirection + " at "; }
-            returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine + "<br/>";
+            returnData += "<div class='UPop'>Wind: "; if(isSet(theData.WindDirection)) { returnData += theData.WindDirection + " at "; }
+            returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine +
+            "<div class='UPopO'>" + 
+            "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
+            "</div></div><br/>";
         }
         if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
         console.log(convertToJsDate(shortTime));
