@@ -1,8 +1,35 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 15 Jul 2018
+Updated: 4 Nov 2018
  */
+
+function getChartData(stationId) {
+    var dateOverrideStart = getDate("hour", -6, "full"); 
+    var dateOverrideEnd = getDate("hour", 0, "full");
+    var thePostData = {
+        "doWhat": "WxObsCharts",
+        "startTime": dateOverrideStart,
+        "endTime": dateOverrideEnd,
+        "order": "DESC",
+        "limit": 5,
+        "stationId": stationId
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Model Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
 
 function getObsData(targetDiv, displayType) {
     aniPreload("on");
@@ -70,12 +97,13 @@ function getObsDataMerged(targetDiv, displayType) {
     var dateOverrideStart = getDate("hour", -1, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var obsJson = getResource("Wx");
+    var stationId = "KOJC";
     var obsJsonPostData = "doWhat=getObsJsonMerged" +
         "&startTime=" + dateOverrideStart +
         "&endTime=" + dateOverrideEnd +
         "&order=DESC" +
         "&limit=1" +
-        "&stationId=KOJC";
+        "&stationId=" + stationId;
     var arObsJsonMq = {
         preventCache: true,
         url: obsJson,
@@ -93,6 +121,7 @@ function getObsDataMerged(targetDiv, displayType) {
                     processMarqueeData(theData, lastData, targetDiv);
                     break;
                 case "static":
+                    getChartData(stationId);
                     processObservationData(nowObsId, theData, lastData, indoorObs, targetDiv);
                     $(targetDiv).html(data.WxObs);
                     break;
@@ -192,7 +221,10 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<a href='" + getBasePath("ui") + "/WxStation.jsp' target='new'>JSON</a><br/>" +
             "Obs #: " + nowObsId + " station " + stationId + "<br/>" +
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
-            "<br/><div class='UPopNM'>" +
+            "<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
+            "<img class='th_small' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
+            "</a><div class='UPopNM'>" +
             "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
             processUpperAirData(998, theData) + "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +

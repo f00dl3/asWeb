@@ -428,7 +428,7 @@ public class ChartResource extends ServerResource {
                     if(wc.isSet(stationId)) {
                         JSONArray wxObsBS = getWeatherAction.getObsJsonByStation(dbc, inParams);
                         JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBS, stationId);
-                        try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemps!\n"; } catch (Exception e) { e.printStackTrace(); }                     
+                        try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp!\n"; } catch (Exception e) { e.printStackTrace(); }                     
                     }
                     break;
                     

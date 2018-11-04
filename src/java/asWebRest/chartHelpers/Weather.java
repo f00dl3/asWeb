@@ -287,16 +287,16 @@ public class Weather {
         JSONArray this_Debug = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
-                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemps")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemp")
                 .put("sName", "Temp").put("sColor", "Red")
                 .put("s2Name", "Dewpt").put("s2Color", "Blue")
                 .put("xLabel", "Date").put("yLabel", "Degrees");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            this_Labels.put(thisObject.getString("ObsTime"));
-            JSONObject thisStationData = thisObject.getJSONObject(stationId);
-            this_Data.put(thisStationData.getDouble("Temperature"));
-            this_Data2.put(thisStationData.getDouble("Dewpoint"));
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            this_Data.put(thisSet.getDouble("Temperature"));
+            this_Data2.put(thisSet.getDouble("Dewpoint"));
         }
         this_Glob
                 .put("labels", this_Labels)
