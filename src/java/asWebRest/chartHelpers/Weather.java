@@ -297,7 +297,6 @@ public class Weather {
                 .put("data", this_Data)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
-        System.out.println(this_Glob.toString());
         return this_Glob;
     }
     
@@ -328,7 +327,6 @@ public class Weather {
                 .put("data2", this_Data2)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
-        System.out.println(this_Glob.toString());
         return this_Glob;
     }
     
@@ -355,7 +353,6 @@ public class Weather {
                 .put("data", this_Data)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
-        System.out.println(this_Glob.toString());
         return this_Glob;
     }
     
