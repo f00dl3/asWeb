@@ -137,7 +137,6 @@ public class Weather {
             int thisHour = thisObject.getInt("FHour");
             hourList.add(thisHour);
         }
-        //Good here! --> System.out.println(hourList.toString());
         JSONObject thisObject = dataIn.getJSONObject(0);
         JSONObject thisCMC = new JSONObject();
         JSONObject thisGFS = new JSONObject();
@@ -170,10 +169,6 @@ public class Weather {
             try { gfsDf = wc.tempC2F(thisGFS.getDouble("D0_"+hour)); } catch (Exception e) {}
             try { namTf = wc.tempC2F(thisNAM.getDouble("T0_"+hour)); } catch (Exception e) {}
             try { namDf = wc.tempC2F(thisNAM.getDouble("D0_"+hour)); } catch (Exception e) {}
-            double mergedCountTf = 0.0;
-            double mergedCountDf = 0.0;
-            double mergedTf = 0.0;
-            double mergedDf = 0.0;
             if(hrrrTf == -999.9) { hrrrTf = 0.0; }
             if(hrrrDf == -999.9) { hrrrDf = 0.0; } 
             if(cmcTf == -999.9) { cmcTf = hrrrTf; } 
@@ -206,7 +201,6 @@ public class Weather {
                 .put("data8", mosTemps_Data8)
                 .put("props", mosTemps_Props)
                 .put("debug", mosTemps_Debug);
-        System.out.println(mosTemps_Glob.toString());
         return mosTemps_Glob;
     }
     

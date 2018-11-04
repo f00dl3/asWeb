@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 28 Oct 2018
+Updated: 4 Nov 2018
 */
 
 package asWebRest.dao;
@@ -340,8 +340,12 @@ public class EntertainmentDAO {
     }
         
     private JSONArray ffxivQuestsByDate(Connection dbc) {
-        final String query_FfxivQuestByDate = "SELECT OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
-                " FROM FFXIV_Quests WHERE OrigCompDate IS NOT NULL GROUP BY OrigCompDate;";
+        final String query_FfxivQuestByDate = "SELECT " +
+                " OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
+                " FROM FFXIV_Quests" + 
+                " WHERE OrigCompDate IS NOT NULL" +
+                " GROUP BY OrigCompDate;";
+                
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivQuestByDate, null);
