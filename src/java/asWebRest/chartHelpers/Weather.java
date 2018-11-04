@@ -118,6 +118,8 @@ public class Weather {
         JSONArray mosTemps_Data6 = new JSONArray();
         JSONArray mosTemps_Data7 = new JSONArray();
         JSONArray mosTemps_Data8 = new JSONArray();
+        JSONArray mosTemps_Data9 = new JSONArray();
+        JSONArray mosTemps_Data10 = new JSONArray();
         JSONArray mosTemps_Debug = new JSONArray();
         mosTemps_Props
                 .put("dateFormat", "yyyyMMddHH")
@@ -130,6 +132,8 @@ public class Weather {
                 .put("s6Name", "NAM DF").put("s6Color", "Green")
                 .put("s7Name", "CMC TF").put("s7Color", "Red")
                 .put("s8Name", "CMC DF").put("s8Color", "Green")
+                .put("s9Name", "SREF TF").put("s9Color", "Red")
+                .put("s10Name", "SREF DF").put("s10Color", "Green")
                 .put("xLabel", "Date").put("yLabel", "degrees F");
         List<Integer> hourList = new ArrayList<>();
         for(int i = 0; i < hourSet.length(); i++) {
@@ -142,10 +146,12 @@ public class Weather {
         JSONObject thisGFS = new JSONObject();
         JSONObject thisHRRR = new JSONObject();
         JSONObject thisNAM = new JSONObject();
+        JSONObject thisSREF = new JSONObject();
         try { thisCMC = new JSONObject(thisObject.getString("CMC")); } catch (Exception e) {}
         try { thisGFS = new JSONObject(thisObject.getString("GFS")); } catch (Exception e) {}
         try { thisHRRR = new JSONObject(thisObject.getString("HRRR")); } catch (Exception e) {}
         try { thisNAM = new JSONObject(thisObject.getString("NAM")); } catch (Exception e) {}
+        try { thisSREF = new JSONObject(thisObject.getString("SREF")); } catch (Exception e) {}
         String thisRunString = thisObject.getString("RunString");
         thisRunString = thisRunString.replace("_", "").replace("Z", "");
         final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyyMMddHH");
@@ -161,6 +167,8 @@ public class Weather {
             double hrrrDf = -999.9;
             double namTf = -999.9;
             double namDf = -999.9;
+            double srefTf = -999.9;
+            double srefDf = -999.9;
             try { hrrrTf = wc.tempC2F(thisHRRR.getDouble("T0_"+hour)); } catch (Exception e) {}
             try { hrrrDf = wc.tempC2F(thisHRRR.getDouble("D0_"+hour)); } catch (Exception e) {}
             try { cmcTf = wc.tempC2F(thisCMC.getDouble("T0_"+hour)); } catch (Exception e) {}
@@ -169,6 +177,8 @@ public class Weather {
             try { gfsDf = wc.tempC2F(thisGFS.getDouble("D0_"+hour)); } catch (Exception e) {}
             try { namTf = wc.tempC2F(thisNAM.getDouble("T0_"+hour)); } catch (Exception e) {}
             try { namDf = wc.tempC2F(thisNAM.getDouble("D0_"+hour)); } catch (Exception e) {}
+            try { srefTf = wc.tempC2F(thisSREF.getDouble("T0_"+hour)); } catch (Exception e) {}
+            try { srefDf = wc.tempC2F(thisSREF.getDouble("D0_"+hour)); } catch (Exception e) {}
             if(hrrrTf == -999.9) { hrrrTf = 0.0; }
             if(hrrrDf == -999.9) { hrrrDf = 0.0; } 
             if(cmcTf == -999.9) { cmcTf = hrrrTf; } 
@@ -177,6 +187,8 @@ public class Weather {
             if(gfsDf == -999.9) { gfsDf = hrrrDf; } 
             if(namTf == -999.9) { namTf = hrrrTf; }
             if(namDf == -999.9) { namDf = hrrrDf; } 
+            if(srefTf == -999.9) { srefTf = hrrrTf; }
+            if(srefDf == -999.9) { srefDf = hrrrDf; } 
             if((hrrrTf + cmcTf + gfsTf + namTf) != 0.0) {
                 mosTemps_Labels.put(this_ValidTime);
                 mosTemps_Data.put(hrrrTf);
@@ -187,6 +199,8 @@ public class Weather {
                 mosTemps_Data6.put(namDf);
                 mosTemps_Data7.put(cmcTf);
                 mosTemps_Data8.put(cmcDf);
+                mosTemps_Data9.put(srefTf);
+                mosTemps_Data10.put(srefDf);
             }
         }
         mosTemps_Glob
@@ -199,6 +213,8 @@ public class Weather {
                 .put("data6", mosTemps_Data6)
                 .put("data7", mosTemps_Data7)
                 .put("data8", mosTemps_Data8)
+                .put("data9", mosTemps_Data9)
+                .put("data10", mosTemps_Data10)
                 .put("props", mosTemps_Props)
                 .put("debug", mosTemps_Debug);
         return mosTemps_Glob;
@@ -213,6 +229,7 @@ public class Weather {
         JSONArray this_Data2 = new JSONArray();
         JSONArray this_Data3 = new JSONArray();
         JSONArray this_Data4 = new JSONArray();
+        JSONArray this_Data5 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyyMMddHH")
@@ -221,6 +238,7 @@ public class Weather {
                 .put("s2Name", "GFS").put("s2Color", "Yellow")
                 .put("s3Name", "NAM").put("s3Color", "Yellow")
                 .put("s4Name", "CMC").put("s4Color", "Yellow")
+                .put("s5Name", "SREF").put("s5Color", "Yellow")
                 .put("xLabel", "Date").put("yLabel", "Wind Speed");
         List<Integer> hourList = new ArrayList<>();
         for(int i = 0; i < hourSet.length(); i++) {
@@ -233,10 +251,12 @@ public class Weather {
         JSONObject thisGFS = new JSONObject();
         JSONObject thisHRRR = new JSONObject();
         JSONObject thisNAM = new JSONObject();
+        JSONObject thisSREF = new JSONObject();
         try { thisCMC = new JSONObject(thisObject.getString("CMC")); } catch (Exception e) {}
         try { thisGFS = new JSONObject(thisObject.getString("GFS")); } catch (Exception e) {}
         try { thisHRRR = new JSONObject(thisObject.getString("HRRR")); } catch (Exception e) {}
         try { thisNAM = new JSONObject(thisObject.getString("NAM")); } catch (Exception e) {}
+        try { thisSREF = new JSONObject(thisObject.getString("SREF")); } catch (Exception e) {}
         String thisRunString = thisObject.getString("RunString");
         thisRunString = thisRunString.replace("_", "").replace("Z", "");
         final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyyMMddHH");
@@ -248,14 +268,17 @@ public class Weather {
             double gfsW = 0.0;
             double hrrrW = 0.0;
             double namW = 0.0;
+            double srefW = 0.0;
             try { hrrrW  = thisHRRR.getDouble("WS0_"+hour); } catch (Exception e) {}
             try { cmcW = thisCMC.getDouble("WS0_"+hour); } catch (Exception e) {}
             try { gfsW = thisGFS.getDouble("WS0_"+hour); } catch (Exception e) {}
             try { namW = thisNAM.getDouble("WS0_"+hour); } catch (Exception e) {}
-            if((hrrrW + cmcW + gfsW + namW) != 0.0) {
+            try { srefW = thisSREF.getDouble("WS0_"+hour); } catch (Exception e) {}
+            if((hrrrW + cmcW + gfsW + namW + srefW) != 0.0) {
                 if(cmcW == 0) { cmcW = hrrrW; }
                 if(gfsW == 0) { gfsW = hrrrW; }
                 if(namW == 0) { namW = hrrrW; } 
+                if(srefW == 0) { srefW = hrrrW; } 
                 this_Labels.put(this_ValidTime);
                 this_Data.put(hrrrW);
                 this_Data2.put(gfsW);
@@ -269,6 +292,7 @@ public class Weather {
                 .put("data2", this_Data2)
                 .put("data3", this_Data3)
                 .put("data4", this_Data4)
+                .put("data5", this_Data5)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
         return this_Glob;  
