@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 16 Oct 2018
+Updated: 4 Nov 2018
  */
 
 package asWebRest.resource;
@@ -411,6 +411,10 @@ public class ChartResource extends ServerResource {
                             "\nChart generated - mosTemps!\n";
                     } catch (Exception e) { e.printStackTrace(); } 
                     // Troubleshoot 5/23/18
+                    break;
+                    
+                case "WxObsChart":
+                    // Working on 11/4/18
                     break;
                     
                 case "WxXml":
