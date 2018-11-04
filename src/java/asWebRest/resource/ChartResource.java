@@ -414,7 +414,8 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "WxObsChart":
-                    // Working on 11/4/18
+                    // Next to develop on 11/4/18
+                    // This is for Map bubble charts
                     break;
                     
                 case "WxXml":
