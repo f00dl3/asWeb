@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 27 Mar 2018
-Updated: 19 Aug 2018
+Updated: 4 Nov 2018
  */
 
 function displayModelData() {
@@ -103,7 +103,7 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
             "</video></a><br/>Focus</span>" +
             "<span class='td'>" +
             "<a href='" + doCh("j", "WxMOSTemp", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("p", "WxMOSTemp", "RunString=" + searchString + "&Thumb=1") + "'/>" +
+            "<img class='th_sm_med' src='" + doCh("j", "WxMOSTemp", "th") + "'/>" +
             "</a><br/>Temperature</span>" +
             "<span class='td'>" +
             "<a href='" + doCh("p", "WxMOSWind", "RunString=" + searchString) + "' target='pChart'>" +
