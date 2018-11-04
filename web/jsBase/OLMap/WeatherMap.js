@@ -584,10 +584,8 @@ function stationFocus(stationId, stationCoord) {
 }
 
 function stationsNearMeMM() {
-    //dojo.byId("StationsNearMe").innerHTML = "<div id='StationsNearMe'>Loading... Part 2<br/>" + myLon + ", " + myLat + "</div>";
     var matchingRows = [];
     if(wxStations) {
-        //dojo.byId("StationsNearMe").innerHTML = "<div id='StationsNearMe'>Loading... Part 2<br/>" + myLon + ", " + myLat + "<br/>Station list loop!</div>";
         wxStations.forEach(function (sr) {
             if(isSet(sr.Point)) {
                 stationGeoJSON = JSON.parse(sr.Point);
