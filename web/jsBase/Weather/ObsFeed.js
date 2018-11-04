@@ -350,13 +350,13 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
                 doSoundingMin += "</table><table>" +
                         shAtParAdd("CAPE", "style", styleCape(stationData.CAPE), stationData.CAPE + " J/Kg", stId, "CAPE", "ObsJSONCapeCin") +
                         shAtParAdd("CIN Height", "class", colorCin(stationData.CIN), stationData.CIN + " J/Kg", stId, "CIN", "ObsJSONCapeCin") +
-                        shAtParAdd("Lift Cond Lvl", "class", colorLcl(stationData.SLCL), Math.round(stationData.SLCL) + " m", stId, "SLCL", null);
-                if(isSet(stationData.FZLV)) { doSoundingMin += shAtParAdd("Freezing Level", null, null, (stationData.FZLV/1000).toFixed(1) + " K Ft", stId, "FZL", null); }
-                if(isSet(stationData.WZLV)) { doSoundingMin += shAtParAdd("Freezing WBulb", null, null, (stationData.WZLV/1000).toFixed(1) + " K Ft", stId, "WZL", null); }
+                        shAtParAdd("Lift Cond Lvl", "class", colorLcl(stationData.SLCL), Math.round(stationData.SLCL) + " m", stId, "SLCL", "ObsJSONLevel");
+                if(isSet(stationData.FZLV)) { doSoundingMin += shAtParAdd("Freezing Level", null, null, (stationData.FZLV/1000).toFixed(1) + " K Ft", stId, "FZL", "ObsJSONLevel"); }
+                if(isSet(stationData.WZLV)) { doSoundingMin += shAtParAdd("Freezing WBulb", null, null, (stationData.WZLV/1000).toFixed(1) + " K Ft", stId, "WZL", "ObsJSONLevel"); }
                 if(isSet(stationData.LI)) { doSoundingMin += shAtParAdd("Lifted Index", "style", styleLi(stationData.LI), stationData.LI, stId, "LI", null); }
-                if(isSet(stationData.CCL)) { doSoundingMin += shAtParAdd("Conv Cond Lvl", null, null, Math.round(stationData.CCL) + " m", stId, "CCL", null); }
+                if(isSet(stationData.CCL)) { doSoundingMin += shAtParAdd("Conv Cond Lvl", null, null, Math.round(stationData.CCL) + " m", stId, "CCL", "ObsJSONLevel"); }
                 if(isSet(stationData.PWAT)) { doSoundingMin += shAtParAdd("Precip Water", "style", styleLiquid(stationData.PWAT), stationData.PWAT + " in", stId, "PWAT", null); }
-                doSoundingMin += "</table><a href='" + doCh("p", "WxLevel", "Station="+stId) + " target='new'>Height Levels</a>";
+                doSoundingMin += "</table>";
             }
         }
         doSounding = doSoundingMin;
