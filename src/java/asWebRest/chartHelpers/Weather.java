@@ -9,6 +9,10 @@ package asWebRest.chartHelpers;
 import asWebRest.shared.WebCommon;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -108,28 +112,28 @@ public class Weather {
         JSONArray mosTemps_Labels = new JSONArray();
         JSONArray mosTemps_Data = new JSONArray();
         JSONArray mosTemps_Data2 = new JSONArray();
-        /* JSONArray mosTemps_Data3 = new JSONArray();
+        JSONArray mosTemps_Data3 = new JSONArray();
         JSONArray mosTemps_Data4 = new JSONArray();
         JSONArray mosTemps_Data5 = new JSONArray();
         JSONArray mosTemps_Data6 = new JSONArray();
         JSONArray mosTemps_Data7 = new JSONArray();
         JSONArray mosTemps_Data8 = new JSONArray();
         JSONArray mosTemps_Data9 = new JSONArray();
-        JSONArray mosTemps_Data10 = new JSONArray(); */
+        JSONArray mosTemps_Data10 = new JSONArray();
         JSONArray mosTemps_Debug = new JSONArray();
         mosTemps_Props
                 .put("dateFormat", "yyyyMMddHH")
                 .put("chartName", mosTemps_ChartName).put("chartFileName", "WxMOSTemp")
                 .put("sName", "Merged TF").put("sColor", "Red")
                 .put("s2Name", "Merged DF").put("s2Color", "Green")
-                /* .put("s3Name", "GFS TF").put("s3Color", "White")
+                .put("s3Name", "GFS TF").put("s3Color", "White")
                 .put("s4Name", "GFS DF").put("s4Color", "Gray")
                 .put("s5Name", "NAM TF").put("s5Color", "White")
                 .put("s6Name", "NAM DF").put("s6Color", "Gray")
                 .put("s7Name", "CMC TF").put("s7Color", "White")
                 .put("s8Name", "CMC DF").put("s8Color", "Gray")
                 .put("s9Name", "HRRR TF").put("s9Color", "White")
-                .put("s10Name", "HRRR DF").put("s10Color", "Gray") */
+                .put("s10Name", "HRRR DF").put("s10Color", "Gray")
                 .put("xLabel", "Date").put("yLabel", "degrees F");
         List<Integer> hourList = new ArrayList<>();
         for(int i = 0; i < hourSet.length(); i++) {
@@ -149,8 +153,12 @@ public class Weather {
         try { thisNAM = new JSONObject(thisObject.getString("NAM")); } catch (Exception e) {}
         String thisRunString = thisObject.getString("RunString");
         thisRunString = thisRunString.replace("_", "").replace("Z", "");
+        final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyyMMddHH");
+        final DateTime trsDateTime = theDateFormat.parseDateTime(thisRunString);
         for(int hour : hourList) {
-            mosTemps_Labels.put(thisRunString + "_" + hour);
+            DateTime this_trsDateTime = trsDateTime.plusHours(hour);
+            String this_ValidTime = theDateFormat.print(this_trsDateTime);
+            mosTemps_Labels.put(this_ValidTime);
             double cmcTf = -999.9;
             double cmcDf = -999.9;
             double gfsTf = -999.9;
@@ -171,16 +179,16 @@ public class Weather {
             double mergedCountDf = 0.0;
             double mergedTf = 0.0;
             double mergedDf = 0.0;
-            /* if(hrrrTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + hrrrTf; } mosTemps_Data9.put(hrrrTf);
-            if(hrrrDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + hrrrTf; } mosTemps_Data10.put(hrrrDf);
-            if(cmcTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + cmcTf; } mosTemps_Data7.put(cmcTf);
-            if(cmcDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + cmcDf; } mosTemps_Data8.put(cmcDf);
-            if(gfsTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + gfsTf; } mosTemps_Data3.put(gfsTf);
-            if(gfsDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + gfsDf; } mosTemps_Data4.put(gfsDf);
-            if(namTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + namTf; } mosTemps_Data5.put(namTf);
-            if(namDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + namTf; } mosTemps_Data6.put(namDf);
+            if(hrrrTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + hrrrTf; } else { hrrrTf = 0.0; } mosTemps_Data9.put(hrrrTf);
+            if(hrrrDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + hrrrTf; } else { hrrrDf = 0.0; } mosTemps_Data10.put(hrrrDf);
+            if(cmcTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + cmcTf; } else { cmcTf = 0.0; } mosTemps_Data7.put(cmcTf);
+            if(cmcDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + cmcDf; } else { cmcDf = 0.0; } mosTemps_Data8.put(cmcDf);
+            if(gfsTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + gfsTf; } else { gfsTf = 0.0; } mosTemps_Data3.put(gfsTf);
+            if(gfsDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + gfsDf; } else { gfsDf = 0.0; } mosTemps_Data4.put(gfsDf);
+            if(namTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + namTf; } else { namTf = 0.0; } mosTemps_Data5.put(namTf);
+            if(namDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + namTf; } else { namDf = 0.0; } mosTemps_Data6.put(namDf);
             mergedTf = mergedTf / mergedCountTf;
-            mergedDf = mergedDf / mergedCountDf; */
+            mergedDf = mergedDf / mergedCountDf;
             mosTemps_Data.put(hrrrTf);
             mosTemps_Data2.put(hrrrDf);
         }
@@ -188,14 +196,14 @@ public class Weather {
                 .put("labels", mosTemps_Labels)
                 .put("data", mosTemps_Data)
                 .put("data2", mosTemps_Data2)
-                /* .put("data3", mosTemps_Data3)
+                .put("data3", mosTemps_Data3)
                 .put("data4", mosTemps_Data4)
                 .put("data5", mosTemps_Data5)
                 .put("data6", mosTemps_Data6)
                 .put("data7", mosTemps_Data7)
                 .put("data8", mosTemps_Data8)
                 .put("data9", mosTemps_Data9)
-                .put("data10", mosTemps_Data10) */
+                .put("data10", mosTemps_Data10)
                 .put("props", mosTemps_Props)
                 .put("debug", mosTemps_Debug);
         System.out.println(mosTemps_Glob.toString());
