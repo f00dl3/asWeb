@@ -290,7 +290,7 @@ public class Weather {
             JSONObject thisObject = dataIn.getJSONObject(i);
             this_Labels.put(thisObject.getString("GetTime"));
             JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
-            this_Data.put(thisSet.getDouble("Humidity"));
+            try { this_Data.put(thisSet.getDouble("RelativeHumidity")); } catch (Exception e) { }
         }
         this_Glob
                 .put("labels", this_Labels)
@@ -319,8 +319,8 @@ public class Weather {
             JSONObject thisObject = dataIn.getJSONObject(i);
             this_Labels.put(thisObject.getString("GetTime"));
             JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
-            this_Data.put(thisSet.getDouble("Temperature"));
-            this_Data2.put(thisSet.getDouble("Dewpoint"));
+            try { this_Data.put(thisSet.getDouble("Temperature")); } catch (Exception e) { }
+            try { this_Data2.put(thisSet.getDouble("Dewpoint")); } catch (Exception e) { }
         }
         this_Glob
                 .put("labels", this_Labels)
@@ -348,7 +348,7 @@ public class Weather {
             JSONObject thisObject = dataIn.getJSONObject(i);
             this_Labels.put(thisObject.getString("GetTime"));
             JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
-            this_Data.put(thisSet.getDouble("WindSpeed"));
+            try { this_Data.put(thisSet.getDouble("WindSpeed")); } catch (Exception e) { }
         }
         this_Glob
                 .put("labels", this_Labels)
