@@ -348,14 +348,14 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
             }
             if(isSet(stationData.CAPE)) {
                 doSoundingMin += "</table><table>" +
-                        shAtParAdd("CAPE", "style", styleCape(stationData.CAPE), stationData.CAPE + " J/Kg", stId, "CAPE") +
-                        shAtParAdd("CIN Height", "class", colorCin(stationData.CIN), stationData.CIN + " J/Kg", stId, "CIN") +
-                        shAtParAdd("Lift Cond Lvl", "class", colorLcl(stationData.SLCL), Math.round(stationData.SLCL) + " m", stId, "SLCL");
-                if(isSet(stationData.FZLV)) { doSoundingMin += shAtParAdd("Freezing Level", null, null, (stationData.FZLV/1000).toFixed(1) + " K Ft", stId, "FZL"); }
-                if(isSet(stationData.WZLV)) { doSoundingMin += shAtParAdd("Freezing WBulb", null, null, (stationData.WZLV/1000).toFixed(1) + " K Ft", stId, "WZL"); }
-                if(isSet(stationData.LI)) { doSoundingMin += shAtParAdd("Lifted Index", "style", styleLi(stationData.LI), stationData.LI, stId, "LI"); }
-                if(isSet(stationData.CCL)) { doSoundingMin += shAtParAdd("Conv Cond Lvl", null, null, Math.round(stationData.CCL) + " m", stId, "CCL"); }
-                if(isSet(stationData.PWAT)) { doSoundingMin += shAtParAdd("Precip Water", "style", styleLiquid(stationData.PWAT), stationData.PWAT + " in", stId, "PWAT"); }
+                        shAtParAdd("CAPE", "style", styleCape(stationData.CAPE), stationData.CAPE + " J/Kg", stId, "CAPE", "ObsJSONCapeCin") +
+                        shAtParAdd("CIN Height", "class", colorCin(stationData.CIN), stationData.CIN + " J/Kg", stId, "CIN", "ObsJSONCapeCin") +
+                        shAtParAdd("Lift Cond Lvl", "class", colorLcl(stationData.SLCL), Math.round(stationData.SLCL) + " m", stId, "SLCL", null);
+                if(isSet(stationData.FZLV)) { doSoundingMin += shAtParAdd("Freezing Level", null, null, (stationData.FZLV/1000).toFixed(1) + " K Ft", stId, "FZL", null); }
+                if(isSet(stationData.WZLV)) { doSoundingMin += shAtParAdd("Freezing WBulb", null, null, (stationData.WZLV/1000).toFixed(1) + " K Ft", stId, "WZL", null); }
+                if(isSet(stationData.LI)) { doSoundingMin += shAtParAdd("Lifted Index", "style", styleLi(stationData.LI), stationData.LI, stId, "LI", null); }
+                if(isSet(stationData.CCL)) { doSoundingMin += shAtParAdd("Conv Cond Lvl", null, null, Math.round(stationData.CCL) + " m", stId, "CCL", null); }
+                if(isSet(stationData.PWAT)) { doSoundingMin += shAtParAdd("Precip Water", "style", styleLiquid(stationData.PWAT), stationData.PWAT + " in", stId, "PWAT", null); }
                 doSoundingMin += "</table><a href='" + doCh("p", "WxLevel", "Station="+stId) + " target='new'>Height Levels</a>";
             }
         }
@@ -368,10 +368,11 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
     return doSounding;
 }
 
-function shAtParAdd(longName, sType, styling, dataIn, stId, param) {
+function shAtParAdd(longName, sType, styling, dataIn, stId, param, chartAssoc) {
     var tdStyling = "";
     if(isSet(styling)) { tdStyling = " " + sType + "='" + styling + "'"; }
-    var rData = "<tr><td>" + longName + "</td><td" + tdStyling + ">" + dataIn + "</td>" +
-            "<td><a href='" + doCh("p", "WxXML", "Station=" + stId + "&Param=" + param) + "' target='new'>" + playIcon + "</a></td></tr>";
+    var tLink = "N/A";
+    if(isSet(chartAssoc)) { tLink = "<a href='" + doCh("j", chartAssoc, "th") + "' target='newChart'>" + playIcon + "</a>"; }
+    var rData = "<tr><td>" + longName + "</td><td" + tdStyling + ">" + dataIn + "</td><td>" + tLink + "</td></tr>";
     return rData;
 }

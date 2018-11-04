@@ -274,6 +274,36 @@ public class Weather {
         return this_Glob;  
     } 
     
+    private JSONObject obsJsonCapeCin(JSONArray dataIn, String stationId) {
+        String this_ChartName = "ObsJSON CAPE/CIN for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONCapeCin")
+                .put("sName", "CAPE").put("sColor", "Red")
+                .put("s2Name", "CINH").put("s2Color", "Blue")
+                .put("xLabel", "Date").put("yLabel", "j/KG @ Height");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            try { this_Data.put(thisSet.getDouble("CAPE")); } catch (Exception e) { }
+            try { this_Data2.put(thisSet.getDouble("CIN")); } catch (Exception e) { }
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("data2", this_Data2)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        return this_Glob;
+    }
+    
     private JSONObject obsJsonHumidity(JSONArray dataIn, String stationId) {
         String this_ChartName = "ObsJSON Humidity for " + stationId;
         JSONObject this_Glob = new JSONObject();
@@ -362,6 +392,7 @@ public class Weather {
     public JSONObject getCf6temps(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getMosTemps(JSONArray dataIn, JSONArray hourSet) { return mosTemps(dataIn, hourSet); }
     public JSONObject getMosWind(JSONArray dataIn, JSONArray hourSet) { return mosWind(dataIn, hourSet); }
+    public JSONObject getObsJsonCapeCin(JSONArray dataIn, String stationId) { return obsJsonCapeCin(dataIn, stationId); }
     public JSONObject getObsJsonHumidity(JSONArray dataIn, String stationId) { return obsJsonHumidity(dataIn, stationId); }
     public JSONObject getObsJsonTemps(JSONArray dataIn, String stationId) { return obsJsonTemps(dataIn, stationId); }
     public JSONObject getObsJsonWind(JSONArray dataIn, String stationId) { return obsJsonWind(dataIn, stationId); }
