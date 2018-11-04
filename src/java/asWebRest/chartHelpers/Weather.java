@@ -274,11 +274,48 @@ public class Weather {
         return this_Glob;
     }
     
+    private JSONObject obsJsonTemps(JSONArray dataIn, String stationId) {
+        // in development, 4 Nov 2018
+        String this_ChartName = "ObsJSON Temps for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
+        JSONArray this_Data3 = new JSONArray();
+        JSONArray this_Data4 = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyyMMddHHmmss")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemps")
+                .put("sName", "Temp").put("sColor", "Red")
+                .put("s2Name", "Dewpt").put("s2Color", "Blue")
+                .put("xLabel", "Date").put("yLabel", "Degrees");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("ObsTime"));
+            JSONObject thisStationData = thisObject.getJSONObject(stationId);
+            this_Data.put(thisStationData.getDouble("Temperature"));
+            this_Data2.put(thisStationData.getDouble("Dewpoint"));
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("data2", this_Data2)
+                .put("data3", this_Data3)
+                .put("data4", this_Data4)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        System.out.println(this_Glob.toString());
+        return this_Glob;
+    }
+    
     public JSONObject getCf6cpc(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6cpc(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6depart(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6temps(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getMosTemps(JSONArray dataIn, JSONArray hourSet) { return mosTemps(dataIn, hourSet); }
     public JSONObject getMosWind(JSONArray dataIn, JSONArray hourSet) { return mosWind(dataIn, hourSet); }
+    public JSONObject getObsJsonTemps(JSONArray dataIn, String stationId) { return obsJsonTemps(dataIn, stationId); }
        
 }
     

@@ -75,6 +75,7 @@ public class ChartResource extends ServerResource {
         String doWhat = null;
         String order = "DESC";
         String returnData = "";      
+        List<String> inParams = new ArrayList<>();      
         
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
@@ -410,9 +411,25 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mosWind_Glob); returnData += "Chart generated - mosWind!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
-                case "WxObsChart":
+                case "WxObsCharts":
                     // Next to develop on 11/4/18
-                    // This is for Map bubble charts
+                    // This is for Map bubble charts etc
+                    String stationId = null;
+                    try {
+                        stationId = argsInForm.getFirstValue("stationId");
+                        inParams.add(0, argsInForm.getFirstValue("startTime"));
+                        inParams.add(1, argsInForm.getFirstValue("endTime"));
+                        inParams.add(2, argsInForm.getFirstValue("order"));
+                        inParams.add(3, argsInForm.getFirstValue("limit"));
+                        inParams.add(4, argsInForm.getFirstValue("stationId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(wc.isSet(stationId)) {
+                        JSONArray wxObsBS = getWeatherAction.getObsJsonByStation(dbc, inParams);
+                        JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBS, stationId);
+                        try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemps!\n"; } catch (Exception e) { e.printStackTrace(); }                     
+                    }
                     break;
                     
                 case "WxXml":
