@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 23 Oct 2018
+Updated: 4 Nov 2018
  */
 
 package asWebRest.chartHelpers;
@@ -35,16 +35,19 @@ public class SysMonDesktop {
             float mJavaCodeLines_asUtils = 0.0f;
             float mJavaCodeLines_asWebTotal = 0.0f;
             String walkTime = "00000000000000";
-            try { 
-                walkTime = thisObject.getString("WalkTime");
-                mJavaCodeLines_asUtils = thisExpanded.getFloat("LOC_asUtilsJava");
-                mJavaCodeLines_asWebTotal = (
+            Float asuJava = 0.0f;
+            Float aswjTotal = 0.0f;
+            try { walkTime = thisObject.getString("WalkTime"); } catch (Exception e) { }
+            try { asuJava = thisExpanded.getFloat("LOC_asUtilsJava"); } catch (Exception e) { }
+            try { aswjTotal = (
                     thisExpanded.getFloat("LOC_aswjJs") +
                     thisExpanded.getFloat("LOC_aswjJava") +
                     thisExpanded.getFloat("LOC_aswjCss") +
                     thisExpanded.getFloat("LOC_aswjJsp")
                 );
             } catch (Exception e) { }
+            mJavaCodeLines_asUtils = asuJava;
+            mJavaCodeLines_asWebTotal = aswjTotal;
             mJavaCodeLines_Labels.put(walkTime);
             mJavaCodeLines_Data.put(mJavaCodeLines_asUtils);
             mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
