@@ -271,25 +271,49 @@ public class Weather {
                 .put("data4", this_Data4)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
+        return this_Glob;  
+    } 
+    
+    private JSONObject obsJsonHumidity(JSONArray dataIn, String stationId) {
+        String this_ChartName = "ObsJSON Humidity for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONHumi")
+                .put("sName", "Humidity").put("sColor", "White")
+                .put("xLabel", "Date").put("yLabel", "Percent");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            this_Data.put(thisSet.getDouble("Humidity"));
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        System.out.println(this_Glob.toString());
         return this_Glob;
     }
     
     private JSONObject obsJsonTemps(JSONArray dataIn, String stationId) {
-        // in development, 4 Nov 2018
         String this_ChartName = "ObsJSON Temps for " + stationId;
         JSONObject this_Glob = new JSONObject();
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
         JSONArray this_Data2 = new JSONArray();
-        JSONArray this_Data3 = new JSONArray();
-        JSONArray this_Data4 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
                 .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemp")
-                .put("sName", "Temp").put("sColor", "Red")
-                .put("s2Name", "Dewpt").put("s2Color", "Blue")
+                .put("sName", "Temperature").put("sColor", "Red")
+                .put("s2Name", "Dewpoint").put("s2Color", "Blue")
                 .put("xLabel", "Date").put("yLabel", "Degrees");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -302,20 +326,48 @@ public class Weather {
                 .put("labels", this_Labels)
                 .put("data", this_Data)
                 .put("data2", this_Data2)
-                .put("data3", this_Data3)
-                .put("data4", this_Data4)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
         System.out.println(this_Glob.toString());
         return this_Glob;
     }
     
+    private JSONObject obsJsonWind(JSONArray dataIn, String stationId) {
+        String this_ChartName = "ObsJSON Wind for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONWind")
+                .put("sName", "Wind").put("sColor", "Yellow")
+                .put("xLabel", "Date").put("yLabel", "MPH");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            this_Data.put(thisSet.getDouble("WindSpeed"));
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        System.out.println(this_Glob.toString());
+        return this_Glob;
+    }
+    
+   
     public JSONObject getCf6cpc(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6cpc(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6depart(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6temps(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getMosTemps(JSONArray dataIn, JSONArray hourSet) { return mosTemps(dataIn, hourSet); }
     public JSONObject getMosWind(JSONArray dataIn, JSONArray hourSet) { return mosWind(dataIn, hourSet); }
+    public JSONObject getObsJsonHumidity(JSONArray dataIn, String stationId) { return obsJsonHumidity(dataIn, stationId); }
     public JSONObject getObsJsonTemps(JSONArray dataIn, String stationId) { return obsJsonTemps(dataIn, stationId); }
+    public JSONObject getObsJsonWind(JSONArray dataIn, String stationId) { return obsJsonWind(dataIn, stationId); }
        
 }
     

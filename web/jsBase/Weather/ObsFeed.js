@@ -4,7 +4,7 @@ Created: 5 Mar 2018
 Updated: 4 Nov 2018
  */
 
-function getChartData(stationId) {
+function getChartDataWXOJ(stationId) {
     var dateOverrideStart = getDate("hour", -24, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var thePostData = {
@@ -121,7 +121,7 @@ function getObsDataMerged(targetDiv, displayType) {
                     processMarqueeData(theData, lastData, targetDiv);
                     break;
                 case "static":
-                    getChartData(stationId);
+                    getChartDataWXOJ(stationId);
                     processObservationData(nowObsId, theData, lastData, indoorObs, targetDiv);
                     $(targetDiv).html(data.WxObs);
                     break;

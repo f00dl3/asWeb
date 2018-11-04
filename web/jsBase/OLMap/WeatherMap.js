@@ -2,12 +2,12 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 30 Aug 2018
+ Updated: 4 NOV 2018
  
- WARNING: AS OF 30 AUG 2018 -- STABILITY ISSUES
+ WARNING: AS OF 4 NOV 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
   - UBUNTU BECOMES UNSTABLE DUE TO EXCESSIVE SWAPPING
-  - OPERA MOBILE ON ANDROID SIMPLY CRASHES THE TAB
+  - ANY MOBILE BROWSER ON ANDROID SIMPLY CRASHES THE TAB OR GOES BLACK
  
  */
 
@@ -280,10 +280,11 @@ function doWeatherOLMap(
                     }
                     eiData += "</td></tr></table>";
                     if (feature.get("priority") < 4) {
+                        getChartDataWXOJ(feature.get("stationId"));
                         var upperAirData = processUpperAirData(null, passedData, true).replace("/\s\s+/", "");
-                        eiData += "<button id='Sh" + feature.get("stationId") + "TableT' class='UButton'>TMP</button>" +
-                                "<button id='Sh" + feature.get("stationId") + "TableH' class='UButton'>HUM</button>" +
-                                "<button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button><br/>" +
+                        eiData += "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableT' class='UButton'>TMP</button></a>" +
+                                "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableH' class='UButton'>HUM</button></a>" +
+                                "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button></a><br/>" +
                                 upperAirData;
                     }
                     break;
