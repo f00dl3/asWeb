@@ -118,22 +118,18 @@ public class Weather {
         JSONArray mosTemps_Data6 = new JSONArray();
         JSONArray mosTemps_Data7 = new JSONArray();
         JSONArray mosTemps_Data8 = new JSONArray();
-        JSONArray mosTemps_Data9 = new JSONArray();
-        JSONArray mosTemps_Data10 = new JSONArray();
         JSONArray mosTemps_Debug = new JSONArray();
         mosTemps_Props
                 .put("dateFormat", "yyyyMMddHH")
                 .put("chartName", mosTemps_ChartName).put("chartFileName", "WxMOSTemp")
-                .put("sName", "Merged TF").put("sColor", "Red")
-                .put("s2Name", "Merged DF").put("s2Color", "Green")
-                .put("s3Name", "GFS TF").put("s3Color", "White")
-                .put("s4Name", "GFS DF").put("s4Color", "Gray")
-                .put("s5Name", "NAM TF").put("s5Color", "White")
-                .put("s6Name", "NAM DF").put("s6Color", "Gray")
-                .put("s7Name", "CMC TF").put("s7Color", "White")
-                .put("s8Name", "CMC DF").put("s8Color", "Gray")
-                .put("s9Name", "HRRR TF").put("s9Color", "White")
-                .put("s10Name", "HRRR DF").put("s10Color", "Gray")
+                .put("sName", "HRRR TF").put("sColor", "Red")
+                .put("s2Name", "HRRR DF").put("s2Color", "Green")
+                .put("s3Name", "GFS TF").put("s3Color", "Red")
+                .put("s4Name", "GFS DF").put("s4Color", "Green")
+                .put("s5Name", "NAM TF").put("s5Color", "Red")
+                .put("s6Name", "NAM DF").put("s6Color", "Green")
+                .put("s7Name", "CMC TF").put("s7Color", "Red")
+                .put("s8Name", "CMC DF").put("s8Color", "Green")
                 .put("xLabel", "Date").put("yLabel", "degrees F");
         List<Integer> hourList = new ArrayList<>();
         for(int i = 0; i < hourSet.length(); i++) {
@@ -178,29 +174,25 @@ public class Weather {
             double mergedCountDf = 0.0;
             double mergedTf = 0.0;
             double mergedDf = 0.0;
-            if(hrrrTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + hrrrTf; } else { hrrrTf = 0.0; }
-            if(hrrrDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + hrrrTf; } else { hrrrDf = 0.0; } 
-            if(cmcTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + cmcTf; } else { cmcTf = 0.0; } 
-            if(cmcDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + cmcDf; } else { cmcDf = 0.0; } 
-            if(gfsTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + gfsTf; } else { gfsTf = 0.0; } 
-            if(gfsDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + gfsDf; } else { gfsDf = 0.0; } 
-            if(namTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + namTf; } else { namTf = 0.0; }
-            if(namDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + namTf; } else { namDf = 0.0; } 
+            if(hrrrTf == -999.9) { hrrrTf = 0.0; }
+            if(hrrrDf == -999.9) { hrrrDf = 0.0; } 
+            if(cmcTf == -999.9) { cmcTf = hrrrTf; } 
+            if(cmcDf == -999.9) { cmcDf = hrrrDf; } 
+            if(gfsTf == -999.9) { gfsTf = hrrrTf; } 
+            if(gfsDf == -999.9) { gfsDf = hrrrDf; } 
+            if(namTf == -999.9) { namTf = hrrrTf; }
+            if(namDf == -999.9) { namDf = hrrrDf; } 
             if((hrrrTf + cmcTf + gfsTf + namTf) != 0.0) {
                 mosTemps_Labels.put(this_ValidTime);
+                mosTemps_Data.put(hrrrTf);
+                mosTemps_Data2.put(hrrrDf);
                 mosTemps_Data3.put(gfsTf);
                 mosTemps_Data4.put(gfsDf);
                 mosTemps_Data5.put(namTf);
                 mosTemps_Data6.put(namDf);
                 mosTemps_Data7.put(cmcTf);
                 mosTemps_Data8.put(cmcDf);
-                mosTemps_Data9.put(hrrrTf);
-                mosTemps_Data10.put(hrrrDf);
             }
-            mergedTf = mergedTf / mergedCountTf;
-            mergedDf = mergedDf / mergedCountDf;
-            mosTemps_Data.put(hrrrTf);
-            mosTemps_Data2.put(hrrrDf);
         }
         mosTemps_Glob
                 .put("labels", mosTemps_Labels)
@@ -212,8 +204,6 @@ public class Weather {
                 .put("data6", mosTemps_Data6)
                 .put("data7", mosTemps_Data7)
                 .put("data8", mosTemps_Data8)
-                .put("data9", mosTemps_Data9)
-                .put("data10", mosTemps_Data10)
                 .put("props", mosTemps_Props)
                 .put("debug", mosTemps_Debug);
         System.out.println(mosTemps_Glob.toString());
