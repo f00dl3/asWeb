@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 18 Jul 2018
+Updated: 4 Nov 2018
  */
 
 var myHeight = 68;
@@ -189,12 +189,12 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
         genString = "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=" + newAction + "&Input=" + inDate + "' target='new'>" +
             "<div class='UPop'><img class='th_icon' src='" + iconBack + "' />" +
             "<div class='UPopO'>" + longAct + " " + typeDesc + " data." + commonFlag + "</div>" +
-            "</div></a>";
+            "</div></a> ";
     } else {
         genString = "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + inDate + "&" + inType + "=" + letAct + "' target='new'>" +
             "<div class='UPop'><img class='th_icon' src='" + iconBack + "' />" +
             "<div class='UPopO'>" + longAct + " " + typeDesc + " data." + commonFlag + "</div>" +
-            "</div></a>";
+            "</div></a> ";
     }
     return genString;
 }
