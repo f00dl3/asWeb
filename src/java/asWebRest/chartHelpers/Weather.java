@@ -158,7 +158,6 @@ public class Weather {
         for(int hour : hourList) {
             DateTime this_trsDateTime = trsDateTime.plusHours(hour);
             String this_ValidTime = theDateFormat.print(this_trsDateTime);
-            mosTemps_Labels.put(this_ValidTime);
             double cmcTf = -999.9;
             double cmcDf = -999.9;
             double gfsTf = -999.9;
@@ -179,14 +178,25 @@ public class Weather {
             double mergedCountDf = 0.0;
             double mergedTf = 0.0;
             double mergedDf = 0.0;
-            if(hrrrTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + hrrrTf; } else { hrrrTf = 0.0; } mosTemps_Data9.put(hrrrTf);
-            if(hrrrDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + hrrrTf; } else { hrrrDf = 0.0; } mosTemps_Data10.put(hrrrDf);
-            if(cmcTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + cmcTf; } else { cmcTf = 0.0; } mosTemps_Data7.put(cmcTf);
-            if(cmcDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + cmcDf; } else { cmcDf = 0.0; } mosTemps_Data8.put(cmcDf);
-            if(gfsTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + gfsTf; } else { gfsTf = 0.0; } mosTemps_Data3.put(gfsTf);
-            if(gfsDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + gfsDf; } else { gfsDf = 0.0; } mosTemps_Data4.put(gfsDf);
-            if(namTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + namTf; } else { namTf = 0.0; } mosTemps_Data5.put(namTf);
-            if(namDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + namTf; } else { namDf = 0.0; } mosTemps_Data6.put(namDf);
+            if(hrrrTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + hrrrTf; } else { hrrrTf = 0.0; }
+            if(hrrrDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + hrrrTf; } else { hrrrDf = 0.0; } 
+            if(cmcTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + cmcTf; } else { cmcTf = 0.0; } 
+            if(cmcDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + cmcDf; } else { cmcDf = 0.0; } 
+            if(gfsTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + gfsTf; } else { gfsTf = 0.0; } 
+            if(gfsDf != -999.9) { mergedCountDf++; mergedDf = mergedDf + gfsDf; } else { gfsDf = 0.0; } 
+            if(namTf != -999.9) { mergedCountTf++; mergedTf = mergedTf + namTf; } else { namTf = 0.0; }
+            if(namDf != -999.9) { mergedCountTf++; mergedDf = mergedDf + namTf; } else { namDf = 0.0; } 
+            if((hrrrTf + cmcTf + gfsTf + namTf) != 0.0) {
+                mosTemps_Labels.put(this_ValidTime);
+                mosTemps_Data3.put(gfsTf);
+                mosTemps_Data4.put(gfsDf);
+                mosTemps_Data5.put(namTf);
+                mosTemps_Data6.put(namDf);
+                mosTemps_Data7.put(cmcTf);
+                mosTemps_Data8.put(cmcDf);
+                mosTemps_Data9.put(hrrrTf);
+                mosTemps_Data10.put(hrrrDf);
+            }
             mergedTf = mergedTf / mergedCountTf;
             mergedDf = mergedDf / mergedCountDf;
             mosTemps_Data.put(hrrrTf);
