@@ -248,10 +248,10 @@ public class Weather {
             double gfsW = 0.0;
             double hrrrW = 0.0;
             double namW = 0.0;
-            try { hrrrW  = wc.tempC2F(thisHRRR.getDouble("WS0_"+hour)); } catch (Exception e) {}
-            try { cmcW = wc.tempC2F(thisCMC.getDouble("WS0_"+hour)); } catch (Exception e) {}
-            try { gfsW = wc.tempC2F(thisGFS.getDouble("WS0_"+hour)); } catch (Exception e) {}
-            try { namW = wc.tempC2F(thisNAM.getDouble("WS0_"+hour)); } catch (Exception e) {}
+            try { hrrrW  = thisHRRR.getDouble("WS0_"+hour); } catch (Exception e) {}
+            try { cmcW = thisCMC.getDouble("WS0_"+hour); } catch (Exception e) {}
+            try { gfsW = thisGFS.getDouble("WS0_"+hour); } catch (Exception e) {}
+            try { namW = thisNAM.getDouble("WS0_"+hour); } catch (Exception e) {}
             if((hrrrW + cmcW + gfsW + namW) != 0.0) {
                 if(cmcW == 0) { cmcW = hrrrW; }
                 if(gfsW == 0) { gfsW = hrrrW; }
