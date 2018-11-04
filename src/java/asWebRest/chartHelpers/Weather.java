@@ -286,7 +286,7 @@ public class Weather {
         JSONArray this_Data4 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         this_Props
-                .put("dateFormat", "yyyyMMddHHmmss")
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
                 .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemp")
                 .put("sName", "Temp").put("sColor", "Red")
                 .put("s2Name", "Dewpt").put("s2Color", "Blue")

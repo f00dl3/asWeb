@@ -412,8 +412,6 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "WxObsCharts":
-                    // Next to develop on 11/4/18
-                    // This is for Map bubble charts etc
                     String stationId = null;
                     try {
                         stationId = argsInForm.getFirstValue("stationId");

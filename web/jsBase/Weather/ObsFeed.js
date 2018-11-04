@@ -5,14 +5,14 @@ Updated: 4 Nov 2018
  */
 
 function getChartData(stationId) {
-    var dateOverrideStart = getDate("hour", -6, "full"); 
+    var dateOverrideStart = getDate("hour", -24, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var thePostData = {
         "doWhat": "WxObsCharts",
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 5,
+        "limit": 72,
         "stationId": stationId
     };
     require(["dojo/request"], function(request) {
@@ -221,10 +221,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<a href='" + getBasePath("ui") + "/WxStation.jsp' target='new'>JSON</a><br/>" +
             "Obs #: " + nowObsId + " station " + stationId + "<br/>" +
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
-            "<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
-            "<img class='th_small' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
-            "</a><div class='UPopNM'>" +
+            "<br/><div class='UPopNM'>" +
             "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
             processUpperAirData(998, theData) + "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +
@@ -234,7 +231,10 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "</div></div><br/>" +
             "<div class='UPop'>" + animatedArrow(diffTemperature) + 
             "<span style='" + styleTemp(theData.Temperature) + "'>" + Math.round(theData.Temperature) + "F</span>" +
-            "<div class='UPopO'>(" + diffTemperature + "F/hr)</div></div>/" +
+            "<div class='UPopO'>(" + diffTemperature + "F/hr)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
+            "</a></div></div>/" +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(theData.Dewpoint) + "'>" + Math.round(theData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffDewpoint + "F/hr)</div></div>" +
