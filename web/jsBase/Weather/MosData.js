@@ -106,8 +106,8 @@ function processMosData(last, heightsIn, hours, runs, jsonModelData) {
             "<img class='th_sm_med' src='" + doCh("j", "WxMOSTemp", "th") + "'/>" +
             "</a><br/>Temperature</span>" +
             "<span class='td'>" +
-            "<a href='" + doCh("p", "WxMOSWind", "RunString=" + searchString) + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("p", "WxMOSWind", "RunString=" + searchString + "&Thumb=1") + "'/>" +
+            "<a href='" + doCh("j", "WxMOSWind", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "WxMOSWind", "th") + "'/>" +
             "</a><br/>Wind Speed</span>" +
             "</div>";
     rData += mroTable;

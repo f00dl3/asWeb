@@ -405,12 +405,9 @@ public class ChartResource extends ServerResource {
                     }
                     JSONArray modelData = getWeatherAction.getJsonModelData(dbc, qParams);
                     JSONObject mosTemps_Glob = wx.getMosTemps(modelData, hourSet);
-                    try {
-                        dynChart.LineChart(mosTemps_Glob);
-                        returnData += "DEBUG: " + mosTemps_Glob.getJSONArray("debug").toString() +
-                            "\nChart generated - mosTemps!\n";
-                    } catch (Exception e) { e.printStackTrace(); } 
-                    // Troubleshoot 5/23/18
+                    JSONObject mosWind_Glob = wx.getMosWind(modelData, hourSet);
+                    try { dynChart.LineChart(mosTemps_Glob); returnData += "Chart generated - mosTemps!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(mosWind_Glob); returnData += "Chart generated - mosWind!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "WxObsChart":

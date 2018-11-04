@@ -204,10 +204,81 @@ public class Weather {
         return mosTemps_Glob;
     }
     
+    private JSONObject mosWind(JSONArray dataIn, JSONArray hourSet) {
+        String this_ChartName = "Model Output Soundings: Winds";
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
+        JSONArray this_Data3 = new JSONArray();
+        JSONArray this_Data4 = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyyMMddHH")
+                .put("chartName", this_ChartName).put("chartFileName", "WxMOSWind")
+                .put("sName", "HRRR").put("sColor", "Yellow")
+                .put("s2Name", "GFS").put("s2Color", "Yellow")
+                .put("s3Name", "NAM").put("s3Color", "Yellow")
+                .put("s4Name", "CMC").put("s4Color", "Yellow")
+                .put("xLabel", "Date").put("yLabel", "Wind Speed");
+        List<Integer> hourList = new ArrayList<>();
+        for(int i = 0; i < hourSet.length(); i++) {
+            JSONObject thisObject = hourSet.getJSONObject(i);
+            int thisHour = thisObject.getInt("FHour");
+            hourList.add(thisHour);
+        }
+        JSONObject thisObject = dataIn.getJSONObject(0);
+        JSONObject thisCMC = new JSONObject();
+        JSONObject thisGFS = new JSONObject();
+        JSONObject thisHRRR = new JSONObject();
+        JSONObject thisNAM = new JSONObject();
+        try { thisCMC = new JSONObject(thisObject.getString("CMC")); } catch (Exception e) {}
+        try { thisGFS = new JSONObject(thisObject.getString("GFS")); } catch (Exception e) {}
+        try { thisHRRR = new JSONObject(thisObject.getString("HRRR")); } catch (Exception e) {}
+        try { thisNAM = new JSONObject(thisObject.getString("NAM")); } catch (Exception e) {}
+        String thisRunString = thisObject.getString("RunString");
+        thisRunString = thisRunString.replace("_", "").replace("Z", "");
+        final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyyMMddHH");
+        final DateTime trsDateTime = theDateFormat.parseDateTime(thisRunString);
+        for(int hour : hourList) {
+            DateTime this_trsDateTime = trsDateTime.plusHours(hour);
+            String this_ValidTime = theDateFormat.print(this_trsDateTime);
+            double cmcW = 0.0;
+            double gfsW = 0.0;
+            double hrrrW = 0.0;
+            double namW = 0.0;
+            try { hrrrW  = wc.tempC2F(thisHRRR.getDouble("WS0_"+hour)); } catch (Exception e) {}
+            try { cmcW = wc.tempC2F(thisCMC.getDouble("WS0_"+hour)); } catch (Exception e) {}
+            try { gfsW = wc.tempC2F(thisGFS.getDouble("WS0_"+hour)); } catch (Exception e) {}
+            try { namW = wc.tempC2F(thisNAM.getDouble("WS0_"+hour)); } catch (Exception e) {}
+            if((hrrrW + cmcW + gfsW + namW) != 0.0) {
+                if(cmcW == 0) { cmcW = hrrrW; }
+                if(gfsW == 0) { gfsW = hrrrW; }
+                if(namW == 0) { namW = hrrrW; } 
+                this_Labels.put(this_ValidTime);
+                this_Data.put(hrrrW);
+                this_Data2.put(gfsW);
+                this_Data3.put(namW);
+                this_Data4.put(cmcW);
+            }
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("data2", this_Data2)
+                .put("data3", this_Data3)
+                .put("data4", this_Data4)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        return this_Glob;
+    }
+    
     public JSONObject getCf6cpc(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6cpc(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6depart(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getCf6temps(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) { return cf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd); }
     public JSONObject getMosTemps(JSONArray dataIn, JSONArray hourSet) { return mosTemps(dataIn, hourSet); }
+    public JSONObject getMosWind(JSONArray dataIn, JSONArray hourSet) { return mosWind(dataIn, hourSet); }
        
 }
     
