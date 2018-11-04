@@ -2,14 +2,12 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 2 Nov 2018
+Updated: 4 Nov 2018
  */
 
 var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
-//var houseAssets = 2.830;
-//var nonHouseAssets = 1.818;
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
@@ -533,8 +531,6 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     assets.forEach(function (asset) { assetValues += asset.Value; });
     var totalValue = (assetValues/1000000).toFixed(2);
     var counts = countIn[0];
-    var charProfLink = "https://na.finalfantasyxiv.com/loadstone/character/20659030";
-    var charProfLink2 = "https://na.finalfantasyxiv.com/lodestone/character/20659030/";
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
     var dCount = counts.Dungeons;
@@ -560,7 +556,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Gathering") { gatherCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
-    var rData = "<a href='" + charProfLink2 + "' target='new'>Foodle Faddle</a> " +
+    var rData = "<span id='charList'></span>" +
             totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
@@ -613,6 +609,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     dojo.byId(target).innerHTML = rData;
     putFfxivMergedSearchBox("mSearchHolder");
     putFfxivMergedList("mergedList", mergedData);
+    getWebLinks("ffxivChars", "charList", "list");
 }
 
 function putFfxivMergedSearchBox(target) {
