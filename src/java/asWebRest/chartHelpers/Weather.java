@@ -400,6 +400,32 @@ public class Weather {
         return this_Glob;
     }
     
+    private JSONObject obsJsonPressure(JSONArray dataIn, String stationId) {
+        String this_ChartName = "ObsJSON MSLP for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONPres")
+                .put("sName", "Pressure").put("sColor", "Green")
+                .put("xLabel", "Date").put("yLabel", "Mililbars");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            try { this_Data.put(thisSet.getDouble("Pressure")); } catch (Exception e) { }
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        return this_Glob;
+    }
+    
     private JSONObject obsJsonTemps(JSONArray dataIn, String stationId) {
         String this_ChartName = "ObsJSON Temps for " + stationId;
         JSONObject this_Glob = new JSONObject();
@@ -465,6 +491,7 @@ public class Weather {
     public JSONObject getObsJsonCapeCin(JSONArray dataIn, String stationId) { return obsJsonCapeCin(dataIn, stationId); }
     public JSONObject getObsJsonHumidity(JSONArray dataIn, String stationId) { return obsJsonHumidity(dataIn, stationId); }
     public JSONObject getObsJsonLevel(JSONArray dataIn, String stationId) { return obsJsonLevel(dataIn, stationId); }
+    public JSONObject getObsJsonPressure(JSONArray dataIn, String stationId) { return obsJsonPressure(dataIn, stationId); }
     public JSONObject getObsJsonTemps(JSONArray dataIn, String stationId) { return obsJsonTemps(dataIn, stationId); }
     public JSONObject getObsJsonWind(JSONArray dataIn, String stationId) { return obsJsonWind(dataIn, stationId); }
        

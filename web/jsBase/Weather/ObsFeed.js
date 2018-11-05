@@ -5,14 +5,14 @@ Updated: 4 Nov 2018
  */
 
 function getChartDataWXOJ(stationId) {
-    var dateOverrideStart = getDate("hour", -24, "full"); 
+    var dateOverrideStart = getDate("hour", -72, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
     var thePostData = {
         "doWhat": "WxObsCharts",
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 72,
+        "limit": 256,
         "stationId": stationId
     };
     require(["dojo/request"], function(request) {
@@ -227,7 +227,9 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<div class='UPop'>" + theData.Weather +
             "<div class='UPopO'>" +
             "Visibility: " + theData.Visibility + " mi.<br/>" +
-            "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb." +
+            "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb.<br/>" +
+            "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
             "</div></div><br/>" +
             "<div class='UPop'>" + animatedArrow(diffTemperature) + 
             "<span style='" + styleTemp(theData.Temperature) + "'>" + Math.round(theData.Temperature) + "F</span>" +

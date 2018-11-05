@@ -282,6 +282,7 @@ function doWeatherOLMap(
                     eiData += "</td></tr></table>" +
                             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableT' class='UButton'>TMP</button></a>" +
                             "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableH' class='UButton'>HUM</button></a>" +
+                            "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableP' class='UButton'>PRS</button></a>" +
                             "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><button id='Sh" + feature.get("stationId") + "TableW' class='UButton'>WND</button></a>";
                     if (feature.get("priority") < 4) {
                         var upperAirData = processUpperAirData(null, passedData, true).replace("/\s\s+/", "");

@@ -428,11 +428,13 @@ public class ChartResource extends ServerResource {
                         JSONObject obsJsonCapeCin_Glob = wx.getObsJsonCapeCin(wxObsBS, stationId);
                         JSONObject obsJsonHumidity_Glob = wx.getObsJsonHumidity(wxObsBS, stationId);
                         JSONObject obsJsonLevel_Glob = wx.getObsJsonLevel(wxObsBS, stationId);
+                        JSONObject obsJsonPressure_Glob = wx.getObsJsonPressure(wxObsBS, stationId);
                         JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBS, stationId);
                         JSONObject obsJsonWind_Glob = wx.getObsJsonWind(wxObsBS, stationId);
                         try { dynChart.LineChart(obsJsonCapeCin_Glob); returnData += "Chart generated - obsJsonCapeCin!\n"; } catch (Exception e) { e.printStackTrace(); }     
                         try { dynChart.LineChart(obsJsonHumidity_Glob); returnData += "Chart generated - obsJsonHumi!\n"; } catch (Exception e) { e.printStackTrace(); }            
-                        try { dynChart.LineChart(obsJsonLevel_Glob); returnData += "Chart generated - obsJsonLevel!\n"; } catch (Exception e) { e.printStackTrace(); }                     
+                        try { dynChart.LineChart(obsJsonLevel_Glob); returnData += "Chart generated - obsJsonLevel!\n"; } catch (Exception e) { e.printStackTrace(); }         
+                        try { dynChart.LineChart(obsJsonPressure_Glob); returnData += "Chart generated - obsJsonPres!\n"; } catch (Exception e) { e.printStackTrace(); }                 
                         try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp!\n"; } catch (Exception e) { e.printStackTrace(); }       
                         try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind!\n"; } catch (Exception e) { e.printStackTrace(); }     
                     }
