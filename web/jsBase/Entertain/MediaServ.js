@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 29 Jul 2018
+Updated: 11 Nov 2018
  */
 
 var msIndex;
@@ -232,7 +232,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                     thisAddCheckbox += "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
                             "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
                     break;
-                case "JPG":
+                case "JPG": case "JPEG": case "PNG":
                     if(isSet(tm.Archived)) {
                         thisAddCheckbox += "<a href='" + getBasePath("old") + "/Images/Memories/Archived/" + tm.Archived + ".war'>" +
                                 "<img src='" + firstThumbSize + "' src='" + getBasePath("icon") + "/ic_zip.png' /></a>";
