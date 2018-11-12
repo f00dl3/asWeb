@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 4 Nov 2018
+Updated: 12 Nov 2018
  */
 
 var myHeight = 68;
@@ -248,7 +248,7 @@ function processFitnessAll(dataIn, autoMpg) {
         var tData = dataIn[i];
         var bkStuds, gym, reelMow, commonRouteFlag, cycMap, runMap, altMap, sleepHours;
         bkStuds = gym = reelMow = commonRouteFlag = cycMap = runMap = altMap = sleepHours = " ";
-        var bmi = 'BMI of' + ((tData.Weight*703)/(myHeight*myHeight)).toFixed(1);
+        var bmi = 'BMI of ' + ((tData.Weight*703)/(myHeight*myHeight)).toFixed(1);
         if(!tData.RunWalk) { tData.RunWalk = " "; }
         if(!tData.Cycling) { tData.Cycling = " "; }
         if(!tData.Calories) { tData.Calories = " "; }
