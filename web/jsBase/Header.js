@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 28 Aug 2018
+Updated: 14 Nov 2018
  */
 
 var annMaint = 910.66;
@@ -363,7 +363,7 @@ function getWebLinks(master, whereTo, outputType) {
             }
         },
         error: function(data, iostatus) {
-            window.alert("xhrGet WebLinks: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            dojo.byId(whereTo).innerHTML = "xhrGet WebLinks: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")";
         }
     };
     dojo.xhrPost(arXhr1);
