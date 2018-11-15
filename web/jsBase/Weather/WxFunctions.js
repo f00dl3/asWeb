@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2018
-Updated: 27 Aug 2018
+Updated: 15 Nov 2018
  */
 
 function color2Grad(type, direct, vals) {
@@ -265,11 +265,11 @@ function colorSnow(snText) {
     switch(sn) {
         case 0.1: return "C6STRA";
         case inRange(sn, 0.2, 0.4): return "C6SG02";
-        case inRange(sn, 0.5, 0.9): return "C6SG05";
-        case inRange(sn, 1.0, 2.9): return "C6SG10";
-        case inRange(sn, 3.0, 4.9): return "C6SG30";
-        case inRange(sn, 5.0, 7.9): return "C6SG50";
-        case inRange(sn, 8.0, 99.9): return "CSG80";
+        case inRange(sn, 0.4, 0.9): return "C6SG05";
+        case inRange(sn, 0.9, 2.9): return "C6SG10";
+        case inRange(sn, 2.9, 4.9): return "C6SG30";
+        case inRange(sn, 4.9, 7.9): return "C6SG50";
+        case inRange(sn, 7.9, 99.9): return "CSG80";
         default: return "C6ZERO";
     }
 }
@@ -609,11 +609,11 @@ function styleLiquid(liqText, valueOnly) {
     switch(liq) {
         case 0.01: bg = "363636"; tc = "white"; break;
         case inRange(liq, 0.01, 0.09): bg = "99ff99"; tc = "black"; break;
-        case inRange(liq, 0.10, 0.24): bg = "00ff00"; tc = "black"; break;
-        case inRange(liq, 0.25, 0.49): bg = "00dd00"; tc = "black"; break;
-        case inRange(liq, 0.50, 0.99): bg = "00cc00"; tc = "black"; break;
-        case inRange(liq, 1.00, 1.99): bg = "008800"; tc = "white"; break;
-        case inRange(liq, 2.00, 99.99): bg = "004400"; tc = "white"; break;
+        case inRange(liq, 0.09, 0.24): bg = "00ff00"; tc = "black"; break;
+        case inRange(liq, 0.24, 0.49): bg = "00dd00"; tc = "black"; break;
+        case inRange(liq, 0.49, 0.99): bg = "00cc00"; tc = "black"; break;
+        case inRange(liq, 0.99, 1.99): bg = "008800"; tc = "white"; break;
+        case inRange(liq, 1.99, 99.99): bg = "004400"; tc = "white"; break;
         default: bg = "363636"; tc = "grey"; break;
     }
     if(valueOnly) {

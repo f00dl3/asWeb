@@ -103,7 +103,8 @@ public class ChartResource extends ServerResource {
                     genericCharts = false;
  		JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);             
                     JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw);
-                    try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }                 
+                    try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    returnData += qbd_Glob.toString();
                     break;
                     
                 case "FinanceBills":
