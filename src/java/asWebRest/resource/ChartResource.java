@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 4 Nov 2018
+Updated: 15 Nov 2018
  */
 
 package asWebRest.resource;
@@ -13,6 +13,7 @@ import asWebRest.action.GetLogsAction;
 import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.GpsData;
@@ -98,19 +99,11 @@ public class ChartResource extends ServerResource {
             switch (doWhat) {
                                                    
                 case "EntertainmentFfxivQuestsByDate":
-                    genericCharts = true;
-                    final String fullChartNameQBD = "FFXIV Quests By Date";
-                    JSONArray jsonResultArrayQBD = getEntertainmentAction.getFfxivQuestsByDate(dbc);
-                    for (int i = 0; i < jsonResultArrayQBD.length(); i++) {
-                        JSONObject thisObject = jsonResultArrayQBD.getJSONObject(i);
-                        labels.put(thisObject.getString("OrigCompDate"));
-                        data.put(thisObject.getInt("OnThisDate"));
-                    }
-                    props
-                        .put("dateFormat", "yyyy-MM-dd")
-                        .put("chartName", fullChartNameQBD).put("chartFileName", "ffxivQuestsByDay")
-                        .put("sName", "Quests").put("sColor", "Yellow")
-                        .put("xLabel", "Date").put("yLabel", "Quests");
+	  	Ffxiv ffxiv = new Ffxiv();
+                    genericCharts = false;
+ 		JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);             
+                    JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw);
+                    try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }                 
                     break;
                     
                 case "FinanceBills":

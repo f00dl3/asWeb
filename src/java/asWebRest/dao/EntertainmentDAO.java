@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 4 Nov 2018
+Updated: 15 Nov 2018
 */
 
 package asWebRest.dao;
@@ -340,20 +340,52 @@ public class EntertainmentDAO {
     }
         
     private JSONArray ffxivQuestsByDate(Connection dbc) {
-        final String query_FfxivQuestByDate = "SELECT " +
-                " OrigCompDate, COUNT(QuestOrder) AS OnThisDate" +
-                " FROM FFXIV_Quests" + 
-                " WHERE OrigCompDate IS NOT NULL" +
-                " GROUP BY OrigCompDate;";
-                
+        final String query_FfxivQuestByDate = "SELECT" +
+		" 	OrigCompDate," +
+		" 	SUM(Quests) AS Quests," +
+		" 	SUM(Hunting) AS Hunting," +
+		" 	SUM(Crafting) AS Crafting" +
+		" FROM (" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		COUNT(QuestOrder) AS Quests," +
+		" 		0 AS Hunting," +
+		" 		0 AS Crafting" +
+		" 		FROM Core.FFXIV_Quests" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		0 as Quests," +
+		" 		COUNT(HuntCode) AS Hunting," +
+		" 		0 AS Crafting" +
+		" 		FROM Core.FFXIV_Hunting" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		0 as Quests," +
+		" 		0 as Hunting," +
+		" 		COUNT(Recipie) AS Crafting" +
+		" 		FROM Core.FFXIV_Crafting" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	) AS tmp" +
+		" GROUP BY OrigCompDate" +
+		" ORDER BY OrigCompDate;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivQuestByDate, null);
             while (resultSet.next()) {
+	/* 	System.out.println(resultSet.toString()); */
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
-                    .put("OnThisDate", resultSet.getInt("OnThisDate"));
+                    .put("Quests", resultSet.getInt("Quests"))
+                    .put("Hunting", resultSet.getInt("Hunting"))
+                    .put("Crafting", resultSet.getInt("Crafting"));
                 tContainer.put(tObject);
             }
             resultSet.close();
