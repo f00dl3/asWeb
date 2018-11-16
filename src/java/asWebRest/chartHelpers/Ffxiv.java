@@ -20,7 +20,7 @@ public class Ffxiv {
         JSONArray this_Data3 = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
-                .put("chartName", this_Name).put("chartFileName", "FfxivByDate")
+                .put("chartName", this_Name).put("chartFileName", "ffxivQuestsByDay")
                 .put("sName", "Quests").put("sColor", "Yellow")
                 .put("s2Name", "Hunting").put("s2Color", "Green")
                 .put("s3Name", "Crafting").put("s3Color", "Blue")
@@ -32,6 +32,10 @@ public class Ffxiv {
             this_Data2.put(thisObject.getInt("Hunting"));
             this_Data3.put(thisObject.getInt("Crafting"));
         }
+        /* System.out.println("Days: " + this_Labels.length());
+        System.out.println("Quest days: " + this_Data.length());
+        System.out.println("Hunting days: " + this_Data2.length());
+        System.out.println("Crafting days: " + this_Data3.length()); */
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
