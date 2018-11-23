@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 15 May 2018
+Updated: 23 Nov 2018
 */
 
 package asWebRest.dao;
@@ -81,6 +81,30 @@ public class FinanceDAO {
     private JSONArray autoMaint(Connection dbc) {
         final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
                 " FROM Core.AutoMaint_MAZ6 ORDER BY Date DESC LIMIT 10;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Invoice", resultSet.getInt("Invoice"))
+                    .put("Miles", resultSet.getInt("Miles"))
+                    .put("Date", resultSet.getString("Date"))
+                    .put("Location", resultSet.getString("Location"))
+                    .put("Services", resultSet.getString("Services"))
+                    .put("Bill", resultSet.getDouble("Bill"))
+                    .put("OilCh", resultSet.getInt("OilCh"))
+                    .put("TireRotate", resultSet.getInt("TireRotate"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }   
+      
+    private JSONArray autoMaintHondaCivic(Connection dbc) {
+        final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
+                " FROM Core.AutoMaint_HONCIV ORDER BY Date DESC LIMIT 10;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
@@ -652,6 +676,7 @@ public class FinanceDAO {
     public JSONArray getAmSch(Connection dbc) { return amSch(dbc); }
     public JSONArray getAutoBillSum(Connection dbc) { return autoBillSum(dbc); }
     public JSONArray getAutoMaint(Connection dbc) { return autoMaint(dbc); }
+    public JSONArray getAutoMaintHondaCivic(Connection dbc) { return autoMaintHondaCivic(dbc); }
     public JSONArray getAutoMpg(Connection dbc) { return autoMpg(dbc); }
     public JSONArray getAutoMpgAverage(Connection dbc) { return autoMpgAverage(dbc); }
     public JSONArray getAssetTrack(Connection dbc) { return assetTrack(dbc); }
