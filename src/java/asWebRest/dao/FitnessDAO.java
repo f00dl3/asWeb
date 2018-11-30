@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Aug 2018
+Updated: 29 Nov 2018
 */
 
 package asWebRest.dao;
@@ -223,6 +223,7 @@ public class FitnessDAO {
     }
     
     public JSONArray getBkStats(Connection dbc, String bike) {
+        // Troubleshoot cycling tire miles 11/29/18
         final String query_Fitness_BkStats = "SELECT" +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkNChain=1 AND Bicycle='"+bike+"') AS LastChain," +
                 " (SELECT MAX(Date) FROM Core.Fitness WHERE BkCln=1 AND Bicycle='"+bike+"') AS LastCleaned," +
