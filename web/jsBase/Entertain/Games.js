@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 17 Sep 2018
+Updated: 6 Dec 2018
  */
 
 function actOnPlayedGameHours(event) {
@@ -20,6 +20,18 @@ function displayGames() {
     $("#ETStream").hide();
 }
 
+function displayGameFlash() {
+    var target = "ETGFlash";
+    dojo.byId(target).innerHTML = "Flash games to be put here!";
+    $("#ETGFF14C").hide();
+    $("#ETGFF14D").hide();
+    $("#ETGFF14I").hide();
+    $("#ETGFF14Q").hide();
+    $("#ETGHours").hide();
+    $("#ETGIndex").hide();
+    $("#ETGHours").hide();
+}
+
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
@@ -27,6 +39,7 @@ function displayGameHours() {
     $("#ETGFF14D").hide();
     $("#ETGFF14I").hide();
     $("#ETGFF14Q").hide();
+    $("#ETGFlash").hide();
     $("#ETGIndex").hide();
 }
 
@@ -37,16 +50,19 @@ function displayGameIndex() {
     $("#ETGFF14D").hide();
     $("#ETGFF14I").hide();
     $("#ETGFF14Q").hide();
+    $("#ETGFlash").hide();
     $("#ETGHours").hide();
 }
 
 function gameButtonListeners() {
+    var btnShowFlash = dojo.byId("ShETGFlash");
     var btnShowHours = dojo.byId("ShETGHours");
     var btnShowIndex = dojo.byId("ShETGIndex");
     var btnShowFF14C = dojo.byId("ShETGFF14C");
     var btnShowFF14D = dojo.byId("ShETGFF14D");
     var btnShowFF14I = dojo.byId("ShETGFF14I");
     var btnShowFF14Q = dojo.byId("ShETGFF14Q");
+    dojo.connect(btnShowFlash, "click", displayGameFlash);
     dojo.connect(btnShowHours, "click", displayGameHours);
     dojo.connect(btnShowIndex, "click", displayGameIndex);
     dojo.connect(btnShowFF14C, "click", displayGameFf14c);
