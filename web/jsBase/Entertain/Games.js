@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 6 Dec 2018
+Updated: 7 Dec 2018
  */
 
 function actOnPlayedGameHours(event) {
@@ -22,7 +22,7 @@ function displayGames() {
 
 function displayGameFlash() {
     var target = "ETGFlash";
-    dojo.byId(target).innerHTML = "Flash games to be put here!";
+    putFlashGames(target);
     $("#ETGFF14C").hide();
     $("#ETGFF14D").hide();
     $("#ETGFF14I").hide();
