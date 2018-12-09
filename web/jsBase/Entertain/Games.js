@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 7 Dec 2018
+Updated: 9 Dec 2018
  */
 
 function actOnPlayedGameHours(event) {
@@ -29,7 +29,6 @@ function displayGameFlash() {
     $("#ETGFF14Q").hide();
     $("#ETGHours").hide();
     $("#ETGIndex").hide();
-    $("#ETGHours").hide();
 }
 
 function displayGameHours() {
