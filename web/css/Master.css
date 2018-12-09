@@ -2,14 +2,14 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 6 Dec 2018
+Updated: 9 Dec 2018
 */
 
 /* Hidden DIVs */
 
 #CF6Results, #FitResults, #ObsResults,
     #ETCooking, #ETLego, #ETGameAll, #ETMovies, #ETStream, #ETXFilesTV, #ETReddit, #HShowETReddit,
-    #ETGFlash, #ETGHours, #ETGIndex, #ETFF14Q,
+    #ETGHours, #ETGIndex, #ETFF14Q,
     #FBAsset, #FBAuto, #FBBills, #FBBlue, #FBCheck, #FBWorkPTO, #FBUtUse,
     #WxFeed, #WxLive, #WxNews, #WxQuakes, #WxLiveContainer, #WxLocalModel, #WxCf6, #WxArchive,
     #inLogs, #loadWait
