@@ -20,17 +20,6 @@ function displayGames() {
     $("#ETStream").hide();
 }
 
-function displayGameFlash() {
-    var target = "ETGFlash";
-    putFlashGames(target);
-    $("#ETGFF14C").hide();
-    $("#ETGFF14D").hide();
-    $("#ETGFF14I").hide();
-    $("#ETGFF14Q").hide();
-    $("#ETGHours").hide();
-    $("#ETGIndex").hide();
-}
-
 function displayGameHours() {
     var target = "ETGHours";
     getGameData(target);
@@ -54,14 +43,12 @@ function displayGameIndex() {
 }
 
 function gameButtonListeners() {
-    var btnShowFlash = dojo.byId("ShETGFlash");
     var btnShowHours = dojo.byId("ShETGHours");
     var btnShowIndex = dojo.byId("ShETGIndex");
     var btnShowFF14C = dojo.byId("ShETGFF14C");
     var btnShowFF14D = dojo.byId("ShETGFF14D");
     var btnShowFF14I = dojo.byId("ShETGFF14I");
     var btnShowFF14Q = dojo.byId("ShETGFF14Q");
-    dojo.connect(btnShowFlash, "click", displayGameFlash);
     dojo.connect(btnShowHours, "click", displayGameHours);
     dojo.connect(btnShowIndex, "click", displayGameIndex);
     dojo.connect(btnShowFF14C, "click", displayGameFf14c);

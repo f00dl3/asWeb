@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    6 Dec 2018
+    Updated:    9 Dec 2018
     Author     : astump
 --%>
 
@@ -21,7 +21,6 @@
         "Entertain/Cooking",
         "Entertain/Dbx",
         "Entertain/Ffxiv",
-        "Entertain/Flash",
         "Entertain/Games",
         "Entertain/Gallery",
         "Entertain/Goosebumps",
@@ -195,6 +194,11 @@
             case "Fitness":
                 scripts2Load += "<script src='"+rootPath+"/jsBase/Weather/WxFunctions.js'></script>" +
                         fitScriptPack;
+                break;
+            case "FlashLoader":
+                scripts2Load = scripts2Load.replaceAll("jquery-3.3.1.min.js","jquery-2.2.4.min.js");
+                scripts2Load += "<script src='"+rootPath+"/jsLib/jQuery/jquery.swfobject.1-1-1.min.js'>";
+                fullTitle = "Flash Loader";
                 break;
             case "Folders":
                 fullTitle = "Folders and Files";

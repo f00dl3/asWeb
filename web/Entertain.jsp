@@ -1,7 +1,7 @@
 <%-- 
     Document   : MediaServ
     Created on : Mar 19, 2018, 7:35:15 AM
-    Updated: 6 Dec 2018
+    Updated: 9 Dec 2018
     Author     : Anthony Stump
 --%>
 
@@ -30,7 +30,6 @@
 
         <div id="ETCooking"></div>
         <div id="ETGameAll">
-            <button class="SButton" id="ShETGFlash">Flash</button>
             <button class="SButton" id="ShETGHours">Hours</button>
             <button class="SButton" id="ShETGIndex">Index</button>
             <div class="UPop">
@@ -43,7 +42,6 @@
                 </div>
             </div>
             <p>
-            <div id="ETGFlash"></div>
             <div id="ETGHours"></div>
             <div id="ETGIndex"></div>
             <div id="ETGFF14C"></div>
