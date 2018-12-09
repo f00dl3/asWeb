@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 11 Nov 2018
+Updated: 9 Dec 2018
  */
 
 var msIndex;
@@ -231,6 +231,10 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 case "DOC": case "CHM": case "PDF": case "TXT": case "LSX": case "GIF": case "ZIP":
                     thisAddCheckbox += "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
                             "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
+                    break;
+                case "SWF":
+                    thisAddCheckbox += "<a href='" + getBasePath("ui") + "/FlashLoader.jsp?ff=" + tm.File + "' target='new'>" +
+                            "<img class='arrow' src='" + getBasePath("icon") + "/ic_ply.png' /></a>";
                     break;
                 case "JPG": case "JPEG": case "PNG":
                     if(isSet(tm.Archived)) {

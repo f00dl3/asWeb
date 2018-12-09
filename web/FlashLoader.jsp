@@ -12,8 +12,8 @@
     String authCheck = "true";
     String flashFile = "NONE";
     WebCommon wc = new WebCommon();
-    if(wc.isSet(request.getParameter("flashFile"))) {
-        flashFile = request.getParameter("flashFile");
+    if(wc.isSet(request.getParameter("ff"))) {
+        flashFile = request.getParameter("ff");
         pageTitle = pageTitle + " (" + flashFile + ")";
     }
 %>
@@ -21,9 +21,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<script>var flashGame = "<% out.print(flashFile); %>";</script>
-
 <jsp:include page="/inc/Header.jsp?type=full&title=FlashLoader&scripts=true"></jsp:include>
+
+    <script>var flashFile = "<% out.print(flashFile); %>";</script>
 
     <body>
         

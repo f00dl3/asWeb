@@ -3,14 +3,13 @@ By Anthony Stump
 Created: 9 Dec 2018
  */
 
-$(document).ready(
-    function() {
-        $('#myFlash').flash({
-            swf: 'Loader.swf',
-            width: 1920,
-            height: 1080
-        });
-    }
-);
+function initFlash() {
+    var swfFile = getBasePath("media") + "/Flash/" + flashFile;
+    $('#flashFileHolder').flash({
+        swf: swfFile,
+        width: 1024,
+        height: 768
+    });
+}
 
-
+dojo.ready(initFlash);

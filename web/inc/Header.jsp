@@ -50,6 +50,10 @@
         "Fitness/Today"
     };
     
+    String[] flashScripts = {
+        "FlashLoader"
+    };
+    
     String[] folScripts = {
     };
     
@@ -139,6 +143,11 @@
         fitScriptPack += "<script src='"+rootPath+"/jsBase/"+fitScripts[i]+".js'></script>";
     }
     
+    String flashScriptPack = "";
+    for(int i=0; i < flashScripts.length; i++) {
+        flashScriptPack += "<script src='"+rootPath+"/jsBase/"+flashScripts[i]+".js'></script>";
+    }
+    
     String folScriptPack = "";
     for(int i=0; i < folScripts.length; i++) {
         folScriptPack += "<script src='"+rootPath+"/jsBase/"+folScripts[i]+".js'></script>";
@@ -196,8 +205,9 @@
                         fitScriptPack;
                 break;
             case "FlashLoader":
-                scripts2Load = scripts2Load.replaceAll("jquery-3.3.1.min.js","jquery-2.2.4.min.js");
-                scripts2Load += "<script src='"+rootPath+"/jsLib/jQuery/jquery.swfobject.1-1-1.min.js'>";
+                scripts2Load = scripts2Load.replace("jquery-3.3.1.min.js","jquery-2.2.4.min.js");
+                scripts2Load += "<script src='"+rootPath+"/jsLib/jQuery/jquery.swfobject.1-1-1.min.js'>" +
+                        flashScriptPack;
                 fullTitle = "Flash Loader";
                 break;
             case "Folders":
