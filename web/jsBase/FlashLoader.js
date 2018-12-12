@@ -10,6 +10,7 @@ function initFlash() {
         width: 1024,
         height: 768
     });
+    dojo.byId("flashDownloader").innerHTML = "<a href='" + swfFile + "' target='new'>Download!</a>"
 }
 
 dojo.ready(initFlash);

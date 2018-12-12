@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Jul 2018
-Updated: 19 Jul 2018
+Updated: 11 Dec 2018
  */
 
 function addHomicideMarker(map, tHomicide) {
@@ -18,10 +18,10 @@ function addHomicideMarker(map, tHomicide) {
         victName: tHomicide.Victim,
     });
     var icLabel = "+";
-    var icColor = "#ffffff";
+    var icColor = "#000000";
     var icOpacity = "1";
     var icLabelColor = "#000000";
-    iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
+    iconFeature.setStyle(svgIconStyle("ct", 20, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
 

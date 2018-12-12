@@ -28,7 +28,8 @@
     <body>
         
         <h1><% out.println(pageTitle); %></h1>
-        <div id="flashFileHolder">Flash failed to load!</div>
+        <div id="flashFileHolder">Flash failed to load!</div><br/>
+        <div id="flashDownloader">Link loading...</div>
              
     </body>
 
