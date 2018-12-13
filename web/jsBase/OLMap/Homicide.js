@@ -5,7 +5,7 @@ Updated: 12 Dec 2018
  */
 
 function addHomicideMarker(map, tHomicide) {
-    var currentYear = getDate("hour", 0, "yearOnly");
+    var curYear = getDate("hour", 0, "yearOnly");
     var tCoord = JSON.parse(tHomicide.Point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
