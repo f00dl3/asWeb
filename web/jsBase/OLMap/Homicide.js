@@ -1,10 +1,11 @@
 /* 
 by Anthony Stump
 Created: 18 Jul 2018
-Updated: 11 Dec 2018
+Updated: 12 Dec 2018
  */
 
 function addHomicideMarker(map, tHomicide) {
+    var currentYear = getDate("hour", 0, "yearOnly");
     var tCoord = JSON.parse(tHomicide.Point);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
@@ -19,8 +20,21 @@ function addHomicideMarker(map, tHomicide) {
     });
     var icLabel = "+";
     var icColor = "#000000";
-    var icOpacity = "1";
+    var icOpacity = "0.5";
     var icLabelColor = "#000000";
+    if((tHomicide.Date).includes(curYear+"-")) {
+        icColor = "#FF0000";
+        icLabelColor = "#FF0000";
+        icOpacity = "1.0";
+    } else if((tHomicide.Date).includes((curYear-1)+"-")) {
+        icColor = "#0000FF";
+        icLabelColor = "#0000FF";
+        icOpacity = "0.9";
+    } else if((tHomicide.Date).includes((curYear-2)+"-")) {
+        icColor = "#00FF00";
+        icLabelColor = "#00FF00";
+        icOpacity = "0.8";
+    }
     iconFeature.setStyle(svgIconStyle("ct", 20, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
