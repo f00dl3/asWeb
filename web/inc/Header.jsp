@@ -18,6 +18,7 @@
     String refresh = request.getParameter("refresh");
     
     String[] etScripts = {
+        "Entertain/ChciagoSeries",
         "Entertain/Cooking",
         "Entertain/Dbx",
         "Entertain/Ffxiv",

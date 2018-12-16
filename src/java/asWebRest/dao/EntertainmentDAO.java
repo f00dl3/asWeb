@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 15 Nov 2018
+Updated: 16 Dec 2018
 */
 
 package asWebRest.dao;
@@ -19,6 +19,32 @@ public class EntertainmentDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
        
+    private JSONArray chicagoSeries(Connection dbc) {
+        final String query_MediaServer_ChicagoSeries = "SELECT" +
+                " OverallNo, Season, SeasonNo, ProdCode, Title, AirDate, MillionViews, Synopsis" +
+                " FROM Core.ChicagoSeries" +
+                " ORDER BY AirDate DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_ChicagoSeries, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("OverallNo", resultSet.getString("OverallNo"))
+                    .put("Season", resultSet.getInt("Season"))
+                    .put("SeasonNo", resultSet.getInt("SeasonNo"))
+                    .put("ProdCode", resultSet.getString("ProdCode"))
+                    .put("Title", resultSet.getString("Title"))
+                    .put("AirDate", resultSet.getString("AirDate"))
+                    .put("MillionViews", resultSet.getDouble("MillionViews"))
+                    .put("Synopsis", resultSet.getString("Synopsis"));                   
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     private JSONArray ffxivAssets(Connection dbc) {
         final String query_FfxivAssets = "SELECT What, Value, Purchased FROM Core.FFXIV_Assets;";
         JSONArray tContainer = new JSONArray();
@@ -437,6 +463,7 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    public JSONArray getChicagoSeries(Connection dbc) { return chicagoSeries(dbc); }    
     public JSONArray getFfxivAssets(Connection dbc) { return ffxivAssets(dbc); }
     public JSONArray getFfxivCounts(Connection dbc) { return ffxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }

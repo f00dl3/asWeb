@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 9 Dec 2018
+Updated: 16 Dec 2018
  */
 
 var msIndex;
@@ -14,6 +14,7 @@ function actOnNonMedia(event) {
     switch(thisFormData.Genre) {
         case "AO_TP": window.location.href = getBasePath("ui") + "/TPGallery.jsp"; break;
         case "AO_DBX": getDbx(target); break;
+        case "ChicagoSeries": getChicagoSeries(target); break;
         case "Goosebumps": getGoosebumps(target); break;
         case "Photos": populateGallery(target); break;
         case "PowerRangers": getPowerRangers(target); break;
@@ -86,6 +87,7 @@ function mediaOpts() {
     var hMediaOpts = [ "AO_DBX" , "AO_TP" ];
     var mediaOpts = [
         "Photos",
+        "ChicagoSeries",
         "Goosebumps",
         "PowerRangers",
         "StarTrek",
