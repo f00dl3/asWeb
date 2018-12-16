@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 26 Jun 2018
+Updated: 16 Dec 2018
  */
 
 package asWebRest.application;
@@ -10,6 +10,7 @@ import asWebRest.resource.AddressResource;
 import asWebRest.resource.ChartResource;
 import asWebRest.resource.CongressResource;
 import asWebRest.resource.CookingResource;
+import asWebRest.resource.CrashDataResource;
 import asWebRest.resource.DatabaseInfoResource;
 import asWebRest.resource.EntertainmentResource;
 import asWebRest.resource.FinanceResource;
@@ -63,6 +64,7 @@ public class AnthonyRestlet extends Application {
         Router router = new Router(getContext());
         router.attach("/Addresses", AddressResource.class);
         router.attach("/Chart", ChartResource.class);
+        router.attach("/CrashData", CrashDataResource.class);
         router.attach("/Congress", CongressResource.class);
         router.attach("/Cooking", CookingResource.class);
         router.attach("/DBInfo", DatabaseInfoResource.class);

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Jul 2018
-Updated: 12 Dec 2018
+Updated: 16 Dec 2018
  */
 
 function addHomicideMarker(map, tHomicide) {
@@ -40,7 +40,6 @@ function addHomicideMarker(map, tHomicide) {
 }
 
 function addHomicides(map, homicideData) {
-    console.log(homicideData);
     var vectorSource = new ol.source.Vector({});
     homicideData.forEach(function (tHomicide) {
         if(isSet(tHomicide.Point)) {
