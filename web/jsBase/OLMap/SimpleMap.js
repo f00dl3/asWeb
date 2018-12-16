@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 26 Aug 2018
+Updated: 16 Dec 2018
  */
 
 function postProcessOptions(map) {
@@ -11,6 +11,7 @@ function postProcessOptions(map) {
     if(isSet(doAction)) {
         switch(doAction) {
             case "Addresses": getAddresses(map); break;
+            case "CrashData": getCrashData(map); break;
             case "Homicide": getHomicides(map); break;
             case "Media": getMediaGeoData(map); break;
             case "Point": addPointToMap(map, dataInput); break;

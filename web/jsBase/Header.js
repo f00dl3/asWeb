@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 14 Nov 2018
+Updated: 16 Dec 2018
  */
 
 var annMaint = 910.66;
@@ -303,6 +303,7 @@ function getResource(what) {
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
+        case "CrashData": return getBasePath("rest") + "/CrashData"; break;
         case "DBInfo": return getBasePath("rest") + "/DBInfo"; break;
         case "Download": return getBasePath("serv") + "/Download"; break;
         case "Emily": return getBasePath("ui") + "/Emily.jsp"; break;

@@ -4,7 +4,9 @@ Created: 16 Dec 2018
  */
 
 function addCrashMarker(map, tCrash) {
-    var tCoord = JSON.parse(tHomicide.Point);
+    var crashPoint = "[" + tCrash.Lon + "," + tCrash.Lat + "]";
+    console.log(crashPoint);
+    var tCoord = JSON.parse(crashPoint);
     var point = new ol.geom.Point(tCoord);
     point.transform('EPSG:4326', 'EPSG:3857');
     var iconFeature = new ol.Feature({
@@ -59,14 +61,14 @@ function addCrashes(map, crashData) {
     });
 }
 
-function getHomicides(map) {
+function getCrashData(map) {
     require(["dojo/request"], function(request) {
         request
             .get(getResource("CrashData"), {
                     handleAs: "json"  
             }).then(
                 function(data) {
-                    addHomicides(map, data);
+                    addCrashes(map, data);
                     aniPreload("off");
                 },
                 function(error) { 
