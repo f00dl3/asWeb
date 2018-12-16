@@ -13,7 +13,7 @@ function addCrashMarker(map, tCrash) {
         geometry: point,
         crashDate: tCrash.Date,
         crashTime: tCrash.Time,
-        crashSynop: tCrash.Synopsis,
+        crashSynopsis: tCrash.Synopsis,
         crashId: tCrash.Incident,
         crashLocation: tCrash.Location,
         crashVehicles: tCrash.Damage,
@@ -30,9 +30,9 @@ function addCrashMarker(map, tCrash) {
 
 function addCrashes(map, crashData) {
     var vectorSource = new ol.source.Vector({});
-    crashData.forEach(function (tHomicide) {
-        if(isSet(tHomicide.Point)) {
-            vectorSource.addFeature(addCrashMarker(map, tHomicide));
+    crashData.forEach(function (crashData) {
+        if(isSet(crashData.Lon) && isSet(crashData.Lat)) {
+            vectorSource.addFeature(addCrashMarker(map, crashData));
         }
     });
     overlayLayer = new ol.layer.Vector({source: vectorSource});
