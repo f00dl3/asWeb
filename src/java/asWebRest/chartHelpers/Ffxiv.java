@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
+Updated: 23 Dec 2018
  */
 
 package asWebRest.chartHelpers;
@@ -18,12 +19,14 @@ public class Ffxiv {
         JSONArray this_Data = new JSONArray();
         JSONArray this_Data2 = new JSONArray();
         JSONArray this_Data3 = new JSONArray();
+        JSONArray this_Data4 = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivQuestsByDay")
                 .put("sName", "Quests").put("sColor", "Yellow")
                 .put("s2Name", "Hunting").put("s2Color", "Green")
                 .put("s3Name", "Crafting").put("s3Color", "Blue")
+                .put("s4Name", "Dungeons").put("s4Color", "Red")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -31,6 +34,7 @@ public class Ffxiv {
             this_Data.put(thisObject.getInt("Quests"));
             this_Data2.put(thisObject.getInt("Hunting"));
             this_Data3.put(thisObject.getInt("Crafting"));
+            this_Data4.put(thisObject.getInt("Dungeons"));
         }
         /* System.out.println("Days: " + this_Labels.length());
         System.out.println("Quest days: " + this_Data.length());
@@ -41,6 +45,7 @@ public class Ffxiv {
                 .put("data", this_Data)
                 .put("data2", this_Data2)
                 .put("data3", this_Data3)
+                .put("data4", this_Data4)
                 .put("props", this_Props);
         return this_Glob;
     }

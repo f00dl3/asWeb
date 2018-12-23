@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 16 Dec 2018
+Updated: 23 Dec 2018
 */
 
 package asWebRest.dao;
@@ -370,13 +370,15 @@ public class EntertainmentDAO {
 		" 	OrigCompDate," +
 		" 	SUM(Quests) AS Quests," +
 		" 	SUM(Hunting) AS Hunting," +
-		" 	SUM(Crafting) AS Crafting" +
+		" 	SUM(Crafting) AS Crafting," +
+                "       SUM(Dungeons) AS Dungeons" +
 		" FROM (" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
 		" 		COUNT(QuestOrder) AS Quests," +
 		" 		0 AS Hunting," +
 		" 		0 AS Crafting" +
+                "               0 AS Dungeons," +
 		" 		FROM Core.FFXIV_Quests" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -386,6 +388,7 @@ public class EntertainmentDAO {
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
 		" 		0 AS Crafting" +
+                "               0 AS Dungeons," +
 		" 		FROM Core.FFXIV_Hunting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -394,8 +397,19 @@ public class EntertainmentDAO {
 		" 		OrigCompDate," +
 		" 		0 as Quests," +
 		" 		0 as Hunting," +
+                "               0 AS Dungeons," +
 		" 		COUNT(Recipie) AS Crafting" +
 		" 		FROM Core.FFXIV_Crafting" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		0 as Quests," +
+		" 		0 AS Hunting," +
+		" 		COUNT(DungeonCode) AS Dungeons," +
+		" 		0 AS Crafting" +
+		" 		FROM Core.FFXIV_Dungeons" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
 		" 	) AS tmp" +
@@ -411,7 +425,8 @@ public class EntertainmentDAO {
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
                     .put("Quests", resultSet.getInt("Quests"))
                     .put("Hunting", resultSet.getInt("Hunting"))
-                    .put("Crafting", resultSet.getInt("Crafting"));
+                    .put("Crafting", resultSet.getInt("Crafting"))
+                    .put("Dungeons", resultSet.getInt("Dungeons"));
                 tContainer.put(tObject);
             }
             resultSet.close();
