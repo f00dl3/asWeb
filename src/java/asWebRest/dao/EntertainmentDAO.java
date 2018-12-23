@@ -377,8 +377,8 @@ public class EntertainmentDAO {
 		" 		OrigCompDate," +
 		" 		COUNT(QuestOrder) AS Quests," +
 		" 		0 AS Hunting," +
-		" 		0 AS Crafting" +
-                "               0 AS Dungeons," +
+		" 		0 AS Crafting," +
+                "               0 AS Dungeons" +
 		" 		FROM Core.FFXIV_Quests" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -387,8 +387,8 @@ public class EntertainmentDAO {
 		" 		OrigCompDate," +
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
-		" 		0 AS Crafting" +
-                "               0 AS Dungeons," +
+		" 		0 AS Crafting," +
+                "               0 AS Dungeons" +
 		" 		FROM Core.FFXIV_Hunting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -416,6 +416,7 @@ public class EntertainmentDAO {
 		" GROUP BY OrigCompDate" +
 		" ORDER BY OrigCompDate;";
         JSONArray tContainer = new JSONArray();
+        System.out.println(query_FfxivQuestByDate);
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivQuestByDate, null);
             while (resultSet.next()) {
