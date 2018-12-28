@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 23 Nov 2018
+Updated: 28 Dec 2018
 */
 
 package asWebRest.dao;
@@ -197,7 +197,8 @@ public class FinanceDAO {
                     .put("UPC", resultSet.getString("UPC"))
                     .put("Related", resultSet.getString("Related"))
                     .put("Locaiton", resultSet.getString("Location"))
-                    .put("Notes", resultSet.getString("Notes"));
+                    .put("Notes", resultSet.getString("Notes"))
+                    .put("PendingDonation", resultSet.getInt("PendingDonation"));
                 tContainer.put(tObject);
             }
             resultSet.close();

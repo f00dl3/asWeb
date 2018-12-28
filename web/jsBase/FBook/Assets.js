@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Assets.js Split: 4 Apr 2018
-Updated: 22 Apr 2018
+Updated: 28 Dec 2018
  */
 
 function actOnAssetUpdate(event) {
@@ -131,6 +131,8 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
     assets.forEach(function (ass) {
         assCounter++;
         var cAge = checkTransactionAge(ass.Checked);
+        var assColor = "White";
+        if(ass.PendingDonation === 1) { assColor = "Blue"; }
         var ifDetails, ifDetailsComb;
         ifDetails = ifDetailsComb = "";
         var upRelatedCheckbox = "<input type='checkbox' class='Check2UpdateAssets' name='AssetSetUpdate' />";
@@ -153,7 +155,7 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
         }
         var assUpForm = "<form class='tr auFormTr' id='AssetUpdateForm'>" +
                 "<input type='hidden' name='AssetID' value='" + assCounter + "' />" +
-                "<span class='td'>" +
+                "<span class='td' style='color: " + assColor + ";'>" +
                 "<input type='hidden' name='AssetDescription' value='" + ass.Description + "'/>" +
                 "<a href='" + onlineAssetSearch(ass.Description) + "' target='_new_AssetSearch' />" +
                 ass.Description + "</a></span>" +
