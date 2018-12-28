@@ -131,8 +131,8 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
     assets.forEach(function (ass) {
         assCounter++;
         var cAge = checkTransactionAge(ass.Checked);
-        var assColor = "White";
-        if(ass.PendingDonation === 1) { assColor = "Blue"; }
+        var assColor = "white";
+        if(ass.PendingDonation === 1) { assColor = "blue"; }
         var ifDetails, ifDetailsComb;
         ifDetails = ifDetailsComb = "";
         var upRelatedCheckbox = "<input type='checkbox' class='Check2UpdateAssets' name='AssetSetUpdate' />";
@@ -155,11 +155,11 @@ function putAssets(qMerged, bGames, books, dTools, licenses, assets) {
         }
         var assUpForm = "<form class='tr auFormTr' id='AssetUpdateForm'>" +
                 "<input type='hidden' name='AssetID' value='" + assCounter + "' />" +
-                "<span class='td' style='color: " + assColor + ";'>" +
+                "<span class='td'>" +
                 "<input type='hidden' name='AssetDescription' value='" + ass.Description + "'/>" +
                 "<a href='" + onlineAssetSearch(ass.Description) + "' target='_new_AssetSearch' />" +
                 ass.Description + "</a></span>" +
-                "<span class='td'>" + ass.Type + " - " + ass.Category + "</span>" +
+                "<span class='td' style='color: " + assColor + ";'>" + ass.Type + " - " + ass.Category + "</span>" +
                 "<span class='td'>" + upRelatedCheckbox + "</span>" +
                 "<span class='td'><input type='number' name='AssetValue' value='" + ass.Value + "' style='width: 75px;' /></span>" +
                 "<span class='" + cAge + "'>" + ass.Checked + "</span>" +
