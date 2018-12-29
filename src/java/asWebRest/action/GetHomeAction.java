@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 8 Apr 2018
+Updated: 29 Dec 2018
 */
 
 package asWebRest.action;
@@ -16,6 +16,8 @@ public class GetHomeAction {
     private HomeDAO homeDAO;
     public GetHomeAction(HomeDAO homeDAO) { this.homeDAO = homeDAO; }
     
+    public JSONArray getAlarmBatteries(Connection dbc) { return homeDAO.getAlarmBatteries(dbc); }
+    public JSONArray getHouseDeepCleaning(Connection dbc) { return homeDAO.getHouseDeepCleaning(dbc); }
     public JSONArray getMeasure(Connection dbc, List qParams) { return homeDAO.getMeasure(dbc, qParams); }
     
 }

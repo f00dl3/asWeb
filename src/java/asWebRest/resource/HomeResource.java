@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 8 Apr 2018
+Updated: 29 Dec 2018
  */
 
 package asWebRest.resource;
@@ -43,6 +43,16 @@ public class HomeResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
+                
+                case "getAlarmBatteries":
+                    JSONArray alarmBatt = getHomeAction.getAlarmBatteries(dbc);
+                    returnData += alarmBatt.toString();
+                    break;
+                
+                case "getDeepClean":
+                    JSONArray deepClean = getHomeAction.getHouseDeepCleaning(dbc);
+                    returnData += deepClean.toString();
+                    break;
                 
                 case "getMeasure":
                     qParams.add(argsInForm.getFirstValue("level"));
