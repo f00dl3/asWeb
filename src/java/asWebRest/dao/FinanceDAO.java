@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Dec 2018
+Updated: 1 Jan 2019
 */
 
 package asWebRest.dao;
@@ -207,7 +207,7 @@ public class FinanceDAO {
     }
     
     private JSONArray bGames(Connection dbc) {
-        final String query_FBook_BGames = "SELECT Title, Quantity FROM Core.BGames ORDER BY Title;";
+        final String query_FBook_BGames = "SELECT Title, Quantity, PendingDonation FROM Core.BGames ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_BGames, null);
@@ -215,7 +215,8 @@ public class FinanceDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Title", resultSet.getString("Title"))
-                    .put("Quantity", resultSet.getDouble("Quantity"));
+                    .put("Quantity", resultSet.getDouble("Quantity"))
+                    .put("PendingDonation", resultSet.getInt("PendingDonation"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -254,7 +255,7 @@ public class FinanceDAO {
     }
    
     private JSONArray books(Connection dbc) {
-        final String query_FBook_Books = "SELECT Title, Quantity FROM Core.Books ORDER BY Title;";
+        final String query_FBook_Books = "SELECT Title, Quantity, PendingDonation FROM Core.Books ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Books, null);
@@ -262,7 +263,8 @@ public class FinanceDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Title", resultSet.getString("Title"))
-                    .put("Quantity", resultSet.getDouble("Quantity"));
+                    .put("Quantity", resultSet.getDouble("Quantity"))
+                    .put("PendingDonation", resultSet.getInt("PendingDonation"));
                 tContainer.put(tObject);
             }
             resultSet.close();
