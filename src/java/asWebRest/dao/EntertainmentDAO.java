@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 23 Dec 2018
+Updated: 5 Jan 2019
 */
 
 package asWebRest.dao;
@@ -445,7 +445,9 @@ public class EntertainmentDAO {
     private String playedGameHours(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
+        final String query_UpdateGameHoursPart2 = "UPDATE Core.Fitness SET HoursGaming=HoursGaming+(?/60) WHERE Date=CURDATE();";
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_UpdateGameHoursPart2, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

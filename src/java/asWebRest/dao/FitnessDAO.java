@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 Dec 2018
+Updated: 5 Jan 2019
 */
 
 package asWebRest.dao;
@@ -70,7 +70,7 @@ public class FitnessDAO {
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
                 " f.RunSpeedAvg, f.RunSpeedMax, f.RunHeartAvg, f.RunHeartMax," +
                 " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags," +
-                " f.Vomit, f.EstHoursSleep, f.Swimming," +
+                " f.Vomit, f.EstHoursSleep, f.Swimming, f.HoursGaming," +
                 " cf6.High, cf6.Low, cf6.Average," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
@@ -136,7 +136,8 @@ public class FitnessDAO {
                     .put("isGPSCycJSON", resultSet.getBoolean("isGPSCycJSON"))
                     .put("isGPSCyc2JSON", resultSet.getBoolean("isGPSCyc2JSON"))
                     .put("isGPSRunJSON", resultSet.getBoolean("isGPSRunJSON"))
-                    .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"));
+                    .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"))
+                    .put("HoursGaming", resultSet.getDouble("HoursGaming"));
                 tContainer.put(tObject);
             }
             resultSet.close();
