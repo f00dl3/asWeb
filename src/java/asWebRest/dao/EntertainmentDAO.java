@@ -448,8 +448,8 @@ public class EntertainmentDAO {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+("+minPlay+"/60), Last=CURDATE() WHERE Name='"+gameName+"';";
         final String query_UpdateGameHoursPart2 = "UPDATE Core.Fitness SET HoursGaming=HoursGaming+("+minPlay+"/60) WHERE Date=CURDATE();";
-        try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData = wc.q2do1c(dbc, query_UpdateGameHoursPart2, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_UpdateGameHoursPart2, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
