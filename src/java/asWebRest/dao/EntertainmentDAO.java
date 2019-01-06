@@ -443,9 +443,11 @@ public class EntertainmentDAO {
     }
     
     private String playedGameHours(Connection dbc, List<String> qParams) {
+        final String minPlay = qParams.get(0);
+        final String gameName = qParams.get(1);
         String returnData = wcb.getDefaultNotRanYet();
-        final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+(?/60), Last=CURDATE() WHERE Name=?;";
-        final String query_UpdateGameHoursPart2 = "UPDATE Core.Fitness SET HoursGaming=HoursGaming+(?/60) WHERE Date=CURDATE();"; //not working because null.
+        final String query_UpdateGameHours = "UPDATE Core.GameHours SET Hours=Hours+("+minPlay+"/60), Last=CURDATE() WHERE Name='"+gameName+"';";
+        final String query_UpdateGameHoursPart2 = "UPDATE Core.Fitness SET HoursGaming=HoursGaming+("+minPlay+"/60) WHERE Date=CURDATE();";
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHours, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHoursPart2, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
