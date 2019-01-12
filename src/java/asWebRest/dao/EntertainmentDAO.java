@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 6 Jan 2019
+Updated: 12 Jan 2019
 */
 
 package asWebRest.dao;
@@ -45,6 +45,13 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+    private String ffxivAchievementDone(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Achievements SET Completed=1, OrigCompDate=CURDATE() WHERE AchCode=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_QuestDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray ffxivAssets(Connection dbc) {
         final String query_FfxivAssets = "SELECT What, Value, Purchased FROM Core.FFXIV_Assets;";
         JSONArray tContainer = new JSONArray();
@@ -66,6 +73,7 @@ public class EntertainmentDAO {
     private JSONArray ffxivCounts(Connection dbc) {
         final String query_ffxivCounts = "SELECT" +
                 " COUNT(Name) AS Quests," +
+                " (SELECT COUNT(AchCode) FROM Core.FFXIV_Achievements) AS Achievements," +
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT Count(Name) FROM Core.FFXIV_Dungeons) AS Dungeons," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
@@ -79,6 +87,7 @@ public class EntertainmentDAO {
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
+                    .put("Achievements", resultSet.getInt("Achievements"))
                     .put("Quests", resultSet.getInt("Quests"))
                     .put("Weapons", resultSet.getInt("Weapons"))
                     .put("Crafting", resultSet.getInt("Crafting"))
@@ -316,6 +325,14 @@ public class EntertainmentDAO {
                 " NULL AS MateriaSlots, CONCAT('Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats" +
                 " FROM Core.FFXIV_Dungeons" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
+                " UNION ALL" +
+                " SELECT 0, Title AS Name, NULL AS CoordX, NULL AS CoordY, Achievement AS Zone, NULL AS Exp, NULL AS Gil," +
+                " NULL AS Classes, AchCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Achievement' AS MasterType, Description AS qcDesc," +
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, NULL AS Stats" +
+                " FROM Core.FFXIV_Achievements" +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
         //System.out.println(query_FFXIV_Merged);
@@ -775,6 +792,7 @@ public class EntertainmentDAO {
         return xTags;
     }
  
+    public String setFfxivAchievementDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List<String> qParams) { return ffxivDungeonDone(dbc, qParams); }

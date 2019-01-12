@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 May 2018
-Updated: 26 Sep 2018
+Updated: 12 Jan 2018
  */
 
 package asWebRest.action;
@@ -15,6 +15,7 @@ public class UpdateEntertainmentAction {
     final private EntertainmentDAO entertainmentDAO;
     public UpdateEntertainmentAction(EntertainmentDAO entertainmentDAO) { this.entertainmentDAO = entertainmentDAO; }
     
+    public String setFfxivAchievementDone(Connection dbc, List qParams) { return entertainmentDAO.setFfxivAchievementDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List qParams) { return entertainmentDAO.setFfxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List qParams) { return entertainmentDAO.setFfxivDungeonDone(dbc, qParams); }
     public String setFfxivGatheringDone(Connection dbc, List qParams) { return entertainmentDAO.setFfxivGatheringDone(dbc, qParams); }
