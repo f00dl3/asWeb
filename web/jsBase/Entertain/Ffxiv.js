@@ -2,7 +2,10 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 4 Nov 2018
+Updated: 12 Jan 2019
+
+NEED TO UPDATE FOR ACHIEVEMENT TRACKING
+
  */
 
 var ffxivCrafting;

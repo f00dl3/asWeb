@@ -326,7 +326,7 @@ public class EntertainmentDAO {
                 " FROM Core.FFXIV_Dungeons" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
-                " SELECT 0, Title AS Name, NULL AS CoordX, NULL AS CoordY, Achievement AS Zone, NULL AS Exp, NULL AS Gil," +
+                " SELECT '0' AS MinLevel, Title AS Name, NULL AS CoordX, NULL AS CoordY, 'Achievement' AS Zone, NULL AS Exp, NULL AS Gil," +
                 " NULL AS Classes, AchCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Achievement' AS MasterType, Description AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
