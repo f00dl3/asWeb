@@ -2,9 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 12 Jan 2019
-
-NEED TO UPDATE FOR ACHIEVEMENT TRACKING
+Updated: 13 Jan 2019
 
  */
 
@@ -16,6 +14,7 @@ function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     switch(thisFormData.Type) {
+        case "Achievement": setFfxivAchievementDone(thisFormData); break;
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
         case "Dungeon": setFfxivDungeonDone(thisFormData); break;
@@ -453,7 +452,7 @@ function putFfxivMergedList(target, questData) {
     for (var i = 0; i < qCols.length; i++) { rData += "<span class='td'><strong>" + qCols[i] + "</strong></span>"; }
     rData += "</div>";
     questData.forEach(function (ff14q) {
-        if(qNum <= 50) {
+        if(qNum <= 100) {
             var shortName = ff14q.Name;
             if(ff14q.MasterType === 'Crafting') { shortName = shortName.substring(4); }
             var qComplete = "No";
@@ -466,6 +465,7 @@ function putFfxivMergedList(target, questData) {
             if(
                     ff14q.Completed === 1 ||
                     (
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Achievement' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Dungeon' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
@@ -534,12 +534,14 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     assets.forEach(function (asset) { assetValues += asset.Value; });
     var totalValue = (assetValues/1000000).toFixed(2);
     var counts = countIn[0];
+    var aCount = counts.Achievements;
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
     var dCount = counts.Dungeons;
     var gCount = counts.Gathering;
     var cCount = counts.Crafting;
     var hCount = counts.Hunting;
+    var achCounter = 0;
     var compCounter = 0;
     var craftCounter = 0;
     var dungeonCounter = 0;
@@ -553,6 +555,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
         "Cnj1", "Cnj4a", "Cnj9"
     ];
     mergedData.forEach(function (ffxq) {
+        if(ffxq.Completed === 1 && ffxq.MasterType === "Achievement") { achCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Dungeon") { dungeonCounter++; totalCompletionCount++; }
@@ -598,6 +601,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
             "Index size: " + mCount + "<br/>" +
             "Completed: " + totalCompletionCount + " (" + ((totalCompletionCount/tCount)*100).toFixed(1) + "%)" +
             "<div class='UPopO'>" +
+            "<strong>Achievements:</strong> " + achCounter + " of " + counts.Achievements + " (" + ((achCounter/aCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Dungeons:</strong> " + dungeonCounter + " of " + counts.Dungeons + " (" + ((dungeonCounter/dCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
@@ -627,6 +631,31 @@ function putFfxivMergedSearchBox(target) {
     dojo.byId(target).innerHTML = rData;
     var ffxivRangeButton = dojo.byId("LevelRangeSubmit");
     dojo.connect(ffxivRangeButton, "onclick", actOnFfxivMergedRangeSearch);
+}
+
+function setFfxivAchievementDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivAchievementDone",
+        "achCode": formData.QuestCode
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Achievement " + formData.Name + " complete!");
+                    getGameFf14q(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Achievement Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function setFfxivCraftingDone(formData) {

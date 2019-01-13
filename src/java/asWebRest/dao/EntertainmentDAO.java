@@ -792,7 +792,7 @@ public class EntertainmentDAO {
         return xTags;
     }
  
-    public String setFfxivAchievementDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
+    public String setFfxivAchievementDone(Connection dbc, List<String> qParams) { return ffxivAchievementDone(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List<String> qParams) { return ffxivDungeonDone(dbc, qParams); }
