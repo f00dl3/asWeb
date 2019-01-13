@@ -638,7 +638,7 @@ function setFfxivAchievementDone(formData) {
     aniPreload("on");
     var thePostData = {
         "doWhat": "setFfxivAchievementDone",
-        "achCode": formData.QuestCode
+        "achCode": formData.QuestOrder
     };
     require(["dojo/request"], function(request) {
         request
