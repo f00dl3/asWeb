@@ -70,6 +70,7 @@ function putAuto(autoMpgData, billSum, amrData) {
         var thisMpg = "N/A";
         if(prevMiles !== "N/A") {
             var milesSinceLastFillUp = mpg.TotMiles - prevMiles;
+            console.log(mpg.TotMiles + " - " + prevMiles + " = " + milesSinceLastFillUp);
             thisMpg = (mpg.Gallons / milesSinceLastFillUp).toFixed(1);
         }
         fuelLog += "<div class='tr'>" +
