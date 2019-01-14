@@ -57,20 +57,29 @@ function getAuto() {
 }
 
 function putAuto(autoMpgData, billSum, amrData) {
-    var autoMpgCols = [ "Date", "Total Miles", "Cost/Gallon", "Gallons" ];
+    var autoMpgCols = [ "Date", "Total Miles", "Cost/Gallon", "Gallons", "MPG" ];
     var rData = "<h3>Auto Maintenance</h3>";
     var fuelLog = "<h4>Fuel Log/MPG</h4>" +
             "<div id='mpgEntryForm'></div><br/>" +
             "<div class='table'><div class='tr'>";
     for (var i = 0; i < autoMpgCols.length; i++) { fuelLog += "<span class='td'><strong>" + autoMpgCols[i] + "</strong></span>"; }
     fuelLog += "</div>";
+    var prevMiles = 0;
     autoMpgData.forEach(function (mpg) { 
+        var thisMiles = mpg.TotMiles;
+        var thisMpg = 0;
+        if(prevMiles != 0) {
+            var milesSinceLastFillUp = mpg.TotMiles - prevMiles;
+            thisMpg = mpg.Gallons / milesSinceLastFillUp;
+        }
         fuelLog += "<div class='tr'>" +
                 "<span class='td'>" + mpg.Date + "</span>" +
                 "<span class='td'>" + mpg.TotMiles + "</span>" +
                 "<span class='td'>" + mpg.CostPG + "</span>" +
                 "<span class='td'>" + mpg.Gallons + "</span>" +
+                "<span class='td'>" + thisMpg + "</span>" +
                 "</div>";
+        var prevMiles = mpg.TotMiles;
     });
     fuelLog += "</div>";
     rData += fuelLog + "<p>";
