@@ -386,6 +386,7 @@ public class EntertainmentDAO {
     private JSONArray ffxivQuestsByDate(Connection dbc) {
         final String query_FfxivQuestByDate = "SELECT" +
 		" 	OrigCompDate," +
+		" 	SUM(Achievements) AS Achievements," +
 		" 	SUM(Quests) AS Quests," +
 		" 	SUM(Hunting) AS Hunting," +
 		" 	SUM(Crafting) AS Crafting," +
@@ -393,6 +394,7 @@ public class EntertainmentDAO {
 		" FROM (" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
+		" 		0 as Achivements," +
 		" 		COUNT(QuestOrder) AS Quests," +
 		" 		0 AS Hunting," +
 		" 		0 AS Crafting," +
@@ -403,6 +405,7 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
+		" 		0 as Achivements," +
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
 		" 		0 AS Crafting," +
@@ -413,6 +416,7 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
+		" 		0 as Achivements," +
 		" 		0 as Quests," +
 		" 		0 as Hunting," +
                 "               0 AS Dungeons," +
@@ -423,11 +427,23 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
+		" 		0 as Achivements," +
 		" 		0 as Quests," +
 		" 		0 AS Hunting," +
 		" 		COUNT(DungeonCode) AS Dungeons," +
 		" 		0 AS Crafting" +
 		" 		FROM Core.FFXIV_Dungeons" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		COUNT(AchCode) as Achievements," +
+		" 		0 as Quests," +
+		" 		0 AS Hunting," +
+		" 		0 AS Dungeons," +
+		" 		0 AS Crafting" +
+		" 		FROM Core.FFXIV_Achievements" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
 		" 	) AS tmp" +
@@ -442,6 +458,7 @@ public class EntertainmentDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
+                    .put("Achievements", resultSet.getInt("Achievements"))
                     .put("Quests", resultSet.getInt("Quests"))
                     .put("Hunting", resultSet.getInt("Hunting"))
                     .put("Crafting", resultSet.getInt("Crafting"))
