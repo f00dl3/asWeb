@@ -47,8 +47,9 @@ public class EntertainmentDAO {
     
     private String ffxivAchievementDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        final String query_FFXIV_QuestDone = "UPDATE Core.FFXIV_Achievements SET Completed=1, OrigCompDate=CURDATE() WHERE AchCode=?;";
-        try { returnData = wc.q2do1c(dbc, query_FFXIV_QuestDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+        final String query_FFXIV_AchievementDone = "UPDATE Core.FFXIV_Achievements SET Completed=1, OrigCompDate=CURDATE() WHERE AchCode=?;";
+        System.out.println(query_FFXIV_AchievementDone);
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_AchievementDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
