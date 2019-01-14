@@ -394,7 +394,7 @@ public class EntertainmentDAO {
 		" FROM (" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
-		" 		0 as Achivements," +
+		" 		0 as Achievements," +
 		" 		COUNT(QuestOrder) AS Quests," +
 		" 		0 AS Hunting," +
 		" 		0 AS Crafting," +
@@ -405,7 +405,7 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
-		" 		0 as Achivements," +
+		" 		0 as Achievements," +
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
 		" 		0 AS Crafting," +
@@ -416,7 +416,7 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
-		" 		0 as Achivements," +
+		" 		0 as Achievements," +
 		" 		0 as Quests," +
 		" 		0 as Hunting," +
                 "               0 AS Dungeons," +
@@ -427,7 +427,7 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
-		" 		0 as Achivements," +
+		" 		0 as Achievements," +
 		" 		0 as Quests," +
 		" 		0 AS Hunting," +
 		" 		COUNT(DungeonCode) AS Dungeons," +
