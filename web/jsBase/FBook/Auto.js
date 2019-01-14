@@ -72,7 +72,7 @@ function putAuto(autoMpgData, billSum, amrData) {
             // Provides incorrect data due to data being sorted ascending.
             var milesSinceLastFillUp = mpg.TotMiles - prevMiles;
             console.log(prevMiles + " - " + mpg.TotMiles + " = " + milesSinceLastFillUp);
-            thisMpg = (mpg.Gallons / milesSinceLastFillUp).toFixed(1);
+            thisMpg = (Math.abs(milesSinceLastFillUp)/mpg.Gallons).toFixed(1);
         }
         fuelLog += "<div class='tr'>" +
                 "<span class='td'>" + mpg.Date + "</span>" +

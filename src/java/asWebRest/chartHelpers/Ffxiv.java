@@ -28,7 +28,7 @@ public class Ffxiv {
                 .put("s2Name", "Hunting").put("s2Color", "Green")
                 .put("s3Name", "Crafting").put("s3Color", "Blue")
                 .put("s4Name", "Dungeons").put("s4Color", "Red")
-                .put("s5Name", "Achievements").put("s4Color", "White")
+                .put("s5Name", "Achievements").put("s5Color", "White")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
