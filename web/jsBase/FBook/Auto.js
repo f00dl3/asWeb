@@ -69,8 +69,9 @@ function putAuto(autoMpgData, billSum, amrData) {
         var thisMiles = mpg.TotMiles;
         var thisMpg = "N/A";
         if(prevMiles !== "N/A") {
+            // Provides incorrect data due to data being sorted ascending.
             var milesSinceLastFillUp = mpg.TotMiles - prevMiles;
-            console.log(mpg.TotMiles + " - " + prevMiles + " = " + milesSinceLastFillUp);
+            console.log(prevMiles + " - " + mpg.TotMiles + " = " + milesSinceLastFillUp);
             thisMpg = (mpg.Gallons / milesSinceLastFillUp).toFixed(1);
         }
         fuelLog += "<div class='tr'>" +
@@ -80,7 +81,7 @@ function putAuto(autoMpgData, billSum, amrData) {
                 "<span class='td'>" + mpg.Gallons + "</span>" +
                 "<span class='td'>" + thisMpg + "</span>" +
                 "</div>";
-        var prevMiles = mpg.TotMiles;
+        prevMiles = mpg.TotMiles;
     });
     fuelLog += "</div>";
     rData += fuelLog + "<p>";
