@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 6 May 2018
+Updated: 13 Jan 2019
  */
 
 function actOnMpgEntry(event) {
@@ -67,10 +67,10 @@ function putAuto(autoMpgData, billSum, amrData) {
     var prevMiles = 0;
     autoMpgData.forEach(function (mpg) { 
         var thisMiles = mpg.TotMiles;
-        var thisMpg = 0;
-        if(prevMiles != 0) {
+        var thisMpg = "N/A";
+        if(prevMiles !== "N/A") {
             var milesSinceLastFillUp = mpg.TotMiles - prevMiles;
-            thisMpg = mpg.Gallons / milesSinceLastFillUp;
+            thisMpg = (mpg.Gallons / milesSinceLastFillUp).toFixed(1);
         }
         fuelLog += "<div class='tr'>" +
                 "<span class='td'>" + mpg.Date + "</span>" +
