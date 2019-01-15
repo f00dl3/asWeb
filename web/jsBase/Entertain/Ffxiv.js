@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 13 Jan 2019
+Updated: 14 Jan 2019
 
  */
 
@@ -638,7 +638,7 @@ function setFfxivAchievementDone(formData) {
     aniPreload("on");
     var thePostData = {
         "doWhat": "setFfxivAchievementDone",
-        "achCode": formData.QuestOrder
+        "achievementCode": formData.QuestOrder
     };
     require(["dojo/request"], function(request) {
         request

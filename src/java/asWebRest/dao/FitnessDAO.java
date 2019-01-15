@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 5 Jan 2019
+Updated: 14 Jan 2019
 */
 
 package asWebRest.dao;
@@ -245,7 +245,7 @@ public class FitnessDAO {
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelF = 1) AND Bicycle='"+bike+"') AS MilesWheelFront," +
                 " (SELECT SUM(Cycling) FROM Core.Fitness WHERE Date > (SELECT MAX(Date) FROM Core.Fitness WHERE BkNWheelR = 1) AND Bicycle='"+bike+"') AS MilesWheelRear" +
                 " FROM Core.Fitness LIMIT 1;";
-        System.out.println(query_Fitness_BkStats);
+        //System.out.println(query_Fitness_BkStats);
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_BkStats, null);
