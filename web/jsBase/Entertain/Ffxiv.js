@@ -488,6 +488,8 @@ function putFfxivMergedList(target, questData) {
                     case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
                     default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
                 }
+            } else {
+                rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>";
             }
             rData += "<div class='UPopO'>";
             if(isSet(ff14q.MasterType)) { rData += "Master Type: " + ff14q.MasterType + "<br/>"; }
