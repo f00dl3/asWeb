@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 14 Jan 2019
+Updated: 16 Jan 2019
 
  */
 
@@ -511,6 +511,7 @@ function putFfxivMergedList(target, questData) {
             if(isSet(ff14q.MateriaSlots)) { rData += "<strong>Materia Slots: </strong>" + ff14q.MateriaSlots + "<br/>"; }
             if(isSet(ff14q.Stats)) { rData += "<strong>Stats: </strong>" + ff14q.Stats + "<br/>"; }
             if(isSet(ff14q.QuestOrder)) { rData += "Quest Order: " + ff14q.QuestOrder + "<br/>"; }
+            if(isSet(ff14q.Journal)) { rData += "Journal: " + ff14q.Journal + "<br/>"; }
             if(isSet(ff14q.Exp)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/XP.png'/>" + ff14q.Exp; }
             if(isSet(ff14q.Gil)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" + ff14q.Gil; }
             rData += "</div></div></span>" +

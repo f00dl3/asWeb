@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 12 Jan 2019
+Updated: 16 Jan 2019
 */
 
 package asWebRest.dao;
@@ -268,7 +268,7 @@ public class EntertainmentDAO {
                 " 'Quest' as MasterType, c.Description as qcDesc, NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality," +
                 " NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats" +
+                " NULL AS MateriaSlots, NULL AS Stats, q.Journal" +
                 " FROM FFXIV_Quests q" +
         	" LEFT JOIN Core.FFXIV_QuestCodes c ON c.Code = SUBSTRING(q.QuestOrder, 4, 6)" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'";
@@ -281,7 +281,7 @@ public class EntertainmentDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Crafting' as MasterType, NULL AS qcDesc," +
                 " Crystals, Materials, Durability, MaxQuality, Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_Crafting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -290,6 +290,7 @@ public class EntertainmentDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Weapon' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Category, DamageType, Damage, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats" +
+                " NULL AS Journal" +
                 " FROM Core.FFXIV_Items_Weapons" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -297,7 +298,8 @@ public class EntertainmentDAO {
                 " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Wearable' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
-                " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats" +
+                " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense," +
+                " MateriaSlots, Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_Items_Wearable" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -306,7 +308,7 @@ public class EntertainmentDAO {
                 " Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Hunt' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_Hunting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -315,7 +317,7 @@ public class EntertainmentDAO {
                 " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Gathering' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats" +
+                " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_GatherNodes" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -324,7 +326,8 @@ public class EntertainmentDAO {
                 " NULL AS Seals, Version, UnlockQuest AS Event, NULL AS Type, 'Dungeon' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, MinItemLevel AS ILEV," +
                 " PartySize AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, CONCAT('Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats" +
+                " NULL AS MateriaSlots, NULL AS Journal," +
+                " CONCAT('Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats" +
                 " FROM Core.FFXIV_Dungeons" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -333,7 +336,7 @@ public class EntertainmentDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Achievement' AS MasterType, Description AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_Achievements" +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
@@ -376,7 +379,8 @@ public class EntertainmentDAO {
                     .put("Defense", resultSet.getInt("Defence"))
                     .put("MagicDefense", resultSet.getInt("MagicDefense"))
                     .put("MateriaSlots", resultSet.getInt("MateriaSlots"))
-                    .put("Stats", resultSet.getString("Stats"));;
+                    .put("Journal", resultSet.getString("Journal"))
+                    .put("Stats", resultSet.getString("Stats"));
                 tContainer.put(tObject);
             }
             resultSet.close();
