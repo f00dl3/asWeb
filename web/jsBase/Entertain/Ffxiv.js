@@ -481,15 +481,17 @@ function putFfxivMergedList(target, questData) {
             rData += "<form class='tr' id='ffxivQuestSubmitForm'>" +
                     "<span class='td' " + tdsStyle + ">" + updateCheckbox + "</span>" +
                     "<span class='td' " + tdsStyle + "><div class='UPop'>" + shortName;
-            if(isSet(ff14q.Type)) {
-                switch(ff14q.Type) {
-                    case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
-                    case "MS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
-                    case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
-                    default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
+            if(ff14q.MasterType === 'Quest') {
+                if(isSet(ff14q.Type)) {
+                    switch(ff14q.Type) {
+                        case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
+                        case "MS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
+                        case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
+                        default: rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>"; break;
+                    }
+                } else {
+                    rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>";
                 }
-            } else {
-                rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qSide.png'/>";
             }
             rData += "<div class='UPopO'>";
             if(isSet(ff14q.MasterType)) { rData += "Master Type: " + ff14q.MasterType + "<br/>"; }
