@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 26 Aug 2018
+Updated: 21 Jan 2019
  */
 
 var addresses;
@@ -38,6 +38,7 @@ function populateResults(addressData) {
     var rData = "";
     var contactCount = (addressData.length) + " contacts returned.";
     var matchesSoFar = 0;
+    var fontColor = "white";
     addressData.forEach(function (ab) {
         matchesSoFar++;
         if(matchesSoFar < 25) {
@@ -54,6 +55,7 @@ function populateResults(addressData) {
                 pHome = "",
                 point = "",
                 website = "";
+            if(ab.Active === 1) { fontColor = "yellow"; }
             if(isSet(ab.FirstName)) { firstName = ab.FirstName; }
             if(isSet(ab.LastName)) { lastName = ab.LastName + ", "; }
             if(isSet(ab.Business)) { displayName = ab.Business; }
@@ -91,7 +93,7 @@ function populateResults(addressData) {
                         point + "</div></div>";
             }
             rData += "<div class='tr'>" +
-                    "<span class='td'><div class='UPop'>" + displayName +
+                    "<span class='td' style='color: '" + fontColor + ";'><div class='UPop'>" + displayName +
                     "<div class='UPopO'>" + website + category + birthday + "<strong>As of: </strong>" + ab.AsOf + "</div></div></span>" +
                     "<span class='td'>" + pBusiness + pHome + pCell + pCell2 + eMail + address + "</span>" +
                     "</div>";
@@ -122,6 +124,7 @@ function showAddressHint(value) {
                 (isSet(sr.FirstName) && (sr.FirstName).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.Address) && (sr.Address).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
+                (isSet(sr.QuickName) && (sr.QuickName).toLowerCase().includes(value.toLowerCase())) ||
                 (isSet(sr.State) && (sr.State).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
