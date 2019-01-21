@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Jul 2018
+Updated: 21 Jan 2019
  */
 
 function addMediaMarker(map, tMedia) {
@@ -14,10 +15,10 @@ function addMediaMarker(map, tMedia) {
             type: "Photo"
         });
         var icLabel = "+";
-        var icColor = "#ffffff";
+        var icColor = "#000000";
         var icOpacity = "1";
-        var icLabelColor = "#000000";
-        iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
+        var icLabelColor = "#ffffff";
+        iconFeature.setStyle(svgIconStyle("ct", 25, icColor, icOpacity, icLabel, icLabelColor));
         return iconFeature;
     } catch (error) { }
 }
