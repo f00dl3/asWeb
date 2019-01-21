@@ -38,8 +38,8 @@ function populateResults(addressData) {
     var rData = "";
     var contactCount = (addressData.length) + " contacts returned.";
     var matchesSoFar = 0;
-    var fontColor = "white";
     addressData.forEach(function (ab) {
+        var fontColor = "white";
         matchesSoFar++;
         if(matchesSoFar < 25) {
             var firstName = "",
@@ -93,7 +93,7 @@ function populateResults(addressData) {
                         point + "</div></div>";
             }
             rData += "<div class='tr'>" +
-                    "<span class='td' style='color: '" + fontColor + ";'><div class='UPop'>" + displayName +
+                    "<span class='td' style='color: " + fontColor + ";'><div class='UPop'>" + displayName +
                     "<div class='UPopO'>" + website + category + birthday + "<strong>As of: </strong>" + ab.AsOf + "</div></div></span>" +
                     "<span class='td'>" + pBusiness + pHome + pCell + pCell2 + eMail + address + "</span>" +
                     "</div>";

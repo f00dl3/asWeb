@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Jul 2018
-Updated: 19 Jul 2018
+Updated: 21 Jan 2019
  */
 
 function addAddressMarker(map, thisAddress) {
@@ -30,9 +30,9 @@ function addAddressMarker(map, thisAddress) {
         type: "Address"
     });
     var icLabel = "+";
-    var icColor = "#ffffff";
+    var icColor = "#000000";
     var icOpacity = "1";
-    var icLabelColor = "#000000";
+    var icLabelColor = "#ffffff";
     iconFeature.setStyle(svgIconStyle("ct", 30, icColor, icOpacity, icLabel, icLabelColor));
     return iconFeature;
 }
