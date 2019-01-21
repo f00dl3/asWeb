@@ -19,8 +19,9 @@ public class AddressBookDAO {
     public JSONArray getAddressBook(Connection dbc) {
         final String query_AddressBook = "SELECT Business, LastName, FirstName,"
             + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2,"
-            + " EMail, AsOf, Holiday2014, Birthday, Point, Website, QuickName"
+            + " EMail, AsOf, Holiday2014, Birthday, Point, Website, QuickName, Active, OldAddresses"
             + " FROM Core.Addresses"
+            + " WHERE Active = 1"
             + " ORDER BY Business, LastName, FirstName"
             + " DESC;";
         JSONArray addressBook = new JSONArray();
@@ -47,6 +48,7 @@ public class AddressBookDAO {
                     .put("Birthday", resultSet.getString("Birthday"))
                     .put("Point", resultSet.getString("Point"))
                     .put("Website", resultSet.getString("Website"))
+                    .put("OldAddresses", resultSet.getString("OldAddresses"))
                     .put("QuickName", resultSet.getString("QuickName"));
                 addressBook.put(tAddressBook);
             }
