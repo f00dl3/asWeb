@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 25 Apr 2018
+Updated: 21 Jan 2019
 */
 
 package asWebRest.dao;
@@ -19,7 +19,7 @@ public class AddressBookDAO {
     public JSONArray getAddressBook(Connection dbc) {
         final String query_AddressBook = "SELECT Business, LastName, FirstName,"
             + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2,"
-            + " EMail, AsOf, Holiday2014, Birthday, Point, Website"
+            + " EMail, AsOf, Holiday2014, Birthday, Point, Website, QuickName"
             + " FROM Core.Addresses"
             + " ORDER BY Business, LastName, FirstName"
             + " DESC;";
@@ -46,7 +46,8 @@ public class AddressBookDAO {
                     .put("Holiday2014", resultSet.getInt("Holiday2014"))
                     .put("Birthday", resultSet.getString("Birthday"))
                     .put("Point", resultSet.getString("Point"))
-                    .put("Website", resultSet.getString("Website"));
+                    .put("Website", resultSet.getString("Website"))
+                    .put("QuickName", resultSet.getString("QuickName"));
                 addressBook.put(tAddressBook);
             }
             resultSet.close();
