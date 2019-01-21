@@ -21,7 +21,6 @@ public class AddressBookDAO {
             + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2,"
             + " EMail, AsOf, Holiday2014, Birthday, Point, Website, QuickName, Active, OldAddresses"
             + " FROM Core.Addresses"
-            + " WHERE Active = 1"
             + " ORDER BY Business, LastName, FirstName"
             + " DESC;";
         JSONArray addressBook = new JSONArray();
@@ -45,6 +44,7 @@ public class AddressBookDAO {
                     .put("EMail", resultSet.getString("EMail"))
                     .put("AsOf", resultSet.getString("AsOf"))
                     .put("Holiday2014", resultSet.getInt("Holiday2014"))
+                    .put("Active", resultSet.getInt("Active"))
                     .put("Birthday", resultSet.getString("Birthday"))
                     .put("Point", resultSet.getString("Point"))
                     .put("Website", resultSet.getString("Website"))
