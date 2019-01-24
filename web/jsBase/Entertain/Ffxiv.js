@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 16 Jan 2019
+Updated: 24 Jan 2019
 
  */
 
@@ -556,7 +556,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var tCount = hCount + qCount + cCount;
     var availImages = [
         "Brd33", "Brd36", "Brd51", "Brd52", "Brd52a", "Brd52b", "Brd52c",
-        "Min1", "Min13",
+        "Min1", "Min13", "Fsh15",
         "Cnj1", "Cnj4a", "Cnj9"
     ];
     mergedData.forEach(function (ffxq) {
