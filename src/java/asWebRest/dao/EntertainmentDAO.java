@@ -405,7 +405,7 @@ public class EntertainmentDAO {
 		" 		0 AS Gathering," +
 		" 		0 AS Hunting," +
 		" 		0 AS Crafting," +
-                "               0 AS Dungeons" +
+                "               0 AS Dungeons," +
 		" 		FROM Core.FFXIV_Quests" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -417,7 +417,7 @@ public class EntertainmentDAO {
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
 		" 		0 AS Crafting," +
-                "               0 AS Dungeons" +
+                "               0 AS Dungeons," +
 		" 		FROM Core.FFXIV_Hunting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -429,7 +429,7 @@ public class EntertainmentDAO {
 		" 		0 AS Gathering," +
 		" 		0 as Hunting," +
                 "               0 AS Dungeons," +
-		" 		COUNT(Recipie) AS Crafting" +
+		" 		COUNT(Recipie) AS Crafting," +
 		" 		FROM Core.FFXIV_Crafting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -441,7 +441,7 @@ public class EntertainmentDAO {
 		" 		0 AS Hunting," +
 		" 		0 AS Gathering," +
 		" 		COUNT(DungeonCode) AS Dungeons," +
-		" 		0 AS Crafting" +
+		" 		0 AS Crafting," +
 		" 		FROM Core.FFXIV_Dungeons" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
@@ -453,7 +453,7 @@ public class EntertainmentDAO {
 		" 		0 AS Hunting," +
 		" 		0 AS Dungeons," +
 		" 		COUNT(NodeCode) AS Gathering," +
-		" 		0 AS Crafting" +
+		" 		0 AS Crafting," +
 		" 		FROM Core.FFXIV_GatherNodes" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
