@@ -36,13 +36,13 @@ public class Ffxiv {
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            final int quests = thisObject.getInt("Quests");
-            final int hunting = thisObject.getInt("Quests");
-            final int crafting = thisObject.getInt("Quests");
-            final int achievements = thisObject.getInt("Quests");
-            final int gathering = thisObject.getInt("Quests");
-            final int dungeons = thisObject.getInt("Quests");
-            final int total = quests + hunting + crafting + achievements + gathering + dungeons;
+            int quests = thisObject.getInt("Quests");
+            int hunting = thisObject.getInt("Hunting");
+            int crafting = thisObject.getInt("Crafting");
+            int achievements = thisObject.getInt("Achievements");
+            int gathering = thisObject.getInt("Gathering");
+            int dungeons = thisObject.getInt("Dungeons");
+            int total = (quests + hunting + crafting + achievements + gathering + dungeons);
             this_Labels.put(thisObject.getString("OrigCompDate"));
             this_Data.put(quests);
             this_Data2.put(hunting);
