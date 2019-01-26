@@ -473,7 +473,7 @@ public class EntertainmentDAO {
 		" GROUP BY OrigCompDate" +
 		" ORDER BY OrigCompDate;";
         JSONArray tContainer = new JSONArray();
-        //System.out.println(query_FfxivQuestByDate);
+        System.out.println(query_FfxivQuestByDate);
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivQuestByDate, null);
             while (resultSet.next()) {
