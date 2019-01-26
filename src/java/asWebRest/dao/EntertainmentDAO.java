@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 16 Jan 2019
+Updated: 26 Jan 2019
 */
 
 package asWebRest.dao;
@@ -395,12 +395,14 @@ public class EntertainmentDAO {
 		" 	SUM(Quests) AS Quests," +
 		" 	SUM(Hunting) AS Hunting," +
 		" 	SUM(Crafting) AS Crafting," +
+		" 	SUM(Gathering) AS Gathering," +
                 "       SUM(Dungeons) AS Dungeons" +
 		" FROM (" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
 		" 		0 as Achievements," +
 		" 		COUNT(QuestOrder) AS Quests," +
+		" 		0 AS Gathering," +
 		" 		0 AS Hunting," +
 		" 		0 AS Crafting," +
                 "               0 AS Dungeons" +
@@ -411,6 +413,7 @@ public class EntertainmentDAO {
 		" 	SELECT" +
 		" 		OrigCompDate," +
 		" 		0 as Achievements," +
+		" 		0 AS Gathering," +
 		" 		0 as Quests," +
 		" 		COUNT(HuntCode) AS Hunting," +
 		" 		0 AS Crafting," +
@@ -423,6 +426,7 @@ public class EntertainmentDAO {
 		" 		OrigCompDate," +
 		" 		0 as Achievements," +
 		" 		0 as Quests," +
+		" 		0 AS Gathering," +
 		" 		0 as Hunting," +
                 "               0 AS Dungeons," +
 		" 		COUNT(Recipie) AS Crafting" +
@@ -435,6 +439,7 @@ public class EntertainmentDAO {
 		" 		0 as Achievements," +
 		" 		0 as Quests," +
 		" 		0 AS Hunting," +
+		" 		0 AS Gathering," +
 		" 		COUNT(DungeonCode) AS Dungeons," +
 		" 		0 AS Crafting" +
 		" 		FROM Core.FFXIV_Dungeons" +
@@ -443,9 +448,22 @@ public class EntertainmentDAO {
 		" 	UNION ALL" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
+		" 		0 as Achievements," +
+		" 		0 as Quests," +
+		" 		0 AS Hunting," +
+		" 		0 AS Dungeons," +
+		" 		COUNT(NodeCode) AS Gathering," +
+		" 		0 AS Crafting" +
+		" 		FROM Core.FFXIV_GatherNodes" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
 		" 		COUNT(AchCode) as Achievements," +
 		" 		0 as Quests," +
 		" 		0 AS Hunting," +
+		" 		0 AS Gathering," +
 		" 		0 AS Dungeons," +
 		" 		0 AS Crafting" +
 		" 		FROM Core.FFXIV_Achievements" +
@@ -467,6 +485,7 @@ public class EntertainmentDAO {
                     .put("Quests", resultSet.getInt("Quests"))
                     .put("Hunting", resultSet.getInt("Hunting"))
                     .put("Crafting", resultSet.getInt("Crafting"))
+                    .put("Gathering", resultSet.getInt("Gathering"))
                     .put("Dungeons", resultSet.getInt("Dungeons"));
                 tContainer.put(tObject);
             }
