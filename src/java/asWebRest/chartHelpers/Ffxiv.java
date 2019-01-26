@@ -22,6 +22,7 @@ public class Ffxiv {
         JSONArray this_Data4 = new JSONArray();
         JSONArray this_Data5 = new JSONArray();
         JSONArray this_Data6 = new JSONArray();
+        JSONArray this_Data7 = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivQuestsByDay")
@@ -31,16 +32,25 @@ public class Ffxiv {
                 .put("s4Name", "Dungeons").put("s4Color", "Red")
                 .put("s5Name", "Achievements").put("s5Color", "White")
                 .put("s6Name", "Gathering").put("s6Color", "Magenta")
+                .put("s7Name", "TOTAL").put("s7Color", "Gray")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
+            final int quests = thisObject.getInt("Quests");
+            final int hunting = thisObject.getInt("Quests");
+            final int crafting = thisObject.getInt("Quests");
+            final int achievements = thisObject.getInt("Quests");
+            final int gathering = thisObject.getInt("Quests");
+            final int dungeons = thisObject.getInt("Quests");
+            final int total = quests + hunting + crafting + achievements + gathering + dungeons;
             this_Labels.put(thisObject.getString("OrigCompDate"));
-            this_Data.put(thisObject.getInt("Quests"));
-            this_Data2.put(thisObject.getInt("Hunting"));
-            this_Data3.put(thisObject.getInt("Crafting"));
-            this_Data4.put(thisObject.getInt("Dungeons"));
-            this_Data5.put(thisObject.getInt("Achievements"));
-            this_Data6.put(thisObject.getInt("Gathering"));
+            this_Data.put(quests);
+            this_Data2.put(hunting);
+            this_Data3.put(crafting);
+            this_Data4.put(dungeons);
+            this_Data5.put(achievements);
+            this_Data6.put(gathering);
+            this_Data7.put(total);
         }
         /* System.out.println("Days: " + this_Labels.length());
         System.out.println("Quest days: " + this_Data.length());
@@ -54,6 +64,7 @@ public class Ffxiv {
                 .put("data4", this_Data4)
                 .put("data5", this_Data5)
                 .put("data6", this_Data6)
+                .put("data7", this_Data7)
                 .put("props", this_Props);
         return this_Glob;
     }
