@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 5 Jan 2019
+Updated: 26 Jan 2019
  */
 
 var myHeight = 68;
@@ -331,7 +331,7 @@ function processFitnessAll(dataIn, autoMpg) {
                 "High: <span style='" + styleTemp(tData.High) + "'>" + tData.High + "</span><br/>" +
                 "Low: <span style='" + styleTemp(tData.Low) + "'>" + tData.Low + "</span><br/>" +
                 "Average: <span style='" + styleTemp(tData.Average) + "'>" + tData.Average + "</span><br/>" +
-                "Gaming: " + tData.HoursGaming + " hrs" +
+                "Gaming: " + (tData.HoursGaming).toFixed(1) + " hrs" +
                 "</div></div></td>" +
                 "<td align='center'><div class='UPop'><div class='" + colorWeight(tData.Weight) + "'>" + tData.Weight + "</div>" +
                 "<div class='UPopO'>" + bmi + "</div>" +
