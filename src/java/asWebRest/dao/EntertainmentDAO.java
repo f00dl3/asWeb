@@ -57,7 +57,7 @@ public class EntertainmentDAO {
     private JSONArray ffxivAssets(Connection dbc) {
         final String query_FfxivAssets = "SELECT What, Value, Purchased FROM Core.FFXIV_Assets" +
                 " UNION ALL" +
-                " (SELECT 'Gil' AS What, Gil AS Value, DateTime AS Purchased FROM Core.FFXIV_Gil ORDER BY DateTime DESC LIMIT 1);";
+                " (SELECT 'Gil' AS What, Gil AS Value, AsOf AS Purchased FROM Core.FFXIV_Gil ORDER BY Purchased DESC LIMIT 1);";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivAssets, null);
