@@ -82,7 +82,7 @@ public class Ffxiv {
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            int gil = thisObject.getInt("Gil");
+            long gil = thisObject.getLong("Gil");
             this_Labels.put(thisObject.getString("Date"));
             this_Data.put(gil);
         }
