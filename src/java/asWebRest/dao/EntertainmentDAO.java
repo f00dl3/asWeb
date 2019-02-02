@@ -208,7 +208,9 @@ public class EntertainmentDAO {
     }
     
     private JSONArray ffxivGilByDate(Connection dbc) {
-        final String query_FFXIVGilByDate = "SELECT SUBSTRING(Date,1,10) AS Date, Gil FROM Core.FFXIV_GilByDate GROUP BY SUBSTRING(Date, 1, 10);";
+        final String query_FFXIVGilByDate = "SELECT SUBSTRING(Date,1,10) AS Date, Gil AS Worth, " +
+                " (SELECT Gil FROM FFXIV_Gil WHERE AsOf < Date ORDER BY AsOf DESC LIMIT 1) AS Gil" +
+                " FROM Core.FFXIV_GilByDate GROUP BY SUBSTRING(Date, 1, 10);";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIVGilByDate, null);
@@ -216,6 +218,7 @@ public class EntertainmentDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Date", resultSet.getString("Date"))
+                    .put("Worth", resultSet.getLong("Worth"))
                     .put("Gil", resultSet.getLong("Gil"));
                 tContainer.put(tObject);
             }
