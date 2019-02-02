@@ -264,6 +264,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                                     /* "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" + */
                                     "<img class='" + firstThumbSize + "' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
                         }
+                        mediaDownloader = "<a href='" + olPicPath + "' target='new'>" +
+                                "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
                         thisAddCheckbox += "</a>";
                     }
                     break;
