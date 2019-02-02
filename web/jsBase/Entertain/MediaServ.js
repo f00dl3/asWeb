@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 16 Dec 2018
+Updated: 2 Feb 2019
  */
 
 var msIndex;
@@ -191,6 +191,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var fileProps = (tm.File).split(".");
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
+        var mediaDownloader = "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
+                            "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
         thisAddCheckbox += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
         if(isSet(tm.AlbumArt)) {
             if(aaTag === "/DBX") {
@@ -231,8 +233,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             thisAddCheckbox += "<div class='UPop'>";
             switch(mediaType) {
                 case "DOC": case "CHM": case "PDF": case "TXT": case "LSX": case "GIF": case "ZIP":
-                    thisAddCheckbox += "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
-                            "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
+                    thisAddCheckbox += mediaDownloader;
                     break;
                 case "SWF":
                     thisAddCheckbox += "<a href='" + getBasePath("ui") + "/FlashLoader.jsp?ff=" + tm.File + "' target='new'>" +
@@ -291,6 +292,9 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File;
         if(tm.PlayCount > 1) { thisMsInfoString += " <tt>(" + tm.PlayCount + ")</tt> "; }
         thisMsInfoString += "<img class='th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
+        if(thisAddCheckbox != mediaDownloader) {
+            thisMsInfoString += mediaDownloader;
+        }
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
