@@ -292,7 +292,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File;
         if(tm.PlayCount > 1) { thisMsInfoString += " <tt>(" + tm.PlayCount + ")</tt> "; }
         thisMsInfoString += "<img class='th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
-        if(thisAddCheckbox != mediaDownloader) {
+        if(thisAddCheckbox !== mediaDownloader) {
             thisMsInfoString += mediaDownloader;
         }
         if(isSet(tm.GeoData)) {
