@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 27 Jan 2019
+Updated: 2 Feb 2019
 */
 
 package asWebRest.dao;
@@ -205,6 +205,23 @@ public class EntertainmentDAO {
         System.out.println(query_FFXIV_GatherDone + "\n" + qParams.get(0));
         try { returnData = wc.q2do1c(dbc, query_FFXIV_GatherDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
+    }
+    
+    private JSONArray ffxivGilByDate(Connection dbc) {
+        final String query_FFXIVGilByDate = "SELECT Date, Gil FROM Core.FFXIV_GilByDate GROUP BY SUBSTRING(Date, 1, 10);";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FFXIVGilByDate, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("DateTime", resultSet.getString("DateTime"))
+                    .put("Gil", resultSet.getInt("Gil"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
     }
     
     private String ffxivHuntingDone(Connection dbc, List<String> qParams) {
@@ -550,6 +567,7 @@ public class EntertainmentDAO {
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }
     public JSONArray getFfxivDungeons(Connection dbc) { return ffxivDungeons(dbc); }
     public JSONArray getFfxivEmotes(Connection dbc) { return ffxivEmotes(dbc); }
+    public JSONArray getFfxivGilByDate(Connection dbc) { return ffxivGilByDate(dbc); }
     public JSONArray getFfxivImageMaps(Connection dbc) { return ffxivImageMaps(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
     public JSONArray getFfxivMerged(Connection dbc,  int minRange, int maxRange, String completed) { return ffxivMerged(dbc, minRange, maxRange, completed); }

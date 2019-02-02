@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 15 Nov 2018
+Updated: 2 Feb 2019
  */
 
 package asWebRest.resource;
@@ -57,6 +57,7 @@ public class ChartResource extends ServerResource {
         boolean genericCharts = false;
         
         DynChartX dynChart = new DynChartX();
+        Ffxiv ffxiv = new Ffxiv();
         GetEntertainmentAction getEntertainmentAction = new GetEntertainmentAction(new EntertainmentDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
@@ -96,13 +97,15 @@ public class ChartResource extends ServerResource {
         }
         
         if(doWhat != null) {
-            switch (doWhat) {
+            switch (doWhat) {    
                                                    
                 case "EntertainmentFfxivQuestsByDate":
-                    Ffxiv ffxiv = new Ffxiv();
                     genericCharts = false;
-                    JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);             
-                    JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw);
+                    JSONArray gbd_Raw = getEntertainmentAction.getFfxivGilByDate(dbc);            
+                    JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);         
+                    JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);    
+                    JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw); 
+                    try { dynChart.LineChart(gbd_Glob); returnData += "Chart generated - FFXIV Gil By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //returnData += qbd_Glob.toString();
                     break;

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
-Updated: 26 Jan 2019
+Updated: 2 Feb 2019
  */
 
 package asWebRest.chartHelpers;
@@ -68,7 +68,32 @@ public class Ffxiv {
                 .put("props", this_Props);
         return this_Glob;
     }
+    
+    private JSONObject gilByDate(JSONArray dataIn) {
+        final String this_Name = "FFXIV Gil By Date";
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd")
+                .put("chartName", this_Name).put("chartFileName", "ffxivGilByDay")
+                .put("sName", "Gil").put("sColor", "Yellow")
+                .put("xLabel", "Date").put("yLabel", "Completed");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            int gil = thisObject.getInt("Gil");
+            this_Labels.put(thisObject.getString("Date"));
+            this_Data.put(gil);
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props);
+        return this_Glob;
+    }
 
     public JSONObject getByDate(JSONArray dataIn) { return byDate(dataIn); }
+    public JSONObject getGilByDate(JSONArray dataIn) { return gilByDate(dataIn); }
         
 }

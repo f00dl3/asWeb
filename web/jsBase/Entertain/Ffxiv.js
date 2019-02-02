@@ -2,7 +2,7 @@
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 24 Jan 2019
+Updated: 2 Feb 2019
 
  */
 
@@ -568,8 +568,11 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
     var rData = "<span id='charList'></span>" +
+            "<div class='UPop'>" +
             totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
-            "-- Mist Ward 1 Plot 39<br/>" +
+            "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
+            "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a>" +
+            "</div></div>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
             " [<a href='" + getBasePath("image") + "/ffxiv/LaNoscea.jpg' target='ffxivMap'>LAN</a>]" +
