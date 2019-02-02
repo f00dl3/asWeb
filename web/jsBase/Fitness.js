@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 26 Jan 2019
+Updated: 2 Feb 2019
  */
 
 var myHeight = 68;
@@ -274,7 +274,7 @@ function processFitnessAll(dataIn, autoMpg) {
                     "</div>";
         }
         cycDiv += "</div>";
-        if(isSet(tData.CycGeoJSON) && tData.CommonRoute === 0) { cycMap += getMapLinkString(tData.Date, "Route", "Cyc", commonRouteFlag, "OL"); }
+        if(isSet(tData.CycGeoJSON) /* && tData.CommonRoute === 0 */) { cycMap += getMapLinkString(tData.Date, "Route", "Cyc", commonRouteFlag, "OL"); }
         if(tData.isGPSCycJSON === true) { cycMap = getMapLinkString(tData.Date, "gpsJSON", "Cyc", commonRouteFlag, "OL"); }
         var runDiv = "Wearing " + tData.Shoe;
         if(isSet(tData.RSMile)) { runDiv = tData.RSMile + " miles wearing " + tData.Shoe; }
@@ -286,10 +286,10 @@ function processFitnessAll(dataIn, autoMpg) {
         }
         runDiv += "<br/>" + Math.round(tData.RunWalk * 1508.57) + " est. steps";
         var runMap = "";
-        if(isSet(tData.RunGeoJSON) && tData.CommonRoute === 0) { runMap += getMapLinkString(tData.Date, "Route", "Run", commonRouteFlag, "OL"); }
+        if(isSet(tData.RunGeoJSON) /* && tData.CommonRoute === 0 */) { runMap += getMapLinkString(tData.Date, "Route", "Run", commonRouteFlag, "OL"); }
         if(tData.isGPSRunJSON === true) { runMap = getMapLinkString(tData.Date, "gpsJSON", "Run", commonRouteFlag, "OL"); }
         var altMap = "";
-        if(isSet(tData.AltGeoJSON) && tData.CommonRoute === 0) { altMap += getMapLinkString(tData.Date, "Route", "Alt", commonRouteFlag, "OL"); }
+        if(isSet(tData.AltGeoJSON) /* && tData.CommonRoute === 0 */) { altMap += getMapLinkString(tData.Date, "Route", "Alt", commonRouteFlag, "OL"); }
         if(tData.isGPSCyc2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Cy2", commonRouteFlag, "OL"); }
         if(tData.isGPSRun2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Ru2", commonRouteFlag, "OL"); }
         var nutriBreakdown = "Breakdown unavailable!";
