@@ -120,6 +120,6 @@ public class Ffxiv {
 
     public JSONObject getByDate(JSONArray dataIn) { return byDate(dataIn); }
     public JSONObject getGilByDate(JSONArray dataIn) { return gilByDate(dataIn); }
-    public JSONObject getGilWorthByDate(JSONArray dataIn) { return gilByDate(dataIn); }
+    public JSONObject getGilWorthByDate(JSONArray dataIn) { return gilWorthByDate(dataIn); }
         
 }
