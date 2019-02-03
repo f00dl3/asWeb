@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
-Updated: 2 Feb 2019
+Updated: 3 Feb 2019
  */
 
 package asWebRest.chartHelpers;
@@ -79,26 +79,47 @@ public class Ffxiv {
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivGilByDay")
-                .put("sName", "Worth").put("sColor", "Yellow")
-                .put("s2Name", "Gil").put("s2Color", "Green")
+                .put("sName", "Gil").put("sColor", "Green")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             long gil = thisObject.getLong("Gil");
-            long worth = thisObject.getLong("Worth");
             this_Labels.put(thisObject.getString("Date"));
             this_Data.put(gil);
-            this_Data2.put(worth);
         }
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
-                .put("data2", this_Data2)
+                .put("props", this_Props);
+        return this_Glob;
+    }
+
+    private JSONObject gilWorthByDate(JSONArray dataIn) {
+        final String this_Name = "FFXIV Gil Worth By Date";
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd")
+                .put("chartName", this_Name).put("chartFileName", "ffxivGilWorthByDay")
+                .put("sName", "Worth").put("sColor", "Yellow")
+                .put("xLabel", "Date").put("yLabel", "Gil");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            long worth = thisObject.getLong("Worth");
+            this_Labels.put(thisObject.getString("Date"));
+            this_Data.put(worth);
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
                 .put("props", this_Props);
         return this_Glob;
     }
 
     public JSONObject getByDate(JSONArray dataIn) { return byDate(dataIn); }
     public JSONObject getGilByDate(JSONArray dataIn) { return gilByDate(dataIn); }
+    public JSONObject getGilWorthByDate(JSONArray dataIn) { return gilByDate(dataIn); }
         
 }

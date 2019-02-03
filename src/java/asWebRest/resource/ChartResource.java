@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 2 Feb 2019
+Updated: 3 Feb 2019
  */
 
 package asWebRest.resource;
@@ -103,11 +103,12 @@ public class ChartResource extends ServerResource {
                     genericCharts = false;
                     JSONArray gbd_Raw = getEntertainmentAction.getFfxivGilByDate(dbc);            
                     JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);         
-                    JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);    
+                    JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);           
+                    JSONObject gwbd_Glob = ffxiv.getGilWorthByDate(gbd_Raw);    
                     JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw); 
+                    try { dynChart.LineChart(gwbd_Glob); returnData += "Chart generated - FFXIV Gil Worth By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(gbd_Glob); returnData += "Chart generated - FFXIV Gil By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //returnData += qbd_Glob.toString();
                     break;
                     
                 case "FinanceBills":
