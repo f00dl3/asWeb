@@ -249,14 +249,15 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                         var imageHeight = imageAttribs[1];
                         //var imageWidthHeightAttribs = "IW=" + imageWidth + "&IH=" + imageHeight + "&";
                         var olResolution = imageAttribs[0] + "x" + imageAttribs[1];
-                        var olPicPath, thisYear;
+                        var olPicPath, oltPickPath, thisYear;
                         if(tm.WarDeploy === 1) {
                             thisYear = (tm.Path).substr((tm.Path).length - 2);
                             olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
+                            oltPicPath = "/asWeb/x/PicsL" + thisYear + "/thumb/" + tm.File;
                             thisAddCheckbox += /* "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" + 
                                     "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" + */
                                     "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
-                                    "<img class='" + firstThumbSize + "' src='" + olPicPath + "'/>";
+                                    "<img class='" + firstThumbSize + "' src='" + oltPicPath + "'/>";
                         } else {
                             thisYear = (tm.Path).substr((tm.Path).length - 4);
                             olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;

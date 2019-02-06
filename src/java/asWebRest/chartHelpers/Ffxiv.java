@@ -75,7 +75,6 @@ public class Ffxiv {
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
-        JSONArray this_Data2 = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivGilByDay")
