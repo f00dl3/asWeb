@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 28 Jun 2018
+Updated: 7 Feb 2019
  */
 
 var gActivity;
@@ -204,12 +204,6 @@ function addGpsToMap(map, inData, activity, metric) {
     var photoVector = new ol.source.Vector({});
     var j = 0;
     switch(metric) {
-        case "Altitude":
-            for(var i = 0; i < keyCount; i++) {
-                var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
-            }
-            break;
         case "Cadence":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
@@ -234,10 +228,17 @@ function addGpsToMap(map, inData, activity, metric) {
                 if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); } else { tMetrics.push(0); }
             }
             break;
-        case "Speed": default: 
+        case "Speed": 
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
                 if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); } else { tMetrics.push(0); }
+            }
+            break;
+        case "Altitude": default: 
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                console.log(tJson.AltitudeFt);
+                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
             }
             break;
     }
@@ -268,12 +269,12 @@ function addGpsToMap(map, inData, activity, metric) {
             if(isSet(tJson.TemperatureF)) { pu_Temps.push(tJson.TemperatureF); } else { pu_Temps.push(0); }
             if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
             switch(metric) {
-                case "Altitude": t2Metric = tJson.AltitudeFt; break;
                 case "Cadence": t2Metric = tJson.Cadence; break;
                 case "HeartRate": t2Metric = tJson.HeartRate; break;
                 case "Power": t2Metric = tJson.PowerWatts; break;
                 case "Temperature": t2Metric = tJson.TemperatureF; break;
-                case "Speed": default: t2Metric = tJson.SpeedMPH; break;
+                case "Speed": t2Metric = tJson.SpeedMPH; break;
+                case "Altitude": default: t2Metric = tJson.AltitudeFt; break;
             }
             if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                 try {
@@ -391,13 +392,13 @@ function getGpsFromDatabase(map, date, type) {
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for GPS Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    getGpsFromDatabasePart2(map, date, type);
                 });
     });
 }
 
 function getGpsFromDatabasePart2(map, date, type) {
-    var metric = "Speed";
+    var metric = "Altitude";
     aniPreload("on");
     var thePostData = {
         "doWhat": "getGpsJson",
