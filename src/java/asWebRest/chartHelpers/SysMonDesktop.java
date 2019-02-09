@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 4 Nov 2018
+Updated: 9 Feb 2019
  */
 
 package asWebRest.chartHelpers;
@@ -22,11 +22,13 @@ public class SysMonDesktop {
         JSONArray mJavaCodeLines_Labels = new JSONArray();
         JSONArray mJavaCodeLines_Data = new JSONArray();
         JSONArray mJavaCodeLines_Data2 = new JSONArray();
+        JSONArray mJavaCodeLines_Data3 = new JSONArray();
         mJavaCodeLines_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mJavaCodeLines_ChartName).put("chartFileName", "mJavaCodeLines")
                 .put("sName", "asUtils/java").put("sColor", "Blue")
-                .put("s2Name", "asWeb/TOTAL").put("s2Color", "Red")
+                .put("s2Name", "asWeb/total").put("s2Color", "Red")
+                .put("s3Name", "ALL CODE TOTAL").put("s3Color", "White")
                 .put("xLabel", "WalkTime").put("yLabel", "Lines");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -46,16 +48,19 @@ public class SysMonDesktop {
                     thisExpanded.getFloat("LOC_aswjJsp")
                 );
             } catch (Exception e) { }
+            float asTotal = asuJava + aswjTotal;
             mJavaCodeLines_asUtils = asuJava;
             mJavaCodeLines_asWebTotal = aswjTotal;
             mJavaCodeLines_Labels.put(walkTime);
             mJavaCodeLines_Data.put(mJavaCodeLines_asUtils);
             mJavaCodeLines_Data2.put(mJavaCodeLines_asWebTotal);
+            mJavaCodeLines_Data3.put(asTotal);
         }
         mJavaCodeLines_Glob
                 .put("labels", mJavaCodeLines_Labels)
                 .put("data", mJavaCodeLines_Data)
                 .put("data2", mJavaCodeLines_Data2)
+                .put("data3", mJavaCodeLines_Data3)
                 .put("props", mJavaCodeLines_Props);
         return mJavaCodeLines_Glob;
     }

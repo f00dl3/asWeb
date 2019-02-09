@@ -277,8 +277,9 @@ function addGpsToMap(map, inData, activity, metric) {
             console.log(tPhotoIcon);
         });
     }
+    var step = 2;
     for(var i = 0; i < keyCount; i++) {
-        if(i % 5 === 0) {
+        if(i % step === 0) {
             var t2Metric;
             var thisColor = 'gray';
             var tJson = gJsonData[i.toString()];
@@ -313,7 +314,7 @@ function addGpsToMap(map, inData, activity, metric) {
                         vectorSource.addFeature(tIconFeature);
                     } catch (err) {
                         console.log(
-                            "Error on " + j + "/~" + Math.round(keyCount/5) + " ---> " +
+                            "Error on " + j + "/~" + Math.round(keyCount/step) + " ---> " +
                             err.message + "(" + t2Metric + " @ " + tCoords[0] + "," + tCoords[1] + ")"
                         );
                     }
