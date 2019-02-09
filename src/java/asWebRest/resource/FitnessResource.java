@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Jun 2018
+Updated: 9 Feb 2019
  */
 
 package asWebRest.resource;
@@ -114,8 +114,12 @@ public class FitnessResource extends ServerResource {
                         switch(actType) {
                             case "Run": gpsData = getFitnessAction.getJsonLogRun(dbc, qParams); break;
                             case "Run2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                            case "Run3": gpsData = getFitnessAction.getJsonLogRun3(dbc, qParams); break;
+                            case "Run4": gpsData = getFitnessAction.getJsonLogRun4(dbc, qParams); break;
                             case "Cyc": gpsData = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
                             case "Cyc2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                            case "Cyc3": gpsData = getFitnessAction.getJsonLogCyc3(dbc, qParams); break;
+                            case "Cyc4": gpsData = getFitnessAction.getJsonLogCyc4(dbc, qParams); break;
                         }
                         mergedResults
                             .put("gpsLog", gpsData.toString())

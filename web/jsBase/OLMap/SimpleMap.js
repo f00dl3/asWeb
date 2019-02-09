@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 16 Dec 2018
+Updated: 9 Feb 2019
  */
 
 function postProcessOptions(map) {
@@ -21,7 +21,13 @@ function postProcessOptions(map) {
             case "RouteGeoJSONRun": getRouteFromDatabase(map, dataInput, "R"); break;
             case "RouteGPSAlt": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteGPSCyc": activity = "Cyc"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSCyc2": activity = "Cy2"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSCyc3": activity = "Cy3"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSCyc4": activity = "Cy4"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteGPSRun": activity = "Run"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSRun2": activity = "Ru2"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSRun3": activity = "Ru3"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
+            case "RouteGPSRun4": activity = "Ru4"; getGpsFromDatabase(map, dataInput, activity, defaultMetric); break;
             case "RouteHistory": getRouteHistoryFromDatabase(map); break;
             case "RoutePlan": getRoutePlanFromDatabase(map, dataInput); break;
             case "Wx": map.getView().setZoom(map.getView().getZoom() - 6); initWxMap(map); break;

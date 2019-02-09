@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 17 Jan 2019
+Updated: 9 Feb 2019
 */
 
 package asWebRest.dao;
@@ -64,7 +64,10 @@ public class FitnessDAO {
                 " f.ReelMow, f.MowNotes, f.Calories," +
                 " CASE WHEN f.gpsLogRun IS NULL THEN f.RunGeoJSON ELSE null END AS RunGeoJSON," +
                 " CASE WHEN f.gpsLogCyc IS NULL THEN f.CycGeoJSON ELSE null END AS CycGeoJSON," +
-                " CASE WHEN f.gpsLogRun2 IS NULL THEN f.AltGeoJSON ELSE null END AS AltGeoJSON," +
+                " CASE WHEN" +
+                "   f.gpsLogRun2 IS NULL AND f.gpsLogRun3 IS NULL AND f.gpsLogRun4 IS NULL AND" +
+                "   f.gpsLogCyc2 IS NULL AND f.gpsLogCyc2 IS NULL AND f.gpsLogCyc4 IS NULL" +
+                "   THEN f.AltGeoJSON ELSE null END AS AltGeoJSON," +
                 " f.Fat, f.Protein, f.Carbs, f.Sugar, f.Fiber, f.Cholest, f.Sodium, f.Water, f.FruitsVeggies," +
                 " f.TrackedTime, f.TrackedDist," +
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
@@ -75,7 +78,11 @@ public class FitnessDAO {
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
                 " CASE WHEN f.gpsLogCyc2 IS NOT NULL THEN true ELSE false END AS isGPSCyc2JSON," +
-                " CASE WHEN f.gpsLogRun2 IS NOT NULL THEN true ELSE false END AS isGPSRun2JSON" +
+                " CASE WHEN f.gpsLogRun2 IS NOT NULL THEN true ELSE false END AS isGPSRun2JSON," +
+                " CASE WHEN f.gpsLogCyc3 IS NOT NULL THEN true ELSE false END AS isGPSCyc3JSON," +
+                " CASE WHEN f.gpsLogRun3 IS NOT NULL THEN true ELSE false END AS isGPSRun3JSON," +
+                " CASE WHEN f.gpsLogCyc4 IS NOT NULL THEN true ELSE false END AS isGPSCyc4JSON," +
+                " CASE WHEN f.gpsLogRun4 IS NOT NULL THEN true ELSE false END AS isGPSRun4JSON," +
                 " FROM Core.Fitness f" +
                 " LEFT OUTER JOIN WxObs.CF6MCI cf6 ON f.Date = cf6.Date" +
                 " WHERE f.Date BETWEEN ? AND ? " +
@@ -135,8 +142,12 @@ public class FitnessDAO {
                     .put("Average", resultSet.getInt("Average"))
                     .put("isGPSCycJSON", resultSet.getBoolean("isGPSCycJSON"))
                     .put("isGPSCyc2JSON", resultSet.getBoolean("isGPSCyc2JSON"))
+                    .put("isGPSCyc3JSON", resultSet.getBoolean("isGPSCyc3JSON"))
+                    .put("isGPSCyc4JSON", resultSet.getBoolean("isGPSCyc4JSON"))
                     .put("isGPSRunJSON", resultSet.getBoolean("isGPSRunJSON"))
                     .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"))
+                    .put("isGPSRun3JSON", resultSet.getBoolean("isGPSRun3JSON"))
+                    .put("isGPSRun4JSON", resultSet.getBoolean("isGPSRun4JSON"))
                     .put("HoursGaming", resultSet.getDouble("HoursGaming"));
                 tContainer.put(tObject);
             }
@@ -489,6 +500,36 @@ public class FitnessDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+    
+    public JSONArray getJsonLogCyc3(Connection dbc, List<String> qParams) {
+        final String query_Fitness_jsonLogCyc3 = "SELECT gpsLogCyc3 as gpsLog FROM Fitness WHERE Date=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc3, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getJsonLogCyc4(Connection dbc, List<String> qParams) {
+        final String query_Fitness_jsonLogCyc4 = "SELECT gpsLogCyc4 as gpsLog FROM Fitness WHERE Date=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc4, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
        
     public JSONArray getJsonLogRun(Connection dbc, List<String> qParams) {
         final String query_Fitness_jsonLogRun = "SELECT gpsLogRun as gpsLog FROM Fitness WHERE Date=?;";
@@ -520,6 +561,37 @@ public class FitnessDAO {
         return tContainer;
     }
     
+    
+    public JSONArray getJsonLogRun3(Connection dbc, List<String> qParams) {
+        final String query_Fitness_jsonLogRun3 = "SELECT gpsLogRun3 as gpsLog FROM Fitness WHERE Date=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun3, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getJsonLogRun4(Connection dbc, List<String> qParams) {
+        final String query_Fitness_jsonLogRun4 = "SELECT gpsLogRun4 as gpsLog FROM Fitness WHERE Date=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun4, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+       
     public JSONArray getOverallStats(Connection dbc) {
         final String query_Fitness_OverallStats = "SELECT" +
                 " SUM(TrackedTime/60) AS TT," +

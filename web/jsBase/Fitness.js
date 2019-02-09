@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 2 Feb 2019
+Updated: 9 Feb 2019
  */
 
 var myHeight = 68;
@@ -176,9 +176,13 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
     switch(inAct) {
         case "Alt": longAct = "Alternate"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSRun"; break;
         case "Run": longAct = "Running"; letAct = "R"; icAct = inAct; newAction = "RouteGeoJSONRun"; gpsAction = "RouteGPSRun"; break;
-        case "Ru2": longAct = "Running 2"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSON"; gpsAction = "RouteGPSRun"; break;
+        case "Ru2": longAct = "Running 2"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSRun2"; break;
+        case "Ru3": longAct = "Running 3"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSRun3"; break;
+        case "Ru4": longAct = "Running 4"; letAct = "A"; icAct = "Run"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSRun4"; break;
         case "Cyc": longAct = "Cycling"; letAct = "C"; icAct= inAct; newAction = "RouteGeoJSONCyc"; gpsAction = "RouteGPSCyc";  break;
-        case "Cy2": longAct = "Cycling 2"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc"; break;
+        case "Cy2": longAct = "Cycling 2"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc2"; break;
+        case "Cy3": longAct = "Cycling 3"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc3"; break;
+        case "Cy4": longAct = "Cycling 4"; letAct = "A"; icAct = "Cyc"; newAction = "RouteGeoJSONAlt"; gpsAction = "RouteGPSCyc4"; break;
     }
     switch(inType) {
         case "gpsJSON": iconBack = getBasePath("icon") + "/ic_" + icAct.toLowerCase() + "J.jpeg"; typeDesc = "GPS JSON"; letAct = inAct; newAction = gpsAction; break;
@@ -290,8 +294,12 @@ function processFitnessAll(dataIn, autoMpg) {
         if(tData.isGPSRunJSON === true) { runMap = getMapLinkString(tData.Date, "gpsJSON", "Run", commonRouteFlag, "OL"); }
         var altMap = "";
         if(isSet(tData.AltGeoJSON) /* && tData.CommonRoute === 0 */) { altMap += getMapLinkString(tData.Date, "Route", "Alt", commonRouteFlag, "OL"); }
-        if(tData.isGPSCyc2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Cy2", commonRouteFlag, "OL"); }
-        if(tData.isGPSRun2JSON === true) { altMap = getMapLinkString(tData.Date, "gpsJSON", "Ru2", commonRouteFlag, "OL"); }
+        if(tData.isGPSCyc2JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Cy2", commonRouteFlag, "OL") + " "; }
+        if(tData.isGPSCyc3JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Cy3", commonRouteFlag, "OL") + " "; }
+        if(tData.isGPSCyc4JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Cy4", commonRouteFlag, "OL") + " "; }
+        if(tData.isGPSRun2JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Ru2", commonRouteFlag, "OL") + " "; }
+        if(tData.isGPSRun3JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Ru3", commonRouteFlag, "OL") + " "; }
+        if(tData.isGPSRun4JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Ru4", commonRouteFlag, "OL") + " "; }
         var nutriBreakdown = "Breakdown unavailable!";
         var shoeClass = "";
         if(isSet(tData.RSMile)) { shoeClass = colorShoeMile(tData.RSMile); }
