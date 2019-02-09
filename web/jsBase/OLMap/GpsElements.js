@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 7 Feb 2019
+Updated: 8 Feb 2019
  */
 
 var gActivity;
@@ -204,6 +204,16 @@ function addGpsToMap(map, inData, activity, metric) {
     var photoVector = new ol.source.Vector({});
     var j = 0;
     switch(metric) {
+        case "Altitude":
+            for(var i = 0; i < keyCount; i++) {
+                var tJson = gJsonData[i.toString()];
+                try {
+                    if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
+                } catch (err) { 
+                    err.message;
+                }
+            }
+            break;
         case "Cadence":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
@@ -244,21 +254,11 @@ function addGpsToMap(map, inData, activity, metric) {
                 }
             }
             break;
-        case "Speed": 
+        case "Speed": default: 
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
                 try {
                     if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); } else { tMetrics.push(0); }
-                } catch (err) { 
-                    err.message;
-                }
-            }
-            break;
-        case "Altitude": default: 
-            for(var i = 0; i < keyCount; i++) {
-                var tJson = gJsonData[i.toString()];
-                try {
-                    if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
                 } catch (err) { 
                     err.message;
                 }
@@ -281,9 +281,9 @@ function addGpsToMap(map, inData, activity, metric) {
         if(i % 5 === 0) {
             var t2Metric;
             var thisColor = 'gray';
-            var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = gJsonData[i.toString()];
             try { 
+                var tCoords = [ tJson.Longitude , tJson.Latitude ];
                 if(isSet(tJson.AltitudeFt)) { pu_Altitude.push(tJson.AltitudeFt); } else { pu_Altitude.push(0); }
                 if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0);  }
                 if(isSet(tJson.DistTotMiles)) { pu_Dists.push(tJson.DistTotMiles); } else { pu_Dists.push(0); }
@@ -293,12 +293,12 @@ function addGpsToMap(map, inData, activity, metric) {
                 if(isSet(tJson.TemperatureF)) { pu_Temps.push(tJson.TemperatureF); } else { pu_Temps.push(0); }
                 if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
                 switch(metric) {
+                    case "Altitude": t2Metric = tJson.AltitudeFt; break;
                     case "Cadence": t2Metric = tJson.Cadence; break;
                     case "HeartRate": t2Metric = tJson.HeartRate; break;
                     case "Power": t2Metric = tJson.PowerWatts; break;
                     case "Temperature": t2Metric = tJson.TemperatureF; break;
-                    case "Speed": t2Metric = tJson.SpeedMPH; break;
-                    case "Altitude": default: t2Metric = tJson.AltitudeFt; break;
+                    case "Speed": default: t2Metric = tJson.SpeedMPH; break;
                 }
                 if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
                     try {
