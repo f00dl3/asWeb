@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 1 Jan 2019
+Updated: 9 Feb 2019
 */
 
 package asWebRest.dao;
@@ -176,6 +176,7 @@ public class FinanceDAO {
         final String query_FBook_ATrackPrep2 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.Books), Checked=CURDATE() WHERE Related='Books';";
         final String query_FBook_ATrackPrep3 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.DecorTools), Checked=CURDATE() WHERE Related='DecorTools';";
         final String query_FBook_ATrackPrep4 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Count)*7 FROM Core.Licenses), Checked=CURDATE() WHERE Related='Licenses';";
+        final String query_FBook_ATrackPrep5 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Asset)*0.99 FROM Core.MediaServer), Checked=CURDATE() WHERE Related='Media';";
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked, PendingDonation," +
                 " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
@@ -183,6 +184,7 @@ public class FinanceDAO {
         try { String rsB = wc.q2do1c(dbc, query_FBook_ATrackPrep2, null); } catch (Exception e) { e.printStackTrace(); }
         try { String rsC = wc.q2do1c(dbc, query_FBook_ATrackPrep3, null); } catch (Exception e) { e.printStackTrace(); }
         try { String rsD = wc.q2do1c(dbc, query_FBook_ATrackPrep4, null); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsE = wc.q2do1c(dbc, query_FBook_ATrackPrep5, null); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ATrack, null);
             while (resultSet.next()) { 
