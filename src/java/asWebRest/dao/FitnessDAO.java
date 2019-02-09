@@ -65,8 +65,8 @@ public class FitnessDAO {
                 " CASE WHEN f.gpsLogRun IS NULL THEN f.RunGeoJSON ELSE null END AS RunGeoJSON," +
                 " CASE WHEN f.gpsLogCyc IS NULL THEN f.CycGeoJSON ELSE null END AS CycGeoJSON," +
                 " CASE WHEN" +
-                "   f.gpsLogRun2 IS NULL AND f.gpsLogRun3 IS NULL AND f.gpsLogRun4 IS NULL AND" +
-                "   f.gpsLogCyc2 IS NULL AND f.gpsLogCyc2 IS NULL AND f.gpsLogCyc4 IS NULL" +
+                "   (f.gpsLogRun2 IS NULL AND f.gpsLogRun3 IS NULL AND f.gpsLogRun4 IS NULL AND" +
+                "   f.gpsLogCyc2 IS NULL AND f.gpsLogCyc3 IS NULL AND f.gpsLogCyc4 IS NULL)" +
                 "   THEN f.AltGeoJSON ELSE null END AS AltGeoJSON," +
                 " f.Fat, f.Protein, f.Carbs, f.Sugar, f.Fiber, f.Cholest, f.Sodium, f.Water, f.FruitsVeggies," +
                 " f.TrackedTime, f.TrackedDist," +
@@ -82,7 +82,7 @@ public class FitnessDAO {
                 " CASE WHEN f.gpsLogCyc3 IS NOT NULL THEN true ELSE false END AS isGPSCyc3JSON," +
                 " CASE WHEN f.gpsLogRun3 IS NOT NULL THEN true ELSE false END AS isGPSRun3JSON," +
                 " CASE WHEN f.gpsLogCyc4 IS NOT NULL THEN true ELSE false END AS isGPSCyc4JSON," +
-                " CASE WHEN f.gpsLogRun4 IS NOT NULL THEN true ELSE false END AS isGPSRun4JSON," +
+                " CASE WHEN f.gpsLogRun4 IS NOT NULL THEN true ELSE false END AS isGPSRun4JSON" +
                 " FROM Core.Fitness f" +
                 " LEFT OUTER JOIN WxObs.CF6MCI cf6 ON f.Date = cf6.Date" +
                 " WHERE f.Date BETWEEN ? AND ? " +

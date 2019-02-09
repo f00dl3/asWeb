@@ -113,13 +113,13 @@ public class FitnessResource extends ServerResource {
                         JSONArray relatedPhotos = getFitnessAction.getRelatedPhotos(dbc, qParams);
                         switch(actType) {
                             case "Run": gpsData = getFitnessAction.getJsonLogRun(dbc, qParams); break;
-                            case "Run2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
-                            case "Run3": gpsData = getFitnessAction.getJsonLogRun3(dbc, qParams); break;
-                            case "Run4": gpsData = getFitnessAction.getJsonLogRun4(dbc, qParams); break;
+                            case "Ru2": gpsData = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                            case "Ru3": gpsData = getFitnessAction.getJsonLogRun3(dbc, qParams); break;
+                            case "Ru4": gpsData = getFitnessAction.getJsonLogRun4(dbc, qParams); break;
                             case "Cyc": gpsData = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
-                            case "Cyc2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
-                            case "Cyc3": gpsData = getFitnessAction.getJsonLogCyc3(dbc, qParams); break;
-                            case "Cyc4": gpsData = getFitnessAction.getJsonLogCyc4(dbc, qParams); break;
+                            case "Cy2": gpsData = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                            case "Cy3": gpsData = getFitnessAction.getJsonLogCyc3(dbc, qParams); break;
+                            case "Cy4": gpsData = getFitnessAction.getJsonLogCyc4(dbc, qParams); break;
                         }
                         mergedResults
                             .put("gpsLog", gpsData.toString())
