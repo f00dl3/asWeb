@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 3 Feb 2019
+Updated: 9 Feb 2019
  */
 
 package asWebRest.resource;
@@ -150,9 +150,13 @@ public class ChartResource extends ServerResource {
                     final String activityType = argsInForm.getFirstValue("activity");
                     switch(activityType) {
                         case "Cyc": gpsDataGlob = getFitnessAction.getJsonLogCyc(dbc, qParams); break;
-                        case "Cyc2": gpsDataGlob = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                        case "Cy2": gpsDataGlob = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                        case "Cy3": gpsDataGlob = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
+                        case "Cy4": gpsDataGlob = getFitnessAction.getJsonLogCyc2(dbc, qParams); break;
                         case "Run": gpsDataGlob = getFitnessAction.getJsonLogRun(dbc, qParams); break;
-                        case "Run2": gpsDataGlob = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                        case "Ru2": gpsDataGlob = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                        case "Ru3": gpsDataGlob = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
+                        case "Ru4": gpsDataGlob = getFitnessAction.getJsonLogRun2(dbc, qParams); break;
                         default: gpsDataGlob = getFitnessAction.getJsonLogRun(dbc, qParams); break;
                     }
                     GpsData gpsData = new GpsData();
