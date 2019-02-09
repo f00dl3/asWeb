@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 17 Jun 2018
-Updated: 19 Jun 2018
+Updated: 9 Feb 2019
  */
 
 package asWebRest.chartHelpers;
@@ -31,8 +31,8 @@ public class GpsData {
             JSONObject tGpsLog = thisObject.getJSONObject("gpsLog");
             for(int j = 0; j < tGpsLog.length(); j++) {
                 String jStr = String.valueOf(j);
-                JSONObject tLog = tGpsLog.getJSONObject(jStr);
                 try {
+                    JSONObject tLog = tGpsLog.getJSONObject(jStr);
                     if(wc.isSet(Double.toString(tLog.getDouble(dataPoint)))) { data.put(tLog.getDouble(dataPoint)); } else { data.put(0.00); }
                 } catch (Exception e) {
                     data.put(0.00);
