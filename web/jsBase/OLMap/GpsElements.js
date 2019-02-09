@@ -207,38 +207,61 @@ function addGpsToMap(map, inData, activity, metric) {
         case "Cadence":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.Cadence)) { tMetrics.push(Number(tJson.Cadence)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.Cadence)) { tMetrics.push(Number(tJson.Cadence)); } else { tMetrics.push(0); }   
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
         case "HeartRate":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.HeartRate)) { tMetrics.push(Number(tJson.HeartRate)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.HeartRate)) { tMetrics.push(Number(tJson.HeartRate)); } else { tMetrics.push(0); }   
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
         case "Power":
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.PowerWatts)) { tMetrics.push(Number(tJson.PowerWatts)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.PowerWatts)) { tMetrics.push(Number(tJson.PowerWatts)); } else { tMetrics.push(0); }   
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
         case "Temperature":
             for (var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.TemperatureF)) { tMetrics.push(Number(tJson.TemperatureF)); } else { tMetrics.push(0); }
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
         case "Speed": 
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.SpeedMPH)) { tMetrics.push(Number(tJson.SpeedMPH)); } else { tMetrics.push(0); }
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
         case "Altitude": default: 
             for(var i = 0; i < keyCount; i++) {
                 var tJson = gJsonData[i.toString()];
-                console.log(tJson.AltitudeFt);
-                if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
+                try {
+                    if(isSet(tJson.AltitudeFt)) { tMetrics.push(Number(tJson.AltitudeFt)); } else { tMetrics.push(0); }
+                } catch (err) { 
+                    err.message;
+                }
             }
             break;
     }
@@ -260,40 +283,44 @@ function addGpsToMap(map, inData, activity, metric) {
             var thisColor = 'gray';
             var tCoords = [ tJson.Longitude , tJson.Latitude ];
             var tJson = gJsonData[i.toString()];
-            if(isSet(tJson.AltitudeFt)) { pu_Altitude.push(tJson.AltitudeFt); } else { pu_Altitude.push(0); }
-            if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0);  }
-            if(isSet(tJson.DistTotMiles)) { pu_Dists.push(tJson.DistTotMiles); } else { pu_Dists.push(0); }
-            if(isSet(tJson.HeartRate)) { pu_Heart.push(tJson.HeartRate); } else { pu_Heart.push(0); }
-            if(isSet(tJson.PowerWatts)) { pu_Power.push(tJson.PowerWatts); } else { pu_Power.push(0); }
-            if(isSet(tJson.SpeedMPH)) { pu_Speed.push(tJson.SpeedMPH); } else { pu_Speed.push(0); }
-            if(isSet(tJson.TemperatureF)) { pu_Temps.push(tJson.TemperatureF); } else { pu_Temps.push(0); }
-            if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
-            switch(metric) {
-                case "Cadence": t2Metric = tJson.Cadence; break;
-                case "HeartRate": t2Metric = tJson.HeartRate; break;
-                case "Power": t2Metric = tJson.PowerWatts; break;
-                case "Temperature": t2Metric = tJson.TemperatureF; break;
-                case "Speed": t2Metric = tJson.SpeedMPH; break;
-                case "Altitude": default: t2Metric = tJson.AltitudeFt; break;
-            }
-            if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
-                try {
-                    coords.push(tCoords);
-                    var tIconFeature = addGpsMarkers(map, tJson, j);
-                    if(metric === "Temperature") {
-                        thisColor = styleTemp(t2Metric, true);
-                    } else {
-                        thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
-                    }
-                    tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
-                    vectorSource.addFeature(tIconFeature);
-                } catch (err) {
-                    console.log(
-                        "Error on " + j + "/~" + Math.round(keyCount/5) + " ---> " +
-                        err.message + "(" + t2Metric + " @ " + tCoords[0] + "," + tCoords[1] + ")"
-                    );
+            try { 
+                if(isSet(tJson.AltitudeFt)) { pu_Altitude.push(tJson.AltitudeFt); } else { pu_Altitude.push(0); }
+                if(isSet(tJson.Cadence)) { pu_Cadence.push(tJson.Cadence); } else { pu_Cadence.push(0);  }
+                if(isSet(tJson.DistTotMiles)) { pu_Dists.push(tJson.DistTotMiles); } else { pu_Dists.push(0); }
+                if(isSet(tJson.HeartRate)) { pu_Heart.push(tJson.HeartRate); } else { pu_Heart.push(0); }
+                if(isSet(tJson.PowerWatts)) { pu_Power.push(tJson.PowerWatts); } else { pu_Power.push(0); }
+                if(isSet(tJson.SpeedMPH)) { pu_Speed.push(tJson.SpeedMPH); } else { pu_Speed.push(0); }
+                if(isSet(tJson.TemperatureF)) { pu_Temps.push(tJson.TemperatureF); } else { pu_Temps.push(0); }
+                if(isSet(tJson.TrainingTimeTotalSec)) { pu_Times.push(tJson.TrainingTimeTotalSec); } else { pu_Times.push(0); }
+                switch(metric) {
+                    case "Cadence": t2Metric = tJson.Cadence; break;
+                    case "HeartRate": t2Metric = tJson.HeartRate; break;
+                    case "Power": t2Metric = tJson.PowerWatts; break;
+                    case "Temperature": t2Metric = tJson.TemperatureF; break;
+                    case "Speed": t2Metric = tJson.SpeedMPH; break;
+                    case "Altitude": default: t2Metric = tJson.AltitudeFt; break;
                 }
-                j++;
+                if(isSet(t2Metric) && isSet(tCoords[0]) && isSet(tCoords[1])) {
+                    try {
+                        coords.push(tCoords);
+                        var tIconFeature = addGpsMarkers(map, tJson, j);
+                        if(metric === "Temperature") {
+                            thisColor = styleTemp(t2Metric, true);
+                        } else {
+                            thisColor = autoColorScale(t2Metric, tMetricsMax, tMetricsMin, tMetricsAvg);
+                        }
+                        tIconFeature.setStyle(svgIconStyle("c", 15, thisColor, 1, null, null));
+                        vectorSource.addFeature(tIconFeature);
+                    } catch (err) {
+                        console.log(
+                            "Error on " + j + "/~" + Math.round(keyCount/5) + " ---> " +
+                            err.message + "(" + t2Metric + " @ " + tCoords[0] + "," + tCoords[1] + ")"
+                        );
+                    }
+                    j++;
+                }
+            } catch (err) {
+                err.message;
             }
         }
     }
@@ -413,6 +440,7 @@ function getGpsFromDatabasePart2(map, date, type) {
             }).then(
                 function(data) {
                     aniPreload("off");
+                    // console.log(data); << works Edge 520+
                     addGpsToMap(map, data, type, metric);
                 },
                 function(error) { 
