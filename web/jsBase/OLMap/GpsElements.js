@@ -425,7 +425,7 @@ function getGpsFromDatabase(map, date, type) {
 }
 
 function getGpsFromDatabasePart2(map, date, type) {
-    var metric = "Altitude";
+    var metric = "Speed";
     aniPreload("on");
     var thePostData = {
         "doWhat": "getGpsJson",

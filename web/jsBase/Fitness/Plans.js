@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
-Updated: 20 Jun 2018
+Updated: 8 Feb 2019
  */
 
 function actOnCommitRoute(event) {
@@ -29,6 +29,7 @@ function fileUploadGenerator() {
 
 function fitnessPlans(dataIn) {
     var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
+            "<a href='https://connect.garmin.com/' target='new'>Garmin Connect Website</a><br/>" +
             "<form id='RoutePlanForm'>" +
             "<button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button>" +
             "<button class='UButton' id='UploadGPS' name='UploadGPS' value='Yes'>Process GPS</button>" +
