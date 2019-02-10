@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Feb 2019
+Updated: 10 Feb 2019
  */
 
 package asWebRest.resource;
@@ -166,7 +166,7 @@ public class FitnessResource extends ServerResource {
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
                     String[] args = {};
-                    asUtils.GPSBulk.main(args);
+                    asUtilsPorts.GPSBulk.main(args);
                     returnData += "Completed!";
                     break;
                     
