@@ -441,7 +441,6 @@ function getGpsFromDatabasePart2(map, date, type) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    // console.log(data); << works Edge 520+
                     addGpsToMap(map, data, type, metric);
                 },
                 function(error) { 
@@ -497,7 +496,6 @@ function getRouteFromDatabase(map, date, type) {
                         case "A": addLineStringToMap(map, JSON.parse(gjd.AltGeoJSON), "Alt route on " + date); break;
                     }
                     if(isSet(photoRelations)) {
-                        // Does not fully work yet, 6/23/18
                         var photoVector = new ol.source.Vector({});
                         photoRelations.forEach(function (photoRelation) {
                             var tPhotoIcon = addPhotoMarker(map, photoRelation);

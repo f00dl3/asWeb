@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    16 Dec 2018
+    Updated:    10 Feb 2019
     Author     : astump
 --%>
 
@@ -47,6 +47,7 @@
     
     String[] fitScripts = {
         "Fitness/Calories",
+        "Fitness/GarminConnectApiSynch",
         "Fitness/Plans",
         "Fitness/Today"
     };
