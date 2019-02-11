@@ -166,7 +166,7 @@ public class FitnessResource extends ServerResource {
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
                     String[] args = {};
-                    asUtilsPorts.GPSBulk.main(args);
+                    asUtils.GPSBulk.main(args);
                     returnData += "Completed!";
                     break;
                     

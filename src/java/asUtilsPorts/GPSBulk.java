@@ -10,8 +10,8 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import asUtilsPorts.GPSParse;
 import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.GPSParse;
 
 public class GPSBulk {
 
