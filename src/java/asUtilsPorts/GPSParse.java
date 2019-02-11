@@ -1,7 +1,8 @@
 /* 
 by Anthony Stump
 Created: 4 Sep 2017
-Updated: 10 Feb 2019
+Ported to asWeb: 10 Feb 2019
+Updated: 11 Feb 2019
 */
 
 package asUtilsPorts;
@@ -351,7 +352,7 @@ public class GPSParse {
                                                 break;
                                                 
                                             case "fractional_cadence":
-                                                int fCadence = Integer.parseInt(thisSetValue);
+                                                double fCadence = Double.parseDouble(thisSetValue);
                                                 gpsData.put("FractionalCadence", fCadence);
                                                 break;
                                                 
