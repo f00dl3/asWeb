@@ -253,10 +253,11 @@ public class GPSParse {
                         csvScanner = new Scanner(csvOutFile);
                         while(csvScanner.hasNext()) {			
                             String sLine = csvScanner.nextLine();
-                            if(sLine.contains("record")) {
+                            if(sLine.contains("Data,12,record")) {
                                 
                                 jsonLogIterator++;
 
+                                boolean errorHitOnLatLon = false;
                                 double latitude = 0.0;
                                 double longitude = 0.0;
                                 String logNo = Integer.toString(jsonLogIterator);
@@ -299,12 +300,16 @@ public class GPSParse {
                                                 break;
                                                 
                                             case "position_lat":
+                                                System.out.println(thisSetValue); 
+                                                if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
                                                 latitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
                                                 gpsData.put("Latitude", latitude); 
                                                 break;
                                                 
                                             case "position_long":
+                                                System.out.println(thisSetValue); 
                                                 longitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
+                                                if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
                                                 gpsData.put("Longitude", longitude);
                                                 break;
                                                 
@@ -377,16 +382,17 @@ public class GPSParse {
                                     
                                 }
                                 
-                                geoJSONtrace += "["+longitude+","+latitude+"],";
+                                if(!errorHitOnLatLon) { geoJSONtrace += "["+longitude+","+latitude+"],"; }
                                 String thisJSONstring = gpsLog.toString().substring(1);
                                 thisJSONstring = thisJSONstring.substring(0, thisJSONstring.length()-1)+",";
                                 if(thisJSONstring.equals("\""+logNo+"\":{},")) {
-                                        System.out.println("Empty JSON!");
+                                        System.out.println("Empty JSON or bad GPS data!");
                                 } else {
                                         fullGPSjson += thisJSONstring;
+                                        System.out.println(logNo + " - " + geoJSONtrace);
                                 }
                                 
-                                csvOutFile.delete();
+                                //csvOutFile.delete();
 
                             }
                         }
