@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 11 Feb 2019
+Updated: 12 Feb 2019
 */
 
 package asUtilsPorts;
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -253,7 +254,8 @@ public class GPSParse {
                         csvScanner = new Scanner(csvOutFile);
                         while(csvScanner.hasNext()) {			
                             String sLine = csvScanner.nextLine();
-                            if(sLine.contains("Data,14,record")) {
+                            
+                            if(Pattern.compile("Data.*record.*timestamp").matcher(sLine).find()) {
                                 
                                 jsonLogIterator++;
 
@@ -273,112 +275,120 @@ public class GPSParse {
                                 
                                 for (int i = 0; i < (thisLine.length-3); i = i + cPr) {
                                     
-                                    String thisDataSet = "tRec: " + tRec + ", i: " + i + " || " +
-                                            "p: " + ((tRec*cPr)+0) + ", d: " + (thisLine[(tRec*cPr)+0]) + " [k] | " +
-                                            "p: " + ((tRec*cPr)+1) + ", d: " + (thisLine[(tRec*cPr)+1]) + " [v] | " +
-                                            "p: " + ((tRec*cPr)+2) + ", d: " + (thisLine[(tRec*cPr)+2]) + " [u];";
-                                    String thisSetKey = (thisLine[(tRec*cPr)+0]);
-                                    String thisSetValue = (thisLine[(tRec*cPr)+1].replaceAll("\"",""));
+                                    try {
+                                        
+                                        String thisDataSet = "tRec: " + tRec + ", i: " + i + " || " +
+                                                "p: " + ((tRec*cPr)+0) + ", d: " + (thisLine[(tRec*cPr)+0]) + " [k] | " +
+                                                "p: " + ((tRec*cPr)+1) + ", d: " + (thisLine[(tRec*cPr)+1]) + " [v] | " +
+                                                "p: " + ((tRec*cPr)+2) + ", d: " + (thisLine[(tRec*cPr)+2]) + " [u];";
+                                        String thisSetKey = (thisLine[(tRec*cPr)+0]);
+                                        String thisSetValue = (thisLine[(tRec*cPr)+1].replaceAll("\"",""));
 
-                                    gpsData.put("SpeedSource", "gps");
-                                    
-                                    if(StumpJunk.isSetNotZero(thisSetValue)) {
-                                        
-                                        switch(thisSetKey) {
-                                            
-                                            case "timestamp": 
-                                                long trainTime = Long.parseLong(thisSetValue)*100;
-                                                long eTrainTime = garminTrainTimeOffset + trainTime;
-                                                switch(jsonLogIterator) {
-                                                    case 1: case 2: initTrainTime = trainTime; trainTimeTot = 0; break;
-                                                    default: trainTimeTot = trainTime - initTrainTime; break;
-                                                }
-                                                gpsData.put("GarminTime", trainTime);
-                                                gpsData.put("TrainingTime", eTrainTime);
-                                                gpsData.put("TrainingTimeTotalSec", trainTimeTot);
-                                                trackedSeconds.add(trainTimeTot);
-                                                break;
-                                                
-                                            case "position_lat":
-                                                //System.out.println(thisSetValue); 
-                                                if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
-                                                latitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
-                                                gpsData.put("Latitude", latitude); 
-                                                break;
-                                                
-                                            case "position_long":
-                                                //System.out.println(thisSetValue); 
-                                                longitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
-                                                if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
-                                                gpsData.put("Longitude", longitude);
-                                                break;
-                                                
-                                            case "distance":
-                                                double distAbsMi = ((Double.parseDouble(thisSetValue))/1000)*0.621;
-                                                gpsData.put("DistTotMiles", distAbsMi);
-                                                miles.add(distAbsMi);
-                                                break;
-                                                
-                                            case "altitude":
-                                                double altFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
-                                                gpsData.put("AltitudeFt", altFt);
-                                                break;
-                                                
-                                            case "enhanced_altitude":
-                                                double eAltFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
-                                                gpsData.put("EnhancedAltitudeFt", eAltFt);
-                                                break;
-                                                
-                                            case "speed":
-                                                double speedMPH = Double.parseDouble(thisSetValue)*2.237;
-                                                gpsData.put("SpeedMPH", speedMPH); intSpeeds.add(speedMPH);
-                                                break;
-                                                
-                                            case "enhanced_speed":
-                                                double eSpeedMPH = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
-                                                gpsData.put("EnhancedSpeedMPH", eSpeedMPH);
-                                                break;
-                                                
-                                            case "heart_rate":
-                                                int heartrate = Integer.parseInt(thisSetValue);
-                                                gpsData.put("HeartRate", heartrate);
-                                                heartRates.add(heartrate);
-                                                break;
-                                                
-                                            case "temperature":
-                                                double tempF = StumpJunk.tempC2F(Double.parseDouble(thisSetValue));
-                                                gpsData.put("TemperatureF", tempF);
-                                                break;
-                                                
-                                            case "cadence":
-                                                int cadence = Integer.parseInt(thisSetValue);
-                                                gpsData.put("Cadence", cadence);
-                                                cadences.add(cadence);
-                                                break;
-                                                
-                                            case "fractional_cadence":
-                                                double fCadence = Double.parseDouble(thisSetValue);
-                                                gpsData.put("FractionalCadence", fCadence);
-                                                break;
-                                                
-                                            case "power":
-                                                double powerWatts = Double.parseDouble(thisSetValue);
-                                                gpsData.put("PowerWatts", powerWatts);
-                                                wattPowers.add(powerWatts);
-                                                break;
-                                                
-                                            default: break;
-                                              
+                                        gpsData.put("SpeedSource", "gps");
+
+                                        if(StumpJunk.isSetNotZero(thisSetValue)) {
+
+                                            switch(thisSetKey) {
+
+                                                case "timestamp": 
+                                                    long trainTime = Long.parseLong(thisSetValue)*100;
+                                                    long eTrainTime = garminTrainTimeOffset + trainTime;
+                                                    switch(jsonLogIterator) {
+                                                        case 1: case 2: initTrainTime = trainTime; trainTimeTot = 0; break;
+                                                        default: trainTimeTot = trainTime - initTrainTime; break;
+                                                    }
+                                                    gpsData.put("GarminTime", trainTime);
+                                                    gpsData.put("TrainingTime", eTrainTime);
+                                                    gpsData.put("TrainingTimeTotalSec", trainTimeTot);
+                                                    trackedSeconds.add(trainTimeTot);
+                                                    break;
+
+                                                case "position_lat":
+                                                    //System.out.println(thisSetValue); 
+                                                    if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
+                                                    latitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
+                                                    gpsData.put("Latitude", latitude); 
+                                                    break;
+
+                                                case "position_long":
+                                                    //System.out.println(thisSetValue); 
+                                                    longitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
+                                                    if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
+                                                    gpsData.put("Longitude", longitude);
+                                                    break;
+
+                                                case "distance":
+                                                    double distAbsMi = ((Double.parseDouble(thisSetValue))/1000)*0.621;
+                                                    gpsData.put("DistTotMiles", distAbsMi);
+                                                    miles.add(distAbsMi);
+                                                    break;
+
+                                                case "altitude":
+                                                    double altFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    gpsData.put("AltitudeFt", altFt);
+                                                    break;
+
+                                                case "enhanced_altitude":
+                                                    double eAltFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    gpsData.put("EnhancedAltitudeFt", eAltFt);
+                                                    break;
+
+                                                case "speed":
+                                                    double speedMPH = Double.parseDouble(thisSetValue)*2.237;
+                                                    gpsData.put("SpeedMPH", speedMPH); intSpeeds.add(speedMPH);
+                                                    break;
+
+                                                case "enhanced_speed":
+                                                    double eSpeedMPH = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    gpsData.put("EnhancedSpeedMPH", eSpeedMPH);
+                                                    break;
+
+                                                case "heart_rate":
+                                                    int heartrate = Integer.parseInt(thisSetValue);
+                                                    gpsData.put("HeartRate", heartrate);
+                                                    heartRates.add(heartrate);
+                                                    break;
+
+                                                case "temperature":
+                                                    double tempF = StumpJunk.tempC2F(Double.parseDouble(thisSetValue));
+                                                    gpsData.put("TemperatureF", tempF);
+                                                    break;
+
+                                                case "cadence":
+                                                    int cadence = Integer.parseInt(thisSetValue);
+                                                    gpsData.put("Cadence", cadence);
+                                                    cadences.add(cadence);
+                                                    break;
+
+                                                case "fractional_cadence":
+                                                    double fCadence = Double.parseDouble(thisSetValue);
+                                                    gpsData.put("FractionalCadence", fCadence);
+                                                    break;
+
+                                                case "power":
+                                                    double powerWatts = Double.parseDouble(thisSetValue);
+                                                    gpsData.put("PowerWatts", powerWatts);
+                                                    wattPowers.add(powerWatts);
+                                                    break;
+
+                                                default: break;
+
+                                            }
+
+
+                                        } else {
+
+                                            System.out.println("ERROR ON --> " + thisDataSet);
+
                                         }
-                                        	
-                                        
-                                    } else {
-                                        
-                                        System.out.println("ERROR ON --> " + thisDataSet);
-                                        
-                                    }
                                     
                                     tRec++;
+                                    
+                                    } catch (Exception e) { 
+                                        
+                                        e.printStackTrace();
+                                        
+                                    }
                                     
                                 }
                                 
