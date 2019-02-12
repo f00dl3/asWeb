@@ -253,7 +253,7 @@ public class GPSParse {
                         csvScanner = new Scanner(csvOutFile);
                         while(csvScanner.hasNext()) {			
                             String sLine = csvScanner.nextLine();
-                            if(sLine.contains("Data,12,record")) {
+                            if(sLine.contains("Data,14,record")) {
                                 
                                 jsonLogIterator++;
 
@@ -300,14 +300,14 @@ public class GPSParse {
                                                 break;
                                                 
                                             case "position_lat":
-                                                System.out.println(thisSetValue); 
+                                                //System.out.println(thisSetValue); 
                                                 if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
                                                 latitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
                                                 gpsData.put("Latitude", latitude); 
                                                 break;
                                                 
                                             case "position_long":
-                                                System.out.println(thisSetValue); 
+                                                //System.out.println(thisSetValue); 
                                                 longitude = (Double.parseDouble(thisSetValue))*(180/Math.pow(2,31));
                                                 if(thisSetValue.contains("E-")) { errorHitOnLatLon = true; }
                                                 gpsData.put("Longitude", longitude);
