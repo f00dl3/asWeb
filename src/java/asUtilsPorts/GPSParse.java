@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 12 Feb 2019
+Updated: 13 Feb 2019
 */
 
 package asUtilsPorts;
@@ -276,6 +276,7 @@ public class GPSParse {
                                 
                                 int cPr = 3;
                                 int tRec = 0;
+                                int unks = 0;
                                 
                                 for (int i = 0; i < (thisLine.length-3); i = i + cPr) {
                                     
@@ -374,6 +375,12 @@ public class GPSParse {
                                                     gpsData.put("PowerWatts", powerWatts);
                                                     wattPowers.add(powerWatts);
                                                     break;
+                                                    
+                                                case "unknown":
+                                                    double unknownValue = Double.parseDouble(thisSetValue);
+                                                    gpsData.put("Unkown_" + unks, unknownValue);
+                                                    unks++;
+                                                    break;
 
                                                 default: break;
 
@@ -423,8 +430,9 @@ public class GPSParse {
                         while(csvScanner2.hasNext()) {			
                             
                             String nLine = csvScanner2.nextLine();
+                            Matcher mainMatcher = Pattern.compile("Data.*hrv.*time").matcher(nLine);
                             
-                            if(nLine.contains("Data,0,hrv,time")) {
+                            if(mainMatcher.find()) {
                                 
                                 String thisHrvLine[] = nLine.replaceAll("\"", "").split(",");
                                 String hRvArray[] = thisHrvLine[4].split("\\|");
