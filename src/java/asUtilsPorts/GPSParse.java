@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,7 +60,8 @@ public class GPSParse {
 		List<Integer> heartRates = new ArrayList<>();
 		List<Integer> logNos = new ArrayList<>();
 		List<Long> trackedSeconds = new ArrayList<>();
-
+                JSONArray hrvArray = new JSONArray();
+                
                 if(sourceType.toLowerCase().equals("csv") || sourceType.toLowerCase().equals("json")) {
                     
                     try (BufferedReader br = Files.newBufferedReader(gpsInFile)) {
@@ -253,9 +255,11 @@ public class GPSParse {
                     Scanner csvScanner = null; try {			
                         csvScanner = new Scanner(csvOutFile);
                         while(csvScanner.hasNext()) {			
-                            String sLine = csvScanner.nextLine();
                             
-                            if(Pattern.compile("Data.*record.*timestamp").matcher(sLine).find()) {
+                            String sLine = csvScanner.nextLine();
+                            Matcher mainMatcher = Pattern.compile("Data.*record.*timestamp").matcher(sLine);
+                            
+                            if(mainMatcher.find()) {
                                 
                                 jsonLogIterator++;
 
@@ -402,6 +406,9 @@ public class GPSParse {
                                         System.out.println(logNo + " - " + geoJSONtrace);
                                 }
                                 
+                                
+                             
+                                
                                 //csvOutFile.delete();
 
                             }
@@ -411,7 +418,30 @@ public class GPSParse {
                         e.printStackTrace();
                     }
                     
-                
+                    Scanner csvScanner2 = null; try {			
+                        csvScanner2 = new Scanner(csvOutFile);
+                        while(csvScanner2.hasNext()) {			
+                            
+                            String nLine = csvScanner2.nextLine();
+                            
+                            if(nLine.contains("Data,0,hrv,time")) {
+                                
+                                String thisHrvLine[] = nLine.replaceAll("\"", "").split(",");
+                                String hRvArray[] = thisHrvLine[4].split("\\|");
+                                double hRvA = Double.parseDouble(hRvArray[0]);
+                                double hRvB = Double.parseDouble(hRvArray[1]);
+                                JSONArray tHrvArray = new JSONArray();
+                                tHrvArray.put(hRvA).put(hRvB);
+                                hrvArray.put(tHrvArray);                                
+                                
+                            }
+                        
+                        }
+		
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
                 }
                     
 		fullGPSjson = ("{"+fullGPSjson+"}").replace(",}", "}");
@@ -431,6 +461,7 @@ public class GPSParse {
 
 		String activityType = null;
 		String activityDataField = null;
+		String activityDataFieldHR = null;
 		String geoJSONField = null;
 		String hrAvgField = null; String hrMaxField = null;
 		String speedAvgField = null; String speedMaxField = null;
@@ -449,6 +480,7 @@ public class GPSParse {
 			case "C":
 				activityType = "Cycling";
 				activityDataField = "gpsLogCyc";
+                                activityDataFieldHR = "hrvLogCyc";
 				geoJSONField = "CycGeoJSON";
 				speedAvgField = "CycSpeedAvg";
 				speedMaxField = "CycSpeedMax";
@@ -463,24 +495,28 @@ public class GPSParse {
 			case "D":
 				activityType = "Cycling";
 				activityDataField = "gpsLogCyc2";
+                                activityDataFieldHR = "hrvLogCyc2";
 				geoJSONField = "AltGeoJSON";
 				break;
 
 			case "E":
 				activityType = "Cycling";
 				activityDataField = "gpsLogCyc3";
+                                activityDataFieldHR = "hrvLogCyc3";
 				geoJSONField = "AltGeoJSON";
 				break;
                                 
 			case "F":
 				activityType = "Cycling";
 				activityDataField = "gpsLogCyc4";
+                                activityDataFieldHR = "hrvLogCyc4";
 				geoJSONField = "AltGeoJSON";
 				break;
 
 			case "R":
 				activityType = "RunWalk";
 				activityDataField = "gpsLogRun";
+                                activityDataFieldHR = "hrvLogRun";
 				geoJSONField = "RunGeoJSON";
 				speedAvgField = "RunSpeedAvg";
 				speedMaxField = "RunSpeedMax";
@@ -491,18 +527,21 @@ public class GPSParse {
 			case "S":
 				activityType = "RunWalk";
 				activityDataField = "gpsLogRun2";
+                                activityDataFieldHR = "hrvLogRun2";
 				geoJSONField = "AltGeoJSON";
 				break;
                                 
 			case "T":
 				activityType = "RunWalk";
 				activityDataField = "gpsLogRun3";
+                                activityDataFieldHR = "hrvLogRun3";
 				geoJSONField = "AltGeoJSON";
 				break;
                                 
 			case "U":
 				activityType = "RunWalk";
 				activityDataField = "gpsLogRun4";
+                                activityDataFieldHR = "hrvLogRun4";
 				geoJSONField = "AltGeoJSON";
 				break;
 
@@ -518,12 +557,15 @@ public class GPSParse {
 
 		} else {
 		
-			gpsQuery = "UPDATE Core.Fitness SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END, "+activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
+			gpsQuery = "UPDATE Core.Fitness " +
+                                "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
+                                activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
 			if(activityType.equals("RunWalk")) { gpsQuery += ", TrackedTime="+trackedTime+", TrackedDist="+trackedDistance; }
 			if(StumpJunk.isSetNotZero(speedAvgField)) { gpsQuery += ", "+speedAvgField+"="+avgSpeed; }
 			if(StumpJunk.isSetNotZero(speedMaxField)) { gpsQuery += ", "+speedMaxField+"="+maxSpeed; }
 			if(StumpJunk.isSetNotZero(hrAvgField)) { gpsQuery += ", "+hrAvgField+"="+avgHeart; }
 			if(StumpJunk.isSetNotZero(hrMaxField)) { gpsQuery += ", "+hrMaxField+"="+maxHeart; }
+                        if(hrvArray.length() != 0) { gpsQuery += ", "+activityDataFieldHR+"='"+hrvArray.toString()+"'"; }
 			if(maxCadence > 0) { gpsQuery += ", CycCadMax="+maxCadence; }
 			if(avgCadence > 0) { gpsQuery += ", CycCadAvg="+avgCadence; }
 			if(maxPower > 0) { gpsQuery += ", CycPowerMax="+maxPower; }
