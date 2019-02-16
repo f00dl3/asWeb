@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 30 Mar 2018
-    Updated:    10 Oct 2018
+    Updated:    16 Feb 2019
     Author     : astump
 --%>
 
@@ -14,7 +14,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/inc/Header.jsp?type=full&title=Cams&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full&title=Cams&scripts=true" />
 
     <body>
         

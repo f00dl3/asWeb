@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 2 Feb 2019
+Updated: 14 Feb 2019
 */
 
 package asWebRest.dao;
@@ -430,6 +430,7 @@ public class EntertainmentDAO {
 		" 		COUNT(QuestOrder) AS Quests" +
 		" 		FROM Core.FFXIV_Quests" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
+                "                   AND QuestOrder NOT LIKE '%EV'" +
 		" 		GROUP BY OrigCompDate" +
 		" 	UNION ALL" +
 		" 	SELECT" +

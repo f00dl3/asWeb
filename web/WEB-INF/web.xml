@@ -75,7 +75,7 @@
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
-            <transport-gaurantee>CONFIDENTIAL</transport-gaurantee>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
     
