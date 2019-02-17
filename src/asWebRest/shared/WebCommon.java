@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 20 Aug 2018
+Updated: 17 Feb 2019
 */
 
 package asWebRest.shared;
@@ -200,6 +200,11 @@ public class WebCommon {
             }
         }
         return choice.toString();
+    }
+    
+    private String[] multiWordSearchArray(String searchStringIn) {
+    	String[] searchArray = searchStringIn.split(" ");
+    	return searchArray;
     }
     
     private String nowDate() {
@@ -404,6 +409,7 @@ public class WebCommon {
     }
     
     /* Public accessors */
+    public String[] getMultiWordSearchArray(String searchStringIn) { return multiWordSearchArray(searchStringIn); }
     public String getNowDate() { return nowDate(); }
     
 }
