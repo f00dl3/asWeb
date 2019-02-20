@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 19 Jul 2018
+Updated: 20 Feb 2019
  */
 
 var tppCallback;
@@ -133,13 +133,19 @@ function initGallery(flagsIn, firstArgIn, tpGlob) {
         path = "/Pics/" + firstArgIn;
     } else if (flagsIn === "tp") {
         flagsOut = "tp";
+    } else if (flagsIn === "tpi") {
+    	flagsOut = "tpi";
     }
+ 
     switch(flagsOut) {
         case "tc":
             thisPath = getServerPath("tomcat") + "/asWeb#x#PicsL" + firstArgIn.substring(2, firstArgIn.length) + "/full/";
             break;
         case "tp":
             thisPath = getServerPath("mediaServer") + "/Adult/TP/" + firstArgIn + "/full/";
+            break;
+        case "tpi":
+            thisPath = getServerPath("mediaServer") + "/Adult/TPi/" + firstArgIn + "/full/";
             break;
         case "none":
             thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/";

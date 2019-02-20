@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 15 Sep 2018
+Updated: 20 Feb 2019
  */
 
 var maxListing = 250;
@@ -19,7 +19,10 @@ function actOnTpSelect(event) {
     var target = "TPGalleryHolderPElement";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob);
+    switch(thisFormData.TPIndexedMS) {
+    	case 0: initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob); break;
+    	case 1: initGallery("tpi", thisFormData.TPHash, thisFormData.TPGlob); break;
+    }
 }
 
 function genLayout() {
@@ -159,7 +162,8 @@ function populateSearchPopup(searchableData) {
                     "<span class='td'>";
             if(tpData.OffDisc === 0) {
                 hosTable += "<input type='radio' class='TPSelect' name='TPHash' value='" + tpData.HashPath + "'/>" +
-                        "<input type='hidden' name='TPGlob' value='" + tpData.Glob + "'/>";
+                        "<input type='hidden' name='TPGlob' value='" + tpData.Glob + "'/>" +
+                        "<input type='hidden' name='TPIndexedMS' value='" + tpData.MSIndexed + "'/>";
             } else {
                 hosTable += "N/A";
             }
