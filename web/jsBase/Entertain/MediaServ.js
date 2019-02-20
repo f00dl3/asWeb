@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 2 Feb 2019
+Updated: 20 Feb 2019
  */
 
 var msIndex;
@@ -250,24 +250,30 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                         //var imageWidthHeightAttribs = "IW=" + imageWidth + "&IH=" + imageHeight + "&";
                         var olResolution = imageAttribs[0] + "x" + imageAttribs[1];
                         var olPicPath, oltPickPath, thisYear;
-                        if(tm.WarDeploy === 1) {
-                            thisYear = (tm.Path).substr((tm.Path).length - 2);
-                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
-                            oltPicPath = "/asWeb/x/PicsL" + thisYear + "/thumb/" + tm.File;
-                            thisAddCheckbox += /* "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" + 
-                                    "<a href='/asWeb/x/PicsL" + thisYear + "/full/" + tm.File + "' target='new'>" + */
-                                    "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
-                                    "<img class='" + firstThumbSize + "' src='" + oltPicPath + "'/>";
+                        if(tm.Path == "/Adult/TPi") {
+                            olPicPath = getBasePath("media") + tm.Path + "/" + tm.File;
+                            oltPicPath = olPicPath.replace("/full/", "/thumb/");
+                            //console.log(olPicPath + "," + oltPicPath + "," + imageWidth + "," + imageHeight);
+                            thisAddCheckbox += "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
+	                            "<img class='" + firstThumbSize + "' src='" + oltPicPath + "'/>";
                         } else {
-                            thisYear = (tm.Path).substr((tm.Path).length - 4);
-                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
-                            thisAddCheckbox += "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" +
-                                    /* "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" + */
-                                    "<img class='" + firstThumbSize + "' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
-                        }
+	                        if(tm.WarDeploy === 1) {
+	                            thisYear = (tm.Path).substr((tm.Path).length - 2);
+	                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
+	                            oltPicPath = "/asWeb/x/PicsL" + thisYear + "/thumb/" + tm.File;
+	                            thisAddCheckbox += "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
+	                                    "<img class='" + firstThumbSize + "' src='" + oltPicPath + "'/>";
+	                        } else {
+	                            thisYear = (tm.Path).substr((tm.Path).length - 4);
+	                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
+	                            thisAddCheckbox += "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" +
+	                                    /* "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" + */
+	                                    "<img class='" + firstThumbSize + "' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
+	                        }
+	                    }
                         mediaDownloader = "<a href='" + olPicPath + "' target='new'>" +
-                                "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
-                        thisAddCheckbox += "</a>";
+                        "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
+                    	thisAddCheckbox += "</a>";
                     }
                     break;
                 default:
