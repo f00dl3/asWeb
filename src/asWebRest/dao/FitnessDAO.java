@@ -422,7 +422,7 @@ public class FitnessDAO {
     public JSONArray getDay(Connection dbc) {
         final String query_Fitness_Day = "SELECT " +
                 " Weight, RunWalk, Shoe, RSMile, Cycling, Gym, GymWorkout, TrackedTime, TrackedDist," +
-                " BkStudT, ReelMow, MowNotes, CommonRoute, xTags, Vomit, EstHoursSleep" +
+                " BkStudT, ReelMow, MowNotes, CommonRoute, xTags, Vomit, EstHoursSleep, Orgs" +
                 " FROM Core.Fitness WHERE Date=CURDATE();";
         JSONArray tContainer = new JSONArray();
         try {
@@ -445,6 +445,7 @@ public class FitnessDAO {
                     .put("CommonRoute", resultSet.getInt("CommonRoute"))
                     .put("xTags", resultSet.getString("xTags"))
                     .put("Vomit", resultSet.getInt("Vomit"))
+                    .put("Orgs", resultSet.getInt("Orgs"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"));
                 tContainer.put(tObject);
             }
