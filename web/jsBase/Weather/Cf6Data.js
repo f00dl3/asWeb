@@ -202,8 +202,8 @@ function popCf6Search(amDat) {
             "</table></form>";            
     var rainGaugeForm = "<form id='rainGaugeForm'>" +
             "<strong>New Precipitation<br/>@ Home</strong><br>" +
-            "<input name='precip' type='number' step='0.01' style='width: 75px;' value=''/>" +
-            "<input name='snow' type='number' step='0.01' style='width: 75px;' value=''/>" +
+            "Liquid: <input name='precip' type='number' step='0.01' style='width: 75px;' value=''/><br/>" +
+            "Frozen: <input name='snow' type='number' step='0.01' style='width: 75px;' value=''/><br/>" +
             "<button class='UButton' id='doRainGauge'>Log It!</button>" +
             "</form>";
     var encapsulatingDiv = "<div class='table'><div class='tr'>" + 

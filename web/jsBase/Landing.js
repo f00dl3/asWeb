@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 9 Jun 2018
+Updated: 20 Feb 2019
  **/
 
 var loggedIn = false;
@@ -59,6 +59,7 @@ function populateLogin() {
             "<div class='tr'><span class='td'>Password</span><span class='td'><input type='password' name='Pass'></input></span></div>" +
             "</div>" +
             "<p><button class='UButton' id='btnLogin' type='submit'>Login!</button>" +
+            " [<a href='" + getBasePath("root") + "/manager' target='new'>Manager</a>]" +
             "</form>";
     dojo.byId("loginPlaceholder").innerHTML = rData;
     var btnLogin = dojo.byId('btnLogin');

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 16 Dec 2018
+Updated: 20 Feb 2019
  */
 
 var annMaint = 910.66;
@@ -222,6 +222,7 @@ function getBasePath(opt) {
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase = baseForUi + "/MediaServer"; break;
         case "rest": tBase = baseForRestlet; break;
+        case "root": tBase = base; break;
         case "serv": tBase = baseForServlet; break;
         case "old": tBase += "/ASWebUI"; break;
         case "oldGet": case "getOld": case "getOldGet": case "get": tBase = baseForUi + "/Get"; break;
