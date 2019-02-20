@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 7 Dec 2018
+Updated: 20 Feb 2019
  */
 
 package asWebRest.dao;
@@ -143,8 +143,8 @@ public class WeatherDAO {
     private String updateRainGauge(Connection dbc, List<String> qParams) {
 	final int rainGaugeId = 3;
         String returnData = wcb.getDefaultNotRanYet();
-        String query_UpdateRainGauge = "INSERT INTO WxObs.RainGauge VALUES (CURDATE(),?,"+rainGaugeId+")" +
-                " ON DUPLICATE KEY UPDATE Precip=Precip+?;";
+        String query_UpdateRainGauge = "INSERT INTO WxObs.RainGauge VALUES (CURDATE(),?,"+rainGaugeId+",?)" +
+                " ON DUPLICATE KEY UPDATE Precip=Precip+?, Snow=Snow+?;";
         try { returnData = wc.q2do1c(dbc, query_UpdateRainGauge, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }

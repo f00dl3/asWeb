@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 5 Oct 2018
+Updated: 20 Feb 2019
  */
 
 if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
@@ -201,8 +201,10 @@ function popCf6Search(amDat) {
             "<tr><td colspan=2 align='center'><button class='UButton' id='Cf6SearchButton' name='DoCf6Search'>Search</button></td></tr>" +
             "</table></form>";            
     var rainGaugeForm = "<form id='rainGaugeForm'>" +
-            "<strong>New Rainfall<br/>@ Home</strong><br>" +
-            "<input name='precip' type='number' step='0.01' style='width: 75px;' value=''/><button class='UButton' id='doRainGauge'>Log It!</button>" +
+            "<strong>New Precipitation<br/>@ Home</strong><br>" +
+            "<input name='precip' type='number' step='0.01' style='width: 75px;' value=''/>" +
+            "<input name='snow' type='number' step='0.01' style='width: 75px;' value=''/>" +
+            "<button class='UButton' id='doRainGauge'>Log It!</button>" +
             "</form>";
     var encapsulatingDiv = "<div class='table'><div class='tr'>" + 
             "<span class='td'>" + searchForm + "</span>" +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 4 Nov 2018
+Updated: 20 Feb 2019
  */
 
 package asWebRest.resource;
@@ -298,7 +298,9 @@ public class WeatherResource extends ServerResource {
                     
                 case "setUpdateRainGauge":
                     qParams.add(0, argsInForm.getFirstValue("precip"));
-                    qParams.add(1, argsInForm.getFirstValue("precip"));
+                    qParams.add(1, argsInForm.getFirstValue("snow"));
+                    qParams.add(2, argsInForm.getFirstValue("precip"));
+                    qParams.add(3, argsInForm.getFirstValue("snow"));
                     returnData += updateWeatherAction.setUpdateRainGauge(dbc, qParams);
                     break;
                     
