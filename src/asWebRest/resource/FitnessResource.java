@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 10 Feb 2019
+Updated: 19 Feb 2019
  */
 
 package asWebRest.resource;
@@ -290,9 +290,11 @@ public class FitnessResource extends ServerResource {
                     }
                     qParams.add(todayX); qParams.add(todayVomit);
                     String todaySleep = null; if(wc.isSet(argsInForm.getFirstValue("TodayEstHoursSleep"))) { todaySleep = argsInForm.getFirstValue("TodayEstHoursSleep"); } qParams.add(todaySleep);
+                    String todayXO = null; if(wc.isSet(argsInForm.getFirstValue("TodayXO"))) { todayXO = argsInForm.getFirstValue("TodayXO"); } qParams.add(todayXO);
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
-                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
+                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep); qParams.add(todayXO);
+                    //System.out.println(qParams.toString());
                     returnData += updateFitnessAction.setUpdateToday(qParams);
                     break;                    
             }

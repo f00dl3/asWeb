@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Today.js split: 4 Apr 2018
-Updated: 20 May 2018
+Updated: 19 Feb 2019
  */
 
 function actUpdateTodaySubmit(event) {
@@ -13,13 +13,14 @@ function actUpdateTodaySubmit(event) {
 
 function fitnessToday(dataIn) {
     if(!isSet(dataIn)) { dataIn = {}; }
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags, hSleep;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags, hSleep, xOrgs;
     studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
+    if(!isSet(dataIn.Orgs)) { xOrgs = ""; } else { xOrgs = dataIn.Orgs; }
     if(!isSet(dataIn.EstHoursSleep)) { hSleep = ""; } else { hSleep = dataIn.EstHoursSleep; }
     if(!isSet(dataIn.xTags)) {
         if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
@@ -43,6 +44,7 @@ function fitnessToday(dataIn) {
             "<tr><td>Mowing</td><td><input type='text' name='TodayMowNotes' value='" + mowNotes + "'/></td></tr>" +
             "<tr><td>Sleep</td><td><input type='number' step='0.1' name='TodayEstHoursSleep' value='" + hSleep + "'/></td></tr>" +
             "<tr><td>Other</td><td><input type='text' name='TodayX' value='" + xTags + "'/></td></tr>" +
+            "<tr><td>Orgs</td><td><input type='number' step='1' name='TodayXO' value='" + xOrgs + "'/></td></tr>" +
             "</tbody></table>";
     holderData += tableData +
             "</form></div></div>";

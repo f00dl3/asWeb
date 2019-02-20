@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Feb 2019
+Updated: 19 Feb 2019
 */
 
 package asWebRest.dao;
@@ -72,7 +72,7 @@ public class FitnessDAO {
                 " f.TrackedTime, f.TrackedDist," +
                 " f.CycSpeedAvg, f.CycSpeedMax, f.CycCadAvg, f.CycCadMax, f.CycPowerAvg, f.CycPowerMax, f.CycHeartAvg, f.CycHeartMax," +
                 " f.RunSpeedAvg, f.RunSpeedMax, f.RunHeartAvg, f.RunHeartMax," +
-                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags," +
+                " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags, f.Orgs," +
                 " f.Vomit, f.EstHoursSleep, f.Swimming, f.HoursGaming," +
                 " cf6.High, cf6.Low, cf6.Average," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
@@ -134,6 +134,7 @@ public class FitnessDAO {
                     .put("GymWorkout", resultSet.getString("GymWorkout"))
                     .put("CommonRoute", resultSet.getInt("CommonRoute"))
                     .put("xTags", resultSet.getString("xTags"))
+					.put("Orgs", resultSet.getInt("Orgs"))
                     .put("Vomit", resultSet.getInt("Vomit"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"))
                     .put("Swimming", resultSet.getInt("Swimming"))
@@ -867,12 +868,12 @@ public class FitnessDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
-                " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags,Vomit,EstHoursSleep) VALUES" +
-                " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?,?,?)" +
+                " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags,Vomit,EstHoursSleep,Orgs) VALUES" +
+                " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?,?,?,?)" +
                 " ON DUPLICATE KEY UPDATE" +
                 " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 		" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
-		" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?;";
+		" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?;";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
         returnData += "\n ***DEBUG: \n part1 : " + query_Fitness_GetLastRsMileTotal + "\n part2 : " + query_Fitness_DayIU;
         return returnData;
