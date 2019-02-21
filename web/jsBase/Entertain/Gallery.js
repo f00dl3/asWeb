@@ -114,7 +114,7 @@ function generateGallery(argsIn, fileList) {
             rData += "<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         }
         rData += "</a><div class='UPopO'>" +
-                "<strong>File: </strong>" + fileName + "<br/>" +
+                "<strong>File: </strong><a href='" + relativePath + "' target='new'>" + fileName + "</a><br/>" +
                 "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
                 "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
                 "<span id='crossDataHolder_" + thisFFN + "'></span>";

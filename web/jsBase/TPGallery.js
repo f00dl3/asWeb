@@ -98,7 +98,7 @@ function genUpdateTpiForm(existingData, iRes, ffn, fileSizeKB, hashPath) {
 		"<strong>Tags: </strong><input type='text' name='TpiTags' style='width: 256px;' value='" + existingTags + "'></input><br/>" +
 		"<input type='hidden' name='TpiSize' value='" + fileSizeKB_int + "'></input>" +
 		"<input type='hidden' name='TpiFile' value='" + ffn + "'></input>" +
-		"<input type='hidden' name='TPiHash' value='" + hashPath + "'></input>" +
+		"<input type='hidden' name='TpiHash' value='" + hashPath + "'></input>" +
 		"<input type='hidden' name='TpiRes' value='" + iRes + "'></input><br/>" +
 		"<button class='UButton tpSubmit' id='MakeUpdates' type='submit'>Add TPI</button>";
 		"</form>";
