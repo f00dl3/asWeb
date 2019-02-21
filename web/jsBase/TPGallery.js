@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 20 Feb 2019
+Updated: 21 Feb 2019
  */
 
 var maxListing = 250;
@@ -20,9 +20,37 @@ function actOnTpSelect(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     switch(thisFormData.TPIndexedMS) {
-    	case 0: initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob); break;
-    	case 1: initGallery("tpi", thisFormData.TPHash, thisFormData.TPGlob); break;
+    	case "1": initGallery("tpi", thisFormData.TPHash, thisFormData.TPGlob); break;
+    	case "0": default: initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob); break;
     }
+}
+
+function checkTpi(ffn) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "checkTpi", "ffn": ffn };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("TP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                	rCount = data[0].Count;
+                	if(rCount === 1) {
+                		console.log(ffn + " is indexed!");
+        				require(["dojo/dom-style"], function(domStyle){
+                				domStyle.set(ffn, "color", "green");
+            			});
+                	} else {
+                		console.log(ffn + " is not indexed!");
+                	}
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to check TPI status failed!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function genLayout() {
@@ -48,6 +76,12 @@ function genLayout() {
     getSearchableData();
     getQueueSize();
     populateGalleryHolder();
+}
+
+function genUpdateTpiForm(iRes, ffn) {
+	console.log(iRes + " " + ffn);
+	rData = "";
+	return rData;
 }
 
 function getSearchableData() {

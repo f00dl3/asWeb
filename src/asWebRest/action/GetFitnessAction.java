@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Feb 2019
+Updated: 21 Feb 2019
  */
 
 package asWebRest.action;
@@ -29,6 +29,7 @@ public class GetFitnessAction {
     public JSONArray getCrsm(Connection dbc) { return fitnessDAO.getCrsm(dbc); }
     public JSONArray getDay(Connection dbc) { return fitnessDAO.getDay(dbc); }
     public JSONArray getDayE(Connection dbc) { return fitnessDAO.getDayE(dbc); }
+    public JSONArray getDayY(Connection dbc) { return fitnessDAO.getDayY(dbc); }
     public JSONArray getGeoJSON(Connection dbc, List qParams) { return fitnessDAO.getGeoJSON(dbc, qParams); }
     public JSONArray getJsonLogCyc(Connection dbc, List qParams) { return fitnessDAO.getJsonLogCyc(dbc, qParams); }
     public JSONArray getJsonLogCyc2(Connection dbc, List qParams) { return fitnessDAO.getJsonLogCyc2(dbc, qParams); }

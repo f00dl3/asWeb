@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 19 Feb 2019
+Updated: 21 Feb 2019
  */
 
 var myHeight = 68;
@@ -149,6 +149,7 @@ function getFitnessAllData(inXdt1, inXdt2) {
             fitnessCalories(data.calories);
             fitnessPlans(data.plans);
             fitnessToday(data.today[0]);
+            fitnessYesterday(data.yesterday[0]);
             fitnessBubbles(
                 data.bkStats[0],
                 data.overall[0],
@@ -260,11 +261,11 @@ function processFitnessAll(dataIn, autoMpg) {
         if(tData.BkStudT === 1) { bkStuds = " style='background: blue; color: white;'"; }
         if(tData.Gym === 1) {
             gym = "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg'/>" +
-                    "<div class='UPop'>" + tData.GymWorkout + "</div></div>";
+                    "<div class='UPop'>" + tData.GymWorkout + "</div></div> ";
         }
         if(tData.ReelMow === 1) {
             reelMow = "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_mow.jpg'>" +
-                    "<div class='UPopO'>" + tData.MowNotes + "</div></div>";
+                    "<div class='UPopO'>" + tData.MowNotes + "</div></div> ";
         }
         if(tData.CommonRoute === 1) { commonRouteFlag = "<br/><strong>Common Route!</strong>"; }
         var cycDiv = "<div class='table'>" +
@@ -301,10 +302,12 @@ function processFitnessAll(dataIn, autoMpg) {
         if(tData.isGPSRun3JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Ru3", commonRouteFlag, "OL") + " "; }
         if(tData.isGPSRun4JSON === true) { altMap += getMapLinkString(tData.Date, "gpsJSON", "Ru4", commonRouteFlag, "OL") + " "; }
         var nutriBreakdown = "Breakdown unavailable!";
+        
         var shoeClass = "";
         if(isSet(tData.RSMile)) { shoeClass = colorShoeMile(tData.RSMile); }
         if(isSet(tData.Fat)) {
-            nutriBreakdown = "<table><tbody><tr><td>" +
+            nutriBreakdown = "<strong>Burned: " + tData.CaloriesBurned + "<br/>" +
+            		"<table><tbody><tr><td>" +
                     "<table><thead><tr><th colspan=3>Consumption</th></tr></thead>" +
                     "<tbody>" +
                     "<tr><td>Fat</td><td>" + tData.Fat + "</td><td>" + Math.round((tData.Fat/(65*1.25) * 100)) + "%</td></tr>" +
@@ -340,7 +343,9 @@ function processFitnessAll(dataIn, autoMpg) {
                 "High: <span style='" + styleTemp(tData.High) + "'>" + tData.High + "</span><br/>" +
                 "Low: <span style='" + styleTemp(tData.Low) + "'>" + tData.Low + "</span><br/>" +
                 "Average: <span style='" + styleTemp(tData.Average) + "'>" + tData.Average + "</span><br/>" +
-                "Gaming: " + (tData.HoursGaming).toFixed(1) + " hrs" +
+                "Gaming: " + (tData.HoursGaming).toFixed(1) + " hrs<br/>" +
+                "Steps: " + tData.Steps + "<br/>" +
+                "Int Mins: " + tData.IntensityMinutes + 
                 "</div></div></td>" +
                 "<td align='center'><div class='UPop'><div class='" + colorWeight(tData.Weight) + "'>" + tData.Weight + "</div>" +
                 "<div class='UPopO'>" + bmi + "</div>" +

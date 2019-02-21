@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 20 Feb 2019
+Updated: 21 Feb 2019
  */
 
 var tppCallback;
@@ -80,12 +80,13 @@ function generateGallery(argsIn, fileList) {
         var relativePath = "";
         var iRes = "";
         switch(argsIn.flagOut) {
-            case "tp":
+            case "tp": case "tpi":
                 relativePath = fullPath.replace(getServerPath("mediaServer"), getBasePath("media"));
-                thisFFN = argsIn.params + "/" + fileName;
-                getTpPicsCallback(thisFFN);
+                thisFFN = relativePath.replace("/asWeb/MediaServer/Adult", "").replace("/TP/", "/").replace("/TPi/", "/").substr(1);
+                checkTpi(thisFFN);
+                //getTpPicsCallback(thisFFN);
                 // wait for it
-                if(isSet(tppCallback) && isSet(tppCallback.XTags)) { imgBorder = "green"; }
+                //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { imgBorder = "green"; }
                 break;
             case "tc":
                 relativePath = getBasePath("ui") + fullPath.replace("/var/lib/tomcat8/webapps/asWeb#x#", "/x/");
@@ -106,15 +107,18 @@ function generateGallery(argsIn, fileList) {
                 "<a href='" + relativePath + "' target='new'>"; */
                 "<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>";
         if(checkMobile()) {
-            rData += "<img class='th_small' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
+            rData += "<img class='th_small' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         } else {
-            rData += "<img class='th_sm_med' src='" + thumbPath + "' style='border: 3px solid " + imgBorder + ";'/>";
+            rData += "<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         }
         rData += "</a><div class='UPopO'>" +
                 "<strong>File: </strong>" + fileName + "<br/>" +
                 "<strong>Size: </strong>" + (fileList[tFile].Size / 1024).toFixed(1) + "<br/>" +
                 "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>";
-        if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
+        if(argsIn.flagsOut == "tp" || argsIn.flagsOut == "tpi") {
+        	rData += genUpdateTpiForm(iRes, thisFFN);
+        }
+        //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
         rData += "</div></div>";
     });
     rData += "<p><strong>Total photo count: </strong>" + photoCount;

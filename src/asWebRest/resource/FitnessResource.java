@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 19 Feb 2019
+Updated: 21 Feb 2019
  */
 
 package asWebRest.resource;
@@ -75,6 +75,7 @@ public class FitnessResource extends ServerResource {
                         JSONArray tot = getFitnessAction.getTot(dbc);
                         JSONArray yData = getFitnessAction.getYear(dbc, year);
                         JSONArray autoMpg = getFinanceAction.getAutoMpgAverage(dbc);
+                        JSONArray yesterday = getFitnessAction.getDayY(dbc);
                         mergedResults
                             .put("allRecs", allRecs)
                             .put("calories", calories)
@@ -87,7 +88,8 @@ public class FitnessResource extends ServerResource {
                             .put("rShoe", rShoe)
                             .put("tot", tot)
                             .put("yData", yData)
-                            .put("autoMpg", autoMpg);
+                            .put("autoMpg", autoMpg)
+                            .put("yesterday", yesterday);
                     } else {
                         returnData += "ERROR";
                     }
@@ -296,8 +298,17 @@ public class FitnessResource extends ServerResource {
                     qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep); qParams.add(todayXO);
                     //System.out.println(qParams.toString());
                     returnData += updateFitnessAction.setUpdateToday(qParams);
-                    break;                    
+                    break;
+                    
+                case "putYesterday":
+                	String yesterdayCaloriesBurned = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayCaloriesBurned"))) { yesterdayCaloriesBurned = argsInForm.getFirstValue("YesterdayCaloriesBurned"); } qParams.add(yesterdayCaloriesBurned);
+                	String yesterdaySteps = null; if(wc.isSet(argsInForm.getFirstValue("YesterdaySteps"))) { yesterdaySteps = argsInForm.getFirstValue("YesterdaySteps"); } qParams.add(yesterdaySteps);
+                	String yesterdayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayIntensityMinutes"))) { yesterdayIntensityMinutes = argsInForm.getFirstValue("YesterdayIntensityMinutes"); } qParams.add(yesterdayIntensityMinutes);
+                	returnData += updateFitnessAction.setUpdateYesterday(qParams);
+                	break;
+                	
             }
+            
         }
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 19 Feb 2019
+Updated: 21 Feb 2019
 */
 
 package asWebRest.dao;
@@ -74,6 +74,7 @@ public class FitnessDAO {
                 " f.RunSpeedAvg, f.RunSpeedMax, f.RunHeartAvg, f.RunHeartMax," +
                 " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags, f.Orgs," +
                 " f.Vomit, f.EstHoursSleep, f.Swimming, f.HoursGaming," +
+                " f.CaloriesBurned, f.Steps, f.IntensityMinutes," +
                 " cf6.High, cf6.Low, cf6.Average," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
@@ -149,7 +150,10 @@ public class FitnessDAO {
                     .put("isGPSRun2JSON", resultSet.getBoolean("isGPSRun2JSON"))
                     .put("isGPSRun3JSON", resultSet.getBoolean("isGPSRun3JSON"))
                     .put("isGPSRun4JSON", resultSet.getBoolean("isGPSRun4JSON"))
-                    .put("HoursGaming", resultSet.getDouble("HoursGaming"));
+                    .put("HoursGaming", resultSet.getDouble("HoursGaming"))
+                    .put("CaloriesBurned", resultSet.getInt("CaloriesBurned"))
+                    .put("Steps", resultSet.getInt("Steps"))
+                    .put("IntensityMinutes", resultSet.getInt("IntensityMinutes"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -464,6 +468,24 @@ public class FitnessDAO {
                 tObject
                     .put("Weight", resultSet.getDouble("Weight"))
                     .put("ExMin", resultSet.getInt("ExMin"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getDayY(Connection dbc) {
+        final String query_Fitness_DayY = "SELECT CaloriesBurned, Steps, IntensityMinutes FROM Core.Fitness WHERE Date=CURDATE() - INTERVAL 1 DAY;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_DayY, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("CaloriesBurned", resultSet.getInt("CaloriesBurned"))
+                    .put("Steps", resultSet.getInt("Steps"))
+                    .put("IntensityMinutes", resultSet.getInt("IntensityMinutes"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -885,6 +907,17 @@ public class FitnessDAO {
         String query_Fitness_DayIUE = "INSERT INTO Core.Fit_Em (Date, Weight, ExMin) VALUES (CURDATE(),?,?) ON DUPLICATE KEY UPDATE Weight=?, ExMin=?;";
         try { returnData = wc.q2do(query_Fitness_DayIUE, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
+    }
+    
+    public String setUpdateYesterday(List<String> qParams) {
+    	String returnData = "Query has not ran yet or has failed.";
+    	String query_Fitness_DayYU = "UPDATE Core.Fitness SET" + 
+    			" CaloriesBurned=?," +
+    			" Steps=?," +
+    			" IntensityMinutes=?" +
+    			" WHERE Date=CURDATE() - INTERVAL 1 DAY;";
+    	try { returnData = wc.q2do(query_Fitness_DayYU, qParams); } catch (Exception e) { e.printStackTrace(); }
+    	return returnData;
     }
     
 }

@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    10 Feb 2019
+    Updated:    21 Feb 2019
     Author     : astump
 --%>
 
@@ -49,7 +49,8 @@
         "Fitness/Calories",
         "Fitness/GarminConnectApiSynch",
         "Fitness/Plans",
-        "Fitness/Today"
+        "Fitness/Today",
+        "Fitness/Yesterday"
     };
     
     String[] flashScripts = {
