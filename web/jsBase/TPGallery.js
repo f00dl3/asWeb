@@ -12,8 +12,6 @@ function actOnDoXTag(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
-    window.alert(thisFormJson);
-    putUpdateTpi(thisFormData);
 }
 
 function actOnTpSelect(event) {
@@ -30,7 +28,7 @@ function actOnTpiUpdate(event) {
 	dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
-    window.alert(thisFormJson);
+    putUpdateTpi(thisFormData);
 }
 
 function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
@@ -45,13 +43,14 @@ function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
                 function(data) {
                 	rCount = data[0].Count;
                 	if(rCount === 1) {
-                		console.log(ffn + " is indexed!");
+                		//console.log(ffn + " is indexed!");
         				require(["dojo/dom-style"], function(domStyle){
                 				domStyle.set(ffn, "border", "2px solid green");
             			});
         				genUpdateTpiForm(data[0], iRes, ffn, fileSizeKB, hashPath);
                 	} else {
                 		console.log(ffn + " is not indexed!");
+        				genUpdateTpiForm(null, iRes, ffn, fileSizeKB, hashPath);
                 	}
                     aniPreload("off");
                 },
@@ -88,20 +87,24 @@ function genLayout() {
 }
 
 function genUpdateTpiForm(existingData, iRes, ffn, fileSizeKB, hashPath) {
+	var existingDescription = "";
+	var existingTags = "";
+	if(existingData && isSet(existingData.Description)) { existingDescription = existingData.Description; }
+	if(existingData && isSet(existingData.XTags)) { existingTags = existingData.XTags; }
 	console.log(iRes + " " + ffn + " " + fileSizeKB);
 	var fileSizeKB_int = parseFloat(fileSizeKB).toFixed(0);
-	rData = "<form id='UpdateTpiForm_" + ffn + "' name='UpdateTpiForm'>" +
-		"<strong>Desc: </strong><input type='text' name='TpiDesc' style='width: 256px;' value='" + existingData.Description + "'></input><br/>" +
-		"<strong>Tags: </strong><input type='text' name='TpiTags' style='width: 256px;' value='" + existingData.XTags + "'></input><br/>" +
+	rData = "<form>" +
+		"<strong>Desc: </strong><textarea name='TpiDesc' rows='4' columns='50'>" + existingDescription + "</textarea><br/>" +
+		"<strong>Tags: </strong><input type='text' name='TpiTags' style='width: 256px;' value='" + existingTags + "'></input><br/>" +
 		"<input type='hidden' name='TpiSize' value='" + fileSizeKB_int + "'></input>" +
 		"<input type='hidden' name='TpiFile' value='" + ffn + "'></input>" +
 		"<input type='hidden' name='TPiHash' value='" + hashPath + "'></input>" +
 		"<input type='hidden' name='TpiRes' value='" + iRes + "'></input><br/>" +
-		"<button id='SubmitTpiData' type='submit'>Submit</button>";
+		"<button class='UButton tpSubmit' id='MakeUpdates' type='submit'>Add TPI</button>";
 		"</form>";
 	dojo.byId("crossDataHolder_" + ffn).innerHTML = rData;
-	var updateTpiForm = dojo.byId("UpdateTpiForm_" + ffn);
-    dojo.connect(updateTpiForm, "onsubmit", actOnTpiUpdate);
+	//var updateTpiForm = dojo.byId("UpdateTpiForm_" + ffn);
+    dojo.query(".tpSubmit").connect("click", actOnTpiUpdate);
 }
 
 function getSearchableData() {
