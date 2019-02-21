@@ -79,11 +79,18 @@ function generateGallery(argsIn, fileList) {
         var fullPath = fileList[tFile].Path;
         var relativePath = "";
         var iRes = "";
+        if(isSet(fileList[tFile].Width) && isSet(fileList[tFile].Height)) {
+            iWidth = fileList[tFile].Width;
+            iHeight = fileList[tFile].Height;
+            iRes = iWidth + "x" + iHeight;
+        }
+        var fileSizeKB = (fileList[tFile].Size / 1024).toFixed(1);
         switch(argsIn.flagOut) {
             case "tp": case "tpi":
                 relativePath = fullPath.replace(getServerPath("mediaServer"), getBasePath("media"));
                 thisFFN = relativePath.replace("/asWeb/MediaServer/Adult", "").replace("/TP/", "/").replace("/TPi/", "/").substr(1);
-                checkTpi(thisFFN);
+                var hashPath = thisFFN.split("/")[0];
+                checkTpi(thisFFN, iRes, fileSizeKB, hashPath);
                 //getTpPicsCallback(thisFFN);
                 // wait for it
                 //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { imgBorder = "green"; }
@@ -94,11 +101,6 @@ function generateGallery(argsIn, fileList) {
             default:
                 relativePath = getBasePath("old") + fullPath.replace("/var/www/ASWebUI", "");
                 break;
-        }
-        if(isSet(fileList[tFile].Width) && isSet(fileList[tFile].Height)) {
-            iWidth = fileList[tFile].Width;
-            iHeight = fileList[tFile].Height;
-            iRes = iWidth + "x" + iHeight;
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
@@ -113,11 +115,9 @@ function generateGallery(argsIn, fileList) {
         }
         rData += "</a><div class='UPopO'>" +
                 "<strong>File: </strong>" + fileName + "<br/>" +
-                "<strong>Size: </strong>" + (fileList[tFile].Size / 1024).toFixed(1) + "<br/>" +
-                "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>";
-        if(argsIn.flagsOut == "tp" || argsIn.flagsOut == "tpi") {
-        	rData += genUpdateTpiForm(iRes, thisFFN);
-        }
+                "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
+                "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
+                "<span id='crossDataHolder_" + thisFFN + "'></span>";
         //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
         rData += "</div></div>";
     });

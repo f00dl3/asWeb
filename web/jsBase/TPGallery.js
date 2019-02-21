@@ -13,6 +13,7 @@ function actOnDoXTag(event) {
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
     window.alert(thisFormJson);
+    putUpdateTpi(thisFormData);
 }
 
 function actOnTpSelect(event) {
@@ -25,7 +26,14 @@ function actOnTpSelect(event) {
     }
 }
 
-function checkTpi(ffn) {
+function actOnTpiUpdate(event) {
+	dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormJson = dojo.formToJson(this.form);
+    window.alert(thisFormJson);
+}
+
+function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
     aniPreload("on");
     var thePostData = { "doWhat": "checkTpi", "ffn": ffn };
     require(["dojo/request"], function(request) {
@@ -39,8 +47,9 @@ function checkTpi(ffn) {
                 	if(rCount === 1) {
                 		console.log(ffn + " is indexed!");
         				require(["dojo/dom-style"], function(domStyle){
-                				domStyle.set(ffn, "color", "green");
+                				domStyle.set(ffn, "border", "2px solid green");
             			});
+        				genUpdateTpiForm(data[0], iRes, ffn, fileSizeKB, hashPath);
                 	} else {
                 		console.log(ffn + " is not indexed!");
                 	}
@@ -78,10 +87,21 @@ function genLayout() {
     populateGalleryHolder();
 }
 
-function genUpdateTpiForm(iRes, ffn) {
-	console.log(iRes + " " + ffn);
-	rData = "";
-	return rData;
+function genUpdateTpiForm(existingData, iRes, ffn, fileSizeKB, hashPath) {
+	console.log(iRes + " " + ffn + " " + fileSizeKB);
+	var fileSizeKB_int = parseFloat(fileSizeKB).toFixed(0);
+	rData = "<form id='UpdateTpiForm_" + ffn + "' name='UpdateTpiForm'>" +
+		"<strong>Desc: </strong><input type='text' name='TpiDesc' style='width: 256px;' value='" + existingData.Description + "'></input><br/>" +
+		"<strong>Tags: </strong><input type='text' name='TpiTags' style='width: 256px;' value='" + existingData.XTags + "'></input><br/>" +
+		"<input type='hidden' name='TpiSize' value='" + fileSizeKB_int + "'></input>" +
+		"<input type='hidden' name='TpiFile' value='" + ffn + "'></input>" +
+		"<input type='hidden' name='TPiHash' value='" + hashPath + "'></input>" +
+		"<input type='hidden' name='TpiRes' value='" + iRes + "'></input><br/>" +
+		"<button id='SubmitTpiData' type='submit'>Submit</button>";
+		"</form>";
+	dojo.byId("crossDataHolder_" + ffn).innerHTML = rData;
+	var updateTpiForm = dojo.byId("UpdateTpiForm_" + ffn);
+    dojo.connect(updateTpiForm, "onsubmit", actOnTpiUpdate);
 }
 
 function getSearchableData() {
@@ -228,6 +248,27 @@ function populateSearchPopup(searchableData) {
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
     dojo.query(".TPSelect").connect("onchange", actOnTpSelect);
+}
+
+function putUpdateTpi(formData) {
+    aniPreload("on");
+    formData.doWhat = "setTpi";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("TP"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Updated TPI data!");
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for UpdateTpi FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function tpShowHint(value) {
