@@ -6,6 +6,8 @@ Updated: 21 Feb 2019
 
 var maxListing = 250;
 var tpSearchableData, tpIndexedImages, tpMatcher;
+var tpHash;
+var tpGlob;
 
 function actOnDoXTag(event) {
     var target = "?";
@@ -18,10 +20,9 @@ function actOnTpSelect(event) {
     var target = "TPGalleryHolderPElement";
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    switch(thisFormData.TPIndexedMS) {
-    	case "1": initGallery("tpi", thisFormData.TPHash, thisFormData.TPGlob); break;
-    	case "0": default: initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob); break;
-    }
+    tpHash = thisFormData.TPHash;
+    tpGlob = thisFormData.TPGlob;
+    initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob);
 }
 
 function actOnTpiUpdate(event) {
@@ -264,6 +265,7 @@ function putUpdateTpi(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice("Updated TPI data!");
+            initGallery("tp", tpHash, tpGlob);
             aniPreload("off");
         },
         error: function(data, iostatus) {

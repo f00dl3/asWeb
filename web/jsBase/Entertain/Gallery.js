@@ -86,9 +86,9 @@ function generateGallery(argsIn, fileList) {
         }
         var fileSizeKB = (fileList[tFile].Size / 1024).toFixed(1);
         switch(argsIn.flagOut) {
-            case "tp": case "tpi":
+            case "tp":
                 relativePath = fullPath.replace(getServerPath("mediaServer"), getBasePath("media"));
-                thisFFN = relativePath.replace("/asWeb/MediaServer/Adult", "").replace("/TP/", "/").replace("/TPi/", "/").substr(1);
+                thisFFN = relativePath.replace("/asWeb/MediaServer/Adult", "").replace("/TP/", "/").substr(1);
                 var hashPath = thisFFN.split("/")[0];
                 checkTpi(thisFFN, iRes, fileSizeKB, hashPath);
                 //getTpPicsCallback(thisFFN);
@@ -104,7 +104,7 @@ function generateGallery(argsIn, fileList) {
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
-        rData += "<div class='UPop'>" +
+        rData += "<div class='UPopNM'>" +
                 /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
                 "<a href='" + relativePath + "' target='new'>"; */
                 "<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>";
@@ -113,7 +113,7 @@ function generateGallery(argsIn, fileList) {
         } else {
             rData += "<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
         }
-        rData += "</a><div class='UPopO'>" +
+        rData += "</a><div class='UPopNMO'>" +
                 "<strong>File: </strong><a href='" + relativePath + "' target='newTP'>" + fileName + "</a><br/>" +
                 "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
                 "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
@@ -137,8 +137,6 @@ function initGallery(flagsIn, firstArgIn, tpGlob) {
         path = "/Pics/" + firstArgIn;
     } else if (flagsIn === "tp") {
         flagsOut = "tp";
-    } else if (flagsIn === "tpi") {
-    	flagsOut = "tpi";
     }
  
     switch(flagsOut) {
@@ -147,9 +145,6 @@ function initGallery(flagsIn, firstArgIn, tpGlob) {
             break;
         case "tp":
             thisPath = getServerPath("mediaServer") + "/Adult/TP/" + firstArgIn + "/full/";
-            break;
-        case "tpi":
-            thisPath = getServerPath("mediaServer") + "/Adult/TPi/" + firstArgIn + "/full/";
             break;
         case "none":
             thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/";
