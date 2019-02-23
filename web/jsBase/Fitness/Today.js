@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Today.js split: 4 Apr 2018
-Updated: 19 Feb 2019
+Updated: 22 Feb 2019
  */
 
 function actUpdateTodaySubmit(event) {
@@ -29,7 +29,7 @@ function fitnessToday(dataIn) {
     }
     if(dataIn.BkStudT === 1) { studChecked = "checked='checked'"; }
     if(dataIn.CommonRoute === 1) { commonRouteChecked = "checked='checked'"; }
-    var holderData = "<div class='UBox'>Today" +
+    var holderData = "<div class='UBox'>TD" +
             "<div class='UBoxO'>Update Today<br/>" +
             "<form id='FormUpdateToday'><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +

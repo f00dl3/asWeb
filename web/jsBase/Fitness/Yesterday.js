@@ -19,13 +19,13 @@ function fitnessYesterday(dataIn) {
     if(!isSet(dataIn.IntensityMinutes)) { yExerciseMinutes = ""; } else { yExerciseMinutes = dataIn.IntensityMinutes; }
     if(!isSet(dataIn.XTags)) { yXTags = ""; } else { yXTags = dataIn.XTags; }
     if(!isSet(dataIn.Orgs)) { yOrgs = ""; } else { yOrgs = dataIn.Orgs; }
-    var holderData = "<div class='UBox'>Yest" +
+    var holderData = "<div class='UBox'>YD" +
             "<div class='UBoxO'>Update Yesterday<br/>" +
             "<form id='FormUpdateYesterday'><button class='UButton' id='MakeUpdatesY' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
             "<tr><td>Burned Cals</td><td><input type='number' step='1' name='YesterdayCaloriesBurned' value='" + yCaloriesBurned + "'/></td></tr>" +
-            "<tr><td>Calores </td><td><input type='number' step='1' name='YesterdayCalories' value='" + yCalories + "'/></td></tr>" +
-            "<tr><td>Steps</td><td><input type='number' step='1' name='YesterdaySteps' value='" + ySteps + "'/></td></tr>" +
+            "<tr><td>Calores<br/><em>Base 2000</em></td><td><input type='number' step='1' name='YesterdayCalories' value='" + yCalories + "'/></td></tr>" +
+            "<tr><td>Steps<br/><em>Base 2000</em></td><td><input type='number' step='1' name='YesterdaySteps' value='" + ySteps + "'/></td></tr>" +
             "<tr><td>Exercise Minutes</td><td><input type='number' step='1' name='YesterdayIntensityMinutes' value='" + yExerciseMinutes + "'/></td></tr>" +
             "<tr><td>XTags</td><td><input type='text' name='YesterdayX' value='" + yXTags + "'/></td></tr>" +
             "<tr><td>Orgs</td><td><input type='number' step='1' name='YesterdayXO' value='" + yOrgs + "'/></td></tr>" +

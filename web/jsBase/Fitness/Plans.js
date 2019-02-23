@@ -28,7 +28,7 @@ function fileUploadGenerator() {
 }
 
 function fitnessPlans(dataIn) {
-    var container = "<div class='UBox'>Plans<div class='UBoxO'>Planned Routes<p>" +
+    var container = "<div class='UBox'>PL<div class='UBoxO'>Planned Routes<p>" +
             "<a href='https://connect.garmin.com/' target='new'>Garmin Connect Website</a><br/>" +
             "<form id='RoutePlanForm'>" +
             "<button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button>" +

@@ -2,6 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Calories.js split: 4 Apr 2018
+Updated: 22 Feb 2019
  */
 
 function actOnCaloriesSubmit(event) {
@@ -13,7 +14,7 @@ function actOnCaloriesSubmit(event) {
 function fitnessCalories(calQ) {
     var foods = 1;
     var tableRows = [ "Food", "Servings", "Today", "Serving", "Calories" ];
-    var dataBack = "<div class='UBox'>Food<div class='UBoxO'>Calorie Tracker" +
+    var dataBack = "<div class='UBox'>FD<div class='UBoxO'>Calorie Tracker" +
             "<form id='CaloriesForm'>" +
             "<button class='UButton' id='CalSubmitButton' type='submit' name='SubmitServings'>Nom nom nom!</button><p>";
     var tableElement = "<table><thead><tr>";
