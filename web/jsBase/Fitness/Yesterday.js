@@ -24,7 +24,7 @@ function fitnessYesterday(dataIn) {
             "<form id='FormUpdateYesterday'><button class='UButton' id='MakeUpdatesY' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
             "<tr><td>Burned Cals</td><td><input type='number' step='1' name='YesterdayCaloriesBurned' value='" + yCaloriesBurned + "'/></td></tr>" +
-            "<tr><td>Calores<br/><em>Base 2000</em></td><td><input type='number' step='1' name='YesterdayCalories' value='" + yCalories + "'/></td></tr>" +
+            "<tr><td>Calores</td><td><input type='number' step='1' name='YesterdayCalories' value='" + yCalories + "'/></td></tr>" +
             "<tr><td>Steps<br/><em>Base 2000</em></td><td><input type='number' step='1' name='YesterdaySteps' value='" + ySteps + "'/></td></tr>" +
             "<tr><td>Exercise Minutes</td><td><input type='number' step='1' name='YesterdayIntensityMinutes' value='" + yExerciseMinutes + "'/></td></tr>" +
             "<tr><td>XTags</td><td><input type='text' name='YesterdayX' value='" + yXTags + "'/></td></tr>" +

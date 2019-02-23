@@ -900,13 +900,15 @@ public class FitnessDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
-	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle,CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,Steps,CaloriesBurned,IntensityMinutes) VALUES" +
-	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?,?,?,?,?,?,?)" +
+	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle," +
+        		"   CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,Steps,CaloriesBurned,IntensityMinutes) VALUES" +
+	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?," +
+        		"   ?,?,?,?,?,?,?,?)" +
 	            " ON DUPLICATE KEY UPDATE" +
 	            " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 				" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 				" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?," +
-				" Steps=?, CaloresBurned=?, IntensityMinutes=?";
+				" Steps=?, CaloriesBurned=?, IntensityMinutes=?";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
         returnData += "\n ***DEBUG: \n part1 : " + query_Fitness_GetLastRsMileTotal + "\n part2 : " + query_Fitness_DayIU;
         return returnData;

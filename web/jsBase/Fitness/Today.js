@@ -23,7 +23,7 @@ function fitnessToday(dataIn) {
     if(!isSet(dataIn.Orgs)) { xOrgs = ""; } else { xOrgs = dataIn.Orgs; }
     if(!isSet(dataIn.EstHoursSleep)) { hSleep = ""; } else { hSleep = dataIn.EstHoursSleep; }
     if(!isSet(dataIn.Steps)) { steps = ""; } else { steps = dataIn.Steps; }
-    if(!isSet(dataIn.CaloriesBurned)) { calsBurned = ""; } else { hSleep = dataIn.CaloriesBurned; }
+    if(!isSet(dataIn.CaloriesBurned)) { calsBurned = ""; } else { calsBurned = dataIn.CaloriesBurned; }
     if(!isSet(dataIn.IntensityMinutes)) { exMins = ""; } else { exMins = dataIn.IntensityMinutes; }
     if(!isSet(dataIn.xTags)) {
         if(dataIn.Vomit === 1) { xTags = "VO"; } else { xTags = ""; }
