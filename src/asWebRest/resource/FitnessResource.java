@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Feb 2019
+Updated: 22 Feb 2019
  */
 
 package asWebRest.resource;
@@ -304,6 +304,9 @@ public class FitnessResource extends ServerResource {
                 	String yesterdayCaloriesBurned = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayCaloriesBurned"))) { yesterdayCaloriesBurned = argsInForm.getFirstValue("YesterdayCaloriesBurned"); } qParams.add(yesterdayCaloriesBurned);
                 	String yesterdaySteps = null; if(wc.isSet(argsInForm.getFirstValue("YesterdaySteps"))) { yesterdaySteps = argsInForm.getFirstValue("YesterdaySteps"); } qParams.add(yesterdaySteps);
                 	String yesterdayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayIntensityMinutes"))) { yesterdayIntensityMinutes = argsInForm.getFirstValue("YesterdayIntensityMinutes"); } qParams.add(yesterdayIntensityMinutes);
+                	String yesterdayCalories = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayCalories"))) { yesterdayCalories = argsInForm.getFirstValue("YesterdayCalories"); } qParams.add(yesterdayCalories);
+                	String yesterdayXTags = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayX"))) { yesterdayXTags = argsInForm.getFirstValue("YesterdayX"); } qParams.add(yesterdayXTags);
+                	String yesterdayOrgs = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayXO"))) { yesterdayOrgs = argsInForm.getFirstValue("YesterdayXO"); } qParams.add(yesterdayOrgs);
                 	returnData += updateFitnessAction.setUpdateYesterday(qParams);
                 	break;
                 	

@@ -476,7 +476,9 @@ public class FitnessDAO {
     }
     
     public JSONArray getDayY(Connection dbc) {
-        final String query_Fitness_DayY = "SELECT CaloriesBurned, Steps, IntensityMinutes FROM Core.Fitness WHERE Date=CURDATE() - INTERVAL 1 DAY;";
+        final String query_Fitness_DayY = "SELECT CaloriesBurned, Steps, IntensityMinutes," +
+        		" Calories, XTags, Orgs" +
+    			" FROM Core.Fitness WHERE Date=CURDATE() - INTERVAL 1 DAY;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_DayY, null);
@@ -485,7 +487,10 @@ public class FitnessDAO {
                 tObject
                     .put("CaloriesBurned", resultSet.getInt("CaloriesBurned"))
                     .put("Steps", resultSet.getInt("Steps"))
-                    .put("IntensityMinutes", resultSet.getInt("IntensityMinutes"));
+                    .put("IntensityMinutes", resultSet.getInt("IntensityMinutes"))
+                    .put("Calories", resultSet.getInt("Calories"))
+                    .put("XTags", resultSet.getString("XTags"))
+                    .put("Orgs", resultSet.getInt("Orgs"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -912,9 +917,8 @@ public class FitnessDAO {
     public String setUpdateYesterday(List<String> qParams) {
     	String returnData = "Query has not ran yet or has failed.";
     	String query_Fitness_DayYU = "UPDATE Core.Fitness SET" + 
-    			" CaloriesBurned=?," +
-    			" Steps=?," +
-    			" IntensityMinutes=?" +
+    			" CaloriesBurned=?, Steps=?, IntensityMinutes=?," +
+    			" Calories=?, XTags=?, Orgs=?" +
     			" WHERE Date=CURDATE() - INTERVAL 1 DAY;";
     	try { returnData = wc.q2do(query_Fitness_DayYU, qParams); } catch (Exception e) { e.printStackTrace(); }
     	return returnData;

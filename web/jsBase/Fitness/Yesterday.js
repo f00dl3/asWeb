@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Feb 2019
-Updated: Created!
+Updated: 22 Feb 2019
  */
 
 function actUpdateYesterdaySubmit(event) {
@@ -12,17 +12,23 @@ function actUpdateYesterdaySubmit(event) {
 
 function fitnessYesterday(dataIn) {
     if(!isSet(dataIn)) { dataIn = {}; }
-    var caloriesBurned, steps, intensityMinutes;
-    if(!isSet(dataIn.CaloriesBurned)) { caloriesBurned = ""; } else { caloriesBurned = dataIn.CaloriesBurned; }
-    if(!isSet(dataIn.Steps)) { steps = ""; } else { steps = dataIn.Steps; }
-    if(!isSet(dataIn.IntensityMinutes)) { intensityMinutes = ""; } else { intensityMinutes = dataIn.IntensityMinutes; }
-    var holderData = "<div class='UBox'>Yester" +
+    var yCaloriesBurned, yCalories, ySteps, yExerciseMinutes, yXTags, yOrgs;
+    if(!isSet(dataIn.Calories)) { yCalories = ""; } else { yCalories = dataIn.Calories; }
+    if(!isSet(dataIn.CaloriesBurned)) { yCaloriesBurned = ""; } else { yCaloriesBurned = dataIn.CaloriesBurned; }
+    if(!isSet(dataIn.Steps)) { ySteps = ""; } else { ySteps = dataIn.Steps; }
+    if(!isSet(dataIn.IntensityMinutes)) { yExerciseMinutes = ""; } else { yExerciseMinutes = dataIn.IntensityMinutes; }
+    if(!isSet(dataIn.XTags)) { yXTags = ""; } else { yXTags = dataIn.XTags; }
+    if(!isSet(dataIn.Orgs)) { yOrgs = ""; } else { yOrgs = dataIn.Orgs; }
+    var holderData = "<div class='UBox'>Yest" +
             "<div class='UBoxO'>Update Yesterday<br/>" +
             "<form id='FormUpdateYesterday'><button class='UButton' id='MakeUpdatesY' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
-            "<tr><td>Calores Burned</td><td><input type='number' step='1' name='YesterdayCaloriesBurned' value='" + caloriesBurned + "'/></td></tr>" +
-            "<tr><td>Steps</td><td><input type='number' step='1' name='YesterdaySteps' value='" + steps + "'/></td></tr>" +
-            "<tr><td>Intensity Minutes</td><td><input type='number' step='1' name='YesterdayIntensityMinutes' value='" + intensityMinutes + "'/></td></tr>" +
+            "<tr><td>Burned Cals</td><td><input type='number' step='1' name='YesterdayCaloriesBurned' value='" + yCaloriesBurned + "'/></td></tr>" +
+            "<tr><td>Calores </td><td><input type='number' step='1' name='YesterdayCalories' value='" + yCalories + "'/></td></tr>" +
+            "<tr><td>Steps</td><td><input type='number' step='1' name='YesterdaySteps' value='" + ySteps + "'/></td></tr>" +
+            "<tr><td>Exercise Minutes</td><td><input type='number' step='1' name='YesterdayIntensityMinutes' value='" + yExerciseMinutes + "'/></td></tr>" +
+            "<tr><td>XTags</td><td><input type='text' name='YesterdayX' value='" + yXTags + "'/></td></tr>" +
+            "<tr><td>Orgs</td><td><input type='number' step='1' name='YesterdayXO' value='" + yOrgs + "'/></td></tr>" +
             "</tbody></table>";
     holderData += tableData +
             "</form></div></div>";

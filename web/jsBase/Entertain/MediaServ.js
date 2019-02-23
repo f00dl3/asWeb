@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 20 Feb 2019
+Updated: 22 Feb 2019
  */
 
 var msIndex;
@@ -250,7 +250,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                         //var imageWidthHeightAttribs = "IW=" + imageWidth + "&IH=" + imageHeight + "&";
                         var olResolution = imageAttribs[0] + "x" + imageAttribs[1];
                         var olPicPath, oltPickPath, thisYear;
-                        if(tm.Path == "/Adult/TPi") {
+                        if(tm.Path == "/Adult/TP") {
                             olPicPath = getBasePath("media") + tm.Path + "/" + tm.File;
                             oltPicPath = olPicPath.replace("/full/", "/thumb/");
                             //console.log(olPicPath + "," + oltPicPath + "," + imageWidth + "," + imageHeight);
@@ -266,8 +266,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 	                        } else {
 	                            thisYear = (tm.Path).substr((tm.Path).length - 4);
 	                            olPicPath = "/asWeb/x/PicsL" + thisYear + "/full/" + tm.File;
-	                            thisAddCheckbox += "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" +
-	                                    /* "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" + */
+	                            thisAddCheckbox += /* "<a href='" + leafletMapImageLink(olPicPath, imageWidth, imageHeight) + "' target='photoPop'>" + */
+	                                    "<a href='" + olMapImageLink(olPicPath, olResolution) + "' target='photoPop'>" +
 	                                    "<img class='" + firstThumbSize + "' src='" + getBasePath("old") + "/Images/Memories/" + thisYear + "/thumb/" + tm.File + "'/>";
 	                        }
 	                    }
