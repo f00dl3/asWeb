@@ -293,9 +293,13 @@ public class FitnessResource extends ServerResource {
                     qParams.add(todayX); qParams.add(todayVomit);
                     String todaySleep = null; if(wc.isSet(argsInForm.getFirstValue("TodayEstHoursSleep"))) { todaySleep = argsInForm.getFirstValue("TodayEstHoursSleep"); } qParams.add(todaySleep);
                     String todayXO = null; if(wc.isSet(argsInForm.getFirstValue("TodayXO"))) { todayXO = argsInForm.getFirstValue("TodayXO"); } qParams.add(todayXO);
+                    String todaySteps = null; if(wc.isSet(argsInForm.getFirstValue("TodaySteps"))) { todaySteps = argsInForm.getFirstValue("TodayCommonRoute"); } qParams.add(todaySteps);
+                    String todayCaloriesBurned = null; if(wc.isSet(argsInForm.getFirstValue("TodayCaloriesBurned"))) { todayCaloriesBurned = argsInForm.getFirstValue("TodayCaloriesBurned"); } qParams.add(todayCaloriesBurned);
+                    String todayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("TodayExerciseMinutes"))) { todayIntensityMinutes = argsInForm.getFirstValue("TodayExerciseMinutes"); } qParams.add(todayIntensityMinutes);
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
-                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep); qParams.add(todayXO);
+                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
+                    qParams.add(todayXO); qParams.add(todaySteps); qParams.add(todayCaloriesBurned); qParams.add(todayIntensityMinutes);
                     //System.out.println(qParams.toString());
                     returnData += updateFitnessAction.setUpdateToday(qParams);
                     break;
