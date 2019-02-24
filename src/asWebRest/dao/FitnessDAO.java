@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Feb 2019
+Updated: 24 Feb 2019
 */
 
 package asWebRest.dao;
@@ -901,15 +901,19 @@ public class FitnessDAO {
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
 	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle," +
-        		"   CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,Steps,CaloriesBurned,IntensityMinutes) VALUES" +
+        		"   CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,IntensityMinutes) VALUES" +
 	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?," +
-        		"   ?,?,?,?,?,?,?,?)" +
+        		"   ?,?,?,?,?,?)" +
 	            " ON DUPLICATE KEY UPDATE" +
 	            " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 				" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 				" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?," +
-				" Steps=?, CaloriesBurned=?, IntensityMinutes=?";
+				" IntensityMinutes=?";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
+        final String query_Fitness_DayIUSteps = "UPDATE Core.Fitness SET Steps=(2000*IFNULL(1508.57*RunWalk,0)) WHERE Date=CURDATE();";
+        final String query_Fitness_DayIUCals = "UPDATE Core.Fitness SET CaloriesBurned=(1600+IFNULL(175*RunWalk,0)+IFNULL(72*Cycling,0)) WHERE Date=CURDATE();";
+        try { returnData = wc.q2do(query_Fitness_DayIUSteps, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do(query_Fitness_DayIUCals, null); } catch (Exception e) { e.printStackTrace(); }
         returnData += "\n ***DEBUG: \n part1 : " + query_Fitness_GetLastRsMileTotal + "\n part2 : " + query_Fitness_DayIU;
         return returnData;
     }
@@ -924,8 +928,7 @@ public class FitnessDAO {
     public String setUpdateYesterday(List<String> qParams) {
     	String returnData = "Query has not ran yet or has failed.";
     	String query_Fitness_DayYU = "UPDATE Core.Fitness SET" + 
-    			" CaloriesBurned=?, Steps=?, IntensityMinutes=?," +
-    			" Calories=?, XTags=?, Orgs=?" +
+    			" IntensityMinutes=?, Calories=?, XTags=?, Orgs=?" +
     			" WHERE Date=CURDATE() - INTERVAL 1 DAY;";
     	try { returnData = wc.q2do(query_Fitness_DayYU, qParams); } catch (Exception e) { e.printStackTrace(); }
     	return returnData;

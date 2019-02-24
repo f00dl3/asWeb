@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Feb 2019
+Updated: 24 Feb 2019
  */
 
 package asWebRest.resource;
@@ -293,20 +293,16 @@ public class FitnessResource extends ServerResource {
                     qParams.add(todayX); qParams.add(todayVomit);
                     String todaySleep = null; if(wc.isSet(argsInForm.getFirstValue("TodayEstHoursSleep"))) { todaySleep = argsInForm.getFirstValue("TodayEstHoursSleep"); } qParams.add(todaySleep);
                     String todayXO = null; if(wc.isSet(argsInForm.getFirstValue("TodayXO"))) { todayXO = argsInForm.getFirstValue("TodayXO"); } qParams.add(todayXO);
-                    String todaySteps = null; if(wc.isSet(argsInForm.getFirstValue("TodaySteps"))) { todaySteps = argsInForm.getFirstValue("TodaySteps"); } qParams.add(todaySteps);
-                    String todayCaloriesBurned = null; if(wc.isSet(argsInForm.getFirstValue("TodayCaloriesBurned"))) { todayCaloriesBurned = argsInForm.getFirstValue("TodayCaloriesBurned"); } qParams.add(todayCaloriesBurned);
                     String todayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("TodayExerciseMinutes"))) { todayIntensityMinutes = argsInForm.getFirstValue("TodayExerciseMinutes"); } qParams.add(todayIntensityMinutes);
                     qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
                     qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
-                    qParams.add(todayXO); qParams.add(todaySteps); qParams.add(todayCaloriesBurned); qParams.add(todayIntensityMinutes);
+                    qParams.add(todayXO); qParams.add(todayIntensityMinutes);
                     System.out.println(qParams.toString());
                     returnData += updateFitnessAction.setUpdateToday(qParams);
                     break;
                     
                 case "putYesterday":
-                	String yesterdayCaloriesBurned = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayCaloriesBurned"))) { yesterdayCaloriesBurned = argsInForm.getFirstValue("YesterdayCaloriesBurned"); } qParams.add(yesterdayCaloriesBurned);
-                	String yesterdaySteps = null; if(wc.isSet(argsInForm.getFirstValue("YesterdaySteps"))) { yesterdaySteps = argsInForm.getFirstValue("YesterdaySteps"); } qParams.add(yesterdaySteps);
                 	String yesterdayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayIntensityMinutes"))) { yesterdayIntensityMinutes = argsInForm.getFirstValue("YesterdayIntensityMinutes"); } qParams.add(yesterdayIntensityMinutes);
                 	String yesterdayCalories = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayCalories"))) { yesterdayCalories = argsInForm.getFirstValue("YesterdayCalories"); } qParams.add(yesterdayCalories);
                 	String yesterdayXTags = null; if(wc.isSet(argsInForm.getFirstValue("YesterdayX"))) { yesterdayXTags = argsInForm.getFirstValue("YesterdayX"); } qParams.add(yesterdayXTags);
