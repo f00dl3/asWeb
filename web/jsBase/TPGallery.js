@@ -1,13 +1,13 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 21 Feb 2019
+Updated: 23 Feb 2019
  */
 
 var maxListing = 250;
 var tpSearchableData, tpIndexedImages, tpMatcher;
-var tpHash;
-var tpGlob;
+var tpHash, tpGlob;
+var msiFlagG = 0;
 
 function actOnDoXTag(event) {
     var target = "?";
@@ -22,14 +22,19 @@ function actOnTpSelect(event) {
     var thisFormData = dojo.formToObject(this.form);
     tpHash = thisFormData.TPHash;
     tpGlob = thisFormData.TPGlob;
-    initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob);
+    initGallery("tp", thisFormData.TPHash, thisFormData.TPGlob, thisFormData.TPIndexedMS);
 }
 
 function actOnTpiUpdate(event) {
 	dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormJson = dojo.formToJson(this.form);
     putUpdateTpi(thisFormData);
+}
+
+function actOnTpMsiUpdate(event) {
+	dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    putUpdateTpMsi(thisFormData);
 }
 
 function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
@@ -108,6 +113,21 @@ function genUpdateTpiForm(existingData, iRes, ffn, fileSizeKB, hashPath) {
     dojo.query(".tpSubmit").connect("click", actOnTpiUpdate);
 }
 
+function genUpdateTpMsiForm(msiFlag) {
+	var msiChecked = "";
+	if(isSet(msiFlag)) { msiFlagG = msiFlag; }
+	var msiFlagGVal = parseInt(msiFlag);
+    if(msiFlagGVal === 1) { msiChecked = "checked='checked'"; }
+	rData = "<form>" +
+    	"<input id='checkMsi' type='checkbox' style='width: 15px;' name='MsiFlag' " + msiChecked + "/>" +
+    	"<input type='hidden' name='MsiHash' value='" + tpHash + "'/>" +
+    	" <strong>Mark all in " + tpHash + " as indexed!<br/>" +
+		"</form>";
+	dojo.byId("UpdateMsiFlagHolder").innerHTML = rData;
+	var checkMsiBox = dojo.byId("checkMsi");
+    dojo.connect(checkMsiBox, "onchange", actOnTpMsiUpdate);
+}
+
 function getSearchableData() {
     aniPreload("on");
     var thePostData = { "doWhat": "getTpIndex" };
@@ -177,7 +197,8 @@ function populateImageTagUpdater(target, xTags, tpPic) {
 function populateGalleryHolder(/* tpIndexed, tpImgTotal */) {
     /* var percentIndexed = ((tpIndexed.Files/tpImgTotal)*100).toFixed(2); */
     var rData = /* "<em>" + tpIndexed.Files + " of " + tpImgTotal + " indexed. (" + percentIndexed + "% done)</em>" + */
-            "<p id='GalleryHolderInside'></p>";
+            "<p id='GalleryHolderInside'></p>" +
+            "<p id='UpdateMsiFlagHolder'></p>";
     dojo.byId("TPGalleryHolder").innerHTML = rData;
 }
 
@@ -194,7 +215,6 @@ function populateSearchBox() {
 }
 
 function populateSearchPopup(searchableData) {
-    var done, percentDone, fColor;
     var tpGallery = 0;
     var tpImageTotal = 0;
     var cols = [ "Do", "Image Set", "Count" ];
@@ -205,6 +225,8 @@ function populateSearchPopup(searchableData) {
     searchableData.forEach(function (tpData) {
         tpGallery++;
         if(tpGallery < maxListing) {
+            var done, fColor;
+        	done = tpData.MSIndexed;
             /* tpMatcher.forEach(function (tpMatch) {
                 if(tpMatch.HashPath === tpData.HashPath) {
                     done = tpMatch.Indexed;
@@ -214,7 +236,7 @@ function populateSearchPopup(searchableData) {
                     percentDone = 0;
                 }
             }); */
-            if(percentDone === 0) { fColor = "gray"; } else { fColor = autoColorScale(percentDone, 100, 0, null); }
+            if(done === 0) { fColor = "yellow"; } else { fColor = "green"; }
             tpImageTotal += (tpImageTotal + tpData.FinalCount);
             hosTable += "<form id='TPFormGallery' class='tr'>" +
                     "<span class='td'>";
@@ -265,11 +287,33 @@ function putUpdateTpi(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice("Updated TPI data!");
-            initGallery("tp", tpHash, tpGlob);
+            initGallery("tp", tpHash, tpGlob, msiFlagG);
             aniPreload("off");
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for UpdateTpi FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function putUpdateTpMsi(formData) {
+    aniPreload("on");
+    formData.doWhat = "setTpMsi";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("TP"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Updated TP MSI data!");
+            initGallery("tp", tpHash, tpGlob, formData.MsiFlag);
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("xhrPost for UpdateTpMsi FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };

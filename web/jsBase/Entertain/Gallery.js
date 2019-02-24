@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 21 Feb 2019
+Updated: 23 Feb 2019
  */
 
 var tppCallback;
@@ -104,16 +104,18 @@ function generateGallery(argsIn, fileList) {
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
-        rData += "<div class='UPopNM'>" +
-                /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
-                "<a href='" + relativePath + "' target='new'>"; */
-                "<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>";
+        rData += "<div class='UPopNM'>";
+                
         if(checkMobile()) {
             rData += "<img class='th_small' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
-        } else {
-            rData += "<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
+        } else {            
+            rData += /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
+                "<a href='" + relativePath + "' target='new'>"; */
+            	"<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>" +
+            	"<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
+            	"</a>";
         }
-        rData += "</a><div class='UPopNMO'>" +
+        rData += "<div class='UPopNMO'>" +
                 "<strong>File: </strong><a href='" + relativePath + "' target='newTP'>" + fileName + "</a><br/>" +
                 "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
                 "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
@@ -125,7 +127,7 @@ function generateGallery(argsIn, fileList) {
     dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
-function initGallery(flagsIn, firstArgIn, tpGlob) {
+function initGallery(flagsIn, firstArgIn, tpGlob, msiFlag) {
     var flagsOut;
     var rData, thisPath, path;
     rData = thisPath = path = "";
@@ -145,6 +147,7 @@ function initGallery(flagsIn, firstArgIn, tpGlob) {
             break;
         case "tp":
             thisPath = getServerPath("mediaServer") + "/Adult/TP/" + firstArgIn + "/full/";
+            genUpdateTpMsiForm(msiFlag);
             break;
         case "none":
             thisPath = getServerPath("apache2") + "/ASWebUI/Images/Memories/" + firstArgIn + "/full/";
