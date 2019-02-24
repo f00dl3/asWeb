@@ -300,6 +300,7 @@ function putUpdateTpi(formData) {
 
 function putUpdateTpMsi(formData) {
     aniPreload("on");
+    msiFlagG = formData.MsiFlag;
     formData.doWhat = "setTpMsi";
     var xhArgs = {
         preventCache: true,
@@ -309,7 +310,7 @@ function putUpdateTpMsi(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice("Updated TP MSI data!");
-            initGallery("tp", tpHash, tpGlob, formData.MsiFlag);
+            initGallery("tp", tpHash, tpGlob, msiFlagG);
             aniPreload("off");
         },
         error: function(data, iostatus) {
