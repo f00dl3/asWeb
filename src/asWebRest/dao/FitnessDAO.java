@@ -910,7 +910,7 @@ public class FitnessDAO {
 				" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?," +
 				" IntensityMinutes=?";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
-        final String query_Fitness_DayIUSteps = "UPDATE Core.Fitness SET Steps=(2000*IFNULL(1508.57*RunWalk,0)) WHERE Date=CURDATE();";
+        final String query_Fitness_DayIUSteps = "UPDATE Core.Fitness SET Steps=(2000+IFNULL(1508.57*RunWalk,0)) WHERE Date=CURDATE();";
         final String query_Fitness_DayIUCals = "UPDATE Core.Fitness SET CaloriesBurned=(1600+IFNULL(175*RunWalk,0)+IFNULL(72*Cycling,0)) WHERE Date=CURDATE();";
         try { returnData = wc.q2do(query_Fitness_DayIUSteps, null); } catch (Exception e) { e.printStackTrace(); }
         try { returnData = wc.q2do(query_Fitness_DayIUCals, null); } catch (Exception e) { e.printStackTrace(); }
