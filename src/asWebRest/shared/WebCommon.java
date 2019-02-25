@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 17 Feb 2019
+Updated: 24 Feb 2019
 */
 
 package asWebRest.shared;
@@ -216,13 +216,13 @@ public class WebCommon {
 
     public String q2do(String query, List<String> params) throws Exception {
         String messageBack = "Query has not ran yet or failed!";
-        if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
         try {
             MyDBConnector mdb = new MyDBConnector();
             Connection connection = mdb.getMyConnection();
             PreparedStatement pStatement = connection.prepareStatement(query);
             int pit = 1;
             if(params != null) {
+                if(isSet(params.toString())) { messageBack += "PARAMS: " + params.toString() + "\n"; }
                 for (String param : params) {
                     if(param != null) {
                         if (param.equals("on")) { param = "1"; }
