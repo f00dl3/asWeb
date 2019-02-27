@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Feb 2019
+Updated: 25 Feb 2019
 */
 
 package asWebRest.dao;
@@ -334,7 +334,7 @@ public class FitnessDAO {
     }
     
     public JSONArray getChCaloriesR(Connection dbc, List<String> qParams) {
-        final String query_ch_CaloriesR = "SELECT Date, Calories, Fat, Protein, Carbs" +
+        final String query_ch_CaloriesR = "SELECT Date, Calories, Fat, Protein, Carbs, CaloriesBurned" +
                 " FROM Core.Fitness WHERE Date BETWEEN ? AND ? LIMIT 366;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -346,7 +346,8 @@ public class FitnessDAO {
                     .put("Calories", resultSet.getInt("Calories"))
                     .put("Fat", resultSet.getInt("Fat"))
                     .put("Protein", resultSet.getInt("Protein"))
-                    .put("Carbs", resultSet.getInt("Carbs"));
+                    .put("Carbs", resultSet.getInt("Carbs"))
+					.put("CaloriesBurned", resultSet.getInt("CaloriesBurned"));
                 tContainer.put(tObject);
             }
             resultSet.close();

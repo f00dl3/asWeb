@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Jun 2018
-Updated: 17 Jan 2019
+Updated: 25 Feb 2019
  */
 
 package asWebRest.chartHelpers;
@@ -20,6 +20,7 @@ public class Fitness {
         JSONArray cal_Data2 = new JSONArray();
         JSONArray cal_Data3 = new JSONArray();
         JSONArray cal_Data4 = new JSONArray();
+	JSONArray cal_Data5 = new JSONArray();
         cal_Props
             .put("dateFormat", "yyyy-MM-dd")
             .put("chartName", cal_Name).put("chartFileName", "CalorieRange")
@@ -27,6 +28,7 @@ public class Fitness {
             .put("s2Color", "Red").put("s2Name", "Fat")
             .put("s3Color", "Green").put("s3Name", "Protein")
             .put("s4Color", "Yellow").put("s4Name", "Carbs")
+		.put("s5Color", "Blue").put("s5Name", "Burned")
             .put("xLabel", "Date").put("yLabel", "Calories");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -35,6 +37,7 @@ public class Fitness {
             cal_Data2.put(9 * thisObject.getInt("Fat"));
             cal_Data3.put(4 * thisObject.getInt("Protein"));
             cal_Data4.put(4 * thisObject.getInt("Carbs"));
+		cal_Data5.put(thisObject.getInt("CaloriesBurned"));
         }
         cal_Glob
                 .put("labels", cal_Labels)
@@ -42,6 +45,7 @@ public class Fitness {
                 .put("data2", cal_Data2)
                 .put("data3", cal_Data3)
                 .put("data4", cal_Data4)
+		.put("data5", cal_Data5)
                 .put("props", cal_Props);
         return cal_Glob;
     }

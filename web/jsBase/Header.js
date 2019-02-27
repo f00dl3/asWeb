@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 20 Feb 2019
+Updated: 26 Feb 2019
  */
 
 var annMaint = 910.66;
@@ -529,6 +529,13 @@ function showNotice(message) {
     $('.Notice').fadeIn('slow').delay(5000).fadeOut('slow');
 }
 
+function showStickyPop() {
+	/* require(["dojo/dom-style", "dojo/query", "dojo/NodeList-dom"], function(domStyle, query){
+		domStyle.set(this, "display", "block");
+	}); */
+	$(this).show();
+}
+
 /* 
 
 function AuthCheck($thisPage,$thisUser) {
@@ -587,6 +594,10 @@ class SortedIterator extends SplHeap {
 function init() {
     getSessionVariables();
     putNavi();
+}
+
+dojo.NodeList.prototype.hover = function(over, out){
+    return this.onmouseenter(over).onmouseleave(out || over);
 }
 
 dojo.ready(init);

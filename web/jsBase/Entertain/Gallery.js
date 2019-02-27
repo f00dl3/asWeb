@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 23 Feb 2019
+Updated: 26 Feb 2019
  */
 
 var tppCallback;
@@ -104,26 +104,31 @@ function generateGallery(argsIn, fileList) {
         }
         var thumbPath = relativePath.replace("/full/", "/thumb/");
         if(!isSet(imgBorder)) { imgBorder = "purple"; }
-        rData += "<div class='UPopNM'>";
-                
+        var popupData = "<strong>File: </strong><a href='" + relativePath + "' target='newTP'>" + fileName + "</a><br/>" +
+	        "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
+	        "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
+	        "<span id='crossDataHolder_" + thisFFN + "'></span>";
         if(checkMobile()) {
-            rData += "<img class='th_small' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>";
+            rData += "<div class='UPopNM'>" +
+            	"<img class='th_small' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
+            	"<div class='UPopNMO'>" + popupData + "</div>" +
+            	"</div>";
         } else {            
-            rData += /* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
+            rData += "<div class='UPopNM'>" + //UStickyPop 
+            	/* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
                 "<a href='" + relativePath + "' target='new'>"; */
             	"<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>" +
             	"<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
-            	"</a>";
+            	"</a>" +
+            	"<div class='UPopNMO'>" + //UStickyPopO
+            	popupData +
+                "</div>" +
+            	"</div>";
         }
-        rData += "<div class='UPopNMO'>" +
-                "<strong>File: </strong><a href='" + relativePath + "' target='newTP'>" + fileName + "</a><br/>" +
-                "<strong>Size: </strong>" + fileSizeKB + "<br/>" +
-                "<strong>Path: </strong>" + fileList[tFile].Path + "<br/>" +
-                "<span id='crossDataHolder_" + thisFFN + "'></span>";
         //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
-        rData += "</div></div>";
     });
     rData += "<p><strong>Total photo count: </strong>" + photoCount;
+    //dojo.query("UStickyPop").hover(function(e) { showStickyPop(); });
     dojo.byId("GalleryHolderInside").innerHTML = rData;
 }
 
