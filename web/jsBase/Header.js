@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 26 Feb 2019
+Updated: 2 Mar 2019
  */
 
 var annMaint = 910.66;
@@ -529,11 +529,19 @@ function showNotice(message) {
     $('.Notice').fadeIn('slow').delay(5000).fadeOut('slow');
 }
 
-function showStickyPop() {
+function stickyPopClose() {
+	$(".UStickyPopO").hide();
+}
+
+function stickyPopShow() {
 	/* require(["dojo/dom-style", "dojo/query", "dojo/NodeList-dom"], function(domStyle, query){
 		domStyle.set(this, "display", "block");
-	}); */
-	$(this).show();
+	}); 
+	$(this).show(); */
+	$(".UStickyPop").hover(function() { 
+		$(".UStickyPopO").hide();
+		$(this).children().show();
+	});
 }
 
 /* 

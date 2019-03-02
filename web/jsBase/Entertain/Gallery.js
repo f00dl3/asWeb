@@ -114,22 +114,23 @@ function generateGallery(argsIn, fileList) {
             	"<div class='UPopNMO'>" + popupData + "</div>" +
             	"</div>";
         } else {            
-            rData += "<div class='UPopNM'>" + //UStickyPop 
+            rData += "<div class='UStickyPop'>" + //UPopNM 
             	/* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
                 "<a href='" + relativePath + "' target='new'>"; */
             	"<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>" +
             	"<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
             	"</a>" +
-            	"<div class='UPopNMO'>" + //UStickyPopO
+            	"<div class='UStickyPopO'>" + //UPopNMO
             	popupData +
                 "</div>" +
-            	"</div>";
+                "</div>";
         }
         //if(isSet(tppCallback) && isSet(tppCallback.XTags)) { rData += "<strong>Tags: </strong>" + tppCallback.XTags + "<br/>"; }
     });
     rData += "<p><strong>Total photo count: </strong>" + photoCount;
     //dojo.query("UStickyPop").hover(function(e) { showStickyPop(); });
     dojo.byId("GalleryHolderInside").innerHTML = rData;
+	stickyPopShow(); 
 }
 
 function initGallery(flagsIn, firstArgIn, tpGlob, msiFlag) {

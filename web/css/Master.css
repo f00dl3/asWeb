@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 26 Feb 2019
+Updated: 2 Mar 2019
 */
 
 /* Hidden DIVs */
@@ -288,14 +288,16 @@ Updated: 26 Feb 2019
 
 .U2PopO { display: none;  height: auto; }
 
-.UStickyPop { clear: both; display: inline; }
+.UStickyPop {
+	clear: both;
+	display: inline;
+	transition: 0s 180s;
+}
 
-.UStickyPopO
-{
-	animation: fadein 1s;
-	background-color: #363636;
-	border: 2px solid white;
-	border-radius: 3px;
+.UStickyPopO {
+	background-color: black;
+	border: 2px solid red;
+	border-radius: 3px;	
 	box-shadow: 7px 7px 3px #000000;
 	color: white;
 	clear: both;
@@ -304,10 +306,9 @@ Updated: 26 Feb 2019
 	height: auto;
 	position: absolute;
 	margin: 0;
-	max-height: 256px;
-	max-width: 320px;
-	overflow: auto;
-	padding: 6px;
+	overflow: hide;
+	padding-left: 6px;
+	transition: 0s;
 	width: auto;
 	z-index: 10;
 }
