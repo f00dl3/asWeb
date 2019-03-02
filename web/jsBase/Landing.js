@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 12 Feb 2018
-Updated: 20 Feb 2019
+Updated: 2 Mar 2019
  **/
 
 var loggedIn = false;
@@ -41,8 +41,10 @@ function getWebVersion() {
         timeout: timeOutMilli,
         load: function(data) {
             var theData = data[0];
-            var thisDiv = "<div class='UPop'>" + theData.Version + " (Updated: " + theData.Date + ")";
-            thisDiv += "<div class='UPopO'>" + theData.Changes + "</div></div>";
+            var thisDiv = "<div class='UPop'>" + theData.Version;
+            if(isSet(theData.Revisions)) { thisDiv += " r" + theData.Revisions; }
+            thisDiv += " (Updated: " + theData.Date + ")" +
+            	"<div class='UPopO'>" + theData.Changes + "</div></div>";
             dojo.byId('webVersion').innerHTML = thisDiv;
         },
         error: function(data, iostatus) {

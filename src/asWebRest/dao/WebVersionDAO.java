@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2018
-Updated: 23 Jun 2018
+Updated: 2 Mar 2019
 */
 
 package asWebRest.dao;
@@ -35,7 +35,7 @@ public class WebVersionDAO {
     }
     
     public JSONArray getWebVersion(Connection dbc) {
-        final String query_WebVersion = "SELECT Version, Date, Changes FROM Core.WebVersion ORDER BY Date DESC LIMIT 5;";
+        final String query_WebVersion = "SELECT Version, Date, Changes, Revisions FROM Core.WebVersion ORDER BY Date DESC LIMIT 5;";
         JSONArray webVersions = new JSONArray();
         try (
             ResultSet resultSet = wc.q2rs1c(dbc, query_WebVersion, null);
@@ -45,6 +45,7 @@ public class WebVersionDAO {
                 webVersion
                     .put("Version", resultSet.getString("Version"))
                     .put("Date", resultSet.getString("Date"))
+                    .put("Revisions", resultSet.getInt("Revisions"))
                     .put("Changes", resultSet.getString("Changes"));
                 webVersions.put(webVersion);
             }
@@ -54,7 +55,7 @@ public class WebVersionDAO {
     }
     
     public JSONArray getWebVersionAuto(Connection dbc) throws Exception {
-        final String query_WebVersion = "SELECT Version, Date, Changes FROM Core.WebVersion ORDER BY Date DESC LIMIT 5;";
+        final String query_WebVersion = "SELECT Version, Date, Changes, Revisions FROM Core.WebVersion ORDER BY Date DESC LIMIT 5;";
         JSONArray webVersions = wc.query2json(dbc, query_WebVersion, null);
         return webVersions;
     }

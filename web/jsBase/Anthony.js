@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 16 Jun 2018
+Updated: 2 Mar 2019
 */
 
 function actOnCalendarSubmit(event) {
@@ -147,13 +147,21 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     databaseInfoBubble += "<strong>MySQL</strong><br/>" + autoUnits(mySqlOverallSize) + "b, " + autoUnits(mySqlOverallRows) + " rows.<p>" +
             "</div></button></a></div>";
     // Postgres DB Info build query?
-    var wvbCols = [ "Version", "Date", "Changes" ];
+    var wvbCols = [ "Version", "Date", "Changes", "Revisions" ];
     var webVersionBubble = "<div class='UPopC'><button class='UButton'>Versions" +
             "<div class='UPopCO'>" +
             "<table><thead><tr>";
     for(var i = 0; i < wvbCols.length; i++) { webVersionBubble += "<th>" + wvbCols[i] + "</th>"; }
     webVersionBubble += "</tr></thead><tbody>";
-    webVersion.forEach(function (wv) { webVersionBubble += "<tr><td>" + wv.Version + "</td><td>" + wv.Date + "</td><td>" + wv.Changes + "</td></tr>"; });
+    webVersion.forEach(function (wv) {
+    	webVersionBubble += "<tr>" +
+    		"<td>" + wv.Version + "</td>" +
+			"<td>" + wv.Date + "</td>" + 
+			"<td>" + wv.Changes + "</td>" +
+			"<td>" + wv.Revisions + "</td>" + 
+			"</tr>";
+    	}
+    );
     webVersionBubble += "</tbody></table></div></button></div>";
     var sduCols = [ "Run #", "Size", "Notes", "Date/Time" ];
     var sduBubble = "<div class='UPopC'><button class='UButton'>SDUtils" +

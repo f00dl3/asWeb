@@ -540,6 +540,8 @@ function stickyPopShow() {
 	$(this).show(); */
 	$(".UStickyPop").hover(function() { 
 		$(".UStickyPopO").hide();
+		//$(".UStickyPop").not(this).addClass("UStickyPopDisabled");
+		//$(".UStickyPop").not(this).removeClass("UStickyPop");
 		$(this).children().show();
 	});
 }
