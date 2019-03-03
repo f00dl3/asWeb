@@ -42,7 +42,7 @@ function getWebVersion() {
         load: function(data) {
             var theData = data[0];
             var thisDiv = "<div class='UPop'>" + theData.Version;
-            if(isSet(theData.Revisions)) { thisDiv += " r" + theData.Revisions; }
+            if(isSet(theData.Revisions)) { thisDiv += " R" + theData.Revisions; }
             thisDiv += " (Updated: " + theData.Date + ")" +
             	"<div class='UPopO'>" + theData.Changes + "</div></div>";
             dojo.byId('webVersion').innerHTML = thisDiv;

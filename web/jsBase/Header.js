@@ -379,8 +379,10 @@ function getWebVersion(whereTo) {
         timeout: timeOutMilli,
         load: function(data) {
             var theData = data[0];
-            var thisDiv = "<div class='UPop'>v" + theData.Version + " (" + theData.Date + ")";
-            thisDiv += "<div class='UPopO'>" + theData.Changes + "</div></div>";
+            var thisDiv = "<div class='UPop'>v" + theData.Version;
+            if(isSet(theData.Revisions)) { thisDiv += "R" + theData.Revisions; }
+            thisDiv += " (" + theData.Date + ")" +
+            	"<div class='UPopO'>" + theData.Changes + "</div></div>";
             dojo.byId(whereTo).innerHTML = thisDiv;
         },
         error: function(data, iostatus) {
@@ -536,12 +538,13 @@ function stickyPopClose() {
 function stickyPopShow() {
 	/* require(["dojo/dom-style", "dojo/query", "dojo/NodeList-dom"], function(domStyle, query){
 		domStyle.set(this, "display", "block");
-	}); 
-	$(this).show(); */
+	}); */
 	$(".UStickyPop").hover(function() { 
 		$(".UStickyPopO").hide();
-		//$(".UStickyPop").not(this).addClass("UStickyPopDisabled");
-		//$(".UStickyPop").not(this).removeClass("UStickyPop");
+		$(".UStickyPop")
+			.not($(this).children())
+			.removeClass("UStickyPop")
+			.addClass("UStickyPopDisabled");
 		$(this).children().show();
 	});
 }
