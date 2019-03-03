@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    21 Feb 2019
+    Updated:    3 Mar 2019
     Author     : astump
 --%>
 
@@ -108,6 +108,7 @@
         "Colors",
         "3DTransforms",
         "Preloader",
+        "Responsive",
         "OLFeatures"
     };
     
