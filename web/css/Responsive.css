@@ -1,0 +1,19 @@
+/* 
+by Anthony Stump
+Created: 3 Mar 2019
+Updated: Created
+*/
+
+.rUBox {
+	background-color: #2A2A2A;
+	border: 2px solid white;
+	border-radius: 13px;
+	clear: both;
+	color: white;
+	display: inline-block;
+	font-size: 18px;
+	height: auto;
+	padding: 3px;
+	text-align:center;
+	width: 20%;
+}
