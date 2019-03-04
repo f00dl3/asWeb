@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 26 Aug 2018
+Updated: 4 Mar 2019
 */
 
 package asWebRest.dao;
@@ -107,7 +107,7 @@ public class SnmpDAO {
     }
         
     public JSONArray getEmS4GeoHistory() {
-        final String query_SNMP_EmS4_GeoHistory = "SELECT Location FROM net_snmp.EmS4 ORDER BY WalkTime DESC LIMIT 20000;";
+        final String query_SNMP_EmS4_GeoHistory = "SELECT Location FROM net_snmp.EmS4 ORDER BY WalkTime DESC LIMIT 5000;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_EmS4_GeoHistory, null);
@@ -469,7 +469,7 @@ public class SnmpDAO {
     }
     
     public JSONArray getNote3GeoHistory() {
-        final String query_SNMP_Note3_GeoHistory = "SELECT Location FROM net_snmp.Note3 ORDER BY WalkTime DESC LIMIT 20000;";
+        final String query_SNMP_Note3_GeoHistory = "SELECT Location FROM net_snmp.Note3 ORDER BY WalkTime DESC LIMIT 5000;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Note3_GeoHistory, null);
@@ -647,7 +647,7 @@ public class SnmpDAO {
     }
                
     public JSONArray getPi2GeoHistory() {
-        final String query_SNMP_Pi2_Geo = "SELECT GPSCoords FROM net_snmp.RaspberryPi2 ORDER BY WalkTime DESC LIMIT 20000;";
+        final String query_SNMP_Pi2_Geo = "SELECT GPSCoords FROM net_snmp.RaspberryPi2 ORDER BY WalkTime DESC LIMIT 5000;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_SNMP_Pi2_Geo, null);

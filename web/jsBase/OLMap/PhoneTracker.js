@@ -23,9 +23,11 @@ function getPhoneTrackFromDatabase(map, dataInput) {
                     (tObj.PhoneTrack).forEach(function(ta) {
                     	gjArray.push(ta.Location);
                     });
-                    var routeData = (JSON.stringify(gjArray)).replace(/\"/g, "");
+                    var routeData = (JSON.stringify(gjArray))
+                    	.replace(/\"/g, "")
+                    	.replace(/\[null\,null\]\,/g, "");
                     console.log(routeData);
-                    addLineStringToMap(map, routeData, tObj.Description);
+                    addLineStringToMap(map, JSON.parse(routeData), tObj.Description);
                     showNotice("Track: " + tObj.Description);
                 },
                 function(error) { 
