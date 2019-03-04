@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 4 Nov 2018
+Updated: 4 Mar 2018
  */
 
 function getChartDataWXOJ(stationId) {
@@ -223,7 +223,8 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
             "<br/><div class='UPopNM'>" +
             "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
-            processUpperAirData(998, theData) + "</div><br/>" +
+            processUpperAirData(998, theData) +
+            "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +
             "<div class='UPopO'>" +
             "Visibility: " + theData.Visibility + " mi.<br/>" +
@@ -282,8 +283,9 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
             stationData.T975 = stationData.T1000;
         }
         var obsData = parseWxObs(stationData);
-        var doSoundingMin = "<table>";
+        var doSoundingMin = "";
         if(isSet(obsData.H900T)) {
+        	doSoundingMin += "<table>";
             obsData.H1000T = conv2Tf(obsData.H1000T);
             var tA100 = [ obsData.H100T ]; var dA100 = [ obsData.H100D ];
             var hA100 = [ obsData.H100H ]; var wA100 = [ obsData.H100WS ];
@@ -371,11 +373,10 @@ function processUpperAirData(baseEle, stationData, noWrappingDiv) {
             }
         }
         doSounding = doSoundingMin;
-        if(!isSet(noWrappingDiv)) { doSounding = "<div class='UPopNMO'>" + doSounding + "</div>"; }
     } else {
         doSounding = "DATA ERROR FOR HOUR";
-        if(!isSet(noWrappingDiv)) { doSounding = "<div class='UPopNMO'>" + doSounding + "</div>"; }
     }
+    if(!isSet(noWrappingDiv)) { doSounding = "<div class='UPopNMO'>" + doSounding + "</div>"; }
     return doSounding;
 }
 

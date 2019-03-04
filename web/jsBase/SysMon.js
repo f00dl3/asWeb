@@ -235,13 +235,13 @@ function populateStatusHolder(target, stateData) {
             "</form></div><br/>" +
             "<a href='" + getBasePath("ui") + "/Images/Topology.jpg'>Topology Map</a><br/>" +
             "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=Note3'>Phone: Note 3</a><br/>" +
-            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=Note3R'>Phone: Note 3 (Rapid)</a><br/>" +
-            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=EmS4'>Phone: Emily S4</a><br/>" +
-            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=RasPi2'>Rasbperry Pi 2</a><br/>" +
-//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
-//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3Rapid'>Phone: Note 3 (Rapid!)</a><br/>" +
-//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
-//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
+// unused   "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=Note3R'>Phone: Note 3 (Rapid)</a><br/>" +
+// unused   "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=EmS4'>Phone: Emily S4</a><br/>" +
+// unused   "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=RasPi2'>Rasbperry Pi 2</a><br/>" +
+//  old     "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
+//  old     "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3Rapid'>Phone: Note 3 (Rapid!)</a><br/>" +
+//  old     "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
+//  old     "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
     var dateForm = "<form id='chDateForm' class='tr'>" +
             "<span class='td'>Date</span>" +

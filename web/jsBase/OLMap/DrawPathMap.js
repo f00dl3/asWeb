@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 12 Aug 2018
+Updated: 4 Mar 2019
  */
 
 function putDrawPathMap() {
@@ -35,7 +35,7 @@ function putDrawPathMap() {
     var draw;
     var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
     var features = (new ol.format.GeoJSON()).readFeatures(jsonDrawn);
-    var raster = localTiles;
+    var raster = remoteTiles;
     var style = {
         'LineString': new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -82,14 +82,21 @@ function putDrawPathMap() {
         vectorSource.addFeatures(draw);
         draw.on('drawend', function(evt) {
             map.removeInteraction(draw);
-            console.log("Draw event ended.");
-            logFeatures();
+            showNotice("Draw event ended!");
+            var features = vectorSource.getFeatures();
+            console.log("FEAT: " + featuers);
+            logFeatures(features);
         }, this);
     }
-    function logFeatures() {
+    function logFeatures(features) {
         var writer = new ol.format.GeoJSON();
-        var geoJsonStr = writer.writeFeatures(vectorSource.getFeatures());
-        dojo.byId("MessageHolder").innerHTML = geoJsonStr;
+        var drawnData = [];
+        features.forEach(function(ft) {
+        	console.log("POINT: " + ft.getGeometry());
+        	drawnData.push(ft.getGeometry().getExtent());
+        });
+        console.log("DRAWN DATA: " + drawnData);
+        dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData);
     }
     addInteraction();
 }
