@@ -84,7 +84,7 @@ function putDrawPathMap() {
             map.removeInteraction(draw);
             showNotice("Draw event ended!");
             var features = vectorSource.getFeatures();
-            console.log("FEAT: " + featuers);
+            console.log("FEAT: " + features); // Returns empty
             logFeatures(features);
         }, this);
     }
@@ -92,11 +92,11 @@ function putDrawPathMap() {
         var writer = new ol.format.GeoJSON();
         var drawnData = [];
         features.forEach(function(ft) {
-        	console.log("POINT: " + ft.getGeometry());
+        	console.log("POINT: " + ft.getGeometry()); // Returns empty
         	drawnData.push(ft.getGeometry().getExtent());
         });
-        console.log("DRAWN DATA: " + drawnData);
-        dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData);
+        console.log("DRAWN DATA: " + drawnData); // Returns empty
+        dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData); // Returns empty
     }
     addInteraction();
 }
