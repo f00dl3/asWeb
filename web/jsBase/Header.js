@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 2 Mar 2019
+Updated: 4 Mar 2019
  */
 
 var annMaint = 910.66;
@@ -380,7 +380,7 @@ function getWebVersion(whereTo) {
         load: function(data) {
             var theData = data[0];
             var thisDiv = "<div class='UPop'>v" + theData.Version;
-            if(isSet(theData.Revisions)) { thisDiv += "R" + theData.Revisions; }
+            if(isSet(theData.Revisions)) { thisDiv += " R" + theData.Revisions; }
             thisDiv += " (" + theData.Date + ")" +
             	"<div class='UPopO'>" + theData.Changes + "</div></div>";
             dojo.byId(whereTo).innerHTML = thisDiv;

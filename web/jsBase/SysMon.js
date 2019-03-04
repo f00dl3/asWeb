@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 18 Oct 2018
+Updated: 4 Mar 2019
 */
 
 var chartArray;
@@ -234,10 +234,14 @@ function populateStatusHolder(target, stateData) {
     rData += "</select></span>" +
             "</form></div><br/>" +
             "<a href='" + getBasePath("ui") + "/Images/Topology.jpg'>Topology Map</a><br/>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3Rapid'>Phone: Note 3 (Rapid!)</a><br/>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
-            "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
+            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=Note3'>Phone: Note 3</a><br/>" +
+            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=Note3R'>Phone: Note 3 (Rapid)</a><br/>" +
+            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=EmS4'>Phone: Emily S4</a><br/>" +
+            "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=PhoneTrack&Input=RasPi2'>Rasbperry Pi 2</a><br/>" +
+//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3'>Phone: Note 3</a><br/>" +
+//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=Note3Rapid'>Phone: Note 3 (Rapid!)</a><br/>" +
+//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=EmS4'>Phone: Emily S4</a><br/>" +
+//          "<a href='" + getBasePath("old") + "/OutMap.php?PhoneTrack=RasPi2'>Raspberry Pi 2</a>" +
             "</div></div>";
     var dateForm = "<form id='chDateForm' class='tr'>" +
             "<span class='td'>Date</span>" +

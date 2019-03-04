@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    3 Mar 2019
+    Updated:    4 Mar 2019
     Author     : astump
 --%>
 
@@ -71,6 +71,7 @@
         "OLMap/KMLRadar",
         "OLMap/LocationListener",
         "OLMap/MediaGeo",
+        "OLMap/PhoneTracker",
         "OLMap/PointClick",
         "OLMap/RenderImage",
         "OLMap/SimpleMap",

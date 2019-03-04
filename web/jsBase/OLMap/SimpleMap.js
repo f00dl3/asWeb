@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 9 Feb 2019
+Updated: 4 Mar 2019
  */
 
 function postProcessOptions(map) {
@@ -15,6 +15,7 @@ function postProcessOptions(map) {
             case "Homicide": getHomicides(map); break;
             case "Media": getMediaGeoData(map); break;
             case "Point": addPointToMap(map, dataInput); break;
+            case "PhoneTrack": getPhoneTrackFromDatabase(map, dataInput); break;
             case "Route": addLineStringToMap(map, dataInputOverride); break;
             case "RouteGeoJSONAlt": getRouteFromDatabase(map, dataInput, "A"); break;
             case "RouteGeoJSONCyc": getRouteFromDatabase(map, dataInput, "C"); break;
