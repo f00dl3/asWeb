@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 4 Mar 2019
+Updated: 5 Mar 2019
  */
 
 var gSearchString;
@@ -36,7 +36,7 @@ function actOnPlayMedia(event) {
     if(isSet(thisFormData.dbxRawFile)) {
         playDbxFile(thisFormData);
     } else {
-        playMediaFile(thisFormData.FilePath);
+        playMediaFile(thisFormData);
     }
 }
 
@@ -132,10 +132,12 @@ function mediaPlayColor(pCount) {
     return "color: " + cPlays + ";";
 }
 
-function playMediaFile(whatFile, dbxFlag) {
+function playMediaFile(thisFormData, dbxFlag) {
+	var whatFile = thisFormData.FilePath; 
     var wfa = whatFile.split(".");
     var mediaType = wfa[wfa.length-1].toLowerCase();
     var mpo, mediaMime, mediaType, filePath;
+    var loopCt = 0;
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     if(isSet(dbxFlag)) { 
@@ -146,7 +148,7 @@ function playMediaFile(whatFile, dbxFlag) {
     switch(mediaType) {
         case "mp3":
             mediaMime = "audio/mpeg";
-            mpo += "<audio id='mediaServerAudoPlayer' controls autoplay loop>" +
+            mpo += "<audio id='mediaServerAudoPlayer' controls autoplay>" + //loop
                     "<source src='" + filePath + "' type='" + mediaMime + "'>" +
                     "</audio>";
             break;
@@ -156,7 +158,15 @@ function playMediaFile(whatFile, dbxFlag) {
     }
     mpo += "</div>";
     dojo.byId("ETSPlayer").innerHTML = mpo;
-    dojo.byId("mediaServerAudoPlayer").play();
+    var theAudio = dojo.byId("mediaServerAudoPlayer");
+    theAudio.play();
+    theAudio.addEventListener('ended', function() {
+		loopCt++
+		this.currentTime = 0;
+		this.play();
+	    setPlayMedia(thisFormData);
+		console.log("Playing [" + filePath + "] again! " + loopCt + " times!");
+	}, false);
 }
 
 function playDbxFile(formData) {
@@ -429,7 +439,6 @@ function setPlayMedia(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
-    		searchAheadMediaServer(gSearchString);
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
