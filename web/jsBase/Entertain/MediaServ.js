@@ -219,7 +219,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
         var mediaDownloader = "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
-                            "<img class='th_icon' src='" + getBasePath("icon") + "/ic_downGreen.png' /></a>";
+                            "<img class='th_icon' src='" + getBasePath("icon") + "/ic_down.ico' /></a>";
         thisAddCheckbox += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
         if(isSet(tm.AlbumArt)) {
             if(aaTag === "/DBX") {
