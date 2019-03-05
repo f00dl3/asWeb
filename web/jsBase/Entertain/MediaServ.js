@@ -429,6 +429,7 @@ function setPlayMedia(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
+    		searchAheadMediaServer(gSearchString);
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
