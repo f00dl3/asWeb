@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    4 Mar 2019
+    Updated:    5 Mar 2019
     Author     : astump
 --%>
 
@@ -262,6 +262,7 @@
     String fullHeader = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>" +
         " <html xmlns='http://www.w3.org/1999/xhtml'>" +    
         " <head><title>asWeb " + fullTitle + "</title>" +
+    	" <link rel='shortcut icon' src='"+rootPath+"/favicon.ico' />" +
         " <meta charset='UTF-8'>" +
         " <meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
         " " + cssFiles + " " + preloadElement +

@@ -137,7 +137,7 @@ function playMediaFile(thisFormData, dbxFlag) {
     var wfa = whatFile.split(".");
     var mediaType = wfa[wfa.length-1].toLowerCase();
     var mpo, mediaMime, mediaType, filePath;
-    var loopCt = 0;
+    var loopCt = 1;
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     if(isSet(dbxFlag)) { 
@@ -165,7 +165,7 @@ function playMediaFile(thisFormData, dbxFlag) {
 		this.play();
 	    if(loopCt !== 0) {
 	    	setPlayMedia(thisFormData);
-    		console.log("Playing [" + filePath + "] again! +" + loopCt + " times!");
+    		console.log("Playing [" + filePath + "] again! (" + loopCt + " times!)");
     	}
 		loopCt++
 	}, false);
@@ -219,7 +219,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
         var mediaDownloader = "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
-                            "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
+                            "<img class='th_icon' src='" + getBasePath("icon") + "/ic_downGreen.png' /></a>";
         thisAddCheckbox += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
         if(isSet(tm.AlbumArt)) {
             if(aaTag === "/DBX") {
