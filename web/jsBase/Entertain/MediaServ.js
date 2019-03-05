@@ -1,10 +1,11 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 22 Feb 2019
+Updated: 4 Mar 2019
  */
 
 var msIndex;
+var updateFlag = false;
 
 function actOnNonMedia(event) {
     var target = "ETSResults";
@@ -47,7 +48,8 @@ function displayMediaServer() {
     $("#ETGameAll").hide();
 }
 
-function getIndex(target, updateFlag) {
+function getIndex(target) {
+    var timeout = getRefresh("long");
     var isMobile = "no";
     var aContent = 0;
     var estimatedLoadSize = "Desktop compressed JSON size under 1 MB.";
@@ -80,6 +82,7 @@ function getIndex(target, updateFlag) {
                     window.alert("request for Media Server Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function() { getIndex(target); }, timeout);
 }
 
 function mediaOpts() {
@@ -168,6 +171,7 @@ function playDbxFile(formData) {
 }
 
 function putFileResults(msData, hitCount, matchLimitHit) {
+	updateFlag = true;
     var noticeMessage = "";
     var thumbSize = "";
     var firstThumbSize = "";
@@ -414,7 +418,6 @@ function setPlayMedia(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
-            getIndex("ETSSearch", true);
         },
         error: function(data, iostatus) {
             window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");

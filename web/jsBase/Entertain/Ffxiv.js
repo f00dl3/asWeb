@@ -1,8 +1,9 @@
 /* 
+by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 9 Feb 2019
+Updated: 4 Mar 2019
 
  */
 
@@ -208,7 +209,7 @@ function getGameFf14i(target) {
 }
 
 function getGameFf14q(target) {
-    var timeout = 2 * 60 * 1000;
+    var timeout = getRefresh("long");
     aniPreload("on");
     var thePostData = { "doWhat": "EntertainmentFfxivQuestsByDate" };
     require(["dojo/request"], function(request) {
