@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 3 Mar 2019
-Updated: Created
+Updated: 4 Mar 2019
 */
 
 .rUBox {
@@ -17,3 +17,8 @@ Updated: Created
 	text-align:center;
 	width: 20%;
 }
+
+.rThumbLarge { height: 25%; width: 25%; }
+
+
+.rWrapper { height: 100%; width: 100%; }

@@ -36,12 +36,12 @@ function generateMapHolder() {
 
 function initMap() {
     switch(doAction) {
+    	case "Draw": putDrawPathMap(); break;
         case "G16IR": renderImage("G16IR"); break;
         case "G16VIS": renderImage("G16VIS"); break;
         case "Image": renderImage(); break;
         case "PointClick": putPointClickMap(); break;
-        case "Simple": putSimpleMap(); break;
-        case "Draw": default: putDrawPathMap(); break;
+        default: putSimpleMap(); break;
     }
 }
 

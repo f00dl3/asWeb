@@ -92,8 +92,11 @@ function putDrawPathMap() {
         var writer = new ol.format.GeoJSON();
         var drawnData = [];
         features.forEach(function(ft) {
-        	console.log("POINT: " + ft.getGeometry()); // Returns empty
-        	drawnData.push(ft.getGeometry().getExtent());
+        	var tGeo = ft.getGeometry();
+        	var format = new ol.format.WKT();
+        	var wktRepresenation  = format.writeGeometry(ol3Geom);
+        	console.log("POINT: " + wktRepresenation);
+        	drawnData.push(wktRepresenation);
         });
         console.log("DRAWN DATA: " + drawnData); // Returns empty
         dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData); // Returns empty

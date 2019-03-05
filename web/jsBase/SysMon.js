@@ -6,6 +6,7 @@ Updated: 4 Mar 2019
 
 var chartArray;
 var dateIn;
+var iconClass = "th_small"; // rThumbLarge
 var lastWalks;
 var stepIn;
 
@@ -117,14 +118,16 @@ function onCheck(timestamp, node) {
 
 function populateChartHolders(chartArray, timestamp) {
     for(var i = 0; i < chartArray.length; i++) {
-        var thisChartObject = "<a href='" + getBasePath("chartCache") + "/" + chartArray[i] + ".png' target='xChart'><img class='th_small' src='" + getBasePath("chartCache") + "/th_" + chartArray[i] + ".png?ts=" + timestamp + "'/></a>";
+        var thisChartObject = "<a href='" + getBasePath("chartCache") + "/" + chartArray[i] + ".png' target='xChart'>" +
+	        "<img class='" + iconClass + "' src='" + getBasePath("chartCache") + "/th_" + chartArray[i] + ".png?ts=" + timestamp + "'/>" +
+	        "</a>";
         dojo.byId("CHART_"+chartArray[i]).innerHTML = thisChartObject;
     }
 }
 
 function populateCharts() {
     var timestamp = getDate("day", 0, "timestamp");
-    var rData = "";
+    var rData = "<div class='rWrapper'>";
     var chartList1 = [
         "mSysLoad", // done 4/29/18
         "mSysCPU", // done 4/29/18
@@ -175,9 +178,10 @@ function populateCharts() {
         rData += "<span id='CHART_" + chartArray[i] + "'></span>";
     }
     rData += "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='nChartR'>" +
-            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/></a>" +
+            "<img class='" + iconClass + "' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/></a>" +
             "<a href='" + getResource("Cams") + "' target='nChartC'>" +
-            "<img class='th_small' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg?ts=" + timestamp + "'/></a>"; 
+            "<img class='" + iconClass + "' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg?ts=" + timestamp + "'/></a>" +
+            "</div>"; 
     dojo.byId("chartPlacement").innerHTML = rData;
     getCharts(chartArray, stepIn, dateIn);
     setTimeout(function () {  populateCharts(); }, getRefresh("veryLong"));
