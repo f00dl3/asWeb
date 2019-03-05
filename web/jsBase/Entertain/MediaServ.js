@@ -4,7 +4,9 @@ Created: 19 Mar 2018
 Updated: 4 Mar 2019
  */
 
+var gSearchString;
 var msIndex;
+var resultLimit = 250;
 var updateFlag = false;
 
 function actOnNonMedia(event) {
@@ -74,7 +76,11 @@ function getIndex(target) {
                 function(data) {
                     msIndex = data.Index;
                     putSearchBox(target, data.Overview[0], updateFlag);
-                    if(!updateFlag) { dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items."; }
+                    if(!updateFlag) {
+                    	dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items.";
+                	} else {
+                		searchAheadMediaServer(gSearchString);
+                	}
                     aniPreload("off");
                 },
                 function(error) { 
@@ -83,6 +89,11 @@ function getIndex(target) {
                 });
     });
     setTimeout(function() { getIndex(target); }, timeout);
+}
+
+function globalizeSearchString(value) {
+	gSearchString = value;
+	searchAheadMediaServer(gSearchString);
 }
 
 function mediaOpts() {
@@ -360,19 +371,19 @@ function putSearchBox(target, msOverview, updateFlag) {
             "<div class='UPopO'>" + subTableData + "</div></div></span>" + 
             "</div>";
     var liveSearchField = "<form class='tr'>" +
-            "<span class='td'><input type='text' class='msSearchBox' name'MediaSearch' onKeyUp='searchAheadMediaServer(this.value)' /></span>" +
+            "<span class='td'><input type='text' class='msSearchBox' name'MediaSearch' onKeyUp='globalizeSearchString(this.value)' /></span>" +
             "<span class='td'>" +
             "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_map.jpeg' />" +
-            "<div class='UPopO'><storng>Searches on: </strong>" +
+            "<div class='UPopO'><strong>Searches on: </strong>" +
             "Media, Path, File, Description, ContentDate, AlbumArt, XTags, and TrackListingASON" +
             " from the Media Server database.</div>" +
             "</div></span></form>";
     var rData = mainTableElement + liveSearchField;
-    if(!updateFlag) {
+    // if(!updateFlag) {
         dojo.byId(target).innerHTML = rData;
         var genreSelect = dojo.byId("GenreSelect");
         dojo.connect(genreSelect, "onchange", actOnNonMedia);
-    }
+    //}
 }
 
 function searchAheadMediaServer(value) {
@@ -396,7 +407,7 @@ function searchAheadMediaServer(value) {
                 (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
             ) { 
                 hitCount++;
-                if(matchingRows.length < 249) {
+                if(matchingRows.length < (resultLimit-1)) {
                     matchingRows.push(sr);
                 } else {
                    matchLimitHit = 1;
