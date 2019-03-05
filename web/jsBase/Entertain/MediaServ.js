@@ -161,11 +161,13 @@ function playMediaFile(thisFormData, dbxFlag) {
     var theAudio = dojo.byId("mediaServerAudoPlayer");
     theAudio.play();
     theAudio.addEventListener('ended', function() {
-		loopCt++
 		this.currentTime = 0;
 		this.play();
-	    setPlayMedia(thisFormData);
-		console.log("Playing [" + filePath + "] again! " + loopCt + " times!");
+	    if(loopCt !== 0) {
+	    	setPlayMedia(thisFormData);
+    		console.log("Playing [" + filePath + "] again! +" + loopCt + " times!");
+    	}
+		loopCt++
 	}, false);
 }
 
