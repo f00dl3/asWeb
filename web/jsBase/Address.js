@@ -1,10 +1,11 @@
 /* 
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 21 Jan 2019
+Updated: 6 Mar 2019
  */
 
 var addresses;
+var resultLimit = 25;
 
 function getAddresses() {
     dojo.byId("ResultHolder").innerHTML = "Loading address book data...";
@@ -114,29 +115,57 @@ function populateSearchHolder() {
 
 function showAddressHint(value) {
         if(value.length > 2) {
-        var hitCount = 0;
-        var matchLimitHit = 0;
-        var matchingRows = [];
-        addresses.forEach(function (sr) {
-            if(
-                (isSet(sr.Business) && (sr.Business).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.LastName) && (sr.LastName).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.FirstName) && (sr.FirstName).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Address) && (sr.Address).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.QuickName) && (sr.QuickName).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.State) && (sr.State).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(matchingRows.length <= 25) {
-                    matchingRows.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
-        populateResults(matchingRows, hitCount, matchLimitHit);    
-    }
+	        var hitCount = 0;
+	        var matchLimitHit = 0;
+	        var matchingRows = [];
+	    	if(value.includes(" ")) {
+	    		wordArray = value.split(" ");
+	    		addresses.forEach(function (sr) {
+	        		var wordsHit = 0;
+	        		wordArray.forEach(function(tWord) {
+			            if(
+			                (isSet(sr.Business) && (sr.Business).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.LastName) && (sr.LastName).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.FirstName) && (sr.FirstName).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.Address) && (sr.Address).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.City) && (sr.City).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.QuickName) && (sr.QuickName).toLowerCase().includes(tWord.toLowerCase())) ||
+			                (isSet(sr.State) && (sr.State).toLowerCase().includes(tWord.toLowerCase()))
+			            ) { 
+			            	wordsHit++;
+			            }
+		    			if (wordsHit === wordArray.length) {
+		    				hitCount++;
+		                    if(matchingRows.length < (resultLimit-1)) {
+		                    	matchingRows.push(sr);
+		                    } else {
+		                    	matchLimitHit = 1;
+		                    }	
+		    			}
+		        	});
+	        	});
+	    	} else {
+		        addresses.forEach(function (sr) {
+		            if(
+		                (isSet(sr.Business) && (sr.Business).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.LastName) && (sr.LastName).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.FirstName) && (sr.FirstName).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.Address) && (sr.Address).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.QuickName) && (sr.QuickName).toLowerCase().includes(value.toLowerCase())) ||
+		                (isSet(sr.State) && (sr.State).toLowerCase().includes(value.toLowerCase()))
+		            ) { 
+		                hitCount++;
+		                if(matchingRows.length <= (resultLimit - 1)) {
+		                    matchingRows.push(sr);
+		                } else {
+		                   matchLimitHit = 1;
+		                }
+		            }
+		        });
+	    	}
+	        populateResults(matchingRows, hitCount, matchLimitHit);    
+	    }
 }
 
 function init() {

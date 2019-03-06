@@ -84,18 +84,40 @@ function ffxivCraftingHint(value) {
         var hitCount = 0;
         var matchLimitHit = 0;
         var matchingRows = [];
-        ffxivCrafting.forEach(function (sr) {
-            if(
-                (isSet(sr.Recipie) && (sr.Recipie).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(matchingRows.length < 49) {
-                    matchingRows.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+    		ffxivCrafting.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+		                (isSet(sr.Recipie) && (sr.Recipie).toLowerCase().includes(tWord.toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
+	        ffxivCrafting.forEach(function (sr) {
+	            if(
+	                (isSet(sr.Recipie) && (sr.Recipie).toLowerCase().includes(value.toLowerCase()))
+	            ) { 
+	                hitCount++;
+	                if(matchingRows.length < 49) {
+	                    matchingRows.push(sr);
+	                } else {
+	                   matchLimitHit = 1;
+	                }
+	            }
+	        });
+    	}
         putFfxivCraftingList("craftingList", matchingRows);    
     }
 }
@@ -105,18 +127,40 @@ function ffxivItemHint(value) {
         var hitCount = 0;
         var matchLimitHit = 0;
         var matchingRows = [];
-        ffxivItems.forEach(function (sr) {
-            if(
-                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(matchingRows.length < 49) {
-                    matchingRows.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+    		ffxivItems.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+		                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(tWord.toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
+	        ffxivItems.forEach(function (sr) {
+	            if(
+	                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
+	            ) { 
+	                hitCount++;
+	                if(matchingRows.length < 49) {
+	                    matchingRows.push(sr);
+	                } else {
+	                   matchLimitHit = 1;
+	                }
+	            }
+	        });
+    	}
         putFfxivItemList("itemList", matchingRows);    
     }
 }

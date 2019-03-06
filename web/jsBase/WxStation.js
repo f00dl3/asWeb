@@ -1,13 +1,14 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 28 Aug 2018
+Updated: 6 Mar 2019
  */
     
 var jmwsData;
 var jmwsStations;
 var myLat;
 var myLon;
+var resultLimit = 250;
 var sdTimeout = getRefresh("medium");
 
 function externalLink(station) {
@@ -118,17 +119,47 @@ function getJMWSChart() {
 function searchAheadStations(value) {
     if(value.length > 2) {
         var matchingRows = [];
-        jmwsStations.forEach(function (sr) {
-            if(
-                (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Station) && (sr.Station).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
-                (value.includes("S:") && isSet(sr.State) && (sr.State).toLowerCase().includes(value.replace("S:", "").toLowerCase())) ||
-                (value.includes("R:") && isSet(sr.Region) && (sr.Region).toLowerCase().includes(value.replace("R:", "").toLowerCase()))
-            ) { 
-                matchingRows.push(sr);
-            }
-        });
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+    		jmwsStations.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+		                (isSet(sr.City) && (sr.City).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Station) && (sr.Station).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (tWord.includes("S:") && isSet(sr.State) && (sr.State).toLowerCase().includes(tWord.replace("S:", "").toLowerCase())) ||
+		                (tWord.includes("R:") && isSet(sr.Region) && (sr.Region).toLowerCase().includes(tWord.replace("R:", "").toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
+	        jmwsStations.forEach(function (sr) {
+	            if(
+	                (isSet(sr.City) && (sr.City).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Station) && (sr.Station).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
+	                (value.includes("S:") && isSet(sr.State) && (sr.State).toLowerCase().includes(value.replace("S:", "").toLowerCase())) ||
+	                (value.includes("R:") && isSet(sr.Region) && (sr.Region).toLowerCase().includes(value.replace("R:", "").toLowerCase()))
+	            ) { 
+                    if(matchingRows.length < (resultLimit-1)) {
+                    	matchingRows.push(sr);
+                    } else {
+                    	matchLimitHit = 1;
+                    }	
+	            }
+	        });
+    	}
         stationDataTable(matchingRows, "jmwsSearchResults");
         //getKeyedUpStationData(matchingRows);
     }
