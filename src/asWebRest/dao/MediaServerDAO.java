@@ -95,7 +95,8 @@ public class MediaServerDAO {
       
     public JSONArray getOverview(Connection dbc) {
         final String query_MediaServer_Overview = "SELECT COUNT(File) AS TotalRecords, SUM(PlayCount) AS TotalPlays," +
-                " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks" +
+                " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks," +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE DateIndexed = CURDATE()) AS NewToday," +
                 " (SELECT COUNT(File) FROM Core.MediaServer WHERE DateIndexed BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()) AS NewMonth," +
                 " (SELECT COUNT(File) FROM Core.MediaServer WHERE DateIndexed BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()) AS NewWeek," +
                 " (SELECT COUNT(File) FROM Core.MediaServer WHERE LastSelected = CURDATE()) AS PlayedToday," +
@@ -112,7 +113,7 @@ public class MediaServerDAO {
                     .put("PlayCount", resultSet.getInt("TotalPlays"))
                     .put("TotalDurSec", resultSet.getLong("TotalDurSec"))
                     .put("TotalBlocks", resultSet.getLong("TotalBlocks"))
-                    .put("NewDay", resultSet.getInt("NewDay"))
+                    .put("NewToday", resultSet.getInt("NewToday"))
                     .put("NewWeek", resultSet.getInt("NewWeek"))
                     .put("NewMonth", resultSet.getInt("NewMonth"))
                     .put("PlayedToday", resultSet.getInt("PlayedToday"))

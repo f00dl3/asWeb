@@ -370,10 +370,10 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 function putSearchBox(target, msOverview, updateFlag) {
     var subTableData = "<div class='table'>" +
         "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</span></div>" +
-        "<div class='tr'><span class='td'>Size</span><span class='td'>" + autoUnits(msOverview.TotalBlocks) + "</span></div>" +
+        "<div class='tr'><span class='td'>Size</span><span class='td'>" + autoUnits(msOverview.TotalBlocks*1000) + "</span></div>" +
         "<div class='tr'><span class='td'>Hours</span><span class='td'>" + ((msOverview.TotalDurSec / 60) / 60).toFixed(1) + "</span></div>" +
         "<div class='tr'><span class='td'>Recent Adds</span><span class='td'>" + msOverview.NewToday + " (" + msOverview.NewWeek + ")</span></div>" +
-        "<div class='tr'><span class='td'>Recent Plays</span><span class='td'>" + msOverview.PlaysToday + " (" + msOverview.PlaysWeek + ")</span></div>" +
+        "<div class='tr'><span class='td'>Recent Plays</span><span class='td'>" + msOverview.PlayedToday + " (" + msOverview.PlayedWeek + ")</span></div>" +
         "<div class='tr'><span class='td'>Total Plays</span><span class='td'>" + msOverview.PlayCount + "</span></div>" +
         "</div>";
     var mainTableElement = "<div class='table'>" +
