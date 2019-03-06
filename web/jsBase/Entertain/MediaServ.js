@@ -197,6 +197,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 	updateFlag = true;
     var noticeMessage = "";
     var thumbSize = "";
+    var iconSize = "th_icon";
     var firstThumbSize = "";
     if(checkMobile()) {
         thumbSize = "th_small";
@@ -207,7 +208,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
     }
     var fileTable = "<div class='table id='FileTable'>" +
             "<div class='tr'>" +
-            "<span class='td'><img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png'/></span>" +
+            "<span class='td'><img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_ply.png'/></span>" +
             "<span class='td'><strong>File</strong></span>" +
             "</div>";
     msData.forEach(function (tm) {
@@ -219,7 +220,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         var mediaType = fileProps[fileProps.length-1].toUpperCase();
         var forceMediaType = mediaType;
         var mediaDownloader = "<a href='" + getBasePath("media") + tm.Path + "/" + tm.File + "' target='new'>" +
-                            "<img class='th_icon' src='" + getBasePath("icon") + "/ic_down.ico' /></a>";
+                            "<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_down.ico' /></a>";
         thisAddCheckbox += "<input type='hidden' name='origPath' value='" + tm.Path + "'/><input type='hidden' name='aaTag' value='" + aaTag + "'/>";
         if(isSet(tm.AlbumArt)) {
             if(aaTag === "/DBX") {
@@ -264,7 +265,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                     break;
                 case "SWF":
                     thisAddCheckbox += "<a href='" + getBasePath("ui") + "/FlashLoader.jsp?ff=" + tm.File + "' target='new'>" +
-                            "<img class='arrow' src='" + getBasePath("icon") + "/ic_ply.png' /></a>";
+                            "<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_ply.png' /></a>";
                     break;
                 case "JPG": case "JPEG": case "PNG":
                     if(isSet(tm.Archived)) {
@@ -299,7 +300,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 	                        }
 	                    }
                         mediaDownloader = "<a href='" + olPicPath + "' target='new'>" +
-                        "<img class='arrow' src='" + getBasePath("icon") + "/ar_dn.gif' /></a>";
+                        	"<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_down.png' /></a>";
                     	thisAddCheckbox += "</a>";
                     }
                     break;
@@ -327,13 +328,13 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 "<div class='UPop'>" +
                 "<input type='hidden' name='FileName' value='" + tm.File + "'/>" + tm.File;
         if(tm.PlayCount > 1) { thisMsInfoString += " <tt>(" + tm.PlayCount + ")</tt> "; }
-        thisMsInfoString += "<img class='th_icon' src='" + getBasePath("icon") + "/ic_tim.png'/>";
+        thisMsInfoString += "<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_tim.png'/>";
         if(thisAddCheckbox !== mediaDownloader) {
             thisMsInfoString += mediaDownloader;
         }
         if(isSet(tm.GeoData)) {
             thisMsInfoString += "<a href='" + getBasePath("old") + "/OutMap.php?Title=" + tm.File + "&Point=" + tm.GeoData + "' target='photoGeo'>" +
-                    "<img class='th_icon' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
+                    "<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_gps.png'/></a>";
         }
         thisMsInfoString += "<div class='UPopO'>" +
                 "<input type='hidden' name='FilePath' value='/MediaServer" + tm.Path + "/" + tm.File + "'/>" +
@@ -342,7 +343,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
         if(isSet(tm.TrackListingASON)) {
             var subAson = (tm.TrackListingASON).replace("[[", "").replace("]]", "").split("],[");
             thisMsInfoString += " <div class='UPop'>" +
-                    "<img class='th_icon' src='" + getBasePath("icon") + "/ic_lst.jpeg'/>" +
+                    "<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_lst.jpeg'/>" +
                     "<div class='UPopO'>";
             for (var i = 0; i < subAson.length; i++) {
                 var tTrackArray = subAson[i].split(",");
@@ -351,7 +352,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             thisMsInfoString += "</div></div>";
         }
         if(tm.NewFlag === 1) {
-        	thisMsInfoString += " <img class='th_icon' src='" + getBasePath("icon") + "/ic_new.png'/>";
+        	thisMsInfoString += " <img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_new.png'/>";
         }
         thisMsInfoString += "</span></form>";
         fileTable += thisMsInfoString;
@@ -384,13 +385,13 @@ function putSearchBox(target, msOverview, updateFlag) {
             mediaOpts() +
             "</select></form></span>" +
             "<span class='td'>" +
-            "<div class='UPop'><img src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg' class='th_icon'/>" +
+            "<div class='UPop'><img src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg' class='" + iconSize + "'/>" +
             "<div class='UPopO'>" + subTableData + "</div></div></span>" + 
             "</div>";
     var liveSearchField = "<form class='tr'>" +
             "<span class='td'><input type='text' class='msSearchBox' name'MediaSearch' onKeyUp='globalizeSearchString(this.value)' /></span>" +
             "<span class='td'>" +
-            "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_map.jpeg' />" +
+            "<div class='UPop'><img class='" + iconSize + "' src='" + getBasePath("ui") + "/img/Icons/ic_map.jpeg' />" +
             "<div class='UPopO'><strong>Searches on: </strong>" +
             "Media, Path, File, Description, ContentDate, AlbumArt, XTags, and TrackListingASON" +
             " from the Media Server database.</div>" +
@@ -408,29 +409,32 @@ function searchAheadMediaServer(value) {
     var matchLimitHit = 0;
     var hitCount = 0;
     if(value.length > 2) {
+        wordArray = value.split(" "); // 3/5/19 - figure out how to search with both words
         var matchingRows = [];
-        msIndex.forEach(function (sr) {
-            if(
-                (isSet(sr.File) && (sr.File).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Path) && (sr.Path).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Media) && (sr.Media).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.ContentDate) && (sr.ContentDate).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.DateIndexed) && (sr.DateIndexed).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Artist) && (sr.Artist).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Resolution) && (sr.Resolution).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(matchingRows.length < (resultLimit-1)) {
-                    matchingRows.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
+        //wordArray.forEach(function(value) {
+        	msIndex.forEach(function (sr) {
+	            if(
+	                (isSet(sr.File) && (sr.File).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Path) && (sr.Path).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Media) && (sr.Media).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.ContentDate) && (sr.ContentDate).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.DateIndexed) && (sr.DateIndexed).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Artist) && (sr.Artist).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Resolution) && (sr.Resolution).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(value.toLowerCase()))
+	            ) { 
+	                hitCount++;
+	                if(matchingRows.length < (resultLimit-1)) {
+	                    matchingRows.push(sr);
+	                } else {
+	                   matchLimitHit = 1;
+	                }
+	            }
+	        });
+        //}
         putFileResults(matchingRows, hitCount, matchLimitHit);    
     }
 }
