@@ -3,13 +3,14 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 4 Mar 2019
+Updated: 6 Mar 2019
 
  */
 
 var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
+var resultLimit = 50;
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
@@ -125,23 +126,50 @@ function ffxivMergedHint(value) {
         var hitCount = 0;
         var matchLimitHit = 0;
         var matchingRows = [];
-        ffxivMerged.forEach(function (sr) {
-            if(
-                (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.MasterType) && (sr.MasterType).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Stats) && (sr.Stats).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                hitCount++;
-                if(matchingRows.length < 49) {
-                    matchingRows.push(sr);
-                } else {
-                   matchLimitHit = 1;
-                }
-            }
-        });
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+    		ffxivMerged.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+		                (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.MasterType) && (sr.MasterType).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Stats) && (sr.Stats).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(tWord.toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
+	        ffxivMerged.forEach(function (sr) {
+	            if(
+	                (isSet(sr.QuestOrder) && (sr.QuestOrder).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.qcDesc) && (sr.qcDesc).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.MasterType) && (sr.MasterType).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Zone) && (sr.Zone).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Stats) && (sr.Stats).toLowerCase().includes(value.toLowerCase())) ||
+	                (isSet(sr.Name) && (sr.Name).toLowerCase().includes(value.toLowerCase()))
+	            ) { 
+	                hitCount++;
+	                if(matchingRows.length < (resultLimit -1)) {
+	                    matchingRows.push(sr);
+	                } else {
+	                   matchLimitHit = 1;
+	                }
+	            }
+	        });
+    	}
         putFfxivMergedList("mergedList", matchingRows);    
     }
 }

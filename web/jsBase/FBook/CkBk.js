@@ -2,10 +2,11 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 24 Aug 2018
+Updated: 6 Mar 2019
  */
 
 var searchableData;
+var resultLimit = 100;
 
 function actOnCheckbookFormSubmit(event) {
     dojo.stopEvent(event);
@@ -187,18 +188,51 @@ function putCheckbookSearchResults(matchingRows) {
 
 function searchAheadCheckbook(value) {
     if(value.length > 2) {
+        var hitCount = 0;
+        var matchLimitHit = 0;
         var matchingRows = [];
-        searchableData.forEach(function (sr) {
-            if(
-                (isSet(sr.Card) && (sr.Card).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.CTID) && (sr.CTID).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Bank) && (sr.Bank).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Date) && (sr.Date).toLowerCase().includes(value.toLowerCase())) ||
-                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase()))
-            ) { 
-                matchingRows.push(sr);
-            }
-        });
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+    		searchableData.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+	                    (isSet(sr.Card) && (sr.Card).toLowerCase().includes(tWord.toLowerCase())) ||
+	                    (isSet(sr.CTID) && (sr.CTID).toLowerCase().includes(tWord.toLowerCase())) ||
+	                    (isSet(sr.Bank) && (sr.Bank).toLowerCase().includes(tWord.toLowerCase())) ||
+	                    (isSet(sr.Date) && (sr.Date).toLowerCase().includes(tWord.toLowerCase())) ||
+	                    (isSet(sr.Description) && (sr.Description).toLowerCase().includes(tWord.toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
+    		searchableData.forEach(function (sr) {
+	            if(
+                    (isSet(sr.Card) && (sr.Card).toLowerCase().includes(value.toLowerCase())) ||
+                    (isSet(sr.CTID) && (sr.CTID).toLowerCase().includes(value.toLowerCase())) ||
+                    (isSet(sr.Bank) && (sr.Bank).toLowerCase().includes(value.toLowerCase())) ||
+                    (isSet(sr.Date) && (sr.Date).toLowerCase().includes(value.toLowerCase())) ||
+                    (isSet(sr.Description) && (sr.Description).toLowerCase().includes(value.toLowerCase()))
+	            ) { 
+	                hitCount++;
+	                if(matchingRows.length < (resultLimit-1)) {
+	                    matchingRows.push(sr);
+	                } else {
+	                	matchLimitHit = 1;
+	                }
+	            }
+	        });
+        }
         putCheckbookSearchResults(matchingRows);
     }
 }

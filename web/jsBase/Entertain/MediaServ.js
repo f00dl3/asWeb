@@ -7,7 +7,7 @@ Updated: 6 Mar 2019
 var gSearchString;
 var iconSize = "th_icon";
 var msIndex;
-var resultLimit = 250;
+var resultLimit = 100;
 var updateFlag = false;
 
 function actOnNonMedia(event) {
