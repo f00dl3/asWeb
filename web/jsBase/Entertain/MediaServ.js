@@ -1,10 +1,11 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 5 Mar 2019
+Updated: 6 Mar 2019
  */
 
 var gSearchString;
+var iconSize = "th_icon";
 var msIndex;
 var resultLimit = 250;
 var updateFlag = false;
@@ -197,7 +198,6 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 	updateFlag = true;
     var noticeMessage = "";
     var thumbSize = "";
-    var iconSize = "th_icon";
     var firstThumbSize = "";
     if(checkMobile()) {
         thumbSize = "th_small";
@@ -300,7 +300,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 	                        }
 	                    }
                         mediaDownloader = "<a href='" + olPicPath + "' target='new'>" +
-                        	"<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_down.png' /></a>";
+                        	"<img class='" + iconSize + "' src='" + getBasePath("icon") + "/ic_down.ico' /></a>";
                     	thisAddCheckbox += "</a>";
                     }
                     break;
@@ -408,10 +408,39 @@ function searchAheadMediaServer(value) {
     var noticeMessage;
     var matchLimitHit = 0;
     var hitCount = 0;
+    var matchingRows = [];
     if(value.length > 2) {
-        wordArray = value.split(" "); // 3/5/19 - figure out how to search with both words
-        var matchingRows = [];
-        //wordArray.forEach(function(value) {
+    	if(value.includes(" ")) {
+    		wordArray = value.split(" ");
+        	msIndex.forEach(function (sr) {
+        		var wordsHit = 0;
+        		wordArray.forEach(function(tWord) {
+		            if(
+		                (isSet(sr.File) && (sr.File).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Path) && (sr.Path).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Media) && (sr.Media).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Description) && (sr.Description).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.ContentDate) && (sr.ContentDate).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.DateIndexed) && (sr.DateIndexed).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.AlbumArt) && (sr.AlbumArt).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Artist) && (sr.Artist).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.XTags) && (sr.XTags).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.Resolution) && (sr.Resolution).toLowerCase().includes(tWord.toLowerCase())) ||
+		                (isSet(sr.TrackListingASON) && (sr.TrackListingASON).toLowerCase().includes(tWord.toLowerCase()))
+		            ) { 
+		            	wordsHit++;
+		            }
+	    			if (wordsHit === wordArray.length) {
+	    				hitCount++;
+	                    if(matchingRows.length < (resultLimit-1)) {
+	                    	matchingRows.push(sr);
+	                    } else {
+	                    	matchLimitHit = 1;
+	                    }	
+	    			}
+	        	});
+        	});
+    	} else {
         	msIndex.forEach(function (sr) {
 	            if(
 	                (isSet(sr.File) && (sr.File).toLowerCase().includes(value.toLowerCase())) ||
@@ -430,11 +459,11 @@ function searchAheadMediaServer(value) {
 	                if(matchingRows.length < (resultLimit-1)) {
 	                    matchingRows.push(sr);
 	                } else {
-	                   matchLimitHit = 1;
+	                	matchLimitHit = 1;
 	                }
 	            }
 	        });
-        //}
+        }
         putFileResults(matchingRows, hitCount, matchLimitHit);    
     }
 }
