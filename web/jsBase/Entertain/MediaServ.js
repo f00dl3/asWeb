@@ -86,7 +86,7 @@ function getIndex(target) {
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for Media Server Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    console.log("request for Media Server Index FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
     setTimeout(function() { getIndex(target); }, timeout);
@@ -165,8 +165,10 @@ function playMediaFile(thisFormData, dbxFlag) {
 		this.currentTime = 0;
 		this.play();
 	    if(loopCt !== 0) {
-	    	setPlayMedia(thisFormData);
     		console.log("Playing [" + filePath + "] again! (" + loopCt + " times!)");
+    		if(!checkMobile()) {
+    	    	setPlayMedia(thisFormData);
+    		}
     	}
 		loopCt++
 	}, false);
@@ -481,7 +483,7 @@ function setPlayMedia(formData) {
             aniPreload("off");
         },
         error: function(data, iostatus) {
-            window.alert("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            console.log("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };
