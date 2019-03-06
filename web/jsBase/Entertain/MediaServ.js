@@ -341,7 +341,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 "</div></div>";
         if(isSet(tm.TrackListingASON)) {
             var subAson = (tm.TrackListingASON).replace("[[", "").replace("]]", "").split("],[");
-            thisMsInfoString += "<div class='UPop'>" +
+            thisMsInfoString += " <div class='UPop'>" +
                     "<img class='th_icon' src='" + getBasePath("icon") + "/ic_lst.jpeg'/>" +
                     "<div class='UPopO'>";
             for (var i = 0; i < subAson.length; i++) {
@@ -349,6 +349,9 @@ function putFileResults(msData, hitCount, matchLimitHit) {
                 thisMsInfoString += tTrackArray[0] + ": " + tTrackArray[1] + "<br/>";
             }
             thisMsInfoString += "</div></div>";
+        }
+        if(tm.NewFlag === 1) {
+        	thisMsInfoString += " <img class='th_icon' src='" + getBasePath("icon") + "/ic_new.png'/>";
         }
         thisMsInfoString += "</span></form>";
         fileTable += thisMsInfoString;
@@ -367,9 +370,11 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 function putSearchBox(target, msOverview, updateFlag) {
     var subTableData = "<div class='table'>" +
         "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</span></div>" +
-        "<div class='tr'><span class='td'>Plays</span><span class='td'>" + msOverview.PlayCount + "</span></div>" +
+        "<div class='tr'><span class='td'>Size</span><span class='td'>" + autoUnits(msOverview.TotalBlocks) + "</span></div>" +
         "<div class='tr'><span class='td'>Hours</span><span class='td'>" + ((msOverview.TotalDurSec / 60) / 60).toFixed(1) + "</span></div>" +
-        "<div class='tr'><span class='td'>Size GB</span><span class='td'>" + ((msOverview.TotalBlocks / 1024) / 1024).toFixed(1) + "</span></div>" +
+        "<div class='tr'><span class='td'>Recent Adds</span><span class='td'>" + msOverview.NewToday + " (" + msOverview.NewWeek + ")</span></div>" +
+        "<div class='tr'><span class='td'>Recent Plays</span><span class='td'>" + msOverview.PlaysToday + " (" + msOverview.PlaysWeek + ")</span></div>" +
+        "<div class='tr'><span class='td'>Total Plays</span><span class='td'>" + msOverview.PlayCount + "</span></div>" +
         "</div>";
     var mainTableElement = "<div class='table'>" +
             "<div class='tr'>" +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 19 Apr 2018
+Updated: 5 Mar 2019
  */
 
 package asWebRest.dao;
@@ -38,7 +38,8 @@ public class MediaServerDAO {
                 " SUBSTRING(Description,1,48) AS DescriptionLimited," +
                 " LastSelected, PlayCount, Burned, BDate, Media, Working, OffDisk, Archived," +
                 " BitRate, Hz, Channels, Resolution, Pages, MPAA, MPAAContent, XTags, XTagVer, GeoData, GIFVer," +
-                " WarDeploy, DateIndexed, TrackListingASON, AltDisk" +
+                " WarDeploy, DateIndexed, TrackListingASON, AltDisk," +
+                " CASE WHEN DateIndexed BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() THEN 1 ELSE 0 AS NewFlag" +
                 " FROM Core.MediaServer" +
                 " WHERE (1=? OR Adult=?)" + // AdultTest, Adult
                 " AND (1=? OR Path LIKE ?);"; // TestPath, Test
@@ -83,7 +84,8 @@ public class MediaServerDAO {
                     .put("WarDeploy", resultSet.getInt("WarDeploy"))
                     .put("DateIndexed", resultSet.getString("DateIndexed"))
                     .put("TrackListingASON",resultSet.getString("TrackListingASON"))
-                    .put("AltDisk", resultSet.getInt("AltDisk"));                    
+                    .put("AltDisk", resultSet.getInt("AltDisk"))
+                    .put("NewFlag", resultSet.getInt("NewFlag"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -93,7 +95,13 @@ public class MediaServerDAO {
       
     public JSONArray getOverview(Connection dbc) {
         final String query_MediaServer_Overview = "SELECT COUNT(File) AS TotalRecords, SUM(PlayCount) AS TotalPlays," +
-                " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks FROM Core.MediaServer;";
+                " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks" +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE DateIndexed BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()) AS NewMonth," +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE DateIndexed BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()) AS NewWeek," +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE LastSelected = CURDATE()) AS PlayedToday," +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE LastSelected BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()) AS PlayedMonth," +
+                " (SELECT COUNT(File) FROM Core.MediaServer WHERE LastSelected BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()) AS PlayedWeek" +
+                " FROM Core.MediaServer;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_Overview, null);
@@ -103,7 +111,13 @@ public class MediaServerDAO {
                     .put("TotalRecords", resultSet.getInt("TotalRecords"))
                     .put("PlayCount", resultSet.getInt("TotalPlays"))
                     .put("TotalDurSec", resultSet.getLong("TotalDurSec"))
-                    .put("TotalBlocks", resultSet.getLong("TotalBlocks"));
+                    .put("TotalBlocks", resultSet.getLong("TotalBlocks"))
+                    .put("NewDay", resultSet.getInt("NewDay"))
+                    .put("NewWeek", resultSet.getInt("NewWeek"))
+                    .put("NewMonth", resultSet.getInt("NewMonth"))
+                    .put("PlayedToday", resultSet.getInt("PlayedToday"))
+                    .put("PlayedWeek", resultSet.getInt("PlayedWeek"))
+                    .put("PlayedMonth", resultSet.getInt("PlayedMonth"));
                 tContainer.put(tObject);
             }
             resultSet.close();
