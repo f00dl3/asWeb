@@ -40,6 +40,7 @@ function actOnTpMsiUpdate(event) {
 	dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     putUpdateTpMsi(thisFormData);
+	getSearchableData("nims");
 }
 
 function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
@@ -143,6 +144,7 @@ function getSearchableData(nimsFlag) {
                 handleAs: "json"
             }).then(
                 function(data) {
+                    tpSearchableData = data.Searchable;
                     if(nimsFlag && nimsFlag === "nims") {
                     	tpSearchableData = data.nims;
                     } else {
@@ -150,7 +152,7 @@ function getSearchableData(nimsFlag) {
                     }
                 	tpIndexedImages = data.IndexedImages;
                     populateSearchBox();
-                    populateSearchPopup();
+                    populateSearchPopup(tpSearchableData);
                     aniPreload("off");
                 },
                 function(error) { 
@@ -226,15 +228,15 @@ function populateSearchBox() {
     dojo.connect(nimsCheckbox, "onchange", actOnNimsChecked);
 }
 
-function populateSearchPopup() {
+function populateSearchPopup(searchableData) {
     var tpGallery = 0;
     var tpImageTotal = 0;
     var cols = [ "Do", "Image Set", "Count" ];
     var hosTable = "<div class='table HideOnSearch'><div class='tr'>";
     for (var i = 0; i < cols.length; i++) { hosTable += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
     hosTable += "</div>";
-    var tpGalleryResults = tpSearchableData.length;
-    tpSearchableData.forEach(function (tpData) {
+    var tpGalleryResults = searchableData.length;
+    searchableData.forEach(function (tpData) {
         tpGallery++;
         if(tpGallery < maxListing) {
             var done, fColor;

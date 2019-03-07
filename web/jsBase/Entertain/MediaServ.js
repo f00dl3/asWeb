@@ -481,6 +481,7 @@ function setPlayMedia(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             aniPreload("off");
+            console.log("xhrPost for SetPlayMedia SUCCESS!");
         },
         error: function(data, iostatus) {
             console.log("xhrPost for SetPlayMedia FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
