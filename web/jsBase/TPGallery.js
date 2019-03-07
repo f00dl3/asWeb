@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 23 Feb 2019
+Updated: 7 Mar 2019
  */
 
 var maxListing = 250;
@@ -14,6 +14,11 @@ function actOnDoXTag(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormJson = dojo.formToJson(this.form);
+}
+
+function actOnNimsChecked(event) {
+	dojo.stopEvent(event);
+	getSearchableData("nims");
 }
 
 function actOnTpSelect(event) {
@@ -128,7 +133,7 @@ function genUpdateTpMsiForm(msiFlag) {
     dojo.connect(checkMsiBox, "onchange", actOnTpMsiUpdate);
 }
 
-function getSearchableData() {
+function getSearchableData(nimsFlag) {
     aniPreload("on");
     var thePostData = { "doWhat": "getTpIndex" };
     require(["dojo/request"], function(request) {
@@ -138,10 +143,14 @@ function getSearchableData() {
                 handleAs: "json"
             }).then(
                 function(data) {
-                    tpSearchableData = data.Searchable;
-                    tpIndexedImages = data.IndexedImages;
+                    if(nimsFlag && nimsFlag === "nims") {
+                    	tpSearchableData = data.nims;
+                    } else {
+                    	tpSearchableData = data.Searchable;
+                    }
+                	tpIndexedImages = data.IndexedImages;
                     populateSearchBox();
-                    populateSearchPopup(data.Searchable);
+                    populateSearchPopup();
                     aniPreload("off");
                 },
                 function(error) { 
@@ -210,19 +219,22 @@ function populateQueueSizeHolder(tpQSize) {
 function populateSearchBox() {
     var rData = "<form class='tr' id='TPSearchForm'>" +
             "<span class='td'><input type='text' class='TPSearchBox' name='TPSearchInput' onKeyUp='tpShowHint(this.value)'/></span>" +
-            "<span class='td'><strong>Search</strong></span></form>";
+            "<span class='td'><strong>Search</strong></span></form><br/>" +
+            "<input type='checkbox' id='nimsOnlyCheckbox' name='nimsOnly'/>Only show images not in Media Server.";
     dojo.byId("TPSearchBoxHolder").innerHTML = rData;
+    var nimsCheckbox = dojo.byId("nimsOnlyCheckbox");
+    dojo.connect(nimsCheckbox, "onchange", actOnNimsChecked);
 }
 
-function populateSearchPopup(searchableData) {
+function populateSearchPopup() {
     var tpGallery = 0;
     var tpImageTotal = 0;
     var cols = [ "Do", "Image Set", "Count" ];
     var hosTable = "<div class='table HideOnSearch'><div class='tr'>";
     for (var i = 0; i < cols.length; i++) { hosTable += "<span class='td'><strong>" + cols[i] + "</strong></span>"; }
     hosTable += "</div>";
-    var tpGalleryResults = searchableData.length;
-    searchableData.forEach(function (tpData) {
+    var tpGalleryResults = tpSearchableData.length;
+    tpSearchableData.forEach(function (tpData) {
         tpGallery++;
         if(tpGallery < maxListing) {
             var done, fColor;
