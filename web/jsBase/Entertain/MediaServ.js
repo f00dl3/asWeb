@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 6 Mar 2019
+Updated: 7 Mar 2019
  */
 
 var gSearchString;
@@ -9,6 +9,7 @@ var iconSize = "th_icon";
 var msIndex;
 var resultLimit = 100;
 var updateFlag = false;
+var whatFile, shortFileName;
 
 function actOnNonMedia(event) {
     var target = "ETSResults";
@@ -33,6 +34,8 @@ function actOnPlayMedia(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
+	whatFile = thisFormData.FilePath;
+	shortFileName = thisFormData.FileName;
     setPlayMedia(thisFormData);
     if(isSet(thisFormData.dbxRawFile)) {
         playDbxFile(thisFormData);
@@ -134,7 +137,6 @@ function mediaPlayColor(pCount) {
 }
 
 function playMediaFile(thisFormData, dbxFlag) {
-	var whatFile = thisFormData.FilePath; 
     var wfa = whatFile.split(".");
     var mediaType = wfa[wfa.length-1].toLowerCase();
     var mpo, mediaMime, mediaType, filePath;
@@ -142,7 +144,7 @@ function playMediaFile(thisFormData, dbxFlag) {
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     if(isSet(dbxFlag)) { 
-        filePath = getBasePath("chartCache") + "/" + whatFile;
+        filePath = getBasePath("chartCache") + "/" + shortFileName;
     } else {
         filePath = getBasePath("ui") + whatFile;
     }

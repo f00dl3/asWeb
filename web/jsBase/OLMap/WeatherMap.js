@@ -2,7 +2,7 @@
  
  by Anthony Stump
  Created: 25 Jun 2018
- Updated: 4 NOV 2018
+ Updated: 10 Mar 2019
  
  WARNING: AS OF 4 NOV 2018 -- STABILITY ISSUES
  AT THE CURRENT STAGE THIS WILL CAUSE MEMORY LEAK ON 32GB+ SYSTEMS
@@ -111,7 +111,7 @@ function addWxMapPops(jsonModelLast, gfsFha, stationCount) {
             "<div id='SDIHolder'>Loading SDI...</div>" +
             "</div></div>";
     var lowRightPop = "<div class='MapLowRight' style='background: black;'>More<br/>" +
-            "<a href='http://weather.cod.edu/satrad/nexrad/index.php?type=EAX-N0Q-0-6' target='newRadar'>CoD Radar</a><br/>" +
+            "<a href='https://weather.cod.edu/satrad/nexrad/index.php?type=EAX-N0Q-0-6' target='newRadar'>CoD Radar</a><br/>" +
             "<a href='" + getResource("Cams") + "' target='newRadar'>Home Cams</a>" +
             "</div>";
     dojo.byId("mapEx").innerHTML = topPop + lowLeftPop + lowRightPop;
