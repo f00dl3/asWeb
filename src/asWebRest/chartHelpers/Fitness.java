@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Jun 2018
-Updated: 25 Feb 2019
+Updated: 16 Mar 2019
  */
 
 package asWebRest.chartHelpers;
@@ -57,22 +57,26 @@ public class Fitness {
         JSONArray sleep_Labels = new JSONArray();
         JSONArray sleep_Data = new JSONArray();
         JSONArray sleep_Data2 = new JSONArray();
+        JSONArray sleep_Data3 = new JSONArray();
         sleep_Props
             .put("dateFormat", "yyyy-MM-dd")
             .put("chartName", sleep_Name).put("chartFileName", "SleepRange")
             .put("sName", "Sleep").put("sColor", "Green")
-            .put("s2Name", "Gaming").put("s2Color", "Red")
+            .put("s2Name", "Gaming").put("s2Color", "Yellow")
+            .put("s3Name", "Exercise").put("s3Color", "Red")
             .put("xLabel", "Date").put("yLabel", "Sleep Hours");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             sleep_Labels.put(thisObject.getString("Date"));
             sleep_Data.put(thisObject.getDouble("EstHoursSleep"));
             sleep_Data2.put(thisObject.getDouble("HoursGaming"));
+            sleep_Data3.put(thisObject.getDouble("HoursExercise"));
         }
         sleep_Glob
                 .put("labels", sleep_Labels)
                 .put("data", sleep_Data)
                 .put("data2", sleep_Data2)
+                .put("data3", sleep_Data3)
                 .put("props", sleep_Props);
         return sleep_Glob;
     }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 14 Feb 2019
+Updated: 14 Mar 2019
 */
 
 package asWebRest.dao;
@@ -494,7 +494,8 @@ public class EntertainmentDAO {
 		" 		GROUP BY OrigCompDate" +
 		" 	) AS tmp" +
 		" GROUP BY OrigCompDate" +
-		" ORDER BY OrigCompDate;";
+		" ORDER BY OrigCompDate" +
+		" LIMIT 720;";
         JSONArray tContainer = new JSONArray();
         //System.out.println(query_FfxivQuestByDate);
         try {
