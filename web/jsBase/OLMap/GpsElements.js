@@ -540,3 +540,26 @@ function getRoutePlanFromDatabase(map, dataInput) {
                 });
     });
 }
+
+function getRoutePlansAllFromDatabase(map) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "getRoutePlansAll"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    addHistoryArrayToMap(map, data);
+                    showNotice("Data pull success!");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Route Plans All FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}

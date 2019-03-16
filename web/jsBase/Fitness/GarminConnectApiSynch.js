@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Feb 2019
+Abandoned: 16 Mar 2019
  */
 
 function garminConnectApiSynchWeight() {

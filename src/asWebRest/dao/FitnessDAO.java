@@ -193,6 +193,28 @@ public class FitnessDAO {
         return tContainer;
     }
 
+    public JSONArray getAllRoutePlans(Connection dbc) {
+        final String query_Fitness_AllRoutePlans = "SELECT" +
+                " Description, GeoJSON, DistKm" +
+        		" FROM Core.Fit_RPlans" +
+                " WHERE Done=0" +
+        		" ORDER BY Description;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_AllRoutePlans, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Description"))
+                    .put("Type", resultSet.getDouble("DistKm"))
+                    .put("GeoJSON", resultSet.getString("GeoJSON"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getAllRoutes(Connection dbc) {
         final String commonRouteCheck = "(CommonRoute = 0 OR CommonRoute IS NULL)";
         final String query_Fitness_AllRoutes = "SELECT" +

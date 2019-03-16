@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Feb 2019
+Updated: 16 Feb 2019
  */
 
 package asWebRest.resource;
@@ -164,6 +164,11 @@ public class FitnessResource extends ServerResource {
                     JSONArray planned = getFitnessAction.getRPlanByDesc(dbc, qParams);
                     returnData += planned.toString();
                     break;
+                    
+                case "getRoutePlansAll":
+                    JSONArray routesP = getFitnessAction.getAllRoutePlans(dbc);
+                    returnData += routesP;
+                    break;                    
                     
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";

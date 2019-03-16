@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Apr 2018
-Updated: 26 Feb 2019
+Updated: 16 Mar 2019
  */
 
 var tppCallback;
@@ -67,6 +67,7 @@ function getTpPicsCallback(ffn) {
 
 function generateGallery(argsIn, fileList) {
     console.log(argsIn + ", " + fileList);
+    var dynThumb = "rThumbMedium";
     var thisFFN;
     var rData = argsIn.rData;
     var photoCount = 0;
@@ -110,7 +111,7 @@ function generateGallery(argsIn, fileList) {
 	        "<span id='crossDataHolder_" + thisFFN + "'></span>";
         if(checkMobile()) {
             rData += "<div class='UPopNM'>" +
-            	"<img class='th_small' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
+            	"<img class='" + dynThumb + "' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
             	"<div class='UPopNMO'>" + popupData + "</div>" +
             	"</div>";
         } else {            
@@ -118,9 +119,9 @@ function generateGallery(argsIn, fileList) {
             	/* "<a href='" + leafletMapImageLink(relativePath, iWidth, iHeight) + "' target='new'>";
                 "<a href='" + relativePath + "' target='new'>"; */
             	"<a href='" + olMapImageLink(relativePath, iRes) + "' target='tpPic'>" +
-            	"<img class='th_sm_med' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
+            	"<img class='" + dynThumb + "' id='" + thisFFN + "' src='" + thumbPath + "' style='border: 2px solid " + imgBorder + ";'/>" +
             	"</a>" +
-            	"<div class='UStickyPopO'>" + //UPopNMO
+            	"<div class='UStickyPopO' style='width: 68%;'>" + //UPopNMO
             	popupData +
                 "</div>" +
                 "</div>";

@@ -1,12 +1,13 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 4 Mar 2019
+Updated: 16 Mar 2019
 */
 
 var chartArray;
 var dateIn;
-var iconClass = "th_small"; // rThumbLarge
+var iconClass = "rThumbMedium";
+if(checkMobile()) { iconClass = "rThumbSmall"; }
 var lastWalks;
 var stepIn;
 
