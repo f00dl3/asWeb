@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 6 Mar 2019
+Updated: 20 Mar 2019
 
  */
 
@@ -71,7 +71,7 @@ function displayGameFf14i() {
 
 function displayGameFf14q() {
     var target = "ETGFF14Q";
-    getGameFf14q(target);
+    getGameFf14q(target, true);
     $("#ETGHours").hide();
     $("#ETGFF14C").hide();
     $("#ETGFF14D").hide();
@@ -280,7 +280,7 @@ function getGameFf14i(target) {
     });
 }
 
-function getGameFf14q(target) {
+function getGameFf14q(target, refresh) {
     var timeout = getRefresh("long");
     aniPreload("on");
     var thePostData = { "doWhat": "EntertainmentFfxivQuestsByDate" };
@@ -299,7 +299,7 @@ function getGameFf14q(target) {
                     window.alert("request for FFXIV Quest Graph by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getGameFf14q(target); }, timeout);
+    if(refresh) { setTimeout(function () { getGameFf14q(target, false); }, timeout); }
 }
 
 function getGameFf14qData(target) {
@@ -731,7 +731,7 @@ function setFfxivAchievementDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Achievement " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -756,7 +756,7 @@ function setFfxivCraftingDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Crafting " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -781,7 +781,7 @@ function setFfxivDungeonDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Dungeon " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -806,7 +806,7 @@ function setFfxivGatheringDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Gathering " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -831,7 +831,7 @@ function setFfxivHuntingDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Hunting " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -856,7 +856,7 @@ function setFfxivQuestDone(formData) {
                 function(data) {
                     aniPreload("off");
                     showNotice("Quest " + formData.Name + " complete!");
-                    getGameFf14q(target);
+                    getGameFf14q(target, false);
                 },
                 function(error) { 
                     aniPreload("off");

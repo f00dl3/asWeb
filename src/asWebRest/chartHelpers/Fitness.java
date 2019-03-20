@@ -61,8 +61,8 @@ public class Fitness {
         sleep_Props
             .put("dateFormat", "yyyy-MM-dd")
             .put("chartName", sleep_Name).put("chartFileName", "SleepRange")
-            .put("sName", "Sleep").put("sColor", "Green")
-            .put("s2Name", "Gaming").put("s2Color", "Yellow")
+            .put("sName", "Sleep").put("sColor", "Yellow")
+            .put("s2Name", "Gaming").put("s2Color", "Blue")
             .put("s3Name", "Exercise").put("s3Color", "Red")
             .put("xLabel", "Date").put("yLabel", "Sleep Hours");
         for(int i = 0; i < dataIn.length(); i++) {

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
-Updated: 16 Mar 2019
+Updated: 19 Mar 2019
  */
 
 function actOnCommitRoute(event) {
@@ -28,8 +28,10 @@ function fileUploadGenerator() {
 }
 
 function fitnessPlans(dataIn) {
+	var gcURL = "https://connect.garmin.com";
     var container = "<div class='UBox'>PL<div class='UBoxO'>Planned Routes<p>" +
     		"<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=RoutePlansAll'><button class='UButton'>All Plans</button></a>" +
+    		"<a href='" + gcURL + "' target='gcws'><button class='UButton'>Garmin</button></a>" +
             "<form id='RoutePlanForm'>" +
             "<button class='UButton' id='CommitRouteButton' name='CommitRoutePlan' value='submit'>Completed</button>" +
             "<button class='UButton' id='UploadGPS' name='UploadGPS' value='Yes'>Process GPS</button>" +

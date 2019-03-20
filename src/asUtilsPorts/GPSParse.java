@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 16 Feb 2019
+Updated: 19 Feb 2019
 */
 
 package asUtilsPorts;
@@ -565,6 +565,7 @@ public class GPSParse {
 
 		} else {
 		
+			int trackedTimeMinutes = (int) trackedTime;
 			gpsQuery = "UPDATE Core.Fitness " +
                                 "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
                                 activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
@@ -579,13 +580,19 @@ public class GPSParse {
 			if(maxPower > 0) { gpsQuery += ", CycPowerMax="+maxPower; }
 			if(avgPower > 0) { gpsQuery += ", CycPowerAvg="+avgPower; }
 			if(activityType.equals("Cycling")) { gpsQuery+= ", Bicycle='"+bicycle+"'"; }
-			gpsQuery += " WHERE Date='"+thisDate+"';";
+			gpsQuery += ", IntensityMinutes = CASE WHEN IntensityMinutes IS NULL THEN " + trackedTimeMinutes + " ELSE IntensityMinutes+" + trackedTimeMinutes + " END" +
+					" WHERE Date='"+thisDate+"';";
 
 		}
+		
+		String squeezeThisQueryIn = "UPDATE Core.Fitness SET CaloriesBurned=(1600+IFNULL(175*RunWalk,0)+IFNULL(72*Cycling,0)) WHERE Date=CURDATE();";
 
 		System.out.println(gpsQuery);
                 if(sourceType.equals("csv") || sourceType.equals("gpx") || sourceType.equals("fit")) {
-                    try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) { stmt.executeUpdate(gpsQuery); }
+                    try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) {
+                    	stmt.executeUpdate(gpsQuery);
+                    	stmt.executeUpdate(squeezeThisQueryIn);
+                	}
                     catch (SQLException se) { se.printStackTrace(); }
                     catch (Exception e) { e.printStackTrace(); }
                     try { StumpJunk.runProcess("gzip "+gpsInFile.toString()); } catch (Exception e) { e.printStackTrace(); }

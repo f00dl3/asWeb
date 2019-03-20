@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 21 Feb 2019
+Updated: 20 Mar 2019
  */
 
 var myHeight = 68;
@@ -11,7 +11,7 @@ function actSearchByDateSubmit(event) {
     var thisFormData = dojo.formToObject("SearchByDateForm");
     var xdt1 = thisFormData.FitSearchStart;
     var xdt2 = thisFormData.FitSearchEnd;
-    getFitnessAllData(xdt1, xdt2);
+    getFitnessAllData(false, xdt1, xdt2);
 }
 
 function colorCalories(tValue) {
@@ -130,7 +130,7 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
     dojo.byId("FitBubbleHolder").innerHTML = returnData;
 }
 
-function getFitnessAllData(inXdt1, inXdt2) {
+function getFitnessAllData(doReload, inXdt1, inXdt2) {
     var timeout = 90 * 1000;
     aniPreload("on");
     var xdt1, xdt2;
@@ -168,7 +168,7 @@ function getFitnessAllData(inXdt1, inXdt2) {
         }
     };
     dojo.xhrPost(xhArgs);
-    setTimeout(function () { getFitnessAllData(inXdt1, inXdt2); }, timeout);
+    if(doReload) { setTimeout(function () { getFitnessAllData(false, inXdt1, inXdt2); }, timeout); }
 }
 
 function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
@@ -431,7 +431,7 @@ function putRoute(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice(data.routesDone[0] + " done!");
-            getFitnessAllData();
+            getFitnessAllData(false);
             aniPreload("off");
         },
         error: function(data, iostatus) {
@@ -445,7 +445,7 @@ function putRoute(formData) {
 var initFitness = function(event) {
     getWeightChart();
     populateSearchBox();
-    getFitnessAllData();
+    getFitnessAllData(true);
 };
 
 dojo.ready(initFitness);
