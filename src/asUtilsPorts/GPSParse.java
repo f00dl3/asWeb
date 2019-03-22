@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 19 Feb 2019
+Updated: 21 Mar 2019
 */
 
 package asUtilsPorts;
@@ -565,7 +565,7 @@ public class GPSParse {
 
 		} else {
 		
-			int trackedTimeMinutes = (int) trackedTime;
+			int trackedTimeMinutes = (int) (trackedTime/60);
 			gpsQuery = "UPDATE Core.Fitness " +
                                 "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
                                 activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";

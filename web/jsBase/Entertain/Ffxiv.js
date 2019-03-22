@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 20 Mar 2019
+Updated: 21 Mar 2019
 
  */
 
@@ -557,6 +557,7 @@ function putFfxivMergedList(target, questData) {
             if(ff14q.MasterType === 'Quest') {
                 if(isSet(ff14q.Type)) {
                     switch(ff14q.Type) {
+                    	case "DA": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qDaily.png'/>"; break;
                         case "FT": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qFeat.png'/>"; break;
                         case "MS": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qMain.png'/>"; break;
                         case "LV": rData += " <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/qLeve.png'/>"; break;
