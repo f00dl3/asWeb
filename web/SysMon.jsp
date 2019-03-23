@@ -1,7 +1,7 @@
 <%-- 
     Document   : SysMon.jsp
     Created on : 20 Apr 2018
-    Updated: 28 Apr 2018
+    Updated: 23 Mar 2019
     Author     : astump
     DESIRED REFRESH 120 SECONDS OR 360 SECONDS IF DATA PULLS ARE HIGH
     ^ TO BE HANDLED IN JAVASCRIPT THE NEW WAY NOW THAT THIS IS RESTFUL!
@@ -23,6 +23,7 @@
         <h1><% out.println(pageTitle); %></h1>
     
         <div id="snmpDataRapidHolder"></div><br/>
+        <div id="databaseLiveHolder"></div>
         <div id="snmpStatusHolder"></div>
         
         <h4>Charts</h4>

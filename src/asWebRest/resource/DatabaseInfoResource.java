@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Mar 2019
  */
 
 package asWebRest.resource;
@@ -69,6 +69,11 @@ public class DatabaseInfoResource extends ServerResource {
                         .put("dbInfo", dbInfo)
                         .put("dbInfoByTable", dbInfoTables);
                     returnData = mergedResults.toString();
+                    break;
+                    
+                case "getLiveRowCount":
+                    JSONArray lrca = getDatabaseInfoAction.getLiveRowCount(dbc);
+                    returnData = lrca.toString();
                     break;
                     
             }

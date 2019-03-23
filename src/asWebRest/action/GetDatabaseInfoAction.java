@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Mar 2019
  */
 
 package asWebRest.action;
@@ -17,5 +17,6 @@ public class GetDatabaseInfoAction {
     
     public JSONArray getDatabaseInfo(Connection dbc) { return databaseInfoDAO.getDbInfo(dbc); }
     public JSONArray getDatabaseInfoByTable(Connection dbc) { return databaseInfoDAO.getDbInfoByTable(dbc); }
+    public JSONArray getLiveRowCount(Connection dbc) { return databaseInfoDAO.getLiveRowCount(dbc); }
     
 }

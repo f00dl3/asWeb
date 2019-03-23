@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 3 Jun 2018
+Updated: 23 Mar 2019
 */
 
 package asWebRest.dao;
@@ -63,6 +63,32 @@ public class DatabaseInfoDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return dbInfo2;
+    }
+    
+    public JSONArray getLiveRowCount(Connection dbc) {
+        final String query_TableSummary = "SELECT" + 
+        		" CONCAT(table_schema, '.', table_name) AS dbTableName" + 
+        		" FROM information_schema.tables" + 
+        		" WHERE table_schema NOT IN ('performance_schema', 'mysql', 'information_schema', 'sys');";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_TableSummary, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+            	final String tableName = resultSet.getString("dbTableName");
+                final String query_ThisTableRowCount = "SELECT COUNT(*) AS RowCount FROM " + tableName + ";";
+            	ResultSet subResultSet = wc.q2rs1c(dbc, query_ThisTableRowCount, null);
+                while (subResultSet.next()) {
+	                tObject
+	                    .put("dbTableName", tableName)
+	                    .put("RowCount", subResultSet.getLong("RowCount"));                    
+	                tContainer.put(tObject);
+                }
+                subResultSet.close();
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
     }
     
 }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 16 Mar 2019
+Updated: 23 Mar 2019
 */
 
 var chartArray;
@@ -92,6 +92,28 @@ function getLastWalk(target) {
                 });
     });
     setTimeout(function () { getLastWalk("snmpStatusHolder"); }, timeout);
+}
+
+function getLiveRowCount(target) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getLiveRowCount" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("DBInfo"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    populateLiveDatabaseHolder(target, data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for LiveRowCount FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                }
+            );
+    });
+    setTimeout(function () { getLiveRowCount(target); }, getRefresh("short"));
 }
 
 function nodeState(state, label) {
@@ -210,6 +232,16 @@ function populateEDiscovery(lastSsh) {
     dojo.byId("eDiscoveryHolder").innerHTML = rData;
 }
 
+function populateLiveDatabaseHolder(target, dbInfo) {
+	var rData = "MySQL database rowcount: ";
+	var cumDbRows = 0;
+	dbInfo.forEach(function (tdbi) {
+		cumDbRows += tdbi.RowCount;
+	});
+	rData += "<strong>" + cumDbRows + "</strong>";
+	dojo.byId(target).innerHTML = rData;
+}
+
 function populateStatusHolder(target, stateData) {
     var indoorTemp = Math.round(0.93 * conv2Tf(stateData.mergedTemps[0].ExtTemp/1000));
     var garageTemp = Math.round(stateData.mergedTemps[1].ExtTemp);
@@ -269,6 +301,7 @@ function populateStatusHolder(target, stateData) {
 function initSysMon() {
     snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
+    getLiveRowCount("databaseLiveHolder");
     populateCharts();
     getEDiscovery();
     populateReliaStump();

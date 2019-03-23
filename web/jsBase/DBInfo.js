@@ -1,6 +1,7 @@
 /* 
 by Anthony Stump
 Created: 3 Jun 2018
+Updated: 23 Mar 2019
  */
 
 function actOnShowInfo(event) {
@@ -73,6 +74,27 @@ function getDatabaseOverview() {
     });
 }
 
+function getDatabaseOverviewLiveRowCount() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getLiveRowCount" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("DBInfo"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    console.log(data);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for LiveRowCount FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                }
+            );
+    });
+}
+
 function generateDatabaseNoteTable(noteData) {
     $("#dbOverviewHolder").hide();
     $("#dbNoteHolder").show();
@@ -132,6 +154,26 @@ function generateDatabaseOverviewByTable(myTables) {
     dojo.byId("dbOverviewByTable").innerHTML = rData;
 }
 
+function generateDatabaseOverviewByTable2(myTables) {
+    var tCols = [ "Database", "Table", "Size", "Rows" ];
+    var rData = "<table><tr>";
+    for(var i = 0; i < tCols.length; i++) { rData += "<th>" + tCols[i] + "</th>"; }
+    rData += "</tr>";
+    myTables.forEach(function (dbInfo3) {
+    	var dbTableArr = (dbInfo3.dbTable).split(".");
+    	var dbName = dbTableArr[0];
+    	var tableName = dbTableArr[1];
+        rData += "<tr>" +
+                "<td>" + dbName + "</td>" +
+                "<td>" + tableName + "</td>" +
+                "<td>N/A</td>" +
+                "<td>" + autoUnits(dbInfo3.RowsCount) + "</td>" +
+                "</tr>";
+    });
+    rData += "</table>";
+    dojo.byId("dbOverviewByTable2").innerHTML = rData;
+}
+
 function generateThisNote(noteData) {
     $("#dbNoteHolder").hide();
     $("#thisDbNote").show();
@@ -148,9 +190,11 @@ function generateThisNote(noteData) {
 function layoutDatabaseOverview() {
     var layout = "<button class='UButton' id='ShowNotes'>Show Notes</button><p>" +
             "<div id='dbOverview'></div><p>" +
-            "<div id='dbOverviewByTable'></div>";
+            "<div id='dbOverviewByTable'></div>"
+            "<div id='dbOverviewByTable2'></div>";
     dojo.byId("dbOverviewHolder").innerHTML = layout;
     getDatabaseOverview();
+    getDatabaseOverviewLiveRowCount();
     var showNoteButton = dojo.byId("ShowNotes");
     dojo.connect(showNoteButton, "click", actOnShowNotes);
 }
