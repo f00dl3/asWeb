@@ -238,7 +238,16 @@ function populateLiveDatabaseHolder(target, dbInfo) {
 	dbInfo.forEach(function (tdbi) {
 		cumDbRows += tdbi.RowCount;
 	});
-	rData += "<strong>" + cumDbRows + "</strong>";
+	rData += "<strong>" +
+		"<div class='UPop'>" + cumDbRows + "<div class='UPopO'>"
+		"<div class='table'>";
+	dbInfo.forEach(function (tdbi) {
+		rData += "<div class='tr'>" +
+			"<span class='td'>" + tdbi.dbTableName + "</span>" +
+			"<span class='td'>" + tdbi.RowCount + "</span>" +
+			"</div>";
+	});
+	rData += "</div></div></div></strong><br/>";
 	dojo.byId(target).innerHTML = rData;
 }
 

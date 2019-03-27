@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    5 Mar 2019
+    Updated:    27 Mar 2019
     Author     : astump
 --%>
 
@@ -227,6 +227,9 @@
             case "OutMap":
                 fullTitle = "Maps";
                 scripts2Load += mapHelperScripts;
+                break;
+            case "Physicals":
+                fullTitle = "Physicals";
                 break;
             case "SysMon":
                 fullTitle = "SNMP+ Tools";

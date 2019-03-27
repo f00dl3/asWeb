@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 Mar 2019
+Updated: 27 Mar 2019
 */
 
 package asWebRest.dao;
@@ -742,7 +742,83 @@ public class FitnessDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-      
+    
+    public JSONArray getPhysical(Connection dbc) {
+        final String query_Fitness_DayE = "SELECT" +
+    			" Date, Albumin, AlkPhos, ALT_SGPT, AST_SGOT," +
+        		" BUN, Calcium, Chloride, Chol_HDL, Cholesterol, CO2," +
+    			" Creatinine, GFR_Est, GFR_Est_AA, Glucose_Level, HDL," + 
+        		" Icterus, Iron, K_Plasma, LDL_Calc, Lipid_Serum," +
+    			" NonHDL_Chol, Sodium, T_Protein, Tbil, Triglycerides," +
+        		" TSH, UA_Bacteria, UA_Bili, UA_Cast, UA_Clarity, UA_Color," +
+    			" UA_Crystal, UA_Epitheliar, UA_Glucose, UA_HGB, UA_Ketones," +
+        		" UA_Leuk_Est, UA_Mucous, UA_Nitrate, UA_pH, UA_Protein," +
+    			" UA_RBC, UA_Spec_Grav, UA_Urobilinogen, UA_WBC, VLDL," +
+        		" Globulin, AlbGlobRatio" +
+        		" FROM Core.Physical" +
+    			" ORDER BY Date DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_DayE, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("AlkPhos", resultSet.getInt("AlkPhos"))
+                    .put("ALT_SGPT", resultSet.getInt("ALT_SGPT"))
+                    .put("AST_SGOT", resultSet.getInt("AST_SGOT"))
+                    .put("BUN", resultSet.getInt("BUN"))
+                    .put("Calcium", resultSet.getDouble("Calcium"))
+                    .put("Chloride", resultSet.getInt("Chloride"))
+                    .put("Chol_HDL", resultSet.getDouble("Chol_HDL"))
+                    .put("Cholesterol", resultSet.getInt("Cholesterol"))
+                    .put("CO2", resultSet.getInt("CO2"))
+                    .put("Creatinine", resultSet.getDouble("Creatinine"))
+                    .put("GFR_Est", resultSet.getInt("GFR_Est"))
+                    .put("GFR_Est_AA", resultSet.getInt("GFR_Est_AA"))
+                    .put("Glucose_Level", resultSet.getInt("Glucose_Level"))
+                    .put("HDL", resultSet.getInt("HDL"))
+                    .put("Icterus", resultSet.getString("Icterus"))
+                    .put("Iron", resultSet.getInt("Iron"))
+                    .put("K_Plasma", resultSet.getDouble("K_Plasma"))
+                    .put("LDL_Calc", resultSet.getInt("LDL_Calc"))
+                    .put("Lipid_Serum", resultSet.getString("Lipid_Serum"))
+                    .put("NonHDL_Chol", resultSet.getInt("NonHDL_Chol"))
+                    .put("Sodium", resultSet.getInt("Sodium"))
+                    .put("T_Protein", resultSet.getDouble("T_Protein"))
+                    .put("Tbil", resultSet.getDouble("Tbil"))
+                    .put("Triglycerides", resultSet.getInt("Triglycerides"))
+                    .put("TSH", resultSet.getDouble("TSH"))
+                    .put("UA_Bacteria", resultSet.getString("UA_Bacteria"))
+                    .put("UA_Bili", resultSet.getString("UA_Bili"))
+                    .put("UA_Cast", resultSet.getString("UA_Cast"))
+                    .put("UA_Clarity", resultSet.getString("UA_Clarity"))
+                    .put("UA_Color", resultSet.getString("UA_Color"))
+                    .put("UA_Crystal", resultSet.getString("UA_Crystal"))
+                    .put("UA_Epitheliar", resultSet.getString("UA_Epitheliar"))
+                    .put("UA_Glucose", resultSet.getString("UA_Glucose"))
+                    .put("UA_HGB", resultSet.getString("UA_HGB"))
+                    .put("UA_Ketones", resultSet.getString("UA_Ketones"))
+                    .put("UA_Leuk_Est", resultSet.getString("UA_Leuk_Est"))
+                    .put("UA_Mucous", resultSet.getString("UA_Mucous"))
+                    .put("UA_Nitrate", resultSet.getString("UA_Nitrate"))
+                    .put("UA_pH", resultSet.getDouble("UA_pH"))
+                    .put("UA_Protein", resultSet.getString("UA_Protein"))
+                    .put("UA_RBC", resultSet.getString("UA_RBC"))
+                    .put("UA_Spec_Grav", resultSet.getDouble("UA_Spec_Grav"))
+                    .put("UA_Urobilinogen", resultSet.getString("UA_Urobilinogen"))
+                    .put("UA_WBC", resultSet.getString("UA_WBC"))
+                    .put("VLDL", resultSet.getInt("VLDL"))
+                    .put("Globulin", resultSet.getDouble("Globulin"))
+                    .put("AlbGlobRatio", resultSet.getDouble("AlbGlobRatio"))
+                    .put("Albumin", resultSet.getDouble("Albumin"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getRPlanByDesc(Connection dbc, List<String> qParams) { return rPlanByDesc(dbc, qParams); }
     
     public JSONArray getRPlans(Connection dbc) {

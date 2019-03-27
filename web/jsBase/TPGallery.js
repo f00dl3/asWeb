@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 7 Mar 2019
+Updated: 23 Mar 2019
  */
 
 var maxListing = 250;
@@ -96,6 +96,7 @@ function genLayout() {
     getSearchableData();
     getQueueSize();
     populateGalleryHolder();
+    getNimsStats();
 }
 
 function genUpdateTpiForm(existingData, iRes, ffn, fileSizeKB, hashPath) {
@@ -132,6 +133,27 @@ function genUpdateTpMsiForm(msiFlag) {
 	dojo.byId("UpdateMsiFlagHolder").innerHTML = rData;
 	var checkMsiBox = dojo.byId("checkMsi");
     dojo.connect(checkMsiBox, "onchange", actOnTpMsiUpdate);
+}
+
+function getNimsStats() {
+    aniPreload("on");
+    var thePostData = { "doWhat": "getTpNimsStats" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("TP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    populateNimsBox(data);
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for NimsStats FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+    setTimeout(function () { getNimsStats(); }, getRefresh("medium"));
 }
 
 function getSearchableData(nimsFlag) {
@@ -216,6 +238,22 @@ function populateGalleryHolder(/* tpIndexed, tpImgTotal */) {
 function populateQueueSizeHolder(tpQSize) {
     var rData = "Queue size: <strong>" + tpQSize + "</strong>";
     dojo.byId("TPQueueSizeHolder").innerHTML = rData;
+}
+
+function populateNimsBox(nsData) {
+	var countIndexed = nsData[0].MSIndexed;
+	var countUnindexed = nsData[0].NotInMS;
+	var countMediaServer = nsData[0].MediaServerSize;
+	var countTotal = nsData[0].TotalImages;
+	var rData = "<div class='UPop'>" +
+		" Indexed : <strong>" + ((countIndexed/countTotal)*100).toFixed(2) + "%</strong>" +
+		"<div class='UPopO'>" + 
+		"<strong>Media Server Size: </strong>" + countMediaServer + "<br/>" +
+		"<strong>TP Image Count: </strong>" + countTotal + "<br/>" +
+		"<strong>TP Unindexed: </strong>" + countUnindexed + "<br/>" +
+		"<strong>TP Indexed: </strong>" + countIndexed +
+		"</div></div>";
+	dojo.byId("TPNimsDataHolder").innerHTML = rData;	
 }
 
 function populateSearchBox() {

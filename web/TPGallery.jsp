@@ -1,7 +1,7 @@
 <%-- 
     Document   : TPGallery.jsp
     Created on : Apr 17, 2018
-	Updated: 14 Aug 2018
+	Updated: 23 Mar 2019
     Author     : Anthony Stump
 --%>
 
@@ -20,8 +20,9 @@
     
     <h1><% out.println(pageTitle); %></h1>
     <tt>Best viewed at 1080p resolution or better.</tt><p>
-
-    <div id="TPQueueSizeHolder"></div><p>
+    
+    <span id="TPQueueSizeHolder"></span>
+    <span id="TPNimsDataHolder"></span><p>
     
     <div id="TPSearchBoxHolder"></div><br/>
         

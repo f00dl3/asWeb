@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 Feb 2019
+Updated: 27 Feb 2019
  */
 
 package asWebRest.resource;
@@ -152,6 +152,11 @@ public class FitnessResource extends ServerResource {
                     } else {
                         returnData += "ERROR!";
                     }
+                    break;
+
+                case "getPhysical":
+                    JSONArray physDataO = getFitnessAction.getPhysical(dbc);
+                    returnData += physDataO.toString();
                     break;
                     
                 case "getRouteHistory":

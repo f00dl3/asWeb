@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 20 Mar 2019
+Updated: 27 Mar 2019
  */
 
 var myHeight = 68;
@@ -409,7 +409,9 @@ function populateSleepChart() {
 
 function populateSearchBox() {
     var tElement = "<div class='UBox'><form id='SearchByDateForm'>" +
-            "<span><button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span><br/>" +
+            "<span><button class='UButton' type='Submit' name='DoFitSearch'>Search</button> back to 2007-06-27</span>" +
+            " [<a href='" + getResource("Physicals") + "' target='physSet'>Physicals</a>]" +
+            "<br/>" +
             "<span>Start: </span><input type='date' name='FitSearchStart' value='' style='width: 120px;'/>";
     if(!checkMobile()) { tElement += " | "; } else { tElement += "<br/>"; }
     tElement += "<span>End: </span><input type='date' name='FitSearchEnd' value='' style='width: 120px;'/><br/>" +
@@ -418,7 +420,6 @@ function populateSearchBox() {
     var searchByDateForm = dojo.byId("SearchByDateForm");
     dojo.connect(searchByDateForm, "onsubmit", actSearchByDateSubmit);
 }
-
 
 function putRoute(formData) {
     aniPreload("on");
