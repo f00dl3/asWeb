@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 7 Mar 2019
+Updated: 28 Mar 2019
  */
 
 var gSearchString;
@@ -54,6 +54,27 @@ function displayMediaServer() {
     $("#ETGameAll").hide();
 }
 
+function getByDateChart(target) {
+    var timeout = getRefresh("long");
+    aniPreload("on");
+    var thePostData = { "doWhat": "MediaServerCharts" };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    putByDateChart(target);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for MediaServer by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function getIndex(target) {
     var timeout = getRefresh("long");
     var isMobile = "no";
@@ -83,6 +104,7 @@ function getIndex(target) {
                     if(!updateFlag) {
                     	dojo.byId("ETSResults").innerHTML = "<p>Ready. " + data.Index.length + " filtered items.";
                 	} else {
+                		getByDateChart();
                 		searchAheadMediaServer(gSearchString);
                 	}
                     aniPreload("off");
@@ -196,6 +218,13 @@ function playDbxFile(formData) {
                     window.alert("request for viewDbx FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+}
+
+function putByDateChart(target) {
+	var rData = "<a href='" + doCh("j", "msByDate", null) + "' target='mCh'>" +
+		"<img class='ch_small' src='" + doCh("j", "msByDate", "th") + "'/>" +
+		"</a>";
+	dojo.byId(target).innerHTML = rData;
 }
 
 function putFileResults(msData, hitCount, matchLimitHit) {
@@ -373,7 +402,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
 }
 
 function putSearchBox(target, msOverview, updateFlag) {
-    var subTableData = "<div class='table'>" +
+    var subTableData = "<div id='byDateHolder'></div><br/>" +
+    	"<div class='table'>" +
         "<div class='tr'><span class='td'>Records</span><span class='td'>" + msOverview.TotalRecords + "</span></div>" +
         "<div class='tr'><span class='td'>Size</span><span class='td'>" + autoUnits(msOverview.TotalBlocks*1000) + "</span></div>" +
         "<div class='tr'><span class='td'>Hours</span><span class='td'>" + ((msOverview.TotalDurSec / 60) / 60).toFixed(1) + "</span></div>" +
@@ -401,11 +431,10 @@ function putSearchBox(target, msOverview, updateFlag) {
             " from the Media Server database.</div>" +
             "</div></span></form>";
     var rData = mainTableElement + liveSearchField;
-    // if(!updateFlag) {
-        dojo.byId(target).innerHTML = rData;
-        var genreSelect = dojo.byId("GenreSelect");
-        dojo.connect(genreSelect, "onchange", actOnNonMedia);
-    //}
+    dojo.byId(target).innerHTML = rData;
+    var genreSelect = dojo.byId("GenreSelect");
+    dojo.connect(genreSelect, "onchange", actOnNonMedia);
+    getByDateChart("byDateHolder");
 }
 
 function searchAheadMediaServer(value) {

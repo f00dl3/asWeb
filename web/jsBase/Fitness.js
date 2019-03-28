@@ -137,38 +137,45 @@ function getFitnessAllData(doReload, inXdt1, inXdt2) {
     var oYear = getDate("year", 0, "yearOnly");
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
-    var thePostData = "doWhat=getAll&XDT1=" + xdt1 + "&XDT2=" + xdt2 + "&Bicycle=" + bicycleUsed + "&year=" + oYear;
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("Fitness"),
-        postData: thePostData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            processFitnessAll(data.allRecs, data.autoMpg[0]);
-            fitnessCalories(data.calories);
-            fitnessPlans(data.plans);
-            fitnessToday(data.today[0]);
-            fitnessYesterday(data.yesterday[0]);
-            fitnessBubbles(
-                data.bkStats[0],
-                data.overall[0],
-                data.tot[0],
-                data.crsm[0],
-                data.rShoe[0],
-                data.autoMpg[0],
-                data.bkInf[0],
-                data.yData[0]
-            );
-            aniPreload("off");
-        },
-        error: function(data, iostatus) {
-            aniPreload("off");
-            console.log("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
-    if(doReload) { setTimeout(function () { getFitnessAllData(false, inXdt1, inXdt2); }, timeout); }
+    var thePostData = { 
+    		"doWhat": "getAll",
+    		"XDT1": xdt1,
+    		"XDT2": xdt2,
+    		"Bicycle": bicycleUsed,
+    		"year": oYear
+    }
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Fitness"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                	processFitnessAll(data.allRecs, data.autoMpg[0]);
+	                fitnessCalories(data.calories);
+	                fitnessPlans(data.plans);
+	                fitnessToday(data.today[0]);
+	                fitnessYesterday(data.yesterday[0]);
+	                fitnessBubbles(
+	                    data.bkStats[0],
+	                    data.overall[0],
+	                    data.tot[0],
+	                    data.crsm[0],
+	                    data.rShoe[0],
+	                    data.autoMpg[0],
+	                    data.bkInf[0],
+	                    data.yData[0]
+	                );
+	                aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    console.log("xhrGet for All FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+                }
+        );
+    });
+    // Temp disabled check for reload 3/28/19 due to bug
+    /* if(doReload) { */ setTimeout(function () { getFitnessAllData(false, inXdt1, inXdt2); }, timeout); /* } */
 }
 
 function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
@@ -446,7 +453,7 @@ function putRoute(formData) {
 var initFitness = function(event) {
     getWeightChart();
     populateSearchBox();
-    getFitnessAllData(true);
+    getFitnessAllData(true, null, null);
 };
 
 dojo.ready(initFitness);

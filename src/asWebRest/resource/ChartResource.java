@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 9 Feb 2019
+Updated: 28 Mar 2019
  */
 
 package asWebRest.resource;
@@ -10,6 +10,7 @@ import asWebRest.action.GetEntertainmentAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetLogsAction;
+import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
@@ -18,6 +19,7 @@ import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.GpsData;
 import asWebRest.chartHelpers.Logs;
+import asWebRest.chartHelpers.MediaServer;
 import asWebRest.chartHelpers.SysMonNote3;
 import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
@@ -29,6 +31,7 @@ import asWebRest.dao.EntertainmentDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.LogsDAO;
+import asWebRest.dao.MediaServerDAO;
 import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
@@ -65,10 +68,12 @@ public class ChartResource extends ServerResource {
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
         GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+        GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
         
         Finance fin = new Finance();
         Weather wx = new Weather();
         Logs log = new Logs();
+        MediaServer ms = new MediaServer();
                     
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -182,6 +187,13 @@ public class ChartResource extends ServerResource {
                     JSONArray cmp4Data = getLogsAction.getCameras(dbc, qParams, cmp4Order);
                     JSONObject cmp4Glob = log.getCmp4(cmp4Data);
                     try { dynChart.LineChart(cmp4Glob); returnData += "Chart generated - LogCamsMp4!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    break;
+
+                case "MediaServerCharts":
+                    genericCharts = false;
+                    JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
+                    JSONObject msGlob = ms.getByDate(msbd);
+                    try { dynChart.LineChart(msGlob); returnData += "Chart generated - MediaServer By Date!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "SysMonCharts":

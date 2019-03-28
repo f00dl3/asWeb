@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 5 Mar 2019
+Updated: 28 Mar 2019
  */
 
 package asWebRest.dao;
@@ -92,7 +92,28 @@ public class MediaServerDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-      
+    
+    public JSONArray getIndexedByDate(Connection dbc) {
+        final String query_IndxedByDate = "SELECT DateIndexed, COUNT(File) AS Hits" +
+        		" FROM Core.MediaServer" +
+        		" WHERE DateIndexed IS NOT NULL" +
+        		" GROUP BY DateIndexed" +
+    			" ORDER BY DateIndexed;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_IndxedByDate, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("DateIndexed"))
+                    .put("Hits", resultSet.getLong("Hits"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }      
+    
     public JSONArray getOverview(Connection dbc) {
         final String query_MediaServer_Overview = "SELECT COUNT(File) AS TotalRecords, SUM(PlayCount) AS TotalPlays," +
                 " SUM(DurSec) AS TotalDurSec, SUM(Size) AS TotalBlocks," +
