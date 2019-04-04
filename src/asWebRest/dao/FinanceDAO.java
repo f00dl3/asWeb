@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Feb 2019
+Updated: 3 Apr 2019
 */
 
 package asWebRest.dao;
@@ -178,7 +178,7 @@ public class FinanceDAO {
         final String query_FBook_ATrackPrep4 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Count)*7 FROM Core.Licenses), Checked=CURDATE() WHERE Related='Licenses';";
         final String query_FBook_ATrackPrep5 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Asset)*0.99 FROM Core.MediaServer), Checked=CURDATE() WHERE Related='Media';";
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked, PendingDonation," +
-                " Serial, UPC, Related, Location, Notes FROM Core.FB_Assets ORDER BY Type, Category, Description;";
+                " Serial, UPC, Related, Location, Notes, NetWorthType FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
         try { String rsA = wc.q2do1c(dbc, query_FBook_ATrackPrep1, null); } catch (Exception e) { e.printStackTrace(); }
         try { String rsB = wc.q2do1c(dbc, query_FBook_ATrackPrep2, null); } catch (Exception e) { e.printStackTrace(); }
@@ -200,6 +200,7 @@ public class FinanceDAO {
                     .put("Related", resultSet.getString("Related"))
                     .put("Locaiton", resultSet.getString("Location"))
                     .put("Notes", resultSet.getString("Notes"))
+                    .put("NetWorthType", resultSet.getString("NetWorthType"))
                     .put("PendingDonation", resultSet.getInt("PendingDonation"));
                 tContainer.put(tObject);
             }
@@ -411,10 +412,12 @@ public class FinanceDAO {
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
                 " FROM Core.FB_ENWT" +
+                " WHERE (AsOf LIKE '%1'" +
+                " OR AsOf LIKE '%6')" + /*
                 " WHERE (AsOf LIKE '%-03-01%'" +
-                " OR AsOf LIKE '%-06-01%'" +
-                " OR AsOf LIKE '%-09-01%'" +
-                " OR AsOf LIKE '%-12-01%')" +
+                " OR AsOf LIKE '%-06-01%')" +
+                " OR AsOf LIKE '%-09-01%')" +
+                " OR AsOf LIKE '%-12-01%')" + */
                 " ORDER BY AsOf;";
         JSONArray tContainer = new JSONArray();
         try {

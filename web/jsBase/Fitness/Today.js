@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Today.js split: 4 Apr 2018
-Updated: 24 Feb 2019
+Updated: 4 Apr 2019
  */
 
 function actUpdateTodaySubmit(event) {
@@ -13,10 +13,11 @@ function actUpdateTodaySubmit(event) {
 
 function fitnessToday(dataIn) {
     if(!isSet(dataIn)) { dataIn = {}; }
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags, hSleep, xOrgs, exMins;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, weightB, shoe, mowNotes, xTags, hSleep, xOrgs, exMins;
     studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }
+    if(!isSet(dataIn.WeightB)) { weightB = ""; } else { weightB = dataIn.WeightB; }
     if(!isSet(dataIn.RunWalk)) { runWalk = ""; } else { runWalk = dataIn.RunWalk; }
     if(!isSet(dataIn.Shoe)) { shoe = ""; } else { shoe = dataIn.Shoe; }
     if(!isSet(dataIn.MowNotes)) { mowNotes = ""; } else { mowNotes = dataIn.MowNotes; }
@@ -35,6 +36,7 @@ function fitnessToday(dataIn) {
             "<form id='FormUpdateToday'><button class='UButton' id='MakeUpdates' type='submit'>Update</button>";
     var tableData = "<table><tbody>" +
             "<tr><td>Weight</td><td><input type='number' step='0.1' name='TodayWeight' value='" + weight + "'/></td></tr>" +
+            "<tr><td>WeightB</td><td><input type='number' step='0.1' name='TodayWeightB' value='" + weightB + "'/></td></tr>" +
             "<tr><td>RunWalk</td><td><input type='number' step='0.1' name='TodayRunWalk' value='" + runWalk + "'/></td></tr>" +
             "<tr><td>Shoe</td><td><input type='text' name='TodayShoe' value='" + shoe + "'/></td></tr>" +
             "<tr><td>RSMile</td><td><input type='number' step='0.1' name='TodayRSMile' value='" + rsMile + "'/></td></tr>" +

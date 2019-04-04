@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Jun 2018
-Updated: 16 Mar 2019
+Updated: 4 Apr 2019
  */
 
 package asWebRest.chartHelpers;
@@ -87,19 +87,23 @@ public class Fitness {
         JSONObject wgt_Props = new JSONObject();
         JSONArray wgt_Labels = new JSONArray();
         JSONArray wgt_Data = new JSONArray();
+        JSONArray wgt_Data2 = new JSONArray();
         wgt_Props
             .put("dateFormat", "yyyy-MM-dd")
             .put("chartName", wgt_Name).put("chartFileName", "WeightRange")
             .put("sName", "Weight").put("sColor", "Yellow")
+            .put("s2Name", "WeightB").put("s2Color", "Yellow")
             .put("xLabel", "Date").put("yLabel", "lbs");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             wgt_Labels.put(thisObject.getString("Date"));
             wgt_Data.put(thisObject.getDouble("Weight"));
+            wgt_Data2.put(thisObject.getDouble("WeightB"));
         }
         wgt_Glob
                 .put("labels", wgt_Labels)
                 .put("data", wgt_Data)
+                .put("data2", wgt_Data2)
                 .put("props", wgt_Props);
         return wgt_Glob;
     }

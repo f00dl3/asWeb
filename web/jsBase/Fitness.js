@@ -1,10 +1,10 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 27 Mar 2019
+Updated: 4 Apr 2019
  */
 
-var myHeight = 68;
+var myHeight = 67;
 
 function actSearchByDateSubmit(event) {
     dojo.stopEvent(event);
@@ -355,7 +355,10 @@ function processFitnessAll(dataIn, autoMpg) {
                 "Int Mins: " + tData.IntensityMinutes + 
                 "</div></div></td>" +
                 "<td align='center'><div class='UPop'><div class='" + colorWeight(tData.Weight) + "'>" + tData.Weight + "</div>" +
-                "<div class='UPopO'>" + bmi + "</div>" +
+                "<div class='UPopO'>" + 
+                "B: <span class='" + colorWeight(tData.WeightB) + "'>" + tData.WeightB + "</span><br/>" + 
+                bmi +
+                "</div>" +
                 "</div></td>" +
                 "<td align='center' class='" + shoeClass + "'><div class='UPop'>" + tData.RunWalk +
                 "<div class='UPopO'>" + runDiv + "</div></div></td>" +

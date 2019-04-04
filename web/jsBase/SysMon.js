@@ -150,7 +150,7 @@ function populateChartHolders(chartArray, timestamp) {
 
 function populateCharts() {
     var timestamp = getDate("day", 0, "timestamp");
-    var rData = "<div class='rWrapper'>";
+    var rData = "<div class='rWrapper'>"; // implement fContainer class
     var chartList1 = [
         "mSysLoad", // done 4/29/18
         "mSysCPU", // done 4/29/18

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 27 Mar 2019
+Updated: 4 Apr 2019
 */
 
 package asWebRest.dao;
@@ -76,6 +76,7 @@ public class FitnessDAO {
                 " f.Vomit, f.EstHoursSleep, f.Swimming, f.HoursGaming," +
                 " f.CaloriesBurned, f.Steps, f.IntensityMinutes," +
                 " cf6.High, cf6.Low, cf6.Average," +
+                " CASE WHEN f.WeightB IS NULL THEN Weight ELSE WeightB END AS WeightB," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
                 " CASE WHEN f.gpsLogCyc2 IS NOT NULL THEN true ELSE false END AS isGPSCyc2JSON," +
@@ -96,6 +97,7 @@ public class FitnessDAO {
                 tObject
                     .put("Date", resultSet.getString("Date"))
                     .put("Weight", resultSet.getDouble("Weight"))
+                    .put("WeightB", resultSet.getDouble("WeightB"))
                     .put("RunWalk", resultSet.getDouble("RunWalk"))
                     .put("Shoe", resultSet.getString("Shoe"))
                     .put("RSMile", resultSet.getString("RSMile"))
@@ -378,7 +380,7 @@ public class FitnessDAO {
     }
      
     public JSONArray getChWeightA() {
-        final String query_ch_WeightA = "SELECT Date, Weight, EstHoursSleep FROM Core.Fitness ORDER BY Date ASC;";
+        final String query_ch_WeightA = "SELECT Date, Weight, WeightB, EstHoursSleep FROM Core.Fitness ORDER BY Date ASC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs(query_ch_WeightA, null);
@@ -387,6 +389,7 @@ public class FitnessDAO {
                 tObject
                     .put("Date", resultSet.getString("Date"))
                     .put("Weight", resultSet.getDouble("Weight"))
+                    .put("WeightB", resultSet.getDouble("WeightB"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"));
                 tContainer.put(tObject);
             }
@@ -398,7 +401,8 @@ public class FitnessDAO {
     public JSONArray getChWeightR(Connection dbc, List<String> qParams) {
         final String query_ch_WeightR = "SELECT" +
     			" Date, Weight, EstHoursSleep, HoursGaming," +
-        		" (IntensityMinutes/60) AS HoursExercise" +
+        		" (IntensityMinutes/60) AS HoursExercise," +
+                " CASE WHEN WeightB IS NULL THEN Weight ELSE WeightB END AS WeightB" +
         		" FROM Core.Fitness" + 
     			" WHERE Date BETWEEN ? AND ?" +
         		" ORDER BY Date ASC LIMIT 366;";
@@ -410,6 +414,7 @@ public class FitnessDAO {
                 tObject
                     .put("Date", resultSet.getString("Date"))
                     .put("Weight", resultSet.getDouble("Weight"))
+                    .put("WeightB", resultSet.getDouble("WeightB"))
                     .put("HoursGaming", resultSet.getDouble("HoursGaming"))
                     .put("HoursExercise", resultSet.getDouble("HoursExercise"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"));
@@ -456,6 +461,7 @@ public class FitnessDAO {
         final String query_Fitness_Day = "SELECT " +
                 " Weight, RunWalk, Shoe, RSMile, Cycling, Gym, GymWorkout, TrackedTime, TrackedDist," +
                 " BkStudT, ReelMow, MowNotes, CommonRoute, xTags, Vomit, EstHoursSleep, Orgs," +
+                " CASE WHEN WeightB IS NULL THEN Weight ELSE WeightB END AS WeightB," +
                 " CaloriesBurned, IntensityMinutes, Steps" +
                 " FROM Core.Fitness WHERE Date=CURDATE();";
         JSONArray tContainer = new JSONArray();
@@ -465,6 +471,7 @@ public class FitnessDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Weight", resultSet.getDouble("Weight"))
+                    .put("WeightB", resultSet.getDouble("WeightB"))
                     .put("RunWalk", resultSet.getDouble("RunWalk"))
                     .put("Shoe", resultSet.getString("Shoe"))
                     .put("RSMile", resultSet.getDouble("RSMile"))
@@ -994,7 +1001,7 @@ public class FitnessDAO {
     
     public String setUpdateToday(List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
-        String tRShoe = qParams.get(2);
+        String tRShoe = qParams.get(3);
         double tRShoeMaxMiles = 0.0;
         final String query_Fitness_GetLastRsMileTotal = "SELECT MAX(RSMile) AS MaxRSMiles FROM Core.Fitness WHERE Shoe='" + tRShoe + "' AND Date != CURDATE();";
         try {
@@ -1005,12 +1012,12 @@ public class FitnessDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
-	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle," +
+	            " (Date,Weight,WeightB,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle," +
         		"   CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,IntensityMinutes) VALUES" +
-	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?," +
+	            " (CURDATE(),?,?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?," +
         		"   ?,?,?,?,?,?)" +
 	            " ON DUPLICATE KEY UPDATE" +
-	            " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
+	            " Weight=?, WeightB=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
 				" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
 				" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?," +
 				" IntensityMinutes=?";

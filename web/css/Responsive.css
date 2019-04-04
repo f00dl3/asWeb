@@ -1,8 +1,15 @@
 /* 
 by Anthony Stump
 Created: 3 Mar 2019
-Updated: 16 Mar 2019
+Updated: 30 Mar 2019
 */
+
+.fContainer {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
 
 .rUBox {
 	background-color: #2A2A2A;

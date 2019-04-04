@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 28 Mar 2019
+Updated: 30 Mar 2019
  */
 
 package asWebRest.dao;
@@ -97,6 +97,7 @@ public class MediaServerDAO {
         final String query_IndxedByDate = "SELECT DateIndexed, COUNT(File) AS Hits" +
         		" FROM Core.MediaServer" +
         		" WHERE DateIndexed IS NOT NULL" +
+        		" AND DateIndexed BETWEEN CURDATE() - INTERVAL 365 DAY AND CURDATE()" +
         		" GROUP BY DateIndexed" +
     			" ORDER BY DateIndexed;";
         JSONArray tContainer = new JSONArray();

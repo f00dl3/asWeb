@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 12 Apr 2018
+Updated: 3 Apr 2019
  */
 
 function actOnSavingsSubmit(event) {
@@ -82,14 +82,14 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
     var cnw1d = (enw.NetWorth / 1000).toFixed(1);
     var mlb1d = (mort.MBal / 1000).toFixed(1);
     var nwci = x3nw.Worth;
-    var nwgm = 1 + (nwga.GrowthAvg / 100);
-    var pro03m = nwci * nwgm;
-    var pro01y = nwci * Math.pow(nwgm, (4 * 1));
-    var pro05y = nwci * Math.pow(nwgm, (4 * 5));
-    var pro10y = nwci * Math.pow(nwgm, (4 * 10));
-    var pro20y = nwci * Math.pow(nwgm, (4 * 20));
-    var pro30y = nwci * Math.pow(nwgm, (4 * 30));
-    var proRet = nwci * Math.pow(nwgm, (4 * 33));
+    var nwgm = (nwga.GrowthAvg / 100);
+    var pro03m = nwci * (1 + nwgm);
+    var pro01y = fnwGrow(nwci, nwgm, 1);
+    var pro05y = fnwGrow(nwci, nwgm, 5);
+    var pro10y = fnwGrow(nwci, nwgm, 10);
+    var pro20y = fnwGrow(nwci, nwgm, 20);
+    var pro30y = fnwGrow(nwci, nwgm, 30);
+    var proRet = fnwGrow(nwci, nwgm, 32);
     var projections = [pro03m, pro01y, pro05y, pro10y, pro20y, pro30y, proRet];
     var bubble = "<div class='UBox'>EWorth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
@@ -168,6 +168,10 @@ function getOverviewData2() {
         }
     };
     dojo.xhrPost(xhArgs);
+}
+
+function fnwGrow(nwci, nwgm, quarters) {
+	return nwci * Math.pow((1 + nwgm), (4 * quarters));
 }
 
 function putOverview(finGlob) {

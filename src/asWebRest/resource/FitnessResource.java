@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 27 Feb 2019
+Updated: 4 Apr 2019
  */
 
 package asWebRest.resource;
@@ -280,6 +280,7 @@ public class FitnessResource extends ServerResource {
                     
                 case "putToday":
                     String todayWeight = null; if(wc.isSet(argsInForm.getFirstValue("TodayWeight"))) { todayWeight = argsInForm.getFirstValue("TodayWeight"); } qParams.add(todayWeight); 
+                    String todayWeightB = null; if(wc.isSet(argsInForm.getFirstValue("TodayWeightB"))) { todayWeightB = argsInForm.getFirstValue("TodayWeightB"); } qParams.add(todayWeightB); 
                     String todayRunWalk = null; if(wc.isSet(argsInForm.getFirstValue("TodayRunWalk"))) { todayRunWalk = argsInForm.getFirstValue("TodayRunWalk"); } qParams.add(todayRunWalk);
                     String todayShoe = null; if(wc.isSet(argsInForm.getFirstValue("TodayShoe"))) { todayShoe = argsInForm.getFirstValue("TodayShoe"); } qParams.add(todayShoe);
                     String todayRSMile = null; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
@@ -304,7 +305,7 @@ public class FitnessResource extends ServerResource {
                     String todaySleep = null; if(wc.isSet(argsInForm.getFirstValue("TodayEstHoursSleep"))) { todaySleep = argsInForm.getFirstValue("TodayEstHoursSleep"); } qParams.add(todaySleep);
                     String todayXO = null; if(wc.isSet(argsInForm.getFirstValue("TodayXO"))) { todayXO = argsInForm.getFirstValue("TodayXO"); } qParams.add(todayXO);
                     String todayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("TodayExerciseMinutes"))) { todayIntensityMinutes = argsInForm.getFirstValue("TodayExerciseMinutes"); } qParams.add(todayIntensityMinutes);
-                    qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
+                    qParams.add(todayWeight); qParams.add(todayWeightB); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
                     qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
                     qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
                     qParams.add(todayXO); qParams.add(todayIntensityMinutes);
