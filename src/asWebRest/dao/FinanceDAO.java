@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 3 Apr 2019
+Updated: 11 Apr 2019
 */
 
 package asWebRest.dao;
@@ -177,6 +177,12 @@ public class FinanceDAO {
         final String query_FBook_ATrackPrep3 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.DecorTools), Checked=CURDATE() WHERE Related='DecorTools';";
         final String query_FBook_ATrackPrep4 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Count)*7 FROM Core.Licenses), Checked=CURDATE() WHERE Related='Licenses';";
         final String query_FBook_ATrackPrep5 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Asset)*0.99 FROM Core.MediaServer), Checked=CURDATE() WHERE Related='Media';";
+        final String query_FBook_ATrackPrep6 = "UPDATE Core.FB_Assets " +
+        		" SET Value=(((SELECT SUM(Value) FROM Core.FFXIV_Assets) + (SELECT Gil FROM Core.FFXIV_Gil ORDER BY AsOf DESC LIMIT 1))" +
+        		" * (SELECT ValueUSD FROM Core.FFXIV_GilExchangeRate ORDER BY Date DESC LIMIT 1)/1000000)," +
+        		" Notes=CONCAT('Exchange rate ',(SELECT ValueUSD FROM Core.FFXIV_GilExchangeRate ORDER BY Date DESC LIMIT 1),' per milion')," +
+        		" Checked=CURDATE()" +
+        		" WHERE Related='FFXIV';";
         final String query_FBook_ATrack = "SELECT Description, Type, Category, Value, Checked, PendingDonation," +
                 " Serial, UPC, Related, Location, Notes, NetWorthType FROM Core.FB_Assets ORDER BY Type, Category, Description;";
         JSONArray tContainer = new JSONArray();
@@ -185,6 +191,7 @@ public class FinanceDAO {
         try { String rsC = wc.q2do1c(dbc, query_FBook_ATrackPrep3, null); } catch (Exception e) { e.printStackTrace(); }
         try { String rsD = wc.q2do1c(dbc, query_FBook_ATrackPrep4, null); } catch (Exception e) { e.printStackTrace(); }
         try { String rsE = wc.q2do1c(dbc, query_FBook_ATrackPrep5, null); } catch (Exception e) { e.printStackTrace(); }
+        try { String rsF = wc.q2do1c(dbc, query_FBook_ATrackPrep6, null); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ATrack, null);
             while (resultSet.next()) { 
@@ -407,18 +414,22 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    private JSONArray enwChart(Connection dbc) {
-        final String query_ch_ENW = "SELECT " +
+    private JSONArray enwChart(Connection dbc, String periodLength) {
+        String query_ch_ENW = "SELECT " +
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
-                " FROM Core.FB_ENWT" +
-                " WHERE (AsOf LIKE '%1'" +
-                " OR AsOf LIKE '%6')" + /*
-                " WHERE (AsOf LIKE '%-03-01%'" +
-                " OR AsOf LIKE '%-06-01%')" +
-                " OR AsOf LIKE '%-09-01%')" +
-                " OR AsOf LIKE '%-12-01%')" + */
-                " ORDER BY AsOf;";
+                " FROM Core.FB_ENWT";
+        switch(periodLength) {
+        	case "Year": 
+        		query_ch_ENW += " WHERE AsOf BETWEEN CURDATE() - INTERVAL 365 DAY AND CURDATE()" + 
+        				" ORDER BY AsOf LIMIT 365;";
+        		break;
+        	case "All": default:
+        		query_ch_ENW += " WHERE (AsOf LIKE '%1'" +
+		                " OR AsOf LIKE '%6')" +
+		                " ORDER BY AsOf;";
+	        	break;
+        }
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ch_ENW, null);
@@ -696,7 +707,7 @@ public class FinanceDAO {
     public JSONArray getCkBkComb(Connection dbc) { return ckBkComb(dbc); }
     public JSONArray getDecorTools(Connection dbc) { return decorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return enw(dbc); }
-    public JSONArray getEnwChart(Connection dbc) { return enwChart(dbc); }
+    public JSONArray getEnwChart(Connection dbc, String periodLength) { return enwChart(dbc, periodLength); }
     public JSONArray getEnwt(Connection dbc) { return enwt(dbc); }
     public JSONArray getLicenses(Connection dbc) { return licenses(dbc); }
     public JSONArray getMort(Connection dbc) { return mort(dbc); }

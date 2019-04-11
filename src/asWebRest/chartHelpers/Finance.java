@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 25 Jul 2018
+Updated: 11 Apr 2019
  */
 
 package asWebRest.chartHelpers;
@@ -54,8 +54,8 @@ public class Finance {
         return bill_Glob;
     }
 
-    private static JSONObject finEnw(JSONArray dataIn) {
-        String enw_Name = "Estimated Net Worth";
+    private static JSONObject finEnw(JSONArray dataIn, String periodLength, String dataSelection) {
+        String enw_Name = "Estimated Net Worth (" + periodLength + " - " + dataSelection + ")";
         JSONObject enw_Glob = new JSONObject();
         JSONObject enw_Props = new JSONObject();
         JSONArray enw_Labels = new JSONArray();
@@ -67,14 +67,31 @@ public class Finance {
         JSONArray enw_Data6 = new JSONArray();
         enw_Props
                 .put("dateFormat", "yyyy-MM-dd")
-                .put("chartName", enw_Name).put("chartFileName", "FinENW")
-                .put("sName", "Worth").put("sColor", "White")
-                .put("s2Name", "Liquid").put("s2Color", "Green")
-                .put("s3Name", "Fixed").put("s3Color", "Blue")
-                .put("s4Name", "Insurance").put("s4Color", "Gray")
-                .put("s5Name", "Credits").put("s5Color", "Yellow")
-                .put("s6Name", "Debt").put("s6Color", "Red")
+                .put("chartName", enw_Name).put("chartFileName", "FinENW_" + periodLength + "_" + dataSelection)
                 .put("xLabel", "Date").put("yLabel", "K USD");
+        switch(dataSelection) {
+	        case "A": default:
+		        enw_Props
+		        	.put("sName", "Worth").put("sColor", "White")
+			        .put("s2Name", "Liquid").put("s2Color", "Green")
+			        .put("s3Name", "Fixed").put("s3Color", "Blue")
+			        .put("s4Name", "Insurance").put("s4Color", "Gray")
+			        .put("s5Name", "Credits").put("s5Color", "Yellow")
+			        .put("s6Name", "Debt").put("s6Color", "Red");
+		        break;
+	        case "T": 
+		        enw_Props.put("sName", "Worth").put("sColor", "White");
+	        	break;
+	        case "L":
+		        enw_Props.put("sName", "Liquid").put("sColor", "Green");
+	        	break;
+	        case "F":
+		        enw_Props.put("sName", "Fixed").put("sColor", "Blue");
+	        	break;
+	        case "D": 
+		        enw_Props.put("sName", "Debt").put("sColor", "Red");
+	        	break;
+        }
         for (int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             enw_Labels.put(thisObject.getString("AsOf"));
@@ -87,13 +104,30 @@ public class Finance {
         }
         enw_Glob
                 .put("labels", enw_Labels)
-                .put("data", enw_Data)
-                .put("data2", enw_Data2)
-                .put("data3", enw_Data3)
-                .put("data4", enw_Data4)
-                .put("data5", enw_Data5)
-                .put("data6", enw_Data6)
                 .put("props", enw_Props);
+        switch(dataSelection) {
+	        case "A": default:
+	    		enw_Glob
+		            .put("data", enw_Data)
+		            .put("data2", enw_Data2)
+		            .put("data3", enw_Data3)
+		            .put("data4", enw_Data4)
+		            .put("data5", enw_Data5)
+		            .put("data6", enw_Data6);
+	            break;
+	        case "T": 
+	    		enw_Glob.put("data", enw_Data);
+	        	break;
+	        case "L":
+	    		enw_Glob.put("data", enw_Data2);
+	        	break;
+	        case "F":
+	    		enw_Glob.put("data", enw_Data3);
+	        	break;
+	        case "D": 
+	    		enw_Glob.put("data", enw_Data6);
+	        	break;
+        }
         return enw_Glob;
     }
     
@@ -121,7 +155,7 @@ public class Finance {
     }
     
     public static JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
-    public static JSONObject getFinEnw(JSONArray dataIn) { return finEnw(dataIn); }
+    public static JSONObject getFinEnw(JSONArray dataIn, String periodLength, String dataSelection) { return finEnw(dataIn, periodLength, dataSelection); }
     public static JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
 
 }

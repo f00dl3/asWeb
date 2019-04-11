@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 28 Mar 2019
+Updated: 11 Apr 2019
  */
 
 package asWebRest.resource;
@@ -125,11 +125,20 @@ public class ChartResource extends ServerResource {
                 
                 case "FinanceOverviewCharts":
                     genericCharts = false;
-                    JSONArray enw_Raw = getFinanceAction.getEnwChart(dbc);
+                    JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
+                    JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
-                    JSONObject enw_Glob = fin.getFinEnw(enw_Raw);
+                    JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");
+                    JSONObject enw_GlobY = fin.getFinEnw(enw_RawY, "Year", "T");
+                    JSONObject enw_GlobYL = fin.getFinEnw(enw_RawY, "Year", "L");
+                    JSONObject enw_GlobYF = fin.getFinEnw(enw_RawY, "Year", "F");
+                    JSONObject enw_GlobYD = fin.getFinEnw(enw_RawY, "Year", "D");
                     JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
-                    try { dynChart.LineChart(enw_Glob); returnData += "Chart generated - Est Net Worth!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(enw_GlobY); returnData += "Chart generated - Est Net Worth Year!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(enw_GlobYF); returnData += "Chart generated - Est Net Worth Year F!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(enw_GlobYL); returnData += "Chart generated - Est Net Worth Year L!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(enw_GlobYD); returnData += "Chart generated - Est Net Worth Year D!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                  

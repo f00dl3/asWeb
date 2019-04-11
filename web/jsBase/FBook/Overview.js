@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 3 Apr 2019
+Updated: 11 Apr 2019
  */
 
 function actOnSavingsSubmit(event) {
@@ -104,9 +104,13 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
         pTable += "<td>" + projections[i].toFixed(1) + "</td>";
     }
     pTable += "</tr></tbody></table>";
-    bubble += pTable +
-            "<p><a href='" + doCh("j", "FinENW", null) + "' target='pChart'>" +
-            "<img class='ch_large' src='" + doCh("j", "FinENW", "th") + "' /></a><p>";
+    bubble += pTable + "<p>" +
+            "<a href='" + doCh("j", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' /></a><br/>" +
+            "<a href='" + doCh("j", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinENW_Year_D", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_D", "th") + "' /></a>" +
+            "<p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {
         wTable += "<th>" + wCols[i] + "</th>";
