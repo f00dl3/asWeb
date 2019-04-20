@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 11 Apr 2019
+Updated: 20 Apr 2019
  */
 
 package asWebRest.resource;
@@ -180,13 +180,15 @@ public class ChartResource extends ServerResource {
                     JSONObject gpsPowerGlob = gpsData.getGpsElement(gpsDataGlob, "Power", "Watts", "PowerWatts");
                     JSONObject gpsSpeedGlob = gpsData.getGpsElement(gpsDataGlob, "Speed", "MPH", "SpeedMPH");
                     JSONObject gpsTemperatureGlob = gpsData.getGpsElement(gpsDataGlob, "Temperature", "Degrees F", "TemperatureF");
+                    JSONObject gpsHrvGlob = gpsData.getHrvCh(gpsDataGlob);
                     
                     try { dynChart.LineChart(gpsCadenceGlob); returnData += "Chart generated - GPS Cadence!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsElevationGlob); returnData += "Chart generated - GPS Elevation!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsHeartRateGlob); returnData += "Chart generated - GPS Heart Rate!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsPowerGlob); returnData += "Chart generated - GPS Power!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(gpsSpeedGlob); returnData += "Chart generated - GPS Speed!\n"; } catch (Exception e) { e.printStackTrace(); } 
-                    try { dynChart.LineChart(gpsTemperatureGlob); returnData += "Chart generated - GPS Temperature!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(gpsTemperatureGlob); returnData += "Chart generated - GPS Temperature!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(gpsHrvGlob); returnData += "Chart generated - GPS HRV!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                     
                 case "LogCharts":

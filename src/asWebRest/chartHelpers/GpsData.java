@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 17 Jun 2018
-Updated: 28 Feb 2019
+Updated: 20 Apr 2019
  */
 
 package asWebRest.chartHelpers;
@@ -53,7 +53,44 @@ public class GpsData {
                 .put("debug", data);
         return glob;
     }
-        
+
+    private static JSONObject hrvCh(JSONArray dataIn) {
+        String tName = "Heart Rate Variability (EKG)";
+        JSONObject tGlob = new JSONObject();
+        JSONObject tProps = new JSONObject();
+        JSONArray tLabels = new JSONArray();
+        JSONArray tData = new JSONArray();
+        JSONArray tData2 = new JSONArray();
+        tProps
+            .put("dateFormat", "ss")
+            .put("chartName", tName).put("chartFileName", "gpsHrv")
+            .put("sName", "HRVa").put("sColor", "Red")
+            .put("s2Name", "HRVb").put("s2Color", "Red")
+            .put("xLabel", "Date").put("yLabel", "Reading");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            JSONArray tHrvGlob = thisObject.getJSONArray("hrvLog");
+            for(int j = 0; j < tHrvGlob.length(); j++) {
+	            JSONArray tHrvLog = tHrvGlob.getJSONArray(j);
+                String jStr = String.valueOf(j);
+	            tLabels.put(jStr);
+	            double tHrvAFiltered = tHrvLog.getDouble(0);
+	            double tHrvBFiltered = tHrvLog.getDouble(1);
+	            if(tHrvAFiltered == 65535) { tHrvAFiltered = 0; }
+	            if(tHrvBFiltered == 65535) { tHrvBFiltered = 0; }
+	            tData.put(tHrvAFiltered);
+	            tData2.put(tHrvBFiltered);
+            }
+        }
+        tGlob
+                .put("labels", tLabels)
+                .put("data", tData)
+                .put("data2", tData2)
+                .put("props", tProps);
+        return tGlob;
+    }
+    
     public JSONObject getGpsElement(JSONArray dataIn, String whatToDo, String xUnits, String dataPoint) { return gpsElement(dataIn, whatToDo, xUnits, dataPoint); }
+    public JSONObject getHrvCh(JSONArray dataIn) { return hrvCh(dataIn); }
         
 }

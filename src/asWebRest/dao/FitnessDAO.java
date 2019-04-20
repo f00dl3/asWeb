@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 4 Apr 2019
+Updated: 20 Apr 2019
 */
 
 package asWebRest.dao;
@@ -16,6 +16,8 @@ import org.json.JSONObject;
 public class FitnessDAO {
     
     WebCommon wc = new WebCommon();
+    
+    private JSONArray emptyJSONArray = new JSONArray("[[0,0],[0,0]]");
        
     private JSONArray geoJson(Connection dbc, List<String> qParams) {
         final String query_Fitness_GeoJSON = "SELECT" +
@@ -541,13 +543,17 @@ public class FitnessDAO {
     public JSONArray getGeoJSON(Connection dbc, List<String> qParams) { return geoJson(dbc, qParams); }
     
     public JSONArray getJsonLogCyc(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogCyc = "SELECT gpsLogCyc as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogCyc = "SELECT gpsLogCyc as gpsLog, hrvLogCyc as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -556,13 +562,17 @@ public class FitnessDAO {
     }
     
     public JSONArray getJsonLogCyc2(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogCyc2 = "SELECT gpsLogCyc2 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogCyc2 = "SELECT gpsLogCyc2 as gpsLog, hrvLogCyc2 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -571,13 +581,17 @@ public class FitnessDAO {
     }
     
     public JSONArray getJsonLogCyc3(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogCyc3 = "SELECT gpsLogCyc3 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogCyc3 = "SELECT gpsLogCyc3 as gpsLog, hrvLogCyc3 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc3, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -586,13 +600,17 @@ public class FitnessDAO {
     }
     
     public JSONArray getJsonLogCyc4(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogCyc4 = "SELECT gpsLogCyc4 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogCyc4 = "SELECT gpsLogCyc4 as gpsLog, hrvLogCyc4 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogCyc4, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -601,13 +619,17 @@ public class FitnessDAO {
     }
        
     public JSONArray getJsonLogRun(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogRun = "SELECT gpsLogRun as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogRun = "SELECT gpsLogRun as gpsLog, hrvLogRun as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -616,13 +638,17 @@ public class FitnessDAO {
     }
     
     public JSONArray getJsonLogRun2(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogRun2 = "SELECT gpsLogRun2 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogRun2 = "SELECT gpsLogRun2 as gpsLog, hrvLogRun2 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun2, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -632,13 +658,17 @@ public class FitnessDAO {
     
     
     public JSONArray getJsonLogRun3(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogRun3 = "SELECT gpsLogRun3 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogRun3 = "SELECT gpsLogRun3 as gpsLog, hrvLogRun3 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun3, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -647,13 +677,17 @@ public class FitnessDAO {
     }
     
     public JSONArray getJsonLogRun4(Connection dbc, List<String> qParams) {
-        final String query_Fitness_jsonLogRun4 = "SELECT gpsLogRun4 as gpsLog FROM Fitness WHERE Date=?;";
+        final String query_Fitness_jsonLogRun4 = "SELECT gpsLogRun4 as gpsLog, hrvLogRun4 as hrvLog FROM Fitness WHERE Date=?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_jsonLogRun4, qParams);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
-                tObject.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")));
+                JSONArray hrvLog = emptyJSONArray;
+                try { hrvLog = new JSONArray(resultSet.getString("hrvLog")); } catch (Exception e) { }
+                tObject
+                	.put("gpsLog", new JSONObject(resultSet.getString("gpsLog")))
+                	.put("hrvLog", hrvLog);
                 tContainer.put(tObject);
             }
             resultSet.close();

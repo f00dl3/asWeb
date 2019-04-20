@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 May 2018
 Split off from OLMap/AddElements.js 16 Jun 2018
-Updated: 8 Feb 2019
+Updated: 20 Apr 2019
  */
 
 var gActivity;
@@ -45,6 +45,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
     var labelQ = "QA";
     var labelS = "SP";
     var labelT = "TM";
+    var labelV = "HV";
     if(!checkMobile()) {
         gpsThumbSize = "th_small";
         gpsPopScale = 1;
@@ -57,6 +58,7 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
         labelQ = "Quadra";
         labelS = "Speed";
         labelT = "Temps";
+        labelV = "HRV";
     }
     var myAge = getDate("day", 0, "yearOnly") - 1985;
     var thisDayWeight = fitToday.Weight;
@@ -91,6 +93,14 @@ function addGpsInfo(activity, oaStats, oaSensors, fitToday) {
                 "<a href='" + doCh("j", "gpsHeartRate", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsHeartRate", null) + "'/></a><br/>" +
                 "<strong>Average: </strong> " + (getSum(pu_Heart)/pu_Heart.length).toFixed(1) + " bpm<br/>" +
                 "<strong>Maximum: </strong> " + Math.max.apply(Math, pu_Heart).toFixed(1) + " bpm<br/>" +
+                "</div>" +
+                "</div></span>" +
+                "<span class='td'><div class='GPSPop'>" + labelV + "<br/>" +
+                "<img class='" + gpsThumbSize + "' src='" + doCh("j", "gpsHrv", "th") + "'/>" +
+                "<div class='" + gpsPopOClass + "'><h3>Heart Rate Variability</h3>" +
+                "<a href='" + doCh("j", "gpsHrv", null) + "' target='gpsCh'><img height='" + (540/gpsPopScale) + "' width='" + (960/gpsPopScale) + "' src='" + doCh("j", "gpsHrv", null) + "'/></a><br/>" +
+                "<strong>Average: </strong> UNIMP!<br/>" +
+                "<strong>Maximum: </strong> UNIMP!<br/>" +
                 "</div>" +
                 "</div></span>";
     }
