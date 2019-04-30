@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 28 Mar 2019
+Updated: 29 Apr 2019
  */
 
 var gSearchString;
@@ -37,7 +37,7 @@ function actOnPlayMedia(event) {
 	whatFile = thisFormData.FilePath;
 	shortFileName = thisFormData.FileName;
     setPlayMedia(thisFormData);
-    if(isSet(thisFormData.dbxRawFile)) {
+    if(isSet(thisFormData.dbxRawFile) && thisFormData.dbxUnpackedFlag == 0) {
         playDbxFile(thisFormData);
     } else {
         playMediaFile(thisFormData);
@@ -166,7 +166,11 @@ function playMediaFile(thisFormData, dbxFlag) {
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     if(isSet(dbxFlag)) { 
-        filePath = getBasePath("chartCache") + "/" + shortFileName;
+    	if(thisFormData.rawUnpacked == 0) {
+    		filePath = getBasePath("chartCache") + "/" + shortFileName;
+    	} else {
+            filePath = getBasePath("ui") + whatFile;
+    	}
     } else {
         filePath = getBasePath("ui") + whatFile;
     }
@@ -199,7 +203,7 @@ function playMediaFile(thisFormData, dbxFlag) {
 }
 
 function playDbxFile(formData) {
-    var thePostData = {
+    /* var thePostData = {
         "doWhat": "viewDbx",
         "rawFilePath": formData.dbxRawFile
     };
@@ -217,7 +221,8 @@ function playDbxFile(formData) {
                     aniPreload("off");
                     window.alert("request for viewDbx FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
-    });
+    }); */
+	window.alert("This has been disabled due to possible load on VM.");
 }
 
 function putByDateChart(target) {
@@ -259,7 +264,8 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             if(aaTag === "/DBX") {
                 var albumArtStripped = (tm.AlbumArt).split("/")[1];
                 thisAddCheckbox += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped + ".raw'/>" +
-                        "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
+                        "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>" +
+                        "<input type='hidden' name='rawUnpacked' value='" + tm.rawUnpacked + "'/>";
             }
             if(
                 aaTag === "/DBX" ||

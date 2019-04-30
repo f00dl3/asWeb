@@ -421,8 +421,8 @@ public class FinanceDAO {
                 " FROM Core.FB_ENWT";
         switch(periodLength) {
         	case "Year": 
-        		query_ch_ENW += " WHERE AsOf BETWEEN CURDATE() - INTERVAL 365 DAY AND CURDATE()" + 
-        				" ORDER BY AsOf LIMIT 365;";
+        		query_ch_ENW += " WHERE AsOf BETWEEN CURDATE() - INTERVAL 730 DAY AND CURDATE()" + 
+        				" ORDER BY AsOf LIMIT 730;";
         		break;
         	case "All": default:
         		query_ch_ENW += " WHERE (AsOf LIKE '%1'" +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 30 Mar 2019
+Updated: 29 Apr 2019
  */
 
 package asWebRest.dao;
@@ -38,7 +38,7 @@ public class MediaServerDAO {
                 " SUBSTRING(Description,1,48) AS DescriptionLimited," +
                 " LastSelected, PlayCount, Burned, BDate, Media, Working, OffDisk, Archived," +
                 " BitRate, Hz, Channels, Resolution, Pages, MPAA, MPAAContent, XTags, XTagVer, GeoData, GIFVer," +
-                " WarDeploy, DateIndexed, TrackListingASON, AltDisk," +
+                " WarDeploy, DateIndexed, TrackListingASON, AltDisk, rawUnpacked," +
                 " CASE WHEN DateIndexed BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() THEN 1 ELSE 0 END AS NewFlag" +
                 " FROM Core.MediaServer" +
                 " WHERE (1=? OR Adult=?)" + // AdultTest, Adult
@@ -85,7 +85,8 @@ public class MediaServerDAO {
                     .put("DateIndexed", resultSet.getString("DateIndexed"))
                     .put("TrackListingASON",resultSet.getString("TrackListingASON"))
                     .put("AltDisk", resultSet.getInt("AltDisk"))
-                    .put("NewFlag", resultSet.getInt("NewFlag"));                    
+                    .put("NewFlag", resultSet.getInt("NewFlag"))
+                    .put("rawUnpacked", resultSet.getInt("rawUnpacked"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 23 Mar 2019
+Updated: 29 Apr 2019
 */
 
 package asWebRest.dao;
@@ -128,7 +128,8 @@ public class SnmpDAO {
                 " (SELECT MAX(WalkTime) FROM net_snmp.Note3 ORDER BY WalkTime ASC) AS Phone," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.RaspberryPi ORDER BY WalkTime ASC) AS Pi," +
                 " (SELECT MAX(WalkTime) FROM net_snmp.RaspberryPi2 ORDER BY WalkTime ASC) AS Pi2," +
-                " (SELECT MAX(WalkTime) FROM net_snmp.Asus3200 ORDER BY WalkTime ASC) AS Router" +
+                " (SELECT MAX(WalkTime) FROM net_snmp.Asus3200 ORDER BY WalkTime ASC) AS Router," +
+                " (SELECT MAX(WalkTime) FROM net_snmp.UbuntuVM2 ORDER BY WalkTime ASC) AS UVM" +
                 " FROM net_snmp.Main LIMIT 1;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -141,6 +142,7 @@ public class SnmpDAO {
                     .put("Phone", resultSet.getString("Phone"))
                     .put("Pi", resultSet.getString("Pi"))
                     .put("Pi2", resultSet.getString("Pi2"))
+                    .put("UVM", resultSet.getString("UVM"))
                     .put("Router", resultSet.getString("Router"));                    
                 tContainer.put(tObject);
             }
@@ -715,5 +717,51 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+    
+    public JSONArray getUbuntuVM(Connection dbc, List qParams) {
+    	final String query_SNMP_Pi2 = "(SELECT * FROM (" +
+    	        " SELECT @row := @row+1 AS rownum, WalkTime," +
+    	        " CPULoad1, CPULoad2, LoadIndex5, LoadIndex5, LoadIndex15," +
+    	        " OctetsIn, OctetsOut," +
+    	        " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
+    	        " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
+    	        " FROM ( SELECT @row :=0 ) r, net_snmp.UbuntuVM2 ) ranked" +
+    	        " WHERE (? = 1 OR rownum % ? = 1)" + // Test, Step
+    	        " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+    	        " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
+    	        JSONArray tContainer = new JSONArray();
+    	        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
+    	        try {
+    	            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi2, qParams);
+    	            while (resultSet.next()) {
+    	                JSONObject tObject = new JSONObject();
+    	                tObject
+    	                    .put("WalkTime", resultSet.getString("WalkTime"))
+    	                    .put("CPULoad1", resultSet.getInt("CPULoad1"))
+    	                    .put("CPULoad2", resultSet.getInt("CPULoad2"))
+    	                    .put("LoadIndex1", resultSet.getDouble("LoadIndex1"))
+    	                    .put("LoadIndex5", resultSet.getDouble("LoadIndex5"))
+    	                    .put("LoadIndex15", resultSet.getDouble("LoadIndex15"))
+    	                    .put("OctetsIn", resultSet.getLong("OctetsIn"))
+    	                    .put("OctetsOut", resultSet.getLong("OctetsOut"))
+    	                    .put("KMemPhys", resultSet.getLong("KMemPhys"))
+    	                    .put("KMemVirt", resultSet.getLong("KMemVirt"))
+    	                    .put("KMemBuff", resultSet.getLong("KMemBuff"))
+    	                    .put("KMemCached", resultSet.getLong("KMemCached"))
+    	                    .put("KMemShared", resultSet.getLong("KMemShared"))
+    	                    .put("KSwap", resultSet.getLong("KSwap"))
+    	                    .put("K4Root", resultSet.getLong("K4Root"))
+    	                    .put("KMemPhysU", resultSet.getLong("KMemPhysU"))
+    	                    .put("KMemVirtU", resultSet.getLong("KMemVirtU"))
+    	                    .put("KMemBuffU", resultSet.getLong("KMemBuffU"))
+    	                    .put("KMemCachedU", resultSet.getLong("KMemCachedU"))
+    	                    .put("KMemSharedU", resultSet.getLong("KMemSharedU"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+        
         
 }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 23 Mar 2019
+Updated: 29 Apr 2019
 */
 
 var chartArray;
@@ -126,7 +126,7 @@ function nodeState(state, label) {
 }
 
 function onCheck(timestamp, node) {
-    var staleTime = getDate("minute", -3, "timestamp"); 
+    var staleTime = getDate("minute", -5, "timestamp"); 
     var state = "off";
     if(isSet(timestamp) && staleTime.valueOf() <= timestamp.valueOf()) { state = "on"; }
     switch(node) {
@@ -136,6 +136,7 @@ function onCheck(timestamp, node) {
         case "Pi2": return nodeState(state, "J"); break;
         case "Phone": return nodeState(state, "P"); break;
         case "PhoneE": return nodeState(state, "E"); break;
+        case "UVM": return nodeState(state, "S"); break;
     }
 }
 
@@ -266,7 +267,7 @@ function populateStatusHolder(target, stateData) {
         "680": "1 day",
         "4760": "1 week"
     };
-    var nodes = [ "Main", "Router", "Pi", "Pi2", "Phone", "PhoneE" ];
+    var nodes = [ "Main", "UVM", "Router", "Pi", "Pi2", "Phone", "PhoneE" ];
     var rData = "<div class='UPopNM'>" +
             "<button style='" + styleTemp(indoorTemp) + "'>" + indoorTemp + "F</button> " +
             "<button style='" + styleTemp(garageTemp) + "'>" + garageTemp + "G</button> " +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Jun 2018
-Updated: 26 Aug 2018
+Updated: 29 Apr 2019
  */
 
 package asWebRest.chartHelpers;
@@ -24,8 +24,12 @@ public class Logs {
                 .put("xLabel", "Date").put("yLabel", "Size (MB)");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            cmp4_Labels.put(thisObject.getString("Date"));
-            cmp4_Data.put(thisObject.getDouble("MP4Size")/1024);
+            try {
+            	cmp4_Labels.put(thisObject.getString("Date"));
+                cmp4_Data.put(thisObject.getDouble("MP4Size")/1024);
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
         }
         cmp4_Glob
                 .put("labels", cmp4_Labels)

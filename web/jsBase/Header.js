@@ -1,7 +1,8 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 27 Mar 2019
+Updated: 23 Apr 2019
+
  */
 
 var annMaint = 910.66;
@@ -507,7 +508,7 @@ function putWebLinks(data, whereTo, outputType) {
                     placeholder += "<a href='" + theLink + "' target='new'><button class='UButton'>" + theData.Bubble + "</button></a>";
                     break;
             case "list": default: 
-                placeholder += "<li><a href='" + theLink + "'>" + theData.Description + "</a></li>";
+                placeholder += "<li><a href='" + theLink + "' target='newWL'>" + theData.Description + "</a></li>";
                 break;
         }
     });

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 4 Mar 2019
+Updated: 24 Apr 2019
  */
 
 function putDrawPathMap() {
@@ -63,6 +63,7 @@ function putDrawPathMap() {
         }).extend([
             new app.exportJson()
         ]),
+        projection: 'EPSG:4326',
         target: 'map',
         layers: [
             raster, vectorLayer
@@ -83,8 +84,9 @@ function putDrawPathMap() {
         draw.on('drawend', function(evt) {
             map.removeInteraction(draw);
             showNotice("Draw event ended!");
+            var feature = evt.feature;
             var features = vectorSource.getFeatures();
-            console.log("FEAT: " + features); // Returns empty
+            features = features.concat(feature);
             logFeatures(features);
         }, this);
     }
@@ -92,13 +94,11 @@ function putDrawPathMap() {
         var writer = new ol.format.GeoJSON();
         var drawnData = [];
         features.forEach(function(ft) {
-        	var tGeo = ft.getGeometry();
-        	var format = new ol.format.WKT();
-        	var wktRepresenation  = format.writeGeometry(ol3Geom);
-        	console.log("POINT: " + wktRepresenation);
-        	drawnData.push(wktRepresenation);
+        	var tGeo = ft.getGeometry().getCoordinates();
+        	//tGeo = ol.proj.transform(tGeo, 'EPSG:3857', 'EPSG:4326');
+        	drawnData.push(tGeo);
         });
-        console.log("DRAWN DATA: " + drawnData); // Returns empty
+        console.log("DRAWN DATA: " + drawnData);
         dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData); // Returns empty
     }
     addInteraction();

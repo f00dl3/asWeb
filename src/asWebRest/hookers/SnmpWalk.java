@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 6 May 2018
+Updated: 29 Apr 2019
  */
 
 package asWebRest.hookers;
@@ -35,6 +35,8 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 public class SnmpWalk {
     
+	SNMPBeans snmpBeans = new SNMPBeans();
+	
     private String targetAddr;
     private String oidStr;
     private String commStr;
@@ -43,11 +45,11 @@ public class SnmpWalk {
     private String usage;
     
     public SnmpWalk() throws IOException {
-        targetAddr = "127.0.0.1";
+        targetAddr = snmpBeans.getSnmpAddress();
         oidStr = null;
         commStr = "public";
         snmpVersion = SnmpConstants.version3;
-        portNum = "161";
+        portNum = snmpBeans.getSnmpPortUVM();
         usage = "Usage: snmpWalk [ -c commName -p portNum -v snmpVer] targetAddr oid";
     }
     
