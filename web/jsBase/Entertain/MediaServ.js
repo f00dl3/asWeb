@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 29 Apr 2019
+Updated: 30 Apr 2019
  */
 
 var gSearchString;
@@ -165,15 +165,7 @@ function playMediaFile(thisFormData, dbxFlag) {
     var loopCt = 1;
     mpo = mediaMime = "";
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
-    if(isSet(dbxFlag)) { 
-    	if(thisFormData.rawUnpacked == 0) {
-    		filePath = getBasePath("chartCache") + "/" + shortFileName;
-    	} else {
-            filePath = getBasePath("ui") + whatFile;
-    	}
-    } else {
-        filePath = getBasePath("ui") + whatFile;
-    }
+    filePath = getBasePath("ui") + whatFile;
     switch(mediaType) {
         case "mp3":
             mediaMime = "audio/mpeg";
@@ -264,8 +256,7 @@ function putFileResults(msData, hitCount, matchLimitHit) {
             if(aaTag === "/DBX") {
                 var albumArtStripped = (tm.AlbumArt).split("/")[1];
                 thisAddCheckbox += "<input type='hidden' name='dbxRawFile' value='" + tm.Path + "/" + albumArtStripped + ".raw'/>" +
-                        "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>" +
-                        "<input type='hidden' name='rawUnpacked' value='" + tm.rawUnpacked + "'/>";
+                        "<input type='hidden' name='unpackedDestination' value='" + tm.File + "'/>";
             }
             if(
                 aaTag === "/DBX" ||

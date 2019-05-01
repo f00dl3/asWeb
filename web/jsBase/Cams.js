@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 8 Oct 2018
+Updated: 30 Apr 2019
  */
 
 function actOnDoLive(event) {
@@ -54,7 +54,7 @@ function popCamHolder() {
 function init() {
     getObsDataMerged("disHolderCAMS", "marquee");
     popCamHolder();
-    snmpRapid("snmpHolder");
+    //snmpRapid("snmpHolder");
 }
 
 dojo.ready(init);
