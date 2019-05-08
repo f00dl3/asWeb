@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 9 Feb 2019
+Updated: 8 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -140,26 +140,10 @@ public class SysMonDesktop {
         JSONObject mSysCPU_Props = new JSONObject();
         JSONArray mSysCPU_Labels = new JSONArray();
         JSONArray mSysCPU_Data = new JSONArray();
-        JSONArray mSysCPU_Data2 = new JSONArray();
-        JSONArray mSysCPU_Data3 = new JSONArray();
-        JSONArray mSysCPU_Data4 = new JSONArray();
-        JSONArray mSysCPU_Data5 = new JSONArray();
-        JSONArray mSysCPU_Data6 = new JSONArray();
-        JSONArray mSysCPU_Data7 = new JSONArray();
-        JSONArray mSysCPU_Data8 = new JSONArray();
-        JSONArray mSysCPU_Data9 = new JSONArray();
         mSysCPU_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysCPU_ChartName).put("chartFileName", "mSysCPU")
                 .put("sName", "Avg CPU").put("sColor", "Yellow")
-                .put("s2Name", "Core 1").put("s2Color", "Gray")
-                .put("s3Name", "Core 2").put("s3Color", "Gray")
-                .put("s4Name", "Core 3").put("s4Color", "Gray")
-                .put("s5Name", "Core 4").put("s5Color", "Gray")
-                .put("s6Name", "Core 5").put("s6Color", "Gray")
-                .put("s7Name", "Core 6").put("s7Color", "Gray")
-                .put("s8Name", "Core 7").put("s8Color", "Gray")
-                .put("s9Name", "Core 8").put("s9Color", "Gray")
                 .put("xLabel", "WalkTime").put("yLabel", "% Use");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -190,26 +174,10 @@ public class SysMonDesktop {
             } catch (Exception e) { e.printStackTrace(); }
             mSysCPU_Labels.put(thisObject.getString("WalkTime"));
             mSysCPU_Data.put(mSysCPU_LoadAverage);
-            mSysCPU_Data2.put(mSysCPU1);
-            mSysCPU_Data3.put(mSysCPU2);
-            mSysCPU_Data4.put(mSysCPU3);
-            mSysCPU_Data5.put(mSysCPU4);
-            mSysCPU_Data6.put(mSysCPU5);
-            mSysCPU_Data7.put(mSysCPU6);
-            mSysCPU_Data8.put(mSysCPU7);
-            mSysCPU_Data9.put(mSysCPU8);
         }
         mSysCPU_Glob
                 .put("labels", mSysCPU_Labels)
                 .put("data", mSysCPU_Data)
-                .put("data2", mSysCPU_Data2)
-                .put("data3", mSysCPU_Data3)
-                .put("data4", mSysCPU_Data4)
-                .put("data5", mSysCPU_Data5)
-                .put("data6", mSysCPU_Data6)
-                .put("data7", mSysCPU_Data7)
-                .put("data8", mSysCPU_Data8)
-                .put("data9", mSysCPU_Data9)
                 .put("props", mSysCPU_Props);
         return mSysCPU_Glob;
     }
@@ -411,11 +379,11 @@ public class SysMonDesktop {
             );
             mSysMySQLSize_Labels.put(thisObject.getString("WalkTime"));
             mSysMySQLSize_Data.put(mSysMySQLSize_TotalRows/100);
-            mSysMySQLSize_Data2.put(thisObject.getFloat("duMySQLCore")/1000000);
-            mSysMySQLSize_Data3.put(thisObject.getFloat("duMySQLFeeds")/1000000);
-            mSysMySQLSize_Data4.put(thisObject.getFloat("duMySQLNetSNMP")/1000000);
-            mSysMySQLSize_Data5.put(thisObject.getFloat("duMySQLWxObs")/1000000);
-            mSysMySQLSize_Data6.put(thisObject.getFloat("duMySQLTotal")/1000000);
+            mSysMySQLSize_Data2.put(thisObject.getFloat("dtMySQLSizeCore")/1000000);
+            mSysMySQLSize_Data3.put(thisObject.getFloat("dtMySQLSizeFeeds")/1000000);
+            mSysMySQLSize_Data4.put(thisObject.getFloat("dtMySQLSizeWebCal")/1000000);
+            mSysMySQLSize_Data5.put(thisObject.getFloat("dtMySQLSizeNetSNMP")/1000000);
+            mSysMySQLSize_Data6.put(thisObject.getFloat("dtMySQLSizeWxObs")/1000000);
         }
         mSysMySQLSize_Glob
                 .put("labels", mSysMySQLSize_Labels)
@@ -436,105 +404,44 @@ public class SysMonDesktop {
         float mSysNet_LastOctetsTotal = 0;
         float mSysNet_LastOctetsIn = 0;
         float mSysNet_LastOctetsOut = 0;
-        float mSysNet_LastLapOctets = 0;
-        float mSysNet_LastVirtualOctets = 0;
-        float mSysNet_LastPiOctets = 0;
-        float mSysNet_LastPi2Octets = 0;
         JSONObject mSysNet_Glob = new JSONObject();
         JSONObject mSysNet_Props = new JSONObject();
         JSONArray mSysNet_Labels = new JSONArray();
         JSONArray mSysNet_Data = new JSONArray();
         JSONArray mSysNet_Data2 = new JSONArray();
         JSONArray mSysNet_Data3 = new JSONArray();
-        JSONArray mSysNet_Data4 = new JSONArray();
-        JSONArray mSysNet_Data5 = new JSONArray();
-        JSONArray mSysNet_Data6 = new JSONArray();
-        JSONArray mSysNet_Data7 = new JSONArray();
-        JSONArray mSysNet_Data8 = new JSONArray();
         mSysNet_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysNet_ChartName).put("chartFileName", "mSysNet")
                 .put("sName", "Total").put("sColor", "White")
-                .put("s2Name", "Router").put("s2Color", "Yellow")
-                .put("s3Name", "Desktop RX").put("s3Color", "Green")
-                .put("s4Name", "Desktop TX").put("s4Color", "Red")
-                .put("s5Name", "Laptop").put("s5Color", "Gray")
-                .put("s6Name", "VMs").put("s6Color", "Gray")
-                .put("s7Name", "Pi").put("s7Color", "Gray")
-                .put("s8Name", "Pi 2").put("s8Color", "Gray")
+                .put("s2Name", "Desktop RX").put("s3Color", "Green")
+                .put("s3Name", "Desktop TX").put("s4Color", "Red")
                 .put("xLabel", "WalkTime").put("yLabel", "Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float dtOctetsIn = 0.0f;
             float dtOctetsOut = 0.0f;
-            float mSysNet_ThisLapOctets = 0.0f;
-            float mSysNet_ThisPiOctets = 0.0f;
-            float mSysNet_ThisPi2Octets = 0.0f;
-            float cmvmOctetsIn = 0.0f;
-            float cmvmOctetsOut = 0.0f;
-            float uvmOctetsIn = 0.0f;
-            float uvmOctetsOut = 0.0f;
-            float w12OctetsIn = 0.0f;
-            float w12OctetsOut = 0.0f;
-            float w16OctetsIn = 0.0f;
-            float w16OctetsOut = 0.0f;
-            float wxpOctetsIn = 0.0f;
-            float wxpOctetsOut = 0.0f;
             if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("lapOctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("lapOctetsOut")))) { try { mSysNet_ThisLapOctets = thisObject.getFloat("lapOctetsIn") + thisObject.getFloat("lapOctetsOut"); } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("piOctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("piOctetsOut")))) { try { mSysNet_ThisPiOctets = thisObject.getFloat("piOctetsIn") + thisObject.getFloat("piOctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("pi2OctetsIn"))) && wc.isSet(Float.toString(thisObject.getFloat("pi2OctetsOut")))) { try { mSysNet_ThisPi2Octets = thisObject.getFloat("pi2OctetsIn") + thisObject.getFloat("pi2OctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("cmvmOctetsIn")))) { try { cmvmOctetsIn = thisObject.getFloat("cmvmOctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("cmvmOctetsOut")))) { try { cmvmOctetsOut = thisObject.getFloat("cmvmOctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("uvmOctetsIn")))) { try { uvmOctetsIn = thisObject.getFloat("uvmOctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("uvmOctetsOut")))) { try { uvmOctetsOut = thisObject.getFloat("uvmOctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("w12OctetsIn")))) { try { w12OctetsIn = thisObject.getFloat("w12OctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("w12OctetsOut")))) { try { w12OctetsOut = thisObject.getFloat("w12OctetsOut");  } catch (Exception e) { }}
-            if(wc.isSet(Float.toString(thisObject.getFloat("w16OctetsIn")))) { try { w16OctetsIn = thisObject.getFloat("w16OctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("w16OctetsOut")))) { try { w16OctetsOut = thisObject.getFloat("w16OctetsOut");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("wxpOctetsIn")))) { try { wxpOctetsIn = thisObject.getFloat("wxpOctetsIn"); } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("wxpOctetsOut")))) { try { wxpOctetsOut = thisObject.getFloat("wxpOctetsOut");  } catch (Exception e) { } }
-            float mSysNet_ThisVirtualOctets = (
-                    cmvmOctetsIn + cmvmOctetsOut +
-                    uvmOctetsIn + uvmOctetsOut +
-                    w12OctetsIn + w12OctetsOut +
-                    w16OctetsIn + w16OctetsOut +
-                    wxpOctetsIn + wxpOctetsOut
-            );
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut");  } catch (Exception e) { } }          
             float mSysNet_ThisOctetsTotal = dtOctetsIn + dtOctetsOut;           
             if(mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal && mSysNet_LastOctetsTotal != 0) {
                 mSysNet_Labels.put(thisObject.getString("WalkTime"));
                 mSysNet_Cumulative = mSysNet_Cumulative + (mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal);
                 mSysNet_Data.put((mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal)/1024/1024/intLen/step);
-                mSysNet_Data2.put((thisObject.getFloat("rtrWANtx") + thisObject.getFloat("rtrWANrx"))/1024/1024/intLen/step);
-                if(mSysNet_LastOctetsIn <= thisObject.getFloat("dtOctetsIn") && mSysNet_LastOctetsIn != 0) { mSysNet_Data3.put((thisObject.getFloat("dtOctetsIn") - mSysNet_LastOctetsIn)/1024/1024/intLen/step); }
-                if(mSysNet_LastOctetsOut <= thisObject.getFloat("dtOctetsOut") && mSysNet_LastOctetsOut != 0) { mSysNet_Data4.put((thisObject.getFloat("dtOctetsOut") - mSysNet_LastOctetsOut)/1024/1024/intLen/step); }
-                if(mSysNet_LastLapOctets <= mSysNet_ThisLapOctets && mSysNet_LastLapOctets != 0) { mSysNet_Data5.put((mSysNet_ThisLapOctets - mSysNet_LastLapOctets)/1024/1024/intLen/step); }
-                if(mSysNet_LastVirtualOctets <= mSysNet_ThisVirtualOctets && mSysNet_LastVirtualOctets != 0) { mSysNet_Data6.put((mSysNet_ThisVirtualOctets - mSysNet_LastVirtualOctets)/1024/1024/intLen/step); }
-                if(mSysNet_LastPiOctets <= mSysNet_ThisPiOctets && mSysNet_LastPiOctets != 0) { mSysNet_Data7.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
-                if(mSysNet_LastPi2Octets <= mSysNet_ThisPi2Octets && mSysNet_LastPi2Octets != 0) { mSysNet_Data8.put((mSysNet_ThisPiOctets - mSysNet_LastPiOctets)/1024/1024/intLen/step); }
+                if(mSysNet_LastOctetsIn <= thisObject.getFloat("dtOctetsIn") && mSysNet_LastOctetsIn != 0) { mSysNet_Data2.put((thisObject.getFloat("dtOctetsIn") - mSysNet_LastOctetsIn)/1024/1024/intLen/step); }
+                if(mSysNet_LastOctetsOut <= thisObject.getFloat("dtOctetsOut") && mSysNet_LastOctetsOut != 0) { mSysNet_Data3.put((thisObject.getFloat("dtOctetsOut") - mSysNet_LastOctetsOut)/1024/1024/intLen/step); }
             } else {
                 returnData += "No data! - " + thisObject.getString("WalkTime");
             }
             mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
             mSysNet_LastOctetsIn = dtOctetsIn;
             mSysNet_LastOctetsOut = dtOctetsOut;
-            mSysNet_LastLapOctets = mSysNet_ThisLapOctets;
-            mSysNet_LastVirtualOctets = mSysNet_ThisVirtualOctets;
-            mSysNet_LastPiOctets = mSysNet_ThisPiOctets;
-            mSysNet_LastPi2Octets = mSysNet_ThisPi2Octets;
         }
         mSysNet_Glob
                 .put("labels", mSysNet_Labels)
                 .put("data", mSysNet_Data)
                 .put("data2", mSysNet_Data2)
                 .put("data3", mSysNet_Data3)
-                .put("data4", mSysNet_Data4)
-                .put("data5", mSysNet_Data5)
-                .put("data6", mSysNet_Data6)
-                .put("data7", mSysNet_Data7)
-                .put("data8", mSysNet_Data8)
                 .put("props", mSysNet_Props);
         return mSysNet_Glob;
     }
@@ -549,41 +456,26 @@ public class SysMonDesktop {
         JSONArray mSysNumUsers_Data3 = new JSONArray();
         JSONArray mSysNumUsers_Data4 = new JSONArray();
         JSONArray mSysNumUsers_Data5 = new JSONArray();
-        JSONArray mSysNumUsers_Data6 = new JSONArray();
-        JSONArray mSysNumUsers_Data7 = new JSONArray();
         mSysNumUsers_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysNumUsers_ChartName).put("chartFileName", "mSysNumUsers")
                 .put("sName", "All Sessions").put("sColor", "White")
                 .put("s2Name", "Desktop Users").put("s2Color", "Red")
-                .put("s3Name", "SSH Desktop Users").put("s3Color", "Orange")
-                .put("s4Name", "Laptop Users").put("s4Color", "Blue")
-                .put("s5Name", "VM Desktop Users").put("s5Color", "Gray")
-                .put("s6Name", "IPCon/10").put("s6Color", "Yellow")
-                .put("s7Name", "Proc/100").put("s7Color", "Green")
+                .put("s3Name", "SSH Users").put("s3Color", "Gray")
+                .put("s4Name", "IPCon/10").put("s4Color", "Yellow")
+                .put("s5Name", "Proc/100").put("s5Color", "Green")
                 .put("xLabel", "WalkTime").put("yLabel", "Count");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            int mSysNumUsers_VmUsers = (
-                    thisObject.getInt("wxpNumUsers") +
-                    thisObject.getInt("w12NumUsers") +
-                    thisObject.getInt("w16NumUsers") +
-                    thisObject.getInt("uvmNumUsers") +
-                    thisObject.getInt("cmvmNumUsers")
-            );
             int mSysNumUsers_TotalSessions = (
-                    thisObject.getInt("dtNumUsers") +
-                    thisObject.getInt("lapNumUsers") +
-                    mSysNumUsers_VmUsers
+                    thisObject.getInt("dtNumUsers")
             );
             mSysNumUsers_Labels.put(thisObject.getString("WalkTime"));
             mSysNumUsers_Data.put(mSysNumUsers_TotalSessions);
             mSysNumUsers_Data2.put(thisObject.getInt("dtNumUsers"));
             mSysNumUsers_Data3.put(thisObject.getInt("dtNS5ActiveSSH"));
-            mSysNumUsers_Data4.put(thisObject.getInt("lapNumUsers"));
-            mSysNumUsers_Data5.put(mSysNumUsers_VmUsers);
-            mSysNumUsers_Data6.put((float) (thisObject.getFloat("dtNS5Active")/10));
-            mSysNumUsers_Data7.put((float) (thisObject.getFloat("dtProcesses")/100));
+            mSysNumUsers_Data4.put((float) (thisObject.getFloat("dtNS5Active")/10));
+            mSysNumUsers_Data5.put((float) (thisObject.getFloat("dtProcesses")/100));
         }
         mSysNumUsers_Glob
                 .put("labels", mSysNumUsers_Labels)
@@ -592,8 +484,6 @@ public class SysMonDesktop {
                 .put("data3", mSysNumUsers_Data3)
                 .put("data4", mSysNumUsers_Data4)
                 .put("data5", mSysNumUsers_Data5)
-                .put("data6", mSysNumUsers_Data6)
-                .put("data7", mSysNumUsers_Data7)
                 .put("props", mSysNumUsers_Props);
         return mSysNumUsers_Glob;
     }
@@ -676,20 +566,12 @@ public class SysMonDesktop {
         JSONArray mSysTemp_Data = new JSONArray();
         JSONArray mSysTemp_Data2 = new JSONArray();
         JSONArray mSysTemp_Data3 = new JSONArray();
-        JSONArray mSysTemp_Data4 = new JSONArray();
-        JSONArray mSysTemp_Data5 = new JSONArray();
-        JSONArray mSysTemp_Data6 = new JSONArray(); 
-        JSONArray mSysTemp_Data7 = new JSONArray(); 
         mSysTemp_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysTemp_ChartName).put("chartFileName", "mSysTemp")
                 .put("sName", "CPU Average").put("sColor", "Yellow")
                 .put("s2Name", "Case").put("s2Color", "Green")
-                .put("s3Name", "Core 1/2").put("s3Color", "Gray")
-                .put("s4Name", "Core 3/4").put("s4Color", "Gray")
-                .put("s5Name", "Core 5/6").put("s5Color", "Gray")
-                .put("s6Name", "Core 7/8").put("s6Color", "Gray")
-                .put("s7Name", "NVIDIA GPU").put("s7Color", "Blue")
+                .put("s3Name", "NVIDIA GPU").put("s3Color", "Blue")
                 .put("xLabel", "WalkTime").put("yLabel", "Temp F");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -698,21 +580,13 @@ public class SysMonDesktop {
             mSysTemp_Labels.put(thisObject.getString("WalkTime"));
             mSysTemp_Data.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCPU")/1000)));
             mSysTemp_Data2.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCase")/1000)));
-            mSysTemp_Data3.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore1")/1000)));
-            mSysTemp_Data4.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore2")/1000)));
-            mSysTemp_Data5.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore3")/1000)));
-            mSysTemp_Data6.put(0.93 * (wc.tempC2F(thisObject.getInt("dtTempCore4")/1000)));
-            try { mSysTemp_Data7.put(0.93 * (wc.tempC2F(thisExpanded.getInt("nvTemp")))); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysTemp_Data3.put(0.93 * (wc.tempC2F(thisExpanded.getInt("nvTemp")))); } catch (Exception e) { e.printStackTrace(); }
         }
         mSysTemp_Glob
                 .put("labels", mSysTemp_Labels)
                 .put("data", mSysTemp_Data)
                 .put("data2", mSysTemp_Data2)
                 .put("data3", mSysTemp_Data3)
-                .put("data4", mSysTemp_Data4)
-                .put("data5", mSysTemp_Data5)
-                .put("data6", mSysTemp_Data6)
-                .put("data7", mSysTemp_Data7)
                 .put("props", mSysTemp_Props);
         return mSysTemp_Glob;
     }

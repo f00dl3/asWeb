@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 29 Apr 2019
+Updated: 8 May 2019
 */
 
 package asWebRest.dao;
@@ -151,9 +151,8 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getMain(Connection dbc, List qParams) {
-        final String query_SNMP_Main = "(SELECT * FROM ( SELECT " +
-                " @row := @row+1 AS rownum, " +
+    public JSONArray getMain(Connection dbc, List qParams, int step) {
+        final String query_SNMP_Main = "SELECT " +
                 " dt.WalkTime as WalkTime, dt.NumUsers as dtNumUsers, " +
                 " dt.CPULoad1 as dtCPULoad1, dt.CPULoad2 as dtCPULoad2, dt.CPULoad3 as dtCPULoad3, dt.CPULoad4 as dtCPULoad4," +
                 " dt.CPULoad5 as dtCPULoad5, dt.CPULoad6 as dtCPULoad6, dt.CPULoad7 as dtCPULoad7, dt.CPULoad8 as dtCPULoad8," +
@@ -173,12 +172,9 @@ public class SnmpDAO {
                 " dt.DiskIOSysRead as dtDiskIOSysRead, dt.DiskIOSysWrite as dtDiskIOSysWrite," +
                 " dt.MySQLUpdate as dtMySQLUpdate, dt.MySQLInsert as dtMySQLInsert, dt.MySQLSelect as dtMySQLSelect," + 
                 " dt.MySQLDelete as dtMySQLDelete, dt.MySQLReplace as dtMySQLReplace," +
-                " dt.MySQLRowsCore as dtMySQLRowsCore, dt.MySQLRowsMediaWiki as dtMySQLRowsMediaWiki," +
+                " dt.MySQLRowsCore as dtMySQLRowsCore, " +
                 " dt.MySQLRowsNetSNMP as dtMySQLRowsNetSNMP, dt.MySQLRowsFeeds as dtMySQLRowsFeeds," +
                 " dt.MySQLRowsWebCal as dtMySQLRowsWebCal, dt.MySQLRowsWxObs as dtMySQLRowsWxObs," +
-                " dt.MySQLSizeCore as dtMySQLSizeCore, dt.MySQLSizeMediaWiki as dtMySQLSizeMediaWiki," + 
-                " dt.MySQLSizeNetSNMP as dtMySQLSizeNetSNMP, dt.MySQLSizeFeeds as dtMySQLSizeFeeds," +
-                " dt.MySQLSizeWebCal as dtMySQLSizeWebCal, dt.MySQLSizeWxObs as dtMySQLSizeWxObs," +
                 " dt.LogApache2GET as dtLogApache2GET, dt.TomcatGET as dtTomcatGET," +
                 " dt.LogSecCam1Down as dtLogSecCam1Down, dt.LogSecCam2Down as dtLogSecCam2Down," +
                 " dt.LogSecCam3Down as dtLogSecCam3Down, dt.LogSecCam4Down as dtLogSecCam4Down," +
@@ -188,38 +184,15 @@ public class SnmpDAO {
                 " dt.INodeSDA1 as dtINodeSDA1, dt.INodeSHM as dtINodeSHM," +
                 " dt.duMySQLCore as duMySQLCore, dt.duMySQLNetSNMP as duMySQLNetSNMP, dt.duMySQLWebCal as duMySQLWebCal," +
                 " dt.duMySQLWxObs as duMySQLWxObs, dt.duMySQLFeeds as duMySQLFeeds, dt.duMySQLTotal as duMySQLTotal," +
-                " cmvm.NumUsers as cmvmNumUsers, cmvm.OctetsIn as cmvmOctetsIn, cmvm.OctetsOut as cmvmOctetsOut," +
-                " lap.NumUsers as lapNumUsers, lap.OctetsIn as lapOctetsIn, lap.OctetsOut as lapOctetsOut," +
-                " uvm.NumUsers as uvmNumUsers, uvm.OctetsIn as uvmOctetsIn, uvm.OctetsOut as uvmOctetsOut," +
-                " uvm.MySQLUpdate as uvmMySQLUpdate, uvm.MySQLInsert as uvmMySQLInsert, uvm.MySQLSelect as uvmMySQLSelect," +
-                " uvm.MySQLDelete as uvmMySQLDelete, uvm.MySQLReplace as uvmMySQLReplace," +
-                " uvm.MySQLRowsCorePub as uvmMySQLRowsCorePub, uvm.MySQLRowsMediaWiki as uvmMySQLRowsMediaWiki," +
-                " uvm.MySQLSizeCorePub as uvmMySQLSizeCorePub, uvm.MySQLSizeMediaWiki as uvmMySQLSizeMediaWiki," +
-                " w12.NumUsers as w12NumUsers, w12.OctetsIn as w12OctetsIn, w12.OctetsOut as w12OctetsOut," +
-                " w16.NumUsers as w16NumUsers, w16.OctetsIn as w16OctetsIn, w16.OctetsOut as w16OctetsOut," +
-                " wxp.NumUsers as wxpNumUsers, wxp.OctetsIn as wxpOctetsIn, wxp.OctetsOut as wxpOctetsOut," +
-                " pi.OctetsIn as piOctetsIn, pi.OctetsOut as piOctetsOut, pi.WifiOctetsIn as piWifiIn, pi.WifiOctetsOut as piWifiOut," +
-                " pi2.OctetsIn as pi2OctetsIn, pi2.OctetsOut as pi2OctetsOut, pi2.WifiOctetsIn as pi2WifiIn, pi2.WifiOctetsOut as pi2WifiOut," +
-                " pi.ExtTemp as piExtTemp, pi2.ExtTemp as pi2ExtTemp," +
                 " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH, " +
                 " dt.ExpandedJSONData as dtExpandedJSONData" +
-                " FROM ( SELECT @row :=0 ) r, net_snmp.Main dt" +
-                " LEFT JOIN net_snmp.Laptop lap ON lap.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.CiscoCMVM cmvm ON cmvm.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.RaspberryPi pi ON pi.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.RaspberryPi2 pi2 ON pi2.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.UbuntuVM uvm ON uvm.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.WinS12VM w12 ON w12.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.WinS16VM w16 ON w16.WalkTime = dt.WalkTime" +
-                " LEFT JOIN net_snmp.WinXPVM wxp ON wxp.WalkTime = dt.WalkTime" +
-                ") ranked " +
-                " WHERE (? = 1 OR rownum % ? = 1)" + // qp1 = Test, qp2 = Step
-                " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // qp3 = DateTest, qp4 = Date
-                " ORDER BY WalkTime DESC" +
-                " LIMIT 720) ORDER BY WalkTime ASC;";
+                " FROM net_snmp.Main dt" +
+                " WHERE (? = 1 OR dt.WalkTime LIKE CONCAT(?, '%'))" + // qp1 = DateTest, qp2 = Date
+                " ORDER BY dt.WalkTime DESC" +
+                " LIMIT 720;";
         //System.out.println(qParams.toString() + "\n" + wcb.getQSetRT0() + "\n" + query_SNMP_Main);
+        System.out.println("step: " + step);
         JSONArray tContainer = new JSONArray();     
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Main, qParams);
             while (resultSet.next()) {
@@ -281,17 +254,15 @@ public class SnmpDAO {
                     .put("dtMySQLDelete", resultSet.getLong("dtMySQLDelete"))
                     .put("dtMySQLReplace", resultSet.getLong("dtMySQLReplace"))
                     .put("dtMySQLRowsCore", resultSet.getLong("dtMySQLRowsCore"))
-                    .put("dtMySQLRowsMediaWiki", resultSet.getLong("dtMySQLRowsMediaWiki"))
                     .put("dtMySQLRowsNetSNMP", resultSet.getLong("dtMySQLRowsNetSNMP"))
                     .put("dtMySQLRowsFeeds", resultSet.getLong("dtMySQLRowsFeeds"))
                     .put("dtMySQLRowsWebCal", resultSet.getLong("dtMySQLRowsWebCal"))
                     .put("dtMySQLRowsWxObs", resultSet.getLong("dtMySQLRowsWxObs"))
-                    .put("dtMySQLSizeCore", resultSet.getLong("dtMySQLSizeCore"))
-                    .put("dtMySQLSizeMediaWiki", resultSet.getLong("dtMySQLSizeMediaWiki"))
-                    .put("dtMySQLSizeNetSNMP", resultSet.getLong("dtMySQLSizeNetSNMP"))
-                    .put("dtMySQLSizeFeeds", resultSet.getLong("dtMySQLSizeFeeds"))
-                    .put("dtMySQLSizeWebCal", resultSet.getLong("dtMySQLSizeWebCal"))
-                    .put("dtMySQLSizeWxObs", resultSet.getLong("dtMySQLSizeWxObs"))
+                    .put("dtMySQLSizeCore", resultSet.getLong("duMySQLCore"))
+                    .put("dtMySQLSizeNetSNMP", resultSet.getLong("duMySQLNetSNMP"))
+                    .put("dtMySQLSizeFeeds", resultSet.getLong("duMySQLFeeds"))
+                    .put("dtMySQLSizeWebCal", resultSet.getLong("duMySQLWebCal"))
+                    .put("dtMySQLSizeWxObs", resultSet.getLong("duMySQLWxObs"))
                     .put("dtLogApache2GET", resultSet.getLong("dtLogApache2GET"))
                     .put("dtTomcatGET", resultSet.getLong("dtTomcatGET"))
                     .put("dtLogSecCam1Down", resultSet.getLong("dtLogSecCam1Down"))
@@ -302,53 +273,6 @@ public class SnmpDAO {
                     .put("dtUPSLoad", resultSet.getDouble("dtUPSLoad"))
                     .put("dtTomcatWars", resultSet.getInt("dtTomcatWars"))
                     .put("dtTomcatDeploy", resultSet.getInt("dtTomcatDeploy"))
-                    .put("rtrWANrx", resultSet.getLong("rtrWANrx"))
-                    .put("rtrWANtx", resultSet.getLong("rtrWANtx"))
-                    .put("dtINodeSDA1", resultSet.getLong("dtINodeSDA1"))
-                    .put("dtINodeSHM", resultSet.getLong("dtINodeSHM"))
-                    .put("duMySQLCore", resultSet.getLong("duMySQLCore"))
-                    .put("duMySQLNetSNMP", resultSet.getLong("duMySQLNetSNMP"))
-                    .put("duMySQLWxObs", resultSet.getLong("duMySQLWxObs"))
-                    .put("duMySQLWebCal", resultSet.getLong("duMySQLWebCal"))
-                    .put("duMySQLFeeds", resultSet.getLong("duMySQLFeeds"))
-                    .put("duMySQLTotal", resultSet.getLong("duMySQLTotal"))
-                    .put("cmvmNumUsers", resultSet.getInt("cmvmNumUsers"))
-                    .put("cmvmOctetsIn", resultSet.getLong("cmvmOctetsIn"))
-                    .put("cmvmOctetsOut", resultSet.getLong("cmvmOctetsOut"))
-                    .put("lapNumUsers", resultSet.getInt("lapNumUsers"))
-                    .put("lapOctetsIn", resultSet.getLong("lapOctetsIn"))
-                    .put("lapOctetsOut", resultSet.getLong("lapOctetsOut"))
-                    .put("uvmNumUsers", resultSet.getInt("uvmNumUsers"))
-                    .put("uvmOctetsIn", resultSet.getLong("uvmOctetsIn"))
-                    .put("uvmOctetsOut", resultSet.getLong("uvmOctetsOut"))
-                    .put("uvmMySQLUpdate", resultSet.getLong("uvmMySQLUpdate"))
-                    .put("uvmMySQLInsert", resultSet.getLong("uvmMySQLInsert"))
-                    .put("uvmMySQLSelect", resultSet.getLong("uvmMySQLSelect"))
-                    .put("uvmMySQLDelete", resultSet.getLong("uvmMySQLDelete"))
-                    .put("uvmMySQLReplace", resultSet.getLong("uvmMySQLReplace"))
-                    .put("uvmMySQLRowsCorePub", resultSet.getLong("uvmMySQLRowsCorePub"))
-                    .put("uvmMySQLSizeCorePub", resultSet.getLong("uvmMySQLSizeCorePub"))
-                    .put("uvmMySQLRowsMediaWiki", resultSet.getLong("uvmMySQLRowsMediaWiki"))
-                    .put("uvmMySQLSizeMediaWiki", resultSet.getLong("uvmMySQLSizeMediaWiki"))
-                    .put("w12NumUsers", resultSet.getInt("w12NumUsers"))
-                    .put("w12OctetsIn", resultSet.getLong("w12OctetsIn"))
-                    .put("w12OctetsOut", resultSet.getLong("w12OctetsOut"))
-                    .put("w16NumUsers", resultSet.getInt("w16NumUsers"))
-                    .put("w16OctetsIn", resultSet.getLong("w16OctetsIn"))
-                    .put("w16OctetsOut", resultSet.getLong("w16OctetsOut"))
-                    .put("wxpNumUsers", resultSet.getInt("wxpNumUsers"))
-                    .put("wxpOctetsIn", resultSet.getLong("wxpOctetsIn"))
-                    .put("wxpOctetsOut", resultSet.getLong("wxpOctetsOut"))
-                    .put("piOctetsIn", resultSet.getLong("piOctetsIn"))
-                    .put("pi2OctetsIn", resultSet.getLong("pi2OctetsIn"))
-                    .put("piOctetsOut", resultSet.getLong("piOctetsOut"))
-                    .put("pi2OctetsOut", resultSet.getLong("pi2OctetsOut"))
-                    .put("piWifiIn", resultSet.getLong("piWifiIn"))
-                    .put("pi2WifiIn", resultSet.getLong("pi2WifiIn"))
-                    .put("piWifiOut", resultSet.getLong("piWifiOut"))
-                    .put("pi2WifiOut", resultSet.getLong("pi2WifiOut"))
-                    .put("piExtTemp", resultSet.getDouble("piExtTemp"))
-                    .put("pi2ExtTemp", resultSet.getDouble("pi2ExtTemp"))
                     .put("dtNS5Active", resultSet.getInt("dtNS5Active"))
                     .put("dtNS5ActiveSSH", resultSet.getInt("dtNS5ActiveSSH"))
                     .put("dtExpandedJSONData", new JSONObject(resultSet.getString("dtExpandedJSONData")));
@@ -358,7 +282,7 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-            
+    
     public JSONArray getMainLastSSH(Connection dbc) {
         final String query_SNMP_Main_LastCaseTemp = "SELECT WalkTime, SSHClientIP FROM net_snmp.Main ORDER BY WalkTime DESC LIMIT 1;";
         JSONArray tContainer = new JSONArray();
@@ -399,22 +323,20 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getNote3(Connection dbc, List qParams) {
-        final String query_SNMP_Note3 = "(SELECT * FROM (" +
-                " SELECT @row := @row+1 AS rownum, WalkTime," +
-                " ActiveConn, rmnet0Rx, rmnet0Tx, wlan0Rx, wlan0Tx," +
+    public JSONArray getNote3(Connection dbc, List qParams, int step) {
+        final String query_SNMP_Note3 = "SELECT" +
+                " WalkTime, ActiveConn, rmnet0Rx, rmnet0Tx, wlan0Rx, wlan0Tx," +
                 " MemoryBuffers, MemoryFree, MemoryShared, MemoryTotal, MemoryUse," +
                 " CPUUse, LoadNow, Load5, Load15," +
                 " BattLevel, BattVolt, BattCurrent, BattTemp, BattPowered, BattPoweredU, BattHealth," +
                 " SigStrGSM, SigStrCDMA, SigStrEVDO, SigStrLTE" +
-                " FROM ( SELECT @row :=0 ) r, net_snmp.Note3 ) ranked" +
-                " WHERE (? = 1 OR rownum % ? = 1)" + // Test, Step
-                " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + //DateTest, Date
-                " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
+                " FROM net_snmp.Note3 " +
+                " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + //DateTest, Date
+                " ORDER BY WalkTime DESC LIMIT 720;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Note3, qParams);
+            System.out.println("Note3 step: " + step);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -663,19 +585,16 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getRouter(Connection dbc, List qParams) {
-        final String query_SNMP_Pi2 = "(SELECT * FROM (" +
-        " SELECT @row := @row+1 AS rownum, WalkTime," +
+    public JSONArray getRouter(Connection dbc, List qParams, int step) {
+        final String query_SNMP_Pi2 = "SELECT  WalkTime," +
         " eth0Rx, eth0Tx, eth1Rx, eth1Tx, eth2Rx, eth2Tx, eth3Rx, eth3Tx," +
         " vlan1Rx, vlan1Tx, vlan2Rx, vlan2Tx, br0Rx, br0Tx, CPULoad1, CPULoad2," +
         " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
         " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
-        " FROM ( SELECT @row :=0 ) r, net_snmp.Asus3200 ) ranked" +
-        " WHERE (? = 1 OR rownum % ? = 1)" + // Test, Step
-        " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
-        " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
+        " FROM net_snmp.Asus3200 " +
+        " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+        " ORDER BY WalkTime DESC LIMIT 720;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi2, qParams);
             while (resultSet.next()) {

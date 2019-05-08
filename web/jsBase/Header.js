@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 23 Apr 2019
+Updated: 1 May 2019
 
  */
 
@@ -17,7 +17,7 @@ var hiddenFeatures = 0;
 var timeOutMilli = (60*1000);
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
 
-var timeEntryWidth = 110;
+var timeEntryWidth = 110;91
 var dateEntryWidth = 75;
 if(checkMobile()) {
     timeEntryWidth = 75;
@@ -489,6 +489,7 @@ function putNavi() {
 
 function putWebLinks(data, whereTo, outputType) {
     var placeholder = "";
+    var random = Math.random().toFixed(4);
     //var numElems = data.length;
     data.forEach(function (theData) {
         var theLink;
@@ -505,10 +506,10 @@ function putWebLinks(data, whereTo, outputType) {
         if(theData.Description === "Local Map Server") { theLink = getBasePath("old") + "/Maps"; }
         switch(outputType) {
             case "bubble":
-                    placeholder += "<a href='" + theLink + "' target='new'><button class='UButton'>" + theData.Bubble + "</button></a>";
+                    placeholder += "<a href='" + theLink + "' target='"+random+"'><button class='UButton'>" + theData.Bubble + "</button></a>";
                     break;
             case "list": default: 
-                placeholder += "<li><a href='" + theLink + "' target='newWL'>" + theData.Description + "</a></li>";
+                placeholder += "<li><a href='" + theLink + "' target='"+random+"'>" + theData.Description + "</a></li>";
                 break;
         }
     });

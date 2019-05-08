@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 30 Apr 2019
+Updated: 8 May 2019
 */
 
 var chartArray;
@@ -313,8 +313,8 @@ function initSysMon() {
     getLastWalk("snmpStatusHolder");
     getLiveRowCount("databaseLiveHolder");
     populateCharts();
-    getEDiscovery();
-    populateReliaStump();
+    //getEDiscovery();
+    //populateReliaStump();
 };
 
 dojo.ready(initSysMon);

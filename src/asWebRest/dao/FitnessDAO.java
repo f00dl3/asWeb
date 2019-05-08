@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 Apr 2019
+Updated: 7 May 2019
 */
 
 package asWebRest.dao;
@@ -162,6 +162,7 @@ public class FitnessDAO {
             }
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
+        System.out.println("DEBUG Fitness All called!");
         return tContainer;
     }
     

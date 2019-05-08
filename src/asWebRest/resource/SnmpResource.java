@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 23 Mar 2019
+Updated: 8 May 2019
  */
 
 package asWebRest.resource;
@@ -39,12 +39,10 @@ public class SnmpResource extends ServerResource {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         List<String> qParams = new ArrayList<>();
-        qParams.add(0, "1"); //Test
-        qParams.add(1, "1"); //Step
-        qParams.add(2, "1"); //DateTest
-        qParams.add(3, "20180224"); //Date
+        qParams.add(0, "1"); //DateTest
+        qParams.add(1, "20180224"); //Date
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
-        JSONArray snmpData = getSnmpAction.getRouter(dbc, qParams);  
+        JSONArray snmpData = getSnmpAction.getRouter(dbc, qParams, 1);  
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         
@@ -79,7 +77,7 @@ public class SnmpResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
-                case "snmpWalk":
+                 case "snmpWalk": /*
                     String extraDiskID = "999";
                     try { extraDiskID = argsInForm.getFirstValue("extraDiskID"); } catch (Exception e) { e.printStackTrace(); }
                     int cpu1Load = 0;
@@ -197,7 +195,8 @@ public class SnmpResource extends ServerResource {
                         .put("tempCase", tempCase)
                         .put("tempCPU", tempCPU)
                         .put("uptime", uptime);
-                    returnData += snmpData.toString();
+                    returnData += snmpData.toString(); */
+            		System.out.println("SNMP Walk called but has been disabled due to performance!");
                     break;
                     
                 case "getLastSSH":
@@ -206,9 +205,9 @@ public class SnmpResource extends ServerResource {
                     break;
                     
                 case "getExtraDiskID":
-                    final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
+                    //final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
                     String extra1DiskID = "";
-                    Scanner walkFileScanner = null; try {		
+                    /* Scanner walkFileScanner = null; try {		
                         walkFileScanner = new Scanner(theWalkFile);
                         while(walkFileScanner.hasNext()) {				
                             String line = walkFileScanner.nextLine();
@@ -216,8 +215,9 @@ public class SnmpResource extends ServerResource {
                         }
                     } catch (FileNotFoundException fnf) {
                             fnf.printStackTrace();
-                    }
+                    } */
                     returnData += extra1DiskID;
+            		System.out.println("SNMP Extra Disk ID called but has been disabled due to performance!");
                     break;
                     
                 case "getLastWalk":
