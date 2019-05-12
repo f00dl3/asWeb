@@ -4,7 +4,7 @@ Created: 1 Jul 2018
 Ported to asWeb: 11 Feb 2019
  */
 
-package asUtilsPorts;
+package asUtilsPorts.Tests;
 
 import asUtils.Shares.JunkyBeans;
 

@@ -309,12 +309,12 @@ function populateStatusHolder(target, stateData) {
 }
 
 function initSysMon() {
-    //snmpRapid("snmpDataRapidHolder");
+    snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     getLiveRowCount("databaseLiveHolder");
     populateCharts();
-    //getEDiscovery();
-    //populateReliaStump();
+    getEDiscovery();
+    populateReliaStump();
 };
 
 dojo.ready(initSysMon);

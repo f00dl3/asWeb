@@ -77,7 +77,7 @@ public class SnmpResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
-                 case "snmpWalk": /*
+                 case "snmpWalk": 
                     String extraDiskID = "999";
                     try { extraDiskID = argsInForm.getFirstValue("extraDiskID"); } catch (Exception e) { e.printStackTrace(); }
                     int cpu1Load = 0;
@@ -195,8 +195,8 @@ public class SnmpResource extends ServerResource {
                         .put("tempCase", tempCase)
                         .put("tempCPU", tempCPU)
                         .put("uptime", uptime);
-                    returnData += snmpData.toString(); */
-            		System.out.println("SNMP Walk called but has been disabled due to performance!");
+                    returnData += snmpData.toString();
+            		//System.out.println("SNMP Walk called but has been disabled due to performance!");
                     break;
                     
                 case "getLastSSH":
@@ -205,9 +205,9 @@ public class SnmpResource extends ServerResource {
                     break;
                     
                 case "getExtraDiskID":
-                    //final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
+                    final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
                     String extra1DiskID = "";
-                    /* Scanner walkFileScanner = null; try {		
+                    Scanner walkFileScanner = null; try {		
                         walkFileScanner = new Scanner(theWalkFile);
                         while(walkFileScanner.hasNext()) {				
                             String line = walkFileScanner.nextLine();
@@ -215,9 +215,9 @@ public class SnmpResource extends ServerResource {
                         }
                     } catch (FileNotFoundException fnf) {
                             fnf.printStackTrace();
-                    } */
+                    }
                     returnData += extra1DiskID;
-            		System.out.println("SNMP Extra Disk ID called but has been disabled due to performance!");
+            		//System.out.println("SNMP Extra Disk ID called but has been disabled due to performance!");
                     break;
                     
                 case "getLastWalk":

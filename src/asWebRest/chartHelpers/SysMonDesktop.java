@@ -377,13 +377,22 @@ public class SysMonDesktop {
                     thisObject.getFloat("dtMySQLRowsWxObs"))
                     / 1000
             );
+            float mSysMySQLSize_TotalSize= ((
+                    thisObject.getFloat("dtMySQLSizeCore") +
+                    thisObject.getFloat("dtMySQLSizeFeeds") +
+                    thisObject.getFloat("dtMySQLRowsWebCal") +
+                    thisObject.getFloat("dtMySQLSizeNetSNMP") +
+                    thisObject.getFloat("dtMySQLSizeWebCal") +
+                    thisObject.getFloat("dtMySQLSizeWxObs"))
+                    / 1000
+            );
             mSysMySQLSize_Labels.put(thisObject.getString("WalkTime"));
             mSysMySQLSize_Data.put(mSysMySQLSize_TotalRows/100);
             mSysMySQLSize_Data2.put(thisObject.getFloat("dtMySQLSizeCore")/1000000);
             mSysMySQLSize_Data3.put(thisObject.getFloat("dtMySQLSizeFeeds")/1000000);
-            mSysMySQLSize_Data4.put(thisObject.getFloat("dtMySQLSizeWebCal")/1000000);
-            mSysMySQLSize_Data5.put(thisObject.getFloat("dtMySQLSizeNetSNMP")/1000000);
-            mSysMySQLSize_Data6.put(thisObject.getFloat("dtMySQLSizeWxObs")/1000000);
+            mSysMySQLSize_Data4.put(thisObject.getFloat("dtMySQLSizeNetSNMP")/1000000);
+            mSysMySQLSize_Data5.put(thisObject.getFloat("dtMySQLSizeWxObs")/1000000);
+            mSysMySQLSize_Data5.put(mSysMySQLSize_TotalSize);
         }
         mSysMySQLSize_Glob
                 .put("labels", mSysMySQLSize_Labels)
