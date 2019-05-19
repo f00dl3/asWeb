@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 8 May 2019
+Updated: 19 May 2019
 */
 
 package asWebRest.dao;
@@ -152,7 +152,7 @@ public class SnmpDAO {
     }
     
     public JSONArray getMain(Connection dbc, List qParams, int step) {
-        final String query_SNMP_Main = "SELECT " +
+        final String query_SNMP_Main = "SELECT * FROM (SELECT " +
                 " dt.WalkTime as WalkTime, dt.NumUsers as dtNumUsers, " +
                 " dt.CPULoad1 as dtCPULoad1, dt.CPULoad2 as dtCPULoad2, dt.CPULoad3 as dtCPULoad3, dt.CPULoad4 as dtCPULoad4," +
                 " dt.CPULoad5 as dtCPULoad5, dt.CPULoad6 as dtCPULoad6, dt.CPULoad7 as dtCPULoad7, dt.CPULoad8 as dtCPULoad8," +
@@ -187,9 +187,10 @@ public class SnmpDAO {
                 " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH, " +
                 " dt.ExpandedJSONData as dtExpandedJSONData" +
                 " FROM net_snmp.Main dt" +
-                " WHERE (? = 1 OR dt.WalkTime LIKE CONCAT(?, '%'))" + // qp1 = DateTest, qp2 = Date
                 " ORDER BY dt.WalkTime DESC" +
-                " LIMIT 720;";
+                " LIMIT 720) as tmp" +
+                " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // qp1 = DateTest, qp2 = Date
+                " ORDER BY WalkTime ASC;";
         //System.out.println(qParams.toString() + "\n" + wcb.getQSetRT0() + "\n" + query_SNMP_Main);
         System.out.println("step: " + step);
         JSONArray tContainer = new JSONArray();     
@@ -324,15 +325,16 @@ public class SnmpDAO {
     }
     
     public JSONArray getNote3(Connection dbc, List qParams, int step) {
-        final String query_SNMP_Note3 = "SELECT" +
+        final String query_SNMP_Note3 = "SELECT * FROM ( SELECT" +
                 " WalkTime, ActiveConn, rmnet0Rx, rmnet0Tx, wlan0Rx, wlan0Tx," +
                 " MemoryBuffers, MemoryFree, MemoryShared, MemoryTotal, MemoryUse," +
                 " CPUUse, LoadNow, Load5, Load15," +
                 " BattLevel, BattVolt, BattCurrent, BattTemp, BattPowered, BattPoweredU, BattHealth," +
                 " SigStrGSM, SigStrCDMA, SigStrEVDO, SigStrLTE" +
                 " FROM net_snmp.Note3 " +
+                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + //DateTest, Date
-                " ORDER BY WalkTime DESC LIMIT 720;";
+                " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Note3, qParams);
@@ -443,20 +445,18 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getPi(Connection dbc, List qParams) {
-        final String query_SNMP_Pi = "(SELECT * FROM (" +
-                " SELECT @row := @row+1 AS rownum, WalkTime," +
-                " CPULoad, CPULoad2, CPULoad3, CPULoad4," +
+    public JSONArray getPi(Connection dbc, List qParams, int step) {
+        final String query_SNMP_Pi = "SELECT * FROM (SELECT " +
+                " WalkTime, CPULoad, CPULoad2, CPULoad3, CPULoad4," +
                 " LoadIndex1, LoadIndex5, LoadIndex15, TempCPU," +
                 " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
                 " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU," +
                 " ExtTemp, ExtAmbLight, ExtNoise, UptimeSec" +
-                " FROM ( SELECT @row :=0 ) r, net_snmp.RaspberryPi ) ranked" +
-                " WHERE (? = 1 OR rownum % ? = 1)" + // Test, Step
-                " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
-                " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
+                " FROM net_snmp.RaspberryPi" +
+                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
+                " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+                " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi, qParams);
             while (resultSet.next()) {
@@ -497,18 +497,17 @@ public class SnmpDAO {
     }
     
     public JSONArray getPi2(Connection dbc, List qParams) {
-        final String query_SNMP_Pi2 = "(SELECT * FROM (" +
-                " SELECT @row := @row+1 AS rownum, WalkTime," +
-                " CPULoad, CPULoad2, CPULoad3, CPULoad4," +
+        final String query_SNMP_Pi2 = "SELECT * FROM (" +
+                " WalkTime, CPULoad, CPULoad2, CPULoad3, CPULoad4," +
                 " LoadIndex1, LoadIndex5, LoadIndex15, TempCPU," +
                 " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
                 " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU," +
                 " ExtTemp, UptimeSec, LightLevel," +
                 " GPSSpeedMPH, GPSAgeMS, GPSCoords, GPSDataChars, GPSAltiCM" +
-                " FROM ( SELECT @row :=0 ) r, net_snmp.RaspberryPi2 ) ranked" +
-                " WHERE (? = 1 OR rownum % ? = 1)" + // Test, Step
+                " FROM net_snmp.RaspberryPi2" +
+                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
-                " ORDER BY WalkTime DESC LIMIT 720) ORDER BY WalkTime ASC;";
+                " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
@@ -586,14 +585,15 @@ public class SnmpDAO {
     }
     
     public JSONArray getRouter(Connection dbc, List qParams, int step) {
-        final String query_SNMP_Pi2 = "SELECT  WalkTime," +
+        final String query_SNMP_Pi2 = "SELECT * FROM ( SELECT WalkTime," +
         " eth0Rx, eth0Tx, eth1Rx, eth1Tx, eth2Rx, eth2Tx, eth3Rx, eth3Tx," +
         " vlan1Rx, vlan1Tx, vlan2Rx, vlan2Tx, br0Rx, br0Tx, CPULoad1, CPULoad2," +
         " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
         " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
         " FROM net_snmp.Asus3200 " +
+        " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
         " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
-        " ORDER BY WalkTime DESC LIMIT 720;";
+        " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi2, qParams);
@@ -681,6 +681,52 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
+
+    public JSONArray getUbuntuVM2(Connection dbc, List qParams, int step) {
+    	final String query_UVM2 = "SELECT * FROM (" +
+    	        " SELECT WalkTime," +
+    	        " CPULoad1, CPULoad2, CPULoad3, CPULoad4, LoadIndex1, LoadIndex5, LoadIndex15," +
+    	        " OctetsIn, OctetsOut," +
+    	        " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
+    	        " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
+    	        " FROM net_snmp.UbuntuVM2" +
+    	        " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
+    	        " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+    	        " ORDER BY WalkTime ASC;";
+    	        JSONArray tContainer = new JSONArray();
+    	        try {
+    	            ResultSet resultSet = wc.q2rs1c(dbc, query_UVM2, qParams);
+    	            while (resultSet.next()) {
+    	                JSONObject tObject = new JSONObject();
+    	                tObject
+    	                    .put("WalkTime", resultSet.getString("WalkTime"))
+    	                    .put("CPULoad1", resultSet.getInt("CPULoad1"))
+    	                    .put("CPULoad2", resultSet.getInt("CPULoad2"))
+    	                    .put("CPULoad3", resultSet.getInt("CPULoad3"))
+    	                    .put("CPULoad4", resultSet.getInt("CPULoad4"))
+    	                    .put("LoadIndex1", resultSet.getDouble("LoadIndex1"))
+    	                    .put("LoadIndex5", resultSet.getDouble("LoadIndex5"))
+    	                    .put("LoadIndex15", resultSet.getDouble("LoadIndex15"))
+    	                    .put("OctetsIn", resultSet.getLong("OctetsIn"))
+    	                    .put("OctetsOut", resultSet.getLong("OctetsOut"))
+    	                    .put("KMemPhys", resultSet.getLong("KMemPhys"))
+    	                    .put("KMemVirt", resultSet.getLong("KMemVirt"))
+    	                    .put("KMemBuff", resultSet.getLong("KMemBuff"))
+    	                    .put("KMemCached", resultSet.getLong("KMemCached"))
+    	                    .put("KMemShared", resultSet.getLong("KMemShared"))
+    	                    .put("KSwap", resultSet.getLong("KSwap"))
+    	                    .put("KSwapU", resultSet.getLong("KSwapU"))
+    	                    .put("K4Root", resultSet.getLong("K4Root"))
+    	                    .put("KMemPhysU", resultSet.getLong("KMemPhysU"))
+    	                    .put("KMemVirtU", resultSet.getLong("KMemVirtU"))
+    	                    .put("KMemBuffU", resultSet.getLong("KMemBuffU"))
+    	                    .put("KMemCachedU", resultSet.getLong("KMemCachedU"))
+    	                    .put("KMemSharedU", resultSet.getLong("KMemSharedU"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
         
 }

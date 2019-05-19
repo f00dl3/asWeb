@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 May 2019
+Updated: 13 May 2019
 
  */
 
@@ -331,6 +331,7 @@ function getResource(what) {
         case "Test": return getBasePath("rest") + "/Test"; break;
         case "Tools": return getBasePath("rest") + "/Tools"; break;
         case "TP": return getBasePath("rest") + "/TP"; break;
+        case "Upload": return getBasePath("rest") + "/Upload"; break;
         case "WebCal": return getBasePath("rest") + "/WebCal"; break;
         case "WebLinks": return getBasePath("rest") + "/WebLinks"; break;
         case "WebVersion": return getBasePath("rest") + "/WebVersion"; break;

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 18 Apr 2019
+Updated: 12 May 2019
  */
 
 var searchableData;
@@ -19,6 +19,16 @@ function actOnCheckbookFormSubmit(event) {
             default: window.alert("No action set!");
         }
     }
+}
+
+function actOnDoDiscover(event) {
+	dojo.stopEvent(event);
+	window.alert("Clicked Discover Button!");
+}
+
+function actOnDoOldNavy(event) {
+	dojo.stopEvent(event);
+	window.alert("Clicked Old Navy Button!");
 }
 
 function displayCheckbook() {
@@ -83,9 +93,15 @@ function getCheckbookDeep() {
 
 function putCheckbookSearchBox() {
     var cbSearchInner = "<div class='table'><form class='tr' id='CkBkSearch'>" +
+    		"<span class='td'>" +
+    		"<button class='UButton' id='doDiscover'>DI</button> " +
+    		"<button class='UButton' id='doOldNavy'>ON</button> " +
+    		"</span>" +
             "<span class='td'><input type='text' id='SearchBoxText' name='CBSearchField' onKeyUp='searchAheadCheckbook(this.value)'/></span>" +
             "<span class='td'><strong>Search</strong></span>" +
             "</form></div><p>";
+    dojo.byId("doDiscover").connect("click", actOnDoDiscover);
+    dojo.byId("doOldNavy").connect("click", actOnDoOldNavy);
     dojo.byId("cbSearchHolder").innerHTML = cbSearchInner;
 }
 

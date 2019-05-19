@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 8 May 2019
+Updated: 19 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -325,16 +325,16 @@ public class SysMonDesktop {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Green")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Use in MBs");
+                .put("xLabel", "WalkTime").put("yLabel", "Use in GBs");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysMemory_Used = 0.00f;
-            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))/1024); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))/1024/1024); } catch (Exception e) { e.printStackTrace(); }
             mSysMemory_Labels.put(thisObject.getString("WalkTime"));
             mSysMemory_Data.put(mSysMemory_Used);
-            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU")/1024);
-            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU")/1024);
-            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU")/1024);
+            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU")/1024/1024);
+            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU")/1024/1024);
+            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU")/1024/1024);
         }
         mSysMemory_Glob
                 .put("labels", mSysMemory_Labels)
@@ -406,6 +406,7 @@ public class SysMonDesktop {
         return mSysMySQLSize_Glob;
     }
      
+    // 5/19/19 - Still not working right.
     private JSONObject mSysNet(JSONArray dataIn, int intLen, int step) {
         String returnData = "";
         String mSysNet_ChartName = "Desktop: Network Use";
@@ -423,24 +424,32 @@ public class SysMonDesktop {
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysNet_ChartName).put("chartFileName", "mSysNet")
                 .put("sName", "Total").put("sColor", "White")
-                .put("s2Name", "Desktop RX").put("s3Color", "Green")
-                .put("s3Name", "Desktop TX").put("s4Color", "Red")
+                .put("s2Name", "Desktop RX").put("s2Color", "Green")
+                .put("s3Name", "Desktop TX").put("s3Color", "Red")
                 .put("xLabel", "WalkTime").put("yLabel", "Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            float dtOctetsIn = 0.0f;
-            float dtOctetsOut = 0.0f;
-            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn");  } catch (Exception e) { } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut");  } catch (Exception e) { } }          
-            float mSysNet_ThisOctetsTotal = dtOctetsIn + dtOctetsOut;           
-            if(mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal && mSysNet_LastOctetsTotal != 0) {
+            if(i < 5) { System.out.println("DEBUG [" + i + "] - NET USE: IN = " + thisObject.getFloat("dtOctetsIn")/1024/1024/intLen/step + ", OUT = " + thisObject.getFloat("dtOctetsOut")/1024/1024/intLen/step); }
+            float dtOctetsIn = 0;
+            float dtOctetsOut = 0;
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn")/1024/1024/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsIn Failed!"); } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut")/1024/1024/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsOut Failed!"); } }          
+            float mSysNet_ThisOctetsTotal = dtOctetsIn + dtOctetsOut;          
+            //System.out.println(i + " -- Comparing " + mSysNet_LastOctetsTotal + " to " + mSysNet_ThisOctetsTotal);
+            if((mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal) && mSysNet_LastOctetsTotal != 0) {
                 mSysNet_Labels.put(thisObject.getString("WalkTime"));
                 mSysNet_Cumulative = mSysNet_Cumulative + (mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal);
-                mSysNet_Data.put((mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal)/1024/1024/intLen/step);
-                if(mSysNet_LastOctetsIn <= thisObject.getFloat("dtOctetsIn") && mSysNet_LastOctetsIn != 0) { mSysNet_Data2.put((thisObject.getFloat("dtOctetsIn") - mSysNet_LastOctetsIn)/1024/1024/intLen/step); }
-                if(mSysNet_LastOctetsOut <= thisObject.getFloat("dtOctetsOut") && mSysNet_LastOctetsOut != 0) { mSysNet_Data3.put((thisObject.getFloat("dtOctetsOut") - mSysNet_LastOctetsOut)/1024/1024/intLen/step); }
+                mSysNet_Data.put((mSysNet_ThisOctetsTotal - mSysNet_LastOctetsTotal));
+                float octetDiffIn = dtOctetsIn - mSysNet_LastOctetsIn;
+                float octetDiffOut = dtOctetsOut - mSysNet_LastOctetsOut;
+                if(mSysNet_LastOctetsIn <= dtOctetsIn && mSysNet_LastOctetsIn != 0) { mSysNet_Data2.put(octetDiffIn); } else { mSysNet_Data2.put(0); }
+                if(mSysNet_LastOctetsOut <= dtOctetsOut && mSysNet_LastOctetsOut != 0) { mSysNet_Data3.put(octetDiffOut); } else { mSysNet_Data3.put(0); }
             } else {
-                returnData += "No data! - " + thisObject.getString("WalkTime");
+                System.out.println("No data! - " + thisObject.getString("WalkTime"));
+                mSysNet_Data.put(0);
+                mSysNet_Data2.put(0);
+                mSysNet_Data3.put(0);
+                mSysNet_Labels.put(thisObject.getString("WalkTime"));
             }
             mSysNet_LastOctetsTotal = mSysNet_ThisOctetsTotal;
             mSysNet_LastOctetsIn = dtOctetsIn;
@@ -452,6 +461,7 @@ public class SysMonDesktop {
                 .put("data2", mSysNet_Data2)
                 .put("data3", mSysNet_Data3)
                 .put("props", mSysNet_Props);
+        //System.out.println(mSysNet_Glob.toString());
         return mSysNet_Glob;
     }
      

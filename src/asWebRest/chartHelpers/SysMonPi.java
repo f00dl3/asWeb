@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 13 May 2018
+Updated: 19 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -48,18 +48,10 @@ public class SysMonPi {
         JSONObject mPiCPU_Props = new JSONObject();
         JSONArray mPiCPU_Labels = new JSONArray();
         JSONArray mPiCPU_Data = new JSONArray();
-        JSONArray mPiCPU_Data2 = new JSONArray();
-        JSONArray mPiCPU_Data3 = new JSONArray();
-        JSONArray mPiCPU_Data4 = new JSONArray();
-        JSONArray mPiCPU_Data5 = new JSONArray();
         mPiCPU_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPiCPU_ChartName).put("chartFileName", "mPiCPU")
                 .put("sName", "Average").put("sColor", "Yellow")
-                .put("s2Name", "Core 1").put("s2Color", "Gray")
-                .put("s3Name", "Core 2").put("s3Color", "Gray")
-                .put("s4Name", "Core 3").put("s4Color", "Gray")
-                .put("s5Name", "Core 4").put("s5Color", "Gray")
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject piObject = dataIn.getJSONObject(i);
@@ -71,18 +63,10 @@ public class SysMonPi {
             );
             mPiCPU_Labels.put(piObject.getString("WalkTime"));
             mPiCPU_Data.put(mPiCPU_Average);
-            mPiCPU_Data2.put(piObject.getInt("CPULoad"));
-            mPiCPU_Data3.put(piObject.getInt("CPULoad2"));
-            mPiCPU_Data4.put(piObject.getInt("CPULoad3"));
-            mPiCPU_Data5.put(piObject.getInt("CPULoad4"));
         }
         mPiCPU_Glob
                 .put("labels", mPiCPU_Labels)
                 .put("data", mPiCPU_Data)
-                .put("data2", mPiCPU_Data2)
-                .put("data3", mPiCPU_Data3)
-                .put("data4", mPiCPU_Data4)
-                .put("data5", mPiCPU_Data5)
                 .put("props", mPiCPU_Props);
         return mPiCPU_Glob;
     }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 6 May 2018
+Updated: 12 May 2019
  */
 
 package asWebRest.resource;
@@ -15,6 +15,7 @@ import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
+import asUtilsPorts.CCImports;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
+
 
 public class FinanceResource extends ServerResource {
         
@@ -39,6 +41,7 @@ public class FinanceResource extends ServerResource {
         GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
         UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
+        CCImports ccImports = new CCImports();
                         
         JSONObject mergedResults = new JSONObject();
         List<String> qParams = new ArrayList<>();
@@ -137,6 +140,14 @@ public class FinanceResource extends ServerResource {
                         .put("uuData", uuData);
                     returnData += mergedResults.toString();
                     break;
+                    
+                case "processDiscover":
+                	ccImports.doDiscover();
+                	break;
+                	
+                case "processOldNavy":
+                	ccImports.doOldNavy();
+                	break;
                     
                 case "putAssetTrackUpdate":
                     qParams.add(argsInForm.getFirstValue("AssetValue"));

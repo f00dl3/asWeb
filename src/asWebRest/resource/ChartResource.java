@@ -25,6 +25,7 @@ import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
 import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
+import asWebRest.chartHelpers.SysMonUVM2;
 import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.EntertainmentDAO;
@@ -219,6 +220,7 @@ public class ChartResource extends ServerResource {
                     SysMonPi smPi = new SysMonPi();
                     SysMonPi2 smPi2 = new SysMonPi2();
                     SysMonRouter smRouter = new SysMonRouter();
+                    SysMonUVM2 smUvm2 = new SysMonUVM2();
                     
                     int step = 1;
                     String stepIn = null;
@@ -250,15 +252,17 @@ public class ChartResource extends ServerResource {
                     //JSONArray mainGlob2019 = new JSONArray();
                     JSONArray note3Glob = new JSONArray();
                     JSONArray piGlob = new JSONArray();
-                    JSONArray pi2Glob = new JSONArray();
+                    //JSONArray pi2Glob = new JSONArray();
                     JSONArray routerGlob = new JSONArray();
+                    JSONArray uvm2Glob = new JSONArray();
 					
                     try { mainGlob = getSnmpAction.getMain(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
                     //try { mainGlob2019 = getSnmpAction.getMain2019(dbc, qParams, iterator); } catch (Exception e) { e.printStackTrace(); }
                     try { note3Glob = getSnmpAction.getNote3(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { piGlob = getSnmpAction.getPi(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { piGlob = getSnmpAction.getPi(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
                     //try { pi2Glob = getSnmpAction.getPi2(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
-                    //try { routerGlob = getSnmpAction.getRouter(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
+                    try { routerGlob = getSnmpAction.getRouter(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { uvm2Glob = getSnmpAction.getUbuntuVM2(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
 					
                     JSONObject mCellBattCPU_Glob = new JSONObject();
                     JSONObject mCellNet_Glob = new JSONObject();
@@ -271,12 +275,12 @@ public class ChartResource extends ServerResource {
                     JSONObject mPiLoad_Glob = new JSONObject();
                     JSONObject mPiMemory_Glob = new JSONObject();
                     JSONObject mPiTemp_Glob = new JSONObject();
-                    JSONObject mPi2CPU_Glob = new JSONObject();
-                    JSONObject mPi2GPSSpeed_Glob = new JSONObject();
-                    JSONObject mPi2Light_Glob = new JSONObject();
-                    JSONObject mPi2Load_Glob = new JSONObject();
-                    JSONObject mPi2Memory_Glob = new JSONObject();
-                    JSONObject mPi2Temp_Glob = new JSONObject();
+                    //JSONObject mPi2CPU_Glob = new JSONObject();
+                    //JSONObject mPi2GPSSpeed_Glob = new JSONObject();
+                    //JSONObject mPi2Light_Glob = new JSONObject();
+                    //JSONObject mPi2Load_Glob = new JSONObject();
+                    //JSONObject mPi2Memory_Glob = new JSONObject();
+                    //JSONObject mPi2Temp_Glob = new JSONObject();
                     JSONObject mRouterCPU_Glob = new JSONObject();
                     JSONObject mRouterMemory_Glob = new JSONObject();
                     JSONObject mRouterNet_Glob = new JSONObject();
@@ -296,6 +300,9 @@ public class ChartResource extends ServerResource {
                     JSONObject mSysUPSLoad_Glob = new JSONObject();
                     JSONObject mSysUPSTimeLeft_Glob = new JSONObject();
                     JSONObject mSysVolt_Glob = new JSONObject();
+                    JSONObject mUvm2CPU_Glob = new JSONObject();
+                    JSONObject mUvm2Memory_Glob = new JSONObject();
+                    JSONObject mUvm2Load_Glob = new JSONObject();
 					
                     try { mCellBattCPU_Glob = smCell.getCellBattCPU(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mCellNet_Glob = smCell.getCellNet(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
@@ -303,11 +310,11 @@ public class ChartResource extends ServerResource {
                     try { mCellTemp_Glob = smCell.getCellTemp(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mCellTempRapid_Glob = smCell.getCellTempRapid(note3Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mJavaCodeLines_Glob = smDesktop.getJavaCodeLines(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { mPiAmb_Glob = smPi.getPiAmb(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { mPiCPU_Glob = smPi.getPiCPU(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { mPiLoad_Glob = smPi.getPiLoad(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { mPiMemory_Glob = smPi.getPiMemory(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
-                    //try { mPiTemp_Glob = smPi.getPiTemp(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiAmb_Glob = smPi.getPiAmb(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiCPU_Glob = smPi.getPiCPU(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiLoad_Glob = smPi.getPiLoad(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiMemory_Glob = smPi.getPiMemory(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+                    try { mPiTemp_Glob = smPi.getPiTemp(piGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     //try { mPi2CPU_Glob = smPi2.getPi2CPU(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     //try { mPi2GPSSpeed_Glob = smPi2.getPi2GPSSpeed(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     //try { mPi2Light_Glob = smPi2.getPi2Light(pi2Glob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
@@ -333,6 +340,9 @@ public class ChartResource extends ServerResource {
                     try { mSysUPSLoad_Glob = smDesktop.getSysUPSLoad(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysUPSTimeLeft_Glob = smDesktop.getSysUPSTimeLeft(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     try { mSysVolt_Glob = smDesktop.getSysVolt(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+            		try { mUvm2CPU_Glob = smUvm2.getSysCPU(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+            		try { mUvm2Memory_Glob = smUvm2.getSysMemory(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
+            		try { mUvm2Load_Glob = smUvm2.getSysLoad(mainGlob, intLen, step); } catch (Exception e) { e.printStackTrace(); }
                     
                     try { dynChart.LineChart(mCellBattCPU_Glob); returnData += "Chart generated - mCellBattCPU!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mCellNet_Glob); returnData += "Chart generated - mCellNet!\n"; } catch (Exception e) { e.printStackTrace(); } 
@@ -340,11 +350,11 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(mCellTemp_Glob); returnData += "Chart generated - mCellTemp!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mCellTempRapid_Glob); returnData += "Chart generated - mCellTempRapid!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(mJavaCodeLines_Glob); returnData += "Chart generated - mJavaCodeLines!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //try { dynChart.LineChart(mPiAmb_Glob); returnData += "Chart generated - mPiAmb!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //try { dynChart.LineChart(mPiCPU_Glob); returnData += "Chart generated - mPiCPU!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //try { dynChart.LineChart(mPiLoad_Glob); returnData += "Chart generated - mPiLoad!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //try { dynChart.LineChart(mPiMemory_Glob); returnData += "Chart generated - mPiMemory!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    //try { dynChart.LineChart(mPiTemp_Glob); returnData += "Chart generated - mPiTemp!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mPiAmb_Glob); returnData += "Chart generated - mPiAmb!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mPiCPU_Glob); returnData += "Chart generated - mPiCPU!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mPiLoad_Glob); returnData += "Chart generated - mPiLoad!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mPiMemory_Glob); returnData += "Chart generated - mPiMemory!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(mPiTemp_Glob); returnData += "Chart generated - mPiTemp!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(mPi2CPU_Glob); returnData += "Chart generated - mPi2CPU!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(mPi2GPSSpeed_Glob); returnData += "Chart generated - mPi2GPSSpeed!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(mPi2Light_Glob); returnData += "Chart generated - mPi2Light!\n"; } catch (Exception e) { e.printStackTrace(); }
@@ -370,6 +380,9 @@ public class ChartResource extends ServerResource {
 	        	    try { dynChart.LineChart(mSysUPSLoad_Glob); returnData += "Chart generated - mSysUPSLoad!\n"; } catch (Exception e) { e.printStackTrace(); } 
 	          	   	try { dynChart.LineChart(mSysUPSTimeLeft_Glob); returnData += "Chart generated - mSysUPSTimeLeft!\n"; } catch (Exception e) { e.printStackTrace(); } 
 	         	    try { dynChart.LineChart(mSysVolt_Glob); returnData += "Chart generated - mSysVolt!\n"; } catch (Exception e) { e.printStackTrace(); } 
+	         	    try { dynChart.LineChart(mUvm2CPU_Glob); returnData += "Chart generated - mUvm2CPU!\n"; } catch (Exception e) { e.printStackTrace(); } 
+	         	    try { dynChart.LineChart(mUvm2Memory_Glob); returnData += "Chart generated - mUvm2Memory!\n"; } catch (Exception e) { e.printStackTrace(); } 
+	         	    try { dynChart.LineChart(mUvm2Load_Glob); returnData += "Chart generated - mUvm2Load!\n"; } catch (Exception e) { e.printStackTrace(); } 
  
                     break;
                     

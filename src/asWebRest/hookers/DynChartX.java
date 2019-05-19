@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 20 Aug 2018
+Updated: 19 May 2019
  */
 
 package asWebRest.hookers;
@@ -125,7 +125,7 @@ public class DynChartX {
                     XYSeries series2 = chart.addSeries(jp.getString("s2Name"), xData, yData2); series2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
                     XYSeries thSeries2 = thChart.addSeries(jp.getString("s2Name"), xData, yData2); thSeries2.setMarker(SeriesMarkers.NONE).setLineColor(s2Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
         
         try { if(wc.isSet(jp.getString("s3Name")) && wc.isSet(jp.getString("s3Color"))) {
@@ -149,7 +149,7 @@ public class DynChartX {
                     XYSeries series4 = chart.addSeries(jp.getString("s4Name"), xData, yData4); series4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
                     XYSeries thSeries4 = thChart.addSeries(jp.getString("s4Name"), xData, yData4); thSeries4.setMarker(SeriesMarkers.NONE).setLineColor(s4Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
     
         try { if(wc.isSet(jp.getString("s5Name")) && wc.isSet(jp.getString("s5Color"))) {
@@ -161,7 +161,7 @@ public class DynChartX {
                     XYSeries series5 = chart.addSeries(jp.getString("s5Name"), xData, yData5); series5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
                     XYSeries thSeries5 = thChart.addSeries(jp.getString("s5Name"), xData, yData5); thSeries5.setMarker(SeriesMarkers.NONE).setLineColor(s5Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
     
         try { if(wc.isSet(jp.getString("s6Name")) && wc.isSet(jp.getString("s6Color"))) {
@@ -209,7 +209,7 @@ public class DynChartX {
                     XYSeries series9 = chart.addSeries(jp.getString("s9Name"), xData, yData9); series9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
                     XYSeries thSeries9 = thChart.addSeries(jp.getString("s9Name"), xData, yData9); thSeries9.setMarker(SeriesMarkers.NONE).setLineColor(s9Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
             
         try { if(wc.isSet(jp.getString("s10Name")) && wc.isSet(jp.getString("s10Color"))) {
@@ -221,7 +221,7 @@ public class DynChartX {
                     XYSeries series10 = chart.addSeries(jp.getString("s10Name"), xData, yData10); series10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
                     XYSeries thSeries10 = thChart.addSeries(jp.getString("s10Name"), xData, yData10); thSeries10.setMarker(SeriesMarkers.NONE).setLineColor(s10Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
             
         try { if(wc.isSet(jp.getString("s11Name")) && wc.isSet(jp.getString("s11Color"))) {
@@ -233,7 +233,7 @@ public class DynChartX {
                     XYSeries series11 = chart.addSeries(jp.getString("s11Name"), xData, yData11); series11.setMarker(SeriesMarkers.NONE).setLineColor(s11Color);
                     XYSeries thSeries11 = thChart.addSeries(jp.getString("s11Name"), xData, yData11); thSeries11.setMarker(SeriesMarkers.NONE).setLineColor(s11Color);
                 }
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { }
         } } catch (Exception e) { }
         
         BitmapEncoder.saveBitmap(chart, fullChart.toString(), BitmapFormat.PNG);

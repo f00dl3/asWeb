@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 8 May 2018
+Updated: 19 May 2018
  */
 
 var extraDiskID = "9999";
@@ -142,8 +142,8 @@ function processSnmpData(snmp, target) {
 }
 
 function snmpRapid(target) {
-    var timeout = 2500;
-    if(checkMobile()) { timeout = 5000; }
+    var timeout = 5000;
+    if(checkMobile()) { timeout = 10000; }
     var thePostData = {
         "doWhat": "snmpWalk",
         "extraDiskID": extraDiskID

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 2 Mar 2019
+Updated: 13 May 2019
 */
 
 function actOnCalendarSubmit(event) {
@@ -231,7 +231,15 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     }
     var javaScriptSchit = "<input type='text' id='newH1Font' placeholder='H1 Font'/>" +
             " <input type='button' id='setFontGo' value='Do it!' /></p>";
-    rData += javaScriptSchit + "</div>";
+
+    var uploadPath = getResource("Upload");
+    var fileUploadForm = "<br/><form method='POST' enctype='multipart/form-data' action='" + uploadPath + "'>" +
+                "File to upload: <input type='file' name='upfile'><br/>" +
+                "Notes about the file: <input type='text' name='note'><br/>" +
+                "<br/>" +
+                "<input type='submit' value='Press'> to upload!" +
+                "</form>";
+    rData += javaScriptSchit + fileUploadForm + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
     var quickCalButton = dojo.byId("QuickCalBtn");

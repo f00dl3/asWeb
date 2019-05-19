@@ -2,6 +2,8 @@
 by Anthony Stump
 Created: 12 May 2019
 Updated: on Creation
+NOTE: to run classes directly use 
+	java -cp /var/lib/tomcat9/webapps/asWeb##xx.xx/WEB-INF/classes  asUtilsPorts.Tests.ArrayListTest
  */
 
 package asUtilsPorts.Tests;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 
 public class ArrayListTest {
     
+		
     
         private ArrayList<Integer> heights(String detail) {
             ArrayList<Integer> heights = new ArrayList<Integer>();

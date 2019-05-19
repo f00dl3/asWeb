@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 8 May 2019
+Updated: 18 May 2019
  */
 
 package asWebRest.resource;
@@ -145,11 +145,11 @@ public class SnmpResource extends ServerResource {
                         try { memPhysUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "1")); } catch (Exception e) { e.printStackTrace(); }
                         try { memVirtSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "3")); } catch (Exception e) { e.printStackTrace(); }
                         try { memVirtUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "3")); } catch (Exception e) { e.printStackTrace(); }
-                        try { myDelete = Long.parseLong(snmpWalk.get("desktop", "myComDelete", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { myInsert = Long.parseLong(snmpWalk.get("desktop", "myComInsert", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { myReplace = Long.parseLong(snmpWalk.get("desktop", "myComReplace", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { mySelect = Long.parseLong(snmpWalk.get("desktop", "myComSelect", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { myUpdate = Long.parseLong(snmpWalk.get("desktop", "myComUpdate", "0")); } catch (Exception e) { e.printStackTrace(); }
+                        //try { myDelete = Long.parseLong(snmpWalk.get("desktop", "myComDelete", "0")); } catch (Exception e) { e.printStackTrace(); }
+                        //try { myInsert = Long.parseLong(snmpWalk.get("desktop", "myComInsert", "0")); } catch (Exception e) { e.printStackTrace(); }
+                        //try { myReplace = Long.parseLong(snmpWalk.get("desktop", "myComReplace", "0")); } catch (Exception e) { e.printStackTrace(); }
+                        //try { mySelect = Long.parseLong(snmpWalk.get("desktop", "myComSelect", "0")); } catch (Exception e) { e.printStackTrace(); }
+                        //try { myUpdate = Long.parseLong(snmpWalk.get("desktop", "myComUpdate", "0")); } catch (Exception e) { e.printStackTrace(); }
                         try { runningProcs = Integer.parseInt(snmpWalk.get("desktop", "hrSystemProcesses", "0")); } catch (Exception e) { e.printStackTrace(); }
                         try { tempCase = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "22")); } catch (Exception e) { e.printStackTrace(); }
                         try { tempCPU = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "35")); } catch (Exception e) { e.printStackTrace(); }

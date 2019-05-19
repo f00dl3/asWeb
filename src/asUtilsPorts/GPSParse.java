@@ -2,13 +2,14 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 21 Mar 2019
+Updated: 18 May 2019
 */
 
 package asUtilsPorts;
 
 import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.StumpJunk;
+import asWebRest.shared.CommonBeans;
 import asUtils.Shares.MyDBConnector;
 import java.io.*;
 import java.nio.file.Files;
@@ -36,8 +37,9 @@ public class GPSParse {
 
 	public static void main(String[] args) {
 
+		CommonBeans cb = new CommonBeans();
                 JunkyBeans junkyBeans = new JunkyBeans();
-		final String dropLocation = junkyBeans.getDesktopPath().toString();
+		final String dropLocation = cb.getPathChartCache().toString();
                 final String appName = junkyBeans.getApplicationName();
                 final String sourceType = args[2];
 		final Path gpsInFile = Paths.get(dropLocation+"/"+args[0]+"."+sourceType.toLowerCase());
@@ -243,7 +245,7 @@ public class GPSParse {
                     
                     System.out.println("DEBUG WebApp path: " + junkyBeans.getPathWebappCache());
                     File csvOutFile = new File(gpsInFile.toString() + ".csv");
-                    if(!(junkyBeans.getPathWebappCache()).contains("null")) { csvOutFile = new File(junkyBeans.getPathWebappCache()+"/"+args[0]+".csv"); }
+                    if(!(junkyBeans.getPathWebappCache()).contains("null")) { csvOutFile = new File(dropLocation+"/"+args[0]+".csv"); }
                     final File fitCsvToolJar = new File(junkyBeans.getHelpers().toString()+"/FitCSVTool.jar");
                     
                     StumpJunk.runProcess("java -jar "+fitCsvToolJar+" -b "+gpsInFile.toString()+" "+csvOutFile.toString());
@@ -412,11 +414,8 @@ public class GPSParse {
                                         fullGPSjson += thisJSONstring;
                                         System.out.println(logNo + " - " + geoJSONtrace);
                                 }
-                                
-                                
-                             
-                                
-                                //csvOutFile.delete();
+
+                                try { StumpJunk.runProcess("gzip "+csvOutFile.toString()); } catch (Exception e) { e.printStackTrace(); }
 
                             }
                         }

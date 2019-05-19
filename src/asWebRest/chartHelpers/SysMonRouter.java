@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 14 Jun 2018
+Updated: 19 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -146,25 +146,25 @@ public class SysMonRouter {
                     mRouterNet_ThisRouterB0Octets
             );
             if(mRouterNet_LastRouterE0Octets <= mRouterNet_ThisRouterE0Octets && mRouterNet_LastRouterE0Octets != 0) {
-                mRouterNet_ThisDiffRouterE0Octets = ((mRouterNet_ThisRouterE0Octets - mRouterNet_LastRouterE0Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterE0Octets = ((mRouterNet_ThisRouterE0Octets - mRouterNet_LastRouterE0Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterE1Octets <= mRouterNet_LastRouterE1Octets && mRouterNet_LastRouterE1Octets != 0) {
-                mRouterNet_ThisDiffRouterE1Octets = ((mRouterNet_ThisRouterE1Octets - mRouterNet_LastRouterE1Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterE1Octets = ((mRouterNet_ThisRouterE1Octets - mRouterNet_LastRouterE1Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterE2Octets <= mRouterNet_LastRouterE2Octets && mRouterNet_LastRouterE2Octets != 0) {
-                mRouterNet_ThisDiffRouterE2Octets = ((mRouterNet_ThisRouterE2Octets - mRouterNet_LastRouterE2Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterE2Octets = ((mRouterNet_ThisRouterE2Octets - mRouterNet_LastRouterE2Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterE3Octets <= mRouterNet_LastRouterE3Octets && mRouterNet_LastRouterE3Octets != 0) {
-                mRouterNet_ThisDiffRouterE3Octets = ((mRouterNet_ThisRouterE3Octets - mRouterNet_LastRouterE3Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterE3Octets = ((mRouterNet_ThisRouterE3Octets - mRouterNet_LastRouterE3Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterV1Octets <= mRouterNet_LastRouterV1Octets && mRouterNet_LastRouterV1Octets != 0) {
-                mRouterNet_ThisDiffRouterV1Octets = ((mRouterNet_ThisRouterV1Octets - mRouterNet_LastRouterV1Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterV1Octets = ((mRouterNet_ThisRouterV1Octets - mRouterNet_LastRouterV1Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterV2Octets <= mRouterNet_LastRouterV2Octets && mRouterNet_LastRouterV2Octets != 0) {
-                mRouterNet_ThisDiffRouterV2Octets = ((mRouterNet_ThisRouterV2Octets - mRouterNet_LastRouterV2Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterV2Octets = ((mRouterNet_ThisRouterV2Octets - mRouterNet_LastRouterV2Octets)/1024/1024/intLen/step);
             }
             if(mRouterNet_LastRouterB0Octets <= mRouterNet_LastRouterB0Octets && mRouterNet_LastRouterB0Octets != 0) {
-                mRouterNet_ThisDiffRouterB0Octets = ((mRouterNet_ThisRouterB0Octets - mRouterNet_LastRouterB0Octets)/1024/intLen/step);
+                mRouterNet_ThisDiffRouterB0Octets = ((mRouterNet_ThisRouterB0Octets - mRouterNet_LastRouterB0Octets)/1024/1024/intLen/step);
             }
             mRouterNet_Labels.put(routerObject.getString("WalkTime"));
             mRouterNet_Data.put(mRouterNet_ThisDiffRouterE0Octets);

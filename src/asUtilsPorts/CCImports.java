@@ -21,6 +21,19 @@ import org.joda.time.format.DateTimeFormatter;
 import asWebRest.shared.MyDBConnector;
 
 public class CCImports {
+	
+	private static void discover() {
+		String[] args = { "Discover" };
+		main(args);
+	}
+	
+	private static void oldNavy() {
+		String[] args = { "OldNavy" };
+		main(args);
+	}
+	
+	public static void doDiscover() { discover(); }
+	public static void doOldNavy() { oldNavy(); }
 
 	public static void main(String[] args) {
 

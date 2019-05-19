@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 Jun 2018
 Split off from WebCommon 1 Jul 2018
-Updated: 1 Jul 2018
+Updated: 18 May 2019
 
  */
 
@@ -102,6 +102,11 @@ public class FolderTools {
                 .put("Folder", scanFolder)
                 .put("InnerChildren", fContainer);
         return resultSet;
+    }
+    
+    public static void rebuildFolder(File folderIn) {
+    	folderIn.delete();
+    	folderIn.mkdirs();
     }
     
 }

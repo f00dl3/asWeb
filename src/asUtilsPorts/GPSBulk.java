@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 30 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 11 Feb 2019
+Updated: 13 May 2019
 */
 
 package asUtilsPorts;
@@ -13,14 +13,16 @@ import java.util.regex.Pattern;
 
 import asUtils.Shares.JunkyBeans;
 import asUtilsPorts.GPSParse;
+import asWebRest.shared.CommonBeans;
 
 public class GPSBulk {
 
 	public static void main(String[] args) {
 
-                JunkyBeans junkyBeans = new JunkyBeans();
+		CommonBeans cb = new CommonBeans();
+        JunkyBeans junkyBeans = new JunkyBeans();
 		final String archFlag = "no";
-		final File dropLocation = new File(junkyBeans.getDesktopPath().toString());
+		final File dropLocation = new File(cb.getPathChartCache().toString());
 		final File[] dirList = dropLocation.listFiles();
 
 		String thisTrace = null;
@@ -29,7 +31,7 @@ public class GPSBulk {
 			for (File child : dirList) {
 				String childPath = child.getPath();
 				if(childPath.contains(".csv")) {
-					Pattern p = Pattern.compile("Desktop/(.*).csv");
+					Pattern p = Pattern.compile(dropLocation+"/(.*).csv");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
 						thisTrace = m.group(1);
@@ -39,7 +41,7 @@ public class GPSBulk {
 					}
 				}
 				if(childPath.contains(".json")) {
-					Pattern p = Pattern.compile("Desktop/(.*).json");
+					Pattern p = Pattern.compile(dropLocation+"/(.*).json");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
 						thisTrace = m.group(1);
@@ -49,7 +51,7 @@ public class GPSBulk {
 					}
 				}
 				if(childPath.contains(".fit")) {
-					Pattern p = Pattern.compile("Desktop/(.*).fit");
+					Pattern p = Pattern.compile(dropLocation+"/(.*).fit");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
 						thisTrace = m.group(1);
@@ -59,7 +61,7 @@ public class GPSBulk {
 					}
 				}
 				if(childPath.contains(".gpx")) {
-					Pattern p = Pattern.compile("Desktop/(.*).gpx");
+					Pattern p = Pattern.compile(dropLocation+"/(.*).gpx");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
 						thisTrace = m.group(1);
