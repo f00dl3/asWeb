@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 19 May 2019
+Updated: 20 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -118,20 +118,20 @@ public class SysMonPi {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Orange")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Percent");
+                .put("xLabel", "WalkTime").put("yLabel", "GB Used");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject piObject = dataIn.getJSONObject(i);
             float mPiMemory_OverallUse = (
                 piObject.getFloat("KMemPhysU") - (
                 piObject.getFloat("KMemBuffU") +
                 piObject.getFloat("KMemCachedU"))
-                / 1024
+                / 1024 / 1024
             );
             mPiMemory_Labels.put(piObject.getString("WalkTime"));
             mPiMemory_Data.put(mPiMemory_OverallUse);
-            mPiMemory_Data2.put(piObject.getFloat("KSwapU")/1024);
-            mPiMemory_Data3.put(piObject.getFloat("KMemBuffU")/1024);
-            mPiMemory_Data4.put(piObject.getFloat("KMemCachedU")/1024);
+            mPiMemory_Data2.put(piObject.getFloat("KSwapU")/1024/1024);
+            mPiMemory_Data3.put(piObject.getFloat("KMemBuffU")/1024/1024);
+            mPiMemory_Data4.put(piObject.getFloat("KMemCachedU")/1024/1024);
         }
         mPiMemory_Glob
                 .put("labels", mPiMemory_Labels)

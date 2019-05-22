@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 19 May 2019
+Updated: 20 May 2019
  */
 
 package asWebRest.action;
@@ -29,7 +29,7 @@ public class GetSnmpAction {
     public JSONArray getNote3RapidGeoHistory() { return snmpDAO.getNote3RapidGeoHistory(); }
     public JSONArray getNote3Sensors(List qParams) { return snmpDAO.getNote3Sensors(qParams); }
     public JSONArray getPi(Connection dbc, List qParams, int step) { return snmpDAO.getPi(dbc, qParams, step); }
-    public JSONArray getPi2(Connection dbc, List qParams) { return snmpDAO.getPi2(dbc, qParams); }
+    public JSONArray getPi2(Connection dbc, List qParams, int step) { return snmpDAO.getPi2(dbc, qParams, step); }
     public JSONArray getPi2Geo() { return snmpDAO.getPi2Geo(); }
     public JSONArray getPi2GeoHistory() { return snmpDAO.getPi2GeoHistory(); }
     public JSONArray getRouter(Connection dbc, List qParams, int step) { return snmpDAO.getRouter(dbc, qParams, step); }

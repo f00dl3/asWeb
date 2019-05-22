@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 19 May 2019
+Updated: 20 May 2019
 */
 
 var chartArray;
@@ -166,18 +166,25 @@ function populateCharts() {
         "mSysUPSLoad", // done 4/30/18
         "mSysUPSTimeLeft", // done 4/30/18
         "mSysTomcatDeploy", // issues 4/30/18
-        "mSysVolt" // done 4/30/18
-    ];
-    var chartList2 = [
+        "mSysVolt", // done 4/30/18
         "mCellBattCPU", // done 5/13/18
         "mCellTemp", // done 5/13/18
         "mCellNet", // done 4/30/18
         "mCellSig", // done 4/30/18
+    ];
+    var chartList2 = [
         "mRouterCPU", // done 4/30/18
         "mRouterNet", // data issues 4/30/18
+        "mRouterMemory", // data issues 4/30/10
         "mPiCPU", // done 4/30/18
+        "mPiLoad", // done 4/30/18
         "mPiMemory", // axis label issues 4/30/18
         "mPiTemp", // done 4/30/18
+        "mPi2CPU", // done 4/30/18
+        "mPi2Memory", // data issues 4/30/18
+        "mPi2Temp", // data issues 4/30/18
+        "mPi2Load", // done 4/30/18
+        "mPi2Light", // data issues 4/30/18
         "mJavaCodeLines", // done 4/29/18
         "mSysNvUtilization", // new 10/16/18
         "mUvm2CPU", //new 5/19/19
@@ -187,16 +194,9 @@ function populateCharts() {
     var UNIMP_chartList = [
         "mPiAmb", // done 4/30/18 - decommed 5/19/19
         "mCellTempRapid", // json iteration not known 4/30/18
-        "mPiLoad", // done 4/30/18
-        "mPi2CPU", // done 4/30/18
-        "mPi2Memory", // data issues 4/30/18
-        "mPi2Temp", // data issues 4/30/18
-        "mPi2Load", // done 4/30/18
-        "mPi2Light", // data issues 4/30/18
         "mPi2GPSSpeed", // data issues 4/30/18
         //"mSysCams", // there, unimplemented anymore 4/30/18
         "mSysMySQLWeb",
-        "mRouterMemory" // data issues 4/30/18
     ];
     var numElements = chartList1.length;
     var numElements2 = chartList2.length;

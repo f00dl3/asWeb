@@ -15,7 +15,7 @@ public class SysMonUVM2 {
     private WebCommon wc = new WebCommon();
     
     private JSONObject mSysCPU(JSONArray dataIn, int intLen, int step) {
-        String mSysCPU_ChartName = "Desktop: CPU Load";
+        String mSysCPU_ChartName = "UVM II: CPU Load";
         JSONObject mSysCPU_Glob = new JSONObject();
         JSONObject mSysCPU_Props = new JSONObject();
         JSONArray mSysCPU_Labels = new JSONArray();
@@ -41,10 +41,6 @@ public class SysMonUVM2 {
             if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad2")))) { try { mSysCPU2 = thisObject.getInt("CPULoad2"); activeCPUs++; } catch (Exception e) { } }
             if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad3")))) { try { mSysCPU3 = thisObject.getInt("CPULoad3"); activeCPUs++; } catch (Exception e) { } }
             if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad4")))) { try { mSysCPU4 = thisObject.getInt("CPULoad4"); activeCPUs++; } catch (Exception e) { } }
-            if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad5")))) { try { mSysCPU1 = thisObject.getInt("CPULoad5"); activeCPUs++; } catch (Exception e) { } }
-            if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad6")))) { try { mSysCPU2 = thisObject.getInt("CPULoad6"); activeCPUs++; } catch (Exception e) { } }
-            if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad7")))) { try { mSysCPU3 = thisObject.getInt("CPULoad7"); activeCPUs++; } catch (Exception e) { } }
-            if(wc.isSet(Integer.toString(thisObject.getInt("CPULoad8")))) { try { mSysCPU4 = thisObject.getInt("CPULoad8"); activeCPUs++; } catch (Exception e) { } }
             try {
                 mSysCPU_LoadAverage = ((mSysCPU1 + mSysCPU2 + mSysCPU3 + mSysCPU4 + mSysCPU5 + mSysCPU6 + mSysCPU7 + mSysCPU8) / activeCPUs );
             } catch (Exception e) { e.printStackTrace(); }
@@ -59,7 +55,7 @@ public class SysMonUVM2 {
     }
 
     private JSONObject mSysLoad(JSONArray dataIn, int intLen, int step) {
-        String mSysLoad_ChartName = "Desktop: System Load";
+        String mSysLoad_ChartName = "UVM II: System Load";
         JSONObject mSysLoad_Glob = new JSONObject();
         JSONObject mSysLoad_Props = new JSONObject();
         JSONArray mSysLoad_Labels = new JSONArray();
@@ -96,7 +92,7 @@ public class SysMonUVM2 {
     }
      
     private JSONObject mSysMemory(JSONArray dataIn, int intLen, int step) {
-        String mSysMemory_ChartName = "Desktop: Memory Use";
+        String mSysMemory_ChartName = "UVM II: Memory Use";
         JSONObject mSysMemory_Glob = new JSONObject();
         JSONObject mSysMemory_Props = new JSONObject();
         JSONArray mSysMemory_Labels = new JSONArray();
@@ -111,16 +107,20 @@ public class SysMonUVM2 {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Green")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Use in MBs");
+                .put("xLabel", "WalkTime").put("yLabel", "Use in GBs");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysMemory_Used = 0.00f;
-            try { mSysMemory_Used = ((thisObject.getFloat("KMemPhysU")-(thisObject.getFloat("KMemBuffU")+thisObject.getFloat("KMemCachedU")))/1024); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysMemory_Used = (
+            		(thisObject.getFloat("KMemPhysU")-
+    				(thisObject.getFloat("KMemBuffU")+thisObject.getFloat("KMemCachedU"))
+    				)/1024/1024);
+            } catch (Exception e) { e.printStackTrace(); }
             mSysMemory_Labels.put(thisObject.getString("WalkTime"));
             mSysMemory_Data.put(mSysMemory_Used);
-            mSysMemory_Data2.put(thisObject.getFloat("KSwapU")/1024);
-            mSysMemory_Data3.put(thisObject.getFloat("KMemBuffU")/1024);
-            mSysMemory_Data4.put(thisObject.getFloat("KMemCachedU")/1024);
+            mSysMemory_Data2.put(thisObject.getFloat("KSwapU")/1024/1024);
+            mSysMemory_Data3.put(thisObject.getFloat("KMemBuffU")/1024/1024);
+            mSysMemory_Data4.put(thisObject.getFloat("KMemCachedU")/1024/1024);
         }
         mSysMemory_Glob
                 .put("labels", mSysMemory_Labels)

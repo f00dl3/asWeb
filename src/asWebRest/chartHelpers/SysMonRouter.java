@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 19 May 2019
+Updated: 21 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -63,7 +63,7 @@ public class SysMonRouter {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Orange")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Percent");
+                .put("xLabel", "WalkTime").put("yLabel", "MB Used");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject routerObject = dataIn.getJSONObject(i);
             float mRouterMemory_OverallUse = (
@@ -72,6 +72,7 @@ public class SysMonRouter {
                 routerObject.getFloat("KMemCachedU"))
                 / 1024
             );
+            
             mRouterMemory_Labels.put(routerObject.getString("WalkTime"));
             mRouterMemory_Data.put(mRouterMemory_OverallUse);
             mRouterMemory_Data2.put(routerObject.getFloat("KSwapU")/1024);

@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 13 May 2018
+Updated: 21 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -21,18 +21,10 @@ public class SysMonPi2 {
         JSONObject mPi2CPU_Props = new JSONObject();
         JSONArray mPi2CPU_Labels = new JSONArray();
         JSONArray mPi2CPU_Data = new JSONArray();
-        JSONArray mPi2CPU_Data2 = new JSONArray();
-        JSONArray mPi2CPU_Data3 = new JSONArray();
-        JSONArray mPi2CPU_Data4 = new JSONArray();
-        JSONArray mPi2CPU_Data5 = new JSONArray();
         mPi2CPU_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mPi2CPU_ChartName).put("chartFileName", "mPi2CPU")
                 .put("sName", "Average").put("sColor", "Yellow")
-                .put("s2Name", "Core 1").put("s2Color", "Gray")
-                .put("s3Name", "Core 2").put("s3Color", "Gray")
-                .put("s4Name", "Core 3").put("s4Color", "Gray")
-                .put("s5Name", "Core 4").put("s5Color", "Gray")
                 .put("xLabel", "WalkTime").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject pi2Object = dataIn.getJSONObject(i);
@@ -44,19 +36,12 @@ public class SysMonPi2 {
             );
             mPi2CPU_Labels.put(pi2Object.getString("WalkTime"));
             mPi2CPU_Data.put(mPi2CPU_Average);
-            mPi2CPU_Data2.put(pi2Object.getInt("CPULoad"));
-            mPi2CPU_Data3.put(pi2Object.getInt("CPULoad2"));
-            mPi2CPU_Data4.put(pi2Object.getInt("CPULoad3"));
-            mPi2CPU_Data5.put(pi2Object.getInt("CPULoad4"));
         }
         mPi2CPU_Glob
                 .put("labels", mPi2CPU_Labels)
                 .put("data", mPi2CPU_Data)
-                .put("data2", mPi2CPU_Data2)
-                .put("data3", mPi2CPU_Data3)
-                .put("data4", mPi2CPU_Data4)
-                .put("data5", mPi2CPU_Data5)
                 .put("props", mPi2CPU_Props);
+        System.out.println(mPi2CPU_Glob.toString());
         return mPi2CPU_Glob;
     }
     
@@ -157,7 +142,7 @@ public class SysMonPi2 {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Orange")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Percent");
+                .put("xLabel", "WalkTime").put("yLabel", "MB Used");
         for (int i = 0; i < dataIn.length(); i++) {
             JSONObject pi2Object = dataIn.getJSONObject(i);
             float mPi2Memory_OverallUse = (

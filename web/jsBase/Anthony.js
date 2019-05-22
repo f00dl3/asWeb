@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 13 May 2019
+Updated: 22 May 2019
 */
 
 function actOnCalendarSubmit(event) {
@@ -27,6 +27,36 @@ function actOnHiddenToggle(event) {
     getAnthonyOverviewData();
 }
 
+function actOnUpload(event) {    
+    dojo.stopEvent(event);
+    fupper("upForm");
+}
+
+function addUploader(divContainer) {
+    require(["dojox/form/uploader/plugins/HTML5"]);
+	var uploadPath = getResource("Upload");
+    var fileUploadForm = "<br/>" +
+		    "<form method='post' action='"+uploadPath+"' id='upForm'" +
+		    " enctype='multipart/form-data'>" +
+		    "    <fieldset>" +
+		    "        <legend>File Uploader</legend>" +
+		    "        <input class='browseButton' name='upfile' multiple='true'" +
+		    "            type='file' data-dojo-type='dojox/form/Uploader'" +
+		    "            data-dojo-props='label: Select' id='upfile'>" +
+		    "        <input type='submit' label='Submit' id='send' data-dojo-type='dijit/form/Button'>" +
+		    "    </fieldset>" +
+		    " </form><br/><textarea id='response'></textarea>";
+    dojo.byId(divContainer).innerHTML = fileUploadForm;
+    var sendButton = dojo.byId("send");
+    dojo.connect(send, "click", actOnUpload);	
+}
+
+function changeH1Font() {
+	var newFont = document.getElementById("newH1Font").value;
+	document.getElementById("mainH1").style.fontFamily='" + newFont + "';
+	//eval(newFontCSS);
+}
+
 function generteLinkSpinner(links) {
     var rData = "";
     var cubeRes = "width=128 height=128";
@@ -45,10 +75,22 @@ function generteLinkSpinner(links) {
     dojo.byId("linkList").innerHTML = rData;
 }
 
-function changeH1Font() {
-	var newFont = document.getElementById("newH1Font").value;
-	document.getElementById("mainH1").style.fontFamily='" + newFont + "';
-	//eval(newFontCSS);
+function fupper(formId) {
+    console.log("Entered fupper - " + formId);
+    aniPreload("on");
+    dojo.require("dojo.io.iframe");
+    dojo.io.iframe.send({
+        contentType: "multipart/form-data",
+        form: formId,
+        load: function(data) {
+            showNotice("File(s) uploaded!");
+            aniPreload("off");
+        },
+        error: function(error) { 
+            aniPreload("off");
+            window.alert("request to Upload FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+") ");
+        }
+    });
 }
 
 function get3dLinkList() {   
@@ -233,12 +275,13 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
             " <input type='button' id='setFontGo' value='Do it!' /></p>";
 
     var uploadPath = getResource("Upload");
-    var fileUploadForm = "<br/><form method='POST' enctype='multipart/form-data' action='" + uploadPath + "'>" +
+    var fileUploadForm = "<br/><div id='UploadHolder'></div>";
+    /* var fileUploadForm = "<br/><form method='POST' enctype='multipart/form-data' action='" + uploadPath + "'>" +
                 "File to upload: <input type='file' name='upfile'><br/>" +
                 "Notes about the file: <input type='text' name='note'><br/>" +
                 "<br/>" +
                 "<input type='submit' value='Press'> to upload!" +
-                "</form>";
+                "</form>"; */
     rData += javaScriptSchit + fileUploadForm + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
@@ -248,6 +291,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     dojo.connect(quickCalButton, "click", actOnCalendarSubmit);
     dojo.connect(changeFontButton, "click", changeH1Font);
     $("#inLogs").toggle();
+    addUploader("UploadHolder");
 }
 
 function logButtonListener() {

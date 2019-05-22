@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 19 May 2019
+Updated: 21 May 2019
 */
 
 package asWebRest.dao;
@@ -187,9 +187,8 @@ public class SnmpDAO {
                 " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH, " +
                 " dt.ExpandedJSONData as dtExpandedJSONData" +
                 " FROM net_snmp.Main dt" +
-                " ORDER BY dt.WalkTime DESC" +
-                " LIMIT 720) as tmp" +
                 " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // qp1 = DateTest, qp2 = Date
+                " ORDER BY dt.WalkTime DESC LIMIT 720) as tmp" +
                 " ORDER BY WalkTime ASC;";
         //System.out.println(qParams.toString() + "\n" + wcb.getQSetRT0() + "\n" + query_SNMP_Main);
         System.out.println("step: " + step);
@@ -332,8 +331,8 @@ public class SnmpDAO {
                 " BattLevel, BattVolt, BattCurrent, BattTemp, BattPowered, BattPoweredU, BattHealth," +
                 " SigStrGSM, SigStrCDMA, SigStrEVDO, SigStrLTE" +
                 " FROM net_snmp.Note3 " +
-                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + //DateTest, Date
+                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -453,8 +452,8 @@ public class SnmpDAO {
                 " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU," +
                 " ExtTemp, ExtAmbLight, ExtNoise, UptimeSec" +
                 " FROM net_snmp.RaspberryPi" +
-                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+                " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
                 " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -496,8 +495,8 @@ public class SnmpDAO {
         return tContainer;
     }
     
-    public JSONArray getPi2(Connection dbc, List qParams) {
-        final String query_SNMP_Pi2 = "SELECT * FROM (" +
+    public JSONArray getPi2(Connection dbc, List qParams, int step) {
+        final String query_SNMP_Pi2 = "SELECT * FROM (SELECT " +
                 " WalkTime, CPULoad, CPULoad2, CPULoad3, CPULoad4," +
                 " LoadIndex1, LoadIndex5, LoadIndex15, TempCPU," +
                 " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
@@ -505,11 +504,10 @@ public class SnmpDAO {
                 " ExtTemp, UptimeSec, LightLevel," +
                 " GPSSpeedMPH, GPSAgeMS, GPSCoords, GPSDataChars, GPSAltiCM" +
                 " FROM net_snmp.RaspberryPi2" +
+                " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
                 " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
-                " AND (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
                 " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
-        try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi2, qParams);
             while (resultSet.next()) {
@@ -591,8 +589,8 @@ public class SnmpDAO {
         " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
         " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
         " FROM net_snmp.Asus3200 " +
-        " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
         " WHERE (? = 1 OR WalkTime LIKE CONCAT(?, '%'))" + // DateTest, Date
+        " ORDER BY WalkTime DESC LIMIT 720) as tmp" +
         " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
