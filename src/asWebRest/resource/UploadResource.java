@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: on Creation
+Updated: 27 May 2019
  */
 
 package asWebRest.resource;
@@ -59,6 +59,21 @@ public class UploadResource extends ServerResource {
                         try(OutputStream outputStream = new FileOutputStream(outFile)) {
                             IOUtils.copy(fi.openStream(), outputStream);
                             sb.append("\n\nFile succesfully wrote - " + outFile.toString()); 
+                            if(fileName.contains(".fit")) {
+                                String[] args = {};
+                                asUtilsPorts.GPSBulk.main(args);
+                                sb.append("\nProcessed GPS tracks!");
+                            } else if (fileName.contains("Discover.csv")) {
+                            	String[] args = { "Discover" };
+                                asUtilsPorts.CCImports.main(args);
+                            	sb.append("\nProcessed Discover credit card data!");
+                            } else if (fileName.contains("OldNavy.csv")) {
+                            	String[] args = { "OldNavy" };
+                                asUtilsPorts.CCImports.main(args);
+                            	sb.append("\nProcessed Old Navy credit card data!");
+                            } else {
+                            	sb.append("\nNo further post-processing actions!");                            	
+                            }
                         } catch (Exception e) { 
                             e.printStackTrace();
                         }

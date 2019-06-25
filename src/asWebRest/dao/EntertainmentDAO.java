@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 14 Mar 2019
+Updated: 27 May 2019
 */
 
 package asWebRest.dao;
@@ -55,9 +55,9 @@ public class EntertainmentDAO {
     }
     
     private JSONArray ffxivAssets(Connection dbc) {
-        final String query_FfxivAssets = "SELECT What, Value, Purchased FROM Core.FFXIV_Assets" +
+        final String query_FfxivAssets = "SELECT What, Value, Purchased, WriteOff FROM Core.FFXIV_Assets" +
                 " UNION ALL" +
-                " (SELECT 'Gil' AS What, Gil AS Value, AsOf AS Purchased FROM Core.FFXIV_Gil ORDER BY Purchased DESC LIMIT 1);";
+                " (SELECT 'Gil' AS What, Gil AS Value, AsOf AS Purchased, 0 AS WriteOff FROM Core.FFXIV_Gil ORDER BY Purchased DESC LIMIT 1);";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivAssets, null);
@@ -66,7 +66,8 @@ public class EntertainmentDAO {
                 tObject
                     .put("What", resultSet.getString("What"))
                     .put("Value", resultSet.getInt("Value"))
-                    .put("Purchased", resultSet.getString("Purchased"));                    
+                    .put("Purchased", resultSet.getString("Purchased"))
+                    .put("WriteOff", resultSet.getInt("WriteOff"));                    
                 tContainer.put(tObject);
             }
             resultSet.close();

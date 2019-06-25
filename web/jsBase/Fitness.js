@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 4 Apr 2019
+Updated: 24 Jun 2019
  */
 
 var myHeight = 67;
@@ -356,7 +356,6 @@ function processFitnessAll(dataIn, autoMpg) {
                 "</div></div></td>" +
                 "<td align='center'><div class='UPop'><div class='" + colorWeight(tData.Weight) + "'>" + tData.Weight + "</div>" +
                 "<div class='UPopO'>" + 
-                "B: <span class='" + colorWeight(tData.WeightB) + "'>" + tData.WeightB + "</span><br/>" + 
                 bmi +
                 "</div>" +
                 "</div></td>" +

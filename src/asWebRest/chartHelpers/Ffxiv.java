@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
-Updated: 3 Feb 2019
+Updated: 29 May 2019
  */
 
 package asWebRest.chartHelpers;
@@ -78,7 +78,7 @@ public class Ffxiv {
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivGilByDay")
-                .put("sName", "Gil").put("sColor", "Green")
+                .put("sName", "Gil (M)").put("sColor", "Green")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -103,7 +103,7 @@ public class Ffxiv {
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivGilWorthByDay")
                 .put("sName", "Worth").put("sColor", "Yellow")
-                .put("xLabel", "Date").put("yLabel", "Gil");
+                .put("xLabel", "Date").put("yLabel", "Gil (M)");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             long worth = thisObject.getLong("Worth");

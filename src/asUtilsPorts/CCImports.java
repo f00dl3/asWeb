@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 12 May 2019
+Updated: 27 May 2019
 */
 
 package asUtilsPorts;
@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 
 public class CCImports {
@@ -38,13 +39,12 @@ public class CCImports {
 	public static void main(String[] args) {
 
 		WebCommon wc = new WebCommon();
+		CommonBeans cb = new CommonBeans();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
-        
-        JunkyBeans junkyBeans = new JunkyBeans();
                 
-		final String placeCCImportsHere = junkyBeans.getDesktopPath().toString();
+		final String placeCCImportsHere = cb.getPathChartCache().toString();
 		String accountType = args[0];
 
 		if (accountType.equals("OldNavy")) {
