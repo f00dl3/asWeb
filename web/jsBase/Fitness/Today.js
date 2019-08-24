@@ -13,7 +13,7 @@ function actUpdateTodaySubmit(event) {
 
 function fitnessToday(dataIn) {
     if(!isSet(dataIn)) { dataIn = {}; }
-    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, weightB, shoe, mowNotes, xTags, hSleep, xOrgs, exMins;
+    var studChecked, commonRouteChecked, runWalk, cycling, rsMile, weight, shoe, mowNotes, xTags, hSleep, xOrgs, exMins;
     studChecked = commonRouteChecked = rsMile = "";
     if(!isSet(dataIn.Cycling)) { cycling = ""; } else { cycling = dataIn.Cycling; }
     if(!isSet(dataIn.Weight)) { weight = ""; } else { weight = dataIn.Weight; }

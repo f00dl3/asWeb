@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    23 Aor 2019
+    Updated:    24 Aug 2019
     Author     : astump
 --%>
 
@@ -66,6 +66,7 @@
         "OLMap/CommonStuff",
         "OLMap/CrashData",
         "OLMap/DrawPathMap",
+        "OLMap/DrawPathMapV2",
         "OLMap/GpsElements",
         "OLMap/Homicide",
         "OLMap/KMLRadar",
@@ -198,6 +199,9 @@
             case "DBInfo":
                 fullTitle = "Database Info";
                 break;
+            case "DOSBox":
+                scripts2Load += "<script src='"+rootPath+"/DOSBox/js-dos.js'>";
+                break;            	
             case "Entertain":
                 fullTitle = "Entertainment";
                 scripts2Load += etScriptPack;

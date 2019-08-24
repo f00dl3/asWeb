@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 27 May 2019
+Updated: 24 Aug 2019
 */
 
 package asWebRest.dao;
@@ -38,6 +38,28 @@ public class EntertainmentDAO {
                     .put("AirDate", resultSet.getString("AirDate"))
                     .put("MillionViews", resultSet.getDouble("MillionViews"))
                     .put("Synopsis", resultSet.getString("Synopsis"));                   
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    private JSONArray dosBoxMapping(Connection dbc) {
+        final String query_DOSBoxMapping = "SELECT" +
+                " FriendlyName, ZIPFile, WorkingDir, Executable" +
+        		" FROM Core.DOSBoxMapping" +
+                " ORDER BY ZIPFile;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_DOSBoxMapping, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("FriendlyName", resultSet.getString("FriendlyName"))
+                    .put("ZIPFile", resultSet.getString("ZIPFile"))
+                    .put("WorkingDir", resultSet.getString("WorkingDir"))
+                    .put("Executable", resultSet.getString("Executable"));                   
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -566,8 +588,9 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-    
+
     public JSONArray getChicagoSeries(Connection dbc) { return chicagoSeries(dbc); }    
+    public JSONArray getDOSBoxMapping(Connection dbc) { return dosBoxMapping(dbc); }  
     public JSONArray getFfxivAssets(Connection dbc) { return ffxivAssets(dbc); }
     public JSONArray getFfxivCounts(Connection dbc) { return ffxivCounts(dbc); }
     public JSONArray getFfxivCrafting(Connection dbc) { return ffxivCrafting(dbc); }

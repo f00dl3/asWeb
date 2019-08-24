@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 24 Apr 2019
+Updated: 27 Jun 2019
  */
 
 function putDrawPathMap() {
@@ -63,7 +63,7 @@ function putDrawPathMap() {
         }).extend([
             new app.exportJson()
         ]),
-        projection: 'EPSG:4326',
+        projection: "EPSG:900913",
         target: 'map',
         layers: [
             raster, vectorLayer
@@ -99,10 +99,12 @@ function putDrawPathMap() {
         	drawnData.push(tGeo);
         });
         console.log("DRAWN DATA: " + drawnData);
+        var line = new ol.geom.LineString(drawnData);
+        var lineLength = Math.round(line.getLength() * 100) / 100
+        console.log("LINE LENGHT: " + lineLength + " METERS");
         dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData); // Returns empty
     }
     addInteraction();
 }
-
 
 

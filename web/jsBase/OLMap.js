@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 29 May 2018
-Updated: 4 Mar 2019
+Updated: 27 Jun 2019
  */
 
 function generateMapHolder() {
@@ -37,6 +37,7 @@ function generateMapHolder() {
 function initMap() {
     switch(doAction) {
     	case "Draw": putDrawPathMap(); break;
+    	case "Draw2": putDrawPathMapV2(); break;
         case "G16IR": renderImage("G16IR"); break;
         case "G16VIS": renderImage("G16VIS"); break;
         case "Image": renderImage(); break;

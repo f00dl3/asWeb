@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 11 Apr 2019
+Updated: 17 Aug 2019
 
  */
 
@@ -610,8 +610,15 @@ function putFfxivMergedList(target, questData) {
 
 function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var assetValues = 0;
-    assets.forEach(function (asset) { assetValues += asset.Value; });
+    var accurateAssetValues = 0;
+    assets.forEach(function (asset) {
+    	assetValues += asset.Value;
+    	if(asset.WriteOff == 0) {
+    		accurateAssetValues += asset.Value;
+    	}
+    });
     var totalValue = (assetValues/1000000).toFixed(2);
+    var totalAccurateValue = (accurateAssetValues/1000000).toFixed(2);
     var counts = countIn[0];
     var aCount = counts.Achievements;
     var mCount = ffxivMerged.length;
@@ -644,7 +651,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     });
     var rData = "<span id='charList'></span>" +
             "<div class='UPop'>" +
-            totalValue + "m <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
+            totalValue + "m (" + totalAccurateValue + "m) <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
             "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
             "<a href='" + doCh("j", "ffxivGilWorthByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilWorthByDay", "th") + "'/></a>" +

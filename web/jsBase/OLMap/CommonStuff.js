@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 14 Aug 2018
+Updated: 27 Jun 2019
  */
 
 // SET TILE SOURCE HERE! == R for REMOTE, L for LOCAL
@@ -65,7 +65,9 @@ var map;
 var overlay;
 var routeColorBlack = 'rgba(0,0,0,0.4)';
 var routeColorYellow = 'rgba(255,255,0,0.4)';
-var tilePathLocal = getBasePath("osmTiles") + "{z}/{x}/{y}.png";
+var tileSuffix = "{z}/{x}/{y}.png";
+var tilePathLocal = getBasePath("osmTiles") + tileSuffix;
+//var tilePathRemote_190626 = "https://tile.openstreetmap.fr/" + tileSuffix;
 var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
 
 var localTiles = new ol.layer.Tile({

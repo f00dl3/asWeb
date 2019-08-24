@@ -1029,7 +1029,7 @@ public class FitnessDAO {
     
     public String setUpdateToday(List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
-        String tRShoe = qParams.get(3);
+        String tRShoe = qParams.get(2);
         double tRShoeMaxMiles = 0.0;
         final String query_Fitness_GetLastRsMileTotal = "SELECT MAX(RSMile) AS MaxRSMiles FROM Core.Fitness WHERE Shoe='" + tRShoe + "' AND Date != CURDATE();";
         try {

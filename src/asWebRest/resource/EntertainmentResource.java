@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 12 Jan 2018
+Updated: 24 Aug 2019
  */
 
 package asWebRest.resource;
@@ -51,6 +51,11 @@ public class EntertainmentResource extends ServerResource {
                 case "getChicagoSeries":
                     JSONArray chi = getEntertainmentAction.getChicagoSeries(dbc);
                     returnData += chi.toString();
+                    break;
+
+                case "getDOSBoxMapping":
+                    JSONArray dbm = getEntertainmentAction.getDOSBoxMapping(dbc);
+                    returnData += dbm.toString();
                     break;
                     
                 case "getFfxivCrafting":
