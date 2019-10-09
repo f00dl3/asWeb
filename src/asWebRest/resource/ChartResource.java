@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 21 May 2019
+Updated: 9 Oct 2019
  */
 
 package asWebRest.resource;
@@ -207,7 +207,16 @@ public class ChartResource extends ServerResource {
                     JSONObject msGlob = ms.getByDate(msbd);
                     try { dynChart.LineChart(msGlob); returnData += "Chart generated - MediaServer By Date!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
-                    
+
+                case "RedditStatCharts":
+                    genericCharts = false;
+                    qParams.add(0, "1024");
+                    final String rsOrder = "DESC";
+                    JSONArray rsData = getLogsAction.getRedditStatsKcregionalwx(dbc, rsOrder);
+                    JSONObject rsGlob = log.getRedditStatsKCRW(rsData);
+                    try { dynChart.LineChart(rsGlob); returnData += "Chart generated - RedditStats_kcregionalwx!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    break;
+
                 case "SysMonCharts":
                     
                 	// Split off? pass argsInForm if so.

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 24 Jun 2019
+Updated: 28 Sep 2019
  */
 
 var searchableData;
@@ -70,6 +70,7 @@ function getCheckbook() {
 }
 
 function getCheckbookDeep() {
+	console.log("DEBUG: Attempting deep checkbook pull...");
     dojo.byId("cbSearchHolder").innerHTML = "LOADING DATA...";
     aniPreload("on");
     var thePostData = { "doWhat": "getCheckingDeep" };
@@ -82,6 +83,7 @@ function getCheckbookDeep() {
                 function(data) {
                     aniPreload("off");
                     searchableData = data;
+                    console.log("DEBUG: Deep checkbook pull success.");
                     putCheckbookSearchBox();
                 },
                 function(error) { 
@@ -93,15 +95,15 @@ function getCheckbookDeep() {
 
 function putCheckbookSearchBox() {
     var cbSearchInner = "<div class='table'><form class='tr' id='CkBkSearch'>" +
-    		"<span class='td'>" +
+    		/* "<span class='td'>" +
     		"<button class='UButton' id='doDiscover'>DI</button> " +
     		"<button class='UButton' id='doOldNavy'>ON</button> " +
-    		"</span>" +
+    		"</span>" + */
             "<span class='td'><input type='text' id='SearchBoxText' name='CBSearchField' onKeyUp='searchAheadCheckbook(this.value)'/></span>" +
             "<span class='td'><strong>Search</strong></span>" +
             "</form></div><p>";
-    dojo.byId("doDiscover").connect("click", actOnDoDiscover);
-    dojo.byId("doOldNavy").connect("click", actOnDoOldNavy);
+    // dojo.byId("doDiscover").connect("click", actOnDoDiscover);
+    // dojo.byId("doOldNavy").connect("click", actOnDoOldNavy);
     dojo.byId("cbSearchHolder").innerHTML = cbSearchInner;
 }
 

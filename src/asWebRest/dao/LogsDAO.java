@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 3 Jun 2018
+Updated: 9 Oct 2019
 */
 
 package asWebRest.dao;
@@ -36,7 +36,28 @@ public class LogsDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-            
+
+    public JSONArray getRedditStatsKcregionalwx(Connection dbc, String order) {
+        final String query_RedditStatsKcregionalwx = "SELECT " +
+        " Date, UniqueViews, PageViews, Subscriptions" +
+        " FROM Core.RedditStats_kcregionalwx ORDER BY Date " + order;
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RedditStatsKcregionalwx, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("UniqueViews", resultSet.getInt("UniqueViews"))
+                    .put("PageViews", resultSet.getInt("PageViews"))
+                    .put("Subscriptions", resultSet.getInt("Subscriptions"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getPlainTextNotes(Connection dbc, List<String> qParams) {
         final String query_PlainTextNotes = "SELECT Date, Topic, TextFileName, `Note`" +
                 " FROM Core.PlainTextNotes WHERE TextFileName LIKE ?;";

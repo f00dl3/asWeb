@@ -4,13 +4,11 @@
     Author     : astump
 --%>
 
-<%@page import="asWebRest.shared.WebCommon"%>
 <%
     String headerType = "full";
-    String pageTitle = "DOS Box Loader";
+    String pageTitle = "DOS Box";
     String scriptIt = "true";
     String authCheck = "true";
-    WebCommon wc = new WebCommon();
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -22,15 +20,6 @@
         
         <h1><% out.println(pageTitle); %></h1>
 		  <canvas id="jsdos"></canvas>
-		  <script>
-		    Dos(document.getElementById("jsdos"), { 
-		        wdosboxUrl: "/asWeb/DOSBox/wdosbox.js" 
-		    }).ready((fs, main) => {
-		      fs.extract("/asWeb/DOSBox/wf/dagger.zip").then(() => {
-		        main(["-c", "CD DAGGER", "-c","DFALL.BAT"])
-		      });
-		    });
-		  </script>
 	
 	</body>
 

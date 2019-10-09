@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 3 Jun 2018
+Updated: 9 Oct 2019
  */
 
 package asWebRest.action;
@@ -17,6 +17,7 @@ public class GetLogsAction {
     public GetLogsAction(LogsDAO logsDAO) { this.logsDAO = logsDAO; }
     
     public JSONArray getCameras(Connection dbc, List qParams, String order) { return logsDAO.getCameras(dbc, qParams, order); }
+    public JSONArray getRedditStatsKcregionalwx(Connection dbc, String order) { return logsDAO.getRedditStatsKcregionalwx(dbc, order); }
     public JSONArray getPlainTextNotes(Connection dbc, List qParams) { return logsDAO.getPlainTextNotes(dbc, qParams); }
     public JSONArray getSdUtils(Connection dbc) { return logsDAO.getSdUtils(dbc); }
     public JSONArray getSystemBackup(Connection dbc) { return logsDAO.getSystemBackup(dbc); }

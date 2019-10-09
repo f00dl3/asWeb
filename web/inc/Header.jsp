@@ -200,6 +200,7 @@
                 fullTitle = "Database Info";
                 break;
             case "DOSBox":
+            	fullTitle = "DOS Box Emulator";
                 scripts2Load += "<script src='"+rootPath+"/DOSBox/js-dos.js'>";
                 break;            	
             case "Entertain":

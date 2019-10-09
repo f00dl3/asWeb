@@ -1,14 +1,14 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 13 May 2019
+Updated: 28 Sep 2019
 
  */
 
-var annMaint = 910.66;
-var annMiles = 12672;
+var annMaint = 841.92;
+var annMiles = 12861;
 var bicycleUsed = "A16";
-var carOwnershipYears = (2018-2010);
+var carOwnershipYears = (2019-2010);
 var carStartMiles = 44150;
 var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
@@ -469,8 +469,8 @@ function putNavi() {
         } else {
             overwriteUsername = sessionVars.userName;
         }
-        var goHome = "<a href='" + uiBasePage + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>" +
-                "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
+        var goHome = "<a href='" + uiBasePage + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_hom.gif'/></a>";
+        // + "<a href='" + getBasePath("old") + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png' /></a>";
         var rData = "<div class='Navi'>" + goHome + "<div class='NaviO'>" +
                 "<span>" + goHome + "</span>" +
                 "<button class='SButton' id='LogoutSpan'>Logout</button><br/>" +
