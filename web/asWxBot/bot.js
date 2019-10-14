@@ -7,27 +7,59 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 19;
-var bUpdated = "12 OCT 2019";
-var helpMessage = "asWxBot (f00dl3) - Build "+bBuild+" ("+bUpdated+")\n" +
-	"Bot options: \n" +
-	"\n\'!ping\': Return \'pong\' reply back to user." +
-	"\n\'cf6\': GetCF6 daily climate data. Use: \'cf6 <YYYY-MM>\'" +
-	"\n\'find\': Get weather data for given station. Use: find <station> <YYYY-MM-DD>" +
-//	"\n\'search\': Search station inventory to get station code for \'find\' tool." +
-	"\n\'weather\': Get latest weather data from KOJC (Olathe, KS).";
+var bBuild = 21;
+var bUpdated = "14 OCT 2019";
 var webUiBase = "https://localhost:8444/asWeb/r/";
-
+var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
 
-function basicAccessLog(input, phase) {
-	console.log("Access " + phase + ": A user executed [" + input + "]");
+function basicAccessLog(msg, input, phase) {
+	var requestor = "user";
+	try { requestor = msg.author.tag; } catch (e) { console.log("ERROR", e); }
+	console.log("\nACCESS: " + requestor + " " + phase + " " + input);
+}
+
+function conv2Tf(tC) {
+	var tF = (tC * 9/5) + 32;
+	return tF.toFixed(0);
+}
+
+function generateHelpMessage(msg) {
+
+	var commandRan = "generateHelpMessage(msg)";
+	basicAccessLog(msg, commandRan, "start");
+	var apiVer = "UNSYNCH";
+	var helpMessageHeader = "asWxBot (f00dl3) - build "+bBuild+" ("+bUpdated+") ==> Commands:";
+	var helpMessageBody = "\n\'!ping\': Return \'pong\' reply back to user" +
+		"\n\'cf6\': GetCF6 daily climate data. Use: \'cf6 <YYYY-MM>\'" +
+		"\n\'find\': Get weather data for given station. Use: find <station> <YYYY-MM-DD>" +
+		"\n\'forecast\': Get latest forecast model output for KOJC (Olathe, KS)" +
+		"\n\'radar\': Get latest weather radar loop. No basemap! Default: EAX. Usage: \'radar <SITE>\'" +
+		"\n\'search\': Search station inventory to get station code for \'find\' tool" +
+		"\n\'server\': Gets latest server status information" +
+		"\n\'weather\': Get latest weather data from KOJC (Olathe, KS)";
+	
+	var returnData = "DEBUG: function getWebVersion()";
+	var url = webUiBase + "WebVersion";
+	fetch(url).then((res) => {
+		returnData = res.data,
+		console.log(res),
+		console.log("API asWebUI v"+returnData.Version),
+		apiVer = returnData.Version,
+		helpMessageHeader = "asWxBot (f00dl3) - Build "+bBuild+" ("+bUpdated+") - asWebUI API v"+apiVer+"\n";
+	});
+
+	var helpMessage = helpMessageHeader + helpMessageBody;
+	msg.reply(helpMessage);
+
+	basicAccessLog(msg, commandRan, "stop");
+	
 }
 
 function getCf6Data(msg, month) {
 
 	var commandRan = "getCf6Data(msg, "+month+")";
-	basicAccessLog(commandRan, "start");
+	basicAccessLog(msg, commandRan, "start");
 
 	var rData = "CF6 Function";
 	var url = webUiBase + "Wx";
@@ -42,14 +74,26 @@ function getCf6Data(msg, month) {
 		console.log(error)
 	});	
 
-	basicAccessLog(commandRan, "stop");
+	basicAccessLog(msg, commandRan, "stop");
 
+}
+
+function getServerInfo(msg) {
+
+	var commandRan = "getServerInfo(msg)";
+	basicAccessLog(msg, commandRan, "start");
+	
+	var rData = "TODO: BUILD SNMP DATA QUERY NON-CHART SPECIFIC!";
+	
+	basicAccessLog(msg, commandRan, "stop");
+	
+	
 }
 
 function getWeatherData(msg, station, date) {
 
 	var commandRan = "getWeatherData(msg, "+station+", "+date+")";
-	basicAccessLog(commandRan, "start");
+	basicAccessLog(msg, commandRan, "start");
 	
 	var rData = "DEBUG: function getWeatherData("+station+")";
 	var url = webUiBase + "Wx";
@@ -73,14 +117,37 @@ function getWeatherData(msg, station, date) {
 		console.log(error)
 	});
 	
-	basicAccessLog(commandRan, "stop");
+	basicAccessLog(msg, commandRan, "stop");
 
+}
+
+function getWeatherForecast(msg) {
+
+	var commandRan = "getWeatherForecast(msg)";
+	basicAccessLog(msg, commandRan, "start");
+
+	var rData = "getWeatherLatest() did not get data back yet!";
+	var url = webUiBase + "Wx";
+	var pData = "doWhat=getMosData";
+
+	axios.post(url, pData).then((res) => {
+		var last = res.data.last[0];
+		var hgts = res.data.heights;
+		var hours = res.data.hours;
+		var runs = res.data.runs;
+		var jmd = res.data.jsonModelData;
+		respondWeatherForecast(msg, last, hgts, hours, runs, jmd);
+	}).catch((error) => {
+		console.log(error);
+	});
+
+	basicAccessLog(msg, commandRan, "stop");
 }
 
 function getWeatherLatest(msg) {
 
 	var commandRan = "getWeatherLatest(msg)";
-	basicAccessLog(commandRan, "start");
+	basicAccessLog(msg, commandRan, "start");
 
 	var rData = "DEBUG: getWeatherLatest() did not get data back yet!";
 	var url = webUiBase + "Wx";
@@ -88,19 +155,28 @@ function getWeatherLatest(msg) {
 
 	axios.post(url, pData).then((res) => { 
 		rData = res.data[0].jsonSet,
-		respondWeatherData("KOJC", rData, msg);
+		respondWeatherData("KOJC", rData, msg)
 	}).catch((error) => {
 		console.log(error)
 	});
 
-	basicAccessLog(commandRan, "stop");
+	basicAccessLog(msg, commandRan, "stop");
 
 }
 
-function getWeatherStations(searchString) {
+function getWeatherRadar(msg, site) {
+
+	var radarSite = "EAX";
+	if(isSet(site)) { radarSite = site.toUpperCase(); }
+	var radarFile = "/var/www/Get/Radar/" + radarSite + "/_BLatest.gif";
+	msg.reply("Latest radar image for " + radarSite + ":\n", { files :  [ radarFile ] });
+
+}
+
+function getWeatherStations(msg, searchString) {
 
 	var commandRan = "getWeatherStations("+searchString+")";
-	basicAccessLog(commandRan, "start");
+	basicAccessLog(msg, commandRan, "start");
 
 	var rData = "DEBUG: getWeatherStations() called.";
 	var url = webUiBase + "Wx";
@@ -112,35 +188,33 @@ function getWeatherStations(searchString) {
 		"&endTime=" + timeEnd +
 		"&limit=1";
 
+	msg.reply("\nPlease wait a few moments to query databse. This could take up to 15 seconds.");
+
 	axios.post(url, pData).then((res) => {
-		jmwsData = data.wxObs,
-		jmwsData = jmwsData.concat(data.wxObsR),
-		jmwsStations = data.stations,
-		respondStationSearch(searchString, jmwsStations, jmwsData)
+		jmwsData = res.data.wxObs,
+		jmwsData = jmwsData.concat(res.data.wxObsR),
+		jmwsStations = res.data.stations,
+		respondStationSearch(msg, searchString, jmwsStations, jmwsData)
 	}).catch((error) => {
 		console.log(error)
 	});
 	
-	basicAccessLog(commandRan, "stop");
+	basicAccessLog(msg, commandRan, "stop");
 
 }
 
-function getWebVersion() {
-
-	var returnData = "DEBUG: function getWebVersion()";
-	var url = webUiBase + "WebVersion";
-	fetch(url).then((res) => {
-		returnData = res.data[0],
-		console.log("API asWebUI v"+returnData.Version)
-	});
-	return returnData;
-
+function isSet(what) {
+	if(typeof what !== 'undefined' && what) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function parseDate(oH) {
 
 	var di = new Date();
-	if(typeof oH !== 'undefined') { di = new Date(di.setHours(di.getHours()- oH)); }
+	if(isSet(oH)) { di = new Date(di.setHours(di.getHours()- oH)); }
 	var dY = di.getFullYear();
 	var dM = ("0" + (di.getMonth()+1)).slice(-2);
 	var dD = ("0" + (di.getDate())).slice(-2);
@@ -188,7 +262,7 @@ function respondCf6Data(msg, cf6in) {
 
 }
 
-function respondStationSearch(searchString, jmwsStations, jmwsData) {
+function respondStationSearch(msg, searchString, jmwsStations, jmwsData) {
 
 	var matchingRows = [];
 	var wordArray = [];
@@ -200,10 +274,10 @@ function respondStationSearch(searchString, jmwsStations, jmwsData) {
 			var wordsHit = 0;
 			wordArray.forEach(function(tWord) {
 				if(
-					(typeof sr.City !== 'undefined') && ((sr.City).toLowerCase.includes(tWord.toLowerCase())) ||
-					(typeof sr.Station !== 'undefined') && ((sr.Station).toLowerCase.includes(tWord.toLowerCase())) ||
-					(typeof sr.Description !== 'undefined') && ((sr.Description).toLowerCase.includes(tWord.toLowerCase())) ||
-					tWord.includes("S: ") && (typeof sr.State !== 'undefined') && ((sr.State).toLowerCase.includes(tWord.toLowerCase())) 
+					(isSet(sr.City)) && ((sr.City).toLowerCase().includes(tWord.toLowerCase())) ||
+					(isSet(sr.Station)) && ((sr.Station).toLowerCase().includes(tWord.toLowerCase())) ||
+					(isSet(sr.Description)) && ((sr.Description).toLowerCase().includes(tWord.toLowerCase())) ||
+					tWord.includes("S: ") && (isSet(sr.State)) && ((sr.State).toLowerCase().includes(tWord.toLowerCase())) 
 				) {
 					wordsHit++;
 				}
@@ -218,12 +292,13 @@ function respondStationSearch(searchString, jmwsStations, jmwsData) {
 			});
 		});
 	} else {
-		jmwsStations.forEach(function(jws) {
+		jmwsStations.forEach(function(sr) {
+			var tWord = searchString;
 			if(
-				(typeof sr.City !== 'undefined') && ((sr.City).toLowerCase.includes(tWord.toLowerCase())) ||
-				(typeof sr.Station !== 'undefined') && ((sr.Station).toLowerCase.includes(tWord.toLowerCase())) ||
-				(typeof sr.Description !== 'undefined') && ((sr.Description).toLowerCase.includes(tWord.toLowerCase())) ||
-				tWord.includes("S: ") && (typeof sr.State !== 'undefined') && ((sr.State).toLowerCase.includes(tWord.toLowerCase()))
+				(isSet(sr.City)) && ((sr.City).toLowerCase().includes(tWord.toLowerCase())) ||
+				(isSet(sr.Station)) && ((sr.Station).toLowerCase().includes(tWord.toLowerCase())) ||
+				(isSet(sr.Description)) && ((sr.Description).toLowerCase().includes(tWord.toLowerCase())) ||
+				tWord.includes("S: ") && (isSet(sr.State)) && ((sr.State).toLowerCase().includes(tWord.toLowerCase()))
 			) {
 				if(matchingRows.length < (resultLimit - 1)) {
 					matchingRows.push(sr);
@@ -235,11 +310,17 @@ function respondStationSearch(searchString, jmwsStations, jmwsData) {
 		
 	}
 
+	var results = "Results:" +
+		"\nStationID | Location";
+
 	matchingRows.forEach(function(mr) {
 
-		console.log(mr);
+		results += "\n" + mr.Station + " | " +
+			mr.City + "," + mr.State;
 
 	});			
+
+	msg.reply(results);
 
 }
 
@@ -277,16 +358,67 @@ function respondWeatherDataTable(station, data, msg) {
 		if(message != lastMessage) { msg.reply(message); }
 		lastMessage = message;
 	});
-
-	console.log(dataBack);
-
-	return dataBack;
 	
+}
+
+function respondWeatherForecast(msg, last, heightsIn, hours, runs, jmd) {
+
+	var tAutoCounter = 0;
+	var searchString = last.RunString;
+	var runString, dataHRRR;
+	var precipTot = 0.00;
+	var rData = "GRIB2 HRRR JSON Model Output Data for KOJC";
+	var heights = [];
+	heightsIn.forEach(function (hgt) {
+		if(hgt.HeightMb !== 0) {
+			heights.push(hgt.HeightMb);
+		}			
+	});
+	var gfsFh = [];
+	hours.forEach(function(tFh) { gfsFh.push(tFh); });
+	var reportingModels = "HRRR";
+	jmd.forEach(function(jd) {
+		runString = jd.RunString;
+		if(isSet(jd.HRRR)) { dataHRRR = JSON.parse(jd.HRRR); }
+	});
+	// Build function to convert UTC to Central Time
+	rData += "\nModel run: " + runString +
+		"\nHour | T | D | Precip";
+	msg.reply(trimForDiscord(rData));
+	gfsFh.forEach(function(tfhA) {
+		var tfh = tfhA.FHour;
+		if(isSet(tfh)) {
+			if(isSet(dataHRRR["T0_"+tfh])) {
+				rData = "\n+" + tfh + " | " +
+					conv2Tf(dataHRRR["T0_"+tfh]) + " | " +
+					conv2Tf(dataHRRR["D0_"+tfh]) + " | " +
+					dataHRRR["PRATE_"+tfh];
+				msg.reply(trimForDiscord(rData));
+			}
+		}
+	});
+
 }
 
 function returnTimestamp(oH) {
 	var tJ = parseDate(oH);
 	return tJ.dY + "-" + tJ.dM + "-" + tJ.dD + " " + tJ.dh + ":" + tJ.dm + ":" + tJ.ds;
+}
+
+function sendMessageOnStartup(client, myArgs) {
+
+	if(isSet(myArgs) && myArgs != '') {
+		var messageToSendOnStartUp = myArgs[0];
+		console.log(myArgs);
+		try {
+			var channel = client.channels.get(homeForBot);
+			channel.send(messageToSendOnStartUp);
+		} catch(e) {
+			console.log("ERROR: ", e);
+	 	}
+		client.destroy();
+	} 
+	
 }
 
 function tabulateWeatherData(jd) {
@@ -311,9 +443,12 @@ function trimForDiscord(message) {
 
 }
 
-client.on('ready', () => {
-	var webVersion = getWebVersion();
-	console.log(`Logged in as ${client.user.tag}!\n`+webVersion);
+client.on('ready', async () => {
+	
+	console.log(`SUCCESS---->\nasWxBot build `+bBuild+` logged in as ${client.user.tag}!\n`);
+	var myArgs = process.argv.slice(2);
+	sendMessageOnStartup(client, myArgs);
+
 });
 
 client.on('message', msg => {
@@ -326,16 +461,24 @@ client.on('message', msg => {
 	switch(ncmsg) {
 
 		case "!help":
-			msg.reply(helpMessage);
+			generateHelpMessage(msg);
 			break;
 		
 		case "!ping":
 			msgBack = "pong!";
 			msg.reply(msgBack);
 			break;
+			
+		case "!serverInfo":
+			getServerInfo(msg);
+			break;
 
 		case "!test1":
 			msg.reply(trimForDiscord2("Testing"));
+			break;
+			
+		case "!test2":
+			msg.reply("Testing image attachment to bot message:", { files : ['../img/DiscordApp/pwned.jpg'] });
 			break;
 
 		case "cf6":
@@ -344,19 +487,36 @@ client.on('message', msg => {
 			break;
 
 		case "find":
-			var station = msgArray[1].toUpperCase();
-			var date = msgArray[2];
+			var station = "",
+				date = "";
+			try { station = msgArray[1].toUpperCase(); } catch (e) { console.log(e); }
+			try { date = msgArray[2]; } catch (e) { console.log(e); }
 		 	getWeatherData(msg, station, date);
 			break;
 
+		case "forecast": 
+			getWeatherForecast(msg);
+			break;
+
+		case "radar":
+			var site = msgArray[1];
+			getWeatherRadar(msg, site);
+			break;
+
 		case "search":
-			var searchString = msgArray[1].toLowerCase();
+			var searchString = "";
+			try { searchString = msgArray[1].toLowerCase(); } catch (e) { console.log(e); }
 			if(searchString.length < 4) {
 				msg.reply("Please enter more characters of the location!");
 			} else {
 				msg.reply("Finding stations similar to [" + searchString + "]...");
-				getWeatherStations(searchString);
+				getWeatherStations(msg, searchString);
 			}
+			break;
+
+		case "server":
+			getServerInfo(msg);
+			break;
 
 		case "weather":
 			getWeatherLatest(msg);
