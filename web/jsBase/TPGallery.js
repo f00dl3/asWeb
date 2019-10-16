@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 24 Sep 2019
+Updated: 16 Oct 2019
  */
 
 var maxListing = 250;
@@ -19,6 +19,14 @@ function actOnDoXTag(event) {
 function actOnNimsChecked(event) {
 	dojo.stopEvent(event);
 	getSearchableData("nims");
+}
+
+function actOnTpDiff(event) {
+	dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormJson = dojo.formToJson(this.form);
+	console.log(thisFormJson);
+	fetchTpiDiff(thisFormData);
 }
 
 function actOnTpSelect(event) {
@@ -69,9 +77,34 @@ function checkTpi(ffn, iRes, fileSizeKB, hashPath) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to check TPI status failed!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
+                }
+            );
     });
 }
+
+function fetchTpiDiff(formData) {
+    aniPreload("on");
+    var thePostData = { "doWhat": "fetchTpDiff", "TPIDiffDo": formData.TPDiffDo };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("TP"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                	window.alert("Fetch TPI Difference for " + formData.TPDiffDo + " successful!");
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                	window.alert("Fetch TPI Difference for " + formData.TPDiffDo + " failed!");
+                
+                }
+            );
+    });
+    
+}
+
 
 function genLayout() {
     var rData = "<div class='table'>" +
@@ -288,7 +321,10 @@ function populateSearchPopup(searchableData) {
                     percentDone = 0;
                 }
             }); */
-            if(done === 0) { fColor = "yellow"; } else { fColor = "green"; }
+        	var check19 = tpData.Check2019;
+            if(done === 0) { 
+            	if(check19 === 1) { fColor = "yellow"; } else { fColor = "orange"; }
+            } else { fColor = "green"; }
             tpImageTotal += (tpImageTotal + tpData.FinalCount);
             hosTable += "<form id='TPFormGallery' class='tr'>" +
                     "<span class='td'>";
@@ -300,8 +336,11 @@ function populateSearchPopup(searchableData) {
                 hosTable += "N/A";
             }
             hosTable += "</span>" +
-                    "<span class='td'>" +
-                    "<div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet;
+                    "<span class='td'>";
+            /* if(!check19) {
+            	hosTable += "<input type='checkbox' class='TPDiff' name='TPDiffDo' value='" + tpData.ImageSet + "'/>";
+            } DISABLED UNTIL FS ACCESS FIGURED OUT */
+            hosTable += "<div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet;
             if(!checkMobile()) {
                 hosTable += "<div class='UPopO'>" +
                 		"<strong>Checked 2019: </strong>" + tpData.Check2019 + "<br/>" +
@@ -327,6 +366,7 @@ function populateSearchPopup(searchableData) {
     hosTable += "</div>";
     dojo.byId("TPSearchPopupHolder").innerHTML = hosTable;
     dojo.query(".TPSelect").connect("onchange", actOnTpSelect);
+    dojo.query(".TPDiff").connect("onchange", actOnTpDiff);
 }
 
 function putUpdateTpi(formData) {
