@@ -1,7 +1,7 @@
 /*
 1by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Jun 2019
+Updated: 17 Oct 2019
 */
 
 package asWebRest.dao;
@@ -77,7 +77,7 @@ public class FitnessDAO {
                 " f.Gym, f.GymWorkout, f.CommonRoute, f.xTags, f.Orgs," +
                 " f.Vomit, f.EstHoursSleep, f.Swimming, f.HoursGaming," +
                 " f.CaloriesBurned, f.Steps, f.IntensityMinutes," +
-                " cf6.High, cf6.Low, cf6.Average," +
+                " cf6.High, cf6.Low, cf6.Average, tls.Types," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
                 " CASE WHEN f.gpsLogCyc2 IS NOT NULL THEN true ELSE false END AS isGPSCyc2JSON," +
@@ -88,6 +88,7 @@ public class FitnessDAO {
                 " CASE WHEN f.gpsLogRun4 IS NOT NULL THEN true ELSE false END AS isGPSRun4JSON" +
                 " FROM Core.Fitness f" +
                 " LEFT OUTER JOIN WxObs.CF6MCI cf6 ON f.Date = cf6.Date" +
+                " LEFT OUTER JOIN Core.AO_TLS tls ON f.Date = tls.DateUsed" +
                 " WHERE f.Date BETWEEN ? AND ? " +
                 " ORDER BY f.Date DESC LIMIT 0, 365;";
         JSONArray tContainer = new JSONArray();
@@ -138,6 +139,7 @@ public class FitnessDAO {
                     .put("CommonRoute", resultSet.getInt("CommonRoute"))
                     .put("xTags", resultSet.getString("xTags"))
 					.put("Orgs", resultSet.getInt("Orgs"))
+					.put("LSTypes", resultSet.getString("Types"))
                     .put("Vomit", resultSet.getInt("Vomit"))
                     .put("EstHoursSleep", resultSet.getDouble("EstHoursSleep"))
                     .put("Swimming", resultSet.getInt("Swimming"))

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 24 Jun 2019
+Updated: 17 Oct 2019
  */
 
 var myHeight = 67;
@@ -334,6 +334,7 @@ function processFitnessAll(dataIn, autoMpg) {
                     "<strong>Liquids:</strong> " + tData.Water + "<br/>" +
                     "<strong>Fruits/Veggies:</strong> " + tData.FruitsVeggies + "<p>" +
                     "<strong>Puked:</strong> " + tData.Vomit + "<br/>" +
+                    "<strong>LS Used:</strong> " + tData.LSTypes + "<br/>" +
                    "<strong>Orgs:</strong> " + tData.Orgs + "<br/>" +
                    "<em>Based off 2500 cals</em></td></tr></tbody></table>";
         }

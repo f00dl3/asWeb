@@ -24,8 +24,6 @@ function actOnNimsChecked(event) {
 function actOnTpDiff(event) {
 	dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormJson = dojo.formToJson(this.form);
-	console.log(thisFormJson);
 	fetchTpiDiff(thisFormData);
 }
 
@@ -337,9 +335,9 @@ function populateSearchPopup(searchableData) {
             }
             hosTable += "</span>" +
                     "<span class='td'>";
-            /* if(!check19) {
+            if(!check19) {
             	hosTable += "<input type='checkbox' class='TPDiff' name='TPDiffDo' value='" + tpData.ImageSet + "'/>";
-            } DISABLED UNTIL FS ACCESS FIGURED OUT */
+            } /* MAY DISABLE UNTIL FS ACCESS FIGURED OUT */
             hosTable += "<div class='UPop' style='color: " + fColor + ";'>" + tpData.ImageSet;
             if(!checkMobile()) {
                 hosTable += "<div class='UPopO'>" +
