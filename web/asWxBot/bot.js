@@ -7,11 +7,23 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 21;
-var bUpdated = "14 OCT 2019";
+var bBuild = 22;
+var bUpdated = "18 OCT 2019";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
+
+function autoUnits(tVal) {
+    var tSuffix = "";
+    if (tVal < 0) { tVal = ""; tSuffix = "Error!"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "K"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "M"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "G"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "T"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "P"; } 
+    var formatting = tVal + tSuffix;
+    return formatting;
+}
 
 function basicAccessLog(msg, input, phase) {
 	var requestor = "user";
@@ -34,6 +46,7 @@ function generateHelpMessage(msg) {
 		"\n\'cf6\': GetCF6 daily climate data. Use: \'cf6 <YYYY-MM>\'" +
 		"\n\'find\': Get weather data for given station. Use: find <station> <YYYY-MM-DD>" +
 		"\n\'forecast\': Get latest forecast model output for KOJC (Olathe, KS)" +
+		"\n\'quote\': Get a random quote" +
 		"\n\'radar\': Get latest weather radar loop. No basemap! Default: EAX. Usage: \'radar <SITE>\'" +
 		"\n\'search\': Search station inventory to get station code for \'find\' tool" +
 		"\n\'server\': Gets latest server status information" +
@@ -84,7 +97,16 @@ function getServerInfo(msg) {
 	basicAccessLog(msg, commandRan, "start");
 	
 	var rData = "TODO: BUILD SNMP DATA QUERY NON-CHART SPECIFIC!";
-	
+	var url = webUiBase + "SNMP";
+	var pData = "doWhat=getMainRecent";
+
+	axios.post(url, pData).then((res) => { 
+		rData = res.data,
+		respondServerInfo(msg, rData)
+	}).catch((error) => {
+		console.log(error)
+	});
+
 	basicAccessLog(msg, commandRan, "stop");
 	
 	
@@ -144,6 +166,26 @@ function getWeatherForecast(msg) {
 	basicAccessLog(msg, commandRan, "stop");
 }
 
+
+function getRandomQuotes(msg) {
+
+	var commandRan = "getRandomQuotes(msg)";
+	basicAccessLog(msg, commandRan, "start");
+
+	var rData = "DEBUG: getRandomQuotes() did not get data back yet!";
+	var url = webUiBase + "Entertainment";
+	var pData = "doWhat=getRandomQuotes";
+
+	axios.post(url, pData).then((res) => { 
+		rData = res.data,
+		respondRandomQuotes(msg, rData)
+	}).catch((error) => {
+		console.log(error)
+	});
+
+	basicAccessLog(msg, commandRan, "stop");
+
+}
 function getWeatherLatest(msg) {
 
 	var commandRan = "getWeatherLatest(msg)";
@@ -260,6 +302,57 @@ function respondCf6Data(msg, cf6in) {
 		msg.reply(trimForDiscord(returnString));
 	});
 
+}
+
+function respondRandomQuotes(msg, rqDataIn) {
+	
+	var quotesHere = rqDataIn.length;
+	var rI = (Math.random() * (quotesHere-1)).toFixed(0);
+	console.log("DEBUG: Random number = " + rI + " - total quotes: " + quotesHere);
+	var thisQuote = rqDataIn[rI];
+	msg.reply(thisQuote.Quote + " -" + thisQuote.Author);
+	
+}
+
+function respondServerInfo(msg, dataIn) {
+	
+	console.log(dataIn[0]);
+	var td = dataIn[0];
+	var xj = td.dtExpandedJSONData;
+	
+	var cpuAverage = ((
+			td.dtCPULoad1 +
+			td.dtCPULoad2 +  
+			td.dtCPULoad3 + 
+			td.dtCPULoad4 + 
+			td.dtCPULoad5 + 
+			td.dtCPULoad6 + 
+			td.dtCPULoad7 + 
+			td.dtCPULoad8) / 8).toFixed(2);
+	
+	//var memUse = ();
+	var networkUse = (td.dtOctestIn + td.dtOctetsOut);
+	var dbRows = (td.dtMySQLRowsCore + td.dtMySQLRowsFeeds + td.dtMySQLRowsWxObs + td.dtMySQLRowsNetSNMP);	
+	var linesCode = (
+			xj.LOC_aswjCss + 
+			xj.LOC_asUtilsJava + 
+			xj.LOC_aswjJava + 
+			xj.LOC_aswjJs +
+			xj.LOC_aswjJsp); 
+	
+	msg.reply("Latest Server Info:");
+	msg.reply("\nData Timestamp:" + td.WalkTime);
+	msg.reply("\nCPU Utilization: " + cpuAverage + "%");
+	msg.reply("\nLoad Index (1 min): " + td.dtLoadIndex1);
+	/* msg.reply("\nDisk Use 1: " + autoUnits(td.dtK4RootU) + "/" + autoUnits(td.dtK4Root) +
+			" (" + (td.dtK4RootU/td.dtK4Root) + "%)");
+	msg.reply("\nDisk Use 2: " + autoUnits(xj.dtK4Extra1U) + "/" + autoUnits(xj.dtK4Extra1) +
+			" (" + (xj.dtK4Extra1U/xj.dtK4Extra1) + "%)"); */
+	msg.reply("\nNetwork Counters: " + autoUnits(networkUse));
+	msg.reply("\nUPS Stats: " + td.dtUPSLoad + "% (" + td.dtUPSTimeLeft + " mins)");
+	msg.reply("\nDatabase Rows: " + autoUnits(dbRows));
+	msg.reply("\nLines of Code: " + autoUnits(linesCode));
+		
 }
 
 function respondStationSearch(msg, searchString, jmwsStations, jmwsData) {
@@ -496,6 +589,10 @@ client.on('message', msg => {
 
 		case "forecast": 
 			getWeatherForecast(msg);
+			break;
+
+		case "quote":
+			getRandomQuotes(msg);
 			break;
 
 		case "radar":

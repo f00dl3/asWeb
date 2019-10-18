@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 18 May 2019
+Updated: 18 Oct 2019
  */
 
 package asWebRest.resource;
@@ -198,26 +198,26 @@ public class SnmpResource extends ServerResource {
                     returnData += snmpData.toString();
             		//System.out.println("SNMP Walk called but has been disabled due to performance!");
                     break;
-                    
+
+                 case "getExtraDiskID":
+                     final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
+                     String extra1DiskID = "";
+                     Scanner walkFileScanner = null; try {		
+                         walkFileScanner = new Scanner(theWalkFile);
+                         while(walkFileScanner.hasNext()) {				
+                             String line = walkFileScanner.nextLine();
+                             if(line.contains("hrStorage") && line.contains("/extra1")) { Pattern p = Pattern.compile("Descr.(.*) ="); Matcher m = p.matcher(line); if (m.find()) { extra1DiskID = m.group(1); }}
+                         }
+                     } catch (FileNotFoundException fnf) {
+                             fnf.printStackTrace();
+                     }
+                     returnData += extra1DiskID;
+             		//System.out.println("SNMP Extra Disk ID called but has been disabled due to performance!");
+                     break;
+                     
                 case "getLastSSH":
                     JSONArray lastSsh = getSnmpAction.getMainLastSSH(dbc);
                     returnData = lastSsh.toString();
-                    break;
-                    
-                case "getExtraDiskID":
-                    final File theWalkFile = new File(cb.getRamPath()+"/snmpwalk.txt");
-                    String extra1DiskID = "";
-                    Scanner walkFileScanner = null; try {		
-                        walkFileScanner = new Scanner(theWalkFile);
-                        while(walkFileScanner.hasNext()) {				
-                            String line = walkFileScanner.nextLine();
-                            if(line.contains("hrStorage") && line.contains("/extra1")) { Pattern p = Pattern.compile("Descr.(.*) ="); Matcher m = p.matcher(line); if (m.find()) { extra1DiskID = m.group(1); }}
-                        }
-                    } catch (FileNotFoundException fnf) {
-                            fnf.printStackTrace();
-                    }
-                    returnData += extra1DiskID;
-            		//System.out.println("SNMP Extra Disk ID called but has been disabled due to performance!");
                     break;
                     
                 case "getLastWalk":
@@ -228,7 +228,12 @@ public class SnmpResource extends ServerResource {
                         .put("mergedTemps", mergedTemps);
                     returnData = mergedResults.toString();
                     break;
-   
+
+                case "getMainRecent":
+                    JSONArray recentData = getSnmpAction.getMainRecent(dbc);
+                    returnData = recentData.toString();
+                    break;
+                    
                 case "getPhoneTrack":
                 	String phoneSelection = "";
             		if(wc.isSet(argsInForm.getFirstValue("SearchString"))) { phoneSelection = argsInForm.getFirstValue("SearchString"); }

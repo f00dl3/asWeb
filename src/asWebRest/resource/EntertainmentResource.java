@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 24 Aug 2019
+Updated: 18 Oct 2019
  */
 
 package asWebRest.resource;
@@ -146,6 +146,11 @@ public class EntertainmentResource extends ServerResource {
                 case "getPowerRangers":
                     JSONArray pr = getEntertainmentAction.getPowerRangers(dbc);
                     returnData += pr.toString();
+                    break;
+                    
+                case "getRandomQuotes":
+                    JSONArray rq = getEntertainmentAction.getRandomQuotes(dbc);
+                    returnData += rq.toString();
                     break;
                     
                 case "getStarTrek":

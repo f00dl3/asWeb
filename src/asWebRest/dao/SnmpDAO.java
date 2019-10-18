@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 21 May 2019
+Updated: 18 Oct 2019
 */
 
 package asWebRest.dao;
@@ -300,6 +300,134 @@ public class SnmpDAO {
         return tContainer;
     }
 
+    public JSONArray getMainRecent(Connection dbc) {
+        final String query_SNMP_Main_Recent = "SELECT " +
+                " dt.WalkTime as WalkTime, dt.NumUsers as dtNumUsers, " +
+                " dt.CPULoad1 as dtCPULoad1, dt.CPULoad2 as dtCPULoad2, dt.CPULoad3 as dtCPULoad3, dt.CPULoad4 as dtCPULoad4," +
+                " dt.CPULoad5 as dtCPULoad5, dt.CPULoad6 as dtCPULoad6, dt.CPULoad7 as dtCPULoad7, dt.CPULoad8 as dtCPULoad8," +
+                " dt.LoadIndex1 as dtLoadIndex1, dt.LoadIndex5 as dtLoadIndex5, dt.LoadIndex15 as dtLoadIndex15," +
+                " dt.Processes as dtProcesses," +
+                " dt.TempCPU as dtTempCPU, dt.TempCase as dtTempCase, dt.Fan1 as dtFan1, dt.Fan2 as dtFan2, dt.Fan3 as dtFan3," +
+                " dt.TempCore1 as dtTempCore1, dt.TempCore2 as dtTempCore2, dt.TempCore3 as dtTempCore3, dt.TempCore4 as dtTempCore4," +
+                " dt.VoltCPU as dtVoltCPU," +
+                " dt.VoltCore1 as dtVoltCore1, dt.VoltCore2 as dtVoltCore2, dt.VoltCore3 as dtVoltCore3, dt.VoltCore4 as dtVoltCore4," + 
+                " dt.VoltPlus33 as dtVoltPlus33, dt.VoltPlus5 as dtVoltPlus5, dt.VoltPlus12 as dtVoltPlus12," +
+                " dt.VoltBatt as dtVoltBatt," +
+                " dt.OctetsIn as dtOctetsIn, dt.OctetsOut as dtOctetsOut," +
+                " dt.KMemPhys as dtKMemPhys, dt.KMemVirt as dtKMemVirt, dt.KMemBuff as dtKMemBuff, dt.KMemCached as dtKMemCached," +
+                " dt.KMemShared as dtKMemShared, dt.KSwap as dtKSwap, dt.K4Root as dtK4Root," + 
+                " dt.KMemPhysU as dtKMemPhysU, dt.KMemVirtU as dtKMemVirtU, dt.KMemBuffU as dtKMemBuffU, dt.KMemCachedU as dtKMemCachedU," +
+                " dt.KMemSharedU as dtKMemSharedU, dt.KSwapU as dtKSwapU, dt.K4RootU as dtK4RootU," +
+                " dt.DiskIOSysRead as dtDiskIOSysRead, dt.DiskIOSysWrite as dtDiskIOSysWrite," +
+                " dt.MySQLUpdate as dtMySQLUpdate, dt.MySQLInsert as dtMySQLInsert, dt.MySQLSelect as dtMySQLSelect," + 
+                " dt.MySQLDelete as dtMySQLDelete, dt.MySQLReplace as dtMySQLReplace," +
+                " dt.MySQLRowsCore as dtMySQLRowsCore, " +
+                " dt.MySQLRowsNetSNMP as dtMySQLRowsNetSNMP, dt.MySQLRowsFeeds as dtMySQLRowsFeeds," +
+                " dt.MySQLRowsWebCal as dtMySQLRowsWebCal, dt.MySQLRowsWxObs as dtMySQLRowsWxObs," +
+                " dt.LogApache2GET as dtLogApache2GET, dt.TomcatGET as dtTomcatGET," +
+                " dt.LogSecCam1Down as dtLogSecCam1Down, dt.LogSecCam2Down as dtLogSecCam2Down," +
+                " dt.LogSecCam3Down as dtLogSecCam3Down, dt.LogSecCam4Down as dtLogSecCam4Down," +
+                " dt.UPSLoad as dtUPSLoad, dt.UPSTimeLeft as dtUPSTimeLeft," +
+                " dt.TomcatWars as dtTomcatWars, dt.TomcatDeploy as dtTomcatDeploy," +
+                " dt.RouterWANrxBs as rtrWANrx, dt.RouterWANtxBs as rtrWANtx," +
+                " dt.INodeSDA1 as dtINodeSDA1, dt.INodeSHM as dtINodeSHM," +
+                " dt.duMySQLCore as duMySQLCore, dt.duMySQLNetSNMP as duMySQLNetSNMP, dt.duMySQLWebCal as duMySQLWebCal," +
+                " dt.duMySQLWxObs as duMySQLWxObs, dt.duMySQLFeeds as duMySQLFeeds, dt.duMySQLTotal as duMySQLTotal," +
+                " dt.NS5Active as dtNS5Active, dt.NS5ActiveSSH as dtNS5ActiveSSH, " +
+                " dt.ExpandedJSONData as dtExpandedJSONData" +
+                " FROM net_snmp.Main dt" +
+                " ORDER BY dt.WalkTime DESC LIMIT 720";
+        JSONArray tContainer = new JSONArray();     
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Main_Recent, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("WalkTime", resultSet.getString("WalkTime"))
+                    .put("dtNumUsers", resultSet.getInt("dtNumUsers"))
+                    .put("dtCPULoad1", resultSet.getInt("dtCPULoad1"))
+                    .put("dtCPULoad2", resultSet.getInt("dtCPULoad2"))
+                    .put("dtCPULoad3", resultSet.getInt("dtCPULoad3"))
+                    .put("dtCPULoad4", resultSet.getInt("dtCPULoad4"))
+                    .put("dtCPULoad5", resultSet.getInt("dtCPULoad5"))
+                    .put("dtCPULoad6", resultSet.getInt("dtCPULoad6"))
+                    .put("dtCPULoad7", resultSet.getInt("dtCPULoad7"))
+                    .put("dtCPULoad8", resultSet.getInt("dtCPULoad8"))
+                    .put("dtLoadIndex1", resultSet.getDouble("dtLoadIndex1"))
+                    .put("dtLoadIndex5", resultSet.getDouble("dtLoadIndex5"))
+                    .put("dtLoadIndex15", resultSet.getDouble("dtLoadIndex15"))
+                    .put("dtProcesses", resultSet.getInt("dtProcesses"))
+                    .put("dtTempCPU", resultSet.getInt("dtTempCPU"))
+                    .put("dtTempCase", resultSet.getInt("dtTempCase"))
+                    .put("dtFan1", resultSet.getInt("dtFan1"))
+                    .put("dtFan2", resultSet.getInt("dtFan2"))
+                    .put("dtFan3", resultSet.getInt("dtFan3"))
+                    .put("dtTempCore1", resultSet.getInt("dtTempCore1"))
+                    .put("dtTempCore2", resultSet.getInt("dtTempCore2"))
+                    .put("dtTempCore3", resultSet.getInt("dtTempCore3"))
+                    .put("dtTempCore4", resultSet.getInt("dtTempCore4"))
+                    .put("dtVoltCPU", resultSet.getDouble("dtVoltCPU"))
+                    .put("dtVoltCore1", resultSet.getDouble("dtVoltCore1"))
+                    .put("dtVoltCore2", resultSet.getDouble("dtVoltCore2"))
+                    .put("dtVoltCore3", resultSet.getDouble("dtVoltCore3"))
+                    .put("dtVoltCore4", resultSet.getDouble("dtVoltCore4"))
+                    .put("dtVoltPlus33", resultSet.getDouble("dtVoltPlus33"))
+                    .put("dtVoltPlus5", resultSet.getDouble("dtVoltPlus5"))
+                    .put("dtVoltPlus12", resultSet.getDouble("dtVoltPlus12"))
+                    .put("dtVoltBatt", resultSet.getDouble("dtVoltBatt"))
+                    .put("dtOctetsIn", resultSet.getLong("dtOctetsIn"))
+                    .put("dtOctetsOut", resultSet.getLong("dtOctetsOut"))
+                    .put("dtKMemPhys", resultSet.getLong("dtKMemPhys"))
+                    .put("dtKMemVirt", resultSet.getLong("dtKMemVirt"))
+                    .put("dtKMemBuff", resultSet.getLong("dtKMemBuff"))
+                    .put("dtKMemCached", resultSet.getLong("dtKMemCached"))
+                    .put("dtKMemShared", resultSet.getLong("dtKMemShared"))
+                    .put("dtKSwap", resultSet.getLong("dtKSwap"))
+                    .put("dtK4Root", resultSet.getLong("dtK4Root"))
+                    .put("dtKMemPhysU", resultSet.getLong("dtKMemPhysU"))
+                    .put("dtKMemVirtU", resultSet.getLong("dtKMemVirtU"))
+                    .put("dtKMemBuffU", resultSet.getLong("dtKMemBuffU"))
+                    .put("dtKMemCachedU", resultSet.getLong("dtKMemCachedU"))
+                    .put("dtKMemSharedU", resultSet.getLong("dtKMemSharedU"))
+                    .put("dtKSwapU", resultSet.getLong("dtKSwapU"))
+                    .put("dtK4RootU", resultSet.getLong("dtK4RootU"))
+                    .put("dtDiskIOSysRead", resultSet.getLong("dtDiskIOSysRead"))
+                    .put("dtDiskIOSysWrite", resultSet.getLong("dtDiskIOSysWrite"))
+                    .put("dtMySQLUpdate", resultSet.getLong("dtMySQLUpdate"))
+                    .put("dtMySQLInsert", resultSet.getLong("dtMySQLInsert"))
+                    .put("dtMySQLSelect", resultSet.getLong("dtMySQLSelect"))
+                    .put("dtMySQLDelete", resultSet.getLong("dtMySQLDelete"))
+                    .put("dtMySQLReplace", resultSet.getLong("dtMySQLReplace"))
+                    .put("dtMySQLRowsCore", resultSet.getLong("dtMySQLRowsCore"))
+                    .put("dtMySQLRowsNetSNMP", resultSet.getLong("dtMySQLRowsNetSNMP"))
+                    .put("dtMySQLRowsFeeds", resultSet.getLong("dtMySQLRowsFeeds"))
+                    .put("dtMySQLRowsWebCal", resultSet.getLong("dtMySQLRowsWebCal"))
+                    .put("dtMySQLRowsWxObs", resultSet.getLong("dtMySQLRowsWxObs"))
+                    .put("dtMySQLSizeCore", resultSet.getLong("duMySQLCore"))
+                    .put("dtMySQLSizeNetSNMP", resultSet.getLong("duMySQLNetSNMP"))
+                    .put("dtMySQLSizeFeeds", resultSet.getLong("duMySQLFeeds"))
+                    .put("dtMySQLSizeWebCal", resultSet.getLong("duMySQLWebCal"))
+                    .put("dtMySQLSizeWxObs", resultSet.getLong("duMySQLWxObs"))
+                    .put("dtLogApache2GET", resultSet.getLong("dtLogApache2GET"))
+                    .put("dtTomcatGET", resultSet.getLong("dtTomcatGET"))
+                    .put("dtLogSecCam1Down", resultSet.getLong("dtLogSecCam1Down"))
+                    .put("dtLogSecCam2Down", resultSet.getLong("dtLogSecCam2Down"))
+                    .put("dtLogSecCam3Down", resultSet.getLong("dtLogSecCam3Down"))
+                    .put("dtLogSecCam4Down", resultSet.getLong("dtLogSecCam4Down"))
+                    .put("dtUPSTimeLeft", resultSet.getDouble("dtUPSTimeLeft"))
+                    .put("dtUPSLoad", resultSet.getDouble("dtUPSLoad"))
+                    .put("dtTomcatWars", resultSet.getInt("dtTomcatWars"))
+                    .put("dtTomcatDeploy", resultSet.getInt("dtTomcatDeploy"))
+                    .put("dtNS5Active", resultSet.getInt("dtNS5Active"))
+                    .put("dtNS5ActiveSSH", resultSet.getInt("dtNS5ActiveSSH"))
+                    .put("dtExpandedJSONData", new JSONObject(resultSet.getString("dtExpandedJSONData")));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+        
     public JSONArray getMergedLastTemp(Connection dbc) {
         final String query_SNMP_MergedTemps = "SELECT Description, WalkTime, ExtTemp FROM (" +
                 " (SELECT 'RaspberryPi' as Description, WalkTime, ExtTemp FROM net_snmp.RaspberryPi ORDER BY WalkTime DESC LIMIT 1) UNION ALL" +

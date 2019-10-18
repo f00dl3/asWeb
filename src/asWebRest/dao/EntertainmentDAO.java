@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 24 Aug 2019
+Updated: 18 Oct 2019
 */
 
 package asWebRest.dao;
@@ -558,6 +558,27 @@ public class EntertainmentDAO {
         try { returnData = wc.q2do1c(dbc, query_UpdateGameHoursPart2, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
+
+    private JSONArray randomQuotes(Connection dbc) {
+        final String query_RandomQuotes = "SELECT" +
+                " QuoteID, Quote, Author, Added" +
+        		" FROM Core.RandomQuotes;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RandomQuotes, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("QuoteID", resultSet.getInt("QuoteID"))
+                    .put("Quote", resultSet.getString("Quote"))
+                    .put("Author", resultSet.getString("Author"))
+                    .put("Added", resultSet.getString("Added"));                   
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     private JSONArray trueBlood(Connection dbc) {
         final String query_MediaServer_TrueBlood = "SELECT" +
@@ -800,6 +821,8 @@ public class EntertainmentDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }  
+    
+    public JSONArray getRandomQuotes(Connection dbc) { return randomQuotes(dbc); }
     
     public JSONArray getStarTrek(Connection dbc) {
         final String query_StarTrek = "SELECT" +

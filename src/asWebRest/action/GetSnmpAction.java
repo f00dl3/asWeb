@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 20 May 2019
+Updated: 18 Oct 2019
  */
 
 package asWebRest.action;
@@ -22,6 +22,7 @@ public class GetSnmpAction {
     public JSONArray getLastWalk(Connection dbc) { return snmpDAO.getLastWalk(dbc); }
     public JSONArray getMain(Connection dbc, List qParams, int step) { return snmpDAO.getMain(dbc, qParams, step); }
     public JSONArray getMainLastSSH(Connection dbc) { return snmpDAO.getMainLastSSH(dbc); }
+    public JSONArray getMainRecent(Connection dbc) { return snmpDAO.getMainRecent(dbc); }
     public JSONArray getMergedLastTemp(Connection dbc) { return snmpDAO.getMergedLastTemp(dbc); }
     public JSONArray getNote3(Connection dbc, List qParams, int step) { return snmpDAO.getNote3(dbc, qParams, step); }
     public JSONArray getNote3Geo(Connection dbc) { return snmpDAO.getNote3Geo(dbc); }
