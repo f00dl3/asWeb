@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 18 Oct 2019
+Updated: 19 Oct 2019
  */
 
 package asWebRest.resource;
@@ -234,6 +234,11 @@ public class SnmpResource extends ServerResource {
                     returnData = recentData.toString();
                     break;
                     
+                case "getNote3Recent":
+                    JSONArray recentN3 = getSnmpAction.getNote3Recent(dbc);
+                    returnData = recentN3.toString();
+                    break;
+                    
                 case "getPhoneTrack":
                 	String phoneSelection = "";
             		if(wc.isSet(argsInForm.getFirstValue("SearchString"))) { phoneSelection = argsInForm.getFirstValue("SearchString"); }
@@ -249,8 +254,20 @@ public class SnmpResource extends ServerResource {
                         .put("PhoneTrack", returnPhoneTrack);
                     returnData = mergedResults.toString();
                     break;
+             
+                case "getRouterRecent":
+                    JSONArray recentDataR = getSnmpAction.getRouterRecent(dbc);
+                    returnData = recentDataR.toString();
+                    break;
+                          
+                case "getUbuntuVM2Recent":
+                    JSONArray recentUV2 = getSnmpAction.getUbuntuVM2Recent(dbc);
+                    returnData = recentUV2.toString();
+                    break;
                     
             }
+            
+            
         }
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }

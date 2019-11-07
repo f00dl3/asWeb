@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 18 Oct 2019
+Updated: 5 Nov 2019
 */
 
 package asWebRest.dao;
@@ -103,6 +103,7 @@ public class EntertainmentDAO {
                 " (SELECT COUNT(AchCode) FROM Core.FFXIV_Achievements) AS Achievements," +
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT Count(Name) FROM Core.FFXIV_Dungeons) AS Dungeons," +
+                " (SELECT Count(Name) FROM Core.FFXIV_FATEs) AS FATEs," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
                 " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
                 " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting," +
@@ -121,6 +122,7 @@ public class EntertainmentDAO {
                     .put("Wearables", resultSet.getInt("Wearables"))
                     .put("Hunting", resultSet.getInt("Hunting"))
                     .put("Gathering", resultSet.getInt("Gathering"))
+                    .put("FATEs", resultSet.getInt("FATEs"))
                     .put("Dungeons", resultSet.getInt("Dungeons"));
                 tContainer.put(tObject);
             }
@@ -222,6 +224,13 @@ public class EntertainmentDAO {
         return tContainer;
     }
     
+	private String ffxivFateDone(Connection dbc, List<String> qParams) {
+	    String returnData = wcb.getDefaultNotRanYet();
+	    final String query_FFXIV_FATEDone = "UPDATE Core.FFXIV_FATEs SET Completed=1, OrigCompDate=CURDATE() WHERE FateCode=?;";
+	    try { returnData = wc.q2do1c(dbc, query_FFXIV_FATEDone, qParams); } catch (Exception e) { e.printStackTrace(); }
+	    return returnData;
+	}
+        
     private String ffxivGatheringDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_FFXIV_GatherDone = "UPDATE Core.FFXIV_GatherNodes SET Completed=1, OrigCompDate=CURDATE() WHERE NodeCode=?;";
@@ -256,7 +265,6 @@ public class EntertainmentDAO {
         try { returnData = wc.q2do1c(dbc, query_FFXIV_HuntingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
-    
     private JSONArray ffxivImageMaps(Connection dbc) {
         final String query_FfxivImageMaps = "SELECT File, Description FROM Core.FFXIV_ImageMaps;";
         JSONArray tContainer = new JSONArray();
@@ -383,6 +391,14 @@ public class EntertainmentDAO {
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
                 " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
                 " FROM Core.FFXIV_Achievements" +
+                " UNION ALL" +
+                " SELECT MinLevel, Name, CoordX, CoordY, Zone, XP AS Exp, Gil," +
+                " NULL AS Classes, FateCode AS QuestOrder, OrigCompDate, Completed, NULL AS GivingNPC," +
+                " Seals, NULL as Version, NULL AS Event, NULL AS Type, 'FATE' AS MasterType, NULL AS qcDesc," +
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
+                " FROM Core.FFXIV_FATEs" +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
         //System.out.println(query_FFXIV_Merged);
@@ -441,14 +457,16 @@ public class EntertainmentDAO {
                 "       SUM(Dungeons) AS Dungeons," +
 		" 	SUM(Gathering) AS Gathering," +
 		" 	SUM(Hunting) AS Hunting," +
+		"	SUM(FATEs) AS FATEs," +
 		" 	SUM(Quests) AS Quests" +
 		" FROM (" +
 		" 	SELECT" +
 		" 		OrigCompDate," +
 		" 		0 as Achievements," +
 		" 		0 AS Crafting," +
-                "               0 AS Dungeons," +
+        "               0 AS Dungeons," +
 		" 		0 AS Gathering," +
+		" 		0 AS FATEs," +
 		" 		0 AS Hunting," +
 		" 		COUNT(QuestOrder) AS Quests" +
 		" 		FROM Core.FFXIV_Quests" +
@@ -460,9 +478,10 @@ public class EntertainmentDAO {
 		" 		OrigCompDate," +
 		" 		0 as Achievements," +
 		" 		0 AS Crafting," +
-                "               0 AS Dungeons," +
+        "       0 AS Dungeons," +
 		" 		0 AS Gathering," +
 		" 		COUNT(HuntCode) AS Hunting," +
+		" 		0 AS FATEs," +
 		" 		0 as Quests" +
 		" 		FROM Core.FFXIV_Hunting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
@@ -475,6 +494,7 @@ public class EntertainmentDAO {
                 "               0 AS Dungeons," +
 		" 		0 AS Gathering," +
 		" 		0 as Hunting," +
+		" 		0 AS FATEs," +
 		" 		0 as Quests" +
 		" 		FROM Core.FFXIV_Crafting" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
@@ -487,6 +507,7 @@ public class EntertainmentDAO {
 		" 		COUNT(DungeonCode) AS Dungeons," +
 		" 		0 AS Gathering," +
 		" 		0 AS Hunting," +
+		" 		0 AS FATEs," +
 		" 		0 as Quests" +
 		" 		FROM Core.FFXIV_Dungeons" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
@@ -499,6 +520,7 @@ public class EntertainmentDAO {
 		" 		0 AS Dungeons," +
 		" 		COUNT(NodeCode) AS Gathering," +
 		" 		0 AS Hunting," +
+		" 		0 AS FATEs," +
 		" 		0 as Quests" +
 		" 		FROM Core.FFXIV_GatherNodes" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
@@ -511,8 +533,22 @@ public class EntertainmentDAO {
 		" 		0 AS Dungeons," +
 		" 		0 AS Gathering," +
 		" 		0 AS Hunting," +
+		" 		0 AS FATEs," +
 		" 		0 as Quests" +
 		" 		FROM Core.FFXIV_Achievements" +
+		" 		WHERE OrigCompDate IS NOT NULL" +
+		" 		GROUP BY OrigCompDate" +
+		" 	UNION ALL" +
+		" 	SELECT" +
+		" 		OrigCompDate," +
+		" 		COUNT(FateCode) as FATEs," +
+		" 		0 AS Crafting," +
+		" 		0 AS Dungeons," +
+		" 		0 AS Gathering," +
+		" 		0 AS Hunting," +
+		" 		0 AS Achievements," +
+		" 		0 as Quests" +
+		" 		FROM Core.FFXIV_FATEs" +
 		" 		WHERE OrigCompDate IS NOT NULL" +
 		" 		GROUP BY OrigCompDate" +
 		" 	) AS tmp" +
@@ -533,7 +569,8 @@ public class EntertainmentDAO {
                     .put("Hunting", resultSet.getInt("Hunting"))
                     .put("Crafting", resultSet.getInt("Crafting"))
                     .put("Gathering", resultSet.getInt("Gathering"))
-                    .put("Dungeons", resultSet.getInt("Dungeons"));
+                    .put("Dungeons", resultSet.getInt("Dungeons"))
+                    .put("FATEs", resultSet.getInt("FATEs"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -910,6 +947,7 @@ public class EntertainmentDAO {
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List<String> qParams) { return ffxivDungeonDone(dbc, qParams); }
+    public String setFfxivFateDone(Connection dbc, List<String> qParams) { return ffxivFateDone(dbc, qParams); }
     public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setPlayedGameHours(Connection dbc, List<String> qParams) { return playedGameHours(dbc, qParams); }

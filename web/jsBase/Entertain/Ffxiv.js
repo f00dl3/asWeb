@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 17 Aug 2019
+Updated: 5 Nov 2019
 
  */
 
@@ -20,6 +20,7 @@ function actOnFfxivQuestDone(event) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
         case "Dungeon": setFfxivDungeonDone(thisFormData); break;
+        case "FATE": setFfxivFateDone(thisFormData); break;
         case "Gathering": setFfxivGatheringDone(thisFormData); break;
         case "Hunt": setFfxivHuntingDone(thisFormData); break;
         default: window.alert("TYPE NOT SET!\n" + thisFormData.QuestOrder); break;
@@ -543,6 +544,7 @@ function putFfxivMergedList(target, questData) {
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Dungeon' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Gathering' &&
+                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'FATE' &&
                         isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
                     )
             ) {
@@ -624,6 +626,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var mCount = ffxivMerged.length;
     var qCount = counts.Quests;
     var dCount = counts.Dungeons;
+    var fCount = counts.FATEs;
     var gCount = counts.Gathering;
     var cCount = counts.Crafting;
     var hCount = counts.Hunting;
@@ -631,8 +634,9 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var compCounter = 0;
     var craftCounter = 0;
     var dungeonCounter = 0;
-    var huntCounter = 0;
+    var fateCounter = 0;
     var gatherCounter = 0;
+    var huntCounter = 0;
     var totalCompletionCount = 0;
     var tCount = hCount + qCount + cCount;
     var availImages = [
@@ -646,6 +650,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Quest") { compCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Crafting") { craftCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Dungeon") { dungeonCounter++; totalCompletionCount++; }
+        if(ffxq.Completed === 1 && ffxq.MasterType === "FATE") { fateCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Gathering") { gatherCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
@@ -695,6 +700,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
             "<strong>Achievements:</strong> " + achCounter + " of " + counts.Achievements + " (" + ((achCounter/aCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Crafting:</strong> " + craftCounter + " of " + counts.Crafting + " (" + ((craftCounter/cCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Dungeons:</strong> " + dungeonCounter + " of " + counts.Dungeons + " (" + ((dungeonCounter/dCount)*100).toFixed(1) + "%)<br/>" +
+            "<strong>FATEs:</strong> " + fateCounter + " of " + counts.FATEs + " (" + ((fateCounter/fCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
@@ -795,6 +801,31 @@ function setFfxivDungeonDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Dungeon Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivFateDone(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivFateDone",
+        "fateCode": formData.QuestOrder
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Entertainment"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("FATE " + formData.Name + " complete!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set FATE Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

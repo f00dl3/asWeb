@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 18 Oct 2019
+Updated: 19 Oct 2019
 */
 
 package asWebRest.dao;
@@ -550,7 +550,54 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-     
+     public JSONArray getNote3Recent(Connection dbc) {
+        final String query_SNMP_Note3r = "SELECT" +
+                " WalkTime, ActiveConn, rmnet0Rx, rmnet0Tx, wlan0Rx, wlan0Tx," +
+                " MemoryBuffers, MemoryFree, MemoryShared, MemoryTotal, MemoryUse," +
+                " CPUUse, LoadNow, Load5, Load15," +
+                " BattLevel, BattVolt, BattCurrent, BattTemp, BattPowered, BattPoweredU, BattHealth," +
+                " SigStrGSM, SigStrCDMA, SigStrEVDO, SigStrLTE" +
+                " FROM net_snmp.Note3 " +
+                " ORDER BY WalkTime DESC LIMIT 720";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Note3r, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("WalkTime", resultSet.getString("WalkTime"))
+                    .put("ActiveConn", resultSet.getInt("ActiveConn"))
+                    .put("rmnet0Rx", resultSet.getLong("rmnet0Rx"))
+                    .put("rmnet0Tx", resultSet.getLong("rmnet0Tx"))
+                    .put("wlan0Rx", resultSet.getLong("wlan0Rx"))
+                    .put("wlan0Tx", resultSet.getLong("wlan0Tx"))
+                    .put("MemoryBuffers", resultSet.getLong("MemoryBuffers"))
+                    .put("MemoryFree", resultSet.getLong("MemoryFree"))
+                    .put("MemoryShared", resultSet.getLong("MemoryShared"))
+                    .put("MemoryTotal", resultSet.getLong("MemoryTotal"))
+                    .put("MemoryUse", resultSet.getLong("MemoryUse"))
+                    .put("CPUUse", resultSet.getDouble("CPUUse"))
+                    .put("LoadNow", resultSet.getDouble("LoadNow"))
+                    .put("Load5", resultSet.getDouble("Load5"))
+                    .put("Load15", resultSet.getDouble("Load15"))
+                    .put("BattLevel", resultSet.getInt("BattLevel"))
+                    .put("BattVolt", resultSet.getInt("BattVolt"))
+                    .put("BattCurrent", resultSet.getInt("BattCurrent"))
+                    .put("BattTemp", resultSet.getInt("BattTemp"))
+                    .put("BattPowered", resultSet.getString("BattPowered"))
+                    .put("BattPoweredU", resultSet.getString("BattPoweredU"))
+                    .put("BattHealth", resultSet.getInt("BattHealth"))
+                    .put("SigStrGSM", resultSet.getInt("SigStrGSM"))
+                    .put("SigStrCDMA", resultSet.getInt("SigStrCDMA"))
+                    .put("SigStrEVDO", resultSet.getInt("SigStrEVDO"))
+                    .put("SigStrLTE", resultSet.getInt("SigStrLTE"));                    
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getNote3Sensors(List qParams) {
         final String query_SNMP_Note3_Sensors = "(SELECT " +
                 " WalkTime, SensorsRapid FROM net_snmp.Note3" +
@@ -711,7 +758,7 @@ public class SnmpDAO {
     }
     
     public JSONArray getRouter(Connection dbc, List qParams, int step) {
-        final String query_SNMP_Pi2 = "SELECT * FROM ( SELECT WalkTime," +
+        final String query_Router = "SELECT * FROM ( SELECT WalkTime," +
         " eth0Rx, eth0Tx, eth1Rx, eth1Tx, eth2Rx, eth2Tx, eth3Rx, eth3Tx," +
         " vlan1Rx, vlan1Tx, vlan2Rx, vlan2Tx, br0Rx, br0Tx, CPULoad1, CPULoad2," +
         " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
@@ -722,7 +769,58 @@ public class SnmpDAO {
         " ORDER BY WalkTime ASC;";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_SNMP_Pi2, qParams);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Router, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("WalkTime", resultSet.getString("WalkTime"))
+                    .put("CPULoad1", resultSet.getInt("CPULoad1"))
+                    .put("CPULoad2", resultSet.getInt("CPULoad2"))
+                    .put("KMemPhys", resultSet.getLong("KMemPhys"))
+                    .put("KMemVirt", resultSet.getLong("KMemVirt"))
+                    .put("KMemBuff", resultSet.getLong("KMemBuff"))
+                    .put("KMemCached", resultSet.getLong("KMemCached"))
+                    .put("KMemShared", resultSet.getLong("KMemShared"))
+                    .put("KSwap", resultSet.getLong("KSwap"))
+                    .put("K4Root", resultSet.getLong("K4Root"))
+                    .put("KMemPhysU", resultSet.getLong("KMemPhysU"))
+                    .put("KMemVirtU", resultSet.getLong("KMemVirtU"))
+                    .put("KMemBuffU", resultSet.getLong("KMemBuffU"))
+                    .put("KMemCachedU", resultSet.getLong("KMemCachedU"))
+                    .put("KMemSharedU", resultSet.getLong("KMemSharedU"))
+                    .put("KSwapU", resultSet.getLong("KSwapU"))
+                    .put("eth0Rx", resultSet.getLong("eth0Rx"))
+                    .put("eth0Tx", resultSet.getLong("eth0Tx"))
+                    .put("eth1Rx", resultSet.getLong("eth1Rx"))
+                    .put("eth1Tx", resultSet.getLong("eth1Tx"))
+                    .put("eth2Rx", resultSet.getLong("eth2Rx"))
+                    .put("eth2Tx", resultSet.getLong("eth2Tx"))
+                    .put("eth3Rx", resultSet.getLong("eth3Rx"))
+                    .put("eth3Tx", resultSet.getLong("eth3Tx"))
+                    .put("vlan1Rx", resultSet.getLong("vlan1Rx"))
+                    .put("vlan1Tx", resultSet.getLong("vlan1Tx"))
+                    .put("vlan2Rx", resultSet.getLong("vlan2Rx"))
+                    .put("vlan2Tx", resultSet.getLong("vlan2Tx"))
+                    .put("br0Rx", resultSet.getLong("br0Rx"))
+                    .put("br0Tx", resultSet.getLong("br0Tx"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getRouterRecent(Connection dbc) {
+        final String query_RouterR = "SELECT WalkTime," +
+        " eth0Rx, eth0Tx, eth1Rx, eth1Tx, eth2Rx, eth2Tx, eth3Rx, eth3Tx," +
+        " vlan1Rx, vlan1Tx, vlan2Rx, vlan2Tx, br0Rx, br0Tx, CPULoad1, CPULoad2," +
+        " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
+        " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
+        " FROM net_snmp.Asus3200 " +
+        " ORDER BY WalkTime DESC LIMIT 720";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RouterR, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -854,5 +952,49 @@ public class SnmpDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
+ 
+    public JSONArray getUbuntuVM2Recent(Connection dbc) {
+    	final String query_UVM2r = "SELECT WalkTime," +
+    	        " CPULoad1, CPULoad2, CPULoad3, CPULoad4, LoadIndex1, LoadIndex5, LoadIndex15," +
+    	        " OctetsIn, OctetsOut," +
+    	        " KMemPhys, KMemVirt, KMemBuff, KMemCached, KMemShared, KSwap, K4Root," +
+    	        " KMemPhysU, KMemVirtU, KMemBuffU, KMemCachedU, KMemSharedU, KSwapU, K4RootU" +
+    	        " FROM net_snmp.UbuntuVM2" +
+    	        " ORDER BY WalkTime DESC LIMIT 720";
+    	        JSONArray tContainer = new JSONArray();
+    	        try {
+    	            ResultSet resultSet = wc.q2rs1c(dbc, query_UVM2r, null);
+    	            while (resultSet.next()) {
+    	                JSONObject tObject = new JSONObject();
+    	                tObject
+    	                    .put("WalkTime", resultSet.getString("WalkTime"))
+    	                    .put("CPULoad1", resultSet.getInt("CPULoad1"))
+    	                    .put("CPULoad2", resultSet.getInt("CPULoad2"))
+    	                    .put("CPULoad3", resultSet.getInt("CPULoad3"))
+    	                    .put("CPULoad4", resultSet.getInt("CPULoad4"))
+    	                    .put("LoadIndex1", resultSet.getDouble("LoadIndex1"))
+    	                    .put("LoadIndex5", resultSet.getDouble("LoadIndex5"))
+    	                    .put("LoadIndex15", resultSet.getDouble("LoadIndex15"))
+    	                    .put("OctetsIn", resultSet.getLong("OctetsIn"))
+    	                    .put("OctetsOut", resultSet.getLong("OctetsOut"))
+    	                    .put("KMemPhys", resultSet.getLong("KMemPhys"))
+    	                    .put("KMemVirt", resultSet.getLong("KMemVirt"))
+    	                    .put("KMemBuff", resultSet.getLong("KMemBuff"))
+    	                    .put("KMemCached", resultSet.getLong("KMemCached"))
+    	                    .put("KMemShared", resultSet.getLong("KMemShared"))
+    	                    .put("KSwap", resultSet.getLong("KSwap"))
+    	                    .put("KSwapU", resultSet.getLong("KSwapU"))
+    	                    .put("K4Root", resultSet.getLong("K4Root"))
+    	                    .put("KMemPhysU", resultSet.getLong("KMemPhysU"))
+    	                    .put("KMemVirtU", resultSet.getLong("KMemVirtU"))
+    	                    .put("KMemBuffU", resultSet.getLong("KMemBuffU"))
+    	                    .put("KMemCachedU", resultSet.getLong("KMemCachedU"))
+    	                    .put("KMemSharedU", resultSet.getLong("KMemSharedU"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+              
 }

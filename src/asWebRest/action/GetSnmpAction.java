@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 18 Oct 2019
+Updated: 19 Oct 2019
  */
 
 package asWebRest.action;
@@ -28,12 +28,15 @@ public class GetSnmpAction {
     public JSONArray getNote3Geo(Connection dbc) { return snmpDAO.getNote3Geo(dbc); }
     public JSONArray getNote3GeoHistory() { return snmpDAO.getNote3GeoHistory(); }
     public JSONArray getNote3RapidGeoHistory() { return snmpDAO.getNote3RapidGeoHistory(); }
+    public JSONArray getNote3Recent(Connection dbc) { return snmpDAO.getNote3Recent(dbc); }
     public JSONArray getNote3Sensors(List qParams) { return snmpDAO.getNote3Sensors(qParams); }
     public JSONArray getPi(Connection dbc, List qParams, int step) { return snmpDAO.getPi(dbc, qParams, step); }
     public JSONArray getPi2(Connection dbc, List qParams, int step) { return snmpDAO.getPi2(dbc, qParams, step); }
     public JSONArray getPi2Geo() { return snmpDAO.getPi2Geo(); }
     public JSONArray getPi2GeoHistory() { return snmpDAO.getPi2GeoHistory(); }
     public JSONArray getRouter(Connection dbc, List qParams, int step) { return snmpDAO.getRouter(dbc, qParams, step); }
+    public JSONArray getRouterRecent(Connection dbc) { return snmpDAO.getRouterRecent(dbc); }
     public JSONArray getUbuntuVM2(Connection dbc, List qParams, int step) { return snmpDAO.getUbuntuVM2(dbc, qParams, step); }
+    public JSONArray getUbuntuVM2Recent(Connection dbc) { return snmpDAO.getUbuntuVM2Recent(dbc); }
     
 }
