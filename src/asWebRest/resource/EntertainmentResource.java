@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 5 Nov 2019
+Updated: 14 Nov 2019
  */
 
 package asWebRest.resource;
@@ -58,65 +58,6 @@ public class EntertainmentResource extends ServerResource {
                     returnData += dbm.toString();
                     break;
                     
-                case "getFfxivCrafting":
-                    JSONArray ffxivC = getEntertainmentAction.getFfxivCrafting(dbc);
-                    returnData += ffxivC.toString();
-                    break;
-                    
-                case "getFfxivDungeons":
-                    JSONArray ffxivD = getEntertainmentAction.getFfxivDungeons(dbc);
-                    returnData += ffxivD.toString();
-                    break;
-                    
-                case "getFfxivItems":
-                    JSONArray ffxivI = getEntertainmentAction.getFfxivItems(dbc);
-                    returnData += ffxivI.toString();
-                    break;
-                    
-                case "getFfxivMerged":
-                    JSONArray ffxivM = getEntertainmentAction.getFfxivMerged(dbc, 1, 9999, "%");
-                    JSONArray ffxivCountsM = getEntertainmentAction.getFfxivCounts(dbc);
-                    JSONArray ffxivIm = getEntertainmentAction.getFfxivImageMaps(dbc);
-                    JSONArray ffxivE = getEntertainmentAction.getFfxivEmotes(dbc);
-                    JSONArray ffxivA = getEntertainmentAction.getFfxivAssets(dbc);
-                    mergedResults
-                        .put("ffxivMerged", ffxivM)
-                        .put("ffxivCount", ffxivCountsM)
-                        .put("ffxivImageMaps", ffxivIm)
-                        .put("ffxivEmotes", ffxivE)
-                        .put("ffxivAssets", ffxivA);
-                    returnData += mergedResults.toString();
-                    break;
-
-                case "getFfxivMergedInRange":
-                    int minLevelM = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
-                    int maxLevelM = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
-                    JSONArray ffxivMr = getEntertainmentAction.getFfxivMerged(dbc, minLevelM, maxLevelM, "0");
-                    JSONArray ffxivCounts = getEntertainmentAction.getFfxivCounts(dbc);
-                    JSONArray ffxivImM = getEntertainmentAction.getFfxivImageMaps(dbc);
-                    JSONArray ffxivEM = getEntertainmentAction.getFfxivEmotes(dbc);
-                    JSONArray ffxivA2 = getEntertainmentAction.getFfxivAssets(dbc);
-                    mergedResults
-                        .put("ffxivMerged", ffxivMr)
-                        .put("ffxivCount", ffxivCounts)
-                        .put("ffxivImageMaps", ffxivImM)
-                        .put("ffxivEmotes", ffxivEM)
-                        .put("ffxivAssets", ffxivA2);
-                    returnData += mergedResults.toString();
-                    break;
-                    
-                case "getFfxivQuests":
-                    JSONArray ffxivQ = getEntertainmentAction.getFfxivQuests(dbc, 1, 9999, "%");
-                    returnData += ffxivQ.toString();
-                    break;
-
-                case "getFfxivQuestsInRange":
-                    int minLevel = Integer.parseInt(argsInForm.getFirstValue("minLevel"));
-                    int maxLevel = Integer.parseInt(argsInForm.getFirstValue("maxLevel"));
-                    JSONArray ffxivQr = getEntertainmentAction.getFfxivQuests(dbc, minLevel, maxLevel, "0");
-                    returnData += ffxivQr.toString();
-                    break;
-                
                 case "getGameData":
                     JSONArray ghTotal = getEntertainmentAction.getGameHoursTotal(dbc);
                     JSONArray ghLatest = getEntertainmentAction.getGameHoursLatest(dbc);
@@ -166,41 +107,6 @@ public class EntertainmentResource extends ServerResource {
                 case "getXFiles":
                     JSONArray xf = getEntertainmentAction.getXFiles(dbc);
                     returnData += xf.toString();
-                    break;
-                    
-                case "setFfxivAchievementDone":
-                    qParams.add(0, argsInForm.getFirstValue("achievementCode"));
-                    returnData += updateEntertainmentAction.setFfxivAchievementDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivCraftingDone":
-                    qParams.add(0, argsInForm.getFirstValue("recipieName"));
-                    returnData += updateEntertainmentAction.setFfxivCraftingDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivDungeonDone":
-                    qParams.add(0, argsInForm.getFirstValue("dungeonCode"));
-                    returnData += updateEntertainmentAction.setFfxivDungeonDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivFateDone":
-                    qParams.add(0, argsInForm.getFirstValue("fateCode"));
-                    returnData += updateEntertainmentAction.setFfxivFateDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivGatheringDone":
-                    qParams.add(0, argsInForm.getFirstValue("gatherCode"));
-                    returnData += updateEntertainmentAction.setFfxivGatheringDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivHuntingDone":
-                    qParams.add(0, argsInForm.getFirstValue("huntCode"));
-                    returnData += updateEntertainmentAction.setFfxivHuntingDone(dbc, qParams);
-                    break;
-                    
-                case "setFfxivQuestDone":
-                    qParams.add(0, argsInForm.getFirstValue("questOrder"));
-                    returnData += updateEntertainmentAction.setFfxivQuestDone(dbc, qParams);
                     break;
                     
                 case "setPlayedGameHours":

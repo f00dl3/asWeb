@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 9 Oct 2019
+Updated: 14 Nov 2019
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetEntertainmentAction;
+import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetLogsAction;
@@ -29,6 +30,7 @@ import asWebRest.chartHelpers.SysMonUVM2;
 import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.EntertainmentDAO;
+import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.LogsDAO;
@@ -63,6 +65,7 @@ public class ChartResource extends ServerResource {
         DynChartX dynChart = new DynChartX();
         Ffxiv ffxiv = new Ffxiv();
         GetEntertainmentAction getEntertainmentAction = new GetEntertainmentAction(new EntertainmentDAO());
+        GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
@@ -107,8 +110,8 @@ public class ChartResource extends ServerResource {
                                                    
                 case "EntertainmentFfxivQuestsByDate":
                     genericCharts = false;
-                    JSONArray gbd_Raw = getEntertainmentAction.getFfxivGilByDate(dbc);            
-                    JSONArray qbd_Raw = getEntertainmentAction.getFfxivQuestsByDate(dbc);         
+                    JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);            
+                    JSONArray qbd_Raw = getFfxivAction.getFfxivQuestsByDate(dbc);         
                     JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);           
                     JSONObject gwbd_Glob = ffxiv.getGilWorthByDate(gbd_Raw);    
                     JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw); 

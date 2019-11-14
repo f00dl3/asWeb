@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 5 Nov 2019
+Updated: 14 Nov 2019
 
  */
 
@@ -11,6 +11,12 @@ var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
 var resultLimit = 50;
+
+function actOnFfxivGil(event) {
+	dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	setFfxivGil(thisFormData);
+}
 
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
@@ -245,7 +251,7 @@ function getGameFf14d(target) {
     var thePostData = { "doWhat": "getFfxivDungeons" };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "json"
             }).then(
@@ -265,7 +271,7 @@ function getGameFf14i(target) {
     var thePostData = { "doWhat": "getFfxivItems" };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "json"
             }).then(
@@ -309,7 +315,7 @@ function getGameFf14qData(target) {
     var thePostData = { "doWhat": "getFfxivMerged" };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "json"
             }).then(
@@ -343,7 +349,7 @@ function getGameFf14qDataInRange(target, formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "json"
             }).then(
@@ -613,10 +619,14 @@ function putFfxivMergedList(target, questData) {
 function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var assetValues = 0;
     var accurateAssetValues = 0;
+    var currentGil = 0;
     assets.forEach(function (asset) {
     	assetValues += asset.Value;
     	if(asset.WriteOff == 0) {
     		accurateAssetValues += asset.Value;
+    	}
+    	if(asset.What == "Gil") {
+    		currentGil = asset.Value;
     	}
     });
     var totalValue = (assetValues/1000000).toFixed(2);
@@ -658,6 +668,10 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
             "<div class='UPop'>" +
             totalValue + "m (" + totalAccurateValue + "m) <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
+            "<form><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
+            " <input name='Gil' type='number' step='0' value='" + currentGil + " style='width: 256px;'/>" +
+            " <button id='gilUpdateButton' type='submit'>gil</button>" +
+            "</form>" +
             "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
             "<a href='" + doCh("j", "ffxivGilWorthByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilWorthByDay", "th") + "'/></a>" +
             "</div></div>" +
@@ -714,6 +728,8 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     putFfxivMergedSearchBox("mSearchHolder");
     putFfxivMergedList("mergedList", mergedData);
     getWebLinks("ffxivChars", "charList", "list");
+    var setGilButton = dojo.byId("gilUpdateButton");
+    dojo.connect(setGilButton, "onclick", actOnFfxivGil);
 }
 
 function putFfxivMergedSearchBox(target) {
@@ -764,7 +780,7 @@ function setFfxivCraftingDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
@@ -814,7 +830,7 @@ function setFfxivFateDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
@@ -839,7 +855,7 @@ function setFfxivGatheringDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
@@ -855,6 +871,31 @@ function setFfxivGatheringDone(formData) {
     });
 }
 
+function setFfxivGil(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivGil",
+        "gil": formData.Gil
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("FFXIV"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Gil " + formData.Name + " updated!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Gil FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function setFfxivHuntingDone(formData) {
     var target = "ETGFF14Q";
     aniPreload("on");
@@ -864,7 +905,7 @@ function setFfxivHuntingDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
@@ -889,7 +930,7 @@ function setFfxivQuestDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(

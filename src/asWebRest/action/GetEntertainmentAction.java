@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 18 Oct 2019
+Updated: 14 Nov 2019
  */
 
 package asWebRest.action;
@@ -17,17 +17,6 @@ public class GetEntertainmentAction {
 
     public JSONArray getChicagoSeries(Connection dbc) { return entertainmentDAO.getChicagoSeries(dbc); }
     public JSONArray getDOSBoxMapping(Connection dbc) { return entertainmentDAO.getDOSBoxMapping(dbc); }
-    public JSONArray getFfxivAssets(Connection dbc) { return entertainmentDAO.getFfxivAssets(dbc); }
-    public JSONArray getFfxivCounts(Connection dbc) { return entertainmentDAO.getFfxivCounts(dbc); }
-    public JSONArray getFfxivCrafting(Connection dbc) { return entertainmentDAO.getFfxivCrafting(dbc); }
-    public JSONArray getFfxivDungeons(Connection dbc) { return entertainmentDAO.getFfxivDungeons(dbc); }
-    public JSONArray getFfxivEmotes(Connection dbc) { return entertainmentDAO.getFfxivEmotes(dbc); }
-    public JSONArray getFfxivGilByDate(Connection dbc) { return entertainmentDAO.getFfxivGilByDate(dbc); }
-    public JSONArray getFfxivImageMaps(Connection dbc) { return entertainmentDAO.getFfxivImageMaps(dbc); }
-    public JSONArray getFfxivItems(Connection dbc) { return entertainmentDAO.getFfxivItems(dbc); }
-    public JSONArray getFfxivMerged(Connection dbc, int minRange, int maxRange, String completed) { return entertainmentDAO.getFfxivMerged(dbc, minRange, maxRange, completed); }
-    public JSONArray getFfxivQuestsByDate(Connection dbc) { return entertainmentDAO.getFfxivQuestsByDate(dbc); }
-    public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) { return entertainmentDAO.getFfxivQuests(dbc, minRange, maxRange, completed); }
     public JSONArray getGameHours(Connection dbc) { return entertainmentDAO.getGameHours(dbc); }
     public JSONArray getGameHoursLatest(Connection dbc) { return entertainmentDAO.getGameHoursLatest(dbc); }
     public JSONArray getGameHoursTotal(Connection dbc) { return entertainmentDAO.getGameHoursTotal(dbc); }

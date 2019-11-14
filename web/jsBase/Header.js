@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 28 Sep 2019
+Updated: 14 Nov 2019
 
  */
 
@@ -310,6 +310,7 @@ function getResource(what) {
         case "Download": return getBasePath("serv") + "/Download"; break;
         case "Emily": return getBasePath("ui") + "/Emily.jsp"; break;
         case "Entertainment": return getBasePath("rest") + "/Entertainment"; break;
+        case "FFXIV": return getBasePath("rest") + "/FFXIV"; break;
         case "Fitness": return getBasePath("rest") + "/Fitness"; break;
         case "Finance": return getBasePath("rest") + "/Finance"; break;
         case "Homicide": return getBasePath("rest") + "/Homicide"; break;
