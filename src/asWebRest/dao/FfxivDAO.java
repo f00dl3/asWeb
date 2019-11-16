@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from Entertainment.java: 14 Nov 2019
-Updated: 14 Nov 2019
+Updated: 16 Nov 2019
 */
 
 package asWebRest.dao;
@@ -120,9 +120,16 @@ public class FfxivDAO {
         return returnData;
     }
     
+    private String ffxivDungeonClear(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_DungeonClear = "UPDATE Core.FFXIV_Dungeons SET Clears=(Clears+1) WHERE DungeonCode=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_DungeonClear, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private String ffxivDungeonDone(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        final String query_FFXIV_DungeonDone = "UPDATE Core.FFXIV_Dungeons SET Completed=1, OrigCompDate=CURDATE() WHERE DungeonCode=?;";
+        final String query_FFXIV_DungeonDone = "UPDATE Core.FFXIV_Dungeons SET Completed=1, Clears=1, OrigCompDate=CURDATE() WHERE DungeonCode=?;";
         try { returnData = wc.q2do1c(dbc, query_FFXIV_DungeonDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -603,6 +610,7 @@ public class FfxivDAO {
     public String setFfxivAchievementDone(Connection dbc, List<String> qParams) { return ffxivAchievementDone(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
+    public String setFfxivDungeonClear(Connection dbc, List<String> qParams) { return ffxivDungeonClear(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List<String> qParams) { return ffxivDungeonDone(dbc, qParams); }
     public String setFfxivFateDone(Connection dbc, List<String> qParams) { return ffxivFateDone(dbc, qParams); }
     public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }

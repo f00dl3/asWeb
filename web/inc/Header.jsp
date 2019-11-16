@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    24 Aug 2019
+    Updated:    16 Nov 2019
     Author     : astump
 --%>
 
@@ -120,7 +120,7 @@
     
     if(type.equals("full")) { 
         scripts2Load += "<script src='"+rootPath+"/jsLib/dojo/v1.15.0/dojo/dojo.js'></script>" +
-                "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.3.1.min.js'></script>" +
+                "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.4.1.min.js'></script>" +
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Tools/comSec.js'></script>" +

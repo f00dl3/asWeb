@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 14 Nov 2019
+Updated: 16 Nov 2019
 
  */
 
@@ -25,7 +25,13 @@ function actOnFfxivQuestDone(event) {
         case "Achievement": setFfxivAchievementDone(thisFormData); break;
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
-        case "Dungeon": setFfxivDungeonDone(thisFormData); break;
+        case "Dungeon":
+        	if(thisFormData.Completed) { 
+        		setFfxivDungeonClear(thisFormData);
+        	} else {
+        		setFfxivDungeonDone(thisFormData);
+        	}
+        	break;
         case "FATE": setFfxivFateDone(thisFormData); break;
         case "Gathering": setFfxivGatheringDone(thisFormData); break;
         case "Hunt": setFfxivHuntingDone(thisFormData); break;
@@ -541,22 +547,30 @@ function putFfxivMergedList(target, questData) {
                     "<input type='hidden' name='Type' value='" + ff14q.MasterType + "'/>" +
                     "<input type='hidden' name='Name' value='" + ff14q.Name + "'/>" +
                     "<input type='hidden' name='QuestOrder' value='" + ff14q.QuestOrder + "'/>" +
+                    "<input type='hidden' name='Completed' value='" + ff14q.Completed + "'/>" +
                     "</span>";
-            if(
-                    ff14q.Completed === 1 ||
-                    (
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Achievement' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Dungeon' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Gathering' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'FATE' &&
-                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
-                    )
-            ) {
-                qComplete = "Yes";
-                fontColor = "White";
-                updateCheckbox = "NA";
+            if(isSet(ff14q.MasterType) && ff14q.MasterType === 'Dungeon') {
+            	if (ff14q.Completed === 1) {
+	                qComplete = "Yes";
+	                fontColor = "White";            		
+            	}
+            } else {
+	            if(
+	                    ff14q.Completed === 1 ||
+	                    (
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Achievement' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Quest' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Crafting' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Dungeon' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Gathering' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'FATE' &&
+	                        isSet(ff14q.MasterType) && ff14q.MasterType !== 'Hunt'
+	                    )
+	            ) {
+	                qComplete = "Yes";
+	                fontColor = "White";
+	                updateCheckbox = "NA";
+	            }
             }
             var tdsStyle = "style='color: " + fontColor + ";'";
             rData += "<form class='tr' id='ffxivQuestSubmitForm'>" +
@@ -669,7 +683,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
             totalValue + "m (" + totalAccurateValue + "m) <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
             "<form><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
-            " <input name='Gil' type='number' step='0' value='" + currentGil + " style='width: 256px;'/>" +
+            " <input name='Gil' type='number' step='0' value='" + currentGil + "' style='width: 178px;'/>" +
             " <button id='gilUpdateButton' type='submit'>gil</button>" +
             "</form>" +
             "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
@@ -755,7 +769,7 @@ function setFfxivAchievementDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
@@ -796,6 +810,31 @@ function setFfxivCraftingDone(formData) {
     });
 }
 
+function setFfxivDungeonClear(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivDungeonClear",
+        "dungeonCode": formData.QuestOrder
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("FFXIV"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Dungeon " + formData.Name + " cleared!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Dungeon Clear FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
 function setFfxivDungeonDone(formData) {
     var target = "ETGFF14Q";
     aniPreload("on");
@@ -805,7 +844,7 @@ function setFfxivDungeonDone(formData) {
     };
     require(["dojo/request"], function(request) {
         request
-            .post(getResource("Entertainment"), {
+            .post(getResource("FFXIV"), {
                 data: thePostData,
                 handleAs: "text"
             }).then(
