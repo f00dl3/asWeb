@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from GetEntertinmentAction.java on 14 Nov 2019
-Updated: 14 Nov 2019
+Updated: 16 Nov 2019
  */
 
 package asWebRest.action;
@@ -24,6 +24,7 @@ public class GetFfxivAction {
     public JSONArray getFfxivGilByDate(Connection dbc) { return ffxivDAO.getFfxivGilByDate(dbc); }
     public JSONArray getFfxivImageMaps(Connection dbc) { return ffxivDAO.getFfxivImageMaps(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivDAO.getFfxivItems(dbc); }
+    public JSONArray getFfxivLevelsCurrent(Connection dbc) { return ffxivDAO.getFfxivLevelsCurrent(dbc); }
     public JSONArray getFfxivMerged(Connection dbc, int minRange, int maxRange, String completed) { return ffxivDAO.getFfxivMerged(dbc, minRange, maxRange, completed); }
     public JSONArray getFfxivQuestsByDate(Connection dbc) { return ffxivDAO.getFfxivQuestsByDate(dbc); }
     public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) { return ffxivDAO.getFfxivQuests(dbc, minRange, maxRange, completed); }

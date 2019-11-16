@@ -70,10 +70,12 @@ public class FfxivResource extends ServerResource {
                     JSONArray ffxivIm = getFfxivAction.getFfxivImageMaps(dbc);
                     JSONArray ffxivE = getFfxivAction.getFfxivEmotes(dbc);
                     JSONArray ffxivA = getFfxivAction.getFfxivAssets(dbc);
+                    JSONArray ffxivL = getFfxivAction.getFfxivLevelsCurrent(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivM)
                         .put("ffxivCount", ffxivCountsM)
                         .put("ffxivImageMaps", ffxivIm)
+                        .put("ffxivLevels", ffxivL)
                         .put("ffxivEmotes", ffxivE)
                         .put("ffxivAssets", ffxivA);
                     returnData += mergedResults.toString();
@@ -87,12 +89,14 @@ public class FfxivResource extends ServerResource {
                     JSONArray ffxivImM = getFfxivAction.getFfxivImageMaps(dbc);
                     JSONArray ffxivEM = getFfxivAction.getFfxivEmotes(dbc);
                     JSONArray ffxivA2 = getFfxivAction.getFfxivAssets(dbc);
+                    JSONArray ffxivL2 = getFfxivAction.getFfxivLevelsCurrent(dbc);
                     mergedResults
                         .put("ffxivMerged", ffxivMr)
                         .put("ffxivCount", ffxivCounts)
                         .put("ffxivImageMaps", ffxivImM)
                         .put("ffxivEmotes", ffxivEM)
-                        .put("ffxivAssets", ffxivA2);
+                        .put("ffxivAssets", ffxivA2)
+                        .put("ffxivLevels", ffxivL2);
                     returnData += mergedResults.toString();
                     break;
                     
@@ -146,6 +150,11 @@ public class FfxivResource extends ServerResource {
                 case "setFfxivHuntingDone":
                     qParams.add(0, argsInForm.getFirstValue("huntCode"));
                     returnData += updateFfxivAction.setFfxivHuntingDone(dbc, qParams);
+                    break;
+
+                case "setFfxivLevelsIncrease":
+                    qParams.add(0, argsInForm.getFirstValue("classCode"));
+                    returnData += updateFfxivAction.setFfxivLevelsIncrease(dbc, qParams);
                     break;
                     
                 case "setFfxivQuestDone":

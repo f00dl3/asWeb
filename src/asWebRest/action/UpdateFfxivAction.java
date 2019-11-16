@@ -24,6 +24,7 @@ public class UpdateFfxivAction {
     public String setFfxivGatheringDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivGatheringDone(dbc, qParams); }
     public String setFfxivGil(Connection dbc, List qParams) { return ffxivDAO.setFfxivGil(dbc, qParams); }
     public String setFfxivHuntingDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivHuntingDone(dbc, qParams); }
+    public String setFfxivLevelsIncrease(Connection dbc, List qParams) { return ffxivDAO.setFfxivLevelsIncrease(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivQuestDone(dbc, qParams); }
 
 }

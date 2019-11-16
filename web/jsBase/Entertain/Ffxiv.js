@@ -18,6 +18,13 @@ function actOnFfxivGil(event) {
 	setFfxivGil(thisFormData);
 }
 
+function actOnFfxivLevelIncrease(event) {
+	dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	var thisFormDataJson = dojo.formToJson(this.form);
+	setFfxivLevelsIncrease(thisFormData);
+}
+
 function actOnFfxivQuestDone(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
@@ -334,7 +341,8 @@ function getGameFf14qData(target) {
                             data.ffxivCount,
                             data.ffxivImageMaps,
                             data.ffxivEmotes,
-                            data.ffxivAssets
+                            data.ffxivAssets,
+                            data.ffxivLevels
                     );
                     $("#"+target).show();
                 },
@@ -368,7 +376,8 @@ function getGameFf14qDataInRange(target, formData) {
                             data.ffxivCount,
                             data.ffxivImageMaps,
                             data.ffxivEmotes,
-                            data.ffxivAssets
+                            data.ffxivAssets,
+                            data.ffxivLevels
                     );
                     $("#"+target).show();
                 },
@@ -630,7 +639,7 @@ function putFfxivMergedList(target, questData) {
     dojo.query(".ffxivQuestDone").connect("onchange", actOnFfxivQuestDone);
 }
 
-function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
+function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, levelInfo) {
     var assetValues = 0;
     var accurateAssetValues = 0;
     var currentGil = 0;
@@ -661,6 +670,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     var fateCounter = 0;
     var gatherCounter = 0;
     var huntCounter = 0;
+    var lData = "";
     var totalCompletionCount = 0;
     var tCount = hCount + qCount + cCount;
     var availImages = [
@@ -678,12 +688,29 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
         if(ffxq.Completed === 1 && ffxq.MasterType === "Gathering") { gatherCounter++; totalCompletionCount++; }
         if(ffxq.Completed === 1 && ffxq.MasterType === "Hunt") { huntCounter++; totalCompletionCount++; }
     });
+    var lData = "<div class='table'><div class='tr'>";
+    var ltrIter = 0;
+	levelInfo.forEach(function(li) {
+		if(ltrIter == 5) {
+			ltrIter = 0;
+			lData += "</div><div class='tr'>";
+		}
+		var cIcon = getBasePath("image") + "/ffxiv/" + li.ClassCode + ".png";
+		lData += "<span class='td'><form>" +
+			"<input type='hidden' name='ClassCode' value='" + li.ClassCode + "'/>" +
+			"<button class='doLevelIncrease'><img class='th_icon' src='" + cIcon + "'/><br/>" +
+			li.Level + "</button></form>" +
+			"</span>";
+		ltrIter++;
+	});
+	lData += "</div></div>";
     var rData = "<span id='charList'></span>" +
+    		"<div class='UPop'>[CL]<div class='UPopO'>" + lData + "</div></div> " +
             "<div class='UPop'>" +
             totalValue + "m (" + totalAccurateValue + "m) <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
-            "<form><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
-            " <input name='Gil' type='number' step='0' value='" + currentGil + "' style='width: 178px;'/>" +
+            "<form id='gilForm'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
+            " <input name='Gil' type='number' step='0' value='" + currentGil + "' style='width: 168px;'/>" +
             " <button id='gilUpdateButton' type='submit'>gil</button>" +
             "</form>" +
             "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
@@ -744,6 +771,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets) {
     getWebLinks("ffxivChars", "charList", "list");
     var setGilButton = dojo.byId("gilUpdateButton");
     dojo.connect(setGilButton, "onclick", actOnFfxivGil);
+    dojo.query(".doLevelIncrease").connect("onclick", actOnFfxivLevelIncrease);
 }
 
 function putFfxivMergedSearchBox(target) {
@@ -956,6 +984,31 @@ function setFfxivHuntingDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Hunting Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivLevelsIncrease(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivLevelsIncrease",
+        "classCode": formData.ClassCode
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("FFXIV"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Level " + formData.ClassCode + " increased by 1!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Level Inrease FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

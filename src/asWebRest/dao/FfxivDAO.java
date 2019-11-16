@@ -233,6 +233,7 @@ public class FfxivDAO {
         try { returnData = wc.q2do1c(dbc, query_FFXIV_HuntingDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
+    
     private JSONArray ffxivImageMaps(Connection dbc) {
         final String query_FfxivImageMaps = "SELECT File, Description FROM Core.FFXIV_ImageMaps;";
         JSONArray tContainer = new JSONArray();
@@ -281,6 +282,30 @@ public class FfxivDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    private JSONArray ffxivLevelsCurrent(Connection dbc) {
+        final String query_FXFIVLevelsCurrent = "SELECT ClassCode, Level FROM Core.FFXIV_LevelsCurrent ORDER BY Level DESC;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FXFIVLevelsCurrent, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("ClassCode", resultSet.getString("ClassCode"))
+                    .put("Level", resultSet.getInt("Level"));                    
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    private String ffxivLevelsIncrease(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_LevelsIncrease = "UPDATE Core.FFXIV_LevelsCurrent SET Level=Level+1 WHERE ClassCode=?;";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_LevelsIncrease, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }    
         
     private JSONArray ffxivMerged(Connection dbc, int minRange, int maxRange, String completed) {
         String query_FFXIV_Merged = "SELECT * FROM (" +
@@ -561,6 +586,7 @@ public class FfxivDAO {
     public JSONArray getFfxivGilByDate(Connection dbc) { return ffxivGilByDate(dbc); }
     public JSONArray getFfxivImageMaps(Connection dbc) { return ffxivImageMaps(dbc); }
     public JSONArray getFfxivItems(Connection dbc) { return ffxivItems(dbc); }
+    public JSONArray getFfxivLevelsCurrent(Connection dbc) { return ffxivLevelsCurrent(dbc); }
     public JSONArray getFfxivMerged(Connection dbc,  int minRange, int maxRange, String completed) { return ffxivMerged(dbc, minRange, maxRange, completed); }
     
     public JSONArray getFfxivQuests(Connection dbc, int minRange, int maxRange, String completed) {
@@ -616,5 +642,6 @@ public class FfxivDAO {
     public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }
     public String setFfxivGil(Connection dbc, List<String> qParams) { return ffxivGil(dbc, qParams); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
+    public String setFfxivLevelsIncrease(Connection dbc, List<String> qParams) { return ffxivLevelsIncrease(dbc, qParams); }
    
 }
