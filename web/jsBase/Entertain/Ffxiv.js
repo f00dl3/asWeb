@@ -10,7 +10,16 @@ Updated: 16 Nov 2019
 var ffxivCrafting;
 var ffxivItems;
 var ffxivMerged;
+var levelCap = 80;
 var resultLimit = 50;
+
+function actOnFfxivAssetAdd(event) {
+	//NEXT TO ADD!
+	dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	window.alert("Got here!");
+	//setFfxivAssetAdd(thisFormData);
+}
 
 function actOnFfxivGil(event) {
 	dojo.stopEvent(event);
@@ -21,7 +30,6 @@ function actOnFfxivGil(event) {
 function actOnFfxivLevelIncrease(event) {
 	dojo.stopEvent(event);
 	var thisFormData = dojo.formToObject(this.form);
-	var thisFormDataJson = dojo.formToJson(this.form);
 	setFfxivLevelsIncrease(thisFormData);
 }
 
@@ -620,6 +628,7 @@ function putFfxivMergedList(target, questData) {
             if(isSet(ff14q.MateriaSlots)) { rData += "<strong>Materia Slots: </strong>" + ff14q.MateriaSlots + "<br/>"; }
             if(isSet(ff14q.Stats)) { rData += "<strong>Stats: </strong>" + ff14q.Stats + "<br/>"; }
             if(isSet(ff14q.QuestOrder)) { rData += "Quest Order: " + ff14q.QuestOrder + "<br/>"; }
+            if(isSet(ff14q.Clears)) { rData += "Times Cleared: " + ff14q.Clears + "<br/>"; }
             if(isSet(ff14q.Journal)) { rData += "Journal: " + ff14q.Journal + "<br/>"; }
             if(isSet(ff14q.Exp)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/XP.png'/>" + ff14q.Exp; }
             if(isSet(ff14q.Gil)) { rData += "<img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" + ff14q.Gil; }
@@ -696,8 +705,13 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
 			lData += "</div><div class='tr'>";
 		}
 		var cIcon = getBasePath("image") + "/ffxiv/" + li.ClassCode + ".png";
-		lData += "<span class='td'><form>" +
+		var tbBorder = "red";
+		if(li.Level !== levelCap) {
+			tbBorder = "green";
+		}
+		lData += "<span class='td' style='border: 1px solid " + tbBorder + ";'><form>" +
 			"<input type='hidden' name='ClassCode' value='" + li.ClassCode + "'/>" +
+			"<input type='hidden' name='CurrentLevel' value='" + li.Level + "'/>" +
 			"<button class='doLevelIncrease'><img class='th_icon' src='" + cIcon + "'/><br/>" +
 			li.Level + "</button></form>" +
 			"</span>";
@@ -809,6 +823,33 @@ function setFfxivAchievementDone(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Achievement Complete FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivAssetAdd(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivAssetAdd",
+        "assetName": formData.DEFINE,
+        "assetValue": formData.DEFINE,
+        "assetWriteOff": formData.DEFINE
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("FFXIV"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Asset " + formData.Name + " added!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Asset FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

@@ -15,8 +15,9 @@ public class UpdateFfxivAction {
     
     final private FfxivDAO ffxivDAO;
     public UpdateFfxivAction(FfxivDAO ffxivDAO) { this.ffxivDAO = ffxivDAO; }
-    
+
     public String setFfxivAchievementDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivAchievementDone(dbc, qParams); }
+    public String setFfxivAssetAdd(Connection dbc, List qParams) { return ffxivDAO.setFfxivAssetAdd(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonClear(Connection dbc, List qParams) { return ffxivDAO.setFfxivDungeonClear(dbc, qParams); }
     public String setFfxivDungeonDone(Connection dbc, List qParams) { return ffxivDAO.setFfxivDungeonDone(dbc, qParams); }

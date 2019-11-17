@@ -117,6 +117,13 @@ public class FfxivResource extends ServerResource {
                     returnData += updateFfxivAction.setFfxivAchievementDone(dbc, qParams);
                     break;
                     
+                case "setFfxivAssetAdd":
+                    qParams.add(0, argsInForm.getFirstValue("assetName"));
+                    qParams.add(1, argsInForm.getFirstValue("assetValue"));
+                    qParams.add(2, argsInForm.getFirstValue("assetWriteOff"));
+                    returnData += updateFfxivAction.setFfxivAssetAdd(dbc, qParams);
+                    break;
+                    
                 case "setFfxivCraftingDone":
                     qParams.add(0, argsInForm.getFirstValue("recipieName"));
                     returnData += updateFfxivAction.setFfxivCraftingDone(dbc, qParams);

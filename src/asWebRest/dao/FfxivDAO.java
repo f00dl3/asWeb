@@ -49,6 +49,13 @@ public class FfxivDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    private String ffxivAssetAdd(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_FFXIV_AssetAdd = "INSERT INTO Core.FFXIV_Assets VALUES (?,?,CURDATE(),?);";
+        try { returnData = wc.q2do1c(dbc, query_FFXIV_AssetAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }    
     
     private JSONArray ffxivCounts(Connection dbc) {
         final String query_ffxivCounts = "SELECT" +
@@ -314,7 +321,7 @@ public class FfxivDAO {
                 " 'Quest' as MasterType, c.Description as qcDesc, NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality," +
                 " NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats, q.Journal" +
+                " NULL AS MateriaSlots, NULL AS Stats, q.Journal, NULL AS Clears" +
                 " FROM FFXIV_Quests q" +
         	" LEFT JOIN Core.FFXIV_QuestCodes c ON c.Code = SUBSTRING(q.QuestOrder, 4, 6)" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange + " AND Completed LIKE '" + completed + "'";
@@ -327,7 +334,7 @@ public class FfxivDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Crafting' as MasterType, NULL AS qcDesc," +
                 " Crystals, Materials, Durability, MaxQuality, Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_Crafting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -336,7 +343,7 @@ public class FfxivDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Weapon' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Category, DamageType, Damage, Delay, AutoAttack, NULL AS Defence, NULL AS MagicDefense, MateriaSlots, Stats," +
-                " NULL AS Journal" +
+                " NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_Items_Weapons" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -345,7 +352,7 @@ public class FfxivDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Wearable' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense," +
-                " MateriaSlots, Stats, NULL AS Journal" +
+                " MateriaSlots, Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_Items_Wearable" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -354,7 +361,7 @@ public class FfxivDAO {
                 " Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Hunt' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_Hunting" +
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -363,7 +370,7 @@ public class FfxivDAO {
                 " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Gathering' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats, NULL AS Journal" +
+                " NULL AS MateriaSlots, CONCAT(Yield, ' ', YieldBonus) AS Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_GatherNodes" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -372,8 +379,7 @@ public class FfxivDAO {
                 " NULL AS Seals, Version, UnlockQuest AS Event, NULL AS Type, 'Dungeon' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, MinItemLevel AS ILEV," +
                 " PartySize AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Journal," +
-                " CONCAT('Clears: ', Clears, ' Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats" +
+                " NULL AS MateriaSlots, CONCAT('Poetics: ', TomesPoetics, ' Creation: ', TomesCreation, ' Mendacity: ', TomesMendacity, ' Genesis: ', TomesGenesis) AS Stats, NULL AS Journal, Clears" +
                 " FROM Core.FFXIV_Dungeons" +
                 " WHERE MinLevel BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
@@ -382,7 +388,7 @@ public class FfxivDAO {
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Achievement' AS MasterType, Description AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_Achievements" +
                 " UNION ALL" +
                 " SELECT MinLevel, Name, CoordX, CoordY, Zone, XP AS Exp, Gil," +
@@ -390,7 +396,7 @@ public class FfxivDAO {
                 " Seals, NULL as Version, NULL AS Event, NULL AS Type, 'FATE' AS MasterType, NULL AS qcDesc," +
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxDurability, NULL AS Difficulty, NULL AS ILEV," +
                 " NULL AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, NULL AS Defence, NULL AS MagicDefense," +
-                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal" +
+                " NULL AS MateriaSlots, NULL AS Stats, NULL AS Journal, NULL AS Clears" +
                 " FROM Core.FFXIV_FATEs" +
                 " ) as tmp" +
                 " ORDER BY MinLevel, QuestOrder";
@@ -409,6 +415,7 @@ public class FfxivDAO {
                     .put("Exp", resultSet.getInt("Exp"))
                     .put("Gil", resultSet.getInt("Gil"))
                     .put("Classes", resultSet.getString("Classes"))
+                    .put("Clears", resultSet.getInt("Clears"))
                     .put("QuestOrder", resultSet.getString("QuestOrder"))
                     .put("OrigCompDate", resultSet.getString("OrigCompDate"))
                     .put("Completed", resultSet.getInt("Completed"))
@@ -632,8 +639,9 @@ public class FfxivDAO {
     }
         
     public JSONArray getFfxivQuestsByDate(Connection dbc) { return ffxivQuestsByDate(dbc); }
-    
+
     public String setFfxivAchievementDone(Connection dbc, List<String> qParams) { return ffxivAchievementDone(dbc, qParams); }
+    public String setFfxivAssetAdd(Connection dbc, List<String> qParams) { return ffxivAssetAdd(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivQuestDone(dbc, qParams); }
     public String setFfxivCraftingDone(Connection dbc, List<String> qParams) { return ffxivCraftingDone(dbc, qParams); }
     public String setFfxivDungeonClear(Connection dbc, List<String> qParams) { return ffxivDungeonClear(dbc, qParams); }
