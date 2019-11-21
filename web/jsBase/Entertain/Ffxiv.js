@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 16 Nov 2019
+Updated: 20 Nov 2019
 
  */
 
@@ -772,9 +772,10 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
             "<strong>FATEs:</strong> " + fateCounter + " of " + counts.FATEs + " (" + ((fateCounter/fCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Gathering:</strong> " + gatherCounter + " of " + counts.Gathering + " (" + ((gatherCounter/gCount)*100).toFixed(1) + "%)<br/>" +
             "<strong>Hunting:</strong> " + huntCounter + " of " + counts.Hunting + " (" + ((huntCounter/hCount)*100).toFixed(1) + "%)<br/>" +
+            "<strong>Items:</strong> " + counts.Items + "<br/>" +
             "<strong>Quests:</strong> " + compCounter + " of " + qCount + " (" + ((compCounter/qCount)*100).toFixed(1) + "%)<br/>" +
-            "<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
-            "<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
+//			"<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
+//			"<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
             "</div></div><br/>" +
             "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
             "<p><div id='mSearchHolder'></div>" +

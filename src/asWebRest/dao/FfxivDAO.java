@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from Entertainment.java: 14 Nov 2019
-Updated: 16 Nov 2019
+Updated: 20 Nov 2019
 */
 
 package asWebRest.dao;
@@ -64,8 +64,9 @@ public class FfxivDAO {
                 " (SELECT COUNT(Recipie) FROM Core.FFXIV_Crafting) AS Crafting," +
                 " (SELECT Count(Name) FROM Core.FFXIV_Dungeons) AS Dungeons," +
                 " (SELECT Count(Name) FROM Core.FFXIV_FATEs) AS FATEs," +
-                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
-                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
+                " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Auto) AS Items," +
+//              " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Weapons) AS Weapons," +
+//              " (SELECT COUNT(Name) FROM Core.FFXIV_Items_Wearable) AS Wearables," +
                 " (SELECT Count(HuntCode) FROM Core.FFXIV_Hunting) AS Hunting," +
                 " (SELECT Count(NodeCode) FROM Core.FFXIV_GatherNodes) AS Gathering" +
                 " FROM Core.FFXIV_Quests;";
@@ -77,9 +78,10 @@ public class FfxivDAO {
                 tObject
                     .put("Achievements", resultSet.getInt("Achievements"))
                     .put("Quests", resultSet.getInt("Quests"))
-                    .put("Weapons", resultSet.getInt("Weapons"))
+                    .put("Items", resultSet.getInt("Items"))
                     .put("Crafting", resultSet.getInt("Crafting"))
-                    .put("Wearables", resultSet.getInt("Wearables"))
+//                  .put("Weapons", resultSet.getInt("Weapons"))
+//                  .put("Wearables", resultSet.getInt("Wearables"))
                     .put("Hunting", resultSet.getInt("Hunting"))
                     .put("Gathering", resultSet.getInt("Gathering"))
                     .put("FATEs", resultSet.getInt("FATEs"))
@@ -264,9 +266,10 @@ public class FfxivDAO {
             " UNION ALL" +
             " SELECT Name, Level, ILEV, Classes, Slot AS Category, NULL AS Damage, NULL AS DamageType, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Wearable" +
             ") as tmp;";
+        final String query_FfxivItems2 = "SELECT Name, Level, ItemLevel AS ILEV, NULL AS Classes, NULL AS Category, Damage, NULL AS DamageType, Delay, AutoAttack, Defense as Defence, MagicDefense, MateriaSlots, Stats FROM FFXIV_Items_Auto";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivItems, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FfxivItems2, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -339,6 +342,13 @@ public class FfxivDAO {
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
                 " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
+                " NULL AS Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
+                " NULL AS Seals, NULL AS Version, NULL AS Event, NULL AS Type, 'Item' as MasterType, NULL AS qcDesc," + 
+                " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ItemLevel AS ILEV," +
+                " NULL AS Category, NULL AS DamageType, Damage, Delay, AutoAttack, Defense as Defence, NULL AS MagicDefense, MateriaSlots, Stats," +
+                " NULL AS Journal, NULL AS Clears" +
+                " FROM Core.FFXIV_Items_Auto" +
+                /* " SELECT Level as MinLevel, Name, NULL AS CoordX, NULL AS CoordY, NULL AS Zone, NULL AS Exp, NULL AS Gil," +
                 " Classes, NULL AS QuestOrder, NULL AS OrigCompDate, NULL AS Completed, NULL AS GivingNPC," +
                 " NULL AS Seals, Version, NULL AS Event, NULL AS Type, 'Weapon' as MasterType, NULL AS qcDesc," + 
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
@@ -353,7 +363,7 @@ public class FfxivDAO {
                 " NULL AS Crystals, NULL AS Materials, NULL AS Durability, NULL AS MaxQuality, NULL AS Difficulty, ILEV," +
                 " Slot AS Category, NULL AS DamageType, NULL AS Damage, NULL AS Delay, NULL AS AutoAttack, Defence, MagicDefense," +
                 " MateriaSlots, Stats, NULL AS Journal, NULL AS Clears" +
-                " FROM Core.FFXIV_Items_Wearable" +
+                " FROM Core.FFXIV_Items_Wearable" + */
                 " WHERE Level BETWEEN " + minRange + " AND " + maxRange +
                 " UNION ALL" +
                 " SELECT Level AS MinLevel, CONCAT(SUBSTRING(HuntCode, 1, 3), ': ', Enemy, ' x', Quantity) as Name, CoordX, CoordY, Zone, Exp, NULL AS Gil," +
