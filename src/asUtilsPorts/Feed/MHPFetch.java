@@ -4,7 +4,7 @@ Created: 16 Dec 2018
 Updated: 22 Nov 2019
  */
 
-package asUtilsPorts;
+package asUtilsPorts.Feed;
 
 import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.MyDBConnector;
@@ -28,7 +28,6 @@ public class MHPFetch {
     public static void main(String[] args) {
    
     	CommonBeans cb = new CommonBeans();
-        JunkyBeans junkyBeans = new JunkyBeans();
         
         final File mhpFile = new File(cb.getPathChartCache().toString()+"/mhpOut.txt");
         final String troop = args[0];
@@ -73,7 +72,7 @@ public class MHPFetch {
                                 String aDateString = "";
                                 String aTimeString = "";
                                 int iteratedThisFile = 0;
-                                final File arFile = new File(junkyBeans.getRamDrive().toString()+"/mhpOut-"+reportId+".txt");
+                                final File arFile = new File(cb.getPathChartCache().toString()+"/mhpOut-"+reportId+".txt");
                                 StumpJunk.jsoupOutBinary(rURL, arFile, 30.0);
                                 StumpJunk.sedFileReplace(arFile.getPath(), "<td class=\"infoCell3\">", "\"");
                                 StumpJunk.sedFileReplace(arFile.getPath(), "</td>", "\"");

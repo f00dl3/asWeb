@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 22 Nov 2019
+Updated: 23 Nov 2019
  */
 
 package asWebRest.application;
@@ -27,6 +27,7 @@ import asWebRest.resource.NewsFeedResource;
 import asWebRest.resource.SnmpResource;
 import asWebRest.resource.PtoResource;
 import asWebRest.resource.SessionResource;
+import asWebRest.resource.SmarthomeResource;
 import asWebRest.resource.TestResource;
 import asWebRest.resource.ToolsResource;
 import asWebRest.resource.TpResource;
@@ -36,6 +37,9 @@ import asWebRest.resource.WeatherResource;
 import asWebRest.resource.WebCalResource;
 import asWebRest.resource.WebLinkResource;
 import asWebRest.resource.WebVersionResource;
+import asWebRest.shared.CommonBeans;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.restlet.Application;
@@ -48,7 +52,8 @@ import org.restlet.service.EncoderService;
 
 public class AnthonyRestlet extends Application {
     
-    public AnthonyRestlet() {     
+    public AnthonyRestlet() {    
+    	
         CorsService corsService = new CorsService();
         corsService.setAllowingAllRequestedHeaders(true);
         corsService.setAllowedOrigins(new HashSet(Arrays.asList(
@@ -60,6 +65,11 @@ public class AnthonyRestlet extends Application {
         corsService.setAllowedCredentials(true);
         corsService.setSkippingResourceForCorsOptions(true);
         getServices().add(corsService);
+
+        CommonBeans cb = new CommonBeans();
+        final File cachePath = new File(cb.getPathChartCache().toString());
+        if(!cachePath.exists()) { cachePath.mkdirs(); }
+        
     }
     
     @Override
@@ -85,6 +95,7 @@ public class AnthonyRestlet extends Application {
         router.attach("/MediaServer", MediaServerResource.class);
         router.attach("/NewsFeed", NewsFeedResource.class);
         router.attach("/SessionVars", SessionResource.class);
+        router.attach("/Smarthome", SmarthomeResource.class);
         router.attach("/SNMP", SnmpResource.class);
         router.attach("/PTO", PtoResource.class);
         router.attach("/Test", TestResource.class);

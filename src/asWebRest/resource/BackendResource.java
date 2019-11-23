@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: on Creation
+Updated: 23 Nov 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -10,7 +10,6 @@ POST REQUEST VIA COMMAND LINE ala
 
 package asWebRest.resource;
 
-import asWebRest.hookers.CgwRipper;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -21,9 +20,10 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import asUtilsPorts.KCScout;
-import asUtilsPorts.MHPFetch;
-import asUtilsPorts.NWSWarnings;
+import asUtilsPorts.Feeds;
+import asUtilsPorts.GetDaily;
+import asUtilsPorts.Feed.MHPFetch;
+import asUtilsPorts.Feed.cWazey;
 
 public class BackendResource extends ServerResource {
     
@@ -38,7 +38,6 @@ public class BackendResource extends ServerResource {
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
         
-        String[] defaultArgs = {};
         String doWhat = null;
         String returnData = "";
          
@@ -51,21 +50,37 @@ public class BackendResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
             
-	            case "KCScout":
-	                KCScout kcScout = new KCScout();
-	                returnData = kcScout.getScoutSQL();                  
-	                break;
+            	case "_DEVTEST":
+            		cWazey waze = new cWazey();
+            		waze.ripShit(dbc);
+            		break;
             
+            	case "Feeds":
+            		String interval = "2m";
+            		Feeds feeds = new Feeds();
+            		try { interval = argsInForm.getFirstValue("interval"); } catch (Exception e) { }
+            		switch(interval) {
+            			case "1h": returnData = feeds.doHourly(dbc); break;
+            			case "2m": default: returnData = feeds.do2Minute(dbc); break;
+            		}
+            		break;
+            
+            	case "GetDaily":
+            		int daysBack = 1;
+            		GetDaily gd = new GetDaily();
+            		try { daysBack = Integer.parseInt(argsInForm.getFirstValue("days")); } catch (Exception e) { }
+            		returnData = gd.getDaily(dbc, daysBack);
+            		break;
+            		
 	            case "MHPFetch":
 	                MHPFetch mhpFetch = new MHPFetch();
-	                mhpFetch.main(defaultArgs);                    
+	                String mhpArg1 = "A";
+	                try { mhpArg1 = argsInForm.getFirstValue("troop"); } catch (Exception e) { }
+	                String[] mhpArgs = { mhpArg1 };
+	                //arg1 = Troop
+	                mhpFetch.main(mhpArgs);                    
 	                break;
-                 
-                case "NWSWarnings":
-                    NWSWarnings nwsWarnings = new NWSWarnings();
-                    nwsWarnings.main(defaultArgs);                    
-                    break;
-                    
+                
             }
             
         }

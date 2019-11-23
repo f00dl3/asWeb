@@ -4,7 +4,7 @@ Created: 2 Sep 2017
 Updated: 22 Nov 2019
 */
 
-package asUtilsPorts;
+package asUtilsPorts.Feed;
 
 import asUtils.Shares.StumpJunk;
 
@@ -16,16 +16,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import asWebRest.shared.CommonBeans;
-import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 
 public class NWSWarnings {
 	
 
-	public static void main(String[] args) {
+	public static void doFetch(Connection dbc) {
 
         CommonBeans cb = new CommonBeans();
+        WebCommon wc = new WebCommon();
     
-		final String ramTemp = cb.getPathChartCache().toString()+"/rssXMLFeedsJ";
+		final String ramTemp = cb.getPathChartCache().toString();
 		
 		final String warn2URL = "https://api.weather.gov/alerts/active";
 		final File warn2File = new File(ramTemp+"/Warn2All.json");
@@ -112,10 +113,8 @@ public class NWSWarnings {
 		}
 		
 		w2jsonSQL = (w2jsonSQL+";").replace(",;", ";");
-		
-		try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) {
-				stmt.executeUpdate(w2jsonSQL);
-		} catch (Exception e) { e.printStackTrace(); }
+
+        try { wc.q2do1c(dbc, w2jsonSQL, null); } catch (Exception e) { e.printStackTrace(); }
 		
 		warn2File.delete();
 

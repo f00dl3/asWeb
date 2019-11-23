@@ -1,28 +1,33 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 22 Nov 2019
+Updated: 23 Nov 2019
 */
 
-package asUtilsPorts;
+package asUtilsPorts.Feed;
 
 import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.StumpJunk;
+import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class KCScout {
     
-    public static String getScoutSQL() {
+    public static String getScoutSQL(Connection dbc) {
         
-        JunkyBeans junkyBeans = new JunkyBeans();
+        CommonBeans cb = new CommonBeans();
+        WebCommon wc = new WebCommon();
                 
         final String scoutURL = "http://www.kcscout.net/IncidentViewer.aspx";
-        final File ramDrive = junkyBeans.getRamDrive();
-        final String ramTemp = ramDrive.getPath()+"/rssXMLFeedsJ";
+        final File ramDrive = new File(cb.getPathChartCache().toString());
+        final String ramTemp = ramDrive.getPath();
         final File scoutFile = new File(ramTemp+"/ScoutFeed.aspx");
         
         StumpJunk.jsoupOutFile(scoutURL, scoutFile);
@@ -61,6 +66,10 @@ public class KCScout {
         kcScoutSQL = kcScoutSQL+";";
         kcScoutSQL = kcScoutSQL.replaceAll("\\),;", "\\);");
 		
+
+        try { kcScoutSQL = wc.q2do1c(dbc, kcScoutSQL, null); } catch (Exception e) { e.printStackTrace(); }
+
+        
         return kcScoutSQL;
         
     }
