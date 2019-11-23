@@ -259,11 +259,28 @@ public class GetSPC {
         try { wc.q2do1c(dbc, cleanSPCmdSQL, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, cleanSPCwwSQL, null); } catch (Exception e) { e.printStackTrace(); }
         
-        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
-        
         spcMDFile.delete();
         spcWWFile.delete();
                         
     }    
+    
+    public static void doGetSPCHourly(Connection dbc) {
+
+        CommonBeans cb = new CommonBeans();
+    	WebCommon wc = new WebCommon();
+    	JunkyBeans jb = new JunkyBeans();
+    	
+        final String mysqlShare = cb.getPathChartCache().toString();
+        final String spcFeedBase = jb.getSpcFeedBase();
+        
+		File spcOutFileSrc = new File(mysqlShare+"/spcacrss.xml");
+		StumpJunk.jsoupOutFile(spcFeedBase+"spcacrss.xml", spcOutFileSrc);		
+		String spcOutSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/spcacrss.xml' IGNORE INTO TABLE WxObs.SPCOutlooks CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET title = ExtractValue(@tmp, '//title'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";
+		
+        try { wc.q2do1c(dbc, spcOutSQL, null); } catch (Exception e) { e.printStackTrace(); }
+
+		new File(mysqlShare+"/spcacrss.xml").delete();
+		
+    }
     
 }
