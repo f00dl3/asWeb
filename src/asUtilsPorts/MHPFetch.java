@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Dec 2018
-Updated: 12 May 2019
+Updated: 22 Nov 2019
  */
 
 package asUtilsPorts;
@@ -9,6 +9,8 @@ package asUtilsPorts;
 import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.MyDBConnector;
 import asUtils.Shares.StumpJunk;
+import asWebRest.shared.CommonBeans;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -25,9 +27,10 @@ public class MHPFetch {
     
     public static void main(String[] args) {
    
+    	CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
         
-        final File mhpFile = new File(junkyBeans.getRamDrive().toString()+"/mhpOut.txt");
+        final File mhpFile = new File(cb.getPathChartCache().toString()+"/mhpOut.txt");
         final String troop = args[0];
         final String tURL = "https://www.mshp.dps.missouri.gov/HP68/SearchAction?searchTroop=" + troop;
         final String rURLPrefix = "https://www.mshp.dps.missouri.gov/HP68/AccidentDetailsAction?ACC_RPT_NUM=";
@@ -142,7 +145,7 @@ public class MHPFetch {
             }
             query_AccidentReport = query_AccidentReport.substring(0, query_AccidentReport.length() - 1) + ";";
             
-            final File sqlDebugFile = new File(junkyBeans.getRamDrive().toString()+"/mhp.sql");
+            final File sqlDebugFile = new File(cb.getPathChartCache().toString()+"/mhp.sql");
             try { StumpJunk.varToFile(query_AccidentReport, sqlDebugFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
             //System.out.println(query_AccidentReport);  
             try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) { stmt.executeUpdate(query_AccidentReport); }

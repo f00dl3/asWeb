@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 19 Nov 2019
+Updated: 22 Nov 2019
  */
 
 package asWebRest.application;
 
 import asWebRest.resource.AddressResource;
+import asWebRest.resource.BackendResource;
 import asWebRest.resource.CgwRipperResource;
 import asWebRest.resource.ChartResource;
 import asWebRest.resource.CongressResource;
@@ -66,6 +67,7 @@ public class AnthonyRestlet extends Application {
         Filter encoder = new Encoder(getContext(), false, true, new EncoderService(true));
         Router router = new Router(getContext());
         router.attach("/Addresses", AddressResource.class);
+        router.attach("/Backend", BackendResource.class);
         router.attach("/CgwRipper", CgwRipperResource.class);
         router.attach("/Chart", ChartResource.class);
         router.attach("/CrashData", CrashDataResource.class);
