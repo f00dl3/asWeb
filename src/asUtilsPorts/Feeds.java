@@ -23,15 +23,13 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
-    	anssQuakes.doAnssQuakes(dbc);
-    	
-        KCScout kcScout = new KCScout();
-        returnData += kcScout.getScoutSQL(dbc);     
-   
         NWSWarnings nwsWarnings = new NWSWarnings();
-        nwsWarnings.doFetch(dbc);    
-        
         GetSPC getSPC = new GetSPC();
+        KCScout kcScout = new KCScout();
+        
+    	anssQuakes.doAnssQuakes(dbc);    	
+        returnData += kcScout.getScoutSQL(dbc); 
+        nwsWarnings.doFetch(dbc);    
         getSPC.doGetSPC(dbc);
         getSPC.doGetSPCb(dbc);
         
@@ -45,12 +43,11 @@ public class Feeds {
     	String returnData = "Fetch hourly feeds:\n";
     	
     	RSSSources rssSources = new RSSSources();
-    	rssSources.getRSS();
-    	
-    	GetSPC getSPC = new GetSPC();
-    	getSPC.doGetSPCHourly(dbc);
-    	
     	NHCFetch nhcFetch = new NHCFetch();
+    	GetSPC getSPC = new GetSPC();
+    	
+    	rssSources.getRSS(dbc);    	
+    	getSPC.doGetSPCHourly(dbc);    	
     	nhcFetch.getNHC(dbc);
     	
     	return returnData;

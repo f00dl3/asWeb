@@ -2,6 +2,13 @@
 by Anthony Stump
 Created: 23 Nov 2019
 Updated: on creation
+
+OVERALL LOGIC FLOW: 
+Have the commands execute to hub.
+
+Set command to disable text alarming for 1 hour 
+Set command to enable text alarming (arm system)
+
  */
 
 package asWebRest.resource;
