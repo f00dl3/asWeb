@@ -66,10 +66,8 @@ public class KCScout {
         kcScoutSQL = kcScoutSQL+";";
         kcScoutSQL = kcScoutSQL.replaceAll("\\),;", "\\);");
 		
-
         try { kcScoutSQL = wc.q2do1c(dbc, kcScoutSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
-        
         return kcScoutSQL;
         
     }

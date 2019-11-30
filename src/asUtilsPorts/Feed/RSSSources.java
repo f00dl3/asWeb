@@ -38,11 +38,10 @@ public class RSSSources {
         	while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
             	String thisLinkName = resultSet.getString("Name");
-				String thisLinkURL = resultSet.getString("LinkURL");
 				String thisFeedFileStr = "NewsFeed"+thisLinkName+".xml";
 				tObject
 	                .put("thisLinkName", thisLinkName)
-	                .put("thisLinkURL", thisLinkURL)
+	                .put("thisLinkURL", resultSet.getString("LinkURL"))
 	                .put("thisFeedFileStr", thisFeedFileStr);               
                 tContainer.put(tObject);
         	}
@@ -54,15 +53,17 @@ public class RSSSources {
         	String thisLinkName = tjo.getString("thisLinkName");
 			String thisLinkURL = tjo.getString("thisLinkURL");
 			String thisFeedFileStr =  tjo.getString("thisFeedFileStr");
-			System.out.println("Fetching: "+thisLinkName+" ("+thisLinkURL+")");
 			File thisFeedFile = new File(ramTemp+"/"+thisFeedFileStr);
 			StumpJunk.jsoupOutFile(thisLinkURL, thisFeedFile);
 			StumpJunk.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "<!\\[CDATA\\[", "");
 			StumpJunk.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "\\]\\]", "");
 			String thisFeedUpSQL = "LOAD XML LOCAL INFILE '"+ramTemp+"/"+thisFeedFileStr+"' IGNORE INTO TABLE Feeds.RSSFeeds CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<item>';";
-			try { returnData += wc.q2do1c(dbc, thisFeedUpSQL, null); } catch (Exception e) { e.printStackTrace(); }
+			try { 
+				System.out.println("Loading infile for: " +thisLinkName+" ("+thisLinkURL+")");
+				returnData += wc.q2do1c(dbc, thisFeedUpSQL, null);
+			} catch (Exception e) { e.printStackTrace(); }
 			thisFeedFile.delete();
-        	
+			try { Thread.sleep(250); } catch (InterruptedException e) { e.printStackTrace(); }
         }
              
     }

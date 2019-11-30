@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    16 Nov 2019
+    Updated:    24 Nov 2019
     Author     : astump
 --%>
 
@@ -236,6 +236,9 @@
             case "Physicals":
                 fullTitle = "Physicals";
                 break;
+            case "Smarthome":
+            	fullTitle = "Smart Home";
+            	break;
             case "SysMon":
                 fullTitle = "SNMP+ Tools";
                 scripts2Load += snmpScriptPack + sysMonScriptPack;

@@ -1,21 +1,18 @@
 /*
 by Anthony Stump
 Created: 16 Dec 2018
-Updated: 22 Nov 2019
+Updated: 23 Nov 2019
  */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.MyDBConnector;
 import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,12 +22,12 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class MHPFetch {
     
-    public static void main(String[] args) {
+    public static void doMHP(Connection dbc, String troop) {
    
     	CommonBeans cb = new CommonBeans();
+    	WebCommon wc = new WebCommon();
         
         final File mhpFile = new File(cb.getPathChartCache().toString()+"/mhpOut.txt");
-        final String troop = args[0];
         final String tURL = "https://www.mshp.dps.missouri.gov/HP68/SearchAction?searchTroop=" + troop;
         final String rURLPrefix = "https://www.mshp.dps.missouri.gov/HP68/AccidentDetailsAction?ACC_RPT_NUM=";
         final DateTimeFormatter inDateFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
@@ -146,10 +143,10 @@ public class MHPFetch {
             
             final File sqlDebugFile = new File(cb.getPathChartCache().toString()+"/mhp.sql");
             try { StumpJunk.varToFile(query_AccidentReport, sqlDebugFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
-            //System.out.println(query_AccidentReport);  
-            try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) { stmt.executeUpdate(query_AccidentReport); }
-            catch (SQLException se) { se.printStackTrace(); }
-            catch (Exception e) { e.printStackTrace(); }
+            //System.out.println(query_AccidentReport);
+
+            try { wc.q2do1c(dbc, query_AccidentReport, null); } catch (Exception e) { e.printStackTrace(); }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }            

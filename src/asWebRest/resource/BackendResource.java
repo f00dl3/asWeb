@@ -76,9 +76,7 @@ public class BackendResource extends ServerResource {
 	                MHPFetch mhpFetch = new MHPFetch();
 	                String mhpArg1 = "A";
 	                try { mhpArg1 = argsInForm.getFirstValue("troop"); } catch (Exception e) { }
-	                String[] mhpArgs = { mhpArg1 };
-	                //arg1 = Troop
-	                mhpFetch.main(mhpArgs);                    
+	                mhpFetch.doMHP(dbc, mhpArg1);                    
 	                break;
                 
             }

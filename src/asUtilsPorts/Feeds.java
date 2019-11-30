@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Reworked: 23 Nov 2019
-Updated: 23 Nov 2019
+Updated: 29 Nov 2019
 */
 
 package asUtilsPorts;
@@ -23,18 +23,19 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
+    	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
         GetSPC getSPC = new GetSPC();
         KCScout kcScout = new KCScout();
         
-    	anssQuakes.doAnssQuakes(dbc);    	
-        returnData += kcScout.getScoutSQL(dbc); 
-        nwsWarnings.doFetch(dbc);    
-        getSPC.doGetSPC(dbc);
-        getSPC.doGetSPCb(dbc);
+        try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
+    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
+    	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
+    	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); } 
         
         return returnData;
-        
             
     }
     
@@ -46,9 +47,9 @@ public class Feeds {
     	NHCFetch nhcFetch = new NHCFetch();
     	GetSPC getSPC = new GetSPC();
     	
-    	rssSources.getRSS(dbc);    	
-    	getSPC.doGetSPCHourly(dbc);    	
-    	nhcFetch.getNHC(dbc);
+    	try { getSPC.doGetSPCHourly(dbc); } catch (Exception e) { e.printStackTrace(); }    	
+    	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
+    	//try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
     	
     	return returnData;
     	
