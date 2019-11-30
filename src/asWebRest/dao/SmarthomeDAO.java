@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: on creation
+Updated: 30 Nov 2019
 */
 
 package asWebRest.dao;
@@ -13,8 +13,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import asUtils.Secure.JunkyPrivate;
+import asUtilsPorts.Mailer;
+
 public class SmarthomeDAO {
-    
+
+	Mailer mailer = new Mailer();
+	JunkyPrivate jp = new JunkyPrivate();
     WebCommon wc = new WebCommon();
     
     public JSONArray getDoorEvents(Connection dbc) {
@@ -39,7 +44,10 @@ public class SmarthomeDAO {
     public String setDoorEvent(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
         String query_AddDoorEvent = "INSERT INTO net_snmp.Home_DoorEvents (OriginalTimestamp, DoorLocation) values (?, ?);";
+        String messageContent = "asWeb Smarthome API Event - " + qParams.get(1) + " detected open!";
+        String messageRecipient = jp.getSmsAddress();
         try { returnData = wc.q2do1c(dbc, query_AddDoorEvent, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { mailer.sendMail(messageRecipient, "asWeb Smarthome Door Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

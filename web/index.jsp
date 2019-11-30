@@ -1,7 +1,7 @@
 <%-- 
     Document   : index.jsp
     Created on : Feb 10, 2018, 1:09:23 PM
-    Updated:    7 Jun 2018
+    Updated:    30 Nov 2019
     Author     : astump
 
     Notes: Consider building for alt deployment location i.e. Raspberry Pi
@@ -10,7 +10,7 @@
 
 <%
     String headerType = "full";
-    String pageTitle = "asWeb (Java REST)";
+    String pageTitle = "asWeb (Java REST API)";
     String scriptIt = "true";
     String remoteIpAddr = request.getRemoteAddr();
     String userAgent = request.getHeader("user-agent");

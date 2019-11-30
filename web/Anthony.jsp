@@ -7,7 +7,7 @@
 
 <%
     String headerType = "full";
-    String pageTitle = "Anthony's REST UI";
+    String pageTitle = "Anthony's REST API";
     String scriptIt = "true";
     String authCheck = "true";
 %>
