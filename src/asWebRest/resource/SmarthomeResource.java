@@ -1,10 +1,9 @@
 /*
 by Anthony Stump
 Created: 23 Nov 2019
-Updated: 29 Nov 2019
+Updated: 1 Dec 2019
 
 OVERALL LOGIC FLOW: 
-Have the commands execute to hub.
 
 Set command to disable text alarming for 1 hour 
 Set command to enable text alarming (arm system)

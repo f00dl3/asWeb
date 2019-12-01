@@ -36,7 +36,7 @@ public class LogsDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-
+    
     public JSONArray getRedditStatsKcregionalwx(Connection dbc, String order) {
         final String query_RedditStatsKcregionalwx = "SELECT " +
         " Date, UniqueViews, PageViews, Subscriptions" +

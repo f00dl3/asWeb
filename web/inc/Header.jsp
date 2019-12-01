@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    24 Nov 2019
+    Updated:    1 Dec 2019
     Author     : astump
 --%>
 
@@ -83,6 +83,7 @@
     };
     
     String[] snmpScripts = {
+   		"SNMP/Smarthome",
         "SNMP/SnmpData",
         "Weather/WxFunctions"
     };

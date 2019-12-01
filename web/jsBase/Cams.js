@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 8 May 2019
+Updated: 1 Dec 2019
  */
 
 function actOnDoLive(event) {
@@ -38,6 +38,7 @@ function displayVideoLoop() {
 function popCamHolder() {
     var getCamRawFolder = getServerPath("rawGet") + "/Cams";
     var rData = "<h1><img src='" + getBasePath("icon") + "/DeusEx.png' class='th_icon'/>Anthony's Survailance</h1>" +
+    		"<span id='miniSmartControllerHolder'></span>" +
             "<button class='UButton' id='doLive'>Live</button>" + 
             "<button class='UButton' id='doLoop'>Loop</button><br/>" +
             "<div id='whereCamsGo'></div><p>" +
@@ -48,6 +49,7 @@ function popCamHolder() {
     var buttonVideo = dojo.byId("doLoop");
     dojo.connect(buttonLive, "onclick", actOnDoLive);
     dojo.connect(buttonVideo, "onclick", actOnDoVideo);
+    showMiniSmartController("miniSmartControllerHolder");
     displayVideoLoop();    
 }
 

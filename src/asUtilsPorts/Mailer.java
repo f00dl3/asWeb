@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 29 Nov 2019
+Updated: 30 Nov 2019
 */
 
 package asUtilsPorts;
@@ -11,6 +11,7 @@ import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.MyDBConnector;
 import asUtils.Shares.SSHTools;
 import asUtils.Shares.StumpJunk;
+import asWebRest.dao.NewsFeedDAO;
 import asWebRest.shared.WebCommon;
 
 import com.jcraft.jsch.JSchException;
@@ -26,7 +27,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -37,55 +41,57 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Store;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Mailer {
     
         public static Session getMailSession() {
             
-                JunkyPrivate junkyPrivate = new JunkyPrivate();
-                JunkyBeans junkyBeans = new JunkyBeans();
-                final String username = junkyPrivate.getGmailUser();
-		final String password = mailAuth();
-
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", junkyBeans.getGmailSmtpServer());
-		props.put("mail.smtp.port", "587");
-
-		Session session = Session.getInstance(props,
-		  new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-                
-                return session;
+	        JunkyPrivate junkyPrivate = new JunkyPrivate();
+	        JunkyBeans junkyBeans = new JunkyBeans();
+	        final String username = junkyPrivate.getGmailUser();
+			final String password = mailAuth();
+	
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", junkyBeans.getGmailSmtpServer());
+			props.put("mail.smtp.port", "587");
+	
+			Session session = Session.getInstance(props,
+			  new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username, password);
+				}
+			});
+	                
+            return session;
                 
         }
         
         public static Session getMailSessionSsh(File keyfile) throws JSchException {
             
-                JunkyPrivate junkyPrivate = new JunkyPrivate();
-                JunkyBeans junkyBeans = new JunkyBeans();
-                final String username = junkyPrivate.getGmailUser();
-                final String password = mailAuthSsh(keyfile);
+            JunkyPrivate junkyPrivate = new JunkyPrivate();
+            JunkyBeans junkyBeans = new JunkyBeans();
+            final String username = junkyPrivate.getGmailUser();
+            final String password = mailAuthSsh(keyfile);
 
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", junkyBeans.getGmailSmtpServer());
-		props.put("mail.smtp.port", "587");
-
-		Session session = Session.getInstance(props,
-		  new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-                
-                return session;
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", junkyBeans.getGmailSmtpServer());
+			props.put("mail.smtp.port", "587");
+		
+			Session session = Session.getInstance(props,
+			  new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username, password);
+				}
+			});
+		            
+            return session;
                 
         }
         
@@ -171,6 +177,7 @@ public class Mailer {
 
 		
         try { wc.q2do1c(dbc, mailUpdateSQL, null); } catch (Exception e) { e.printStackTrace(); }
+        try { runMailActions(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return mailUpdateSQL;
         
@@ -223,6 +230,27 @@ public class Mailer {
             e.printStackTrace();
         }
         return allMail;
+    }
+    
+    public static void runMailActions(Connection dbc) {
+
+    	JunkyPrivate jp = new JunkyPrivate();
+    	NewsFeedDAO newsFeedDAO = new NewsFeedDAO();
+    	JSONArray messageStore = newsFeedDAO.getRecentEmail(dbc);
+    	for(int i = 0; i < messageStore.length(); i++) {
+    		JSONObject thisMessage = messageStore.getJSONObject(i);
+    		String thisSubject = thisMessage.getString("Subject");
+    		if(thisSubject.contains("asWeb:")) {
+    	        String messageRecipient = jp.getSmsAddress();
+    	        String messageSubject = "asWeb Command Detected!";
+    	        String messageBody = thisMessage.getString("Subject");
+    	        List<String> sqParams = new ArrayList<String>();
+    	        sqParams.add(0, thisMessage.getString("MessageID"));
+    	        sendMail(messageRecipient, messageSubject, messageBody, null);
+    	        newsFeedDAO.setMessageActionTaken(dbc, sqParams);
+    		}
+    	}
+    	
     }
     
 	public static void sendMail(String sendTo, String messageSubject, String messageContent, File attachment) {
