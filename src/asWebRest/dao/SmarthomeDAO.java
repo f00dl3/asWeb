@@ -7,20 +7,36 @@ Updated: 1 Dec 2019
 package asWebRest.dao;
 
 import java.sql.ResultSet;
+
+import asWebRest.hookers.AlarmSystem;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import asUtils.Secure.JunkyPrivate;
-import asUtilsPorts.Mailer;
-
 public class SmarthomeDAO {
 
-	Mailer mailer = new Mailer();
-	JunkyPrivate jp = new JunkyPrivate();
+	AlarmSystem als = new AlarmSystem();
     WebCommon wc = new WebCommon();
+    
+    public JSONArray getArmDisarm(Connection dbc) {
+        final String query_ArmDisarm = "SELECT RequestID, ArmTime, ArmType FROM net_snmp.Home_ArmDisarm ORDER BY ArmTime DESC LIMIT 25;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ArmDisarm, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("RequestID", resultSet.getLong("RequestID"))
+                    .put("ArmTime", resultSet.getString("ArmTime"))
+                    .put("ArmType", resultSet.getString("ArmType"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     public JSONArray getDoorEvents(Connection dbc) {
         final String query_DoorEvents = "SELECT EventID, ReceivedTimestamp, OriginalTimestamp, DoorLocation FROM net_snmp.Home_DoorEvents;";
@@ -46,16 +62,13 @@ public class SmarthomeDAO {
         String query_ArmDisarm = "INSERT INTO net_snmp.Home_ArmDisarm (ArmType) values (?);";
         try { returnData = wc.q2do1c(dbc, query_ArmDisarm, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
-    }
-    
+    }    
     
     public String setDoorEvent(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";
         String query_AddDoorEvent = "INSERT INTO net_snmp.Home_DoorEvents (OriginalTimestamp, DoorLocation) values (?, ?);";
-        String messageContent = qParams.get(1) + " detected open!";
-        String messageRecipient = jp.getSmsAddress();
         try { returnData = wc.q2do1c(dbc, query_AddDoorEvent, qParams); } catch (Exception e) { e.printStackTrace(); }
-        try { mailer.sendMail(messageRecipient, "asWeb Smarthome Door Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
+        try { als.notifyOfEvent(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 14 Nov 2019
+Updated: 1 Dec 2019
 
  */
 
@@ -328,6 +328,7 @@ function getResource(what) {
         case "Physicals": return getBasePath("ui") + "/Physicals.jsp"; break;
         case "Pto": return getBasePath("rest") + "/PTO"; break;
         case "Session": return getBasePath("serv") + "/Session"; break;
+        case "Smarthome": return getBasePath("rest") + "/Smarthome"; break;
         case "SNMP": return getBasePath("rest") + "/SNMP"; break;
         case "Test": return getBasePath("rest") + "/Test"; break;
         case "Tools": return getBasePath("rest") + "/Tools"; break;

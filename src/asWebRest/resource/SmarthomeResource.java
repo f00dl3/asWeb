@@ -2,12 +2,6 @@
 by Anthony Stump
 Created: 23 Nov 2019
 Updated: 1 Dec 2019
-
-OVERALL LOGIC FLOW: 
-
-Set command to disable text alarming for 1 hour 
-Set command to enable text alarming (arm system)
-
  */
 
 package asWebRest.resource;
@@ -68,11 +62,23 @@ public class SmarthomeResource extends ServerResource {
             
             	case "doRouterSmartplug":
             		break;
+            		
+            	case "getArmDisarm":
+                    JSONArray armDisarm = getSmarthomeAction.getArmDisarm(dbc);
+                    returnData = armDisarm.toString();
+            		break;       
             
             	case "getDoorEvents":
                     JSONArray doorEvents = getSmarthomeAction.getDoorEvents(dbc);
                     returnData = doorEvents.toString();
-            		break;            	
+            		break;             	
+            
+	            case "setArmDisarm":
+            		String armType = "";
+            		if(wc.isSet(argsInForm.getFirstValue("ArmType"))) { armType = argsInForm.getFirstValue("ArmType"); }
+            		qParams.add(0, armType);
+                	returnData = updateSmarthomeAction.setArmDisarm(dbc, qParams).toString();
+                	break;       	
             
 	            case "setDoorEvent":
             		String originalTimestamp = "";
@@ -81,14 +87,12 @@ public class SmarthomeResource extends ServerResource {
             		if(wc.isSet(argsInForm.getFirstValue("DoorLocation"))) { doorLocation = argsInForm.getFirstValue("DoorLocation"); }
             		qParams.add(0, originalTimestamp);
             		qParams.add(1, doorLocation);
-            		System.out.println(originalTimestamp + " - " + doorLocation);
                 	returnData = updateSmarthomeAction.setDoorEvent(dbc, qParams).toString();
                 	break;
                     
             }
             
-        }
-        
+        }        
                
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
 
