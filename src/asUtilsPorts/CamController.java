@@ -32,8 +32,8 @@ public class CamController {
 		final File pushTemp = camBeans.getPushTemp();
 
 		Thread p1 = new Thread(() -> { mainCams(camPath, pushTemp); });
-		//Thread p2 = new Thread(() -> { piCams(camPath, pushTemp); });
-		Thread procs[] = { p1 /*, p2 */};
+		Thread p2 = new Thread(() -> { piCams(camPath, pushTemp); });
+		Thread procs[] = { p1, p2 };
 		for (Thread thread : procs) { thread.start(); } 
                 
 	}

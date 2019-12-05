@@ -31,7 +31,12 @@ public class CamWorkerPi {
 		final String instance = args[1];
 		final String piCam1 = junkyPrivate.getIpForRaspPi1();
 		File yWebC4File = new File(camPath+"/"+instance+"webc4-temp.jpeg");
-                
+
+        final String capCommand_191205 = "ffmpeg -i rtsp://"+piCam1+":8554/unicast -f image2 -update 1 "+yWebC4File.getPath();
+
+        StumpJunk.runProcess(capCommand_191205);
+        
+        /*
         while (testVal == testVal) {
 
 			//yWebC4File.delete();
@@ -40,7 +45,6 @@ public class CamWorkerPi {
             final String capCommand = "ffmpeg -i rtsp://"+piCam1+":8554/unicast -ss 00:00:00.6 -frames 1 "+yWebC4File.getPath();
             
             try { 
-                //StumpJunk.runProcess(capCommand);
                 StumpJunk.runProcess("timeout --kill-after="+timeout+" "+timeout+" "+capCommand);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -48,7 +52,7 @@ public class CamWorkerPi {
 			
             if(!yWebC4File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()); }
             
-		}
+		} */
 
 	}
 
