@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 Dec 2019
+Updated: 4 Dec 2019
 
  */
 
@@ -222,6 +222,7 @@ function getBasePath(opt) {
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase = baseForUi + "/MediaServer"; break;
+        case "persist": tBase = baseForUi + "/persist"; break;
         case "rest": tBase = baseForRestlet; break;
         case "root": tBase = base; break;
         case "serv": tBase = baseForServlet; break;

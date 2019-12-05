@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 4 Dec 2019
+Updated: 5 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -38,7 +38,6 @@ public class CamWorkerHF {
 		final String ipCam1Alt = junkyPrivate.getIpForCam1Alt() + ":88";
 		final String ipCam2 = junkyPrivate.getIpForCam2() + ":88";
 		final String ipCam3 = junkyPrivate.getIpForCam3() + ":88";
-		final String piCam1 = junkyPrivate.getIpForRaspPi1();
 		final String ipCamUser = junkyPrivate.getIpCamUser();
 		final String ipCamPass = junkyPrivate.getIpCamPass();
 
@@ -78,29 +77,17 @@ public class CamWorkerHF {
             Scanner urlScanner = null; String thisUrl = ""; try { urlScanner = new Scanner(urlFile); while(urlScanner.hasNext()) { thisUrl = urlScanner.nextLine(); } } catch (FileNotFoundException e) { e.printStackTrace(); }
                         
 
-            final double timeout = 1.5;
             final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F -- GA "+tempGarage+"F -- CPU "+tempCPU+"F -- "+upsStatus;
-            final String capCommand = "ffmpeg -i rtsp://"+piCam1+":8554/unicast -ss 00:00:00.6 -frames 1 "+yWebC4File.getPath();
             
             System.out.println("DEBUG: Cam image downloads");
-            //Use StumpJunk.jsoupOutBinaryNoCache if issues!
-			Thread ca1a = new Thread(() -> {
-                //System.out.println("Disabled due to Cam 4 down"); << REINSTATE THIS IF CAUSES FAIL. BUILT TIMEOUT TO ADDRESS 7/21/19
-                try { 
-                    //StumpJunk.runProcess(capCommand);
-                    StumpJunk.runProcess("timeout --kill-after="+timeout+" "+timeout+" "+capCommand);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                
-            });
+            //Use StumpJunk.jsoupOutBinaryNoCache if issues!			
 			Thread ca1b = new Thread(() -> { try { StumpJunk.jsoupOutBinary("http://"+ipCam1+"/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr="+ipCamUser+"&pwd="+ipCamPass, yWebC3File, capWait);  } catch (Exception e) { } });
 			Thread ca1c = new Thread(() -> { try { StumpJunk.jsoupOutBinary("http://"+ipCam2+"/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr="+ipCamUser+"&pwd="+ipCamPass, yWebC2File, capWait);  } catch (Exception e) { } });
 			Thread ca1d = new Thread(() -> { try { StumpJunk.jsoupOutBinary("http://"+ipCam3+"/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=admin&pwd=", yWebC5File, capWait); } catch (Exception e) { } });
-			Thread thList1[] = { ca1a, ca1b, ca1c, ca1d };
+			Thread thList1[] = { ca1b, ca1c, ca1d };
 			for (Thread thread : thList1) { thread.start(); } 
 			for (int i = 0; i < thList1.length; i++) { try { thList1[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
-		
+
 
 			if(yWebC3File.length() == 0) { 
                 System.out.println("DEBUG: Alt Cam image downloads");

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 4 Dec 2019
+Updated: 5 Dec 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -21,11 +21,13 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import asUtilsPorts.CamController;
+import asUtilsPorts.CamNightly;
 import asUtilsPorts.CamPusher;
 import asUtilsPorts.Feeds;
 import asUtilsPorts.GetDaily;
 import asUtilsPorts.Feed.MHPFetch;
 import asUtilsPorts.Feed.cWazey;
+import asUtilsPorts.Tests.TestStuff;
 
 public class BackendResource extends ServerResource {
     
@@ -56,6 +58,11 @@ public class BackendResource extends ServerResource {
             		cWazey waze = new cWazey();
             		waze.ripShit(dbc);
             		break;
+            		            		
+            	case "_TEST":
+            		TestStuff testStuff = new TestStuff();
+            		testStuff.stupidTomcatSandboxing();
+            		break;
             		
             	case "CamController":
             		CamController cc = new CamController();
@@ -65,6 +72,11 @@ public class BackendResource extends ServerResource {
             	case "CamPusher":
             		CamPusher camPusher = new CamPusher();
             		camPusher.pushIt(dbc);
+            		break;
+            		
+            	case "CamNightly":
+            		CamNightly camNightly = new CamNightly();
+            		camNightly.doJob(dbc);
             		break;
             		
             	case "Feeds":

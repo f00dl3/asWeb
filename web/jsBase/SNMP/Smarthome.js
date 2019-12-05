@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 4 Dec 2019
+Updated: 5 Dec 2019
 */
 
 function actOnArmAway(event) {
@@ -81,8 +81,12 @@ function populateDoorEvents(target, eventData) {
 		"<strong>Last 5:</strong><br/>" +
 		"<div class='table'>";
 	eventLog.forEach(function(el) {
-		if(counter <= 5) {
-			rData += "<div class='tr'><span class='td'>" + el.EventID + "</span><span class='td'>" + el.ReceivedTimestamp + "</span></div>";
+		if(counter < 5) {
+			rData += "<div class='tr'>" +
+				"<span class='td'>" + el.EventID + "</span>" +
+				"<span class='td'>" + el.ReceivedTimestamp + "</span>" + 
+				"<span class='td'>" + el.DoorLocation + "</span>" + 
+				"</div>";
 			counter++;
 		}
 	});
