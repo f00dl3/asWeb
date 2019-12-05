@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 23 Nov 2019
+Updated: 3 Dec 2019
  */
 
 package asWebRest.application;
@@ -54,6 +54,7 @@ public class AnthonyRestlet extends Application {
     
     public AnthonyRestlet() {    
     	
+    	RestletOnStart ros = new RestletOnStart();
         CorsService corsService = new CorsService();
         corsService.setAllowingAllRequestedHeaders(true);
         corsService.setAllowedOrigins(new HashSet(Arrays.asList(
@@ -66,9 +67,7 @@ public class AnthonyRestlet extends Application {
         corsService.setSkippingResourceForCorsOptions(true);
         getServices().add(corsService);
 
-        CommonBeans cb = new CommonBeans();
-        final File cachePath = new File(cb.getPathChartCache().toString());
-        if(!cachePath.exists()) { cachePath.mkdirs(); }
+        try { ros.ExecuteOnStartup(); } catch (Exception e) { e.printStackTrace(); }
         
     }
     

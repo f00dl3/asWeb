@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 1 Dec 2019
+Updated: 4 Dec 2019
 */
 
 package asWebRest.dao;
@@ -39,7 +39,7 @@ public class SmarthomeDAO {
     }
     
     public JSONArray getDoorEvents(Connection dbc) {
-        final String query_DoorEvents = "SELECT EventID, ReceivedTimestamp, OriginalTimestamp, DoorLocation FROM net_snmp.Home_DoorEvents;";
+        final String query_DoorEvents = "SELECT EventID, ReceivedTimesetamp, OriginalTimestamp, DoorLocation FROM net_snmp.Home_DoorEvents ORDER BY ReceivedTimesetamp DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_DoorEvents, null);
@@ -47,7 +47,7 @@ public class SmarthomeDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("EventID", resultSet.getLong("EventID"))
-                    .put("ReceivedTimestamp", resultSet.getString("ReceivedTimestamp"))
+                    .put("ReceivedTimestamp", resultSet.getString("ReceivedTimesetamp"))
                     .put("OriginalTimestamp", resultSet.getString("OriginalTimestamp"))
                     .put("DoorLocation", resultSet.getString("DoorLocation"));
                 tContainer.put(tObject);

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from EntertinmentResource.java on 14 Nov 2019
-Updated: 16 Nov 2019
+Updated: 4 Dec 2019
  */
 
 package asWebRest.resource;
@@ -135,6 +135,7 @@ public class FfxivResource extends ServerResource {
                     break;
                     
                 case "setFfxivDungeonDone":
+                	System.out.println("DUNGEON DONE DEBUG");
                     qParams.add(0, argsInForm.getFirstValue("dungeonCode"));
                     returnData += updateFfxivAction.setFfxivDungeonDone(dbc, qParams);
                     break;

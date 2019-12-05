@@ -1,14 +1,16 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Reworked: 23 Nov 2019
-Updated: 29 Nov 2019
+Updated: 4 Dec 2019
 */
 
 package asUtilsPorts;
 
+import java.io.File;
 import java.sql.Connection;
 
+import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.ANSSQuakes;
 import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.KCScout;
@@ -23,11 +25,16 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
+    	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
         GetSPC getSPC = new GetSPC();
         KCScout kcScout = new KCScout();
+        CamBeans camBeans = new CamBeans();
         
+		final File camPath = camBeans.getCamPath();
+
+        try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  

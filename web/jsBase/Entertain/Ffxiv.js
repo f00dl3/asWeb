@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 20 Nov 2019
+Updated: 4 Dec 2019
 
  */
 
@@ -41,10 +41,10 @@ function actOnFfxivQuestDone(event) {
         case "Quest": setFfxivQuestDone(thisFormData); break;
         case "Crafting": setFfxivCraftingDone(thisFormData); break;
         case "Dungeon":
-        	if(thisFormData.Completed) { 
-        		setFfxivDungeonClear(thisFormData);
-        	} else {
+        	if(thisFormData.Completed === "0") { 
         		setFfxivDungeonDone(thisFormData);
+        	} else {
+        		setFfxivDungeonClear(thisFormData);
         	}
         	break;
         case "FATE": setFfxivFateDone(thisFormData); break;
