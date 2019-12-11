@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 23 Nov 2019
-Updated: 1 Dec 2019
+Updated: 11 Dec 2019
  */
 
 package asWebRest.resource;
@@ -56,11 +56,13 @@ public class SmarthomeResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
-	            
-	        	case "doDesktopSmartplug":
-	        		break;
             
-            	case "doRouterSmartplug":
+            	case "doSmartplug":
+            		String device = "router";
+            		String command = "status";
+            		if(wc.isSet(argsInForm.getFirstValue("target"))) { device = argsInForm.getFirstValue("target"); }
+            		if(wc.isSet(argsInForm.getFirstValue("command"))) { command = argsInForm.getFirstValue("command"); }
+            		smartplugInterface.setPlug(command, device);
             		break;
             		
             	case "getArmDisarm":

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 5 Dec 2019
+Updated: 11 Dec 2019
 */
 
 function actOnArmAway(event) {
@@ -22,6 +22,12 @@ function actOnDisarm2(event) {
 	setArmDisarm(thisFormData);
 }
 
+function actOnSmartplug(event) {
+    dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	setSmartplug(thisFormData);
+}
+
 
 
 function getDoorEvents(target) {
@@ -37,7 +43,7 @@ function getDoorEvents(target) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    populateDoorEvents(target, data);
+                    populateSmartStuff(target, data);
                 },
                 function(error) { 
                     aniPreload("off");
@@ -69,10 +75,34 @@ function setArmDisarm(formData) {
     });
 }
 
-function populateDoorEvents(target, eventData) {
+function setSmartplug(formData) {
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "doSmartplug",
+        "target": formData.Device,
+        "command": "cycle"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Smarthome"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Sent " + thePostData.command + " to " + formData.Device);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Smartplug FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function populateSmartStuff(target, eventData) {
 	var eventLog = JSON.parse(eventData);
 	var counter = 0;
-	var rData = "<div class='UPop'>" +
+	var doorData = "<div class='UPop'>" +
 		"<button class='UButton'>Alarm</button>" +
 		"<div class='UPopO'>" +
 		"<form><input type='hidden' name='ArmType' value='Disarm2H'><button class='UButton' id='disarm2'>Disarm for 2h</button></form>" +
@@ -82,7 +112,7 @@ function populateDoorEvents(target, eventData) {
 		"<div class='table'>";
 	eventLog.forEach(function(el) {
 		if(counter < 5) {
-			rData += "<div class='tr'>" +
+			doorData += "<div class='tr'>" +
 				"<span class='td'>" + el.EventID + "</span>" +
 				"<span class='td'>" + el.ReceivedTimestamp + "</span>" + 
 				"<span class='td'>" + el.DoorLocation + "</span>" + 
@@ -90,15 +120,27 @@ function populateDoorEvents(target, eventData) {
 			counter++;
 		}
 	});
-	rData += "</div>" + 
+	doorData += "</div>" + 
 		"</div></div>";
+	var smartData = "<div class='UPop'>" +
+		"<button class='UButton'>Plugs</button>" +
+		"<div class='UPopO'>" +
+		"<form><input type='hidden' name='Device' value='Router'><button class='UButton' id='spRouter'>Router</button></form>" +
+		"<form><input type='hidden' name='Device' value='Desktop'><button class='UButton' id='spDesktop'>Desktop</button></form>" +
+		"</div>" + 
+		"</div>";
+	var rData = doorData + smartData;
 	dojo.byId(target).innerHTML = rData;
 	var buttonDisarm2 = dojo.byId('disarm2');
 	var buttonArmStay = dojo.byId('armStay');
 	var buttonArmAway = dojo.byId('armAway');
+	var buttonSpDesktop = dojo.byId('spDesktop');
+	var buttonSpRouter = dojo.byId('spRouter');
 	dojo.connect(buttonDisarm2, "onclick", actOnDisarm2);
 	dojo.connect(buttonArmStay, "onclick", actOnArmStay);
-	dojo.connect(buttonArmAway, "onclick", actOnArmAway);		
+	dojo.connect(buttonArmAway, "onclick", actOnArmAway);	
+	dojo.connect(buttonSpDesktop, "onclick", actOnSmartplug);
+	dojo.connect(buttonSpRouter, "onclick", actOnSmartplug);		
 }
 
 function showMiniSmartController(target) {	
