@@ -1,7 +1,7 @@
 <%-- 
     Document   : index.jsp
     Created on : Feb 10, 2018, 1:09:23 PM
-    Updated:    30 Nov 2019
+    Updated:    11 Dec 2019
     Author     : astump
 
     Notes: Consider building for alt deployment location i.e. Raspberry Pi
@@ -31,7 +31,7 @@
     
         <div id="loginPlaceholder"></div>
         
-        <strong>Version: </strong><span id="webVersion"></span><br/>
+        <strong>Build: </strong><span id="webVersion"></span><br/>
         <strong>Your IP: </strong><% out.println(remoteIpAddr); %><br/>
         <strong>Browser: </strong><% out.println(userAgent); %><br/>
         Last login from <span id="lastUser"></span> at <span id="lastTime"></span> from <span id="lastIP"></span><br/>
