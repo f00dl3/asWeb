@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 13 Dec 2019
+Updated: 14 Dec 2019
 */
 
 package asUtilsPorts;
@@ -26,7 +26,7 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
-	CamPusher camPusher = new CamPusher();
+    	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
@@ -36,7 +36,7 @@ public class Feeds {
         
 		final File camPath = camBeans.getCamPath();
 
-	//try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
+		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	

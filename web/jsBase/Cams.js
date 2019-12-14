@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 1 Dec 2019
+Updated: 14 Dec 2019
  */
 
 function actOnDoLive(event) {
@@ -19,7 +19,7 @@ function actOnDoVideo(event) {
 function displayLiveCams() {
     var timeout = getRefresh("rapid");
     if(checkMobile()) { timeout = getRefresh("semiRapid"); }
-    var liveSnapshotImage = getBasePath("oldRoot") + "/Get/Cams/Live.jpeg?ts=" + getDate("minute", 0, "timestamp");
+    var liveSnapshotImage = getBasePath("get2") + "/Cams/Live.jpeg?ts=" + getDate("minute", 0, "timestamp");
     var rData = "<a href='" + liveSnapshotImage + "'><img src='" + liveSnapshotImage + "' width='100%'/></a>";
     dojo.byId("whereCamsGo").innerHTML = rData;
     setTimeout(function() { displayLiveCams(); }, timeout);
@@ -28,7 +28,7 @@ function displayLiveCams() {
 function displayVideoLoop() {
     var timeout = 1000 * 90;
     var vObj = "<video id='CamLoop' height='100%' width='100%' autoplay muted controls loop>" +
-            "<source src='" + getBasePath("getOld") + "/Cams/_Loop.mp4?ts=" + getDate("minute", 0, "timestamp") + "'></source>" +
+            "<source src='" + getBasePath("get2") + "/Cams/_Loop.mp4?ts=" + getDate("minute", 0, "timestamp") + "'></source>" +
             "</video>";
     dojo.byId("whereCamsGo").innerHTML = vObj;
     dojo.byId("CamLoop").play();
@@ -36,7 +36,7 @@ function displayVideoLoop() {
 }
 
 function popCamHolder() {
-    var getCamRawFolder = getServerPath("rawGet") + "/Cams";
+    var getCamRawFolder = getBasePath("get2") + "/Cams";
     var rData = "<h1><img src='" + getBasePath("icon") + "/DeusEx.png' class='th_icon'/>Anthony's Survailance</h1>" +
     		"<span id='miniSmartControllerHolder'></span>" +
             "<button class='UButton' id='doLive'>Live</button>" + 

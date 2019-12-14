@@ -75,7 +75,7 @@
 	<property environment="env"/>
 	<property name="java.home" value="${env.JAVA_HOME}" />
 	<property name="war-file-name" value="${project-name}.war" />
-	<property name="source-directory" value="../src" />
+	<property name="source-directory" value="src" />
 	<property name="classes-directory" value="bin" />
 	<property name="web-directory" value="web" />
 	<property name="deployment.dir" value="." />
@@ -137,6 +137,7 @@
 				webxml="${web-xml-file}">
 			<classes dir="${classes-directory}"  />
 			<fileset dir="${web-directory}"></fileset>
+			<fileset dir="${source-directory}"></fileset>
 			<manifest>
 				<attribute name="Built-By" value="${builder}" />
 				<attribute name="Built-On" value="${build-info.current-date}"/>

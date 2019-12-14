@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Dec 2017
-Updated: 4 Dec 2019
+Updated: 14 Dec 2019
 based off 
     https://developers.google.com/drive/v3/web/quickstart/java
     https://developers.google.com/api-client-library/java/google-api-java-client/media-upload
@@ -39,7 +39,7 @@ public class GDrive {
 	static CommonBeans cb = new CommonBeans();
     
     private static final String APPLICATION_NAME = "asUtils";
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(cb.getPersistTomcat() + "/.credentials/gDrive");
+    private static final java.io.File DATA_STORE_DIR = new java.io.File(cb.getTomcatUserHome() + "/.credentials/gDrive");
     private static FileDataStoreFactory DATA_STORE_FACTORY;
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static HttpTransport HTTP_TRANSPORT;
@@ -64,7 +64,7 @@ public class GDrive {
 
     public static Credential authorize() throws IOException {
         
-        InputStream in = GDrive.class.getResourceAsStream("../secure/client_secret.json");
+        InputStream in = GDrive.class.getResourceAsStream("../../../../jsLib/gdcs.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         GoogleAuthorizationCodeFlow flow =

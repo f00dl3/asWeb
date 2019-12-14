@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 11 Dec 2019
+Updated: 14 Dec 2019
 
  */
 
@@ -218,11 +218,11 @@ function getBasePath(opt) {
         case "chartCache": tBase = baseForUi + "/cache"; break;
         case "congress": tBase = baseForUi + "/img/CongressHack"; break;
         case "downloads": tBase = baseForUi + "/Download"; break;
+        case "get2": tBase = baseForUi + "/Get2"; break;
         case "g2OutOld": case "g2Out": tBase = baseForUi + "/G2Out"; break;
         case "icon": tBase = baseForUi + "/img/Icons"; break;
         case "image": tBase = baseForUi + "/img"; break;
         case "media": tBase = baseForUi + "/MediaServer"; break;
-        case "persist": tBase = baseForUi + "/persist"; break;
         case "rest": tBase = baseForRestlet; break;
         case "root": tBase = base; break;
         case "serv": tBase = baseForServlet; break;

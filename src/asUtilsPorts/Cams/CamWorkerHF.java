@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 13 Dec 2019
+Updated: 14 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -91,7 +91,7 @@ public class CamWorkerHF {
 
 			StumpJunk.runProcessSilently(convertC);
 
-			StumpJunk.moveFile(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg");
+			StumpJunk.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg");
             try { StumpJunk.copyFile(camPath+"/PushTmp/"+fileTimestamp+".jpeg", camPath+"/Live.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
 
 		}
