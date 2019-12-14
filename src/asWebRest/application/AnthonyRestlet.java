@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 3 Dec 2019
+Updated: 14 Dec 2019
  */
 
 package asWebRest.application;
@@ -20,6 +20,7 @@ import asWebRest.resource.FinanceResource;
 import asWebRest.resource.FitnessResource;
 import asWebRest.resource.HomeResource;
 import asWebRest.resource.HomicideResource;
+import asWebRest.resource.ICalResource;
 import asWebRest.resource.LoginResource;
 import asWebRest.resource.LogsResource;
 import asWebRest.resource.MediaServerResource;
@@ -37,9 +38,7 @@ import asWebRest.resource.WeatherResource;
 import asWebRest.resource.WebCalResource;
 import asWebRest.resource.WebLinkResource;
 import asWebRest.resource.WebVersionResource;
-import asWebRest.shared.CommonBeans;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.restlet.Application;
@@ -89,6 +88,7 @@ public class AnthonyRestlet extends Application {
         router.attach("/Fitness", FitnessResource.class);
         router.attach("/Home", HomeResource.class);
         router.attach("/Homicide", HomicideResource.class);
+        router.attach("/iCal", ICalResource.class);
         router.attach("/Login", LoginResource.class);
         router.attach("/Logs", LogsResource.class);
         router.attach("/MediaServer", MediaServerResource.class);

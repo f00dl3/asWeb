@@ -7,7 +7,7 @@ Updated: 14 Dec 2019
 package asUtilsPorts.Cams;
 
 import asUtils.Shares.StumpJunk;
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.shared.CommonBeans;
 import asUtils.Shares.JunkyBeans;
 import java.io.*;
 import java.text.DateFormat;
@@ -21,14 +21,15 @@ public class CamWorkerHF {
 	public static void main(String[] args) {
 
         CamBeans camBeans = new CamBeans();
+        CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
-        JunkyPrivate junkyPrivate = new JunkyPrivate();
         
 		final int testVal = 1;
 
 		final String camPath = args[0];
         final String capRes = camBeans.getCapRes();
 		final String instance = args[1];
+		final String cachePath = cb.getPathChartCache();
 
 		DateFormat dateOverlayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		DateFormat dateFileFormat = new SimpleDateFormat("yyMMdd-HHmmss-SSS");
@@ -92,7 +93,7 @@ public class CamWorkerHF {
 			StumpJunk.runProcessSilently(convertC);
 
 			StumpJunk.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg");
-            try { StumpJunk.copyFile(camPath+"/PushTmp/"+fileTimestamp+".jpeg", camPath+"/Live.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
+            try { StumpJunk.copyFile(camPath+"/PushTmp/"+fileTimestamp+".jpeg", cachePath+"/CamLive.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
 
 		}
 

@@ -6,6 +6,7 @@ Updated: 14 Dec 2019
 
 package asWebRest.application;
 
+import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.CommonBeans;
 
 import java.io.File;
@@ -23,6 +24,10 @@ public class RestletOnStart {
     	
         CommonBeans cb = new CommonBeans();
         CamBeans camBeans = new CamBeans();
+        CamController cc = new CamController();
+        WeatherBot wxBot = new WeatherBot();
+
+        try { wxBot.startBot(); } catch (Exception e) { e.printStackTrace(); }
         
         final File cachePath = new File(cb.getPathChartCache().toString());
         if(!cachePath.exists()) { cachePath.mkdirs(); }
@@ -45,7 +50,7 @@ public class RestletOnStart {
 		
 		// To enable cam capture, forward USB to VM, uncomment below line
 		
-        try { CamController.initCams(); } catch (Exception e) { e.printStackTrace(); }
+        try { cc.initCams(); } catch (Exception e) { e.printStackTrace(); }
                 
     }
         

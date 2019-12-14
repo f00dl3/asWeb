@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 13 Dec 2019
+Updated: 14 Dec 2019
 */
 
 package asUtilsPorts;
@@ -36,7 +36,7 @@ public class CamController {
                     pushTemp.mkdirs();
             }
             
-            //ab.getAtBootDesktop();
+            ab.getAtBootDesktop();
             
             Thread ta = new Thread(() -> { mainCamLoop(camPath); });
             Thread tb = new Thread(() -> { streamForker(camPath, pushTemp); });

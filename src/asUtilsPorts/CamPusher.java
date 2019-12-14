@@ -50,9 +50,11 @@ public class CamPusher {
         int tfCase = 0;
         int tfCPU = 0;
         int tfGarage = 0;
-              
+
+        
         if(!pushTemp.exists()) { pushTemp.mkdirs(); }
         if(!camWebRoot.exists()) { camWebRoot.mkdirs(); }
+        if(dumpTemp.exists()) { StumpJunk.deleteDir(dumpTemp); }
         
         try {
         	ResultSet resultSet = wc.q2rs1c(dbc, tempSelects, null);
@@ -75,14 +77,14 @@ public class CamPusher {
         try { StumpJunk.varToFile(Integer.toString(tfCPU), tfOutCPU, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
         try { StumpJunk.varToFile(Integer.toString(tfGarage), tfOutGarage, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
         
-        if(!dumpTemp.exists()) { dumpTemp.mkdirs(); }
+        dumpTemp.mkdirs();
         if(mp4OutAlt.exists()) { mp4OutAlt.delete(); }
         if(mp4Out.exists()) { StumpJunk.moveFile(mp4Out.toString(), mp4OutAlt.toString()); }
         StumpJunk.runProcess("mv "+pushTemp.toString()+"/*.jpeg "+dumpTemp.toString());
         StumpJunk.runProcess("find "+dumpTemp.toString()+"/ -type f -size 0b -delete");
         StumpJunk.runProcess("bash "+helpers.toString()+"/Sequence.sh "+dumpTemp.toString()+"/ jpeg");
         try { StumpJunk.copyFile(dumpTemp.toString()+"/00001.jpeg", camWebRoot.toString()+"/_Latest.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
-        StumpJunk.runProcess("(ffmpeg -threads 8 -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4Out.toString()+" 2> "+mp4Log.toString()+")");
+        StumpJunk.runProcess("(ffmpeg -threads 4 -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4Out.toString()+" 2> "+mp4Log.toString()+")");
         StumpJunk.runProcess("mogrify -resize 25% "+camWebRoot.toString()+"/_Latest.jpeg");
         try { StumpJunk.copyFile(mp4Out.toString(), camWebRoot.toString()+"/_Loop.mp4"); } catch (IOException ix) { ix.printStackTrace(); }
         StumpJunk.deleteDir(dumpTemp);

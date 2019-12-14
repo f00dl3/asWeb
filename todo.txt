@@ -1,0 +1,4 @@
+Things to do:
+	- Node bot autostart (in progress)
+	- Build webcal alternative <-- see f00dl3.ics for basic iCal format (in progress)
+	- Build open layers drawable map for running

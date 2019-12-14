@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 22 Nov 2019
+Updated: 14 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -26,7 +26,7 @@ public class NWSWarnings {
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
     
-		final String ramTemp = cb.getPathChartCache().toString();
+		final String ramTemp = cb.getPathChartCache();
 		
 		final String warn2URL = "https://api.weather.gov/alerts/active";
 		final File warn2File = new File(ramTemp+"/Warn2All.json");

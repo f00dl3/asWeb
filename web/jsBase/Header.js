@@ -348,6 +348,7 @@ function getServerPath(what) {
         case "apache2": return "/var/www"; break;
         case "mediaServer": return "/extra1/MediaServer"; break;
         case "rawGet": return "/var/www/Get"; break;
+        case "rawGet2": return "/media/sf_SharePoint/Get"; break;
         case "tomcat": return "/var/lib/tomcat8/webapps"; break;
     }
 }

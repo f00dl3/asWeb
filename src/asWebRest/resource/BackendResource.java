@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 13 Dec 2019
+Updated: 14 Dec 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -10,6 +10,7 @@ POST REQUEST VIA COMMAND LINE ala
 
 package asWebRest.resource;
 
+import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.MyDBConnector;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -102,6 +103,11 @@ public class BackendResource extends ServerResource {
 	                try { mhpArg1 = argsInForm.getFirstValue("troop"); } catch (Exception e) { }
 	                mhpFetch.doMHP(dbc, mhpArg1);                    
 	                break;
+	                
+	            case "WxBot":
+	            	WeatherBot wxBot = new WeatherBot();
+	            	wxBot.startBot();
+	            	break;
                 
             }
             

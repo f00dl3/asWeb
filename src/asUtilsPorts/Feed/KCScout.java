@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 23 Nov 2019
+Updated: 14 Dec 2019
 */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
@@ -26,7 +25,7 @@ public class KCScout {
         WebCommon wc = new WebCommon();
                 
         final String scoutURL = "http://www.kcscout.net/IncidentViewer.aspx";
-        final File ramDrive = new File(cb.getPathChartCache().toString());
+        final File ramDrive = new File(cb.getPathChartCache());
         final String ramTemp = ramDrive.getPath();
         final File scoutFile = new File(ramTemp+"/ScoutFeed.aspx");
         

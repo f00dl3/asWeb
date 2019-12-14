@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 11 Sep 2018
+Updated: 14 Dec 2019
  */
 
 function actOnShowFeed() {
@@ -227,7 +227,7 @@ function popLiveLinks3d(irsLinks, df7Links) {
         elementListWx1.push(tElem);
     });
     var elementPopper1 = "<a styleReplace href='" + getResource("Cams") + "' target='new'>" +
-            "<img " + cubeRes + " src='" + getBasePath("getOld") + "/Cams/_Latest.jpeg' alt='Cams'></a>";
+            "<img " + cubeRes + " src='" + getBasePath("chartCache") + "/CamLive.jpeg' alt='Cams'></a>";
     elementListWx1.push(elementPopper1);
     var rData = imageLinks3d(elementListWx1, 25, 200, 1.53);
     dojo.byId("ObsLinks3D").innerHTML = rData;
