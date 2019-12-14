@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 4 Dec 2019
+Updated: 13 Dec 2019
 */
 
 package asUtilsPorts;
@@ -52,6 +52,7 @@ public class CamPusher {
         int tfGarage = 0;
               
         if(!pushTemp.exists()) { pushTemp.mkdirs(); }
+        if(!camWebRoot.exists()) { camWebRoot.mkdirs(); }
         
         try {
         	ResultSet resultSet = wc.q2rs1c(dbc, tempSelects, null);
@@ -86,7 +87,7 @@ public class CamPusher {
         try { StumpJunk.copyFile(mp4Out.toString(), camWebRoot.toString()+"/_Loop.mp4"); } catch (IOException ix) { ix.printStackTrace(); }
         StumpJunk.deleteDir(dumpTemp);
        
-        try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (IOException ix) { ix.printStackTrace(); }
+        //try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (IOException ix) { ix.printStackTrace(); }
         
         return "End of program!";
         

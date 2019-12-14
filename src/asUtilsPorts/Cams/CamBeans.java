@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Dec 2017
-Updated: 5 Dec 2019
+Updated: 13 Dec 2019
  */
 
 package asUtilsPorts.Cams;
@@ -18,8 +18,7 @@ public class CamBeans {
 
     final private File camPath = new File(cb.getRamPath().toString()+"/GetCamsJ");
     final private File camUrl = new File(cb.getPersistTomcat()+"/camUrl.txt");
-    final private File camWebRoot = new File(junkyBeans.getWebRoot().toString()+"/vGet/Cams"); //SANDBOXED ON VM
-    //final private File camWebRoot = new File(cb.getPersistTomcat()+"/Get/Cams");
+    final private File camWebRoot = new File(cb.getPersistTomcat().toString()+"/Get/Cams");
     final private String capRes = "1288x729";
     final private double capWait = 0.01;
     final private String finalRes = "2649x1313";

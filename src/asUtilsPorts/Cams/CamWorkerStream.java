@@ -33,12 +33,12 @@ public class CamWorkerStream {
                     " " + outFile.toString() +
                     " > /dev/null 2>&1 < /dev/null";
             
-            while (tester == tester) {
+            //while (tester == tester) {
                     try {
                         sj.runProcess(ffmpegCall);
                         Thread.sleep(threadTimeout*1000);
                     } catch (Exception e) { e.printStackTrace(); }
-            }
+            //}
             
         }
 
@@ -76,12 +76,12 @@ public class CamWorkerStream {
         final String c4_url = "rtsp://" + jp.getIpForRaspPi1() + ":8554/unicast";
         final String c5_url = "rtsp://admin:@" + jp.getIpForCam3() + ":88/videoMain";
         
-        Thread cs1 = new Thread(() -> { ffmpegCall(c1_url, c1_file, capRes); });
+        //Thread cs1 = new Thread(() -> { ffmpegCall(c1_url, c1_file, capRes); });
         Thread cs2 = new Thread(() -> { ffmpegCall(c2_url, c2_file, capRes); });
         Thread cs3 = new Thread(() -> { ffmpegCall(c3_url, c3_file, capRes); });
         Thread cs4 = new Thread(() -> { ffmpegCall(c4_url, c4_file, capRes); });
         Thread cs5 = new Thread(() -> { ffmpegCall(c5_url, c5_file, capRes); });
-        Thread streams[] = { cs1, cs2, cs3, cs4, cs5 };
+        Thread streams[] = { /* cs1, */ cs2, cs3, cs4, cs5 };
         for (Thread thread : streams) { thread.start(); }
                 
 	}

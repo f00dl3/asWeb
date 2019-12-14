@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 5 Dec 2019
+Updated: 13 Dec 2019
  */
 
 package asWebRest.application;
@@ -31,9 +31,9 @@ public class RestletOnStart {
         final Path linkLocationPath = Paths.get("/var/lib/tomcat9/webapps/asWeb#cache");
         try { Files.createSymbolicLink(linkLocationPath, cachePath_Path); } catch (Exception e) { e.printStackTrace(); }
         
-        //final Path persistPath_Path = Paths.get(cb.getPersistTomcat());
-        //final Path persistLinkLocationPath = Paths.get("/var/lib/tomcat9/webapps/asWeb#persist");
-        //try { Files.createSymbolicLink(persistLinkLocationPath, persistPath_Path); } catch (Exception e) { e.printStackTrace(); }
+        final Path persistPath_Path = Paths.get(cb.getPersistTomcat());
+        final Path persistLinkLocationPath = Paths.get("/var/lib/tomcat9/webapps/asWeb#SharePoint");
+        try { Files.createSymbolicLink(persistLinkLocationPath, persistPath_Path); } catch (Exception e) { e.printStackTrace(); }
         
         final File camPath = camBeans.getCamPath();
 		final File pushTemp = camBeans.getPushTemp();

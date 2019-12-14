@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 4 Dec 2019
+Updated: 13 Dec 2019
 */
 
 package asUtilsPorts;
@@ -9,6 +9,7 @@ package asUtilsPorts;
 import java.io.File;
 import java.sql.Connection;
 
+import asUtilsPorts.CamPusher;
 import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.ANSSQuakes;
@@ -25,6 +26,7 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
+	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
@@ -34,6 +36,7 @@ public class Feeds {
         
 		final File camPath = camBeans.getCamPath();
 
+	//try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	

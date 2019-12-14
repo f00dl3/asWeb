@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 5 Dec 2019
+Updated: 13 Dec 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -61,7 +61,7 @@ public class BackendResource extends ServerResource {
             		            		
             	case "_TEST":
             		TestStuff testStuff = new TestStuff();
-            		testStuff.stupidTomcatSandboxing();
+            		returnData = testStuff.stupidTomcatSandboxing();
             		break;
             		
             	case "CamController":

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 8 Dec 2019
+Updated: 13 Dec 2019
 */
 
 package asUtilsPorts;
@@ -18,9 +18,9 @@ public class CamController {
     private static void mainCamLoop(File camPath) {            
         final String[] hf1Arg = { camPath.getPath(), "X" };
         int tester = 1;            
-        while (tester == tester) {
+        //while (tester == tester) {
             CamWorkerHF.main(hf1Arg);
-        }                        
+        //}                        
     }
 
 	public static void initCams() {
@@ -36,7 +36,7 @@ public class CamController {
                     pushTemp.mkdirs();
             }
             
-            ab.getAtBootDesktop();
+            //ab.getAtBootDesktop();
             
             Thread ta = new Thread(() -> { mainCamLoop(camPath); });
             Thread tb = new Thread(() -> { streamForker(camPath, pushTemp); });
@@ -48,9 +48,9 @@ public class CamController {
     private static void streamForker(File camPath, File pushTemp) {                            
         final String[] hf1Arg = { camPath.getPath() };            
         int tester = 1;            
-        while (tester == tester) {
+        //while (tester == tester) {
             CamWorkerStream.main(hf1Arg);
-        }            
+        //}            
     }
 
 }
