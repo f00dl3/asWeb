@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 24 Feb 2019
+Updated: 16 Dec 2019
 */
 
 package asWebRest.shared;
@@ -130,6 +130,14 @@ public class WebCommon {
     
     public static String basicInputFilter(String inString) {
         return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
+    }
+    
+    public static String basicInputFilterICS(String inString) {
+        return inString
+        		.replace("\'", "\\\'")
+        		.replace("\"", "\\\"")
+        		.replace("\n", "\\n")
+        		.replace(",",  "\\,");
     }
     
     public static String cryptIt(String passwordIn) throws Exception {

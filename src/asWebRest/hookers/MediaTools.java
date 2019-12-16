@@ -1,19 +1,33 @@
 /*
 by Anthony Stump
 Created: 15 Jul 2018
+Updated: 16 Dec 2019
 */
 
 package asWebRest.hookers;
 
 import asUtils.Shares.JunkyBeans;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import com.spikeify.ffmpeg.FFprobe;
 import com.spikeify.ffmpeg.probe.FFmpegFormat;
 import com.spikeify.ffmpeg.probe.FFmpegProbeResult;
 import com.spikeify.ffmpeg.probe.FFmpegStream;
+
+import java.io.File;
 import java.io.IOException;
 import org.json.JSONObject;
 
 public class MediaTools {
+	
+	private void playMediaOnServer(String mp3File) {
+		
+		Media hit = new Media(new File(mp3File).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(hit);
+		mediaPlayer.play();
+		
+	}
     
     private JSONObject imageInfo(String fileToWorkWith) {
         JunkyBeans jb = new JunkyBeans();
@@ -37,7 +51,9 @@ public class MediaTools {
                 .put("imageWidth", mediaWidth);
         return tContainer;
     }
-    
+
+    public void doPlayMediaOnServer(String mp3File) { playMediaOnServer(mp3File); }
+    public void doPlayMediaOnServer_TEST() { playMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Gold - Foundry.mp3"); }
     public JSONObject getImageInfo(String fileToWorkWith) { return imageInfo(fileToWorkWith); }
     
 }

@@ -1,13 +1,22 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 14 Dec 2019
+Updated: 16 Dec 2019
  */
 
 package asWebRest.shared;
 
+import asWebRest.hookers.WeatherBot;
+
 public class CommonBeans {
     
+	private String warDeployBase() {
+        String thisWorkingFolder = WeatherBot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        thisWorkingFolder = thisWorkingFolder.replace("%23","#").replace("%23","#");
+        thisWorkingFolder = thisWorkingFolder.replace("/WEB-INF/classes",  "");
+        return thisWorkingFolder;        
+	}
+	
 	private String ramPath = "/dev/shm/tomcatShare";
     
     private String catalinaHome = System.getenv("CATALINA_HOME");
@@ -42,5 +51,6 @@ public class CommonBeans {
     public String getQSetRT120K() { return query_SetRT120K; }
     public String getRamPath() { return ramPath; }
     public String getTomcatUserHome() { return tomcatUserHome; }
+    public String getWarDeployBase() { return warDeployBase(); }
     
 }

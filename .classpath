@@ -274,6 +274,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/asUtils-191214-0855.jar"/>
+	<classpathentry kind="lib" path="libs/asUtils-191215-2028.jar"/>
+	<classpathentry kind="lib" path="libs/javafx.media.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

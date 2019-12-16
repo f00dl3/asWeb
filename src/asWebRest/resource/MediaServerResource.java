@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 24 Apr 2018
+Updated: 16 Dec 2019
  */
 
 package asWebRest.resource;
@@ -10,6 +10,7 @@ import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.UpdateMediaServerAction;
 import asWebRest.dao.MediaServerDAO;
 import asWebRest.hookers.FolderTools;
+import asWebRest.hookers.MediaTools;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -33,8 +34,9 @@ public class MediaServerResource extends ServerResource {
     public String doPost(Representation argsIn) {
         
         CommonBeans cb = new CommonBeans();
-        WebCommon wc = new WebCommon();
         FolderTools ft = new FolderTools();
+    	MediaTools mt = new MediaTools();
+        WebCommon wc = new WebCommon();
         
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -122,6 +124,16 @@ public class MediaServerResource extends ServerResource {
                         .put("Index", msi);
                     returnData += mergedResults.toString();
                     break;
+
+                case "playServerSide":
+                	String fileToPlay = "";
+                    if(wc.isSet(argsInForm.getFirstValue("FileToPlay"))) { fileToPlay = argsInForm.getFirstValue("FileToPlay"); }
+                	mt.doPlayMediaOnServer(fileToPlay);
+                	break;
+                	
+                case "playServerSide_Test":
+                	mt.doPlayMediaOnServer_TEST();
+                	break;
                   
                 case "setPlayed":
                     qParams.add(0, argsInForm.getFirstValue("FileName"));

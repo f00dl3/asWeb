@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 19 Oct 2019
+Updated: 15 Dec 2019
  */
 
 package asWebRest.resource;
@@ -132,7 +132,7 @@ public class SnmpResource extends ServerResource {
                         try { eth0In = Long.parseLong(snmpWalk.get("desktop", "ifInOctets", "2")); } catch (Exception e) { e.printStackTrace(); }
                         try { eth0Out = Long.parseLong(snmpWalk.get("desktop", "ifOutOctets", "2")); } catch (Exception e) { e.printStackTrace(); }
                         try { hdd0Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "31")); } catch (Exception e) { e.printStackTrace(); }
-                        try { hdd1Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", extraDiskID)); } catch (Exception e) { e.printStackTrace(); }
+                        try { hdd1Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", extraDiskID)); } catch (Exception e) { }
                         try { loadIndex = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "1")); } catch (Exception e) { e.printStackTrace(); }
                         try { loadIndex5 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "2")); } catch (Exception e) { e.printStackTrace(); }
                         try { loadIndex15 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "3")); } catch (Exception e) { e.printStackTrace(); }

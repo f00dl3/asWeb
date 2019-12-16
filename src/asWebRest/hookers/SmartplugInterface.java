@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 11 Dec 2019
+Updated: 15 Dec 2019
  */
 
 package asWebRest.hookers;
@@ -24,10 +24,12 @@ public class SmartplugInterface {
 		String ip_controller = jp.getIpForDesktop();
 		String ip_spRouter = jp.getIpForSmartplug3();
 		String ip_spDesktop = jp.getIpForSmartplug1();
+		String ip_spDCamera = jp.getIpForSmartplug2();
 		String ipTarget = "";
 		File keyFile = ssh.getSshKey_Pi2();
 		
 		switch(device.toLowerCase()) {
+			case "dcamera": ipTarget = ip_spDCamera; break;
 			case "desktop": ipTarget = ip_spDesktop; break;
 			case "router": default: ipTarget = ip_spRouter; break;
 		}

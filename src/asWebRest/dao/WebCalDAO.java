@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 22 Apr 2018
+Updated: 16 Dec 2019
 */
 
 package asWebRest.dao;
@@ -11,6 +11,10 @@ import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +23,9 @@ public class WebCalDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
     
-    public String generate_iCal(JSONObject events) {
+    public String generate_iCal(Connection dbc) {
+    	
+    	JSONArray events = getEventsBasic(dbc); 
     	
     	String iCalHeader = "BEGIN:VCALENDAR\n" +
     			"X-WR-CALNAME;VALUE=TEXT:f00dl3\n" +
@@ -27,38 +33,110 @@ public class WebCalDAO {
     			"VERSION:0.1\n" +
     			"METHOD:PUBLISH\n";
     	
-    	/* ICAL FORMAT :
-    	 
-				BEGIN:VEVENT
-				UID:-LOCALHOST:8080-WCAL-F00DL3-0000000220
-				LAST-MODIFIED:20150326T003958Z
-				SUMMARY:Red Lobster parents
-				DESCRIPTION:Red Lobster parents
-				CLASS:PUBLIC
-				STATUS:CONFIRMED
-				ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN="Anthony ":MAILTO:youremailhere
-				DTSTART:20150329T230000Z
-				DTSTAMP:20191214T201601Z
-				DTEND:20150330T010000Z
-				END:VEVENT
-
+    	/* ICAL FORMAT REPEAT:
+	    	 UID:-LOCALHOST:8080-WCAL-F00DL3-0000000003
+		   64 LAST-MODIFIED:20141023T005617Z
+		   65 SUMMARY:CCSA WebCal Day
+		   66 DESCRIPTION:Work @ CCSA
+		   67 CLASS:PUBLIC
+		   68 STATUS:CONFIRMED
+		   69 ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN="Anthony ":MAILTO:youremailhere
+		   70 DTSTART:20140719T140000Z
+		   71 DTSTAMP:20191214T201601Z
+		   72 DTEND:20140719T150000Z
+		   73 RRULE:FREQ=WEEKLY;BYDAY=SA;UNTIL=20141031T140000Z
+		   74 EXDATE;VALUE=DATE:20140726,20140802,20140906,20141025
+		   75 END:VEVENT
     	 */
     	
     	String returnData = iCalHeader;
-    	return returnData;
+    	
+    	for(int i = 0; i < events.length(); i++) {
+    		
+    		JSONObject tObject = events.getJSONObject(i);
+
+            try { 
+	            String description = "";
+	            String summary = "";
+            	int eFrequency = 0;
+	            String formatPattern = "yyyyMMdd'T'HHmmss'Z'";
+	    		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(formatPattern).withZoneUTC();
+	    		final DateTime nowTime = DateTime.now();
+	    		  
+	            try { description = wc.basicInputFilterICS(tObject.getString("cal_description")); } catch (Exception e) { }
+	            try { summary = wc.basicInputFilterICS(tObject.getString("cal_name")); } catch (Exception e) { }
+	    		try { eFrequency = tObject.getInt("cal_frequency"); } catch (Exception e) { }
+	    		
+	    		final String formatted_eventId = String.format("%010d", tObject.getInt("cal_id"));
+	    		final String formatted_calModDate = String.format("%08d", tObject.getInt("cal_mod_date"));
+	    		final String formatted_calModTime = String.format("%06d", tObject.getInt("cal_mod_time"));
+	    		final String pretty_lastModified = formatted_calModDate + "T" + formatted_calModTime + "Z"; 
+	    		final String formatted_calStartDate = String.format("%08d", tObject.getInt("cal_date"));
+	    		final String formatted_calStartTime = String.format("%06d", tObject.getInt("cal_time"));
+	    		final String pretty_eventStart = formatted_calStartDate + "T" + formatted_calStartTime + "Z"; 
+	    		final DateTime eventStartDateTime = DateTime.parse(pretty_eventStart, dateTimeFormatter).toDateTime();
+	    		final DateTime eventEndDateTime = eventStartDateTime.plusMinutes(tObject.getInt("cal_duration")); 
+	            final String pretty_eventEnd = dateTimeFormatter.print(eventEndDateTime);
+	            final String pretty_theTimeItIsNow = dateTimeFormatter.print(nowTime);	          
+	            
+	    		String tEventData = "BEGIN:VEVENT\n" +
+	    				"UID:-LOCALHOST:8080-WCAL-F00DL3-" + formatted_eventId + "\n" +
+	    				"LAST-MODIFIED:" + pretty_lastModified + "\n" +
+	    				"SUMMARY:" + summary + "\n" +
+	    				"DESCRIPTION:" + description + "\n" +
+	    				"CLASS:PUBLIC\n" +
+	    				"STATUS:CONFIRMED\n" +
+	    				"ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN=\"Anthony \":MAILTO:youremailhere\n" +
+	    				"DTSTART:" + pretty_eventStart + "\n" +
+	    				"DTSTAMP:" + pretty_theTimeItIsNow + "\n" +
+	    				"DTEND:" + pretty_eventEnd + "\n";
+	
+	            if(eFrequency == 1) {	            	
+	            	String fDate = tObject.getString("cal_type").toUpperCase();
+	            	tEventData += "RRULE:FREQ=" + fDate;
+	            	if(wc.isSet(tObject.getString("cal_byday"))) {
+	            		tEventData += ";BYDAY=" + tObject.getString("cal_byday");
+	            	}
+	            	if(wc.isSet(Integer.toString(tObject.getInt("cal_end")))) {
+	            		final String formatted_calEnd = String.format("%08d", tObject.getInt("cal_end"));
+	            		final String formatted_calEndTime = String.format("%06d", tObject.getInt("cal_endtime"));
+	            		final String pretty_calEnd = formatted_calEnd + "T" + formatted_calEndTime + "Z";
+	            		if(!pretty_calEnd.equals("00000000T000000Z")) {
+	            			tEventData += ";UNTIL=" + pretty_calEnd;
+	            		}
+	            	}            	
+	            	tEventData += "\n";
+	            }
+	            
+	    		tEventData += "END:VEVENT\n";
+	    		
+	    		returnData += tEventData;
+
+        	} catch (Exception e) { e.printStackTrace(); }
+    	
+    	}
+    	
+        return returnData;
     	
     }
     
-    public JSONObject getEventsBasic(Connection dbc) {
+    public JSONArray getEventsBasic(Connection dbc) {
     	final String query_Calendar_Events = "SELECT " +
-    			" cal_id, cal_date, cal_time, cal_mod_date, cal_mod_time," +
-    			" cal_due_date, cal_due_time, cal_name, cal_description, cal_duration" +
-    			" FROM WebCal.webcal_entry";
-        JSONObject tContainer = new JSONObject();
+    			" wce.cal_id, wce.cal_date, wce.cal_time, wce.cal_mod_date, wce.cal_mod_time," +
+    			" wce.cal_due_date, wce.cal_due_time, wce.cal_name, wce.cal_description, wce.cal_duration," +
+    			" wcu.cal_status, wcr.cal_frequency, wcr.cal_days, wcr.cal_type, wcr.cal_bymonth," +
+    			" wcr.cal_bymonthday, wcr.cal_byday, wcr.cal_bysetpos, wcr.cal_byweekno, wcr.cal_byyearday," +
+    			" wcr.cal_wkst, wcr.cal_count, wcr.cal_end, wcr.cal_endtime" +
+    			" FROM WebCal.webcal_entry wce" +
+    			" LEFT JOIN WebCal.webcal_entry_user wcu ON wce.cal_id = wcu.cal_id" +
+    			" LEFT JOIN WebCal.webcal_entry_repeats wcr ON wce.cal_id = wcr.cal_id" +
+    			" WHERE wcu.cal_status = 'A'";
+        JSONArray tContainer = new JSONArray();
         try {            
             ResultSet resultSet = wc.q2rs1c(dbc, query_Calendar_Events, null);
             while (resultSet.next()) {
-                tContainer
+            	JSONObject tObject = new JSONObject();
+            	tObject
                     .put("cal_id", resultSet.getInt("cal_id"))
                     .put("cal_date", resultSet.getInt("cal_date"))
                     .put("cal_time", resultSet.getInt("cal_time"))
@@ -68,7 +146,22 @@ public class WebCalDAO {
                     .put("cal_due_date", resultSet.getInt("cal_due_date"))
                     .put("cal_due_time", resultSet.getInt("cal_due_time"))
                     .put("cal_name", resultSet.getString("cal_name"))
-                    .put("cal_description", resultSet.getString("cal_description"));
+                    .put("cal_description", resultSet.getString("cal_description"))
+                    .put("cal_status", resultSet.getString("cal_status"))
+                    .put("cal_frequency", resultSet.getString("cal_frequency"))
+                    .put("cal_type", resultSet.getString("cal_type"))
+                    .put("cal_days", resultSet.getInt("cal_days"))
+                    .put("cal_bymonth", resultSet.getString("cal_bymonth"))
+                    .put("cal_bymonthday", resultSet.getString("cal_bymonthday"))
+                    .put("cal_byday", resultSet.getString("cal_byday"))
+                    .put("cal_bysetpos", resultSet.getString("cal_bysetpos"))
+                    .put("cal_byweekno", resultSet.getString("cal_byweekno"))
+                    .put("cal_byyearday", resultSet.getString("cal_byyearday"))
+                    .put("cal_wkst", resultSet.getString("cal_wkst"))
+                    .put("cal_count", resultSet.getInt("cal_count"))
+                    .put("cal_end", resultSet.getInt("cal_end"))
+                    .put("cal_endtime", resultSet.getInt("cal_endtime"));
+            	tContainer.put(tObject);                
             }
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }

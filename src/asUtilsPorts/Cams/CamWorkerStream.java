@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 14 Dec 2019
+Updated: 15 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -33,8 +33,9 @@ public class CamWorkerStream {
                     " > /dev/null 2>&1 < /dev/null";
             
             while (tester == tester) {
-                    try { sj.runProcess(ffmpegCall); } catch (Exception e) { e.printStackTrace(); }
+                    try { sj.runProcess(ffmpegCall); } catch (Exception e) { }
                     try { Thread.sleep(threadTimeout*1000); } catch (Exception e) { }
+                    System.out.println("WARN: Catpture for " + outFile.toString() + " reset!");
             }
             
         }
@@ -60,13 +61,14 @@ public class CamWorkerStream {
         /* String usbDevice = null;
         try { usbDevice = StumpJunk.runProcessOutVar("ls "+camBeans.getUsbs().toString()+"*"); } catch (IOException ix) { ix.printStackTrace(); }
         usbDevice = usbDevice.replaceAll("\\n", ";");
-        String usbDevices[] = usbDevice.split(";"); */
+        String usbDevices[] = usbDevice.split(";");
 
         try { c1_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c2_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c3_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c4_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c5_file.delete(); } catch (Exception e) { e.printStackTrace(); }
+         */
         
         final String c1_url = "/dev/video0"; //usbDevices[1];
         final String c2_url = "rtsp://" + ipCamUser + ":" + ipCamPass + "@" + jp.getIpForCam2() + ":88/videoMain";

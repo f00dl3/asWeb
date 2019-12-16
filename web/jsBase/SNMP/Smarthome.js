@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 11 Dec 2019
+Updated: 15 Dec 2019
 */
 
 function actOnArmAway(event) {
@@ -125,6 +125,7 @@ function populateSmartStuff(target, eventData) {
 	var smartData = "<div class='UPop'>" +
 		"<button class='UButton'>Plugs</button>" +
 		"<div class='UPopO'>" +
+		"<form><input type='hidden' name='Device' value='DCamera'><button class='UButton' id='spDCamera'>SPARE</button></form>" +
 		"<form><input type='hidden' name='Device' value='Router'><button class='UButton' id='spRouter'>Router</button></form>" +
 		"<form><input type='hidden' name='Device' value='Desktop'><button class='UButton' id='spDesktop'>Desktop</button></form>" +
 		"</div>" + 
@@ -134,11 +135,13 @@ function populateSmartStuff(target, eventData) {
 	var buttonDisarm2 = dojo.byId('disarm2');
 	var buttonArmStay = dojo.byId('armStay');
 	var buttonArmAway = dojo.byId('armAway');
+	var buttonDCamera = dojo.byId('spDCamera');
 	var buttonSpDesktop = dojo.byId('spDesktop');
 	var buttonSpRouter = dojo.byId('spRouter');
 	dojo.connect(buttonDisarm2, "onclick", actOnDisarm2);
 	dojo.connect(buttonArmStay, "onclick", actOnArmStay);
-	dojo.connect(buttonArmAway, "onclick", actOnArmAway);	
+	dojo.connect(buttonArmAway, "onclick", actOnArmAway);
+	dojo.connect(buttonDCamera, "onclick", actOnSmartplug);	
 	dojo.connect(buttonSpDesktop, "onclick", actOnSmartplug);
 	dojo.connect(buttonSpRouter, "onclick", actOnSmartplug);		
 }
