@@ -23,7 +23,7 @@ public class WeatherBot {
 		
 		String commandToRun = "cd '" + thisWorkingFolder + "';" +
 				" cd asWxBot;" +
-				sendMessage + ";" +
+				// sendMessage + ";" +
 				startBot;
 			
 		Thread wxbot = new Thread(() -> { try { sj.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });

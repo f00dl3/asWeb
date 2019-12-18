@@ -1,4 +1,7 @@
 Things to do:
-	- Node bot autostart (in progress)
-	- Build webcal alternative <-- see f00dl3.ics for basic iCal format (in progress)
+	- Build Webcal calendar alternative.
 	- Build open layers drawable map for running
+
+COMPLETED 12/16/19:
+	- WebCal ICS REST endpoint
+	- Node Discord bot auto deployment.

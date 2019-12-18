@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 9 May 2018
+Updated: 18 Dec 2019
  */
 
 package asWebRest.resource;
@@ -70,6 +70,11 @@ public class WebCalResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
+	
+	            case "getEventsBasic":
+	                JSONArray calEvents = getWebCalAction.generate_FriendlyJSON(dbc);
+	                returnData += calEvents.toString();
+	                break;
                 
                 case "setQuickCalEntry":
                     List<String> qParams2 = new ArrayList<>();

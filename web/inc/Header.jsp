@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    1 Dec 2019
+    Updated:    18 Dec 2019
     Author     : astump
 --%>
 
@@ -16,6 +16,12 @@
     String scripts = request.getParameter("scripts");
     String scripts2Load = "";
     String refresh = request.getParameter("refresh");
+
+    String[] calScripts = {
+   		"Calendar/ByDay",
+   		"Calendar/ByMonth",
+   		"Calendar/Shared"
+    };
     
     String[] etScripts = {
         "Entertain/ChicagoSeries",
@@ -112,7 +118,8 @@
         "3DTransforms",
         "Preloader",
         "Responsive",
-        "OLFeatures"
+        "OLFeatures",
+        "StumpCal"
     };
     
     if(title == null) { title = "asWeb"; }
@@ -134,6 +141,11 @@
     String cssFiles = "";
     for(int i=0; i < css2do.length; i++) {
         cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
+    }
+    
+    String calScriptPack = "";
+    for(int i=0; i < calScripts.length; i++) {
+        calScriptPack += "<script src='"+rootPath+"/jsBase/"+calScripts[i]+".js'></script>";
     }
     
     String etScriptPack = "";
@@ -192,10 +204,16 @@
     if(scripts.equals("true")) {
         switch(title) {
             case "Anthony":
-                scripts2Load += wxScriptPack;
+                scripts2Load += "<script src='"+rootPath+"/jsBase/Calendar.js'>" +
+            			calScriptPack + wxScriptPack;
                 break;
             case "Cams":
+            	//fullTitle = "Smarthome Interface";
                 scripts2Load += wxScriptPack + snmpScriptPack;
+                break;
+            case "Calendar":
+            	fullTitle = "WebCal Anthony Fork";
+                scripts2Load += calScriptPack;
                 break;
             case "DBInfo":
                 fullTitle = "Database Info";
@@ -213,8 +231,7 @@
                 scripts2Load += fbScriptPack;
                 break;
             case "Fitness":
-                scripts2Load += "<script src='"+rootPath+"/jsBase/Weather/WxFunctions.js'></script>" +
-                        fitScriptPack;
+                scripts2Load += wxScriptPack + fitScriptPack;
                 break;
             case "FlashLoader":
                 scripts2Load = scripts2Load.replace("jquery-3.3.1.min.js","jquery-2.2.4.min.js");

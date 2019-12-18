@@ -1,19 +1,8 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 22 May 2019
+Updated: 16 Dec 2019
 */
-
-function actOnCalendarSubmit(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToJson(this.form);
-    if(isSet(thisFormData.QuickStart) && isSet(thisFormData.QuickStartTime) && isSet(thisFormData.QuickTitle)) {
-        putQuickCalendarEntry(thisFormData);
-    } else {
-        window.alert("Incomplete data!\nCheck input and try again!\n" + thisFormDataJ);
-    }
-}
 
 function actOnHiddenToggle(event) {
     dojo.stopEvent(event);
@@ -168,14 +157,7 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
     var mySqlOverallSize = 0;
     var mySqlOverallRows = 0;
     var toolHolder = "<h4>Tools</h4>";
-    var quickWebCalEntryForm = "<div class='UBox' id='QuickCalendar'><span>Quick Calendar Entry</span>" +
-            "<div class='table'><form class='tr' id='QuickCalFormTr'>" +
-            "<span class='td'><input name='QuickStart' type='date' value='' style='width: " + dateEntryWidth + "px;'/></span>" +
-            "<span class='td'><input name='QuickStartTime' type='time' value='' style='width: " + timeEntryWidth + "px'/></span>" +
-            "<span class='td'><input name='QuickTitle' type='text' value='' style='width: 100px;' />" +
-            "<input name='doWhat' type='hidden' value='setQuickCalEntry'/>" +
-            "<button id='QuickCalBtn' name='QuickCalendar' class='UButton'>Go</button>" +
-            "</span></form></div></div>";
+    var quickWebCalEntryForm = "<div class='UBox' id='QuickCalendar'></div>";
     toolHolder += quickWebCalEntryForm;
     var bubbleHolder = "<h4>Bubbles</h4>";
     var databaseInfoBubble = "<div class='UPopNM'>" +
@@ -284,11 +266,10 @@ function showInLogs(dbInfo, webVersion, sduLogs, camLogs, backupLogs) {
                 "</form>"; */
     rData += javaScriptSchit + fileUploadForm + "</div>";
     dojo.byId("inLogs").innerHTML = rData;
+    quickCalendar("QuickCalendar");
     var hiddenCheckbox = dojo.byId("HiddenCheckbox");
-    var quickCalButton = dojo.byId("QuickCalBtn");
     var changeFontButton = dojo.byId("setFontGo");
     dojo.connect(hiddenCheckbox, "onchange", actOnHiddenToggle);
-    dojo.connect(quickCalButton, "click", actOnCalendarSubmit);
     dojo.connect(changeFontButton, "click", changeH1Font);
     $("#inLogs").toggle();
     addUploader("UploadHolder");
@@ -305,28 +286,6 @@ function popLinkList() {
     } else {
         get3dLinkList();
     }
-}
-
-function putQuickCalendarEntry(formData) {
-    aniPreload("on");
-    var xhArgs = {
-        preventCache: true,
-        url: getResource("WebCal"),
-        postData: formData,
-        handleAs: "json",
-        timeout: timeOutMilli,
-        load: function(data) {
-            aniPreload("off");
-            showNotice("Calendar entry " + data.EntryID + " added!");
-            console.log(data.ErrorLog);
-            getAnthonyOverviewData();
-        },
-        error: function(data, iostatus) {
-            aniPreload("off");
-            window.alert("request for QuickCal Entry FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-        }
-    };
-    dojo.xhrPost(xhArgs);
 }
 
 var initAnthony = function(event) {

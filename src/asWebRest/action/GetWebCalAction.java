@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 16 Dec 2019
+Updated: 18 Dec 2019
  */
 
 package asWebRest.action;
@@ -16,6 +16,7 @@ public class GetWebCalAction {
     
     private WebCalDAO webCalDAO;
     public GetWebCalAction(WebCalDAO webCalDAO) { this.webCalDAO = webCalDAO; }
+    public JSONArray generate_FriendlyJSON(Connection dbc) { return webCalDAO.generate_FriendlyJSON(dbc); }
     public String generate_iCal(Connection dbc) { return webCalDAO.generate_iCal(dbc); }
     public JSONArray getEventsBasic(Connection dbc) { return webCalDAO.getEventsBasic(dbc); }
     public JSONObject getLastLogId(Connection dbc) { return webCalDAO.getLastLogId(dbc); }

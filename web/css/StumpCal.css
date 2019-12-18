@@ -1,0 +1,35 @@
+/*
+by Anthony Stump
+Created : 17 Dec 2019
+Updated : on creation
+*/
+
+DIV.cal_mo_table {
+	background-color: #2e3436;
+	border-width: 3px;
+	border-style: solid;
+	border-color: black;
+	display: table;
+        height: 80vh;
+        width: 87vw;
+}
+
+DIV.cal_mo_tr, FORM.cal_mo_tr { display: table-row; }
+
+SPAN.cal_mo_td, FORM.cal_mo_td {
+	display: table-cell;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	padding: 3px;
+}
+
+SPAN.cal_mo_th, FORM.cal_mo_th {
+	background-color: yellow;
+	display: table-cell;
+	border-width: 1px;
+	border-style: solid;
+	border-color: red;
+	font-weight: bold;
+	padding: 5px;
+}

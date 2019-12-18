@@ -1,0 +1,27 @@
+<%-- 
+    Document   : Anthony
+    Created on : 16 December 2019
+    Updated:    on Creation
+    Author     : astump
+--%>
+
+<%
+    String headerType = "full";
+    String pageTitle = "Calendar";
+    String scriptIt = "true";
+    String authCheck = "true";
+%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/inc/Header.jsp?type=full&title=Calendar&scripts=true" />
+
+    <body>
+    
+        <h1><% out.println(pageTitle); %></h1>
+            
+        <div id='calendarViewHolder'></div>
+             
+    </body>
+
+<jsp:include page="/inc/Footer.jsp"></jsp:include>

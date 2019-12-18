@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 16 Dec 2019
+Updated: 18 Dec 2019
 */
 
 package asWebRest.dao;
@@ -23,6 +23,73 @@ public class WebCalDAO {
     WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
     
+    public JSONArray generate_FriendlyJSON(Connection dbc) {
+
+    	JSONArray events = getEventsBasic(dbc);     	
+    	JSONArray friendlyEvents = new JSONArray();
+    	
+    	for(int i = 0; i < events.length(); i++) {
+    		JSONObject tObject = events.getJSONObject(i);    
+    		JSONObject fObject = new JSONObject();
+
+            try { 
+	            String description = "";
+	            String summary = "";
+            	int eFrequency = 0;
+	            String formatPattern = "yyyyMMdd'T'HHmmss'Z'";
+	    		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(formatPattern).withZoneUTC();
+	    		  
+	            try { description = wc.basicInputFilterICS(tObject.getString("cal_description")); } catch (Exception e) { }
+	            try { summary = wc.basicInputFilterICS(tObject.getString("cal_name")); } catch (Exception e) { }
+	    		try { eFrequency = tObject.getInt("cal_frequency"); } catch (Exception e) { }
+	    		
+	    		final String formatted_eventId = String.format("%010d", tObject.getInt("cal_id"));
+	    		final String formatted_calModDate = String.format("%08d", tObject.getInt("cal_mod_date"));
+	    		final String formatted_calModTime = String.format("%06d", tObject.getInt("cal_mod_time"));
+	    		final String pretty_lastModified = formatted_calModDate + "T" + formatted_calModTime + "Z"; 
+	    		final String formatted_calStartDate = String.format("%08d", tObject.getInt("cal_date"));
+	    		final String formatted_calStartTime = String.format("%06d", tObject.getInt("cal_time"));
+	    		final String pretty_eventStart = formatted_calStartDate + "T" + formatted_calStartTime + "Z"; 
+	    		final DateTime eventStartDateTime = DateTime.parse(pretty_eventStart, dateTimeFormatter).toDateTime();
+	    		final DateTime eventEndDateTime = eventStartDateTime.plusMinutes(tObject.getInt("cal_duration")); 
+	            final String pretty_eventEnd = dateTimeFormatter.print(eventEndDateTime);
+	            
+	            fObject
+	            	.put("eventId", formatted_eventId)
+	            	.put("lastModified", pretty_lastModified)
+	            	.put("summary", summary)
+	            	.put("description", description)
+	            	.put("eventStart", pretty_eventStart)
+	            	.put("eventEnd", pretty_eventEnd)
+	            	.put("frequency",  eFrequency);
+	    		
+	            if(eFrequency == 1) {
+	            	String fDate = tObject.getString("cal_type").toUpperCase();
+	            	if(fDate.contentEquals("MONTHLYBYDAY")) { fDate = "MONTHLY"; }
+            		fObject.put("fDate",  fDate);
+	            	if(wc.isSet(tObject.getString("cal_byday"))) {
+		            	fObject.put("byDay",  tObject.getString("cal_byday"));
+	            	}
+	            	if(wc.isSet(Integer.toString(tObject.getInt("cal_end")))) {
+	            		final String formatted_calEnd = String.format("%08d", tObject.getInt("cal_end"));
+	            		final String formatted_calEndTime = String.format("%06d", tObject.getInt("cal_endtime"));
+	            		final String pretty_calEnd = formatted_calEnd + "T" + formatted_calEndTime + "Z";
+	            		if(!pretty_calEnd.equals("00000000T000000Z")) {
+			            	fObject.put("calEnd", pretty_calEnd);
+	            		}
+	            	}           
+	            }
+	            
+	    		friendlyEvents.put(fObject);
+
+        	} catch (Exception e) { e.printStackTrace(); }   	
+            
+    	}
+    	
+    	return friendlyEvents;
+    	
+    }
+    
     public String generate_iCal(Connection dbc) {
     	
     	JSONArray events = getEventsBasic(dbc); 
@@ -32,22 +99,6 @@ public class WebCalDAO {
     			"PRODID:-//asWeb-ICS\n" +
     			"VERSION:0.1\n" +
     			"METHOD:PUBLISH\n";
-    	
-    	/* ICAL FORMAT REPEAT:
-	    	 UID:-LOCALHOST:8080-WCAL-F00DL3-0000000003
-		   64 LAST-MODIFIED:20141023T005617Z
-		   65 SUMMARY:CCSA WebCal Day
-		   66 DESCRIPTION:Work @ CCSA
-		   67 CLASS:PUBLIC
-		   68 STATUS:CONFIRMED
-		   69 ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN="Anthony ":MAILTO:youremailhere
-		   70 DTSTART:20140719T140000Z
-		   71 DTSTAMP:20191214T201601Z
-		   72 DTEND:20140719T150000Z
-		   73 RRULE:FREQ=WEEKLY;BYDAY=SA;UNTIL=20141031T140000Z
-		   74 EXDATE;VALUE=DATE:20140726,20140802,20140906,20141025
-		   75 END:VEVENT
-    	 */
     	
     	String returnData = iCalHeader;
     	
@@ -93,6 +144,7 @@ public class WebCalDAO {
 	
 	            if(eFrequency == 1) {	            	
 	            	String fDate = tObject.getString("cal_type").toUpperCase();
+	            	if(fDate.contentEquals("MONTHLYBYDAY")) { fDate = "MONTHLY"; }
 	            	tEventData += "RRULE:FREQ=" + fDate;
 	            	if(wc.isSet(tObject.getString("cal_byday"))) {
 	            		tEventData += ";BYDAY=" + tObject.getString("cal_byday");
@@ -116,6 +168,7 @@ public class WebCalDAO {
     	
     	}
     	
+    	returnData += "END:VCALENDAR";
         return returnData;
     	
     }
