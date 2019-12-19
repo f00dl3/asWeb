@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 15 Dec 2019
+Updated: 18 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -58,11 +58,7 @@ public class CamWorkerStream {
 		File c4_file = new File(camPath+"/webc4-temp.jpeg");
 		File c5_file = new File(camPath+"/webc5-temp.jpeg");
 		
-        /* String usbDevice = null;
-        try { usbDevice = StumpJunk.runProcessOutVar("ls "+camBeans.getUsbs().toString()+"*"); } catch (IOException ix) { ix.printStackTrace(); }
-        usbDevice = usbDevice.replaceAll("\\n", ";");
-        String usbDevices[] = usbDevice.split(";");
-
+		/*
         try { c1_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c2_file.delete(); } catch (Exception e) { e.printStackTrace(); }
         try { c3_file.delete(); } catch (Exception e) { e.printStackTrace(); }
@@ -81,7 +77,7 @@ public class CamWorkerStream {
         Thread cs3 = new Thread(() -> { ffmpegCall(c3_url, c3_file, capRes); });
         Thread cs4 = new Thread(() -> { ffmpegCall(c4_url, c4_file, capRes); });
         Thread cs5 = new Thread(() -> { ffmpegCall(c5_url, c5_file, capRes); });
-        Thread streams[] = { /* cs1,*/ cs2, cs3, cs4, cs5 };
+        Thread streams[] = { cs1, cs2, cs3, cs4, cs5 };
         for (Thread thread : streams) { thread.start(); }
                 
 	}
