@@ -1,6 +1,7 @@
 Things to do:
 	- Build Webcal calendar alternative.
 	- Build open layers drawable map for running
+	- Implement Weather APIs
 
 COMPLETED 12/16/19:
 	- WebCal ICS REST endpoint

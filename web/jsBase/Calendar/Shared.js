@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 17 Dec 2019
-Updated: 18 Dec 2019
+Updated: 21 Dec 2019
 */
 
 Date.prototype.addDays = function(days) {
@@ -17,15 +17,25 @@ Date.prototype.addHours = function(h) {
 
 function addEventDateTimes(eds) {
 	eds.forEach(function (tEvent) {
-		var tEventStart = new Date(tEvent.eventStart);
-		var tEventEnd = new Date(tEvent.eventEnd);
-		var tLastModified = new Date(tEvent.lastModified);
+		var tEventStart = new Date(convertToJsDt(tEvent.eventStart));
+		var tEventEnd = new Date(convertToJsDt(tEvent.eventEnd));
+		var tLastModified = new Date(convertToJsDt(tEvent.lastModified));
 		tEvent.tEventStart = tEventStart;
 		tEvent.tEventEnd = tEventEnd;
 		tEvent.tLastModified = tLastModified;
 	});
-	console.log(JSON.stringify(eds));
+	//console.log(JSON.stringify(eds));
 	return eds;
+}
+
+function convertToJsDt(tIn) {
+	var timeOut = tIn.substring(0,4) + "-" +
+		tIn.substring(4,6) + "-" +
+		tIn.substring(6,8) + "T" +
+		tIn.substring(9,11) + ":" +
+		tIn.substring(11,13) + ":" +
+		tIn.substring(13,15) + "Z";
+	return timeOut;
 }
 
 function getDayPosition(dayString) {

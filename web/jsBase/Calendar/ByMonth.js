@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created 16 Dec 2019
-Updated 18 Dec 2019
+Updated 21 Dec 2019
 */
 
 var todayDate = new Date();
@@ -31,9 +31,26 @@ function calendarMonthCreator(dateIn, target) {
     var dayOfMonth = 0;
     var monthName = prettyMonth(firstDayOfMonth.getMonth());
     var yearFull = firstDayOfMonth.getFullYear();
+    var lastDayOfMonth = new Date(firstDayOfMonth.addDays(daysInMonth));
     
     var rData = "<h4>" + monthName + " " + yearFull + "</h4>" +
     	"<div class='cal_mo_table'>";
+    
+    var tMonthEvents = [];
+    
+    console.log("DEBUG: Range = " + firstDayOfMonth + " to " + lastDayOfMonth);
+    
+    wcEventData.forEach(function (cev) {
+    	if(
+    			(cev.tEventStart).getTime() >= firstDayOfMonth.getTime() &&
+    			cev.tEventStart.getTime() <= lastDayOfMonth.getTime()
+		) {
+    		console.log("DEBUG: Event " + cev.summary + " is in range for start of " + firstDayOfMonth + " !");
+    		tMonthEvents.push(cev);
+    	}
+    });
+    
+    console.log(JSON.stringify(tMonthEvents));
     
     while(thisWeek <= requiredWeeks) {
         
@@ -45,16 +62,40 @@ function calendarMonthCreator(dateIn, target) {
             if(dayOfMonth === (daysInMonth + 1)) { dayOfMonth = 0; }
             
             rData += "<span class='cal_mo_td'><div class='UPop'>";
+            if(!checkMobile()) { rData += "<span><ul type='dot'>"; }
             
             if(dayOfMonth !== 0) {
 
+            	var todaysEvents = [];
+            	var todayEventCount = 0;
             	var thisDate = new Date(firstDayOfMonth).addDays(dayOfMonth-1);
-            	rData += prettyDayOfMonthPopper(getDayPosition(tdow), dayOfMonth) +
-            			popupHourly(thisDate);
-                dayOfMonth++;
+            	var thisEndConstraint = new Date(thisDate.addDays(2));
+            	rData += prettyDayOfMonthPopper(getDayPosition(tdow), dayOfMonth);
+            	
+            	tMonthEvents.forEach(function (tev) {
+            		if(
+                			(tev.tEventStart).getTime() >= thisDate.getTime() &&
+                			tev.tEventStart.getTime() < thisEndConstraint.getTime()
+            		) {
+                		if(!checkMobile()) {
+                			rData += "<li>" + tev.summary + "</li>";
+                		}
+                		todayEventCount++;
+                		todaysEvents.push(tev);
+                	}
+            	});
+            	
+            		
+            	rData += popupHourly(todaysEvents, thisDate);
+                
+            	dayOfMonth++;
+                
                 
             }
-            
+
+        	if(!checkMobile()) { rData += "</ul></span>"; }
+        	if(checkMobile() && todayEventCount !== 0) { rData += "(" + todayEventCount + ")"; }
+        	
             rData += "</div></span>";
             
             iterator++;

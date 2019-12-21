@@ -1,10 +1,10 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 16 Oct 2019
+Updated: 20 Dec 2019
  */
 
-var maxListing = 250;
+var maxListing = 5000;
 var tpSearchableData, tpIndexedImages, tpMatcher;
 var tpHash, tpGlob;
 var msiFlagG = 0;
