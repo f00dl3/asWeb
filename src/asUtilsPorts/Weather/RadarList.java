@@ -5,7 +5,7 @@ Created: 29 Apr 2019
 Updated: 28 Dec 2019
  */
 
-package asUtilsPorts;
+package asUtilsPorts.Weather;
 
 import asWebRest.shared.WebCommon;
 

@@ -27,11 +27,11 @@ import asUtilsPorts.CamPusher;
 import asUtilsPorts.Feeds;
 import asUtilsPorts.GetDaily;
 import asUtilsPorts.Radar;
-import asUtilsPorts.RadarList;
 import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
+import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
 
 public class BackendResource extends ServerResource {
@@ -85,6 +85,7 @@ public class BackendResource extends ServerResource {
             		try { interval = argsInForm.getFirstValue("interval"); } catch (Exception e) { }
             		switch(interval) {
             			case "1h": returnData = Feeds.doHourly(dbc); break;
+            			case "5m": returnData = Feeds.do5Minute(dbc); break;
             			case "2m": default: returnData = Feeds.do2Minute(dbc); break;
             		}
             		break;
@@ -100,7 +101,8 @@ public class BackendResource extends ServerResource {
             		break;
             		
             	case "Radar":
-            		Radar.fetchRadars();
+            		Radar radar = new Radar();
+            		radar.fetchRadars();
             		break;
             		
             	case "RadarList":

@@ -67,12 +67,12 @@ public class CamWorkerHF {
                         
             final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F -- GA "+tempGarage+"F -- CPU "+tempCPU+"F -- "+upsStatus;
   
-			if(!xWebCWFile.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()); }
-			if(!xWebC1File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()); }
-			if(!yWebC2File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()); }
-            if(!yWebC3File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()); }
-            if(!yWebC4File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()); }
-            if(!yWebC5File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()); }
+			if(!xWebCWFile.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			if(!xWebC1File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			if(!yWebC2File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC3File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC4File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC5File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 
 			String convertA = "convert \\( "+yWebC4File.getPath()+" -resize "+capRes+"! "+xWebC1File.getPath()+" -resize "+capRes+"! "+yWebC2File.getPath()+" -resize "+capRes+"! +append \\)"
 				+ " -background Black -append "+webcYaFile.getPath();

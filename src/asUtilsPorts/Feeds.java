@@ -33,7 +33,6 @@ public class Feeds {
         GetSPC getSPC = new GetSPC();
         KCScout kcScout = new KCScout();
         CamBeans camBeans = new CamBeans();
-        Radar radar = new Radar();
         
 		final File camPath = camBeans.getCamPath();
 
@@ -45,10 +44,20 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	//try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             
+    }
+    
+    public static String do5Minute(Connection dbc) {
+    	
+    	String returnData = "Fetch 5 minute feeds:\n";
+    	
+        Radar radar = new Radar();
+    	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
+    	
+    	return returnData;
+    	
     }
     
     public static String doHourly(Connection dbc) {

@@ -53,6 +53,9 @@ public class RadarNightly {
             e.printStackTrace();
         }
         
+        final File mp4Folder = new File(radPath+"/MP4");
+        if(!mp4Folder.exists()) { mp4Folder.mkdirs(); }
+        
         try { 
         	wc.zipThisFolder(rdObj, new File(radPath + "/MP4/" + getYesterday + ".Archived.zip"));
     	} catch (Exception e) { 

@@ -51,8 +51,8 @@ public class RadarWorker {
 				final String thisRad = resultSet.getString("Site");
 				File thisPathObject = new File(ramDrive+"/"+thisRad);
 				File thisDestPathObject = new File(radPath+"/"+thisRad+"/Archive");
-				thisPathObject.mkdirs();
-				thisDestPathObject.mkdirs();
+				if(!thisPathObject.exists()) { thisPathObject.mkdirs(); }
+				if(!thisDestPathObject.exists()) { thisDestPathObject.mkdirs(); }
 
 				final File radAoutFile = new File(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif");
 				final File radBoutFile = new File(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif");
@@ -86,8 +86,8 @@ public class RadarWorker {
 				for (int i = 0; i < grListB.length; i++) { try { grListB[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
 				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/_BLatest.gif");
-				WebCommon.moveFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
-				WebCommon.moveFile(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif", radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
+				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
+				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif", radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
 
 				WebCommon.runProcess("(ls "+radPath+"/"+thisRad+"/B*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/B*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
 				WebCommon.runProcess("(ls "+radPath+"/"+thisRad+"/V*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");

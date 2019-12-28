@@ -8,6 +8,7 @@ package asUtilsPorts;
 
 import asUtils.Secure.JunkyPrivate;
 import asUtilsPorts.Feed.CF6Daily;
+import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.shared.WebCommon;
 
 import java.sql.*;
@@ -18,7 +19,8 @@ public class GetDaily {
 		
 		String returnData = "";
 		
-		returnData = CF6Daily.getCf6(dbc, daysBack);
+		returnData += CF6Daily.getCf6(dbc, daysBack);
+		RadarNightly.process(dbc);
 
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         WebCommon wc = new WebCommon();

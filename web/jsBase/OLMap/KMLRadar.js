@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 19 Aug 2018
+Updated: 28 Dec 2019
  */
 
 var radarImage = [];
@@ -14,7 +14,7 @@ function doModelBasemap(map, lmmi, fHour, baseType, lastRunData) {
     var fhAn = Number(fHour);
     var iFolder = "Images";
     if(fHour !== "0000") {
-        fixedLmiPath = getBasePath("g2OutOld");
+        fixedLmiPath = getBasePath("get2");
         var model = "HRRR";
         if(fhAn > 16) {
             if (fhAn >= 82) { 
@@ -33,7 +33,7 @@ function doModelBasemap(map, lmmi, fHour, baseType, lastRunData) {
                 .replace("js2tmp", "tmp2m")
                 .replace("wm0850", "wm0800");
     } else {
-        fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("g2OutOld"));
+        fixedLmiPath = lmmi.lastFile.replace("/var/www/G2Out", getBasePath("get2"));
     }
     console.log(fixedLmiPath); // for debug
     var extent = ol.extent.applyTransform(
@@ -104,7 +104,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp, hideNext) {
                     "W: " + inBoundsW + " " + wCheck +")";
             //if(!checkMobile() || opacity === 0.2) {
             /* Can get away with this now - OL performance much better than Leaflet! */ if(1 === 1) {
-                var imageSource = getBasePath("get") + "/Radar/" + tRad.Site + "/_BLatest.gif";
+                var imageSource = getBasePath("get2") + "/Radar/" + tRad.Site + "/_BLatest.gif";
                 var extent = ol.extent.applyTransform(
                         [bounds[3], bounds[1], bounds[2], bounds[0]],
                         ol.proj.getTransform('EPSG:4326', 'EPSG:3857')
