@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
@@ -25,7 +25,6 @@ public class CamController {
 
 	public static void initCams() {
 
-            AtBootDt ab = new AtBootDt();
             CamBeans camBeans = new CamBeans();
         
             final File camPath = camBeans.getCamPath();
@@ -36,7 +35,7 @@ public class CamController {
                     pushTemp.mkdirs();
             }
             
-            ab.getAtBootDesktop();
+            AtBootDt.getAtBootDesktop();
             
             Thread ta = new Thread(() -> { mainCamLoop(camPath); });
             Thread tb = new Thread(() -> { streamForker(camPath, pushTemp); });

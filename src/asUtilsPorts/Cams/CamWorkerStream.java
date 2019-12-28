@@ -2,20 +2,19 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 18 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Shares.StumpJunk;
 import asUtils.Secure.JunkyPrivate;
+import asWebRest.shared.WebCommon;
+
 import java.io.*;
 
 public class CamWorkerStream {
     
         private static void ffmpegCall(String url, File outFile, String capRes) {
-            
-            StumpJunk sj = new StumpJunk();
             
             final int tester = 1;
             final int timeout = (120*1000);
@@ -33,7 +32,7 @@ public class CamWorkerStream {
                     " > /dev/null 2>&1 < /dev/null";
             
             while (tester == tester) {
-                    try { sj.runProcess(ffmpegCall); } catch (Exception e) { }
+                    try { WebCommon.runProcess(ffmpegCall); } catch (Exception e) { }
                     try { Thread.sleep(threadTimeout*1000); } catch (Exception e) { }
                     System.out.println("WARN: Catpture for " + outFile.toString() + " reset!");
             }

@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 16 Dec 2018
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
  */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -38,7 +37,7 @@ public class MHPFetch {
         final String vehHeader2 = "Vehicle Description Disposition Driver Gender Safety Device Driver Insurance";
         final String injHeader = "Veh. # Gender Injury Type City/State Disposition";
         final String injHeader2 = "Name Age Safety Device Involvement";
-        StumpJunk.jsoupOutBinary(tURL, mhpFile, 30.0);
+        WebCommon.jsoupOutBinary(tURL, mhpFile, 30.0);
         
         String query_AccidentReport = "INSERT IGNORE INTO Core.Crash_HPMO " +
                                         "(Incident, Lat, Lon, County, Location," +
@@ -70,35 +69,35 @@ public class MHPFetch {
                                 String aTimeString = "";
                                 int iteratedThisFile = 0;
                                 final File arFile = new File(cb.getPathChartCache().toString()+"/mhpOut-"+reportId+".txt");
-                                StumpJunk.jsoupOutBinary(rURL, arFile, 30.0);
-                                StumpJunk.sedFileReplace(arFile.getPath(), "<td class=\"infoCell3\">", "\"");
-                                StumpJunk.sedFileReplace(arFile.getPath(), "</td>", "\"");
-                                StumpJunk.sedFileReplace(arFile.getPath(), "\\t", "");
-                                StumpJunk.sedFileReplace(arFile.getPath(), "<tr>", "-TRS-");
-                                StumpJunk.sedFileReplace(arFile.getPath(), "</tr>", "-TRE-");
-                                StumpJunk.sedFileReplace(arFile.getPath(), "\\*", "-");
+                                WebCommon.jsoupOutBinary(rURL, arFile, 30.0);
+                                WebCommon.sedFileReplace(arFile.getPath(), "<td class=\"infoCell3\">", "\"");
+                                WebCommon.sedFileReplace(arFile.getPath(), "</td>", "\"");
+                                WebCommon.sedFileReplace(arFile.getPath(), "\\t", "");
+                                WebCommon.sedFileReplace(arFile.getPath(), "<tr>", "-TRS-");
+                                WebCommon.sedFileReplace(arFile.getPath(), "</tr>", "-TRE-");
+                                WebCommon.sedFileReplace(arFile.getPath(), "\\*", "-");
                                 Scanner arFileScanner = null; try {		
                                     arFileScanner = new Scanner(arFile);
                                     while(arFileScanner.hasNext()) {				
                                         String arLine = arFileScanner.nextLine();
                                         if(arLine.contains(reportId)) {
-                                            aLatitude = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
-                                            aLongitude = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
-                                            String dateString = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            aLatitude = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            aLongitude = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            String dateString = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
                                             DateTime readDateIn = inDateFormat.parseDateTime(dateString);
-                                            aDateString = StumpJunk.jsonSanitizeStrict(outDateFormat.print(readDateIn));
-                                            String timeString = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            aDateString = WebCommon.jsonSanitizeStrict(outDateFormat.print(readDateIn));
+                                            String timeString = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
                                             DateTime readTimeIn = inTimeFormat.parseDateTime(timeString);
-                                            aTimeString = StumpJunk.jsonSanitizeStrict(outTimeFormat.print(readTimeIn));
-                                            aCounty = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
-                                            aLocation = StumpJunk.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            aTimeString = WebCommon.jsonSanitizeStrict(outTimeFormat.print(readTimeIn));
+                                            aCounty = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
+                                            aLocation = WebCommon.jsonSanitizeStrict(arFileScanner.nextLine().replaceAll("\"", ""));
                                             
                                         }
                                         if(arLine.contains("<span id=\"Misc\">")) {                         
                                             Pattern synPat = Pattern.compile("<span id=\"Misc\">(.*)</span>");
                                             Matcher synMat = synPat.matcher(arLine);
                                             while(synMat.find()) {
-                                                aSynopsis = StumpJunk.jsonSanitizeStrict(synMat.group(1));
+                                                aSynopsis = WebCommon.jsonSanitizeStrict(synMat.group(1));
                                             }
                                         }
                                     }
@@ -110,7 +109,7 @@ public class MHPFetch {
                                         if(arLineC.contains("Vehicle Information") && iteratedThisFile == 0) {
                                             while(arFileScannerC.hasNext()) {
                                                 String textLine = arFileScannerC.nextLine();
-                                                textLine = StumpJunk.htmlStripTease(textLine);
+                                                textLine = WebCommon.htmlStripTease(textLine);
                                                 textFull += textLine + " ";
                                                 if(arFileScannerC.nextLine().equals("</table>")) { break; }
                                             }
@@ -121,8 +120,8 @@ public class MHPFetch {
                                 //System.out.println(textFull);
                                 try {
                                     textFull = textFull.replaceAll("\\n", ",").replaceAll(" +", " ").replaceAll("  -TRE-","").replaceAll(" -TRE- -TRS- ", ";");
-                                    String carsFull = StumpJunk.jsonSanitizeStrict(textFull.replaceAll(vehHeader, "").replaceAll(vehHeader2, "").split(injHeader2)[0]);
-                                    String injFull = StumpJunk.jsonSanitizeStrict(textFull.replaceAll(injHeader, "").replaceAll(aSynopsis, "").split(injHeader2)[1]);
+                                    String carsFull = WebCommon.jsonSanitizeStrict(textFull.replaceAll(vehHeader, "").replaceAll(vehHeader2, "").split(injHeader2)[0]);
+                                    String injFull = WebCommon.jsonSanitizeStrict(textFull.replaceAll(injHeader, "").replaceAll(aSynopsis, "").split(injHeader2)[1]);
                                     int totCars = carsFull.length() - carsFull.replaceAll(";", "").length() + 1;
                                     int totInj = injFull.length() - injFull.replaceAll(";", "").length() + 1;
                                     if(!aLocation.equals("")) {
@@ -142,7 +141,7 @@ public class MHPFetch {
             query_AccidentReport = query_AccidentReport.substring(0, query_AccidentReport.length() - 1) + ";";
             
             final File sqlDebugFile = new File(cb.getPathChartCache().toString()+"/mhp.sql");
-            try { StumpJunk.varToFile(query_AccidentReport, sqlDebugFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+            try { WebCommon.varToFile(query_AccidentReport, sqlDebugFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
             //System.out.println(query_AccidentReport);
 
             try { wc.q2do1c(dbc, query_AccidentReport, null); } catch (Exception e) { e.printStackTrace(); }

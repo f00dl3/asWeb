@@ -1,20 +1,19 @@
 /*
 by Anthony Stump
 Created: 14 Dec 2019
-Updated: 16 Dec 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.hookers;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
 
 public class WeatherBot {
         
 	public static void startBot() {
 
 		CommonBeans cb = new CommonBeans();
-		StumpJunk sj = new StumpJunk();
 		String thisWorkingFolder = cb.getWarDeployBase();
 		
 		String sendMessage = "node bot.js 'Auto-start @ " + thisWorkingFolder + "'";
@@ -26,7 +25,7 @@ public class WeatherBot {
 				// sendMessage + ";" +
 				startBot;
 			
-		Thread wxbot = new Thread(() -> { try { sj.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });
+		Thread wxbot = new Thread(() -> { try { WebCommon.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });
 		Thread bots[] = { wxbot };
 		for (Thread bot : bots) { bot.start(); } 
 				

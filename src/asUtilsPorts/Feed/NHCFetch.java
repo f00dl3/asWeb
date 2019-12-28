@@ -2,14 +2,13 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Split to NHCFetch: 23 Nov 2019
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
 
 import java.io.File;
 import java.sql.Connection;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -29,15 +28,15 @@ public class NHCFetch {
 		File nhcDAtFileSrc = new File(ramTemp+"/TWDAT.xml");
 		File nhcDEpFileSrc = new File(ramTemp+"/TWDEP.xml");
 		
-		StumpJunk.jsoupOutFile(nhcBase+"index-at.xml", nhcIAtFileSrc);
-		StumpJunk.jsoupOutFile(nhcBase+"index-ep.xml", nhcIEpFileSrc);
-		StumpJunk.jsoupOutFile(nhcBase+"xml/TWDAT.xml", nhcDAtFileSrc);
-		StumpJunk.jsoupOutFile(nhcBase+"xml/TWDEP.xml", nhcDEpFileSrc);
+		WebCommon.jsoupOutFile(nhcBase+"index-at.xml", nhcIAtFileSrc);
+		WebCommon.jsoupOutFile(nhcBase+"index-ep.xml", nhcIEpFileSrc);
+		WebCommon.jsoupOutFile(nhcBase+"xml/TWDAT.xml", nhcDAtFileSrc);
+		WebCommon.jsoupOutFile(nhcBase+"xml/TWDEP.xml", nhcDEpFileSrc);
 		
-		StumpJunk.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/index-at.xml > "+mysqlShare+"/index-at.xml");
-		StumpJunk.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/index-ep.xml > "+mysqlShare+"/index-ep.xml");
-		StumpJunk.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/TWDAT.xml > "+mysqlShare+"/TWDAT.xml");
-		StumpJunk.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/TWDEP.xml > "+mysqlShare+"/TWDEP.xml");
+		WebCommon.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/index-at.xml > "+mysqlShare+"/index-at.xml");
+		WebCommon.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/index-ep.xml > "+mysqlShare+"/index-ep.xml");
+		WebCommon.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/TWDAT.xml > "+mysqlShare+"/TWDAT.xml");
+		WebCommon.runProcess("iconv -f ISO-8859-1 -t UTF-8 "+ramTemp+"/TWDEP.xml > "+mysqlShare+"/TWDEP.xml");
 		
 		String nhcIAtSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/index-at.xml' IGNORE INTO TABLE WxObs.NHCFeeds CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET guid = ExtractValue(@tmp, '//guid'), title = ExtractValue(@tmp, '//title'), link = ExtractValue(@tmp, '//link'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";
 		String nhcIEpSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/index-ep.xml' IGNORE INTO TABLE WxObs.NHCFeeds CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET guid = ExtractValue(@tmp, '//guid'), title = ExtractValue(@tmp, '//title'), link = ExtractValue(@tmp, '//link'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";

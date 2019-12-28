@@ -1,12 +1,14 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 16 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asWebRest.shared;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
@@ -15,8 +17,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,17 +39,24 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 public class WebCommon {
         
-    public static Double[] arrayDoubleFromJson(JSONArray inJsonArray) {
+    public Double[] arrayDoubleFromJson(JSONArray inJsonArray) {
         Double[] newArray = new Double[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             Double tempDouble = 0.0;
@@ -47,7 +66,7 @@ public class WebCommon {
         return newArray;
     }
         
-    public static double[] arrayDoubleOldFromJson(JSONArray inJsonArray) {
+    public double[] arrayDoubleOldFromJson(JSONArray inJsonArray) {
         double[] newArray = new double[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             double tempDoubleOld = 0.0;
@@ -57,7 +76,7 @@ public class WebCommon {
         return newArray;
     }
     
-    public static float[] arrayFloatFromJson(JSONArray inJsonArray) {
+    public float[] arrayFloatFromJson(JSONArray inJsonArray) {
         float[] newArray = new float[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             Float tempFloat = 0.0f;
@@ -67,7 +86,7 @@ public class WebCommon {
         return newArray;
     }
     
-    public static Integer[] arrayIntegerFromJson(JSONArray inJsonArray) {
+    public Integer[] arrayIntegerFromJson(JSONArray inJsonArray) {
         Integer[] newArray = new Integer[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             Integer tempInteger = 0;
@@ -77,7 +96,7 @@ public class WebCommon {
         return newArray;
     }
     
-    public static ArrayList<Date> arrayListDateFromJson(JSONArray inJsonArray, String formatPattern) {
+    public ArrayList<Date> arrayListDateFromJson(JSONArray inJsonArray, String formatPattern) {
         DateFormat outFormat = new SimpleDateFormat(formatPattern);
         ArrayList<Date> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
@@ -98,7 +117,7 @@ public class WebCommon {
         return newArrayList;
     }
     
-    public static ArrayList<Float> arrayListFloatFromJson(JSONArray inJsonArray) {
+    public ArrayList<Float> arrayListFloatFromJson(JSONArray inJsonArray) {
         ArrayList<Float> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
             Float tempFloat = 0.0f;
@@ -108,7 +127,7 @@ public class WebCommon {
         return newArrayList;
     }        
     
-    public static ArrayList<Integer> arrayListIntegerFromJson(JSONArray inJsonArray) {
+    public ArrayList<Integer> arrayListIntegerFromJson(JSONArray inJsonArray) {
         ArrayList<Integer> newArrayList = new ArrayList<>();
         for (int i = 0; i < inJsonArray.length(); i++) {
             Integer tempInteger = 0;
@@ -118,7 +137,7 @@ public class WebCommon {
         return newArrayList;
     }        
     
-    public static String[] arrayStringFromJson(JSONArray inJsonArray) {
+    public String[] arrayStringFromJson(JSONArray inJsonArray) {
         String[] newArray = new String[inJsonArray.length()];
         for (int i = 0; i < inJsonArray.length(); i++) {
             String tempString = "";
@@ -128,19 +147,31 @@ public class WebCommon {
         return newArray;
     }
     
-    public static String basicInputFilter(String inString) {
+    public String basicInputFilter(String inString) {
         return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
     }
     
-    public static String basicInputFilterICS(String inString) {
+    public String basicInputFilterICS(String inString) {
         return inString
         		.replace("\'", "\\\'")
         		.replace("\"", "\\\"")
         		.replace("\n", "\\n")
         		.replace(",",  "\\,");
     }
-    
-    public static String cryptIt(String passwordIn) throws Exception {
+
+	public static void copyFile(String sourceFile, String destFile) throws IOException {
+		try { 
+			Files.copy(Paths.get(sourceFile),
+				Paths.get(destFile),
+				StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ix) { ix.printStackTrace(); }
+	}
+
+	public static void copyFileSilently(String sourceFile, String destFile) {
+		try { Files.copy(Paths.get(sourceFile), Paths.get(destFile), StandardCopyOption.REPLACE_EXISTING); } catch (Exception e) { e.printStackTrace(); }
+	}
+	
+    public String cryptIt(String passwordIn) throws Exception {
         byte[] hash = hashIt(passwordIn);
         StringBuffer hexString = new StringBuffer();
         for(int i = 0; i< hash.length; i++) {
@@ -159,7 +190,23 @@ public class WebCommon {
             file.delete();
     }
 
-    public static String getFileExtension(File thisFile) {
+	public static String fileScanner(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
+
+	public static List<String> fileSorter(Path folderPath, String objectsToSort) {	
+		List<String> sorterList = new ArrayList<>();
+		try {
+			DirectoryStream<Path> stream = Files.newDirectoryStream(folderPath, objectsToSort);
+			for (Path path : stream) { sorterList.add(path.toString()); }
+		}
+		catch (IOException ix) { ix.printStackTrace(); }
+		Collections.sort(sorterList);
+		return sorterList;
+	}
+	
+    public String getFileExtension(File thisFile) {
         String fileString = thisFile.toString();
         String fileExtension = null;
         int i = fileString.lastIndexOf('.');
@@ -180,19 +227,85 @@ public class WebCommon {
         return Jsoup.parse(stringIn).text();
     }
     
-    public static boolean isSet(String tStr) {
+    public boolean isSet(String tStr) {
         if (tStr != null && !tStr.isEmpty()) {
             return true;
         } else { return false; }
     }
 
-    public static boolean isSetNotZero(String tStr) {
+    public boolean isSetNotZero(String tStr) {
         if (tStr != null && !tStr.isEmpty() && !tStr.equals("0")) {
             return true;
         } else { return false; }
     }
     
-    public static String lastModifiedFile(String path2Check) {
+    public static String jsonSanitize(String inString) {
+        return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
+    }
+    
+    public static String jsonSanitizeStrict(String inString) {
+        return inString.replace("\'", "").replace("\"", "").replace("\n", "").replace("\\(", "").replace("\\(", "");
+    }
+
+	public static void jsoupOutBinary(String thisUrl, File outFile, double toS) {
+		int toLength = (int) (1000.0*toS*60);
+		String stripPath = outFile.getPath();
+		File cacheFile = new File(stripPath+".tmp");
+                System.out.println(" --> Downloading [ "+thisUrl+" ] NO MIME AS BINARY");
+		try {
+			FileOutputStream out = new FileOutputStream(cacheFile);
+			org.jsoup.Connection.Response binaryResult = Jsoup.connect(thisUrl)
+				.ignoreContentType(true)
+				.maxBodySize(1024*1024*1024*100)
+				.timeout(toLength)
+				.execute();
+			out.write(binaryResult.bodyAsBytes());
+			out.close();
+		}
+        catch (SocketTimeoutException stx) { stx.printStackTrace(); }
+		catch (Exception e) { e.printStackTrace(); }
+		if (cacheFile.length() > 0) {
+			moveFile(cacheFile.getPath(), outFile.getPath());
+		} else { System.out.println("0 byte download!"); }
+		cacheFile.delete();
+		System.out.flush();
+	}
+
+	public static void jsoupOutBinaryNoCache(String thisUrl, File outFile, double toS) {
+		int toLength = (int) (1000.0*toS*60);
+		String stripPath = outFile.getPath();
+		File cacheFile = outFile;
+		System.out.println(" --> Downloading [ "+thisUrl+" ] NO MIME AS BINARY - NO CACHE");
+		try {
+			FileOutputStream out = new FileOutputStream(cacheFile);
+			org.jsoup.Connection.Response binaryResult = Jsoup.connect(thisUrl)
+				.ignoreContentType(true)
+				.maxBodySize(1024*1024*1024*100)
+				.timeout(toLength)
+				.execute();
+			out.write(binaryResult.bodyAsBytes());
+			out.close();
+		}
+                catch (SocketTimeoutException stx) { stx.printStackTrace(); }
+		catch (Exception e) { e.printStackTrace(); }
+		System.out.flush();
+	}
+
+	public static void jsoupOutFile(String thisUrl, File outFile) {
+		System.out.println(" --> Downloading [ "+thisUrl+" ] NO MIME");
+		PrintStream console = System.out;
+		try {
+			org.jsoup.Connection.Response html = Jsoup.connect(thisUrl).ignoreContentType(true).execute();
+			System.setOut(new PrintStream(new FileOutputStream(outFile, false)));
+			System.out.println(html.body());
+		}
+                catch (SocketTimeoutException stx) { stx.printStackTrace(); }
+		catch (Exception e) { e.printStackTrace(); }
+		System.out.flush();
+		System.setOut(console);
+	}
+    
+    public String lastModifiedFile(String path2Check) {
         File fl = new File(path2Check);
         File[] files = fl.listFiles(new FileFilter() {
             public boolean accept(File file) {
@@ -209,7 +322,28 @@ public class WebCommon {
         }
         return choice.toString();
     }
-    
+
+	public static double meters2Feet(double metersIn) { return metersIn*3.28; }
+	
+    public static void moveFile(String oldFileName, String newFileName) {
+		System.out.println(" --> Moving [ "+oldFileName+" ] to [ "+newFileName+" ]");
+		Path oldFileFile = Paths.get(oldFileName);
+		Path newFileFile = Paths.get(newFileName);
+		try { 
+			Files.move(oldFileFile, newFileFile, StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (IOException io) { io.printStackTrace(); }
+	}
+
+	public static void moveFileSilently(String oldFileName, String newFileName) {
+		Path oldFileFile = Paths.get(oldFileName);
+		Path newFileFile = Paths.get(newFileName);
+		try { 
+			Files.move(oldFileFile, newFileFile, StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (IOException io) { io.printStackTrace(); }
+	} 
+        
     private String[] multiWordSearchArray(String searchStringIn) {
     	String[] searchArray = searchStringIn.split(" ");
     	return searchArray;
@@ -296,7 +430,7 @@ public class WebCommon {
         return messageBack;
     }
     
-    public static ResultSet q2rs(String query, List<String> params) throws Exception {
+    public ResultSet q2rs(String query, List<String> params) throws Exception {
         MyDBConnector mdb = new MyDBConnector();
         Connection connection = mdb.getMyConnection();
         PreparedStatement pStatement = connection.prepareStatement(query);
@@ -321,7 +455,7 @@ public class WebCommon {
         return resultSet;
     }
     
-    public static ResultSet q2rs1c(Connection connection, String query, List<String> params) throws Exception {
+    public ResultSet q2rs1c(Connection connection, String query, List<String> params) throws Exception {
         PreparedStatement pStatement = connection.prepareStatement(query);
         int pit = 1;
         if(params != null) {
@@ -344,7 +478,7 @@ public class WebCommon {
         return resultSet;
     }
     
-    public static JSONArray query2json(Connection connection, String query, List<String> params) throws Exception {
+    public JSONArray query2json(Connection connection, String query, List<String> params) throws Exception {
         JSONArray tContainer = new JSONArray();
         PreparedStatement pStatement = connection.prepareStatement(query);
         int pit = 1;
@@ -381,10 +515,177 @@ public class WebCommon {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-
-    public static double tempC2F(double tempC) { return tempC * 9/5 + 32; }
+    
+	public static void runProcess(String pString) {
+		System.out.println(" --> Running [ "+pString+" ]");
+		String s = null;
+		String[] pArray = { "bash", "-c", pString };
+		try { 
+			Process p = new ProcessBuilder(pArray).start();
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			while ((s = stdInput.readLine()) != null) { System.out.println(s); }
+			while ((s = stdError.readLine()) != null) { System.out.println(s); }
+			p.destroy();
+		}
+		catch (IOException e) { e.printStackTrace(); }
+		System.out.flush();
+	}
         
-    public static String unzipFile(String zipFile, String outputFolder) {
+	public static void runProcessAsynch(String pString) {
+		System.out.println(" --> Running asynchronously [ "+pString+" ]");
+		String[] pArray = { "bash", "-c", pString };
+		try { 
+			Process p = Runtime.getRuntime().exec(pArray);
+		}
+		catch (IOException e) { e.printStackTrace(); }
+		System.out.flush();
+	}
+     
+    public static void runProcessAsynchNoFlush(String pString) {
+        pString = "nohup " + pString;
+        System.out.println(" ---> Running asynchronously no flush [ " + pString + " ]");
+        String[] pArray = { "bash", "-c", pString };
+        try {
+            Process p = Runtime.getRuntime().exec(pArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+	public static void runProcessSilently(String pString) {
+		String s = null;
+		String[] pArray = { "bash", "-c", pString };
+		try { 
+			Process p = new ProcessBuilder(pArray).start();
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			while ((s = stdInput.readLine()) != null) { System.out.println(s); }
+			while ((s = stdError.readLine()) != null) { System.out.println(s); }
+			p.destroy();
+		}
+		catch (IOException e) { e.printStackTrace(); }
+		System.out.flush();
+	}
+
+	public static void runProcessOutFile(String pString, File outFile, boolean appendFlag) throws FileNotFoundException {
+		System.out.println(" --> (Output following result to file: "+outFile.getPath()+")");
+		String tmpVar = null;
+		try { tmpVar = runProcessOutVar(pString); } catch (IOException ix) { ix.printStackTrace(); }
+		varToFile(tmpVar, outFile, appendFlag);
+	}
+
+	public static String runProcessOutVar(String pString) throws java.io.IOException {
+		String[] pArray = { "bash", "-c", pString };
+		Process proc = new ProcessBuilder(pArray).start();
+		InputStream is = proc.getInputStream();
+		Scanner co = new Scanner(is).useDelimiter("\\A");
+		String val = "";
+		if (co.hasNext()) { val = co.next(); } else { val = ""; }
+		return val;
+	}
+
+	public static void sedFileDeleteFirstLine(String fileName) {
+		try {
+			File thisFileObject = new File(fileName);
+			Scanner fileScanner = new Scanner(thisFileObject);
+			if (fileScanner.hasNextLine()) {
+				fileScanner.nextLine();
+				FileWriter fileStream = new FileWriter(thisFileObject);
+				BufferedWriter out = new BufferedWriter(fileStream);
+				while (fileScanner.hasNextLine()) {
+					String next = fileScanner.nextLine();
+					if(next.equals("\n")) { out.newLine(); } else { out.write(next); }
+					out.newLine();
+				}
+				out.close();
+				fileStream.close();
+			}
+		} catch (IOException ix) { ix.printStackTrace(); }
+	}
+
+	public static void sedFileInsertEachLineNew(String subjectFile, String toInsert, String targetFile) {
+		try {
+			FileInputStream fstream = new FileInputStream(subjectFile);
+			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(targetFile), true));
+			String strLine = null;
+			while ((strLine = br.readLine()) != null) {
+				if (strLine.equals("")) {
+					System.out.println(" --> Skipping a line...");
+				} else {
+					System.out.println(" --> Processing: \""+strLine+"\"");		
+					String upLine = toInsert+strLine;
+					bw.write(upLine);
+					bw.newLine();
+				}
+			}
+			bw.close();
+			br.close();
+		}
+		catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+		catch (IOException iox) { iox.printStackTrace(); }
+		System.out.flush();
+	}
+
+	public static void sedFileReplace(String fileName, String toFind, String replaceTo) {
+		Path path = Paths.get(fileName);
+		Charset charset = StandardCharsets.UTF_8;
+		try {		
+			String content = new String(Files.readAllBytes(path), charset);
+			content = content.trim().replaceAll(toFind, replaceTo);
+			Files.write(path, content.getBytes(charset));
+		}
+		catch (IOException io) { io.printStackTrace(); }
+	}
+
+	public static double sumListDouble(List<Double> dList) {
+		if (dList == null || dList.size() < 1) { return 0; }
+		double sum = 0.0;
+		for (double tVar : dList) { sum = sum+tVar; }
+		return sum;		
+	}
+
+	public static double sumListInteger(List<Integer> iList) {
+		if (iList == null || iList.size() < 1) { return 0; }
+		int sum = 0;
+		for (int tVar : iList) { sum = sum+tVar; }
+		return sum;		
+	}
+	
+    public static double tempC2F(double tempC) { return tempC * 9/5 + 32; }
+
+	public static void unTarGz(String tarFileStr, String destStr) {
+		File tarFile = new File(tarFileStr);
+		File dest = new File(destStr);
+		dest.mkdirs();
+		TarArchiveInputStream tarIn = null;
+		try {
+			tarIn = new TarArchiveInputStream(new GzipCompressorInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
+			TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
+			while (tarEntry != null) {
+				File destPath = new File(dest, tarEntry.getName());
+				System.out.println("Working: " + destPath.getCanonicalPath());
+				if (tarEntry.isDirectory()) { destPath.mkdirs(); }
+				else {
+					if(!destPath.getParentFile().exists()) { destPath.getParentFile().mkdirs(); }					
+					destPath.createNewFile();
+					byte [] btoRead = new byte[4096];
+					BufferedOutputStream bout = new BufferedOutputStream(new FileOutputStream(destPath));
+					int len = 0;
+					while ((len = tarIn.read(btoRead)) != -1) { bout.write(btoRead, 0, len); }
+					bout.close();
+					btoRead = null;
+				}
+				tarEntry = tarIn.getNextTarEntry();
+			}
+			tarIn.close();
+		}
+		catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+		catch (IOException iox) { iox.printStackTrace(); }
+	}
+	
+    public String unzipFile(String zipFile, String outputFolder) {
         String resultsBack = "";
         byte[] buffer = new byte[4096];
         try {
@@ -414,6 +715,58 @@ public class WebCommon {
         try ( PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile, appendFlag))) ) {
                 out.println(thisVar);
         } catch (IOException io) { io.printStackTrace(); }
+    }
+
+    public void zipThisFolder(File sourceFolder, File outputZipFile) {
+        String zipFile = outputZipFile.toString();
+        File sourceDir = sourceFolder;
+        try {
+            FileOutputStream fos = new FileOutputStream(zipFile);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            System.out.println(" --> Creating [ "+outputZipFile.toString()+"]");
+            zipThisFolderWorker(sourceDir, zos);
+            zos.close();
+            System.out.println(" --> Packed all files in [ "+sourceFolder.toString()+" ] to [ "+outputZipFile.toString()+"]. Final size: "+outputZipFile.length());
+        }
+        catch (IOException ioe) { ioe.printStackTrace(); }
+    }
+
+    private void zipThisFolderWorker(File dirObj, ZipOutputStream zos) throws IOException {
+        File[] files = dirObj.listFiles();
+        byte[] buffer = new byte[8192];
+        for(int i = 0; i < files.length; i++) {
+            if(files[i].isDirectory()) { zipThisFolderWorker(files[i], zos); continue; }
+            FileInputStream fis = new FileInputStream(files[i].getAbsolutePath());
+            System.out.print(" --> Compressing: "+files[i].getAbsolutePath()+" ("+files[i].length()+" bytes) -- ");
+            zos.putNextEntry(new ZipEntry(files[i].getAbsolutePath()));
+            int len;
+            while ((len = fis.read(buffer)) > 0) {
+                zos.write(buffer, 0, len);
+            }
+            System.out.print(" DONE!\n");
+            zos.closeEntry();
+            fis.close();
+        }
+    }
+    
+    public void zipThisFile(File fileToZip, File outputZipFile) {
+        String zipFile = outputZipFile.toString();
+        String sourceFile = fileToZip.toString();
+        try {
+            byte[] buffer = new byte[4096];
+            FileOutputStream fos = new FileOutputStream(zipFile);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            File thisFile = new File(sourceFile);
+            FileInputStream fis = new FileInputStream(thisFile);
+            zos.putNextEntry(new ZipEntry(thisFile.getName()));
+            int length;
+            while ((length = fis.read(buffer)) > 0) { zos.write(buffer, 0, length); }
+            zos.closeEntry();
+            fis.close();
+            zos.close();
+            System.out.println(" --> Packed [ "+fileToZip.toString()+" ] into [ "+outputZipFile.toString()+"]");
+        }
+        catch (IOException ioe) { ioe.printStackTrace(); }
     }
     
     /* Public accessors */

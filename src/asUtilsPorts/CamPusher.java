@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
@@ -11,7 +11,6 @@ import asWebRest.secure.GDriveAttribs;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.WebCommon;
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,8 +27,9 @@ public class CamPusher {
         GDriveAttribs gDriveAttribs = new GDriveAttribs();
         CamBeans camBeans = new CamBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
-        Date date = new Date();
         WebCommon wc = new WebCommon();
+        
+        Date date = new Date();
         
         final String parentFolder = gDriveAttribs.getCloudCamFolder();
         final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -54,7 +54,7 @@ public class CamPusher {
         
         if(!pushTemp.exists()) { pushTemp.mkdirs(); }
         if(!camWebRoot.exists()) { camWebRoot.mkdirs(); }
-        if(dumpTemp.exists()) { StumpJunk.deleteDir(dumpTemp); }
+        if(dumpTemp.exists()) { WebCommon.deleteDir(dumpTemp); }
         
         try {
         	ResultSet resultSet = wc.q2rs1c(dbc, tempSelects, null);
@@ -73,21 +73,21 @@ public class CamPusher {
         
         System.out.println("[DEBUG] TempCase: "+tfCase+"; TempCPU: "+tfCPU+"; TempGar: "+tfGarage);
         
-        try { StumpJunk.varToFile(Integer.toString(tfCase), tfOutCase, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
-        try { StumpJunk.varToFile(Integer.toString(tfCPU), tfOutCPU, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
-        try { StumpJunk.varToFile(Integer.toString(tfGarage), tfOutGarage, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+        try { WebCommon.varToFile(Integer.toString(tfCase), tfOutCase, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+        try { WebCommon.varToFile(Integer.toString(tfCPU), tfOutCPU, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+        try { WebCommon.varToFile(Integer.toString(tfGarage), tfOutGarage, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
         
         dumpTemp.mkdirs();
         if(mp4OutAlt.exists()) { mp4OutAlt.delete(); }
-        if(mp4Out.exists()) { StumpJunk.moveFile(mp4Out.toString(), mp4OutAlt.toString()); }
-        StumpJunk.runProcess("mv "+pushTemp.toString()+"/*.jpeg "+dumpTemp.toString());
-        StumpJunk.runProcess("find "+dumpTemp.toString()+"/ -type f -size 0b -delete");
-        StumpJunk.runProcess("bash "+helpers.toString()+"/Sequence.sh "+dumpTemp.toString()+"/ jpeg");
-        try { StumpJunk.copyFile(dumpTemp.toString()+"/00001.jpeg", camWebRoot.toString()+"/_Latest.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
-        StumpJunk.runProcess("(ffmpeg -threads 4 -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4Out.toString()+" 2> "+mp4Log.toString()+")");
-        StumpJunk.runProcess("mogrify -resize 25% "+camWebRoot.toString()+"/_Latest.jpeg");
-        try { StumpJunk.copyFile(mp4Out.toString(), camWebRoot.toString()+"/_Loop.mp4"); } catch (IOException ix) { ix.printStackTrace(); }
-        StumpJunk.deleteDir(dumpTemp);
+        if(mp4Out.exists()) { WebCommon.moveFile(mp4Out.toString(), mp4OutAlt.toString()); }
+        WebCommon.runProcess("mv "+pushTemp.toString()+"/*.jpeg "+dumpTemp.toString());
+        WebCommon.runProcess("find "+dumpTemp.toString()+"/ -type f -size 0b -delete");
+        WebCommon.runProcess("bash "+helpers.toString()+"/Sequence.sh "+dumpTemp.toString()+"/ jpeg");
+        try { WebCommon.copyFile(dumpTemp.toString()+"/00001.jpeg", camWebRoot.toString()+"/_Latest.jpeg"); } catch (IOException ix) { ix.printStackTrace(); }
+        WebCommon.runProcess("(ffmpeg -threads 4 -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4Out.toString()+" 2> "+mp4Log.toString()+")");
+        WebCommon.runProcess("mogrify -resize 25% "+camWebRoot.toString()+"/_Latest.jpeg");
+        try { WebCommon.copyFile(mp4Out.toString(), camWebRoot.toString()+"/_Loop.mp4"); } catch (IOException ix) { ix.printStackTrace(); }
+        WebCommon.deleteDir(dumpTemp);
        
         try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (Exception ix) { ix.printStackTrace(); }
         

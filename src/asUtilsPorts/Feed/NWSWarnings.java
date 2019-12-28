@@ -1,12 +1,10 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
-
-import asUtils.Shares.StumpJunk;
 
 import java.io.*;
 import java.sql.*;
@@ -31,10 +29,10 @@ public class NWSWarnings {
 		final String warn2URL = "https://api.weather.gov/alerts/active";
 		final File warn2File = new File(ramTemp+"/Warn2All.json");
 		
-		StumpJunk.jsoupOutBinary(warn2URL, warn2File, 5.0);
+		WebCommon.jsoupOutBinary(warn2URL, warn2File, 5.0);
 		
-		StumpJunk.sedFileReplace(ramTemp+"/Warn2All.json", "\\n", "");
-		StumpJunk.sedFileReplace(ramTemp+"/Warn2All.json", " null\\,", "\\\"null\\\",");
+		WebCommon.sedFileReplace(ramTemp+"/Warn2All.json", "\\n", "");
+		WebCommon.sedFileReplace(ramTemp+"/Warn2All.json", " null\\,", "\\\"null\\\",");
 			
 		String warn2data = "";
 		Scanner warn2Scanner = null;
@@ -91,8 +89,8 @@ public class NWSWarnings {
 			String thisId = thisJObjRoot.getString("id");
 			String thisUpdated = thisJObjProperties.getString("sent");
 			String thisTitle = thisJObjProperties.getString("headline");
-			String thisSummary1 = StumpJunk.jsonSanitize(thisJObjProperties.getString("description"));
-			String thisSummary2 = StumpJunk.jsonSanitize(thisJObjProperties.getString("instruction"));
+			String thisSummary1 = WebCommon.jsonSanitize(thisJObjProperties.getString("description"));
+			String thisSummary2 = WebCommon.jsonSanitize(thisJObjProperties.getString("instruction"));
 			String thisEvent = thisJObjProperties.getString("event");
 			String thisEffective = thisJObjProperties.getString("effective");
 			String thisExpires = thisJObjProperties.getString("expires");
@@ -102,7 +100,7 @@ public class NWSWarnings {
 			String thisUrgency = thisJObjProperties.getString("urgency");
 			String thisSeverity = thisJObjProperties.getString("severity");
 			String thisCertainty = thisJObjProperties.getString("certainty");
-			String thisAreaDesc = StumpJunk.jsonSanitize(thisJObjProperties.getString("areaDesc"));
+			String thisAreaDesc = WebCommon.jsonSanitize(thisJObjProperties.getString("areaDesc"));
 		
 			w2jsonSQL = w2jsonSQL+" (1.20,'"+thisId+"','"+thisUpdated+"','"+thisUpdated+"','"+thisTitle+"','"+thisSummary1+thisSummary2+"',"
 				+ thisPolygon+",'"+thisEvent+"','"+thisEffective+"','"+thisExpires+"','"+thisStatus+"',"

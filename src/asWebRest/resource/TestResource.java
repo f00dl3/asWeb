@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 1 Jul 2018
+Updated: 28 Dec 2019
  */
 
 package asWebRest.resource;
@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;

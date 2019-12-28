@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -39,7 +38,7 @@ public class CF6Daily {
 		String dSQL = sqlf.print(tdt);
 		String domSp = dom.replaceAll("\\G0", " ");
 		
-		StumpJunk.jsoupOutBinary(cf6DataURL, cf6File, 30.0);
+		WebCommon.jsoupOutBinary(cf6DataURL, cf6File, 30.0);
 		
 		String processedLine = null;
 		

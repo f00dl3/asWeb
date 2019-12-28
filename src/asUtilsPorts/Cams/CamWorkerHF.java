@@ -1,13 +1,13 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 15 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
 import asUtils.Shares.JunkyBeans;
 import java.io.*;
 import java.text.DateFormat;
@@ -67,12 +67,12 @@ public class CamWorkerHF {
                         
             final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F -- GA "+tempGarage+"F -- CPU "+tempCPU+"F -- "+upsStatus;
   
-			if(!xWebCWFile.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()); }
-			if(!xWebC1File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()); }
-			if(!yWebC2File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()); }
-            if(!yWebC3File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()); }
-            if(!yWebC4File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()); }
-            if(!yWebC5File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()); }
+			if(!xWebCWFile.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()); }
+			if(!xWebC1File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()); }
+			if(!yWebC2File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()); }
+            if(!yWebC3File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()); }
+            if(!yWebC4File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()); }
+            if(!yWebC5File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()); }
 
 			String convertA = "convert \\( "+yWebC4File.getPath()+" -resize "+capRes+"! "+xWebC1File.getPath()+" -resize "+capRes+"! "+yWebC2File.getPath()+" -resize "+capRes+"! +append \\)"
 				+ " -background Black -append "+webcYaFile.getPath();
@@ -81,8 +81,8 @@ public class CamWorkerHF {
 				+ " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
 				+ " -background Black -append "+webcYbFile.getPath();
 
-			Thread ca2a = new Thread(() -> { StumpJunk.runProcessSilently(convertA); });
-			Thread ca2b = new Thread(() -> { StumpJunk.runProcessSilently(convertB); });
+			Thread ca2a = new Thread(() -> { WebCommon.runProcessSilently(convertA); });
+			Thread ca2b = new Thread(() -> { WebCommon.runProcessSilently(convertB); });
 			Thread thList2[] = { ca2a, ca2b };
 			for (Thread thread : thList2) { thread.start(); } 
 			for (int i = 0; i < thList2.length; i++) { try { thList2[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
@@ -91,10 +91,10 @@ public class CamWorkerHF {
 				+ " \\( "+webcYbFile.getPath()+" +append \\)"
 				+ " -background Black -append -resize "+camBeans.getFinalRes()+"! "+webcYFile.getPath();
 
-			StumpJunk.runProcessSilently(convertC);
+			WebCommon.runProcessSilently(convertC);
 
-			try { StumpJunk.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg"); } catch (Exception e) { }
-            try { StumpJunk.copyFileSilently(camPath+"/PushTmp/"+fileTimestamp+".jpeg", cachePath+"/CamLive.jpeg"); } catch (Exception ix) { }
+			try { WebCommon.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg"); } catch (Exception e) { }
+            try { WebCommon.copyFileSilently(camPath+"/PushTmp/"+fileTimestamp+".jpeg", cachePath+"/CamLive.jpeg"); } catch (Exception ix) { }
 
 		}
 

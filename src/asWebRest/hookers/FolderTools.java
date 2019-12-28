@@ -2,13 +2,12 @@
 by Anthony Stump
 Created: 29 Jun 2018
 Split off from WebCommon 1 Jul 2018
-Updated: 18 May 2019
-
+Updated: 28 Dec 2019
  */
 
 package asWebRest.hookers;
 
-import static asWebRest.shared.WebCommon.isSet;
+import asWebRest.shared.WebCommon;
 import java.io.File;
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -32,7 +31,8 @@ public class FolderTools {
         }
     }
     
-    public static JSONObject lukePathWalker(String folderToWalk) {
+    public JSONObject lukePathWalker(String folderToWalk) {
+    	WebCommon wc = new WebCommon();
         String scanFolder = "";
         JSONObject resultSet = new JSONObject();
         JSONArray fullPathsFiles = new JSONArray();
@@ -49,11 +49,11 @@ public class FolderTools {
                 String fullPath = fileListing[i].toString();
                 long fileSize = fileListing[i].length();
                 if (fileListing[i].isDirectory()) {
-                    if(isSet(fullPath)) { fullPathsFolders.put(fullPath); }
-                    if(isSet(fileName)) { shortNameFolders.put(fileName); }
+                    if(wc.isSet(fullPath)) { fullPathsFolders.put(fullPath); }
+                    if(wc.isSet(fileName)) { shortNameFolders.put(fileName); }
                 } else if (fileListing[i].isFile()) {
-                    if(isSet(fullPath)) { fullPathsFiles.put(fullPath); }
-                    if(isSet(fileName)) { shortNameFiles.put(fileName); }
+                    if(wc.isSet(fullPath)) { fullPathsFiles.put(fullPath); }
+                    if(wc.isSet(fileName)) { shortNameFiles.put(fileName); }
                     sizesOfFiles.put(fileSize);
                 }
             }
@@ -70,7 +70,8 @@ public class FolderTools {
         return resultSet;
     }
     
-    public static JSONObject lukePathWalker2(String folderToWalk) {
+    public JSONObject lukePathWalker2(String folderToWalk) {
+    	WebCommon wc = new WebCommon();
         String scanFolder = "";
         JSONObject resultSet = new JSONObject();
         JSONObject fContainer = new JSONObject();
@@ -85,12 +86,12 @@ public class FolderTools {
                 long fileSize = fileListing[i].length();
                 if (fileListing[i].isDirectory()) {
                     fObject.put("type", "folder");
-                    if(isSet(fullPath)) { fObject.put("path", fullPath); }
-                    if(isSet(fileName)) { fObject.put("name", fileName); }
+                    if(wc.isSet(fullPath)) { fObject.put("path", fullPath); }
+                    if(wc.isSet(fileName)) { fObject.put("name", fileName); }
                 } else if (fileListing[i].isFile()) {
                     fObject.put("type", "file");
-                    if(isSet(fullPath)) { fObject.put("path", fullPath); }
-                    if(isSet(fileName)) { fObject.put("name", fileName); }
+                    if(wc.isSet(fullPath)) { fObject.put("path", fullPath); }
+                    if(wc.isSet(fileName)) { fObject.put("name", fileName); }
                     fObject.put("size", fileSize);
                 }
                 fContainer.put(fileName, fObject);
@@ -104,7 +105,7 @@ public class FolderTools {
         return resultSet;
     }
     
-    public static void rebuildFolder(File folderIn) {
+    public void rebuildFolder(File folderIn) {
     	folderIn.delete();
     	folderIn.mkdirs();
     }

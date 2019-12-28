@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
@@ -33,6 +33,7 @@ public class Feeds {
         GetSPC getSPC = new GetSPC();
         KCScout kcScout = new KCScout();
         CamBeans camBeans = new CamBeans();
+        Radar radar = new Radar();
         
 		final File camPath = camBeans.getCamPath();
 
@@ -43,7 +44,8 @@ public class Feeds {
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
-    	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); } 
+    	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	//try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             

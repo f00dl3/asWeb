@@ -1,26 +1,16 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
 
 import asUtils.Secure.JunkyPrivate;
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import asUtilsPorts.Feed.CF6Daily;
 import asWebRest.shared.WebCommon;
 
-import java.io.*;
 import java.sql.*;
-import java.util.Scanner;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import asUtils.Shares.MyDBConnector;
 
 public class GetDaily {
 
@@ -28,10 +18,8 @@ public class GetDaily {
 		
 		String returnData = "";
 		
-		CF6Daily cf6 = new CF6Daily();
-		returnData = cf6.getCf6(dbc, daysBack);
+		returnData = CF6Daily.getCf6(dbc, daysBack);
 
-        JunkyBeans junkyBeans = new JunkyBeans();
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         WebCommon wc = new WebCommon();
 		

@@ -2,14 +2,14 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 18 May 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
 import asUtils.Shares.MyDBConnector;
 import java.io.*;
 import java.nio.file.Files;
@@ -38,16 +38,18 @@ public class GPSParse {
 	public static void main(String[] args) {
 
 		CommonBeans cb = new CommonBeans();
-                JunkyBeans junkyBeans = new JunkyBeans();
+        JunkyBeans junkyBeans = new JunkyBeans();
+        WebCommon wc = new WebCommon();
+        
 		final String dropLocation = cb.getPathChartCache().toString();
-                final String appName = junkyBeans.getApplicationName();
-                final String sourceType = args[2];
+        final String appName = junkyBeans.getApplicationName();
+        final String sourceType = args[2];
 		final Path gpsInFile = Paths.get(dropLocation+"/"+args[0]+"."+sourceType.toLowerCase());
 		final String thisDate = args[0].substring(0, 10);
 		final String bicycle = junkyBeans.getBicycle();
 		final String legacyFlag = args[1];
-                final long garminTrainTimeOffset = 631065600;
-                if(args.length != 3) { System.out.println("Please enter args: [fileName] [legacyFlag] [sourceType]"); System.exit(0); }
+        final long garminTrainTimeOffset = 631065600;
+        if(args.length != 3) { System.out.println("Please enter args: [fileName] [legacyFlag] [sourceType]"); System.exit(0); }
 		String fullGPSjson = "";
 		String geoJSONtrace = "";
 
@@ -86,35 +88,35 @@ public class GPSParse {
                                     JSONObject gpsData = new JSONObject();
                                     gpsLog.put(logNo, gpsData);
 
-                                    if(StumpJunk.isSetNotZero(thisLine[1])) { double altFt = StumpJunk.meters2Feet(Integer.parseInt(thisLine[1])/1000); gpsData.put("AltitudeFt", altFt); }
-                                    if(StumpJunk.isSetNotZero(thisLine[2])) { double altDiffDownFt = StumpJunk.meters2Feet(Integer.parseInt(thisLine[2]) / 1000); gpsData.put("AltDiffDownFt", altDiffDownFt); }
-                                    if(StumpJunk.isSetNotZero(thisLine[3])) { double altDiffUpFt = StumpJunk.meters2Feet(Integer.parseInt(thisLine[3]) / 1000); gpsData.put("AltDiffUpFt", altDiffUpFt); }
-                                    if(StumpJunk.isSetNotZero(thisLine[4])) { int cadence = Integer.parseInt(thisLine[4]); gpsData.put("Cadence", cadence); cadences.add(cadence); }
-                                    if(StumpJunk.isSetNotZero(thisLine[5])) { double kCal = Double.parseDouble(thisLine[5]); gpsData.put("kcal", kCal); }
-                                    if(StumpJunk.isSetNotZero(thisLine[6])) { double distAbsMi = (Double.parseDouble(thisLine[6])/1000)*0.621; gpsData.put("DistTotMiles", distAbsMi); miles.add(distAbsMi); }
-                                    if(StumpJunk.isSetNotZero(thisLine[7])) { double distInt = Double.parseDouble(thisLine[7]); gpsData.put("DistIntMeters", distInt); }
-                                    if(StumpJunk.isSetNotZero(thisLine[8])) { double distIntDown = Double.parseDouble(thisLine[8]); gpsData.put("DistIntDownFt", StumpJunk.meters2Feet(distIntDown)); }
-                                    if(StumpJunk.isSetNotZero(thisLine[9])) { double distIntUp = Double.parseDouble(thisLine[9]); gpsData.put("DistIntUpFt", StumpJunk.meters2Feet(distIntUp)); }
-                                    if(StumpJunk.isSetNotZero(thisLine[10])) { int heartrate = Integer.parseInt(thisLine[10]); gpsData.put("HeartRate", heartrate); heartRates.add(heartrate); }
-                                    if(StumpJunk.isSetNotZero(thisLine[11])) { double incline = Double.parseDouble(thisLine[11]); gpsData.put("Incline", incline); }
-                                    if(StumpJunk.isSetNotZero(thisLine[12])) { int iZone = Integer.parseInt(thisLine[12]); gpsData.put("IntensityZone", iZone); }
-                                    if(StumpJunk.isSetNotZero(thisLine[13])) { latitude = Double.parseDouble(thisLine[13]); gpsData.put("Latitude", latitude);  }
-                                    if(StumpJunk.isSetNotZero(thisLine[14])) { longitude = Double.parseDouble(thisLine[14]); gpsData.put("Longitude", longitude); }
-                                    if(StumpJunk.isSetNotZero(thisLine[15])) { double pHRMax = Double.parseDouble(thisLine[15]); gpsData.put("PercentHRMax", pHRMax); }
-                                    if(StumpJunk.isSetNotZero(thisLine[16])) { double powerWatts = Double.parseDouble(thisLine[16]); gpsData.put("PowerWatts", powerWatts); wattPowers.add(powerWatts); }
-                                    if(StumpJunk.isSetNotZero(thisLine[17])) { double pWRatio = Double.parseDouble(thisLine[17]); gpsData.put("PowerWeightRatio", pWRatio); }
-                                    if(StumpJunk.isSetNotZero(thisLine[18])) { double riseRate = Double.parseDouble(thisLine[18]); gpsData.put("RiseRate", riseRate); }
-                                    if(StumpJunk.isSetNotZero(thisLine[19])) { double speedMPH = Double.parseDouble(thisLine[19])*2.237; gpsData.put("SpeedMPH", speedMPH); intSpeeds.add(speedMPH); }
-                                    if(StumpJunk.isSetNotZero(thisLine[20])) { String speedRef = thisLine[20]; gpsData.put("SpeedSource", speedRef); }
-                                    if(StumpJunk.isSetNotZero(thisLine[21])) { int speedTime = Integer.parseInt(thisLine[21]); gpsData.put("SpeedTime", speedTime); }
-                                    if(StumpJunk.isSetNotZero(thisLine[22])) { int targetZone = Integer.parseInt(thisLine[22]); gpsData.put("TargetZone", targetZone); }
-                                    if(StumpJunk.isSetNotZero(thisLine[23])) { double tempF = StumpJunk.tempC2F(Double.parseDouble(thisLine[23])); gpsData.put("TemperatureF", tempF); }
-                                    if(StumpJunk.isSetNotZero(thisLine[24])) { long trainTime = Integer.parseInt(thisLine[24]); gpsData.put("TrainingTime", trainTime); }
-                                    if(StumpJunk.isSetNotZero(thisLine[25])) { long trainTimeTot = Integer.parseInt(thisLine[25]); gpsData.put("TrainingTimeTotalSec", trainTimeTot); trackedSeconds.add(trainTimeTot); }
-                                    if(StumpJunk.isSetNotZero(thisLine[26])) { long trainTimeDown = Integer.parseInt(thisLine[26]); gpsData.put("TrainingTimeDownhillSec", trainTimeDown); }
-                                    if(StumpJunk.isSetNotZero(thisLine[27])) { long trainTimeUp = Integer.parseInt(thisLine[27]); gpsData.put("TrainingTimeUphillSec", trainTimeUp); }
-                                    if(StumpJunk.isSetNotZero(thisLine[28])) { int workKJ = Integer.parseInt(thisLine[28]); gpsData.put("WorkKJ", workKJ); }
-                                    if(StumpJunk.isSetNotZero(thisLine[29])) { int powerZone = Integer.parseInt(thisLine[29]); gpsData.put("PowerZone", powerZone); }
+                                    if(wc.isSetNotZero(thisLine[1])) { double altFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[1])/1000); gpsData.put("AltitudeFt", altFt); }
+                                    if(wc.isSetNotZero(thisLine[2])) { double altDiffDownFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[2]) / 1000); gpsData.put("AltDiffDownFt", altDiffDownFt); }
+                                    if(wc.isSetNotZero(thisLine[3])) { double altDiffUpFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[3]) / 1000); gpsData.put("AltDiffUpFt", altDiffUpFt); }
+                                    if(wc.isSetNotZero(thisLine[4])) { int cadence = Integer.parseInt(thisLine[4]); gpsData.put("Cadence", cadence); cadences.add(cadence); }
+                                    if(wc.isSetNotZero(thisLine[5])) { double kCal = Double.parseDouble(thisLine[5]); gpsData.put("kcal", kCal); }
+                                    if(wc.isSetNotZero(thisLine[6])) { double distAbsMi = (Double.parseDouble(thisLine[6])/1000)*0.621; gpsData.put("DistTotMiles", distAbsMi); miles.add(distAbsMi); }
+                                    if(wc.isSetNotZero(thisLine[7])) { double distInt = Double.parseDouble(thisLine[7]); gpsData.put("DistIntMeters", distInt); }
+                                    if(wc.isSetNotZero(thisLine[8])) { double distIntDown = Double.parseDouble(thisLine[8]); gpsData.put("DistIntDownFt", WebCommon.meters2Feet(distIntDown)); }
+                                    if(wc.isSetNotZero(thisLine[9])) { double distIntUp = Double.parseDouble(thisLine[9]); gpsData.put("DistIntUpFt", WebCommon.meters2Feet(distIntUp)); }
+                                    if(wc.isSetNotZero(thisLine[10])) { int heartrate = Integer.parseInt(thisLine[10]); gpsData.put("HeartRate", heartrate); heartRates.add(heartrate); }
+                                    if(wc.isSetNotZero(thisLine[11])) { double incline = Double.parseDouble(thisLine[11]); gpsData.put("Incline", incline); }
+                                    if(wc.isSetNotZero(thisLine[12])) { int iZone = Integer.parseInt(thisLine[12]); gpsData.put("IntensityZone", iZone); }
+                                    if(wc.isSetNotZero(thisLine[13])) { latitude = Double.parseDouble(thisLine[13]); gpsData.put("Latitude", latitude);  }
+                                    if(wc.isSetNotZero(thisLine[14])) { longitude = Double.parseDouble(thisLine[14]); gpsData.put("Longitude", longitude); }
+                                    if(wc.isSetNotZero(thisLine[15])) { double pHRMax = Double.parseDouble(thisLine[15]); gpsData.put("PercentHRMax", pHRMax); }
+                                    if(wc.isSetNotZero(thisLine[16])) { double powerWatts = Double.parseDouble(thisLine[16]); gpsData.put("PowerWatts", powerWatts); wattPowers.add(powerWatts); }
+                                    if(wc.isSetNotZero(thisLine[17])) { double pWRatio = Double.parseDouble(thisLine[17]); gpsData.put("PowerWeightRatio", pWRatio); }
+                                    if(wc.isSetNotZero(thisLine[18])) { double riseRate = Double.parseDouble(thisLine[18]); gpsData.put("RiseRate", riseRate); }
+                                    if(wc.isSetNotZero(thisLine[19])) { double speedMPH = Double.parseDouble(thisLine[19])*2.237; gpsData.put("SpeedMPH", speedMPH); intSpeeds.add(speedMPH); }
+                                    if(wc.isSetNotZero(thisLine[20])) { String speedRef = thisLine[20]; gpsData.put("SpeedSource", speedRef); }
+                                    if(wc.isSetNotZero(thisLine[21])) { int speedTime = Integer.parseInt(thisLine[21]); gpsData.put("SpeedTime", speedTime); }
+                                    if(wc.isSetNotZero(thisLine[22])) { int targetZone = Integer.parseInt(thisLine[22]); gpsData.put("TargetZone", targetZone); }
+                                    if(wc.isSetNotZero(thisLine[23])) { double tempF = WebCommon.tempC2F(Double.parseDouble(thisLine[23])); gpsData.put("TemperatureF", tempF); }
+                                    if(wc.isSetNotZero(thisLine[24])) { long trainTime = Integer.parseInt(thisLine[24]); gpsData.put("TrainingTime", trainTime); }
+                                    if(wc.isSetNotZero(thisLine[25])) { long trainTimeTot = Integer.parseInt(thisLine[25]); gpsData.put("TrainingTimeTotalSec", trainTimeTot); trackedSeconds.add(trainTimeTot); }
+                                    if(wc.isSetNotZero(thisLine[26])) { long trainTimeDown = Integer.parseInt(thisLine[26]); gpsData.put("TrainingTimeDownhillSec", trainTimeDown); }
+                                    if(wc.isSetNotZero(thisLine[27])) { long trainTimeUp = Integer.parseInt(thisLine[27]); gpsData.put("TrainingTimeUphillSec", trainTimeUp); }
+                                    if(wc.isSetNotZero(thisLine[28])) { int workKJ = Integer.parseInt(thisLine[28]); gpsData.put("WorkKJ", workKJ); }
+                                    if(wc.isSetNotZero(thisLine[29])) { int powerZone = Integer.parseInt(thisLine[29]); gpsData.put("PowerZone", powerZone); }
 
                                     geoJSONtrace += "["+longitude+","+latitude+"],";				
 
@@ -207,8 +209,8 @@ public class GPSParse {
                                 
                                 latitude = Double.parseDouble(eElement.getAttribute("lat"));
                                 longitude = Double.parseDouble(eElement.getAttribute("lon"));
-                                altFt = StumpJunk.meters2Feet(Double.parseDouble(eElement.getElementsByTagName("ele").item(0).getTextContent()));
-                                tempF = StumpJunk.tempC2F(Double.parseDouble(eElement.getElementsByTagName("ns3:atemp").item(0).getTextContent())); 
+                                altFt = WebCommon.meters2Feet(Double.parseDouble(eElement.getElementsByTagName("ele").item(0).getTextContent()));
+                                tempF = WebCommon.tempC2F(Double.parseDouble(eElement.getElementsByTagName("ns3:atemp").item(0).getTextContent())); 
                                 trainTime = eElement.getElementsByTagName("time").item(0).getTextContent();
                                                                 
                                 gpsData.put("Latitude", latitude);
@@ -248,7 +250,7 @@ public class GPSParse {
                     if(!(junkyBeans.getPathWebappCache()).contains("null")) { csvOutFile = new File(dropLocation+"/"+args[0]+".csv"); }
                     final File fitCsvToolJar = new File(junkyBeans.getHelpers().toString()+"/FitCSVTool.jar");
                     
-                    StumpJunk.runProcess("java -jar "+fitCsvToolJar+" -b "+gpsInFile.toString()+" "+csvOutFile.toString());
+                    WebCommon.runProcess("java -jar "+fitCsvToolJar+" -b "+gpsInFile.toString()+" "+csvOutFile.toString());
                     
                     int jsonLogIterator = 0;
                     long initTrainTime = 0;
@@ -293,7 +295,7 @@ public class GPSParse {
 
                                         gpsData.put("SpeedSource", "gps");
 
-                                        if(StumpJunk.isSetNotZero(thisSetValue)) {
+                                        if(wc.isSetNotZero(thisSetValue)) {
 
                                             switch(thisSetKey) {
 
@@ -331,12 +333,12 @@ public class GPSParse {
                                                     break;
 
                                                 case "altitude":
-                                                    double altFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double altFt = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("AltitudeFt", altFt);
                                                     break;
 
                                                 case "enhanced_altitude":
-                                                    double eAltFt = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double eAltFt = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("EnhancedAltitudeFt", eAltFt);
                                                     break;
 
@@ -346,7 +348,7 @@ public class GPSParse {
                                                     break;
 
                                                 case "enhanced_speed":
-                                                    double eSpeedMPH = StumpJunk.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double eSpeedMPH = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("EnhancedSpeedMPH", eSpeedMPH);
                                                     break;
 
@@ -357,7 +359,7 @@ public class GPSParse {
                                                     break;
 
                                                 case "temperature":
-                                                    double tempF = StumpJunk.tempC2F(Double.parseDouble(thisSetValue));
+                                                    double tempF = WebCommon.tempC2F(Double.parseDouble(thisSetValue));
                                                     gpsData.put("TemperatureF", tempF);
                                                     break;
 
@@ -415,7 +417,7 @@ public class GPSParse {
                                         System.out.println(logNo + " - " + geoJSONtrace);
                                 }
 
-                                try { StumpJunk.runProcess("gzip "+csvOutFile.toString()); } catch (Exception e) { e.printStackTrace(); }
+                                try { WebCommon.runProcess("gzip "+csvOutFile.toString()); } catch (Exception e) { e.printStackTrace(); }
 
                             }
                         }
@@ -475,8 +477,8 @@ public class GPSParse {
 
 		String activityCode = args[0].substring(11);
 
-		try { avgHeart = (StumpJunk.sumListInteger(heartRates) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-		try { avgSpeed = (StumpJunk.sumListDouble(intSpeeds) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+		try { avgHeart = (WebCommon.sumListInteger(heartRates) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+		try { avgSpeed = (WebCommon.sumListDouble(intSpeeds) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { maxHeart = Collections.max(heartRates); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { maxSpeed = Collections.max(intSpeeds); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { trackedDistance = Collections.max(miles); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
@@ -494,9 +496,9 @@ public class GPSParse {
 				hrAvgField = "CycHeartAvg";
 				hrMaxField = "CycHeartMax";
 				try { maxCadence = Collections.max(cadences); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-				try { avgCadence = (StumpJunk.sumListInteger(cadences) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+				try { avgCadence = (WebCommon.sumListInteger(cadences) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 				try { maxPower = Collections.max(wattPowers); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-				try { avgPower = (StumpJunk.sumListDouble(wattPowers) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+				try { avgPower = (WebCommon.sumListDouble(wattPowers) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 				break;
 
 			case "D":
@@ -569,11 +571,11 @@ public class GPSParse {
                                 "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
                                 activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
 			if(activityType.equals("RunWalk")) { gpsQuery += ", TrackedTime="+trackedTime+", TrackedDist="+trackedDistance; }
-			if(StumpJunk.isSetNotZero(speedAvgField)) { gpsQuery += ", "+speedAvgField+"="+avgSpeed; }
-			if(StumpJunk.isSetNotZero(speedMaxField)) { gpsQuery += ", "+speedMaxField+"="+maxSpeed; }
-			if(StumpJunk.isSetNotZero(hrAvgField)) { gpsQuery += ", "+hrAvgField+"="+avgHeart; }
-			if(StumpJunk.isSetNotZero(hrMaxField)) { gpsQuery += ", "+hrMaxField+"="+maxHeart; }
-                        if(hrvArray.length() != 0) { gpsQuery += ", "+activityDataFieldHR+"='"+hrvArray.toString()+"'"; }
+			if(wc.isSetNotZero(speedAvgField)) { gpsQuery += ", "+speedAvgField+"="+avgSpeed; }
+			if(wc.isSetNotZero(speedMaxField)) { gpsQuery += ", "+speedMaxField+"="+maxSpeed; }
+			if(wc.isSetNotZero(hrAvgField)) { gpsQuery += ", "+hrAvgField+"="+avgHeart; }
+			if(wc.isSetNotZero(hrMaxField)) { gpsQuery += ", "+hrMaxField+"="+maxHeart; }
+            if(hrvArray.length() != 0) { gpsQuery += ", "+activityDataFieldHR+"='"+hrvArray.toString()+"'"; }
 			if(maxCadence > 0) { gpsQuery += ", CycCadMax="+maxCadence; }
 			if(avgCadence > 0) { gpsQuery += ", CycCadAvg="+avgCadence; }
 			if(maxPower > 0) { gpsQuery += ", CycPowerMax="+maxPower; }
@@ -594,7 +596,7 @@ public class GPSParse {
                 	}
                     catch (SQLException se) { se.printStackTrace(); }
                     catch (Exception e) { e.printStackTrace(); }
-                    try { StumpJunk.runProcess("gzip "+gpsInFile.toString()); } catch (Exception e) { e.printStackTrace(); }
+                    try { WebCommon.runProcess("gzip "+gpsInFile.toString()); } catch (Exception e) { e.printStackTrace(); }
                 } else {
                     System.out.println("Not running query or gzipping as source type ["+sourceType+"] is still experimental!");
                 }

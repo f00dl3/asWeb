@@ -1,12 +1,11 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.io.*;
@@ -34,10 +33,10 @@ public class cWazey {
         final String wazeFeedURL = wazeFeedURL_190503;
 		final Path wazeJSON = Paths.get(ramDrive.toString()+"/Waze.json");
 
-		StumpJunk.jsoupOutBinary(wazeFeedURL, wazeJSON.toFile(), 5.0);
+		WebCommon.jsoupOutBinary(wazeFeedURL, wazeJSON.toFile(), 5.0);
 
-		StumpJunk.sedFileReplace(wazeJSON.toString(), "\\n", "");
-		StumpJunk.sedFileReplace(wazeJSON.toString(), " null\\,", "\\\"null\\\",");
+		WebCommon.sedFileReplace(wazeJSON.toString(), "\\n", "");
+		WebCommon.sedFileReplace(wazeJSON.toString(), " null\\,", "\\\"null\\\",");
 			
 		String wazeLoaded = "";
 		Scanner wazeScanner = null;
@@ -89,21 +88,21 @@ public class cWazey {
 
 			tId = tJOAlert.getString("id");
 			tUuid = tJOAlert.getString("uuid");
-			tCountry = StumpJunk.jsonSanitize(tJOAlert.getString("country"));
+			tCountry = WebCommon.jsonSanitize(tJOAlert.getString("country"));
 			tNThumbsUp = tJOAlert.getInt("nThumbsUp");
 			tReportRating = tJOAlert.getInt("reportRating");
 			tReliability = tJOAlert.getInt("reliability");
-			tType = StumpJunk.jsonSanitize(tJOAlert.getString("type"));
+			tType = WebCommon.jsonSanitize(tJOAlert.getString("type"));
 			tSpeed = tJOAlert.getInt("speed");
 			tReportMood = tJOAlert.getInt("reportMood");
-			tSubType = StumpJunk.jsonSanitize(tJOAlert.getString("subtype"));
-			if(tJOAlert.has("street")) { tStreet = StumpJunk.jsonSanitize(tJOAlert.getString("street")); }
-			if(tJOAlert.has("additionalInfo")) { tAdditionalInfo = StumpJunk.jsonSanitize(tJOAlert.getString("additionalInfo")); }
+			tSubType = WebCommon.jsonSanitize(tJOAlert.getString("subtype"));
+			if(tJOAlert.has("street")) { tStreet = WebCommon.jsonSanitize(tJOAlert.getString("street")); }
+			if(tJOAlert.has("additionalInfo")) { tAdditionalInfo = WebCommon.jsonSanitize(tJOAlert.getString("additionalInfo")); }
 			tNComments = tJOAlert.getInt("nComments");
-			if(tJOAlert.has("reportBy")) { tReportBy = StumpJunk.jsonSanitize(tJOAlert.getString("reportBy")); }
-			if(tJOAlert.has("reportDescription")) { tReportDescription = StumpJunk.jsonSanitize(tJOAlert.getString("reportDescription")); }
+			if(tJOAlert.has("reportBy")) { tReportBy = WebCommon.jsonSanitize(tJOAlert.getString("reportBy")); }
+			if(tJOAlert.has("reportDescription")) { tReportDescription = WebCommon.jsonSanitize(tJOAlert.getString("reportDescription")); }
 			tWazeData = tJOAlert.getString("wazeData");
-			if(tJOAlert.has("nearBy")) { tNearBy = StumpJunk.jsonSanitize(tJOAlert.getString("nearBy")); }
+			if(tJOAlert.has("nearBy")) { tNearBy = WebCommon.jsonSanitize(tJOAlert.getString("nearBy")); }
 			tPubMillis = tJOAlert.getLong("pubMillis");
 
 			wazeSQL = wazeSQL+"("

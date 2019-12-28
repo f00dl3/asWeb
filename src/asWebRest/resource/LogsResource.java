@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 7 Jun 2018
+Updated: 28 Dec 2019
  */
 
 package asWebRest.resource;
@@ -58,6 +58,7 @@ public class LogsResource extends ServerResource {
         GetDatabaseInfoAction getDatabaseInfoAction = new GetDatabaseInfoAction(new DatabaseInfoDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
         GetWebVersionAction getWebVersionAction = new GetWebVersionAction(new WebVersionDAO());
+        UpdateWebAccessLogAction updateWebAccessLogAction = new UpdateWebAccessLogAction(new WebAccessLogDAO());
                         
         JSONObject mergedResults = new JSONObject();
         List<String> qParams = new ArrayList<>();
@@ -97,7 +98,6 @@ public class LogsResource extends ServerResource {
                     webAccessLog.setUser(argsInForm.getFirstValue("UserName"));
                     webAccessLog.setRemoteIp(argsInForm.getFirstValue("RemoteIP"));
                     webAccessLog.setBrowser(argsInForm.getFirstValue("UserAgent"));
-                    UpdateWebAccessLogAction updateWebAccessLogAction = new UpdateWebAccessLogAction(new WebAccessLogDAO());
                     updateWebAccessLogAction.updateWebAccessLog(webAccessLog);
                     returnData += "QUERY RAN SUCESSFULLY!";
                     break;

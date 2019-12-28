@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 30 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 13 May 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
@@ -11,7 +11,6 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import asUtils.Shares.JunkyBeans;
 import asUtilsPorts.GPSParse;
 import asWebRest.shared.CommonBeans;
 
@@ -20,7 +19,6 @@ public class GPSBulk {
 	public static void main(String[] args) {
 
 		CommonBeans cb = new CommonBeans();
-        JunkyBeans junkyBeans = new JunkyBeans();
 		final String archFlag = "no";
 		final File dropLocation = new File(cb.getPathChartCache().toString());
 		final File[] dirList = dropLocation.listFiles();

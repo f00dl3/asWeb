@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Oct 2019
-Updated: 17 Oct 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.hookers;
@@ -18,8 +18,6 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
-import asWebRest.action.GetTpAction;
 import asWebRest.action.UpdateTpAction;
 import asWebRest.dao.TpDAO;
 import asWebRest.secure.XBeans;
@@ -35,11 +33,10 @@ public class XGetHook {
 		// Does not work due to security permissions of Tomcat user.
 		XBeans xb = new XBeans();
 		JunkyBeans jb = new JunkyBeans();
-		StumpJunk sj = new StumpJunk(); 
 		
 		String uHome = xb.getTpGalleryBasePath();		
 		try {
-			sj.runProcess("bash " + uHome + "/xGetDiff.sh " + imageSet);
+			WebCommon.runProcess("bash " + uHome + "/xGetDiff.sh " + imageSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,7 +54,7 @@ public class XGetHook {
 		
 		tpBase = tpBase + imageSet + ".html";
 
-		try { StumpJunk.jsoupOutBinary(tpBase, tpSwap, 30); } catch (Exception e) { e.printStackTrace(); }
+		try { WebCommon.jsoupOutBinary(tpBase, tpSwap, 30); } catch (Exception e) { e.printStackTrace(); }
 		
 		Scanner tpSwapScanner = null; try {
 			tpSwapScanner = new Scanner(tpSwap);
@@ -138,14 +135,14 @@ public class XGetHook {
 				System.out.println("DEBUG: [ " + thisImage + " ] - Downloading...");
 				String fileToGet = tpImageBase + thisImage;
 				File tImageFile = new File(xb.getTpSwapFolder().toString() + "/" + thisImage);
-				try { StumpJunk.jsoupOutBinary(fileToGet, tImageFile, 30); } catch (Exception e) { e.printStackTrace(); }
+				try { WebCommon.jsoupOutBinary(fileToGet, tImageFile, 30); } catch (Exception e) { e.printStackTrace(); }
 			}
 		}
 		
 		try { 
-			StumpJunk.runProcess("cp " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathF.toString());
-			StumpJunk.runProcess("mogrify -resize 64x64! " + xb.getTpSwapFolder().toString() + "/*.jpg");
-			StumpJunk.runProcess("mv " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathT.toString());			
+			WebCommon.runProcess("cp " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathF.toString());
+			WebCommon.runProcess("mogrify -resize 64x64! " + xb.getTpSwapFolder().toString() + "/*.jpg");
+			WebCommon.runProcess("mv " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathT.toString());			
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}

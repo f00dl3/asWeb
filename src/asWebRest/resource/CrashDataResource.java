@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Dec 2018
+Updated: 28 Dec 2019
  */
 
 package asWebRest.resource;
@@ -14,9 +15,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 public class CrashDataResource extends ServerResource {
-    
-        
-        
+       
     @Get
     public String represent() {
         

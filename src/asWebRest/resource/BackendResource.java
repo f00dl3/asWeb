@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -26,16 +26,21 @@ import asUtilsPorts.CamNightly;
 import asUtilsPorts.CamPusher;
 import asUtilsPorts.Feeds;
 import asUtilsPorts.GetDaily;
+import asUtilsPorts.Radar;
+import asUtilsPorts.RadarList;
+import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
+import asUtilsPorts.Weather.RadarNightly;
 
 public class BackendResource extends ServerResource {
     
     @Post
     public String doPost(Representation argsIn) {
         
-        MyDBConnector mdb = new MyDBConnector();
+    	MyDBConnector mdb = new MyDBConnector();
+    	
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
                         
@@ -56,57 +61,67 @@ public class BackendResource extends ServerResource {
             switch(doWhat) {
             
             	case "_DEVTEST":
-            		cWazey waze = new cWazey();
-            		waze.ripShit(dbc);
+            		cWazey.ripShit(dbc);
             		break;
             		            		
             	case "_TEST":
-            		TestStuff testStuff = new TestStuff();
-            		returnData = testStuff.stupidTomcatSandboxing();
+            		returnData = TestStuff.stupidTomcatSandboxing();
             		break;
             		
             	case "CamController":
-            		CamController cc = new CamController();
-            		cc.initCams();
+            		CamController.initCams();
             		break;
             		
             	case "CamPusher":
-            		CamPusher camPusher = new CamPusher();
-            		camPusher.pushIt(dbc);
+            		CamPusher.pushIt(dbc);
             		break;
             		
             	case "CamNightly":
-            		CamNightly camNightly = new CamNightly();
-            		camNightly.doJob(dbc);
+            		CamNightly.doJob(dbc);
             		break;
             		
             	case "Feeds":
             		String interval = "2m";
-            		Feeds feeds = new Feeds();
             		try { interval = argsInForm.getFirstValue("interval"); } catch (Exception e) { }
             		switch(interval) {
-            			case "1h": returnData = feeds.doHourly(dbc); break;
-            			case "2m": default: returnData = feeds.do2Minute(dbc); break;
+            			case "1h": returnData = Feeds.doHourly(dbc); break;
+            			case "2m": default: returnData = Feeds.do2Minute(dbc); break;
             		}
             		break;
             
             	case "GetDaily":
             		int daysBack = 1;
-            		GetDaily gd = new GetDaily();
             		try { daysBack = Integer.parseInt(argsInForm.getFirstValue("days")); } catch (Exception e) { }
-            		returnData = gd.getDaily(dbc, daysBack);
+            		returnData = GetDaily.getDaily(dbc, daysBack);
+            		break;
+            		
+            	case "Kilauea":
+            		KilaeuaCam.doKilaeua();
+            		break;
+            		
+            	case "Radar":
+            		Radar.fetchRadars();
+            		break;
+            		
+            	case "RadarList":
+            		returnData = RadarList.listSites(dbc);
+            		break;
+            		
+            	case "RadarNightly":
+            		RadarNightly.process(dbc);
             		break;
             		
 	            case "MHPFetch":
-	                MHPFetch mhpFetch = new MHPFetch();
 	                String mhpArg1 = "A";
 	                try { mhpArg1 = argsInForm.getFirstValue("troop"); } catch (Exception e) { }
-	                mhpFetch.doMHP(dbc, mhpArg1);                    
+	                MHPFetch.doMHP(dbc, mhpArg1);                    
 	                break;
 	                
 	            case "WxBot":
-	            	WeatherBot wxBot = new WeatherBot();
-	            	wxBot.startBot();
+	            	WeatherBot.startBot();
+	            	break;
+	            	
+	            case "xs19":
 	            	break;
                 
             }

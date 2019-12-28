@@ -117,9 +117,10 @@ function putDrawPathMap() {
 	    var geojsonStr = writer.writeFeatures(features, {featureProjection: 'EPSG:3857'});
         dojo.byId("MessageHolder").innerHTML = refLineLength;
         if(!checkMobile()) {
+        	// FOR DEBUGGING : dojo.byId("map").innerHTML = geojsonStr;
         	generateDownload(geojsonStr, "points.geojson");   
         } else {
-        	dojo.byId("OLMapHolder").innerHTML = geojsonStr;
+        	dojo.byId("map").innerHTML = geojsonStr;
         }
     }
     

@@ -33,7 +33,9 @@ import org.json.JSONObject;
 
 public class Controller extends HttpServlet {
     
-    @Override
+	private static final long serialVersionUID = 20180210;
+
+	@Override
     public void doGet(
         HttpServletRequest request, HttpServletResponse response
     ) throws ServletException, IOException {
@@ -115,7 +117,7 @@ public class Controller extends HttpServlet {
                             
                         case "userAndPass":
                             final File cachePath = new File(cb.getPathChartCache());
-                            wc.deleteDir(cachePath);
+                            WebCommon.deleteDir(cachePath);
                             GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
                             GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
                             String loginCheck = "false";
@@ -126,7 +128,7 @@ public class Controller extends HttpServlet {
                             String hashWord = "";
                             try { hashWord = wc.cryptIt(pass); } catch (Exception e) { e.printStackTrace(); }
                             String webUIserAuth = getWebUIserAuthAction.getWebUIserAuth(userName);
-                            if(webUIserAuth.equals(hashWord) && WebCommon.isSet(hashWord)) { loginCheck = "true"; }
+                            if(webUIserAuth.equals(hashWord) && wc.isSet(hashWord)) { loginCheck = "true"; }
                             JSONArray webAccessLogs = getWebAccessLogAction.getWebAccessLogs();
                             session.setAttribute("userName", userName);
                             session.setAttribute("loggedIn", loginCheck);

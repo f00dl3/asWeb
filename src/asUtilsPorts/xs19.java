@@ -1,7 +1,7 @@
 /*
 XML Stations 2019 - Core Process 
 Created: 4 Sep 2016
-Updated: 19 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
@@ -182,7 +182,7 @@ public class xs19 {
                 Thread xs6 = new Thread(() -> { xsWorkerBouy.main(xwbWorkerArgs); });
                 Thread xs7 = new Thread(() -> { xsWorkerHydro.main(xwhWorkerArgs); });
                 Thread xs8 = new Thread(() -> { xsWorkerWunder.main(xwuWorkerArgs); });
-                Thread xsPool[] = { xs1, xs2, xs3, xs4, xs5, xs6, xs7, xs8 }; 
+                Thread xsPool[] = { xs1 /*, xs2, xs3, xs4, xs5, xs6, xs7, xs8 */};
                 for (Thread thread : xsPool) { thread.start(); }
                 for (int i = 0; i < xsPool.length; i++) { try { xsPool[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
                 

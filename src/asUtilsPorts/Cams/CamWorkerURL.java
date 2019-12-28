@@ -1,14 +1,12 @@
 /*
 by Anthony Stump
 Created: 23 Oct 2018
-Updated: 4 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Cams;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.MyDBConnector;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.WebCommon;
 
 import java.io.*;
@@ -54,19 +52,19 @@ public class CamWorkerURL {
 	                final File tFile = new File(camPath+"/"+filePrefix+".jpeg");
 	                final File tTempFile = new File(camPath+"/"+filePrefix+"-A.jpeg");
 	                String thisUrl = rs.getString("URL");
-	                StumpJunk.jsoupOutBinary(thisUrl, tTempFile, 5.0);
+	                WebCommon.jsoupOutBinary(thisUrl, tTempFile, 5.0);
 	                if(tFile.exists()) { tFile.delete(); }
-	                if(tTempFile.exists()) { StumpJunk.moveFile(tTempFile.getPath(), tFile.getPath()); } else { System.out.println("URL Capture issues @ " + rs.getString("CamURLBubble") + "!"); }
+	                if(tTempFile.exists()) { WebCommon.moveFile(tTempFile.getPath(), tFile.getPath()); } else { System.out.println("URL Capture issues @ " + rs.getString("CamURLBubble") + "!"); }
 	                camNum++;
 	                
 	            }
                 
 		} catch (Exception e) { e.printStackTrace(); }
                 
-        if(!tc1File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
-        if(!tc2File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
-        if(!tc3File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
-        if(!tc4File.exists()) { StumpJunk.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
+        if(!tc1File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
+        if(!tc2File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
+        if(!tc3File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
+        if(!tc4File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamU4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+tc1File.getPath()); }
 
         String convertA = "convert \\( "+tc1File.getPath()+" -resize "+capRes+"! "+tc2File.getPath()+" -resize "+capRes+"! +append \\)"
                 + " -background Black -append "+taFile.getPath();
@@ -75,8 +73,8 @@ public class CamWorkerURL {
                 + " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
                 + " -background Black -append "+tbFile.getPath();
 
-        Thread ca2a = new Thread(() -> { StumpJunk.runProcess(convertA); });
-        Thread ca2b = new Thread(() -> { StumpJunk.runProcess(convertB); });
+        Thread ca2a = new Thread(() -> { WebCommon.runProcess(convertA); });
+        Thread ca2b = new Thread(() -> { WebCommon.runProcess(convertB); });
         Thread thList2[] = { ca2a, ca2b };
         for (Thread thread : thList2) { thread.start(); } 
         for (int i = 0; i < thList2.length; i++) { try { thList2[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
@@ -85,10 +83,10 @@ public class CamWorkerURL {
                 + " \\( "+tbFile.getPath()+" +append \\)"
                 + " -background Black -append -resize "+capRes+"! "+urlTempFile.getPath();
 
-        StumpJunk.runProcess(convertC);
+        WebCommon.runProcess(convertC);
                     
         if(urlCamFile.exists()) { urlCamFile.delete(); }
-        if(urlTempFile.exists()) { StumpJunk.moveFile(urlTempFile.getPath(), urlCamFile.getPath()); } else { System.out.println("URL Capture issues @ Merge!"); }
+        if(urlTempFile.exists()) { WebCommon.moveFile(urlTempFile.getPath(), urlCamFile.getPath()); } else { System.out.println("URL Capture issues @ Merge!"); }
                 
 	}
 

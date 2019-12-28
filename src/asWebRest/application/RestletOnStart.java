@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.application;
@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import asUtils.Shares.StumpJunk;
 import asUtilsPorts.CamController;
 import asUtilsPorts.Cams.CamBeans;
 
@@ -24,10 +23,8 @@ public class RestletOnStart {
     	
         CommonBeans cb = new CommonBeans();
         CamBeans camBeans = new CamBeans();
-        CamController cc = new CamController();
-        WeatherBot wxBot = new WeatherBot();
 
-        try { wxBot.startBot(); } catch (Exception e) { e.printStackTrace(); }
+        try { WeatherBot.startBot(); } catch (Exception e) { e.printStackTrace(); }
         
         final File cachePath = new File(cb.getPathChartCache().toString());
         if(!cachePath.exists()) { cachePath.mkdirs(); }
@@ -48,9 +45,7 @@ public class RestletOnStart {
 			pushTemp.mkdirs();
 		} 
 		
-		// To enable cam capture, forward USB to VM, uncomment below line
-		
-        try { cc.initCams(); } catch (Exception e) { e.printStackTrace(); }
+        try { CamController.initCams(); } catch (Exception e) { e.printStackTrace(); }
                 
     }
         

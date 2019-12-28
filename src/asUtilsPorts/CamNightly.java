@@ -1,13 +1,12 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated; 5 Dec 2019
+Updated; 28 Dec 2019
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Cams.CamBeans;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.WebCommon;
@@ -45,18 +44,18 @@ public class CamNightly {
                 
 		try { Files.createDirectories(unpackFolder); } catch (IOException ix) { ix.printStackTrace(); }
 
-		StumpJunk.runProcess("mv "+sourceFolder.toString()+"/* "+unpackFolder.toString());
-		StumpJunk.runProcess("bash "+helpers.getPath()+"/Sequence.sh "+unpackFolder.toString()+"/ mp4");
-		List<String> camFiles = StumpJunk.fileSorter(unpackFolder, "*.mp4");
+		WebCommon.runProcess("mv "+sourceFolder.toString()+"/* "+unpackFolder.toString());
+		WebCommon.runProcess("bash "+helpers.getPath()+"/Sequence.sh "+unpackFolder.toString()+"/ mp4");
+		List<String> camFiles = WebCommon.fileSorter(unpackFolder, "*.mp4");
 		
 		try { Files.delete(cListing); } catch (IOException ix) { ix.printStackTrace(); }
 
 		for (String thisLoop : camFiles) {
 			String fileListStr = "file '"+thisLoop+"'\n"; 
-			try { StumpJunk.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			try { WebCommon.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		}
 
-		StumpJunk.runProcess("timeout --kill-after=120 120 ffmpeg -threads 8 -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
+		WebCommon.runProcess("timeout --kill-after=120 120 ffmpeg -threads 8 -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
 
 /*		String camImgQtyS = "0";
 		try { camImgQtyS = StumpJunk.runProcessOutVar("timeout --kill-after=120 120 ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 "+mp4OutFile.toString()); } catch (IOException ix) { ix.printStackTrace(); }
@@ -71,10 +70,10 @@ public class CamNightly {
 
         try { wc.q2do1c(dbc, camLogSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
-		StumpJunk.runProcess("(ls "+camPath.toString()+"/MP4/*.mp4 -t | head -n 14; ls "+camPath.toString()+"/MP4/*.mp4)|sort|uniq -u|xargs rm");
-		StumpJunk.runProcess("chown -R "+junkyBeans.getWebUser()+" "+camPath.toString()+"/MP4");
+        WebCommon.runProcess("(ls "+camPath.toString()+"/MP4/*.mp4 -t | head -n 14; ls "+camPath.toString()+"/MP4/*.mp4)|sort|uniq -u|xargs rm");
+        WebCommon.runProcess("chown -R "+junkyBeans.getWebUser()+" "+camPath.toString()+"/MP4");
 
-		StumpJunk.deleteDir(unpackFolder.toFile());
+        WebCommon.deleteDir(unpackFolder.toFile());
 	}
 
 }

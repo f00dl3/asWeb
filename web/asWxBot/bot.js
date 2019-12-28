@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 22;
-var bUpdated = "18 OCT 2019";
+var bBuild = 23;
+var bUpdated = "28 DEC 2019";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -211,6 +211,7 @@ function getWeatherRadar(msg, site) {
 	var radarSite = "EAX";
 	if(isSet(site)) { radarSite = site.toUpperCase(); }
 	var radarFile = "/var/www/Get/Radar/" + radarSite + "/_BLatest.gif";
+	var radarFile20 = "/media/sf_SharePoint/Get/Radar/" + radarSite + "/_BLatest.gif";
 	msg.reply("Latest radar image for " + radarSite + ":\n", { files :  [ radarFile ] });
 
 }

@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
+Updated: 28 Dec 2019
 */
 
 package asWebRest.shared;
@@ -10,13 +11,13 @@ import java.sql.*;
 
 public class MyDBConnector {
 
-	public static Connection getMyConnection() throws Exception {
+	public Connection getMyConnection() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
 		DatabaseProps DBProperties = new DatabaseProps();
 		return DriverManager.getConnection(DBProperties.getDbUrl(), DBProperties.getDbUser(), DBProperties.getDbPass());
 	}
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		Connection conn = null;
 		try {
 			conn = getMyConnection();

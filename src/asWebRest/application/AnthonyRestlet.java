@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.application;
@@ -53,7 +53,6 @@ public class AnthonyRestlet extends Application {
     
     public AnthonyRestlet() {    
     	
-    	RestletOnStart ros = new RestletOnStart();
         CorsService corsService = new CorsService();
         corsService.setAllowingAllRequestedHeaders(true);
         corsService.setAllowedOrigins(new HashSet(Arrays.asList(
@@ -66,7 +65,7 @@ public class AnthonyRestlet extends Application {
         corsService.setSkippingResourceForCorsOptions(true);
         getServices().add(corsService);
 
-        try { ros.ExecuteOnStartup(); } catch (Exception e) { e.printStackTrace(); }
+        try { RestletOnStart.ExecuteOnStartup(); } catch (Exception e) { e.printStackTrace(); }
         
     }
     

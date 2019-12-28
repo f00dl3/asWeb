@@ -1,13 +1,11 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 27 May 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts;
 
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.WebCommon;
 
 import java.io.*;
@@ -38,9 +36,9 @@ public class CCImports {
 
 	public static void main(String[] args) {
 
+        MyDBConnector mdb = new MyDBConnector();
 		WebCommon wc = new WebCommon();
 		CommonBeans cb = new CommonBeans();
-        MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
                 
@@ -50,7 +48,7 @@ public class CCImports {
 		if (accountType.equals("OldNavy")) {
 
 			File oldNavyCSV = new File(placeCCImportsHere+"/OldNavy.csv");
-			StumpJunk.sedFileDeleteFirstLine(placeCCImportsHere+"/OldNavy.csv");
+			WebCommon.sedFileDeleteFirstLine(placeCCImportsHere+"/OldNavy.csv");
 
 			String oldNavySQL = "INSERT IGNORE INTO Core.FB_ONCCXX ("
 				+ "Date, Description, Debit, Credit, ReferenceNo"
@@ -109,7 +107,7 @@ public class CCImports {
 		if (accountType.equals("Discover")) {
 
 			File discoverCSV = new File(placeCCImportsHere+"/Discover.csv");
-			StumpJunk.sedFileDeleteFirstLine(placeCCImportsHere+"/Discover.csv");
+			WebCommon.sedFileDeleteFirstLine(placeCCImportsHere+"/Discover.csv");
 
 			String discoverSQL = "INSERT IGNORE INTO Core.FB_DICC45 ("
 				+ "Date, Description, Debit, Credit"

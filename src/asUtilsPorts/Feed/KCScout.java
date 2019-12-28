@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 14 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -29,8 +28,8 @@ public class KCScout {
         final String ramTemp = ramDrive.getPath();
         final File scoutFile = new File(ramTemp+"/ScoutFeed.aspx");
         
-        StumpJunk.jsoupOutFile(scoutURL, scoutFile);
-        StumpJunk.sedFileReplace(ramTemp+"/ScoutFeed.aspx", "</div><br></br><div>", "\n");
+        WebCommon.jsoupOutFile(scoutURL, scoutFile);
+        WebCommon.sedFileReplace(ramTemp+"/ScoutFeed.aspx", "</div><br></br><div>", "\n");
 			
         List<String> scoutType = new ArrayList<>();
         List<String> scoutLocation = new ArrayList<>();

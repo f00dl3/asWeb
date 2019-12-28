@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 May 2019
-Updated: 19 Dec 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Weather;

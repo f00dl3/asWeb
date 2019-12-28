@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    27 Dec 2019
+    Updated:    28 Dec 2019
     Author     : astump
 --%>
 
@@ -72,9 +72,6 @@
         "OLMap/CommonStuff",
         "OLMap/CrashData",
         "OLMap/DrawPathMap",
-        "OLMap/DrawPathMapV2",
-        "OLMap/DrawPathMapV3",
-        "OLMap/DrawPathMapV4",
         "OLMap/GpsElements",
         "OLMap/Homicide",
         "OLMap/KMLRadar",

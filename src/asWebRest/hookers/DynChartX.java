@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 19 May 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.hookers;
@@ -26,7 +26,7 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 public class DynChartX {
     
-    private static Color getSeriesColor(String colorIn) {
+    private Color getSeriesColor(String colorIn) {
         Color colorObject = Color.WHITE;
         if(colorIn.substring(0, 1).equals("#")) {
             colorObject = Color.decode(colorIn);
@@ -45,7 +45,7 @@ public class DynChartX {
         return colorObject;
     }
     
-    public static void LineChart(JSONObject jsonGlobIn) throws Exception {
+    public void LineChart(JSONObject jsonGlobIn) throws Exception {
         
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();

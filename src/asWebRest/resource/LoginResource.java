@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Udpated: 4 Mar 2018
+Udpated: 28 Dec 2019
  */
 
 package asWebRest.resource;
@@ -27,12 +27,10 @@ public class LoginResource extends ServerResource {
     WebCommon wc = new WebCommon(); 
     
     @Get @Options
-    public String represent() {
-        
+    public String represent() {        
         GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
         JSONArray webAccessLogs = getWebAccessLogAction.getWebAccessLogs();  
-        return webAccessLogs.toString();
-        
+        return webAccessLogs.toString();        
     }
     
     @Post

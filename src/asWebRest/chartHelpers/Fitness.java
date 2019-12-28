@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Jun 2018
-Updated: 24 Jun 2019
+Updated: 28 Dec 2019
  */
 
 package asWebRest.chartHelpers;
@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class Fitness {
     
-    private static JSONObject calCh(JSONArray dataIn) {
+    private JSONObject calCh(JSONArray dataIn) {
         String cal_Name = "Calories";
         JSONObject cal_Glob = new JSONObject();
         JSONObject cal_Props = new JSONObject();
@@ -50,7 +50,7 @@ public class Fitness {
         return cal_Glob;
     }
     
-    private static JSONObject sleepCh(JSONArray dataIn) {
+    private JSONObject sleepCh(JSONArray dataIn) {
         String sleep_Name = "Hours of Sleep/Gaming";
         JSONObject sleep_Glob = new JSONObject();
         JSONObject sleep_Props = new JSONObject();
@@ -81,7 +81,7 @@ public class Fitness {
         return sleep_Glob;
     }
     
-    private static JSONObject weightCh(JSONArray dataIn) {
+    private JSONObject weightCh(JSONArray dataIn) {
         String wgt_Name = "Weight";
         JSONObject wgt_Glob = new JSONObject();
         JSONObject wgt_Props = new JSONObject();
@@ -104,8 +104,8 @@ public class Fitness {
         return wgt_Glob;
     }
 
-    public static JSONObject getCalCh(JSONArray dataIn) { return calCh(dataIn); }
-    public static JSONObject getSleepCh(JSONArray dataIn) { return sleepCh(dataIn); }
-    public static JSONObject getWeightCh(JSONArray dataIn) { return weightCh(dataIn); }
+    public JSONObject getCalCh(JSONArray dataIn) { return calCh(dataIn); }
+    public JSONObject getSleepCh(JSONArray dataIn) { return sleepCh(dataIn); }
+    public JSONObject getWeightCh(JSONArray dataIn) { return weightCh(dataIn); }
     
 }

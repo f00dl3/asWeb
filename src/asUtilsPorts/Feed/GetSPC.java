@@ -1,13 +1,12 @@
 /* 
 by Anthony Stump
 Created: 17 Aug 2017
-Updated: 23 Nov 2019
+Updated: 28 Dec 2019
 */
 
 package asUtilsPorts.Feed;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -66,30 +65,30 @@ public class GetSPC {
 		File spcWWkmzFile = new File(tmpPath+"/ActiveWW.kmz");
 		File spcMDkmzFile = new File(tmpPath+"/ActiveMD.kmz");
 
-		Thread thA1 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_torn.csv", spcReportsTFile, 5.0); });
-		Thread thA2 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_hail.csv", spcReportsHFile, 5.0); });
-		Thread thA3 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_wind.csv", spcReportsWFile, 5.0); });
-		Thread thA4 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_torn.csv", spcReportsYTFile, 5.0); });
-		Thread thA5 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_hail.csv", spcReportsYHFile, 5.0); });
-		Thread thA6 = new Thread(() -> { StumpJunk.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_wind.csv", spcReportsYWFile, 5.0); });
-		Thread thA7 = new Thread(() -> { StumpJunk.jsoupOutBinary("http://www.spc.noaa.gov/products/watch/ActiveWW.kmz", spcWWkmzFile, 5.0); });
-		Thread thA8 = new Thread(() -> { StumpJunk.jsoupOutBinary("http://www.spc.noaa.gov/products/md/ActiveMD.kmz", spcMDkmzFile, 5.0); });
+		Thread thA1 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_torn.csv", spcReportsTFile, 5.0); });
+		Thread thA2 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_hail.csv", spcReportsHFile, 5.0); });
+		Thread thA3 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDate+"_rpts_filtered_wind.csv", spcReportsWFile, 5.0); });
+		Thread thA4 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_torn.csv", spcReportsYTFile, 5.0); });
+		Thread thA5 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_hail.csv", spcReportsYHFile, 5.0); });
+		Thread thA6 = new Thread(() -> { WebCommon.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_wind.csv", spcReportsYWFile, 5.0); });
+		Thread thA7 = new Thread(() -> { WebCommon.jsoupOutBinary("http://www.spc.noaa.gov/products/watch/ActiveWW.kmz", spcWWkmzFile, 5.0); });
+		Thread thA8 = new Thread(() -> { WebCommon.jsoupOutBinary("http://www.spc.noaa.gov/products/md/ActiveMD.kmz", spcMDkmzFile, 5.0); });
 		Thread thListA[] = { thA1, thA2, thA3, thA4, thA5, thA6, thA7, thA8 };
 		for (Thread thread : thListA) { thread.start(); } 
 		for (int i = 0; i < thListA.length; i++) { try { thListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
-		Thread thB1 = new Thread(() -> { StumpJunk.unzipFile(tmpPathStr+"/ActiveWW.kmz", tmpPathStr); });
-		Thread thB2 = new Thread(() -> { StumpJunk.unzipFile(tmpPathStr+"/ActiveMD.kmz", tmpPathStr); });
+		Thread thB1 = new Thread(() -> { wc.unzipFile(tmpPathStr+"/ActiveWW.kmz", tmpPathStr); });
+		Thread thB2 = new Thread(() -> { wc.unzipFile(tmpPathStr+"/ActiveMD.kmz", tmpPathStr); });
 		Thread thListB[] = { thB1, thB2 };
 		for (Thread thread : thListB) { thread.start(); } 
 		for (int i = 0; i < thListB.length; i++) { try { thListB[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
-		Thread thC1 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsT.csv"); });
-		Thread thC2 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsH.csv"); });
-		Thread thC3 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsW.csv"); });
-		Thread thC4 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYT.csv"); });
-		Thread thC5 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYH.csv"); });
-		Thread thC6 = new Thread(() -> { StumpJunk.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYW.csv"); });
+		Thread thC1 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsT.csv"); });
+		Thread thC2 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsH.csv"); });
+		Thread thC3 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsW.csv"); });
+		Thread thC4 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYT.csv"); });
+		Thread thC5 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYH.csv"); });
+		Thread thC6 = new Thread(() -> { WebCommon.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYW.csv"); });
 		Thread thListC[] = { thC1, thC2, thC3, thC4, thC5, thC6 };
 		for (Thread thread : thListC) { thread.start(); } 
 		for (int i = 0; i < thListC.length; i++) { try { thListC[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
@@ -97,13 +96,13 @@ public class GetSPC {
 		File spcMDkmlFile = new File(tmpPath+"/ActiveMD.kml");
 		File spcWWkmlFile = new File(tmpPath+"/ActiveWW.kml");
 
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsT.csv","T,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsH.csv","H,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsW.csv","W,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYT.csv","T,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYH.csv","H,"+spcSQLDateY+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYW.csv","W,"+spcSQLDateY+",",tmpPath+"/SPCReportsLive.csv");
-		StumpJunk.moveFile(tmpPath+"/SPCReportsLive.csv", mysqlShare+"/jSPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsT.csv","T,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsH.csv","H,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsW.csv","W,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYT.csv","T,"+spcSQLDate+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYH.csv","H,"+spcSQLDateY+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.sedFileInsertEachLineNew(tmpPath+"/SPCReportsYW.csv","W,"+spcSQLDateY+",",tmpPath+"/SPCReportsLive.csv");
+		WebCommon.moveFile(tmpPath+"/SPCReportsLive.csv", mysqlShare+"/jSPCReportsLive.csv");
 
 		String spcReportsSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/jSPCReportsLive.csv' REPLACE INTO TABLE WxObs.SPCReportsLive FIELDS TERMINATED BY ',' LINES TERMINATED BY '\\\n' (Type,Date,Time,Magnitude,Location,County,State,Lat,Lon,Comments) SET AssocID = CONCAT(Date, Time, Type, Lat, Lon);";		
 
@@ -129,14 +128,14 @@ public class GetSPC {
 						String spcMDsubFileName = spcMDsubURL.substring(spcMDsubURL.lastIndexOf("/")+1);
 						String spcMDsubFileNoExt = spcMDsubFileName.substring(0, spcMDsubFileName.lastIndexOf("."));
 						File spcMDsubFile = new File(tmpPath+"/"+spcMDsubFileName);
-						StumpJunk.jsoupOutBinary(spcMDsubURL, spcMDsubFile, 5.0);
-						StumpJunk.unzipFile(tmpPath+"/"+spcMDsubFileName, tmpPathStr);
+						WebCommon.jsoupOutBinary(spcMDsubURL, spcMDsubFile, 5.0);
+						wc.unzipFile(tmpPath+"/"+spcMDsubFileName, tmpPathStr);
 						String thisMDFileStr = tmpPath+"/"+spcMDsubFileNoExt+".kml";
 						File thisMDFile = new File(thisMDFileStr);
 						System.out.println(thisMDFileStr);
-						StumpJunk.sedFileReplace(thisMDFileStr, "<coordinates>\\\n", "<coordinates>");
-						StumpJunk.sedFileReplace(thisMDFileStr, "</coordinates>\\\n", "</coordinates>");
-						StumpJunk.sedFileReplace(thisMDFileStr, ",0\\\n", "],[");
+						WebCommon.sedFileReplace(thisMDFileStr, "<coordinates>\\\n", "<coordinates>");
+						WebCommon.sedFileReplace(thisMDFileStr, "</coordinates>\\\n", "</coordinates>");
+						WebCommon.sedFileReplace(thisMDFileStr, ",0\\\n", "],[");
 						String thisMDid = null;
 						String thisMDgeo = null;
 						Scanner thisMDScanner = null; try {		
@@ -177,14 +176,14 @@ public class GetSPC {
 						String spcWWsubFileName = spcWWsubURL.substring(spcWWsubURL.lastIndexOf("/")+1);
 						String spcWWsubFileNoExt = spcWWsubFileName.substring(0, spcWWsubFileName.lastIndexOf("."));
 						File spcWWsubFile = new File(tmpPath+"/"+spcWWsubFileName);
-						StumpJunk.jsoupOutBinary(spcWWsubURL, spcWWsubFile, 5.0);
-						StumpJunk.unzipFile(tmpPath+"/"+spcWWsubFileName, tmpPathStr);
+						WebCommon.jsoupOutBinary(spcWWsubURL, spcWWsubFile, 5.0);
+						wc.unzipFile(tmpPath+"/"+spcWWsubFileName, tmpPathStr);
 						String thisWWFileStr = tmpPath+"/"+spcWWsubFileNoExt+".kml";
 						File thisWWFile = new File(thisWWFileStr);
 						System.out.println(thisWWFileStr);
-						StumpJunk.sedFileReplace(thisWWFileStr, "<coordinates>\\\n", "<coordinates>");
-						StumpJunk.sedFileReplace(thisWWFileStr, "</coordinates>\\\n", "</coordinates>");
-						StumpJunk.sedFileReplace(thisWWFileStr, ",0\\\n", "],[");
+						WebCommon.sedFileReplace(thisWWFileStr, "<coordinates>\\\n", "<coordinates>");
+						WebCommon.sedFileReplace(thisWWFileStr, "</coordinates>\\\n", "</coordinates>");
+						WebCommon.sedFileReplace(thisWWFileStr, ",0\\\n", "],[");
 						String thisWWid = null;
 						String thisWWgeo = null;
 						Scanner thisWWScanner = null; try {		
@@ -246,8 +245,8 @@ public class GetSPC {
         Date date = new Date();
         String tYear = dateFormat.format(date);
                 
-        StumpJunk.jsoupOutFile(spcFeedBase+"spcmdrss.xml", spcMDFile);
-        StumpJunk.jsoupOutFile(spcFeedBase+"spcwwrss.xml", spcWWFile);			
+        WebCommon.jsoupOutFile(spcFeedBase+"spcmdrss.xml", spcMDFile);
+        WebCommon.jsoupOutFile(spcFeedBase+"spcwwrss.xml", spcWWFile);			
 
         String loadSPCmdSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/spcmdrss.xml' IGNORE INTO TABLE WxObs.SPCMesoscale CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET title = CONCAT(ExtractValue(@tmp, '//title'),' "+tYear+"'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";
         String loadSPCwwSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/spcwwrss.xml' IGNORE INTO TABLE WxObs.SPCWatches CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET title = CONCAT(ExtractValue(@tmp, '//title'),' "+tYear+"'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";
@@ -274,7 +273,7 @@ public class GetSPC {
         final String spcFeedBase = jb.getSpcFeedBase();
         
 		File spcOutFileSrc = new File(mysqlShare+"/spcacrss.xml");
-		StumpJunk.jsoupOutFile(spcFeedBase+"spcacrss.xml", spcOutFileSrc);		
+		WebCommon.jsoupOutFile(spcFeedBase+"spcacrss.xml", spcOutFileSrc);		
 		String spcOutSQL = "LOAD DATA LOCAL INFILE '"+mysqlShare+"/spcacrss.xml' IGNORE INTO TABLE WxObs.SPCOutlooks CHARACTER SET 'utf8' LINES STARTING BY '<item>' TERMINATED BY '</item>' (@tmp) SET title = ExtractValue(@tmp, '//title'), description = ExtractValue(@tmp, '//description'), pubDate = ExtractValue(@tmp, '//pubDate');";
 		
         try { wc.q2do1c(dbc, spcOutSQL, null); } catch (Exception e) { e.printStackTrace(); }

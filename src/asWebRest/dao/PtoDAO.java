@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 24 Feb 2019
+Updated: 28 Dec 2019
 */
 
 package asWebRest.dao;
@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 public class PtoDAO {
     
-    WebCommon wc = new WebCommon();
     CommonBeans wcb = new CommonBeans();
+    WebCommon wc = new WebCommon();
     
     public JSONArray getPto(Connection dbc) {
         final String query_PTO = "SELECT Month, New, Taken, Save," + 

@@ -2,18 +2,17 @@
 by Anthony Stump
 Created: 1 Jul 2018
 Ported to asWeb: 11 Feb 2019
-Updated: 13 Dec 2019
+Updated: 28 Dec 2019
  */
 
 package asUtilsPorts.Tests;
 
 import java.io.File;
-import java.io.IOException;
 import org.apache.commons.lang3.exception.*;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.StumpJunk;
 import asUtilsPorts.Cams.CamBeans;
+import asWebRest.shared.WebCommon;
 
 public class TestStuff {
     
@@ -36,7 +35,7 @@ public class TestStuff {
 		File newTestFile = new File("/media/sf_SharePoint/snmpwalk-Out.txt");
 
         	try { 
-			StumpJunk.copyFile(jb.getRamDrive().toString()+"/tomcatShare/snmpwalk.txt", newTestFile.toString());
+    		WebCommon.copyFile(jb.getRamDrive().toString()+"/tomcatShare/snmpwalk.txt", newTestFile.toString());
 			returnData = "It was successful.";
 		 } catch (Exception ix) {
 			//ix.printStackTrace();
