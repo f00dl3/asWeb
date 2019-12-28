@@ -2,8 +2,14 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 27 Jun 2019
+Updated: 28 Dec 2019
  */
+
+var mAdjustment = 0.740586;
+var mapProjection = "EPSG:3857";
+var goodProjection = "EPSG:4326";
+var mapProjectionObject = ol.proj.get(mapProjection);
+var lineLength = "Not started yet!";
 
 function putDrawPathMap() {
     var lineColor = "black";
@@ -32,6 +38,7 @@ function putDrawPathMap() {
         'crs': { 'type': 'name' },
         'features': []
     };
+    
     var draw;
     var wmGeoJson = ol.proj.fromLonLat(getHomeGeo("geoJsonRaw"));
     var features = (new ol.format.GeoJSON()).readFeatures(jsonDrawn);
@@ -63,7 +70,7 @@ function putDrawPathMap() {
         }).extend([
             new app.exportJson()
         ]),
-        projection: "EPSG:900913",
+        projection: mapProjection,
         target: 'map',
         layers: [
             raster, vectorLayer
@@ -74,6 +81,7 @@ function putDrawPathMap() {
         })
     });
     function addInteraction() {
+    	var refLineLength = "N/A";
         var typeOfDraw = "LineString";
         draw = new ol.interaction.Draw({
             source: vectorSource,
@@ -81,30 +89,42 @@ function putDrawPathMap() {
         });
         map.addInteraction(draw);   
         vectorSource.addFeatures(draw);
+        draw.on('drawstart', function(evt) {
+        	evt.feature.on("change", function (evt) {
+            	var measurement = evt.target.getGeometry().getLength();
+            	var measurementFixed = measurement * mAdjustment;
+            	var distanceKm = (measurementFixed / 1000).toFixed(2);
+            	var distanceMi = (distanceKm * 0.621371).toFixed(2);
+            	lineLength = refLineLength = distanceKm;
+            	var noticeString = "Distance: " + distanceKm + " km (" + distanceMi + " mi)";
+            	showNotice(noticeString);
+            });
+        });
         draw.on('drawend', function(evt) {
             map.removeInteraction(draw);
             showNotice("Draw event ended!");
             var feature = evt.feature;
             var features = vectorSource.getFeatures();
             features = features.concat(feature);
-            logFeatures(features);
+            distanceMi = (refLineLength * 0.621371).toFixed(2);
+            fullRefLineLength = refLineLength + " km (" + distanceMi + " mi)";
+            logFeatures(features, fullRefLineLength);
         }, this);
     }
-    function logFeatures(features) {
-        var writer = new ol.format.GeoJSON();
-        var drawnData = [];
-        features.forEach(function(ft) {
-        	var tGeo = ft.getGeometry().getCoordinates();
-        	//tGeo = ol.proj.transform(tGeo, 'EPSG:3857', 'EPSG:4326');
-        	drawnData.push(tGeo);
-        });
-        console.log("DRAWN DATA: " + drawnData);
-        var line = new ol.geom.LineString(drawnData);
-        var lineLength = Math.round(line.getLength() * 100) / 100
-        console.log("LINE LENGHT: " + lineLength + " METERS");
-        dojo.byId("MessageHolder").innerHTML = JSON.stringify(drawnData); // Returns empty
+    
+    function logFeatures(features, refLineLength) {
+	    var writer = new ol.format.GeoJSON();
+	    var geojsonStr = writer.writeFeatures(features, {featureProjection: 'EPSG:3857'});
+        dojo.byId("MessageHolder").innerHTML = refLineLength;
+        if(!checkMobile()) {
+        	generateDownload(geojsonStr, "points.geojson");   
+        } else {
+        	dojo.byId("OLMapHolder").innerHTML = geojsonStr;
+        }
     }
+    
     addInteraction();
+    
 }
 
 

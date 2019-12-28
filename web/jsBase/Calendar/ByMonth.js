@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created 16 Dec 2019
-Updated 21 Dec 2019
+Updated 27 Dec 2019
 */
 
 var todayDate = new Date();
@@ -68,17 +68,29 @@ function calendarMonthCreator(dateIn, target) {
 
             	var todaysEvents = [];
             	var todayEventCount = 0;
+            	var todayActiveEventCount = 0;
             	var thisDate = new Date(firstDayOfMonth).addDays(dayOfMonth-1);
             	var thisEndConstraint = new Date(thisDate.addDays(2));
             	rData += prettyDayOfMonthPopper(getDayPosition(tdow), dayOfMonth);
             	
             	tMonthEvents.forEach(function (tev) {
+            		var eventFontColor = "white";
+					if(tev.cal_status == "A") { 
+						todayActiveEventCount++;
+						eventFontColor = "yellow";	
+					}
             		if(
                 			(tev.tEventStart).getTime() >= thisDate.getTime() &&
                 			tev.tEventStart.getTime() < thisEndConstraint.getTime()
             		) {
                 		if(!checkMobile()) {
-                			rData += "<li>" + tev.summary + "</li>";
+                			rData += "<li><form>" +
+                			"<input type='hidden' name='eventId' value='" + parseInt(tev.eventId, 10) + "'/>";
+							if(tev.cal_status == "A") { 
+								rData += " <button class='UButton deleteCal'>X</button>";
+							}
+							rData += "<span style='color: " + eventFontColor + ";'>" + tev.summary + "</span>" +
+								"</form></li>";
                 		}
                 		todayEventCount++;
                 		todaysEvents.push(tev);
@@ -94,7 +106,11 @@ function calendarMonthCreator(dateIn, target) {
             }
 
         	if(!checkMobile()) { rData += "</ul></span>"; }
-        	if(checkMobile() && todayEventCount !== 0) { rData += "(" + todayEventCount + ")"; }
+        	if(checkMobile() && todayEventCount !== 0) { 
+        		rData += "<p/>" +
+        			todayEventCount + 
+        			" (<strong><span style='color: yellow;'>" + todayActiveEventCount + "</span>)"; 
+    		}
         	
             rData += "</div></span>";
             
@@ -109,6 +125,9 @@ function calendarMonthCreator(dateIn, target) {
     rData += "</div>";
     
     target.innerHTML = rData;
+
+	dojo.query(".AddEvent").connect("onclick", addCalendarEventByHour);
+	dojo.query(".deleteCal").connect("onclick", deleteCalendarEvent);
 
 }
 

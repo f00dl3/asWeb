@@ -2,12 +2,38 @@
 by Anthony Stump
 Created: 29 May 2018
 Split off from OLMap.js on 30 May 2018
-Updated: 27 Jun 2019
+Updated: 27 Dec 2019
  */
 
 // SET TILE SOURCE HERE! == R for REMOTE, L for LOCAL
 var tileSourceFlag = "R";
 
+var formatArea = function(polygon) {
+  var area = getArea(polygon);
+  var output;
+  if (area > 10000) {
+    output = (Math.round(area / 1000000 * 100) / 100) +
+        ' ' + 'km<sup>2</sup>';
+  } else {
+    output = (Math.round(area * 100) / 100) +
+        ' ' + 'm<sup>2</sup>';
+  }
+  return output;
+};
+
+var formatLength = function(line) {
+	  var length = getLength(line);
+	  var output;
+	  if (length > 100) {
+	    output = (Math.round(length / 1000 * 100) / 100) +
+	        ' ' + 'km';
+	  } else {
+	    output = (Math.round(length * 100) / 100) +
+	        ' ' + 'm';
+	  }
+	  return output;
+};
+	
 function getOSMAttribution() {
     var currentYear = getDate("day", 0, "yearOnly");
     var rString = "Anthony Stump, 2015-" + currentYear + "<br/>" +

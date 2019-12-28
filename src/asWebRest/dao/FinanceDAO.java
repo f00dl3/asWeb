@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 11 Apr 2019
+Updated: 23 Dec 2019
 */
 
 package asWebRest.dao;
@@ -516,6 +516,20 @@ public class FinanceDAO {
         return tContainer;
     }
     
+    private JSONArray mortDumpFund(Connection dbc) { 
+        final String query_FBook_Checking = "SELECT SUM(Value) AS Value FROM Core.FB_Assets WHERE Description LIKE '%CD%';";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_Checking, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject.put("Value", resultSet.getInt("Value"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     private JSONArray netWorth3(Connection dbc) {
         final String query_FBook_3NW = "SELECT" +
         " ((AsLiq + AsFix + Life + Credits) - Debts) AS Worth" +
@@ -711,6 +725,7 @@ public class FinanceDAO {
     public JSONArray getEnwt(Connection dbc) { return enwt(dbc); }
     public JSONArray getLicenses(Connection dbc) { return licenses(dbc); }
     public JSONArray getMort(Connection dbc) { return mort(dbc); }
+    public JSONArray getMortDumpFund(Connection dbc) { return mortDumpFund(dbc); }
     public JSONArray getNwga(Connection dbc) { return nwga(dbc); }
     public JSONArray getQMerged(Connection dbc) { return qMerged(dbc); }
     public JSONArray getSaving(Connection dbc) { return saving(dbc); }

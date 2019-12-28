@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
-    Created on : 16 December 2019
-    Updated:    on Creation
+    Created on : 16 Dec 2019
+    Updated:    22 Dec 2019
     Author     : astump
 --%>
 
@@ -20,6 +20,7 @@
     
         <h1><% out.println(pageTitle); %></h1>
             
+        <div id='qcHolder'></div><br/>
         <div id='calendarViewHolder'></div>
              
     </body>

@@ -1,8 +1,14 @@
 /*
 by Anthony Stump
 Created 18 Dec 2019
-Updated 21 Dec 2019
+Updated 27 Dec 2019
 */
+
+function addCalendarEventByHour() {
+	dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	window.alert("NOT BUILT " + thisFormData.dateTime);
+}
 
 function popupHourly(todaysEvents, tDay) {
 
@@ -13,35 +19,22 @@ function popupHourly(todaysEvents, tDay) {
 		"<strong>" + monthName + " " + tDay.getDate() + ", " + yearFull + "</strong><br/>" +
 		"<div class='table'>";
 	
-	for(var i = 0; i < 24; i++) {
-		var tTime = tDay.addHours(1);
-		var tETime = new Date(tTime);
-		tETime.addHours(1);
-		rData += "<div class='tr'>" +
-			"<span class='td'>" + tTime.getHours() + "</span>" +
-			"<span class='td'><ul type='dot'>";
-
-		todaysEvents.forEach(function (tev) {
-    		if(
-        			(tev.tEventStart).getTime() >= tTime.getTime() &&
-        			tev.tEventStart.getTime() < tETime.getTime()
-    		) {
-        		rData += "<li>" +
-        			tev.tEventStart.getHours() + ":" + tev.tEventStart.getMinutes() + " - " +
-        			tev.summary +
-        			"</li>";
-        	}
-    	});
+	todaysEvents.forEach(function (tev) {    
+		var eventFontColor = "white";
+		rData += "<li><form>" +
+			"<input type='hidden' name='eventId' value='" + parseInt(tev.eventId, 10) + "'/>" + 
+			tev.tEventStart.getHours() + ":" + tev.tEventStart.getMinutes() + " - ";
+			if(tev.cal_summary == "A") { 
+					eventFontColor = "yellow";
+    				rData += " <button class='UButton deleteCal'>X</button>";
+			}
+			rData += "<span style='color: " + eventFontColor + ";'>" + tev.summary + "</span>" +
+				"</form></li>";
+	});
 		
-		rData += "</ul></span>" +
-			"<span class='td'><button class='UButton'>+</button></span>" +
-			"</div>";
-		
-		
-	}
-	
 	rData += "</div></div>";
 	
+
 	return rData; 
 	
 }

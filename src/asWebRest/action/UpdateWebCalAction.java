@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
+Updated: 23 Dec 2019
  */
 
 package asWebRest.action;
@@ -16,6 +17,8 @@ public class UpdateWebCalAction {
     
     public String setAddEntry(Connection dbc, List qParams) { return webCalDAO.setAddEntry(dbc, qParams); }
     public String setAddEntryLog(Connection dbc, List qParams) { return webCalDAO.setAddEntryLog(dbc, qParams); }
+    public String setAddEntryRepeats(Connection dbc, List qParams) { return webCalDAO.setAddEntryRepeats(dbc, qParams); }
     public String setAddEntryUser(Connection dbc, List qParams) { return webCalDAO.setAddEntryUser(dbc, qParams); }
+    public String setDeleteEvent(Connection dbc, List qParams) { return webCalDAO.setDeleteEvent(dbc, qParams); }
         
 }

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 11 Apr 2019
+Updated: 23 Dec 2019
  */
 
 function actOnSavingsSubmit(event) {
@@ -11,11 +11,13 @@ function actOnSavingsSubmit(event) {
     setSavingsAdd(thisFormData);
 }
 
-function genOverviewMortgage(mortData, amSch) {
+function genOverviewMortgage(mortData, amSch, mdfbal) {
     var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
     var masDate = getDate("day", 0, "dateOnly");
     var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</span>" +
-            "<div class='UBoxO'><strong>Amortization</strong><br/>" +
+            "<div class='UBoxO'>" +
+            "to payoff: $" + ((mortData[0].MBal - mdfbal.Value)/1000).toFixed(1) + "K<br/>" +
+            "<strong>Amortization</strong><br/>" +
             "<em>Payments after today(" + masDate + ")</em><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < asCols.length; i++) {
@@ -76,7 +78,7 @@ function genOverviewSavings(svData, svBk) {
     dojo.connect(svButton, "onclick", actOnSavingsSubmit);
 }
 
-function genOverviewWorth(enw, mort, x3nw, nwga, enwt) {
+function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var proCols = ["3M", "1Y", "5Y", "10Y", "20Y", "30Y", "RET"];
     var wCols = ["As of Date", "ENW", "Liq", "Fix", "Life", "Credit", "Debt", "Growth"];
     var cnw1d = (enw.NetWorth / 1000).toFixed(1);
@@ -188,10 +190,11 @@ function putOverview(finGlob) {
     var x3nw = finGlob.x3nw[0];
     var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
+    var mdfbal = finGlob.mdfbal[0];
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
-    genOverviewMortgage(mortData, amSch);
-    genOverviewWorth(enw, mortData, x3nw, nwga, enwt);
+    genOverviewMortgage(mortData, amSch, mdfbal);
+    genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }
 
 function setSavingsAdd(formData) {

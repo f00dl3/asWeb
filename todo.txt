@@ -1,8 +1,9 @@
 Things to do:
-	- Build Webcal calendar alternative.
+	- Fix bugs in webcal alternative i.e. event double display, no repeat events showing.
 	- Build open layers drawable map for running
 	- Implement Weather APIs
 
 COMPLETED 12/16/19:
+	- WebCal alternative "good enough" to turn down old webcal.
 	- WebCal ICS REST endpoint
 	- Node Discord bot auto deployment.

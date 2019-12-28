@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 18 Dec 2019
+Updated: 24 Dec 2019
 */
 
 package asWebRest.dao;
@@ -106,66 +106,71 @@ public class WebCalDAO {
     		
     		JSONObject tObject = events.getJSONObject(i);
 
-            try { 
-	            String description = "";
-	            String summary = "";
-            	int eFrequency = 0;
-	            String formatPattern = "yyyyMMdd'T'HHmmss'Z'";
-	    		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(formatPattern).withZoneUTC();
-	    		final DateTime nowTime = DateTime.now();
-	    		  
-	            try { description = wc.basicInputFilterICS(tObject.getString("cal_description")); } catch (Exception e) { }
-	            try { summary = wc.basicInputFilterICS(tObject.getString("cal_name")); } catch (Exception e) { }
-	    		try { eFrequency = tObject.getInt("cal_frequency"); } catch (Exception e) { }
-	    		
-	    		final String formatted_eventId = String.format("%010d", tObject.getInt("cal_id"));
-	    		final String formatted_calModDate = String.format("%08d", tObject.getInt("cal_mod_date"));
-	    		final String formatted_calModTime = String.format("%06d", tObject.getInt("cal_mod_time"));
-	    		final String pretty_lastModified = formatted_calModDate + "T" + formatted_calModTime + "Z"; 
-	    		final String formatted_calStartDate = String.format("%08d", tObject.getInt("cal_date"));
-	    		final String formatted_calStartTime = String.format("%06d", tObject.getInt("cal_time"));
-	    		final String pretty_eventStart = formatted_calStartDate + "T" + formatted_calStartTime + "Z"; 
-	    		final DateTime eventStartDateTime = DateTime.parse(pretty_eventStart, dateTimeFormatter).toDateTime();
-	    		final DateTime eventEndDateTime = eventStartDateTime.plusMinutes(tObject.getInt("cal_duration")); 
-	            final String pretty_eventEnd = dateTimeFormatter.print(eventEndDateTime);
-	            final String pretty_theTimeItIsNow = dateTimeFormatter.print(nowTime);	          
-	            
-	    		String tEventData = "BEGIN:VEVENT\n" +
-	    				"UID:-LOCALHOST:8080-WCAL-F00DL3-" + formatted_eventId + "\n" +
-	    				"LAST-MODIFIED:" + pretty_lastModified + "\n" +
-	    				"SUMMARY:" + summary + "\n" +
-	    				"DESCRIPTION:" + description + "\n" +
-	    				"CLASS:PUBLIC\n" +
-	    				"STATUS:CONFIRMED\n" +
-	    				"ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN=\"Anthony \":MAILTO:youremailhere\n" +
-	    				"DTSTART:" + pretty_eventStart + "\n" +
-	    				"DTSTAMP:" + pretty_theTimeItIsNow + "\n" +
-	    				"DTEND:" + pretty_eventEnd + "\n";
-	
-	            if(eFrequency == 1) {	            	
-	            	String fDate = tObject.getString("cal_type").toUpperCase();
-	            	if(fDate.contentEquals("MONTHLYBYDAY")) { fDate = "MONTHLY"; }
-	            	tEventData += "RRULE:FREQ=" + fDate;
-	            	if(wc.isSet(tObject.getString("cal_byday"))) {
-	            		tEventData += ";BYDAY=" + tObject.getString("cal_byday");
-	            	}
-	            	if(wc.isSet(Integer.toString(tObject.getInt("cal_end")))) {
-	            		final String formatted_calEnd = String.format("%08d", tObject.getInt("cal_end"));
-	            		final String formatted_calEndTime = String.format("%06d", tObject.getInt("cal_endtime"));
-	            		final String pretty_calEnd = formatted_calEnd + "T" + formatted_calEndTime + "Z";
-	            		if(!pretty_calEnd.equals("00000000T000000Z")) {
-	            			tEventData += ";UNTIL=" + pretty_calEnd;
-	            		}
-	            	}            	
-	            	tEventData += "\n";
-	            }
-	            
-	    		tEventData += "END:VEVENT\n";
-	    		
-	    		returnData += tEventData;
+	String status = "A";
 
+	try { status = tObject.getString("cal_status"); } catch (Exception e) { }
+
+            try { 
+				if(status.equals("A")) {
+			            String description = "";
+			            String summary = "";
+		            	int eFrequency = 0;
+			            String formatPattern = "yyyyMMdd'T'HHmmss'Z'";
+			    		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(formatPattern).withZoneUTC();
+			    		final DateTime nowTime = DateTime.now();
+			    		  
+			            try { description = wc.basicInputFilterICS(tObject.getString("cal_description")); } catch (Exception e) { }
+			            try { summary = wc.basicInputFilterICS(tObject.getString("cal_name")); } catch (Exception e) { }
+			    		try { eFrequency = tObject.getInt("cal_frequency"); } catch (Exception e) { }
+			    		
+			    		final String formatted_eventId = String.format("%010d", tObject.getInt("cal_id"));
+			    		final String formatted_calModDate = String.format("%08d", tObject.getInt("cal_mod_date"));
+			    		final String formatted_calModTime = String.format("%06d", tObject.getInt("cal_mod_time"));
+			    		final String pretty_lastModified = formatted_calModDate + "T" + formatted_calModTime + "Z"; 
+			    		final String formatted_calStartDate = String.format("%08d", tObject.getInt("cal_date"));
+			    		final String formatted_calStartTime = String.format("%06d", tObject.getInt("cal_time"));
+			    		final String pretty_eventStart = formatted_calStartDate + "T" + formatted_calStartTime + "Z"; 
+			    		final DateTime eventStartDateTime = DateTime.parse(pretty_eventStart, dateTimeFormatter).toDateTime();
+			    		final DateTime eventEndDateTime = eventStartDateTime.plusMinutes(tObject.getInt("cal_duration")); 
+			            final String pretty_eventEnd = dateTimeFormatter.print(eventEndDateTime);
+			            final String pretty_theTimeItIsNow = dateTimeFormatter.print(nowTime);	          
+			            
+			    		String tEventData = "BEGIN:VEVENT\n" +
+			    				"UID:-LOCALHOST:8080-WCAL-F00DL3-" + formatted_eventId + "\n" +
+			    				"LAST-MODIFIED:" + pretty_lastModified + "\n" +
+			    				"SUMMARY:" + summary + "\n" +
+			    				"DESCRIPTION:" + description + "\n" +
+			    				"CLASS:PUBLIC\n" +
+			    				"STATUS:CONFIRMED\n" +
+			    				"ATTENDEE;ROLE=CHAIR;PARTSTAT=ACCEPTED;CN=\"Anthony \":MAILTO:youremailhere\n" +
+			    				"DTSTART:" + pretty_eventStart + "\n" +
+			    				"DTSTAMP:" + pretty_theTimeItIsNow + "\n" +
+			    				"DTEND:" + pretty_eventEnd + "\n";
+			
+			            if(eFrequency == 1) {	            	
+			            	String fDate = tObject.getString("cal_type").toUpperCase();
+			            	if(fDate.contentEquals("MONTHLYBYDAY")) { fDate = "MONTHLY"; }
+			            	tEventData += "RRULE:FREQ=" + fDate;
+			            	if(wc.isSet(tObject.getString("cal_byday"))) {
+			            		tEventData += ";BYDAY=" + tObject.getString("cal_byday");
+			            	}
+			            	if(wc.isSet(Integer.toString(tObject.getInt("cal_end")))) {
+			            		final String formatted_calEnd = String.format("%08d", tObject.getInt("cal_end"));
+			            		final String formatted_calEndTime = String.format("%06d", tObject.getInt("cal_endtime"));
+			            		final String pretty_calEnd = formatted_calEnd + "T" + formatted_calEndTime + "Z";
+			            		if(!pretty_calEnd.equals("00000000T000000Z")) {
+			            			tEventData += ";UNTIL=" + pretty_calEnd;
+			            		}
+			            	}            	
+			            	tEventData += "\n";
+			            }
+			            
+			    		tEventData += "END:VEVENT\n";
+			    		
+			    		returnData += tEventData;
+		
+				}
         	} catch (Exception e) { e.printStackTrace(); }
-    	
     	}
     	
     	returnData += "END:VCALENDAR";
@@ -182,8 +187,8 @@ public class WebCalDAO {
     			" wcr.cal_wkst, wcr.cal_count, wcr.cal_end, wcr.cal_endtime" +
     			" FROM WebCal.webcal_entry wce" +
     			" LEFT JOIN WebCal.webcal_entry_user wcu ON wce.cal_id = wcu.cal_id" +
-    			" LEFT JOIN WebCal.webcal_entry_repeats wcr ON wce.cal_id = wcr.cal_id" +
-    			" WHERE wcu.cal_status = 'A'";
+    			" LEFT JOIN WebCal.webcal_entry_repeats wcr ON wce.cal_id = wcr.cal_id;";
+    			//" WHERE wcu.cal_status = 'A'";
         JSONArray tContainer = new JSONArray();
         try {            
             ResultSet resultSet = wc.q2rs1c(dbc, query_Calendar_Events, null);
@@ -238,7 +243,17 @@ public class WebCalDAO {
     
     public String setAddEntry(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_Calendar_AddEntry = "INSERT INTO WebCal.webcal_entry VALUES (?,Null,Null,'f00dl3',?,?,?,?,?,?,?,5,'E','P',?,Null,Null,Null,?);";
+        String query_Calendar_AddEntry = "INSERT INTO WebCal.webcal_entry " +
+        		"VALUES (?,Null,Null,'f00dl3',?,?,?,?,?,?,?,5,'E','P',?,Null,Null,Null,?);";
+        try { returnData = wc.q2do1c(dbc, query_Calendar_AddEntry, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+
+    public String setAddEntryRepeats(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_Calendar_AddEntry = "INSERT INTO WebCal.webcal_entry_repeats " +
+        " (cal_id, cal_type, cal_frequency, cal_byday, cal_wkst) VALUES" +
+		" (?,'weekly',1,?,'MO');";
         try { returnData = wc.q2do1c(dbc, query_Calendar_AddEntry, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -257,4 +272,10 @@ public class WebCalDAO {
         return returnData;
     }
     
+    public String setDeleteEvent(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_Calendar_Delete = "UPDATE WebCal.webcal_entry_user SET cal_status='D' where cal_id=?;";
+        try { returnData = wc.q2do1c(dbc, query_Calendar_Delete, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
 }

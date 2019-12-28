@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
-    Updated: 16 Nov 2019
+    Updated: 24 Dec 2019
     Author     : astump
 --%>
 
@@ -47,9 +47,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-    <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.css"/>
+    <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v5.3.0-dist/ol.css"/>
+    <!-- <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.css"/> -->
     <!-- <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/ol-popup.css"/> -->
-    <script src="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.js"></script>
+    <script src="/asWeb/jsLib/OpenLayers/v5.3.0-dist/ol.js"></script>
+    <!--  <script src="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.js"></script> -->
     <!-- <script src="/asWeb/jsLib/OpenLayers/ol-popup.js"></script> -->
     <!-- <script src="/asWeb/jsLib/OpenLayers/ol-debug.js"></script> -->
     

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 17 Dec 2019
-Updated: 21 Dec 2019
+Updated: 24 Dec 2019
 */
 
 Date.prototype.addDays = function(days) {
@@ -15,14 +15,31 @@ Date.prototype.addHours = function(h) {
   return this;
 }
 
+Date.prototype.isDstObserved = function () {
+    return this.getTimezoneOffset() < this.stdTimezoneOffset();
+}
+
+Date.prototype.stdTimezoneOffset = function () {
+    var jan = new Date(this.getFullYear(), 0, 1);
+    var jul = new Date(this.getFullYear(), 6, 1);
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+
+var ctOffsetMin = new Date().stdTimezoneOffset();
+var ctOffset = (0 - ctOffsetMin/60);
+console.log("DEBUG: ctOffset = " + ctOffset);
+
 function addEventDateTimes(eds) {
 	eds.forEach(function (tEvent) {
 		var tEventStart = new Date(convertToJsDt(tEvent.eventStart));
 		var tEventEnd = new Date(convertToJsDt(tEvent.eventEnd));
 		var tLastModified = new Date(convertToJsDt(tEvent.lastModified));
 		tEvent.tEventStart = tEventStart;
+		tEvent.tEventStartCT = tEventStart.addHours(ctOffset);
 		tEvent.tEventEnd = tEventEnd;
+		tEvent.tEventEndCT = tEventEnd.addHours(ctOffset);
 		tEvent.tLastModified = tLastModified;
+		tEvent.tLastModifiedCT = tLastModified.addHours(ctOffset);
 	});
 	//console.log(JSON.stringify(eds));
 	return eds;
@@ -36,6 +53,12 @@ function convertToJsDt(tIn) {
 		tIn.substring(11,13) + ":" +
 		tIn.substring(13,15) + "Z";
 	return timeOut;
+}
+
+function deleteCalendarEvent() {	
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    deleteEvent(thisFormData);
 }
 
 function getDayPosition(dayString) {
@@ -57,6 +80,30 @@ function getDayPosition(dayString) {
         case "SAT": dayPos = 6; break;
     }
     return dayPos;
+}
+
+function deleteEvent(formData) {
+    aniPreload("on");
+    var thePostData = { 
+    		"doWhat": "setDeleteEvent", 
+    		"eventId": formData.eventId
+	};
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("WebCal"), {
+                data: thePostData,
+                handleAs: "json"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Event " + formData.eventId + " deleted!");
+                    getEvents();
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to delete Calendar Event failed!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
 }
 
 function getEvents() {

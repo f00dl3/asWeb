@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 14 Dec 2019
+Updated: 27 Dec 2019
 
  */
 
@@ -202,6 +202,31 @@ function formatDate(inDate, request) {
 function formatNumber(number, padding) {
     number = ("000000000" + number).slice(-padding);
     return number;
+}
+
+function generateDownload(input, outFile) {
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(input));
+	element.setAttribute('download', outFile);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);     
+}
+
+function generateDownloadBlob(input, outFile) {
+	var blob = new Blob(input, {type: 'text/csv'});
+    if(window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, outFile);
+    }
+    else{
+        var elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = filename;        
+        document.body.appendChild(elem);
+        elem.click();        
+        document.body.removeChild(elem);
+    }
 }
 
 function getBasePath(opt) {
