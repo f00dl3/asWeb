@@ -24,6 +24,7 @@ import org.restlet.resource.ServerResource;
 import asUtilsPorts.CamController;
 import asUtilsPorts.CamNightly;
 import asUtilsPorts.CamPusher;
+import asUtilsPorts.CodexImport;
 import asUtilsPorts.Feeds;
 import asUtilsPorts.GetDaily;
 import asUtilsPorts.Radar;
@@ -31,6 +32,7 @@ import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
+import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
 
@@ -68,6 +70,10 @@ public class BackendResource extends ServerResource {
             		returnData = TestStuff.stupidTomcatSandboxing();
             		break;
             		
+            	case "AlertMe":
+            		AlertMe.doAlert();
+            		break;
+            		
             	case "CamController":
             		CamController.initCams();
             		break;
@@ -78,6 +84,12 @@ public class BackendResource extends ServerResource {
             		
             	case "CamNightly":
             		CamNightly.doJob(dbc);
+            		break;
+            		
+            	case "Codex":
+            		String argsIn2 = "";
+            		try { argsIn2 = argsInForm.getFirstValue("interval"); } catch (Exception e) { }
+            		CodexImport.wrapper(argsIn2);
             		break;
             		
             	case "Feeds":
