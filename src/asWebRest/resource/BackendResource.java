@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -12,9 +12,11 @@ package asWebRest.resource;
 
 import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.MyDBConnector;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
@@ -30,8 +32,6 @@ import asUtilsPorts.GetDaily;
 import asUtilsPorts.Radar;
 import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
-import asUtilsPorts.Feed.cWazey;
-import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
@@ -61,14 +61,6 @@ public class BackendResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
-            
-            	case "_DEVTEST":
-            		cWazey.ripShit(dbc);
-            		break;
-            		            		
-            	case "_TEST":
-            		returnData = TestStuff.stupidTomcatSandboxing();
-            		break;
             		
             	case "AlertMe":
             		AlertMe.doAlert();
@@ -79,7 +71,8 @@ public class BackendResource extends ServerResource {
             		break;
             		
             	case "CamPusher":
-            		CamPusher.pushIt(dbc);
+            		CamPusher cp = new CamPusher();
+            		cp.pushIt(dbc);
             		break;
             		
             	case "CamNightly":
@@ -109,7 +102,8 @@ public class BackendResource extends ServerResource {
             		break;
             		
             	case "Kilauea":
-            		KilaeuaCam.doKilaeua();
+            		KilaeuaCam kc = new KilaeuaCam();
+            		kc.doKilaeua();
             		break;
             		
             	case "Radar":
@@ -133,9 +127,6 @@ public class BackendResource extends ServerResource {
 	                
 	            case "WxBot":
 	            	WeatherBot.startBot();
-	            	break;
-	            	
-	            case "xs19":
 	            	break;
                 
             }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Weather;
@@ -22,6 +22,7 @@ public class G16Hourly {
             
 		CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
+        WebCommon wc = new WebCommon();
 
 		final String animName = args[0];
 		final DateFormat dateFormat = new SimpleDateFormat("yyMMddHH");
@@ -34,12 +35,12 @@ public class G16Hourly {
 		memTemp.mkdirs();
 		g16Archive.mkdirs();
 
-		WebCommon.runProcess("mv "+g16Source+"/*.jpg "+memTemp+"/");
-		WebCommon.runProcess("bash "+junkyBeans.getHelpers().toString()+"/Sequence.sh "+memTemp+"/ jpg");
-		//WebCommon.runProcess("mogrify -format jpg "+memTemp+"/*.jpg");
-		WebCommon.runProcess("ffmpeg -threads 8 -framerate 24 -i "+memTemp+"/%05d.jpg -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" -vcodec libx264 -pix_fmt yuv420p "+g16Archive.getPath()+"/H"+mp4Timestamp+".mp4");
-		//WebCommon.runProcess("chown -R "+junkyBeans.getWebUser()+" "+g16Archive.getPath());
-		WebCommon.deleteDir(memTemp);
+		wc.runProcess("mv "+g16Source+"/*.jpg "+memTemp+"/");
+		wc.runProcess("bash "+junkyBeans.getHelpers().toString()+"/Sequence.sh "+memTemp+"/ jpg");
+		//wc.runProcess("mogrify -format jpg "+memTemp+"/*.jpg");
+		wc.runProcess("ffmpeg -threads 8 -framerate 24 -i "+memTemp+"/%05d.jpg -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\" -vcodec libx264 -pix_fmt yuv420p "+g16Archive.getPath()+"/H"+mp4Timestamp+".mp4");
+		//wc.runProcess("chown -R "+junkyBeans.getWebUser()+" "+g16Archive.getPath());
+		wc.deleteDir(memTemp);
 
 	}
 

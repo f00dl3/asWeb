@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated; 28 Dec 2019
+Updated; 30 Dec 2019
 */
 
 package asUtilsPorts;
@@ -9,6 +9,7 @@ package asUtilsPorts;
 import asUtilsPorts.Cams.CamBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.GDrive;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 import asUtils.Shares.JunkyBeans;
 import java.io.*;
@@ -27,6 +28,7 @@ public class CamNightly {
         JunkyBeans junkyBeans = new JunkyBeans();
         CamBeans camBeans = new CamBeans();
         CommonBeans cb = new CommonBeans();
+        ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
                 
 		final File ramDrive = new File(cb.getRamPath());
@@ -44,23 +46,19 @@ public class CamNightly {
                 
 		try { Files.createDirectories(unpackFolder); } catch (IOException ix) { ix.printStackTrace(); }
 
-		WebCommon.runProcess("mv "+sourceFolder.toString()+"/* "+unpackFolder.toString());
-		WebCommon.runProcess("bash "+helpers.getPath()+"/Sequence.sh "+unpackFolder.toString()+"/ mp4");
-		List<String> camFiles = WebCommon.fileSorter(unpackFolder, "*.mp4");
+		wc.runProcess("mv "+sourceFolder.toString()+"/* "+unpackFolder.toString());
+		wc.runProcess("bash "+helpers.getPath()+"/Sequence.sh "+unpackFolder.toString()+"/ mp4");
+		List<String> camFiles = wc.fileSorter(unpackFolder, "*.mp4");
 		
 		try { Files.delete(cListing); } catch (IOException ix) { ix.printStackTrace(); }
 
 		for (String thisLoop : camFiles) {
 			String fileListStr = "file '"+thisLoop+"'\n"; 
-			try { WebCommon.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			try { wc.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		}
 
-		WebCommon.runProcess("timeout --kill-after=120 120 ffmpeg -threads 8 -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
+		wc.runProcess("timeout --kill-after=120 120 ffmpeg -threads "+tr.getMaxThreads()+" -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
 
-/*		String camImgQtyS = "0";
-		try { camImgQtyS = StumpJunk.runProcessOutVar("timeout --kill-after=120 120 ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 "+mp4OutFile.toString()); } catch (IOException ix) { ix.printStackTrace(); }
-		
-		int camImgQty = Integer.parseInt(); */
 		int camImgQty = 0;
 
 		long camMP4Size = 0;
@@ -70,10 +68,10 @@ public class CamNightly {
 
         try { wc.q2do1c(dbc, camLogSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
-        WebCommon.runProcess("(ls "+camPath.toString()+"/MP4/*.mp4 -t | head -n 14; ls "+camPath.toString()+"/MP4/*.mp4)|sort|uniq -u|xargs rm");
-        WebCommon.runProcess("chown -R "+junkyBeans.getWebUser()+" "+camPath.toString()+"/MP4");
+        wc.runProcess("(ls "+camPath.toString()+"/MP4/*.mp4 -t | head -n 14; ls "+camPath.toString()+"/MP4/*.mp4)|sort|uniq -u|xargs rm");
+        wc.runProcess("chown -R "+junkyBeans.getWebUser()+" "+camPath.toString()+"/MP4");
 
-        WebCommon.deleteDir(unpackFolder.toFile());
+        wc.deleteDir(unpackFolder.toFile());
 	}
 
 }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 20 May 2019
+Updated: 29 Dec 2019
 */
 
 var chartArray;
@@ -205,9 +205,9 @@ function populateCharts() {
         rData += "<span id='CHART_" + chartArray[i] + "'></span>";
     }
     rData += "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='nChartR'>" +
-            "<img class='" + iconClass + "' src='" + getBasePath("getOldGet") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/></a>" +
+            "<img class='" + iconClass + "' src='" + getBasePath("get2") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/></a>" +
             "<a href='" + getResource("Cams") + "' target='nChartC'>" +
-            "<img class='" + iconClass + "' src='" + getBasePath("getOldGet") + "/Cams/_Latest.jpeg?ts=" + timestamp + "'/></a>" +
+            "<img class='" + iconClass + "' src='" + getBasePath("get2") + "/Cams/_Latest.jpeg?ts=" + timestamp + "'/></a>" +
             "</div>"; 
     dojo.byId("chartPlacement").innerHTML = rData;
     getCharts(chartArray, stepIn, dateIn);

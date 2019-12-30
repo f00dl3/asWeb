@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Dec 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
  */
 
 package asWebRest.hookers;
@@ -14,6 +14,8 @@ public class WeatherBot {
 	public static void startBot() {
 
 		CommonBeans cb = new CommonBeans();
+		WebCommon wc = new WebCommon();
+		
 		String thisWorkingFolder = cb.getWarDeployBase();
 		
 		String sendMessage = "node bot.js 'Auto-start @ " + thisWorkingFolder + "'";
@@ -25,7 +27,7 @@ public class WeatherBot {
 				// sendMessage + ";" +
 				startBot;
 			
-		Thread wxbot = new Thread(() -> { try { WebCommon.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });
+		Thread wxbot = new Thread(() -> { try { wc.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });
 		Thread bots[] = { wxbot };
 		for (Thread bot : bots) { bot.start(); } 
 				

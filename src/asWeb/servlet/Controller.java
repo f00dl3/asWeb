@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 7 Jun 2018
+Updated: 30 Dec 2019
 For support of non-RESTful API calls
 */
 
@@ -117,7 +117,7 @@ public class Controller extends HttpServlet {
                             
                         case "userAndPass":
                             final File cachePath = new File(cb.getPathChartCache());
-                            WebCommon.deleteDir(cachePath);
+                            wc.deleteDir(cachePath);
                             GetWebUIserAuthAction getWebUIserAuthAction = new GetWebUIserAuthAction(new WebUIserAuthDAO());
                             GetWebAccessLogAction getWebAccessLogAction = new GetWebAccessLogAction(new WebAccessLogDAO());
                             String loginCheck = "false";

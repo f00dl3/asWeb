@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -18,7 +18,7 @@ import org.json.*;
 
 public class cWazey {
 
-	public static void ripShit(Connection dbc) {
+	public void ripShit(Connection dbc) {
 
 		// WAZE security increased in 2018 - this no longer works. Need to hack past it.
 		
@@ -33,10 +33,10 @@ public class cWazey {
         final String wazeFeedURL = wazeFeedURL_190503;
 		final Path wazeJSON = Paths.get(ramDrive.toString()+"/Waze.json");
 
-		WebCommon.jsoupOutBinary(wazeFeedURL, wazeJSON.toFile(), 5.0);
+		wc.jsoupOutBinary(wazeFeedURL, wazeJSON.toFile(), 5.0);
 
-		WebCommon.sedFileReplace(wazeJSON.toString(), "\\n", "");
-		WebCommon.sedFileReplace(wazeJSON.toString(), " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(wazeJSON.toString(), "\\n", "");
+		wc.sedFileReplace(wazeJSON.toString(), " null\\,", "\\\"null\\\",");
 			
 		String wazeLoaded = "";
 		Scanner wazeScanner = null;
@@ -88,21 +88,21 @@ public class cWazey {
 
 			tId = tJOAlert.getString("id");
 			tUuid = tJOAlert.getString("uuid");
-			tCountry = WebCommon.jsonSanitize(tJOAlert.getString("country"));
+			tCountry = wc.jsonSanitize(tJOAlert.getString("country"));
 			tNThumbsUp = tJOAlert.getInt("nThumbsUp");
 			tReportRating = tJOAlert.getInt("reportRating");
 			tReliability = tJOAlert.getInt("reliability");
-			tType = WebCommon.jsonSanitize(tJOAlert.getString("type"));
+			tType = wc.jsonSanitize(tJOAlert.getString("type"));
 			tSpeed = tJOAlert.getInt("speed");
 			tReportMood = tJOAlert.getInt("reportMood");
-			tSubType = WebCommon.jsonSanitize(tJOAlert.getString("subtype"));
-			if(tJOAlert.has("street")) { tStreet = WebCommon.jsonSanitize(tJOAlert.getString("street")); }
-			if(tJOAlert.has("additionalInfo")) { tAdditionalInfo = WebCommon.jsonSanitize(tJOAlert.getString("additionalInfo")); }
+			tSubType = wc.jsonSanitize(tJOAlert.getString("subtype"));
+			if(tJOAlert.has("street")) { tStreet = wc.jsonSanitize(tJOAlert.getString("street")); }
+			if(tJOAlert.has("additionalInfo")) { tAdditionalInfo = wc.jsonSanitize(tJOAlert.getString("additionalInfo")); }
 			tNComments = tJOAlert.getInt("nComments");
-			if(tJOAlert.has("reportBy")) { tReportBy = WebCommon.jsonSanitize(tJOAlert.getString("reportBy")); }
-			if(tJOAlert.has("reportDescription")) { tReportDescription = WebCommon.jsonSanitize(tJOAlert.getString("reportDescription")); }
+			if(tJOAlert.has("reportBy")) { tReportBy = wc.jsonSanitize(tJOAlert.getString("reportBy")); }
+			if(tJOAlert.has("reportDescription")) { tReportDescription = wc.jsonSanitize(tJOAlert.getString("reportDescription")); }
 			tWazeData = tJOAlert.getString("wazeData");
-			if(tJOAlert.has("nearBy")) { tNearBy = WebCommon.jsonSanitize(tJOAlert.getString("nearBy")); }
+			if(tJOAlert.has("nearBy")) { tNearBy = wc.jsonSanitize(tJOAlert.getString("nearBy")); }
 			tPubMillis = tJOAlert.getLong("pubMillis");
 
 			wazeSQL = wazeSQL+"("

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts;
@@ -88,15 +88,15 @@ public class GPSParse {
                                     JSONObject gpsData = new JSONObject();
                                     gpsLog.put(logNo, gpsData);
 
-                                    if(wc.isSetNotZero(thisLine[1])) { double altFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[1])/1000); gpsData.put("AltitudeFt", altFt); }
-                                    if(wc.isSetNotZero(thisLine[2])) { double altDiffDownFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[2]) / 1000); gpsData.put("AltDiffDownFt", altDiffDownFt); }
-                                    if(wc.isSetNotZero(thisLine[3])) { double altDiffUpFt = WebCommon.meters2Feet(Integer.parseInt(thisLine[3]) / 1000); gpsData.put("AltDiffUpFt", altDiffUpFt); }
+                                    if(wc.isSetNotZero(thisLine[1])) { double altFt = wc.meters2Feet(Integer.parseInt(thisLine[1])/1000); gpsData.put("AltitudeFt", altFt); }
+                                    if(wc.isSetNotZero(thisLine[2])) { double altDiffDownFt = wc.meters2Feet(Integer.parseInt(thisLine[2]) / 1000); gpsData.put("AltDiffDownFt", altDiffDownFt); }
+                                    if(wc.isSetNotZero(thisLine[3])) { double altDiffUpFt = wc.meters2Feet(Integer.parseInt(thisLine[3]) / 1000); gpsData.put("AltDiffUpFt", altDiffUpFt); }
                                     if(wc.isSetNotZero(thisLine[4])) { int cadence = Integer.parseInt(thisLine[4]); gpsData.put("Cadence", cadence); cadences.add(cadence); }
                                     if(wc.isSetNotZero(thisLine[5])) { double kCal = Double.parseDouble(thisLine[5]); gpsData.put("kcal", kCal); }
                                     if(wc.isSetNotZero(thisLine[6])) { double distAbsMi = (Double.parseDouble(thisLine[6])/1000)*0.621; gpsData.put("DistTotMiles", distAbsMi); miles.add(distAbsMi); }
                                     if(wc.isSetNotZero(thisLine[7])) { double distInt = Double.parseDouble(thisLine[7]); gpsData.put("DistIntMeters", distInt); }
-                                    if(wc.isSetNotZero(thisLine[8])) { double distIntDown = Double.parseDouble(thisLine[8]); gpsData.put("DistIntDownFt", WebCommon.meters2Feet(distIntDown)); }
-                                    if(wc.isSetNotZero(thisLine[9])) { double distIntUp = Double.parseDouble(thisLine[9]); gpsData.put("DistIntUpFt", WebCommon.meters2Feet(distIntUp)); }
+                                    if(wc.isSetNotZero(thisLine[8])) { double distIntDown = Double.parseDouble(thisLine[8]); gpsData.put("DistIntDownFt", wc.meters2Feet(distIntDown)); }
+                                    if(wc.isSetNotZero(thisLine[9])) { double distIntUp = Double.parseDouble(thisLine[9]); gpsData.put("DistIntUpFt", wc.meters2Feet(distIntUp)); }
                                     if(wc.isSetNotZero(thisLine[10])) { int heartrate = Integer.parseInt(thisLine[10]); gpsData.put("HeartRate", heartrate); heartRates.add(heartrate); }
                                     if(wc.isSetNotZero(thisLine[11])) { double incline = Double.parseDouble(thisLine[11]); gpsData.put("Incline", incline); }
                                     if(wc.isSetNotZero(thisLine[12])) { int iZone = Integer.parseInt(thisLine[12]); gpsData.put("IntensityZone", iZone); }
@@ -110,7 +110,7 @@ public class GPSParse {
                                     if(wc.isSetNotZero(thisLine[20])) { String speedRef = thisLine[20]; gpsData.put("SpeedSource", speedRef); }
                                     if(wc.isSetNotZero(thisLine[21])) { int speedTime = Integer.parseInt(thisLine[21]); gpsData.put("SpeedTime", speedTime); }
                                     if(wc.isSetNotZero(thisLine[22])) { int targetZone = Integer.parseInt(thisLine[22]); gpsData.put("TargetZone", targetZone); }
-                                    if(wc.isSetNotZero(thisLine[23])) { double tempF = WebCommon.tempC2F(Double.parseDouble(thisLine[23])); gpsData.put("TemperatureF", tempF); }
+                                    if(wc.isSetNotZero(thisLine[23])) { double tempF = wc.tempC2F(Double.parseDouble(thisLine[23])); gpsData.put("TemperatureF", tempF); }
                                     if(wc.isSetNotZero(thisLine[24])) { long trainTime = Integer.parseInt(thisLine[24]); gpsData.put("TrainingTime", trainTime); }
                                     if(wc.isSetNotZero(thisLine[25])) { long trainTimeTot = Integer.parseInt(thisLine[25]); gpsData.put("TrainingTimeTotalSec", trainTimeTot); trackedSeconds.add(trainTimeTot); }
                                     if(wc.isSetNotZero(thisLine[26])) { long trainTimeDown = Integer.parseInt(thisLine[26]); gpsData.put("TrainingTimeDownhillSec", trainTimeDown); }
@@ -209,8 +209,8 @@ public class GPSParse {
                                 
                                 latitude = Double.parseDouble(eElement.getAttribute("lat"));
                                 longitude = Double.parseDouble(eElement.getAttribute("lon"));
-                                altFt = WebCommon.meters2Feet(Double.parseDouble(eElement.getElementsByTagName("ele").item(0).getTextContent()));
-                                tempF = WebCommon.tempC2F(Double.parseDouble(eElement.getElementsByTagName("ns3:atemp").item(0).getTextContent())); 
+                                altFt = wc.meters2Feet(Double.parseDouble(eElement.getElementsByTagName("ele").item(0).getTextContent()));
+                                tempF = wc.tempC2F(Double.parseDouble(eElement.getElementsByTagName("ns3:atemp").item(0).getTextContent())); 
                                 trainTime = eElement.getElementsByTagName("time").item(0).getTextContent();
                                                                 
                                 gpsData.put("Latitude", latitude);
@@ -250,7 +250,7 @@ public class GPSParse {
                     if(!(junkyBeans.getPathWebappCache()).contains("null")) { csvOutFile = new File(dropLocation+"/"+args[0]+".csv"); }
                     final File fitCsvToolJar = new File(junkyBeans.getHelpers().toString()+"/FitCSVTool.jar");
                     
-                    WebCommon.runProcess("java -jar "+fitCsvToolJar+" -b "+gpsInFile.toString()+" "+csvOutFile.toString());
+                    wc.runProcess("java -jar "+fitCsvToolJar+" -b "+gpsInFile.toString()+" "+csvOutFile.toString());
                     
                     int jsonLogIterator = 0;
                     long initTrainTime = 0;
@@ -333,12 +333,12 @@ public class GPSParse {
                                                     break;
 
                                                 case "altitude":
-                                                    double altFt = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double altFt = wc.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("AltitudeFt", altFt);
                                                     break;
 
                                                 case "enhanced_altitude":
-                                                    double eAltFt = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double eAltFt = wc.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("EnhancedAltitudeFt", eAltFt);
                                                     break;
 
@@ -348,7 +348,7 @@ public class GPSParse {
                                                     break;
 
                                                 case "enhanced_speed":
-                                                    double eSpeedMPH = WebCommon.meters2Feet(Double.parseDouble(thisSetValue));
+                                                    double eSpeedMPH = wc.meters2Feet(Double.parseDouble(thisSetValue));
                                                     gpsData.put("EnhancedSpeedMPH", eSpeedMPH);
                                                     break;
 
@@ -359,7 +359,7 @@ public class GPSParse {
                                                     break;
 
                                                 case "temperature":
-                                                    double tempF = WebCommon.tempC2F(Double.parseDouble(thisSetValue));
+                                                    double tempF = wc.tempC2F(Double.parseDouble(thisSetValue));
                                                     gpsData.put("TemperatureF", tempF);
                                                     break;
 
@@ -417,7 +417,7 @@ public class GPSParse {
                                         System.out.println(logNo + " - " + geoJSONtrace);
                                 }
 
-                                try { WebCommon.runProcess("gzip "+csvOutFile.toString()); } catch (Exception e) { e.printStackTrace(); }
+                                try { wc.runProcess("gzip "+csvOutFile.toString()); } catch (Exception e) { e.printStackTrace(); }
 
                             }
                         }
@@ -477,8 +477,8 @@ public class GPSParse {
 
 		String activityCode = args[0].substring(11);
 
-		try { avgHeart = (WebCommon.sumListInteger(heartRates) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-		try { avgSpeed = (WebCommon.sumListDouble(intSpeeds) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+		try { avgHeart = (wc.sumListInteger(heartRates) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+		try { avgSpeed = (wc.sumListDouble(intSpeeds) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { maxHeart = Collections.max(heartRates); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { maxSpeed = Collections.max(intSpeeds); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 		try { trackedDistance = Collections.max(miles); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
@@ -496,9 +496,9 @@ public class GPSParse {
 				hrAvgField = "CycHeartAvg";
 				hrMaxField = "CycHeartMax";
 				try { maxCadence = Collections.max(cadences); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-				try { avgCadence = (WebCommon.sumListInteger(cadences) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+				try { avgCadence = (wc.sumListInteger(cadences) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 				try { maxPower = Collections.max(wattPowers); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
-				try { avgPower = (WebCommon.sumListDouble(wattPowers) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
+				try { avgPower = (wc.sumListDouble(wattPowers) / Collections.max(logNos)); } catch (NoSuchElementException nse) { nse.printStackTrace(); }
 				break;
 
 			case "D":
@@ -568,8 +568,8 @@ public class GPSParse {
 		
 			int trackedTimeMinutes = (int) (trackedTime/60);
 			gpsQuery = "UPDATE Core.Fitness " +
-                                "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
-                                activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
+                    "SET "+activityType+" = CASE WHEN "+activityType+" IS NULL THEN "+trackedDistance+" ELSE "+activityType+"+"+trackedDistance+" END," +
+                    activityDataField+"='"+fullGPSjson+"', "+geoJSONField+"='"+geoJSONtrace+"'";
 			if(activityType.equals("RunWalk")) { gpsQuery += ", TrackedTime="+trackedTime+", TrackedDist="+trackedDistance; }
 			if(wc.isSetNotZero(speedAvgField)) { gpsQuery += ", "+speedAvgField+"="+avgSpeed; }
 			if(wc.isSetNotZero(speedMaxField)) { gpsQuery += ", "+speedMaxField+"="+maxSpeed; }
@@ -596,7 +596,7 @@ public class GPSParse {
                 	}
                     catch (SQLException se) { se.printStackTrace(); }
                     catch (Exception e) { e.printStackTrace(); }
-                    try { WebCommon.runProcess("gzip "+gpsInFile.toString()); } catch (Exception e) { e.printStackTrace(); }
+                    try { wc.runProcess("gzip "+gpsInFile.toString()); } catch (Exception e) { e.printStackTrace(); }
                 } else {
                     System.out.println("Not running query or gzipping as source type ["+sourceType+"] is still experimental!");
                 }

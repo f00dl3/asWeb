@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Split to RSSSources: 23 Nov 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -19,7 +19,7 @@ import asWebRest.shared.WebCommon;
 
 public class RSSSources {
     
-    public static void getRSS(Connection dbc) {
+    public void getRSS(Connection dbc) {
 
     	String returnData = "";
     	
@@ -53,9 +53,9 @@ public class RSSSources {
 			String thisLinkURL = tjo.getString("thisLinkURL");
 			String thisFeedFileStr =  tjo.getString("thisFeedFileStr");
 			File thisFeedFile = new File(ramTemp+"/"+thisFeedFileStr);
-			WebCommon.jsoupOutFile(thisLinkURL, thisFeedFile);
-			WebCommon.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "<!\\[CDATA\\[", "");
-			WebCommon.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "\\]\\]", "");
+			wc.jsoupOutFile(thisLinkURL, thisFeedFile);
+			wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "<!\\[CDATA\\[", "");
+			wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "\\]\\]", "");
 			String thisFeedUpSQL = "LOAD XML LOCAL INFILE '"+ramTemp+"/"+thisFeedFileStr+"' IGNORE INTO TABLE Feeds.RSSFeeds CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<item>';";
 			try { 
 				System.out.println("Loading infile for: " +thisLinkName+" ("+thisLinkURL+")");

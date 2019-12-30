@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 17 May 2018
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -19,9 +19,10 @@ import asUtils.Shares.MyDBConnector;
 
 public class KilaeuaCam {
 
-	public static void doKilaeua() {
+	public void doKilaeua() {
 
         CommonBeans cb = new CommonBeans();
+        WebCommon wc = new WebCommon();
         
 		final String ramDrive = cb.getRamPath().toString()+"/kilaeua";
 		final String kPath = cb.getPersistTomcat().toString()+"/Get/Kilaeua";
@@ -50,9 +51,9 @@ public class KilaeuaCam {
 				thisDestPathObject.mkdirs();
                 final String camURLReturn = resultSet.getString("URL");
 				final File camOutFile = new File(ramDrive+"/KICam_Latest.jpg");
-				WebCommon.jsoupOutBinary(camURLReturn, camOutFile, 5.0);
-				WebCommon.copyFile(camOutFile.toString(), kPath+"/KICam_Latest.jpg");
-				WebCommon.moveFile(camOutFile.toString(), kPath+"/Archive/KICam_"+thisTimestamp+".jpg");
+				wc.jsoupOutBinary(camURLReturn, camOutFile, 5.0);
+				wc.copyFile(camOutFile.toString(), kPath+"/KICam_Latest.jpg");
+				wc.moveFile(camOutFile.toString(), kPath+"/Archive/KICam_"+thisTimestamp+".jpg");
 			}
 
 		} catch (Exception e) { e.printStackTrace(); }

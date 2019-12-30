@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Weather;
@@ -35,8 +35,23 @@ public class RadarNightly {
 		final File rdObj = new File(ramDrive);
 		final File radPathObj = new File(radPath);
 		
-		if(!rdObj.exists()) { try { rdObj.mkdirs(); } catch (Exception e) { e.printStackTrace(); } }
-		if(!radPathObj.exists()) { try { radPathObj.mkdirs(); } catch (Exception e) { e.printStackTrace(); } }
+		if(!rdObj.exists()) { 
+			try { 
+				rdObj.mkdirs();
+			} catch (Exception e) { 
+				e.printStackTrace(); 
+			} 
+		} else {
+			wc.deleteDir(rdObj);
+		}
+		
+		if(!radPathObj.exists()) {
+			try { 
+				radPathObj.mkdirs(); 
+			} catch (Exception e) {
+				e.printStackTrace(); 
+			}
+		}
 
         final String queryRadarList = "SELECT Site FROM WxObs.RadarList WHERE Active=1 ORDER BY Site ASC;";
         
@@ -47,7 +62,7 @@ public class RadarNightly {
                 final File tmpRadPath = new File(ramDrive + "/" + thisSite);
                 final File sourceFolder = new File(radPath + "/" + thisSite + "/Archive");
                 tmpRadPath.mkdirs();
-                WebCommon.runProcess("mv " + sourceFolder.toString() + "/*.gif " + tmpRadPath.toString());
+                wc.runProcess("mv " + sourceFolder.toString() + "/*.gif " + tmpRadPath.toString());
             }            
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +77,7 @@ public class RadarNightly {
     		e.printStackTrace();
 		}
         
-        WebCommon.runProcess("(ls "+radPath+"/MP4/* -t | head -n 14; ls "+radPath+"/MP4/*)|sort|uniq -u|xargs rm");
+        wc.runProcess("(ls "+radPath+"/MP4/* -t | head -n 14; ls "+radPath+"/MP4/*)|sort|uniq -u|xargs rm");
                 
 	}
 

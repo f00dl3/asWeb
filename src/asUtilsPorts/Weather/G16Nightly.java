@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 SEP 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Weather;
@@ -25,9 +25,10 @@ public class G16Nightly {
 	public static void main(String[] args) {
 
 		CommonBeans cb = new CommonBeans();
-		MyDBConnector mdb = new MyDBConnector();
-		
+		MyDBConnector mdb = new MyDBConnector();		
         JunkyBeans junkyBeans = new JunkyBeans();
+        WebCommon wc = new WebCommon();
+        
 		final DateTime dtYesterday = new DateTime().minusDays(1);
 		final DateTimeFormatter dtFormat = DateTimeFormat.forPattern("yyMMdd");
 		final String dateStamp = dtFormat.print(dtYesterday);
@@ -50,27 +51,27 @@ public class G16Nightly {
 				Path tArchDay = Paths.get(g16Base+"/ArchiveDay/"+thisSector);
 				Path tListing = Paths.get(tMemTmpA+"/Listing.txt");
 
-				WebCommon.deleteDir(tMemTmpA.toFile());
+				wc.deleteDir(tMemTmpA.toFile());
 				Files.createDirectories(tMemTmpA);
 				Files.createDirectories(tArchDay);
 				if (Files.exists(tListing)) { Files.delete(tListing); }
 
-				WebCommon.runProcess("mv "+tG16Arch+"/*.mp4 "+tMemTmpA);
-				WebCommon.runProcess("bash "+junkyBeans.getHelpers().toString()+"/Sequence.sh "+tMemTmpA+"/ mp4");
+				wc.runProcess("mv "+tG16Arch+"/*.mp4 "+tMemTmpA);
+				wc.runProcess("bash "+junkyBeans.getHelpers().toString()+"/Sequence.sh "+tMemTmpA+"/ mp4");
 
 				String fileListingString = "";	
 
-				List<String> aOfFiles = WebCommon.fileSorter(tMemTmpA, "*.mp4");
+				List<String> aOfFiles = wc.fileSorter(tMemTmpA, "*.mp4");
 
 				for (String thisFileStr : aOfFiles) {
 					fileListingString += "file '"+thisFileStr+"'\n";
 				}
 
-				WebCommon.varToFile(fileListingString, tListing.toFile(), false);
+				wc.varToFile(fileListingString, tListing.toFile(), false);
 
 				System.out.println("Creating MP4 file...");
-				WebCommon.runProcess("ffmpeg -threads 8 -safe 0 -f concat -i "+tListing.toString()+" -c copy "+tArchDay.toString()+"/"+dateStamp+"A.mp4");
-				WebCommon.runProcess("(ls "+tArchDay.toString()+"/*.mp4 -t | head -n 31; ls "+tArchDay.toString()+"/*.mp4)|sort|uniq -u|xargs rm");
+				wc.runProcess("ffmpeg -threads 8 -safe 0 -f concat -i "+tListing.toString()+" -c copy "+tArchDay.toString()+"/"+dateStamp+"A.mp4");
+				wc.runProcess("(ls "+tArchDay.toString()+"/*.mp4 -t | head -n 31; ls "+tArchDay.toString()+"/*.mp4)|sort|uniq -u|xargs rm");
 				//WebCommon.runProcess("chown -R "+junkyBeans.getWebUser()+" "+tArchDay.toString());
 				System.out.println(thisSector+" completed!");
 

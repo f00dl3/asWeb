@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -19,7 +19,7 @@ import asWebRest.shared.WebCommon;
 public class NWSWarnings {
 	
 
-	public static void doFetch(Connection dbc) {
+	public void doFetch(Connection dbc) {
 
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
@@ -29,10 +29,10 @@ public class NWSWarnings {
 		final String warn2URL = "https://api.weather.gov/alerts/active";
 		final File warn2File = new File(ramTemp+"/Warn2All.json");
 		
-		WebCommon.jsoupOutBinary(warn2URL, warn2File, 5.0);
+		wc.jsoupOutBinary(warn2URL, warn2File, 5.0);
 		
-		WebCommon.sedFileReplace(ramTemp+"/Warn2All.json", "\\n", "");
-		WebCommon.sedFileReplace(ramTemp+"/Warn2All.json", " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(ramTemp+"/Warn2All.json", "\\n", "");
+		wc.sedFileReplace(ramTemp+"/Warn2All.json", " null\\,", "\\\"null\\\",");
 			
 		String warn2data = "";
 		Scanner warn2Scanner = null;
@@ -89,8 +89,8 @@ public class NWSWarnings {
 			String thisId = thisJObjRoot.getString("id");
 			String thisUpdated = thisJObjProperties.getString("sent");
 			String thisTitle = thisJObjProperties.getString("headline");
-			String thisSummary1 = WebCommon.jsonSanitize(thisJObjProperties.getString("description"));
-			String thisSummary2 = WebCommon.jsonSanitize(thisJObjProperties.getString("instruction"));
+			String thisSummary1 = wc.jsonSanitize(thisJObjProperties.getString("description"));
+			String thisSummary2 = wc.jsonSanitize(thisJObjProperties.getString("instruction"));
 			String thisEvent = thisJObjProperties.getString("event");
 			String thisEffective = thisJObjProperties.getString("effective");
 			String thisExpires = thisJObjProperties.getString("expires");
@@ -100,7 +100,7 @@ public class NWSWarnings {
 			String thisUrgency = thisJObjProperties.getString("urgency");
 			String thisSeverity = thisJObjProperties.getString("severity");
 			String thisCertainty = thisJObjProperties.getString("certainty");
-			String thisAreaDesc = WebCommon.jsonSanitize(thisJObjProperties.getString("areaDesc"));
+			String thisAreaDesc = wc.jsonSanitize(thisJObjProperties.getString("areaDesc"));
 		
 			w2jsonSQL = w2jsonSQL+" (1.20,'"+thisId+"','"+thisUpdated+"','"+thisUpdated+"','"+thisTitle+"','"+thisSummary1+thisSummary2+"',"
 				+ thisPolygon+",'"+thisEvent+"','"+thisEffective+"','"+thisExpires+"','"+thisStatus+"',"

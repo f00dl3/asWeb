@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts;
@@ -11,7 +11,6 @@ import asUtilsPorts.Cams.CamWorkerHF;
 import asUtilsPorts.Cams.CamWorkerStream;
 import java.io.*;
 
-import asUtils.AtBootDt;
 
 public class CamController {
         
@@ -34,8 +33,6 @@ public class CamController {
                     camPath.mkdirs();
                     pushTemp.mkdirs();
             }
-            
-            AtBootDt.getAtBootDesktop();
             
             Thread ta = new Thread(() -> { mainCamLoop(camPath); });
             Thread tb = new Thread(() -> { streamForker(camPath, pushTemp); });

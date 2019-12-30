@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 5 Apr 2018
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
  */
 
 package asWebRest.resource;
@@ -25,10 +25,11 @@ public class CongressResource extends ServerResource {
     @Get @Options
     public String represent() {        
         CommonBeans cb = new CommonBeans();        
+        WebCommon wc = new WebCommon();
         File testJsonOutFile = new File(cb.getPathChartCache() + "/congressOut.json");
         GetCongressAction getCongressAction = new GetCongressAction(new CongressDAO());
         JSONArray hack = getCongressAction.getCongressHack();  
-        try { WebCommon.varToFile(hack.toString(),testJsonOutFile,false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+        try { wc.varToFile(hack.toString(),testJsonOutFile,false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
         return hack.toString();        
     }
     

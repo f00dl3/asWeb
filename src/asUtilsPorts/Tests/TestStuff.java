@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 1 Jul 2018
 Ported to asWeb: 11 Feb 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
  */
 
 package asUtilsPorts.Tests;
@@ -21,6 +21,7 @@ public class TestStuff {
 		String returnData = "";
 		CamBeans camBeans = new CamBeans();
 		JunkyBeans jb = new JunkyBeans();
+		WebCommon wc = new WebCommon();
 		
 		File camWebRoot = camBeans.getCamWebRoot();
 		if(!camWebRoot.exists()) {
@@ -35,7 +36,7 @@ public class TestStuff {
 		File newTestFile = new File("/media/sf_SharePoint/snmpwalk-Out.txt");
 
         	try { 
-    		WebCommon.copyFile(jb.getRamDrive().toString()+"/tomcatShare/snmpwalk.txt", newTestFile.toString());
+    		wc.copyFile(jb.getRamDrive().toString()+"/tomcatShare/snmpwalk.txt", newTestFile.toString());
 			returnData = "It was successful.";
 		 } catch (Exception ix) {
 			//ix.printStackTrace();

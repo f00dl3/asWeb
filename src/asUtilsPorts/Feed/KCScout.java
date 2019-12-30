@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 public class KCScout {
     
-    public static String getScoutSQL(Connection dbc) {
+    public String getScoutSQL(Connection dbc) {
         
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
@@ -28,8 +28,8 @@ public class KCScout {
         final String ramTemp = ramDrive.getPath();
         final File scoutFile = new File(ramTemp+"/ScoutFeed.aspx");
         
-        WebCommon.jsoupOutFile(scoutURL, scoutFile);
-        WebCommon.sedFileReplace(ramTemp+"/ScoutFeed.aspx", "</div><br></br><div>", "\n");
+        wc.jsoupOutFile(scoutURL, scoutFile);
+        wc.sedFileReplace(ramTemp+"/ScoutFeed.aspx", "</div><br></br><div>", "\n");
 			
         List<String> scoutType = new ArrayList<>();
         List<String> scoutLocation = new ArrayList<>();

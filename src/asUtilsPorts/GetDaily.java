@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts;
@@ -17,9 +17,10 @@ public class GetDaily {
 
 	public static String getDaily(Connection dbc, int daysBack) {
 		
+		CF6Daily cf6 = new CF6Daily();
 		String returnData = "";
 		
-		returnData += CF6Daily.getCf6(dbc, daysBack);
+		returnData += cf6.getCf6(dbc, daysBack);
 		RadarNightly.process(dbc);
 
         JunkyPrivate junkyPrivate = new JunkyPrivate();

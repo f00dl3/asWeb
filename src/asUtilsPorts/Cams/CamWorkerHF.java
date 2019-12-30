@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -23,6 +23,7 @@ public class CamWorkerHF {
         CamBeans camBeans = new CamBeans();
         CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
+        WebCommon wc = new WebCommon();
         
 		final int testVal = 1;
 
@@ -67,12 +68,12 @@ public class CamWorkerHF {
                         
             final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F -- GA "+tempGarage+"F -- CPU "+tempCPU+"F -- "+upsStatus;
   
-			if(!xWebCWFile.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
-			if(!xWebC1File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
-			if(!yWebC2File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
-            if(!yWebC3File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
-            if(!yWebC4File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
-            if(!yWebC5File.exists()) { WebCommon.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			if(!xWebCWFile.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+xWebCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			if(!xWebC1File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+xWebC1File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			if(!yWebC2File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC2File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC3File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC3File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC4File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC4File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            if(!yWebC5File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+yWebC5File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 
 			String convertA = "convert \\( "+yWebC4File.getPath()+" -resize "+capRes+"! "+xWebC1File.getPath()+" -resize "+capRes+"! "+yWebC2File.getPath()+" -resize "+capRes+"! +append \\)"
 				+ " -background Black -append "+webcYaFile.getPath();
@@ -81,8 +82,8 @@ public class CamWorkerHF {
 				+ " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
 				+ " -background Black -append "+webcYbFile.getPath();
 
-			Thread ca2a = new Thread(() -> { WebCommon.runProcessSilently(convertA); });
-			Thread ca2b = new Thread(() -> { WebCommon.runProcessSilently(convertB); });
+			Thread ca2a = new Thread(() -> { wc.runProcessSilently(convertA); });
+			Thread ca2b = new Thread(() -> { wc.runProcessSilently(convertB); });
 			Thread thList2[] = { ca2a, ca2b };
 			for (Thread thread : thList2) { thread.start(); } 
 			for (int i = 0; i < thList2.length; i++) { try { thList2[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
@@ -91,10 +92,10 @@ public class CamWorkerHF {
 				+ " \\( "+webcYbFile.getPath()+" +append \\)"
 				+ " -background Black -append -resize "+camBeans.getFinalRes()+"! "+webcYFile.getPath();
 
-			WebCommon.runProcessSilently(convertC);
+			wc.runProcessSilently(convertC);
 
-			try { WebCommon.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg"); } catch (Exception e) { }
-            try { WebCommon.copyFileSilently(camPath+"/PushTmp/"+fileTimestamp+".jpeg", cachePath+"/CamLive.jpeg"); } catch (Exception ix) { }
+			try { wc.moveFileSilently(webcYFile.getPath(), camPath+"/PushTmp/"+fileTimestamp+".jpeg"); } catch (Exception e) { }
+            try { wc.copyFileSilently(camPath+"/PushTmp/"+fileTimestamp+".jpeg", cachePath+"/CamLive.jpeg"); } catch (Exception ix) { }
 
 		}
 

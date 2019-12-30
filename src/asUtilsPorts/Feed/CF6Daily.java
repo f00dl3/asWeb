@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Dec 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Feed;
@@ -20,7 +20,7 @@ import asWebRest.shared.WebCommon;
 
 public class CF6Daily {
     
-    public static String getCf6(Connection dbc, int daysBack) {
+    public String getCf6(Connection dbc, int daysBack) {
 
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
@@ -38,7 +38,7 @@ public class CF6Daily {
 		String dSQL = sqlf.print(tdt);
 		String domSp = dom.replaceAll("\\G0", " ");
 		
-		WebCommon.jsoupOutBinary(cf6DataURL, cf6File, 30.0);
+		wc.jsoupOutBinary(cf6DataURL, cf6File, 30.0);
 		
 		String processedLine = null;
 		

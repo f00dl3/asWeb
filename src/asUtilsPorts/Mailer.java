@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts;
@@ -144,7 +144,7 @@ public class Mailer {
 		return password;
 	}
         
-    public static String mailForSQL(Connection dbc) {
+    public String mailForSQL(Connection dbc) {
     	
     	WebCommon wc = new WebCommon();
 
@@ -159,12 +159,12 @@ public class Mailer {
         Iterator<?> keys = allMailJSON.keys();
         while(keys.hasNext()) {
             String theKey = (String)keys.next();
-            messageId = WebCommon.jsonSanitize(theKey);
+            messageId = wc.jsonSanitize(theKey);
             JSONObject messageObj = (JSONObject) allMailJSON.get(theKey);
-            received = WebCommon.jsonSanitize(messageObj.getString("Received"));
-            fromAddress = WebCommon.jsonSanitize(messageObj.getString("From"));
-            subject = WebCommon.jsonSanitize(messageObj.getString("Subject"));
-            body = WebCommon.jsonSanitize(messageObj.getString("Body"));
+            received = wc.jsonSanitize(messageObj.getString("Received"));
+            fromAddress = wc.jsonSanitize(messageObj.getString("From"));
+            subject = wc.jsonSanitize(messageObj.getString("Subject"));
+            body = wc.jsonSanitize(messageObj.getString("Body"));
             sqlStatementAppending += "('"+messageId+"','"+received+"','"+fromAddress+"','"+subject+"','"+body+"'),";
         }
         

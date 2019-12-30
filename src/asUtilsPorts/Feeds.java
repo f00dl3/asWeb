@@ -17,7 +17,7 @@ import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.KCScout;
 import asUtilsPorts.Feed.NHCFetch;
 import asUtilsPorts.Feed.NWSWarnings;
-import asUtilsPorts.Feed.RSSSources;
+//import asUtilsPorts.Feed.RSSSources;
 
 public class Feeds {
 
@@ -64,7 +64,7 @@ public class Feeds {
     	
     	String returnData = "Fetch hourly feeds:\n";
     	
-    	RSSSources rssSources = new RSSSources();
+    	//RSSSources rssSources = new RSSSources();
     	NHCFetch nhcFetch = new NHCFetch();
     	GetSPC getSPC = new GetSPC();
     	

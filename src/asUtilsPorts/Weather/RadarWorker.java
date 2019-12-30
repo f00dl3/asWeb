@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Aug 2017
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Weather;
@@ -61,41 +61,41 @@ public class RadarWorker {
                     String radarURLa = null;
                     if(thisRad.equals("XXX")) { radarURLa = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif"; }
                     else { radarURLa = "https://radar.weather.gov/ridge/RadarImg/N0R/"+thisRad+"_N0R_0.gif"; }
-                    WebCommon.jsoupOutBinary(radarURLa, radAoutFile, 5.0);
+                    wc.jsoupOutBinary(radarURLa, radAoutFile, 5.0);
                 });
 				
 				Thread gr1b = new Thread(() -> {
                     String radarURLb = null;
                     if(thisRad.equals("XXX")) { radarURLb = "https://radar.weather.gov/ridge/RadarImg/N0S/EAX_N0S_0.gif"; }
                     else { radarURLb = "https://radar.weather.gov/ridge/RadarImg/N0S/"+thisRad+"_N0S_0.gif"; }
-                    WebCommon.jsoupOutBinary(radarURLb, radBoutFile, 5.0);
+                    wc.jsoupOutBinary(radarURLb, radBoutFile, 5.0);
                 });
 
 				Thread grListA[] = { gr1a, gr1b };
 				for (Thread thread : grListA) { thread.start(); }
 				for (int i = 0; i < grListA.length; i++) { try { grListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
-				System.out.println("Processing: K"+thisRad);
+				/* System.out.println("Processing: K"+thisRad);
 				
-				Thread gr2a = new Thread(() -> { WebCommon.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif -fill \"#576464\" -opaque \"#04E9E7\" "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif"); });
-				Thread gr2b = new Thread(() -> { WebCommon.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#000000\" -opaque \"#9000A0\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
-				Thread gr2c = new Thread(() -> { WebCommon.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#201B1E\" -opaque \"#7C977B\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
-				Thread gr2d = new Thread(() -> { WebCommon.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#551616\" -opaque \"#987777\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
+				Thread gr2a = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif -fill \"#576464\" -opaque \"#04E9E7\" "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif"); });
+				Thread gr2b = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#000000\" -opaque \"#9000A0\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
+				Thread gr2c = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#201B1E\" -opaque \"#7C977B\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
+				Thread gr2d = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#551616\" -opaque \"#987777\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
 				Thread grListB[] = { gr2a, gr2b, gr2c, gr2d };
 				for (Thread thread : grListB) { thread.start(); }
-				for (int i = 0; i < grListB.length; i++) { try { grListB[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
+				for (int i = 0; i < grListB.length; i++) { try { grListB[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } } */
 
-				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/_BLatest.gif");
-				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
-				WebCommon.copyFile(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif", radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
+				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/_BLatest.gif");
+				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
+				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif", radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
 
-				WebCommon.runProcess("(ls "+radPath+"/"+thisRad+"/B*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/B*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
-				WebCommon.runProcess("(ls "+radPath+"/"+thisRad+"/V*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
-				WebCommon.runProcess("find "+radPath+"/"+thisRad+"/ -size 0 -print0 |xargs -0 rm");
+				wc.runProcess("(ls "+radPath+"/"+thisRad+"/B*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/B*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
+				wc.runProcess("(ls "+radPath+"/"+thisRad+"/V*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
+				wc.runProcess("find "+radPath+"/"+thisRad+"/ -size 0 -print0 |xargs -0 rm");
 				
                 if(thisRad.equals("EAX")) { 
-                	WebCommon.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/B*.gif "+radPath+"/"+thisRad+"/_BLoop.gif");
-                	WebCommon.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/V*.gif "+radPath+"/"+thisRad+"/_VLoop.gif");
+                	wc.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/B*.gif "+radPath+"/"+thisRad+"/_BLoop.gif");
+                	wc.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/V*.gif "+radPath+"/"+thisRad+"/_VLoop.gif");
                 }			
 
 

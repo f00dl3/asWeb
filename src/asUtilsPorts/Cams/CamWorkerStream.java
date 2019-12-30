@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
 */
 
 package asUtilsPorts.Cams;
@@ -14,30 +14,32 @@ import java.io.*;
 
 public class CamWorkerStream {
     
-        private static void ffmpegCall(String url, File outFile, String capRes) {
-            
-            final int tester = 1;
-            final int timeout = (120*1000);
-            final int threadTimeout = 10;
-            
-            final String ffmpegCall = "ffmpeg " +
-                    " -y" +
-                    " -i " + url +
-                    " -timeout " + timeout +
-                    " -f image2" +
-                    " -filter:v fps=fps=8" +
-                    " -update 1" +
-                    " -s " + capRes +
-                    " " + outFile.toString() +
-                    " > /dev/null 2>&1 < /dev/null";
-            
-            while (tester == tester) {
-                    try { WebCommon.runProcess(ffmpegCall); } catch (Exception e) { }
-                    try { Thread.sleep(threadTimeout*1000); } catch (Exception e) { }
-                    System.out.println("WARN: Catpture for " + outFile.toString() + " reset!");
-            }
-            
+    private static void ffmpegCall(String url, File outFile, String capRes) {
+        
+    	WebCommon wc = new WebCommon();
+    	
+    	final int tester = 1;
+        final int timeout = (120*1000);
+        final int threadTimeout = 10;
+        
+        final String ffmpegCall = "ffmpeg " +
+                " -y" +
+                " -i " + url +
+                " -timeout " + timeout +
+                " -f image2" +
+                " -filter:v fps=fps=8" +
+                " -update 1" +
+                " -s " + capRes +
+                " " + outFile.toString() +
+                " > /dev/null 2>&1 < /dev/null";
+        
+        while (tester == tester) {
+                try { wc.runProcess(ffmpegCall); } catch (Exception e) { }
+                try { Thread.sleep(threadTimeout*1000); } catch (Exception e) { }
+                System.out.println("WARN: Catpture for " + outFile.toString() + " reset!");
         }
+        
+    }
 
     
 	public static void main(String[] args) {

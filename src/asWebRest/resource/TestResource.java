@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 28 Dec 2019
+Updated: 30 Dec 2019
  */
 
 package asWebRest.resource;
@@ -12,18 +12,26 @@ import asWebRest.hookers.SnmpWalk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.ThreadRipper;
+import asWebRest.shared.WebCommon;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
+
+import asUtilsPorts.Feed.cWazey;
+import asUtilsPorts.Tests.TestStuff;
+import asUtilsPorts.Weather.RadarWorker;
 
 public class TestResource extends ServerResource {
     
@@ -111,7 +119,16 @@ public class TestResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
-                
+	            
+	        	case "_DEVTEST":
+	        		cWazey cw = new cWazey();
+	        		cw.ripShit(dbc);
+	        		break;
+	        		            		
+	        	case "_TEST":
+	        		returnData = TestStuff.stupidTomcatSandboxing();
+	        		break;
+	        		
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
                     returnData = jw.getDesiredDataType(
@@ -120,7 +137,24 @@ public class TestResource extends ServerResource {
                             null
                     );
                     break;
-                
+
+            	case "ThreadTest":
+            		WebCommon wc = new WebCommon();
+            		ArrayList<Runnable> testList = new ArrayList<Runnable>();
+            		testList.add(() -> wc.runProcess("echo 1 of 6"));
+            		testList.add(() -> wc.runProcess("echo 2 of 6"));
+            		testList.add(() -> wc.runProcess("echo 3 of 6"));
+            		testList.add(() -> wc.runProcess("echo 4 of 6"));
+            		testList.add(() -> wc.runProcess("echo 5 of 6"));
+            		testList.add(() -> wc.runProcess("echo 6 of 6"));
+            		ThreadRipper tr = new ThreadRipper();
+            		//returnData += tr.runProcesses(testList, false);
+            		returnData += tr.runProcesses(testList, true);
+            		break;
+	
+	            case "xs19":
+	            	break;
+	            	
             }
         }
         

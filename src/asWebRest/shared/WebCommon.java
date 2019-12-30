@@ -159,7 +159,7 @@ public class WebCommon {
         		.replace(",",  "\\,");
     }
 
-	public static void copyFile(String sourceFile, String destFile) throws IOException {
+	public void copyFile(String sourceFile, String destFile) throws IOException {
 		try { 
 			Files.copy(Paths.get(sourceFile),
 				Paths.get(destFile),
@@ -167,7 +167,7 @@ public class WebCommon {
 		} catch (IOException ix) { ix.printStackTrace(); }
 	}
 
-	public static void copyFileSilently(String sourceFile, String destFile) {
+	public void copyFileSilently(String sourceFile, String destFile) {
 		try { Files.copy(Paths.get(sourceFile), Paths.get(destFile), StandardCopyOption.REPLACE_EXISTING); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
@@ -182,7 +182,7 @@ public class WebCommon {
         return hexString.toString();
     }
         
-    public static void deleteDir(File file) {
+    public void deleteDir(File file) {
             File[] contents = file.listFiles();
             if (contents != null) {
                     for (File f : contents) { deleteDir(f); }
@@ -190,12 +190,12 @@ public class WebCommon {
             file.delete();
     }
 
-	public static String fileScanner(String path, Charset encoding) throws IOException {
+	public String fileScanner(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
 
-	public static List<String> fileSorter(Path folderPath, String objectsToSort) {	
+	public List<String> fileSorter(Path folderPath, String objectsToSort) {	
 		List<String> sorterList = new ArrayList<>();
 		try {
 			DirectoryStream<Path> stream = Files.newDirectoryStream(folderPath, objectsToSort);
@@ -215,7 +215,7 @@ public class WebCommon {
         return fileExtension;
     }
 
-    public static byte[] hashIt(String passwordIn) throws Exception {
+    public byte[] hashIt(String passwordIn) throws Exception {
         
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(passwordIn.getBytes(StandardCharsets.UTF_8));
@@ -223,7 +223,7 @@ public class WebCommon {
         
     }
     
-    public static String htmlStripTease(String stringIn) {
+    public String htmlStripTease(String stringIn) {
         return Jsoup.parse(stringIn).text();
     }
     
@@ -239,15 +239,15 @@ public class WebCommon {
         } else { return false; }
     }
     
-    public static String jsonSanitize(String inString) {
+    public String jsonSanitize(String inString) {
         return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
     }
     
-    public static String jsonSanitizeStrict(String inString) {
+    public String jsonSanitizeStrict(String inString) {
         return inString.replace("\'", "").replace("\"", "").replace("\n", "").replace("\\(", "").replace("\\(", "");
     }
 
-	public static void jsoupOutBinary(String thisUrl, File outFile, double toS) {
+	public void jsoupOutBinary(String thisUrl, File outFile, double toS) {
 		int toLength = (int) (1000.0*toS*60);
 		String stripPath = outFile.getPath();
 		File cacheFile = new File(stripPath+".tmp");
@@ -271,7 +271,7 @@ public class WebCommon {
 		System.out.flush();
 	}
 
-	public static void jsoupOutBinaryNoCache(String thisUrl, File outFile, double toS) {
+	public void jsoupOutBinaryNoCache(String thisUrl, File outFile, double toS) {
 		int toLength = (int) (1000.0*toS*60);
 		String stripPath = outFile.getPath();
 		File cacheFile = outFile;
@@ -291,7 +291,7 @@ public class WebCommon {
 		System.out.flush();
 	}
 
-	public static void jsoupOutFile(String thisUrl, File outFile) {
+	public void jsoupOutFile(String thisUrl, File outFile) {
 		System.out.println(" --> Downloading [ "+thisUrl+" ] NO MIME");
 		PrintStream console = System.out;
 		try {
@@ -323,9 +323,9 @@ public class WebCommon {
         return choice.toString();
     }
 
-	public static double meters2Feet(double metersIn) { return metersIn*3.28; }
+	public double meters2Feet(double metersIn) { return metersIn*3.28; }
 	
-    public static void moveFile(String oldFileName, String newFileName) {
+    public void moveFile(String oldFileName, String newFileName) {
 		System.out.println(" --> Moving [ "+oldFileName+" ] to [ "+newFileName+" ]");
 		Path oldFileFile = Paths.get(oldFileName);
 		Path newFileFile = Paths.get(newFileName);
@@ -335,7 +335,7 @@ public class WebCommon {
 		catch (IOException io) { io.printStackTrace(); }
 	}
 
-	public static void moveFileSilently(String oldFileName, String newFileName) {
+	public void moveFileSilently(String oldFileName, String newFileName) {
 		Path oldFileFile = Paths.get(oldFileName);
 		Path newFileFile = Paths.get(newFileName);
 		try { 
@@ -516,7 +516,7 @@ public class WebCommon {
         return tContainer;
     }
     
-	public static void runProcess(String pString) {
+	public void runProcess(String pString) {
 		System.out.println(" --> Running [ "+pString+" ]");
 		String s = null;
 		String[] pArray = { "bash", "-c", pString };
@@ -532,7 +532,7 @@ public class WebCommon {
 		System.out.flush();
 	}
         
-	public static void runProcessAsynch(String pString) {
+	public void runProcessAsynch(String pString) {
 		System.out.println(" --> Running asynchronously [ "+pString+" ]");
 		String[] pArray = { "bash", "-c", pString };
 		try { 
@@ -542,7 +542,7 @@ public class WebCommon {
 		System.out.flush();
 	}
      
-    public static void runProcessAsynchNoFlush(String pString) {
+    public void runProcessAsynchNoFlush(String pString) {
         pString = "nohup " + pString;
         System.out.println(" ---> Running asynchronously no flush [ " + pString + " ]");
         String[] pArray = { "bash", "-c", pString };
@@ -553,7 +553,7 @@ public class WebCommon {
         }
     }
     
-	public static void runProcessSilently(String pString) {
+	public void runProcessSilently(String pString) {
 		String s = null;
 		String[] pArray = { "bash", "-c", pString };
 		try { 
@@ -568,14 +568,14 @@ public class WebCommon {
 		System.out.flush();
 	}
 
-	public static void runProcessOutFile(String pString, File outFile, boolean appendFlag) throws FileNotFoundException {
+	public void runProcessOutFile(String pString, File outFile, boolean appendFlag) throws FileNotFoundException {
 		System.out.println(" --> (Output following result to file: "+outFile.getPath()+")");
 		String tmpVar = null;
 		try { tmpVar = runProcessOutVar(pString); } catch (IOException ix) { ix.printStackTrace(); }
 		varToFile(tmpVar, outFile, appendFlag);
 	}
 
-	public static String runProcessOutVar(String pString) throws java.io.IOException {
+	public String runProcessOutVar(String pString) throws java.io.IOException {
 		String[] pArray = { "bash", "-c", pString };
 		Process proc = new ProcessBuilder(pArray).start();
 		InputStream is = proc.getInputStream();
@@ -585,7 +585,7 @@ public class WebCommon {
 		return val;
 	}
 
-	public static void sedFileDeleteFirstLine(String fileName) {
+	public void sedFileDeleteFirstLine(String fileName) {
 		try {
 			File thisFileObject = new File(fileName);
 			Scanner fileScanner = new Scanner(thisFileObject);
@@ -604,7 +604,7 @@ public class WebCommon {
 		} catch (IOException ix) { ix.printStackTrace(); }
 	}
 
-	public static void sedFileInsertEachLineNew(String subjectFile, String toInsert, String targetFile) {
+	public void sedFileInsertEachLineNew(String subjectFile, String toInsert, String targetFile) {
 		try {
 			FileInputStream fstream = new FileInputStream(subjectFile);
 			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
@@ -628,7 +628,7 @@ public class WebCommon {
 		System.out.flush();
 	}
 
-	public static void sedFileReplace(String fileName, String toFind, String replaceTo) {
+	public void sedFileReplace(String fileName, String toFind, String replaceTo) {
 		Path path = Paths.get(fileName);
 		Charset charset = StandardCharsets.UTF_8;
 		try {		
@@ -639,23 +639,23 @@ public class WebCommon {
 		catch (IOException io) { io.printStackTrace(); }
 	}
 
-	public static double sumListDouble(List<Double> dList) {
+	public double sumListDouble(List<Double> dList) {
 		if (dList == null || dList.size() < 1) { return 0; }
 		double sum = 0.0;
 		for (double tVar : dList) { sum = sum+tVar; }
 		return sum;		
 	}
 
-	public static double sumListInteger(List<Integer> iList) {
+	public double sumListInteger(List<Integer> iList) {
 		if (iList == null || iList.size() < 1) { return 0; }
 		int sum = 0;
 		for (int tVar : iList) { sum = sum+tVar; }
 		return sum;		
 	}
 	
-    public static double tempC2F(double tempC) { return tempC * 9/5 + 32; }
+    public double tempC2F(double tempC) { return tempC * 9/5 + 32; }
 
-	public static void unTarGz(String tarFileStr, String destStr) {
+	public void unTarGz(String tarFileStr, String destStr) {
 		File tarFile = new File(tarFileStr);
 		File dest = new File(destStr);
 		dest.mkdirs();
@@ -711,7 +711,7 @@ public class WebCommon {
         return resultsBack;
     }
 
-    public static void varToFile(String thisVar, File outFile, boolean appendFlag) throws FileNotFoundException {
+    public void varToFile(String thisVar, File outFile, boolean appendFlag) throws FileNotFoundException {
         try ( PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile, appendFlag))) ) {
                 out.println(thisVar);
         } catch (IOException io) { io.printStackTrace(); }
