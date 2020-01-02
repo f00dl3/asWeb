@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 4 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asWebRest.dao;
@@ -63,6 +63,14 @@ public class SmarthomeDAO {
         try { returnData = wc.q2do1c(dbc, query_ArmDisarm, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }    
+    
+    public String setCo2FireEvent(Connection dbc, List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        String query_AddDoorEvent = "INSERT INTO net_snmp.Home_DoorEvents (OriginalTimestamp, DoorLocation) values (?, ?);";
+        try { returnData = wc.q2do1c(dbc, query_AddDoorEvent, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { als.notifyOfEventEnvironmental(qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
     
     public String setDoorEvent(Connection dbc, List<String> qParams) {
         String returnData = "Query has not ran yet or failed!";

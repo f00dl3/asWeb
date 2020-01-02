@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 30 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts;
@@ -231,7 +231,7 @@ public class Mailer {
         return allMail;
     }
     
-    public static void runMailActions(Connection dbc) {
+    public void runMailActions(Connection dbc) {
 
     	JunkyPrivate jp = new JunkyPrivate();
     	NewsFeedDAO newsFeedDAO = new NewsFeedDAO();
@@ -252,7 +252,7 @@ public class Mailer {
     	
     }
     
-	public static void sendMail(String sendTo, String messageSubject, String messageContent, File attachment) {
+	public void sendMail(String sendTo, String messageSubject, String messageContent, File attachment) {
 
                 JunkyPrivate junkyPrivate = new JunkyPrivate();
                 final String username = junkyPrivate.getGmailUser();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 30 Dec 2019
+Updated: 2 Jan 2020
  */
 
 package asUtilsPorts;
@@ -20,6 +20,7 @@ public class StartupNotify {
         
         CommonBeans cb = new CommonBeans();
         JunkyPrivate junkyPrivate = new JunkyPrivate();
+        Mailer mailer = new Mailer();
         ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
                 
@@ -37,8 +38,8 @@ public class StartupNotify {
         		"Threads: " + tr.getMaxThreads();
 
         wc.zipThisFile(sysLog, packedLog);
-        Thread cm1 = new Thread(() -> { Mailer.sendMail(myCell, thisSubject, thisMessage, null); });
-        Thread cm2 = new Thread(() -> { Mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog); });
+        Thread cm1 = new Thread(() -> { mailer.sendMail(myCell, thisSubject, thisMessage, null); });
+        Thread cm2 = new Thread(() -> { mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog); });
         Thread mailers[] = { cm1, cm2 };
         for (Thread thread : mailers) { thread.start(); }
         for (int i = 0; i < mailers.length; i++) { try { mailers[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }

@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 24 Sep 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.StumpJunk;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,34 +19,35 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import asUtils.Shares.MyDBConnector;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 
 public class xsNDBCUpdate {
 
-	public static String getAttributeValue(String attr, Element tElement) throws NullPointerException {
+	public String getAttributeValue(String attr, Element tElement) throws NullPointerException {
 		String nVal = tElement.getAttributes().getNamedItem(attr).getNodeValue();
 		if(nVal == null) { return null; }
 		return nVal;
 	}
 
-	public static void main(String[] args) {
+	public void main(String xsTmp) {
 
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
-
-		final String xsTmp = args[0];
 
 		final String activeStationURL = "http://www.ndbc.noaa.gov/activestations.xml";
 		final File activeFile = new File(xsTmp+"/activestations.xml");
 
-		StumpJunk.jsoupOutBinary(activeStationURL, activeFile, 15.0);
+		wc.jsoupOutBinary(activeStationURL, activeFile, 15.0);
 
 		List<String> wxStations = new ArrayList<>();
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations;";
 		String addStationTestSQL = "INSERT IGNORE INTO WxObs.Stations (Station, Point, City, State, Active, Priority, Region, DataSource, Frequency) VALUES";
 
-		try ( ResultSet resultSetStations = mdb.q2rs1c(dbc, getStationListSQL, null); ) {
+		try ( ResultSet resultSetStations = wc.q2rs1c(dbc, getStationListSQL, null); ) {
                     while (resultSetStations.next()) { wxStations.add(resultSetStations.getString("Station")); } 
                 } catch (Exception e) { e.printStackTrace(); }
 
@@ -93,7 +93,7 @@ public class xsNDBCUpdate {
 
 		addStationTestSQL = (addStationTestSQL+";").replace(",;",";");
 		System.out.println(addStationTestSQL);		
-		try { mdb.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
+		try { wc.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
                 
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
                 

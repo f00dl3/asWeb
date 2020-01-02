@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Aug 2017
-Updated: 30 Dec 2019
+Updated: 2 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -74,16 +74,6 @@ public class RadarWorker {
 				Thread grListA[] = { gr1a, gr1b };
 				for (Thread thread : grListA) { thread.start(); }
 				for (int i = 0; i < grListA.length; i++) { try { grListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
-
-				/* System.out.println("Processing: K"+thisRad);
-				
-				Thread gr2a = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif -fill \"#576464\" -opaque \"#04E9E7\" "+ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif"); });
-				Thread gr2b = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#000000\" -opaque \"#9000A0\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
-				Thread gr2c = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#201B1E\" -opaque \"#7C977B\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
-				Thread gr2d = new Thread(() -> { wc.runProcess("convert "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif -fill \"#551616\" -opaque \"#987777\" "+ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif"); });
-				Thread grListB[] = { gr2a, gr2b, gr2c, gr2d };
-				for (Thread thread : grListB) { thread.start(); }
-				for (int i = 0; i < grListB.length; i++) { try { grListB[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } } */
 
 				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/_BLatest.gif");
 				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");

@@ -31,7 +31,6 @@ import org.restlet.resource.ServerResource;
 
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
-import asUtilsPorts.Weather.RadarWorker;
 
 public class TestResource extends ServerResource {
     

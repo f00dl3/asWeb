@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 23 Nov 2019
-Updated: 11 Dec 2019
+Updated: 2 Jan 2020
  */
 
 package asWebRest.resource;
@@ -81,7 +81,7 @@ public class SmarthomeResource extends ServerResource {
             		qParams.add(0, armType);
                 	returnData = updateSmarthomeAction.setArmDisarm(dbc, qParams).toString();
                 	break;       	
-            
+                	
 	            case "setDoorEvent":
             		String originalTimestamp = "";
             		String doorLocation = "0";
@@ -90,8 +90,18 @@ public class SmarthomeResource extends ServerResource {
             		qParams.add(0, originalTimestamp);
             		qParams.add(1, doorLocation);
                 	returnData = updateSmarthomeAction.setDoorEvent(dbc, qParams).toString();
-                	break;
-                    
+                	break; 
+
+	            case "setEnvironmentalEvent":
+            		String originalTimestampE = "";
+            		String eventAndLocation = "0";
+            		if(wc.isSet(argsInForm.getFirstValue("OriginalTimestamp"))) { originalTimestampE = argsInForm.getFirstValue("OriginalTimestamp"); }
+            		if(wc.isSet(argsInForm.getFirstValue("EventLocation"))) { eventAndLocation = argsInForm.getFirstValue("EventLocation"); }
+            		qParams.add(0, originalTimestampE);
+            		qParams.add(1, eventAndLocation);
+                	returnData = updateSmarthomeAction.setCo2FireEvent(dbc, qParams).toString();
+                	break;                  
+
             }
             
         }        

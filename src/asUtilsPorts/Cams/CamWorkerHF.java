@@ -7,11 +7,13 @@ Updated: 30 Dec 2019
 package asUtilsPorts.Cams;
 
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 import asUtils.Shares.JunkyBeans;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -23,6 +25,7 @@ public class CamWorkerHF {
         CamBeans camBeans = new CamBeans();
         CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
+        ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
         
 		final int testVal = 1;
@@ -82,12 +85,11 @@ public class CamWorkerHF {
 				+ " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
 				+ " -background Black -append "+webcYbFile.getPath();
 
-			Thread ca2a = new Thread(() -> { wc.runProcessSilently(convertA); });
-			Thread ca2b = new Thread(() -> { wc.runProcessSilently(convertB); });
-			Thread thList2[] = { ca2a, ca2b };
-			for (Thread thread : thList2) { thread.start(); } 
-			for (int i = 0; i < thList2.length; i++) { try { thList2[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
-
+			ArrayList<Runnable> cwts = new ArrayList<Runnable>();
+			cwts.add(() -> wc.runProcess(convertA));
+			cwts.add(() -> wc.runProcess(convertB));
+			tr.runProcesses(cwts, false);
+			
 			String convertC = "convert \\( "+webcYaFile.getPath()+" +append \\)"
 				+ " \\( "+webcYbFile.getPath()+" +append \\)"
 				+ " -background Black -append -resize "+camBeans.getFinalRes()+"! "+webcYFile.getPath();

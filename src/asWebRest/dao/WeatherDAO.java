@@ -552,9 +552,9 @@ public class WeatherDAO {
         final String query_LiveReports = "SELECT Date, Time, Type, Magnitude, Lat, Lon, Location, Comments, County, State FROM (" +
                 " /* SELECT" +
                 "   CASE" +
-		"       WHEN Time BETWEEN '0' AND '1200' THEN" +
-		"           SUBSTRING(CONVERT_TZ(CONCAT(DATE_ADD(Date, INTERVAL +0 DAY), ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10)" +
-		"       ELSE" +
+				"       WHEN Time BETWEEN '0' AND '1200' THEN" +
+				"           SUBSTRING(CONVERT_TZ(CONCAT(DATE_ADD(Date, INTERVAL +0 DAY), ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10)" +
+				"       ELSE" +
                 "           SUBSTRING(CONVERT_TZ(CONCAT(Date, ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 1, 10)" +
                 "   END as Date," +
                 "   SUBSTRING(CONVERT_TZ(CONCAT(Date, ' ', CONCAT(SUBSTRING(Time,1,2),':',SUBSTRING(Time,3,2))), '+00:00', '-05:00'), 12, 5) AS Time," +

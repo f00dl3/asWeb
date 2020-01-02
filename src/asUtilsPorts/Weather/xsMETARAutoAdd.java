@@ -19,31 +19,32 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import asUtils.Shares.MyDBConnector;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 
 public class xsMETARAutoAdd {
 
-	public static String getTagValue(String tag, Element eElement) throws NullPointerException {
+	public String getTagValue(String tag, Element eElement) throws NullPointerException {
 		NodeList nl = eElement.getElementsByTagName(tag).item(0).getChildNodes();
 		Node nVal = (Node) nl.item(0);
 		if(nVal == null) { return null; }
 		return nVal.getNodeValue();
 	}
 
-	public static void main(String[] args) {
+	public void main(String xsTmp) {
 
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
-
-		final String xsTmp = args[0];
 
 		List<String> wxStations = new ArrayList<>();
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations;";
 		final File xmlMetarsIn = new File(xsTmp+"/metars.xml");
 		String addStationTestSQL = "INSERT IGNORE INTO WxObs.Stations (Station, Point, City, State, Active, Priority, Region, DataSource, Frequency) VALUES";
 
-		try ( ResultSet resultSetStations = mdb.q2rs1c(dbc, getStationListSQL, null); ) {
+		try ( ResultSet resultSetStations = wc.q2rs1c(dbc, getStationListSQL, null); ) {
                     while (resultSetStations.next()) { wxStations.add(resultSetStations.getString("Station")); }
                 } catch (Exception e) { e.printStackTrace(); }
 
@@ -80,7 +81,7 @@ public class xsMETARAutoAdd {
 		addStationTestSQL = (addStationTestSQL+";").replace(",;",";");
 		
         System.out.println(addStationTestSQL);
-		try { mdb.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
+		try { wc.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
 		
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         

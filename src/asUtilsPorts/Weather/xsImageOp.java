@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 Sep 2017
-Updated: 30 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -17,7 +17,7 @@ import asUtils.Shares.JunkyBeans;
 
 public class xsImageOp {
 
-	public static void main(String[] args, List<String> gVars, List<String> gVarsH, List<String> gVarsL) {
+	public void main(String[] args, List<String> gVars, List<String> gVarsH, List<String> gVarsL) {
 
 		CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
@@ -46,7 +46,6 @@ public class xsImageOp {
 		}
 
 		wc.runProcess("mv "+xsTmp+"/_HRRRLoop_* "+wwwOut+"/");
-		//StumpJunk.runProcess("chown -R "+junkyBeans.getWebUser()+" "+wwwOut+"/");
 		wc.deleteDir(gradsOutObj);
 
 	}

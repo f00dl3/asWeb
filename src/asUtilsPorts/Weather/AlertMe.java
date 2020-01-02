@@ -1,6 +1,6 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 28 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -64,6 +64,7 @@ public class AlertMe {
     
         private static void getAlertsForUser(Connection dbc, JSONObject params) {
             
+        	Mailer mailer = new Mailer();
             MyDBConnector mdb = new MyDBConnector();
             WebCommon wc = new WebCommon();
             
@@ -131,7 +132,7 @@ public class AlertMe {
                         String tSummary = rs.getString("summary");
                         tSummary = tId; // for mobile compliance
                         System.out.println("Alert!\nID: "+tId+"\nTitle: "+tTitle+"\nExpires: "+tExpireTime);
-                        Mailer.sendMail(destinationAddress, "asUtils.AlertMe: "+tTitle, tSummary, null);
+                        mailer.sendMail(destinationAddress, "asUtils.AlertMe: "+tTitle, tSummary, null);
                         String flagSent = "INSERT INTO WxObs.LiveWarnings_Sent VALUES ('"+tId+"',1);";
                         System.out.println(flagSent);
                         try { wc.q2do1c(dbc, flagSent, null); } catch (Exception e) { e.printStackTrace(); }

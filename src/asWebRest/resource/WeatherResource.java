@@ -149,6 +149,7 @@ public class WeatherResource extends ServerResource {
                     returnData = wxObs.toString();
                     break;
                     
+                // 	Needs heavy optimization! 12/30/2019
                 case "getObsJsonGlob":
                     try {
                         inParams.add(0, "DESC");

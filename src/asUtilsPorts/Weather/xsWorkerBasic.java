@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 15 Sep 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.StumpJunk;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,19 +16,21 @@ import java.util.Scanner;
 
 import org.json.*;
 
-import asUtils.Shares.MyDBConnector;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
+
 
 public class xsWorkerBasic {
 
-	public static void main(String[] args) {
+	public void stations(String xsTmp, String region) {
 
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
-		final String xsTmp = args[0];
 		final String stationType = "Basic";
-		final String region = args[1];
 		final File jsonOutFile = new File(xsTmp+"/output_"+stationType+"_"+region+".json");
 		final File badStationFile = new File(xsTmp+"/badStations_"+stationType+".txt");
 
@@ -39,7 +40,7 @@ public class xsWorkerBasic {
 
 		List<String> wxStations = new ArrayList<>();
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations WHERE Active=1 AND Priority = 4 ORDER BY Priority, Station DESC;";	
-		try ( ResultSet resultSetStations = mdb.q2rs1c(dbc, getStationListSQL, null); ) { 
+		try ( ResultSet resultSetStations = wc.q2rs1c(dbc, getStationListSQL, null); ) { 
             while (resultSetStations.next()) { wxStations.add(resultSetStations.getString("Station")); }
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -84,28 +85,28 @@ public class xsWorkerBasic {
 			}
 			catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 
-			if (StumpJunk.isSet(tTempF)) { jStationData.put("Temperature", tTempF); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tDewpointF)) { jStationData.put("Dewpoint", tDewpointF); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tRelativeHumidity)) { jStationData.put("RelativeHumidity", tRelativeHumidity); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tPressureMb)) { jStationData.put("Pressure", tPressureMb); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tWeather)) { jStationData.put("Weather", tWeather); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tWindDegrees)) { jStationData.put("WindDirection", tWindDirection); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tWindGust)) { jStationData.put("WindGust", tWindGust); } else { thisNullCounter++; }
-			if (StumpJunk.isSet(tWindSpeed)) { jStationData.put("WindSpeed", tWindSpeed); } else { thisNullCounter++; }
+			if (wc.isSet(tTempF)) { jStationData.put("Temperature", tTempF); } else { thisNullCounter++; }
+			if (wc.isSet(tDewpointF)) { jStationData.put("Dewpoint", tDewpointF); } else { thisNullCounter++; }
+			if (wc.isSet(tRelativeHumidity)) { jStationData.put("RelativeHumidity", tRelativeHumidity); } else { thisNullCounter++; }
+			if (wc.isSet(tPressureMb)) { jStationData.put("Pressure", tPressureMb); } else { thisNullCounter++; }
+			if (wc.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); } else { thisNullCounter++; }
+			if (wc.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); } else { thisNullCounter++; }
+			if (wc.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); } else { thisNullCounter++; }
+			if (wc.isSet(tWeather)) { jStationData.put("Weather", tWeather); } else { thisNullCounter++; }
+			if (wc.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); } else { thisNullCounter++; }
+			if (wc.isSet(tWindDegrees)) { jStationData.put("WindDirection", tWindDirection); } else { thisNullCounter++; }
+			if (wc.isSet(tWindGust)) { jStationData.put("WindGust", tWindGust); } else { thisNullCounter++; }
+			if (wc.isSet(tWindSpeed)) { jStationData.put("WindSpeed", tWindSpeed); } else { thisNullCounter++; }
 
 			if (thisNullCounter != tVars) {
 				String thisJSONstring = jStationObj.toString().substring(1);
 				thisJSONstring = thisJSONstring.substring(0, thisJSONstring.length()-1)+",";
-				try { StumpJunk.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+				try { wc.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 				System.out.println(" -> Completed: "+thisStation+" ("+stationType+" - "+region+")");
 			} else {
 				System.out.println("!!! WARN: NO DATA FOR Station "+thisStation+" !");
 				String thisBadStation = thisStation+", ";
-				try { StumpJunk.varToFile(thisBadStation, badStationFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+				try { wc.varToFile(thisBadStation, badStationFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 			}
 
 			xmlOut.delete();

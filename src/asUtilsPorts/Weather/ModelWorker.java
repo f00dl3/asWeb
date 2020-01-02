@@ -1,17 +1,24 @@
 /*
 by Anthony Stump
 Created: 22 Sep 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
 public class ModelWorker {
 	
-	public static void main(String[] args) {
-            
-		final String getHour = args[0];
-		final String round = args[1];
+	public void main(String getHour, String round) {            
+	
+		ModelWorkerCMC mwCMC = new ModelWorkerCMC();
+		ModelWorkerGFS mwGFS = new ModelWorkerGFS();
+		ModelWorkerHRRR mwHRRR = new ModelWorkerHRRR();
+		ModelWorkerHRWA mwHRWA = new ModelWorkerHRWA();
+		ModelWorkerHRWN mwHRWN = new ModelWorkerHRWN();
+		ModelWorkerNAM mwNAM = new ModelWorkerNAM();
+		ModelWorkerSRFA mwSRFA = new ModelWorkerSRFA();
+		ModelWorkerSRFN mwSRFN = new ModelWorkerSRFN();
+		
 		boolean int6h = false;
 		boolean int6hO = false;
 		boolean int12h = false;
@@ -20,21 +27,21 @@ public class ModelWorker {
 		if(getHour.equals("03") || getHour.equals("09") || getHour.equals("15") || getHour.equals("21")) { int6hO = true; }
 		if(getHour.equals("00") || getHour.equals("12")) { int12h = true; }
 
-		final String[] hrrrArgs = { getHour, round }; ModelWorkerHRRR.main(hrrrArgs);
+		mwHRRR.main(getHour, round);
 		
 		if(int6h) {
-			final String[] gfsArgs = { getHour, round }; ModelWorkerGFS.main(gfsArgs);
-			final String[] namArgs = { getHour, round }; ModelWorkerNAM.main(namArgs);
+			mwGFS.main(getHour, round);
+			mwNAM.main(getHour, round);
 			if(int12h) {
-				final String[] hrwaArgs = { getHour, round }; ModelWorkerHRWA.main(hrwaArgs);
-				final String[] hrwnArgs = { getHour, round }; ModelWorkerHRWN.main(hrwnArgs);
-				final String[] cmcArgs = { getHour, round }; ModelWorkerCMC.main(cmcArgs);
+				mwHRWA.main(getHour, round);
+				mwHRWN.main(getHour, round);
+				mwCMC.main(getHour, round);
 			}
 		}
 
 		if(int6hO) {
-			final String[] srfaArgs = { getHour, round }; ModelWorkerSRFA.main(srfaArgs);
-			final String[] srfnArgs = { getHour, round }; ModelWorkerSRFN.main(srfnArgs);
+			mwSRFA.main(getHour, round);
+			mwSRFN.main(getHour, round);
 		}			
 		
 	}

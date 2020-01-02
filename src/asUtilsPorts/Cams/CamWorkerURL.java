@@ -7,6 +7,7 @@ Updated: 30 Dec 2019
 package asUtilsPorts.Cams;
 
 import asUtils.Shares.JunkyBeans;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 import java.io.*;
@@ -14,17 +15,20 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class CamWorkerURL {
 
 	public void doJob(Connection dbc, String camPath) {		
-		
+
+        CamBeans camBeans = new CamBeans();
+        JunkyBeans junkyBeans = new JunkyBeans();
+        ThreadRipper tr = new ThreadRipper();
 		WebCommon wc = new WebCommon();
 		
-        JunkyBeans junkyBeans = new JunkyBeans();
-        CamBeans camBeans = new CamBeans();
         Date date = new Date();
+        
 		final DateFormat dateOverlayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         final String capRes = camBeans.getCapRes();
         final String masterPrefix = "XwebcW-temp";
@@ -73,12 +77,11 @@ public class CamWorkerURL {
                 + " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
                 + " -background Black -append "+tbFile.getPath();
 
-        Thread ca2a = new Thread(() -> { wc.runProcess(convertA); });
-        Thread ca2b = new Thread(() -> { wc.runProcess(convertB); });
-        Thread thList2[] = { ca2a, ca2b };
-        for (Thread thread : thList2) { thread.start(); } 
-        for (int i = 0; i < thList2.length; i++) { try { thList2[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
-
+		ArrayList<Runnable> cwts = new ArrayList<Runnable>();
+		cwts.add(() -> wc.runProcess(convertA));
+		cwts.add(() -> wc.runProcess(convertB));
+		tr.runProcesses(cwts, false);
+		
         String convertC = "convert \\( "+taFile.getPath()+" +append \\)"
                 + " \\( "+tbFile.getPath()+" +append \\)"
                 + " -background Black -append -resize "+capRes+"! "+urlTempFile.getPath();

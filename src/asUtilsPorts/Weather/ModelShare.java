@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Oct 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -13,26 +13,31 @@ import java.util.List;
 import java.util.Scanner;
 
 import asUtils.Shares.JunkyBeans;
-import asUtils.Model.ModelBeans;
-import asUtils.Shares.StumpJunk;
-import asUtils.Shares.MyDBConnector;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 
 public class ModelShare {	
 	
-    public static JunkyBeans junkyBeans = new JunkyBeans();
-    public static ModelBeans modelBeans = new ModelBeans();
+    public JunkyBeans junkyBeans = new JunkyBeans();
+    public ModelBeans modelBeans = new ModelBeans();
     
-	final public static double windDirCalc(double tWUin, double tWVin) { return 57.29578*(Math.atan2(tWUin, tWVin))+180; }
-	final public static double windSpdCalc(double tWUin, double tWVin) { return Math.sqrt(tWUin*tWUin+tWVin*tWVin)*1.944; }
-	final public static double calcSLCL(double tTCin, double tRHin) { return (20+(tTCin/5))*(100-tRHin); }
-	final public static double calcDwpt(double tTCin, double tRHin) { return tTCin-(100-tRHin)/5; }
+	final public double windDirCalc(double tWUin, double tWVin) { return 57.29578*(Math.atan2(tWUin, tWVin))+180; }
+	final public double windSpdCalc(double tWUin, double tWVin) { return Math.sqrt(tWUin*tWUin+tWVin*tWVin)*1.944; }
+	final public double calcSLCL(double tTCin, double tRHin) { return (20+(tTCin/5))*(100-tRHin); }
+	final public double calcDwpt(double tTCin, double tRHin) { return tTCin-(100-tRHin)/5; }
         
-	public static String pointInputAsString(String tStation) {
+	public String pointInputAsString(String tStation) {
+		
+        MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        
 		final String pointsSQL = "SELECT SUBSTRING(Point, 2, CHAR_LENGTH(Point)-2) AS Coords FROM WxObs.Stations WHERE Station='"+tStation+"' ORDER BY Station DESC;";
 		List<String> pointInputArray = new ArrayList<String>();
 		try (
-			Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();
-			ResultSet resultSetPIA = stmt.executeQuery(pointsSQL);
+			ResultSet resultSetPIA = wc.q2rs1c(dbc, pointsSQL, null)
 		) { while (resultSetPIA.next()) { pointInputArray.add(resultSetPIA.getString("Coords")); } }
 		catch (Exception e) { e.printStackTrace(); }
 		String thisGeo = null;
@@ -44,7 +49,7 @@ public class ModelShare {
 		return pointInputString;
 	}
 
-	public static String filters(String whichOne) {
+	public String filters(String whichOne) {
 		
         final File helpers = junkyBeans.getHelpers();
 		File filtFile = null;
@@ -77,10 +82,11 @@ public class ModelShare {
 
 	}
 
-	public static String jsonMerge(String modelName) {
-                final File xml2Path = modelBeans.getXml2Path();
+	public String jsonMerge(String modelName) {
+		WebCommon wc = new WebCommon();
+        final File xml2Path = modelBeans.getXml2Path();
 		String thisJSON = null;
-		try { thisJSON = StumpJunk.runProcessOutVar("cat "+xml2Path.getPath()+"/"+modelName+"Out*.json"); } catch (IOException ix) { ix.printStackTrace(); }
+		try { thisJSON = wc.runProcessOutVar("cat "+xml2Path.getPath()+"/"+modelName+"Out*.json"); } catch (IOException ix) { ix.printStackTrace(); }
 		thisJSON = thisJSON.replace("\n","").replace(",}", "}").replace("{,","").replace("{","").replace("}","");
 		thisJSON = ("{"+thisJSON+"}").replace(",}","}");
 		return thisJSON;

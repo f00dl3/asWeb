@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 15 Dec 2019
+Updated: 2 Jan 2020
  */
 
 package asWebRest.hookers;
@@ -15,7 +15,7 @@ import asWebRest.secure.SshBeans;
 
 public class SmartplugInterface {
         
-	public static void setPlug(String command, String device) {
+	public void setPlug(String command, String device) {
 		
 		SshBeans ssh = new SshBeans();
 		JunkyBeans jb = new JunkyBeans();

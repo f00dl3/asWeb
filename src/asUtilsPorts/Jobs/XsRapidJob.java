@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Jul 2018
-Updated: 29 Dec 2019
+Updated: 2 Jan 2020
  */
 
 package asUtilsPorts.Jobs;
@@ -13,8 +13,6 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import asUtilsPorts.xs19;
-
 public class XsRapidJob implements Job {
         
     private static Logger _log = LoggerFactory.getLogger(XsRapidJob.class);
@@ -24,7 +22,7 @@ public class XsRapidJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         _log.info("Executed asUtils.xs7 (Rapid) @ " + new Date());
         String[] argsToPass = { "Rapid" };
-        xs19.main(argsToPass);
+        asUtils.xs19.main(argsToPass);
     }
         
 }

@@ -1,12 +1,10 @@
 /*
 by Anthony Stump
 Created: 18 Sep 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather; 
-
-import asUtils.Shares.StumpJunk;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,19 +14,20 @@ import java.util.Scanner;
 
 import org.json.*;
 
-import asUtils.Shares.MyDBConnector;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
 
 public class xsWorkerWunder {
 
-	public static void main(String[] args) {
+	public void main(String xsTmp, String region) {
             
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
 
-		final String xsTmp = args[0];
 		final String stationType = "Wunder";
-		final String region = args[1];
 		final File jsonOutFile = new File(xsTmp+"/rapid_"+stationType+"_"+region+".json");
 		final File wunderFile = new File(xsTmp+"/wuData.json");
 		final File wunderFile2 = new File(xsTmp+"/wuData2.json");
@@ -46,15 +45,15 @@ public class xsWorkerWunder {
 		final String wunderURL3 = "http://stationdata.wunderground.com/cgi-bin/stationdata?format=json&maxstations=1000&minlat=41&minlon=-103&maxlat=47&maxlon=-97";
 		final String wunderURL4 = "http://stationdata.wunderground.com/cgi-bin/stationdata?format=json&maxstations=1000&minlat=41&minlon=-97&maxlat=47&maxlon=-91";
 
-		StumpJunk.jsoupOutBinary(wunderURL, wunderFile, 15.0);
-		StumpJunk.jsoupOutBinary(wunderURL2, wunderFile2, 15.0);
-		StumpJunk.jsoupOutBinary(wunderURL3, wunderFile3, 15.0);
-		StumpJunk.jsoupOutBinary(wunderURL4, wunderFile4, 15.0);
+		wc.jsoupOutBinary(wunderURL, wunderFile, 15.0);
+		wc.jsoupOutBinary(wunderURL2, wunderFile2, 15.0);
+		wc.jsoupOutBinary(wunderURL3, wunderFile3, 15.0);
+		wc.jsoupOutBinary(wunderURL4, wunderFile4, 15.0);
 		
-		StumpJunk.sedFileReplace(wunderFile.toString(), "\\n", ""); StumpJunk.sedFileReplace(wunderFile.toString(), " null\\,", "\\\"null\\\",");
-		StumpJunk.sedFileReplace(wunderFile2.toString(), "\\n", ""); StumpJunk.sedFileReplace(wunderFile2.toString(), " null\\,", "\\\"null\\\",");
-		StumpJunk.sedFileReplace(wunderFile3.toString(), "\\n", ""); StumpJunk.sedFileReplace(wunderFile3.toString(), " null\\,", "\\\"null\\\",");
-		StumpJunk.sedFileReplace(wunderFile4.toString(), "\\n", ""); StumpJunk.sedFileReplace(wunderFile4.toString(), " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(wunderFile.toString(), "\\n", ""); wc.sedFileReplace(wunderFile.toString(), " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(wunderFile2.toString(), "\\n", ""); wc.sedFileReplace(wunderFile2.toString(), " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(wunderFile3.toString(), "\\n", ""); wc.sedFileReplace(wunderFile3.toString(), " null\\,", "\\\"null\\\",");
+		wc.sedFileReplace(wunderFile4.toString(), "\\n", ""); wc.sedFileReplace(wunderFile4.toString(), " null\\,", "\\\"null\\\",");
 			
 		String wuLoaded = ""; Scanner wuScanner = null; try { wuScanner = new Scanner(wunderFile); while(wuScanner.hasNext()) { wuLoaded = wuLoaded+wuScanner.nextLine(); } } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		String wuLoaded2 = ""; Scanner wuScanner2 = null; try { wuScanner2 = new Scanner(wunderFile2); while(wuScanner2.hasNext()) { wuLoaded2 = wuLoaded2+wuScanner2.nextLine(); } } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
@@ -64,7 +63,7 @@ public class xsWorkerWunder {
 		List<String> wxStations = new ArrayList<>();
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations WHERE Active=1 AND DataSource='WU' ORDER BY Station DESC;";
 	
-		try ( ResultSet resultSetStations = mdb.q2rs1c(dbc, getStationListSQL, null); ) { 
+		try ( ResultSet resultSetStations = wc.q2rs1c(dbc, getStationListSQL, null); ) { 
             while (resultSetStations.next()) { wxStations.add(resultSetStations.getString("Station")); }
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -128,23 +127,23 @@ public class xsWorkerWunder {
 				String tFlightCategory = null; tVars++;
 				String tDailyRain = null; tVars++;
 
-				if(tJOStationData.has("tempf")) { tTemp = tJOStationData.getString("tempf"); if(StumpJunk.isSet(tTemp)) { jStationData.put("Temperature", tTemp); } else { tNulls++; } }
-				if(tJOStationData.has("dewptf")) { tDewpoint = tJOStationData.getString("dewptf"); if(StumpJunk.isSet(tDewpoint)) { jStationData.put("Dewpoint", tDewpoint); } else { tNulls++; } }
-				if(tJOStationData.has("dateutc")) { tTimeString = tJOStationData.getString("dateutc"); if(StumpJunk.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); } else { tNulls++; } }
-				if(tJOStationData.has("RawP")) { tPressureIn = tJOStationData.getString("RawP"); if(StumpJunk.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); } else { tNulls++; } }
-				if(tJOStationData.has("humidity")) { tRelativeHumidity = tJOStationData.getString("humidity"); if(StumpJunk.isSet(tRelativeHumidity)) { jStationData.put("RelativeHumidity", tRelativeHumidity); } else { tNulls++; } }
-				if(tJOStationData.has("weather")) { tWeather = tJOStationData.getString("weather"); if(StumpJunk.isSet(tWeather)) { jStationData.put("Weather", tWeather); } else { tNulls++; } }
-				if(tJOStationData.has("winddir")) { tWindDegrees = tJOStationData.getString("winddir"); if(StumpJunk.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); } else { tNulls++; } }
-				if(tJOStationData.has("windspeedmph")) { tWindSpeed = tJOStationData.getString("windspeedmph"); if(StumpJunk.isSet(tWindSpeed) && !tWindSpeed.equals("-999.0") && !tWindSpeed.equals("-9999.0")) { jStationData.put("WindSpeed", tWindSpeed); } else { tNulls++; } }
-				if(tJOStationData.has("windgustmph")) { tWindGust = tJOStationData.getString("windgustmph"); if(StumpJunk.isSet(tWindGust) && !tWindGust.equals("-999.0") && !tWindGust.equals("-9999.0")) { jStationData.put("WindGust", tWindGust); } else { tNulls++; } }
-				if(tJOStationData.has("visibilitysm")) { tVisibility = tJOStationData.getString("visibilitysm"); if(StumpJunk.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); } else { tNulls++; } }
-				if(tJOStationData.has("flightrule")) { tVisibility = tJOStationData.getString("flightrule"); if(StumpJunk.isSet(tFlightCategory)) { jStationData.put("FlightCategory", tFlightCategory); } else { tNulls++; } }
-				if(tJOStationData.has("dailyrainin")) { tVisibility = tJOStationData.getString("dailyrainin"); if(StumpJunk.isSet(tDailyRain)) { jStationData.put("DailyRain", tDailyRain); } else { tNulls++; } }
+				if(tJOStationData.has("tempf")) { tTemp = tJOStationData.getString("tempf"); if(wc.isSet(tTemp)) { jStationData.put("Temperature", tTemp); } else { tNulls++; } }
+				if(tJOStationData.has("dewptf")) { tDewpoint = tJOStationData.getString("dewptf"); if(wc.isSet(tDewpoint)) { jStationData.put("Dewpoint", tDewpoint); } else { tNulls++; } }
+				if(tJOStationData.has("dateutc")) { tTimeString = tJOStationData.getString("dateutc"); if(wc.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); } else { tNulls++; } }
+				if(tJOStationData.has("RawP")) { tPressureIn = tJOStationData.getString("RawP"); if(wc.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); } else { tNulls++; } }
+				if(tJOStationData.has("humidity")) { tRelativeHumidity = tJOStationData.getString("humidity"); if(wc.isSet(tRelativeHumidity)) { jStationData.put("RelativeHumidity", tRelativeHumidity); } else { tNulls++; } }
+				if(tJOStationData.has("weather")) { tWeather = tJOStationData.getString("weather"); if(wc.isSet(tWeather)) { jStationData.put("Weather", tWeather); } else { tNulls++; } }
+				if(tJOStationData.has("winddir")) { tWindDegrees = tJOStationData.getString("winddir"); if(wc.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); } else { tNulls++; } }
+				if(tJOStationData.has("windspeedmph")) { tWindSpeed = tJOStationData.getString("windspeedmph"); if(wc.isSet(tWindSpeed) && !tWindSpeed.equals("-999.0") && !tWindSpeed.equals("-9999.0")) { jStationData.put("WindSpeed", tWindSpeed); } else { tNulls++; } }
+				if(tJOStationData.has("windgustmph")) { tWindGust = tJOStationData.getString("windgustmph"); if(wc.isSet(tWindGust) && !tWindGust.equals("-999.0") && !tWindGust.equals("-9999.0")) { jStationData.put("WindGust", tWindGust); } else { tNulls++; } }
+				if(tJOStationData.has("visibilitysm")) { tVisibility = tJOStationData.getString("visibilitysm"); if(wc.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); } else { tNulls++; } }
+				if(tJOStationData.has("flightrule")) { tVisibility = tJOStationData.getString("flightrule"); if(wc.isSet(tFlightCategory)) { jStationData.put("FlightCategory", tFlightCategory); } else { tNulls++; } }
+				if(tJOStationData.has("dailyrainin")) { tVisibility = tJOStationData.getString("dailyrainin"); if(wc.isSet(tDailyRain)) { jStationData.put("DailyRain", tDailyRain); } else { tNulls++; } }
 			
 				if (tNulls != tVars) {
 					String thisJSONstring = "\""+thisStation+"\":"+jStationData.toString()+",";
 					thisJSONstring = thisJSONstring.substring(0, thisJSONstring.length()-1)+",";
-					try { StumpJunk.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+					try { wc.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 					System.out.println(" -> Completed: "+thisStation+" ("+stationType+" - "+region+")");
 				} else {
 					System.out.println("!!! WARN: NO DATA FOR Station "+thisStation+" !");
@@ -158,7 +157,7 @@ public class xsWorkerWunder {
 
 		System.out.println(addStationTestSQL);
 
-		try { mdb.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
+		try { wc.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
 

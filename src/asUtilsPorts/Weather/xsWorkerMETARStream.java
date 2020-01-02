@@ -1,12 +1,14 @@
 /*
 by Anthony Stump
 Created: 24 Sep 2017
-Updated: 19 Dec 2019
+Updated: 2 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.StumpJunk;
+import asWebRest.shared.MyDBConnector;
+import asWebRest.shared.WebCommon;
+
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,17 +23,17 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.json.*;
 
-import asUtils.Shares.MyDBConnector;
 
 public class xsWorkerMETARStream {
 
-	public static void main(String[] args) {
+	public void main(String xsTmp) {
 
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
 
-		final String xsTmp = args[0];
 		final String stationType = "METAR";
 		final String region = "None";
 		final File jsonOutFile = new File(xsTmp+"/output_"+stationType+"_"+region+".json");
@@ -39,7 +41,7 @@ public class xsWorkerMETARStream {
 
 		List<String> wxStations = new ArrayList<>();
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations WHERE Active=1 AND Priority = 5 ORDER BY Priority, Station DESC;";
-		try ( ResultSet resultSetStations = mdb.q2rs1c(dbc, getStationListSQL, null); ) { 
+		try ( ResultSet resultSetStations = wc.q2rs1c(dbc, getStationListSQL, null); ) { 
             while (resultSetStations.next()) { wxStations.add(resultSetStations.getString("Station")); }
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -131,31 +133,31 @@ public class xsWorkerMETARStream {
 
 						if(endElement.getName().getLocalPart().equals("METAR")) {
 
-							if (StumpJunk.isSet(thisStation) && wxStations.contains(thisStation)) {
+							if (wc.isSet(thisStation) && wxStations.contains(thisStation)) {
 
 								JSONObject jStationObj = new JSONObject();
 								JSONObject jStationData = new JSONObject();
 								jStationObj.put(thisStation, jStationData);
 
-								if (StumpJunk.isSet(tTempC)) { jStationData.put("Temperature", tTempC); }
-								if (StumpJunk.isSet(tDewpointC)) { jStationData.put("Dewpoint", tDewpointC); }
-								if (StumpJunk.isSet(tPressureMb)) { jStationData.put("Pressure", tPressureMb); }
-								if (StumpJunk.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); }
-								if (StumpJunk.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); }
-								if (StumpJunk.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); }
-								if (StumpJunk.isSet(tWeather)) { jStationData.put("Weather", tWeather); }
-								if (StumpJunk.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); }
-								if (StumpJunk.isSet(tWindSpeed)) { jStationData.put("WindSpeed", tWindSpeed); }
-								if (StumpJunk.isSet(tPrecipIn)) { jStationData.put("PrecipIn", tPrecipIn); }
-								if (StumpJunk.isSet(tRawMETAR)) { jStationData.put("RawMETAR", tRawMETAR); }
-								if (StumpJunk.isSet(tFlightCat)) { jStationData.put("FlightCategory", tFlightCat); }
+								if (wc.isSet(tTempC)) { jStationData.put("Temperature", tTempC); }
+								if (wc.isSet(tDewpointC)) { jStationData.put("Dewpoint", tDewpointC); }
+								if (wc.isSet(tPressureMb)) { jStationData.put("Pressure", tPressureMb); }
+								if (wc.isSet(tPressureIn)) { jStationData.put("PressureIn", tPressureIn); }
+								if (wc.isSet(tTimeString)) { jStationData.put("TimeString", tTimeString); }
+								if (wc.isSet(tVisibility)) { jStationData.put("Visibility", tVisibility); }
+								if (wc.isSet(tWeather)) { jStationData.put("Weather", tWeather); }
+								if (wc.isSet(tWindDegrees)) { jStationData.put("WindDegrees", tWindDegrees); }
+								if (wc.isSet(tWindSpeed)) { jStationData.put("WindSpeed", tWindSpeed); }
+								if (wc.isSet(tPrecipIn)) { jStationData.put("PrecipIn", tPrecipIn); }
+								if (wc.isSet(tRawMETAR)) { jStationData.put("RawMETAR", tRawMETAR); }
+								if (wc.isSet(tFlightCat)) { jStationData.put("FlightCategory", tFlightCat); }
 
 								String thisJSONstring = jStationObj.toString().substring(1);
 								thisJSONstring = thisJSONstring.substring(0, thisJSONstring.length()-1)+",";
 								if(thisJSONstring.equals("\""+thisStation+"\":{},")) {
 									System.out.println("!!! WARN: NO DATA FOR Station "+thisStation+" (METAR Stream Method)!");
 								} else {
-									try { StumpJunk.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+									try { wc.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 									System.out.println(" -> Completed: "+thisStation+" ("+stationType+" Stream)");
 								}
 
