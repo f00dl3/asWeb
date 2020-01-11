@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 30 Dec 2019
+Updated: 10 Jan 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
@@ -29,6 +30,9 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import asUtilsPorts.Stations;
+import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
 
@@ -98,6 +102,8 @@ public class TestResource extends ServerResource {
         
         JsonWorkers jw = new JsonWorkers();
         MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
@@ -128,6 +134,17 @@ public class TestResource extends ServerResource {
 	        		returnData = TestStuff.stupidTomcatSandboxing();
 	        		break;
 	        		
+	        	case "CamURLTest":
+	        		CamBeans camBeans = new CamBeans();
+	        		CamWorkerURL cwURL = new CamWorkerURL();
+	        		cwURL.doJob(dbc, camBeans.getCamPath().getPath());
+	        		break;
+	        		
+	        	case "AudioTest":
+	        		MediaTools mTools = new MediaTools();
+	        		mTools.doPlayMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Tournament - Phantom.mp3");
+	        		break;
+	        		
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
                     returnData = jw.getDesiredDataType(
@@ -138,7 +155,6 @@ public class TestResource extends ServerResource {
                     break;
 
             	case "ThreadTest":
-            		WebCommon wc = new WebCommon();
             		ArrayList<Runnable> testList = new ArrayList<Runnable>();
             		testList.add(() -> wc.runProcess("echo 1 of 6"));
             		testList.add(() -> wc.runProcess("echo 2 of 6"));
@@ -147,11 +163,16 @@ public class TestResource extends ServerResource {
             		testList.add(() -> wc.runProcess("echo 5 of 6"));
             		testList.add(() -> wc.runProcess("echo 6 of 6"));
             		ThreadRipper tr = new ThreadRipper();
-            		//returnData += tr.runProcesses(testList, false);
-            		returnData += tr.runProcesses(testList, true);
+            		returnData += tr.runProcesses(testList, true, false);
             		break;
 	
-	            case "xs19":
+	            case "Stations":
+	            	Stations stations = new Stations();
+	            	String wxTest = "Wunder";
+                    if(wc.isSet(argsInForm.getFirstValue("action"))) { 
+                    	wxTest = argsInForm.getFirstValue("action");
+                    }
+	            	returnData += stations.fetch(wxTest);
 	            	break;
 	            	
             }

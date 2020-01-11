@@ -20,7 +20,8 @@ import asWebRest.shared.WebCommon;
 public class xsWorkerWunder {
 
 	public void main(String xsTmp, String region) {
-            
+          
+		String returnData = "";
         MyDBConnector mdb = new MyDBConnector();
         WebCommon wc = new WebCommon();
         
@@ -120,7 +121,6 @@ public class xsWorkerWunder {
 				String tTimeString = null; tVars++;
 				String tWeather = null; tVars++;
 				String tWindDegrees = null; tVars++;
-				String tWindDirection = null; tVars++;
 				String tWindSpeed = null; tVars++;
 				String tWindGust = null; tVars++;
 				String tVisibility = null; tVars++;
@@ -144,9 +144,9 @@ public class xsWorkerWunder {
 					String thisJSONstring = "\""+thisStation+"\":"+jStationData.toString()+",";
 					thisJSONstring = thisJSONstring.substring(0, thisJSONstring.length()-1)+",";
 					try { wc.varToFile(thisJSONstring, jsonOutFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
-					System.out.println(" -> Completed: "+thisStation+" ("+stationType+" - "+region+")");
+					returnData += " -> Completed: "+thisStation+" ("+stationType+" - "+region+")\n";
 				} else {
-					System.out.println("!!! WARN: NO DATA FOR Station "+thisStation+" !");
+					returnData += "!!! WARN: NO DATA FOR Station "+thisStation+" !\n";
 				}
 			
 			}
@@ -155,11 +155,13 @@ public class xsWorkerWunder {
 
 		addStationTestSQL = (addStationTestSQL+";").replace(",;",";");
 
-		System.out.println(addStationTestSQL);
+		returnData += addStationTestSQL+"\n";
 
 		try { wc.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
+        System.out.println(returnData);
 
 	}
 		

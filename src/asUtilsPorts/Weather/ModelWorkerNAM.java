@@ -41,7 +41,6 @@ public class ModelWorkerNAM {
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(4);
 		final DateTimeFormatter getDateFormat = DateTimeFormat.forPattern("yyyyMMdd");
 		final String getDate = getDateFormat.print(tDateTime);
-		final File appPath = junkyBeans.getAppShareSys();
 		final File xml2Path = wmb.getXml2Path();
 		final File helpers = junkyBeans.getHelpers();
 		final File jsonOutFile = new File(xml2Path+"/namOut_"+round+".json");
@@ -82,10 +81,10 @@ public class ModelWorkerNAM {
 			System.out.println(" -> Processing "+modelName+" data - FH +"+tFHour4D+"!");
 
 			wc.runProcess("(\""+helpers.getPath()+"/get_inv.pl\" "+tFHData+".idx | grep \""+filters+"\" | \""+helpers.getPath()+"/get_grib.pl\" "+tFHData+" "+tFHGlob.getPath()+")");
-			try { wc.runProcessOutFile("\""+appPath.getPath()+"/wgrib2\" "+tFHGlob.getPath()+" "+pointInputAsString, sounding, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			try { wc.runProcessOutFile("\""+helpers.getPath()+"/wgrib2\" "+tFHGlob.getPath()+" "+pointInputAsString, sounding, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 			wc.sedFileReplace(sounding.getPath(), ":lon", ",lon");
-			try { wc.runProcessOutFile("\""+appPath.getPath()+"/g2ctl\" "+tFHGlob.getPath(), tFHCtlFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
-			wc.runProcess("\""+appPath.getPath()+"/gribmap\" -v -i "+tFHCtlFile.getPath());
+			try { wc.runProcessOutFile("\""+helpers.getPath()+"/g2ctl\" "+tFHGlob.getPath(), tFHCtlFile, false); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			wc.runProcess("\""+helpers.getPath()+"/gribmap\" -v -i "+tFHCtlFile.getPath());
 		
 			Scanner namScanner = null; try {		
 				namScanner = new Scanner(sounding);
@@ -123,7 +122,7 @@ public class ModelWorkerNAM {
             
             if(nam.has("PWAT"+enc)) { nam.put("PRATE"+enc, nam.getDouble("PWAT"+enc)); }
             
-			wc.runProcess("(echo \"run "+helpers.getPath()+"/ModelData.gs "+modelName+" "+tFHour4D+" "+getDate+" "+getHour+" "+xml2Path.getPath()+"\" | "+appPath.getPath()+"/grads -blc \"open "+tFHCtlFile.getPath()+"\")");								
+			wc.runProcess("(echo \"run "+helpers.getPath()+"/ModelData.gs "+modelName+" "+tFHour4D+" "+getDate+" "+getHour+" "+xml2Path.getPath()+"\" | "+helpers.getPath()+"/grads -blc \"open "+tFHCtlFile.getPath()+"\")");								
 			
 			tFHGlob.delete();
 			

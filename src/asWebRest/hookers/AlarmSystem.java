@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 2 Jan 2020
+Updated: 4 Jan 2020
  */
 
 package asWebRest.hookers;
@@ -25,7 +25,7 @@ public class AlarmSystem {
 	
 	public void notifyOfEvent(Connection dbc, List<String> qParamsIn) {
 
-		String messageContent = qParamsIn.get(1) + " detected open!";
+		String messageContent = qParamsIn.get(1);
 
         GetSmarthomeAction getSmarthomeAction = new GetSmarthomeAction(new SmarthomeDAO());
 		final DateTime nowTime = new DateTime();
@@ -63,22 +63,14 @@ public class AlarmSystem {
 	}
 
 	public void notifyOfEventEnvironmental(List<String> qParamsIn) {
-		String messageContent = qParamsIn.get(1) + " IN ALARM!";
-	    sendAlarmEnvironmental(messageContent);
+	    sendAlarm(qParamsIn.get(1));
 	}
     
 	private void sendAlarm(String messageContent) {
 		JunkyPrivate jp = new JunkyPrivate();
         String messageRecipient = jp.getSmsAddress();
 		Mailer mailer = new Mailer();
-		try { mailer.sendMail(messageRecipient, "asWeb Smarthome Door Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
-	}
-	
-	private void sendAlarmEnvironmental(String messageContent) {
-		JunkyPrivate jp = new JunkyPrivate();
-        String messageRecipient = jp.getSmsAddress();
-		Mailer mailer = new Mailer();
-		try { mailer.sendMail(messageRecipient, "asWeb Smarthome Environmental Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
+		try { mailer.sendMail(messageRecipient, "asWeb Smarthome Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
 }

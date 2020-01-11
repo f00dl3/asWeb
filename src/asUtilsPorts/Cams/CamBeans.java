@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Dec 2017
-Updated: 28 Dec 2019
+Updated: 10 Jan 2020
  */
 
 package asUtilsPorts.Cams;
@@ -29,6 +29,7 @@ public class CamBeans {
     final private File tfOutGarage = new File(camPath.toString()+"/tfOutGarage.txt");
     final private File dumpTemp = new File(camPath.getPath()+"/DumpTmp");
     final private File pushTemp = new File(camPath.getPath()+"/PushTmp");   
+    final private File pushTempPub = new File(camPath.getPath()+"/PushTmpPub");   
     
     public File getCamPath() { return camPath; }
     public File getCamUrl() { return camUrl; }
@@ -39,6 +40,7 @@ public class CamBeans {
     public String getFinalRes() { return finalRes; }
     public int getFrameRate() { return frameRate; }
     public File getPushTemp() { return pushTemp; }
+    public File getPushTempPub() { return pushTempPub; }
     public File getUsbs() { return usbs; }
     public File getTfOutCase() { return tfOutCase; }
     public File getTfOutCPU() { return tfOutCPU; }

@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 30 Dec 2019
+Updated: 10 Jan 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Cams.CamBeans;
 import asWebRest.secure.GDriveAttribs;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
@@ -26,13 +27,15 @@ public class CamPusher {
     public String pushIt(Connection dbc) {
         
         GDriveAttribs gDriveAttribs = new GDriveAttribs();
+        CommonBeans cb = new CommonBeans();
         CamBeans camBeans = new CamBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
         ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
         
         Date date = new Date();
-        
+
+		final String cachePath = cb.getPathChartCache();
         final String parentFolder = gDriveAttribs.getCloudCamFolder();
         final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         final String getLockTime = dateFormat.format(date);
@@ -40,9 +43,12 @@ public class CamPusher {
         final File dumpTemp = camBeans.getDumpTemp();
         final File helpers = junkyBeans.getHelpers();
         final File mp4Log = new File(camWebRoot.toString()+"/MakeMP4_GIF.log");
+        final File mp4LogPub = new File(cb.getPathChartCache()+"/MakeMP4Pub_GIF.log");
         final File mp4Out = new File(camWebRoot.toString()+"/Archive/push_"+getLockTime+".mp4");
         final File mp4OutAlt = new File(camWebRoot.toString()+"/Archive/push_"+getLockTime+"_b.mp4");
+        final File mp4OutPub = new File(cb.getPathChartCache()+"/CamLoopPublic.mp4");
         final File pushTemp = camBeans.getPushTemp();
+        final File pushTempPub = camBeans.getPushTempPub();
         final File tfOutCase = camBeans.getTfOutCase();
         final File tfOutCPU = camBeans.getTfOutCPU();
         final File tfOutGarage = camBeans.getTfOutGarage();
@@ -54,7 +60,7 @@ public class CamPusher {
         int tfGarage = 0;
 
         
-        if(!pushTemp.exists()) { pushTemp.mkdirs(); }
+        if(!pushTemp.exists()) { pushTemp.mkdirs(); pushTempPub.mkdirs(); }
         if(!camWebRoot.exists()) { camWebRoot.mkdirs(); }
         if(dumpTemp.exists()) { wc.deleteDir(dumpTemp); }
         
@@ -92,6 +98,13 @@ public class CamPusher {
         wc.deleteDir(dumpTemp);
        
         try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (Exception ix) { ix.printStackTrace(); }
+
+        dumpTemp.mkdirs();
+        wc.runProcess("mv "+pushTempPub.toString()+"/*.jpeg "+dumpTemp.toString());
+        wc.runProcess("find "+dumpTemp.toString()+"/ -type f -size 0b -delete");
+        wc.runProcess("bash "+helpers.toString()+"/Sequence.sh "+dumpTemp.toString()+"/ jpeg");
+        wc.runProcess("(ffmpeg -y -threads "+tr.getMaxThreads()+" -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4OutPub.toString()+ " 2> "+mp4LogPub.toString()+")");
+        wc.deleteDir(dumpTemp);
         
         return "End of program!";
         

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 30 Dec 2019
-Updated: on Creation
+Updated: 7 Jan 2020
  */
 
 package asWebRest.shared;
@@ -12,15 +12,18 @@ import java.util.List;
 public class ThreadRipper {
     
 	private int maxThreads = 4;
+	private int minThreads = maxThreads/2;
 	private int maxThreadsHost = 8;	
 	
-	private void execThreads(List<Thread> tPool) {
-		for (int j = 0; j < tPool.size(); j++) {
-			try {  tPool.get(j).join();  } catch (Exception nx) { }
+	private void execThreads(List<Thread> tPool, boolean asynch) {
+		if(!asynch) { 
+			for (int j = 0; j < tPool.size(); j++) {
+				try {  tPool.get(j).join();  } catch (Exception nx) { }
+			}
 		}
 	}
 	
-	public String runProcesses(List<Runnable> threadList, boolean pool) {
+	public String runProcesses(List<Runnable> threadList, boolean pool, boolean asynch) {
 
 		ArrayList<Thread> tPool = new ArrayList<>();
 		String runResults = "";
@@ -40,27 +43,31 @@ public class ThreadRipper {
 					inPool++;
 				} else {
 					procLoop++;
-					execThreads(tPool);
+					execThreads(tPool, asynch);
 					inPool = 0;
 					tPool.clear();
+					//tThread.start();
 					tPool.add(tThread);
+				
+					try { 
+						if(!tPool.isEmpty()) {				
+							tThread.start();
+							execThreads(tPool, asynch);
+							inPool = 0;
+							tPool = null;
+						}
+					} catch (Exception e) { }
 				}
-				try { 
-					if(!tPool.isEmpty()) {				
-						execThreads(tPool);
-						inPool = 0;
-						tPool = null;
-					}
-				} catch (Exception e) { }
 				taskNo++;
 			}
 		} else {
 			for(Runnable exTask : threadList) {
 				runResults += "Task [" + taskNo + "] Loop [" + procLoop + "] Thread [" + inPool + "]: " + exTask + "\n";
 				Thread tThread = new Thread(exTask);
+				tThread.start();
 				tPool.add(tThread); 
 			}
-			execThreads(tPool);
+			execThreads(tPool, asynch);
 		}
 		
 		return runResults;
@@ -69,5 +76,6 @@ public class ThreadRipper {
 	
 	public int getMaxThreads() { return maxThreads; }
 	public int getMaxThreadsHost() { return maxThreadsHost; }
+	public int getMinThreads() { return minThreads; }
     
 }

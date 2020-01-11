@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 23 Oct 2018
-Updated: 30 Dec 2019
+Updated: 6 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -80,7 +80,7 @@ public class CamWorkerURL {
 		ArrayList<Runnable> cwts = new ArrayList<Runnable>();
 		cwts.add(() -> wc.runProcess(convertA));
 		cwts.add(() -> wc.runProcess(convertB));
-		tr.runProcesses(cwts, false);
+		tr.runProcesses(cwts, false, false);
 		
         String convertC = "convert \\( "+taFile.getPath()+" +append \\)"
                 + " \\( "+tbFile.getPath()+" +append \\)"

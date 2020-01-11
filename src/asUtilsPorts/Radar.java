@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 30 Aug 2017
-Updated: 30 Dec 2019
+Updated: 6 Jan 2020
 */
 
 package asUtilsPorts;
@@ -38,7 +38,7 @@ public class Radar {
 		//rp.add(() -> RadarWorker.fetch("7"));
 		//rp.add(() -> RadarWorker.fetch("8"));
 		
-		tr.runProcesses(rp, false);
+		tr.runProcesses(rp, false, false);
 		
 	}
 

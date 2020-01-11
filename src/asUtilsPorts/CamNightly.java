@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated; 30 Dec 2019
+Updated; 9 Jan 2020
 */
 
 package asUtilsPorts;
@@ -41,6 +41,7 @@ public class CamNightly {
 		final Path unpackFolder = Paths.get(ramDrive.getPath()+"/mp4tmp");
 		final Path cListing = Paths.get(unpackFolder.toString()+"/Listing.txt");
 		final Path mp4OutFile = Paths.get(camPath+"/MP4/"+getYesterday+"J.mp4");
+		final int killTime = 240;
 
         try { GDrive.deleteChildItemsFromFolder("CloudCams"); } catch (IOException ix) { ix.printStackTrace(); }
                 
@@ -57,7 +58,7 @@ public class CamNightly {
 			try { wc.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		}
 
-		wc.runProcess("timeout --kill-after=120 120 ffmpeg -threads "+tr.getMaxThreads()+" -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
+		wc.runProcess("timeout --kill-after="+killTime+" "+killTime+" ffmpeg -threads "+tr.getMaxThreads()+" -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+"  2> "+camPath.toString()+"/MakeMP4_Last.log");
 
 		int camImgQty = 0;
 
@@ -72,6 +73,7 @@ public class CamNightly {
         wc.runProcess("chown -R "+junkyBeans.getWebUser()+" "+camPath.toString()+"/MP4");
 
         wc.deleteDir(unpackFolder.toFile());
+        
 	}
 
 }

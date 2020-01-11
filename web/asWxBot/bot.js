@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 26;
-var bUpdated = "28 DEC 2019";
+var bBuild = 34;
+var bUpdated = "10 JAN 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -43,6 +43,8 @@ function generateHelpMessage(msg) {
 	var apiVer = "UNSYNCH";
 	var helpMessageHeader = "asWxBot (f00dl3) - build "+bBuild+" ("+bUpdated+") ==> Commands:";
 	var helpMessageBody = "\n\'!ping\': Return \'pong\' reply back to user" +
+		"\n\'cam\': Get bot\'s cameras!" +
+		"\n\'camloop\': Get bot\'s camera video loop!" +
 		"\n\'cf6\': GetCF6 daily climate data. Use: \'cf6 <YYYY-MM>\'" +
 		"\n\'find\': Get weather data for given station. Use: find <station> <YYYY-MM-DD>" +
 		"\n\'forecast\': Get latest forecast model output for KOJC (Olathe, KS)" +
@@ -86,6 +88,38 @@ function getCf6Data(msg, month) {
 	}).catch((error) => {
 		console.log(error)
 	});	
+
+	basicAccessLog(msg, commandRan, "stop");
+
+}
+
+function getLaughing(msg) {
+	var commandRan = "getNearMe(msg)";
+	msg.reply("Was that really that funny?");
+	basicAccessLog(msg, commandRan, "null");	
+}
+
+function getNearMe(msg) {
+	var commandRan = "getNearMe(msg)";
+	msg.reply("What do you think this is, Google?");
+	basicAccessLog(msg, commandRan, "null");
+}
+
+function getRandomQuotes(msg) {
+
+	var commandRan = "getRandomQuotes(msg)";
+	basicAccessLog(msg, commandRan, "start");
+
+	var rData = "DEBUG: getRandomQuotes() did not get data back yet!";
+	var url = webUiBase + "Entertainment";
+	var pData = "doWhat=getRandomQuotes";
+
+	axios.post(url, pData).then((res) => { 
+		rData = res.data,
+		respondRandomQuotes(msg, rData)
+	}).catch((error) => {
+		console.log(error)
+	});
 
 	basicAccessLog(msg, commandRan, "stop");
 
@@ -143,6 +177,16 @@ function getWeatherData(msg, station, date) {
 
 }
 
+function getWeatherCameras(msg) {
+	var camSnap = "/dev/shm/tomcatShare/cache/CamLive_Public.jpeg";
+	msg.reply("Camera Snapshot", { files :  [ camSnap ] });
+}
+
+function getWeatherCameraLoop(msg) {
+	var camLoop = "/dev/shm/tomcatShare/cache/CamLoopPublic.mp4";
+	msg.reply("Camera Loop", { files :  [ camLoop ] });
+}
+
 function getWeatherForecast(msg) {
 
 	var commandRan = "getWeatherForecast(msg)";
@@ -166,26 +210,6 @@ function getWeatherForecast(msg) {
 	basicAccessLog(msg, commandRan, "stop");
 }
 
-
-function getRandomQuotes(msg) {
-
-	var commandRan = "getRandomQuotes(msg)";
-	basicAccessLog(msg, commandRan, "start");
-
-	var rData = "DEBUG: getRandomQuotes() did not get data back yet!";
-	var url = webUiBase + "Entertainment";
-	var pData = "doWhat=getRandomQuotes";
-
-	axios.post(url, pData).then((res) => { 
-		rData = res.data,
-		respondRandomQuotes(msg, rData)
-	}).catch((error) => {
-		console.log(error)
-	});
-
-	basicAccessLog(msg, commandRan, "stop");
-
-}
 function getWeatherLatest(msg) {
 
 	var commandRan = "getWeatherLatest(msg)";
@@ -212,10 +236,7 @@ function getWeatherRadar(msg, site) {
 	if(isSet(site)) { radarSite = site.toUpperCase(); }
 	var radarFile = "/var/www/Get/Radar/" + radarSite + "/_BLatest.gif";
 	var radarFileNew = "/media/sf_SharePoint/Get/Radar/" + radarSite + "/_BLatest.gif";
-	msg.reply("Latest radar image for " + radarSite + ":\n",// + 
-			//"DEBUG: var radarFile = " + radarFile + "\n" + 
-			//"DEBUG: var radarFileNew = " + radarFileNew,
-			{ files :  [ radarFileNew ] });
+	msg.reply("Latest radar image for " + radarSite + ":\n", { files :  [ radarFileNew ] });
 
 }
 
@@ -433,6 +454,7 @@ function respondWeatherData(station, data, msg) {
 		"\nHumidity: " + jds.RelativeHumidity + "%" +
 		"\nPressure: " + jds.Pressure + " mb" +
 		"\nWind: " + jds.WindDirection + " at " + jds.WindSpeed + " mph";
+	if(isSet(jds.WindGust)) { finalMessage += "\nGusts: " + jds.WindGust + " mph"; }
 	msg.reply(trimForDiscord(finalMessage));
 
 }
@@ -577,6 +599,14 @@ client.on('message', msg => {
 		case "!test2":
 			msg.reply("Testing image attachment to bot message:", { files : ['../img/DiscordApp/pwned.jpg'] });
 			break;
+			
+		case "cam":
+			getWeatherCameras(msg);
+			break;
+			
+		case "camloop":
+			getWeatherCameraLoop(msg);
+			break;
 
 		case "cf6":
 			var month = msgArray[1];
@@ -593,6 +623,15 @@ client.on('message', msg => {
 
 		case "forecast": 
 			getWeatherForecast(msg);
+			break;
+		
+		case "lol":
+			getLaughing(msg);
+			break;
+			
+		case "nearby":
+			if(msgArray)
+			getNearMe(msg);
 			break;
 
 		case "quote":

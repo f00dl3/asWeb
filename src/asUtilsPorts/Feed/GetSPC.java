@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Aug 2017
-Updated: 30 Dec 2019
+Updated: 6 Jan 2020
 */
 
 package asUtilsPorts.Feed;
@@ -77,12 +77,12 @@ public class GetSPC {
 		spc1.add(() -> wc.jsoupOutBinary(spcBaseURL+spcDateY+"_rpts_filtered_wind.csv", spcReportsYWFile, 5.0));
 		spc1.add(() -> wc.jsoupOutBinary("http://www.spc.noaa.gov/products/watch/ActiveWW.kmz", spcWWkmzFile, 5.0));
 		spc1.add(() -> wc.jsoupOutBinary("http://www.spc.noaa.gov/products/md/ActiveMD.kmz", spcMDkmzFile, 5.0));
-		tr.runProcesses(spc1, false);
+		tr.runProcesses(spc1, false, false);
 
 		ArrayList<Runnable> spc2 = new ArrayList<Runnable>();		
 		spc2.add(() -> wc.unzipFile(tmpPathStr+"/ActiveWW.kmz", tmpPathStr));
 		spc2.add(() -> wc.unzipFile(tmpPathStr+"/ActiveMD.kmz", tmpPathStr));
-		tr.runProcesses(spc2, false);
+		tr.runProcesses(spc2, false, false);
 
 		ArrayList<Runnable> spc3 = new ArrayList<Runnable>();		
 		spc3.add(() -> wc.sedFileDeleteFirstLine(tmpPath+"/SPCReportsT.csv"));
@@ -91,7 +91,7 @@ public class GetSPC {
 		spc3.add(() -> wc.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYT.csv"));
 		spc3.add(() -> wc.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYH.csv"));
 		spc3.add(() -> wc.sedFileDeleteFirstLine(tmpPath+"/SPCReportsYW.csv"));
-		tr.runProcesses(spc3, false);
+		tr.runProcesses(spc3, false, false);
 		
 		File spcMDkmlFile = new File(tmpPath+"/ActiveMD.kml");
 		File spcWWkmlFile = new File(tmpPath+"/ActiveWW.kml");

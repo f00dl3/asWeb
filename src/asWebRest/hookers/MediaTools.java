@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 16 Dec 2019
+Updated: 4 Jan 2020
 */
 
 package asWebRest.hookers;
 
 import asUtils.Shares.JunkyBeans;
+//import asWebRest.shared.WebCommon;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -26,6 +27,9 @@ public class MediaTools {
 		Media hit = new Media(new File(mp3File).toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(hit);
 		mediaPlayer.play();
+		
+		/* WebCommon wc = new WebCommon();
+		wc.runProcess("ffplay -nodisp \"" + mp3File + "\""); */
 		
 	}
     

@@ -22,16 +22,16 @@ import org.json.*;
 public class xsWorkerFull {
 
 	public void stations(boolean debugMode, String xsTmp, String region) {
-            
+
+        ModelBeans wmb = new ModelBeans();
+        ModelShare wms = new ModelShare();
         MyDBConnector mdb = new MyDBConnector();
+        Grib2Iterators gi = new Grib2Iterators();
         WebCommon wc = new WebCommon();
         
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
-        ModelBeans wmb = new ModelBeans();
-        ModelShare wms = new ModelShare();
-        Grib2Iterators gi = new Grib2Iterators();
         ArrayList<Integer> tHts = gi.getHeights("H");
         if(debugMode) { System.out.println("tHts: " + tHts.toString()); }
         

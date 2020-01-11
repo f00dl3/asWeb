@@ -33,7 +33,9 @@ import asWebRest.shared.WebCommon;
 
 public class Stations {
 
-	public void fetch(String fType) {
+	public String fetch(String fType) {
+		
+		String returnData = "";
             
         final boolean debugMode = false;
 
@@ -60,9 +62,7 @@ public class Stations {
 		final File ramDrive = new File(cb.getRamPath());
 		final String xsTmp = ramDrive.getPath()+"/xsTmpJ_19";
 		final String tFHour2D = "02";
-		final String tFHour4D = "0002";
 		final String tSFHour2D = "03";
-		final String tSFHour4D = "0003";
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(2);
 		final DateTimeFormatter getHourFormat = DateTimeFormat.forPattern("HH");
 		final DateTimeFormatter getHourMinFormat = DateTimeFormat.forPattern("HHmm");
@@ -84,8 +84,7 @@ public class Stations {
 		final String gVarsLSQL = "SELECT gVar FROM WxObs.gradsOutType WHERE Active=1 AND HighRes=0;";
 		final String resHigh = "13068x6600";
 		final String resLow = "2904x1440";
-		final String appPath = junkyBeans.getAppShareSys().toString();
-		final String[] xwuWorkerArgs = { xsTmp, "None" };
+		final String appPath = helpers.toString();
 		List<String> gVars = new ArrayList<String>();
 		List<String> gVarsH = new ArrayList<String>();
 		List<String> gVarsL = new ArrayList<String>();
@@ -104,9 +103,9 @@ public class Stations {
 		if(fType.equals("Rapid")) { rapidRefresh = true; subHour = true; subHourFlag = "yes"; onlyWunder = false; }
 		if(fType.equals("Wunder")) { rapidRefresh = true; subHour = false; subHourFlag = "no"; onlyWunder = true; }
 
-		System.out.println(" -> DEBUG: (String) getHour = "+getHour);
-		System.out.println(" -> DEBUG: (String) getHourMin = "+getHourMin);
-		System.out.println(" -> DEBUG: (String) getDate = "+getDate);
+		returnData += " -> DEBUG: (String) getHour = "+getHour+"\n" +
+				" -> DEBUG: (String) getHourMin = "+getHourMin+"\n" +
+				" -> DEBUG: (String) getDate = "+getDate;
                 
 		if(!onlyWunder) {
 			
@@ -153,15 +152,13 @@ public class Stations {
 			ArrayList<Runnable> stp1 = new ArrayList<Runnable>();
 			stp1.add(() -> wc.jsoupOutBinary(xmlObsURL, nwsObsXMLzipFile, 15.0));
 			stp1.add(() -> wc.jsoupOutBinary(metarsURL, metarsZipFile, 15.0));
-			tr.runProcesses(stp1, false);		
+			tr.runProcesses(stp1, false, false);		
 
 			ArrayList<Runnable> stp2 = new ArrayList<Runnable>();
 			stp2.add(() -> wc.unzipFile(nwsObsXMLzipFile.getPath(), xsTmp));
 			stp2.add(() -> wc.runProcess("gunzip \""+metarsZipFile.getPath()+"\""));
-			tr.runProcesses(stp2, false);
+			tr.runProcesses(stp2, false, false);
 			
-			final String[] xmWorkerSArgs = { xsTmp, "None" }; 
-                        
             if(debugMode) {
 
                 System.out.println("DEBUG MODE ON!");
@@ -186,7 +183,7 @@ public class Stations {
     			stp3.add(() -> xswy.main(xsTmp, "None"));
     			stp3.add(() -> xswh.main(xsTmp, "None"));
     			stp3.add(() -> xsww.main(xsTmp, "None"));
-    			tr.runProcesses(stp3, false);
+    			tr.runProcesses(stp3, false, false);
     			
                 String jsonBigString = null;
                 try { jsonBigString = wc.runProcessOutVar("cat "+xsTmp+"/output_*.json"); } catch (IOException ix) { ix.printStackTrace(); }
@@ -218,9 +215,11 @@ public class Stations {
 		try { wc.varToFile(xsRuntime, logFile, true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		try { wc.q2do1c(dbc, xsRuntime, null); } catch (Exception e) { e.printStackTrace(); }
 
-		System.out.println("Updates completed! Runtime: "+totalRunTime); 
+		returnData += "Updates completed! Runtime: "+totalRunTime; 
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+        
+        return returnData;
 		
 	}
 

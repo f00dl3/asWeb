@@ -3,7 +3,7 @@ by Anthony Stump
 Models 2020 core class Tomcat Port
 
 Created: 22 Sep 2017
-Updated: 2 Feb 2020
+Updated: 6 Jan 2020
 Status: UNTESTED on Tomcat
 */
 
@@ -40,7 +40,6 @@ public class Models {
         
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
-        
         
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(4);
 		final DateTimeFormatter getDateFormat = DateTimeFormat.forPattern("yyyyMMdd");
@@ -82,7 +81,7 @@ public class Models {
 		pool.add(() -> mw.main(getHour, "25"));
 		pool.add(() -> mw.main(getHour, "26"));
 		pool.add(() -> mw.main(getHour, "27"));
-		tr.runProcesses(pool, false);		
+		tr.runProcesses(pool, false, false);		
 		
 		final String[] imgOpArgs = { getHour }; ModelImageOps.main(imgOpArgs);
 		

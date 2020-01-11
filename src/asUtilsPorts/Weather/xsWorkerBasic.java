@@ -35,7 +35,6 @@ public class xsWorkerBasic {
 		final File badStationFile = new File(xsTmp+"/badStations_"+stationType+".txt");
 
 		int thisNullCounter = 0;
-		int thisNullCounterModel = 0;
 		int tVars = 0;
 
 		List<String> wxStations = new ArrayList<>();
