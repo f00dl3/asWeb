@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 28 Dec 2019
+Updated: 11 Jan 2020
 */
 
 package asWebRest.shared;
@@ -168,7 +168,7 @@ public class WebCommon {
 	}
 
 	public void copyFileSilently(String sourceFile, String destFile) {
-		try { Files.copy(Paths.get(sourceFile), Paths.get(destFile), StandardCopyOption.REPLACE_EXISTING); } catch (Exception e) { e.printStackTrace(); }
+		try { Files.copy(Paths.get(sourceFile), Paths.get(destFile), StandardCopyOption.REPLACE_EXISTING); } catch (Exception e) { }
 	}
 	
     public String cryptIt(String passwordIn) throws Exception {
@@ -341,7 +341,7 @@ public class WebCommon {
 		try { 
 			Files.move(oldFileFile, newFileFile, StandardCopyOption.REPLACE_EXISTING);
 		}
-		catch (IOException io) { io.printStackTrace(); }
+		catch (IOException io) { }
 	} 
         
     private String[] multiWordSearchArray(String searchStringIn) {

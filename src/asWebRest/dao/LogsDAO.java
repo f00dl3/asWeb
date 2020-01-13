@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 20 Feb 2018
-Updated: 9 Oct 2019
+Updated: 11 Jan 2020
 */
 
 package asWebRest.dao;
@@ -121,6 +121,13 @@ public class LogsDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
+    }
+
+    public String setDiscordAccess(Connection dbc, List<String> qParams) {
+        String returnData = "Query has not ran yet or failed!";
+        final String query_DiscordAccess = "INSERT INTO net_snmp.DiscordBotLog VALUES (null,?);";
+        try { returnData = wc.q2do1c(dbc, query_DiscordAccess, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
     }
     
 }

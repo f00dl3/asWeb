@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 30 Dec 2019
+Updated: 13 Jan 2020
 */
 
 package asUtilsPorts;
@@ -16,7 +16,8 @@ import java.sql.*;
 public class GetDaily {
 
 	public static String getDaily(Connection dbc, int daysBack) {
-		
+
+        CamNightly cn = new CamNightly();
 		CF6Daily cf6 = new CF6Daily();
 		String returnData = "";
 		
@@ -63,6 +64,8 @@ public class GetDaily {
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, ffxivGilQuery, null); } catch (Exception e) { e.printStackTrace(); }
+        
+        try { cn.doJob(dbc); } catch (Exception e) { e.printStackTrace(); }
 
         return returnData;
         

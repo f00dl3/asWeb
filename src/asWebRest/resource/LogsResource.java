@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetDatabaseInfoAction;
 import asWebRest.action.GetLogsAction;
 import asWebRest.action.GetWebVersionAction;
+import asWebRest.action.UpdateLogsAction;
 import asWebRest.action.UpdateWebAccessLogAction;
 import asWebRest.dao.DatabaseInfoDAO;
 import asWebRest.dao.LogsDAO;
@@ -58,6 +59,7 @@ public class LogsResource extends ServerResource {
         GetDatabaseInfoAction getDatabaseInfoAction = new GetDatabaseInfoAction(new DatabaseInfoDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
         GetWebVersionAction getWebVersionAction = new GetWebVersionAction(new WebVersionDAO());
+        UpdateLogsAction updateLogsAction = new UpdateLogsAction(new LogsDAO());
         UpdateWebAccessLogAction updateWebAccessLogAction = new UpdateWebAccessLogAction(new WebAccessLogDAO());
                         
         JSONObject mergedResults = new JSONObject();
@@ -92,7 +94,7 @@ public class LogsResource extends ServerResource {
                         .put("backupLogs", backupLogs);
                     returnData += mergedResults.toString();
                     break;
-                    
+
                 case "LogLogin":
                     WebAccessLog webAccessLog = new WebAccessLog();
                     webAccessLog.setUser(argsInForm.getFirstValue("UserName"));
@@ -109,7 +111,14 @@ public class LogsResource extends ServerResource {
                     JSONArray notes = getLogsAction.getPlainTextNotes(dbc, qParams);
                     returnData += notes.toString();
                     break;
-                    
+
+                case "setDiscordAccess":
+                    String access = "";
+                    try { access = argsInForm.getFirstValue("attempt"); } catch (Exception e) { e.printStackTrace(); }
+                    qParams.add(0, access);
+                    updateLogsAction.setDiscordAccess(dbc, qParams);
+                    break;
+                                        
             }
         }
        

@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 34;
-var bUpdated = "10 JAN 2020";
+var bBuild = 37;
+var bUpdated = "13 JAN 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -28,7 +28,15 @@ function autoUnits(tVal) {
 function basicAccessLog(msg, input, phase) {
 	var requestor = "user";
 	try { requestor = msg.author.tag; } catch (e) { console.log("ERROR", e); }
-	console.log("\nACCESS: " + requestor + " " + phase + " " + input);
+	var accessString = "ACCESS: " + requestor + " " + phase + " " + input;
+	var url = webUiBase + "Logs";
+	var pData = "doWhat=setDiscordAccess" +
+			"&attempt=" + accessString;
+	axios.post(url, encodeURI(pData)).then((res) => {
+		console.log("Success log!");
+	}).catch((error) => {
+		console.log(error)
+	});
 }
 
 function conv2Tf(tC) {
@@ -94,7 +102,7 @@ function getCf6Data(msg, month) {
 }
 
 function getLaughing(msg) {
-	var commandRan = "getNearMe(msg)";
+	var commandRan = "getLaughing(msg)";
 	msg.reply("Was that really that funny?");
 	basicAccessLog(msg, commandRan, "null");	
 }
@@ -178,13 +186,19 @@ function getWeatherData(msg, station, date) {
 }
 
 function getWeatherCameras(msg) {
+	var commandRan = "getWeatherCameras(msg)";
+	basicAccessLog(msg, commandRan, "start");
 	var camSnap = "/dev/shm/tomcatShare/cache/CamLive_Public.jpeg";
 	msg.reply("Camera Snapshot", { files :  [ camSnap ] });
+	basicAccessLog(msg, commandRan, "stop");
 }
 
 function getWeatherCameraLoop(msg) {
+	var commandRan = "getWeatherCamLoop(msg)";
+	basicAccessLog(msg, commandRan, "start");
 	var camLoop = "/dev/shm/tomcatShare/cache/CamLoopPublic.mp4";
 	msg.reply("Camera Loop", { files :  [ camLoop ] });
+	basicAccessLog(msg, commandRan, "stop");
 }
 
 function getWeatherForecast(msg) {
@@ -330,13 +344,11 @@ function respondCf6Data(msg, cf6in) {
 }
 
 function respondRandomQuotes(msg, rqDataIn) {
-	
 	var quotesHere = rqDataIn.length;
 	var rI = (Math.random() * (quotesHere-1)).toFixed(0);
 	console.log("DEBUG: Random number = " + rI + " - total quotes: " + quotesHere);
 	var thisQuote = rqDataIn[rI];
 	msg.reply(thisQuote.Quote + " -" + thisQuote.Author);
-	
 }
 
 function respondServerInfo(msg, dataIn) {
