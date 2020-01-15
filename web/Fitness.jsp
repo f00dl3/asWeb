@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 14 Mar 2018
-    Updated:    21 Feb 2019
+    Updated:    14 Jan 2020
     Author     : astump
 --%>
 
@@ -33,6 +33,7 @@
                 <td>
                     <div id="Calories"></div><br/>
                     <div id="Plans"></div><br/>
+                    <div id="Strength"></div><br/>
                     <div id="Today"></div><br/>
                     <div id="Yesterday"></div>
                 </td>

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 13 Jan 2020
+Updated: 14 Jan 2020
 */
 
 package asUtilsPorts;
@@ -38,7 +38,7 @@ public class CamNightly {
 		final String getYesterday = dtFormat.print(dtYesterday);
 		final Path camPath = Paths.get(camBeans.getCamWebRoot().toString());
 		final Path sourceFolder = Paths.get(camPath.toString()+"/Archive");
-		final Path unpackFolder = Paths.get(ramDrive.getPath()+"/mp4tmp");
+		final Path unpackFolder = Paths.get(camPath.toString()+"/mp4tmp");
 		final Path cListing = Paths.get(unpackFolder.toString()+"/Listing.txt");
         final File mp4Log = new File(camPath.toString()+"/MakeMP4_GIF.log");
 		final Path mp4OutFile = Paths.get(camPath.toString()+"/MP4/"+getYesterday+"JT.mp4");

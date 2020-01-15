@@ -1,18 +1,11 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 17 Oct 2019
+Updated: 14 Jan 2020
  */
 
 var myHeight = 67;
-
-function actSearchByDateSubmit(event) {
-    dojo.stopEvent(event);
-    var thisFormData = dojo.formToObject("SearchByDateForm");
-    var xdt1 = thisFormData.FitSearchStart;
-    var xdt2 = thisFormData.FitSearchEnd;
-    getFitnessAllData(false, xdt1, xdt2);
-}
+var strPlan = 2;
 
 function colorCalories(tValue) {
     switch(tValue) {
@@ -60,6 +53,14 @@ function colorWeight(tValue) {
         case inRange(tValue, 162.5, 164.9): return 'FtWG1650';
         case inRange(tValue, 165.0, 999.9): return 'FtCG3000';
     }
+}
+
+function actSearchByDateSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject("SearchByDateForm");
+    var xdt1 = thisFormData.FitSearchStart;
+    var xdt2 = thisFormData.FitSearchEnd;
+    getFitnessAllData(false, xdt1, xdt2);
 }
 
 function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, bikeInfo, yearStats) {
@@ -142,6 +143,7 @@ function getFitnessAllData(doReload, inXdt1, inXdt2) {
     		"XDT1": xdt1,
     		"XDT2": xdt2,
     		"Bicycle": bicycleUsed,
+    		"routine": strPlan,
     		"year": oYear
     }
     require(["dojo/request"], function(request) {
@@ -154,6 +156,7 @@ function getFitnessAllData(doReload, inXdt1, inXdt2) {
                 	processFitnessAll(data.allRecs, data.autoMpg[0]);
 	                fitnessCalories(data.calories);
 	                fitnessPlans(data.plans);
+	                fitnessStrength(data.strength);
 	                fitnessToday(data.today[0]);
 	                fitnessYesterday(data.yesterday[0]);
 	                fitnessBubbles(
@@ -268,7 +271,7 @@ function processFitnessAll(dataIn, autoMpg) {
         if(tData.BkStudT === 1) { bkStuds = " style='background: blue; color: white;'"; }
         if(tData.Gym === 1) {
             gym = "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_lst.jpeg'/>" +
-                    "<div class='UPop'>" + tData.GymWorkout + "</div></div> ";
+                    "<div class='UPopO'>" + tData.GymWorkout + "</div></div> ";
         }
         if(tData.ReelMow === 1) {
             reelMow = "<div class='UPop'><img class='th_icon' src='" + getBasePath("ui") + "/img/Icons/ic_mow.jpg'>" +

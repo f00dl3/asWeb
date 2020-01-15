@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 24 Jun 2019
+Updated: 14 Jan 2020
  */
 
 package asWebRest.resource;
@@ -56,6 +56,7 @@ public class FitnessResource extends ServerResource {
             switch (doWhat) {
                 
                 case "getAll": 
+                	List<String> qParams3 = new ArrayList<>();
                     String xdt1 = argsInForm.getFirstValue("XDT1");
                     String xdt2 = argsInForm.getFirstValue("XDT2");
                     String bike = argsInForm.getFirstValue("Bicycle");
@@ -63,6 +64,7 @@ public class FitnessResource extends ServerResource {
                     if(xdt1 != null && xdt2 != null && bike != null && year != null) {
                         qParams.add(xdt1);
                         qParams.add(xdt2);
+                        qParams3.add(0, argsInForm.getFirstValue("routine"));
                         JSONArray allRecs = getFitnessAction.getAll(dbc, qParams);
                         JSONArray calories = getFitnessAction.getCalories(dbc);
                         JSONArray plans = getFitnessAction.getRPlans(dbc);
@@ -76,6 +78,7 @@ public class FitnessResource extends ServerResource {
                         JSONArray yData = getFitnessAction.getYear(dbc, year);
                         JSONArray autoMpg = getFinanceAction.getAutoMpgAverage(dbc);
                         JSONArray yesterday = getFitnessAction.getDayY(dbc);
+                        JSONArray strength = getFitnessAction.getStrengthTraining(dbc, qParams3);
                         mergedResults
                             .put("allRecs", allRecs)
                             .put("calories", calories)
@@ -89,6 +92,7 @@ public class FitnessResource extends ServerResource {
                             .put("tot", tot)
                             .put("yData", yData)
                             .put("autoMpg", autoMpg)
+                            .put("strength", strength)
                             .put("yesterday", yesterday);
                     } else {
                         returnData += "ERROR";
@@ -174,6 +178,12 @@ public class FitnessResource extends ServerResource {
                     JSONArray routesP = getFitnessAction.getAllRoutePlans(dbc);
                     returnData += routesP;
                     break;                    
+
+                case "getStrengthTraining":
+                    qParams.add(0, argsInForm.getFirstValue("routine"));
+                    JSONArray strength = getFitnessAction.getStrengthTraining(dbc, qParams);
+                    returnData += strength.toString();
+                    break;
                     
                 case "processGpsTracks":
                     returnData += "Processing GPS Tracks at /home/astump/Desktop !";
@@ -285,6 +295,8 @@ public class FitnessResource extends ServerResource {
                     String todayRSMile = null; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
                     String todayCycling = null; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
                     String todayBkStudT = null; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
+                    String todayGym = null; if(wc.isSet(argsInForm.getFirstValue("TodayGymWorkout"))) { todayGym = "1"; } qParams.add(todayGym);
+                    String todayGymWorkout = null; if(wc.isSet(argsInForm.getFirstValue("TodayGymWorkout"))) { todayGymWorkout = argsInForm.getFirstValue("TodayGymWorkout"); } qParams.add(todayGymWorkout);
                     String todayReelMow = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayReelMow = "1"; } qParams.add(todayReelMow);
                     String todayMowNotes = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);
                     String todayBicycle = null; if(wc.isSet(argsInForm.getFirstValue("TodayBicycle"))) { todayBicycle = argsInForm.getFirstValue("TodayBicycle"); } qParams.add(todayBicycle);
@@ -304,9 +316,13 @@ public class FitnessResource extends ServerResource {
                     String todaySleep = null; if(wc.isSet(argsInForm.getFirstValue("TodayEstHoursSleep"))) { todaySleep = argsInForm.getFirstValue("TodayEstHoursSleep"); } qParams.add(todaySleep);
                     String todayXO = null; if(wc.isSet(argsInForm.getFirstValue("TodayXO"))) { todayXO = argsInForm.getFirstValue("TodayXO"); } qParams.add(todayXO);
                     String todayIntensityMinutes = null; if(wc.isSet(argsInForm.getFirstValue("TodayExerciseMinutes"))) { todayIntensityMinutes = argsInForm.getFirstValue("TodayExerciseMinutes"); } qParams.add(todayIntensityMinutes);
-                    qParams.add(todayWeight); qParams.add(todayRunWalk); qParams.add(todayShoe); qParams.add(todayRSMile);
-                    qParams.add(todayCycling); qParams.add(todayBkStudT); qParams.add(todayReelMow); qParams.add(todayMowNotes);
-                    qParams.add(todayBicycle); qParams.add(todayCommonRoute); qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
+                    qParams.add(todayWeight); qParams.add(todayRunWalk); 
+                    qParams.add(todayShoe); qParams.add(todayRSMile);
+                    qParams.add(todayCycling); qParams.add(todayBkStudT);
+                    qParams.add(todayGym); qParams.add(todayGymWorkout);
+                    qParams.add(todayReelMow); qParams.add(todayMowNotes);
+                    qParams.add(todayBicycle); qParams.add(todayCommonRoute);
+                    qParams.add(todayX); qParams.add(todayVomit); qParams.add(todaySleep);
                     qParams.add(todayXO); qParams.add(todayIntensityMinutes);
                     System.out.println(qParams.toString());
                     returnData += updateFitnessAction.setUpdateToday(qParams);

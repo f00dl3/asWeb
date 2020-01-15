@@ -1,7 +1,7 @@
 /*
-Stations 2020 - Core Process 
+Stations - Core Process 
 Created: 4 Sep 2016
-Updated: 2 Jan 2020
+Updated: 14 Jan 2020
 */
 
 package asUtilsPorts;
@@ -59,8 +59,7 @@ public class Stations {
     
 		final long startTime = System.currentTimeMillis();
 
-		final File ramDrive = new File(cb.getRamPath());
-		final String xsTmp = ramDrive.getPath()+"/xsTmpJ_19";
+		final String xsTmp = modelBeans.getDiskSwap().toString();
 		final String tFHour2D = "02";
 		final String tSFHour2D = "03";
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(2);
@@ -74,7 +73,7 @@ public class Stations {
 		final File helpers = junkyBeans.getHelpers();
 		final File jsonDebugDumpFile = new File(xsTmp+"/dbgBigString.json");
 		final File jsonDebugDumpRapidFile = new File(xsTmp+"/dbgRapidString.json");
-		final File logFile = new File(xsTmp+"/xs19.log");
+		final File logFile = new File(xsTmp+"/xs.log");
 		final File metarsZipFile = new File(xsTmp+"/metars.xml.gz");
 		final File nwsObsXMLzipFile = new File(xsTmp+"/index.zip");
 		final File wwwOutObj = new File(cb.getPersistTomcat()+"/G2Out/xsOut");

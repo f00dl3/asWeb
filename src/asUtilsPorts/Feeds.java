@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 28 Dec 2019
+Updated: 14 Jan 2020
 */
 
 package asUtilsPorts;
@@ -54,7 +54,10 @@ public class Feeds {
     	String returnData = "Fetch 5 minute feeds:\n";
     	
         Radar radar = new Radar();
+        Stations stations = new Stations();
+        
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
+    	try { stations.fetch("Wunder"); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	

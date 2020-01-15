@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    28 Dec 2019
+    Updated:    14 Jan 2020
     Author     : astump
 --%>
 
@@ -55,6 +55,7 @@
         "Fitness/Calories",
         "Fitness/GarminConnectApiSynch",
         "Fitness/Plans",
+        "Fitness/Strength",
         "Fitness/Today",
         "Fitness/Yesterday"
     };

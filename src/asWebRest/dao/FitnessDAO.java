@@ -1,7 +1,7 @@
 /*
-1by Anthony Stump
+by Anthony Stump
 Created: 19 Feb 2018
-Updated: 17 Oct 2019
+Updated: 14 Jan 2020
 */
 
 package asWebRest.dao;
@@ -52,6 +52,37 @@ public class FitnessDAO {
                     .put("Description", resultSet.getString("Description"))
                     .put("GeoJSON", resultSet.getString("GeoJSON"))
                     .put("DistKm", resultSet.getDouble("DistKm"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+
+    private JSONArray strengthTraining(Connection dbc, List<String> qParams) {
+        final String query_StrengthTraining = "SELECT " +
+        		" id, Plan, PlanDate, PlanDayAlias, Day," +
+        		" MachineNum, Exercise, SetSeat, SetROM, Weight, Reps, GEID" +
+        		" FROM Core.Fit_Strength" +
+        		" WHERE Plan=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_StrengthTraining, qParams);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("id", resultSet.getInt("id"))
+                    .put("Plan", resultSet.getInt("Plan"))
+                    .put("PlanDate", resultSet.getString("PlanDate"))
+                    .put("PlanDayAlias", resultSet.getString("PlanDayAlias"))
+                    .put("Day", resultSet.getInt("Day"))
+                    .put("MachineNum", resultSet.getInt("MachineNum"))
+                    .put("Exercise", resultSet.getString("Exercise"))
+                    .put("SetSeat", resultSet.getInt("SetSeat"))
+                    .put("SetROM", resultSet.getInt("SetROM"))
+                    .put("Weight", resultSet.getInt("Weight"))
+                    .put("Reps", resultSet.getInt("Reps"))
+                    .put("GEID", resultSet.getInt("GEID"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -906,6 +937,8 @@ public class FitnessDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    public JSONArray getStrengthTraining(Connection dbc, List<String> qParams) { return strengthTraining(dbc, qParams); }
     
     public JSONArray getTot(Connection dbc) {
         final String query_Fitness_TOT = "SELECT" +
@@ -1042,13 +1075,13 @@ public class FitnessDAO {
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         String query_Fitness_DayIU = "INSERT INTO Core.Fitness" +
-	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,ReelMow,MowNotes,Bicycle," +
+	            " (Date,Weight,RunWalk,Shoe,RSMile,Cycling,BkStudT,Gym,GymWorkout,ReelMow,MowNotes,Bicycle," +
         		"   CommonRoute,xTags,Vomit,EstHoursSleep,Orgs,IntensityMinutes) VALUES" +
-	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?," +
+	            " (CURDATE(),?,?,?,(?+" + tRShoeMaxMiles + "),?,?,?,?,?,?,?," +
         		"   ?,?,?,?,?,?)" +
 	            " ON DUPLICATE KEY UPDATE" +
 	            " Weight=?, RunWalk=?, Shoe=?, RSMile=(?+" + tRShoeMaxMiles + ")," +
-				" Cycling=?, BkStudT=?, ReelMow=?, MowNotes=?," +
+				" Cycling=?, BkStudT=?, Gym=?, GymWorkout=?, ReelMow=?, MowNotes=?," +
 				" Bicycle=?, CommonRoute=?, xTags=?, Vomit=?, EstHoursSleep=?, Orgs=?," +
 				" IntensityMinutes=?";
         try { returnData = wc.q2do(query_Fitness_DayIU, qParams); } catch (Exception e) { e.printStackTrace(); }
