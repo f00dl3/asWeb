@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Aug 2017
-Updated: 6 Jan 2020
+Updated: 18 Jan 2020
 */
 
 package asUtilsPorts.Feed;
@@ -152,7 +152,7 @@ public class GetSPC {
 									}
 								}
 							}
-						} catch (FileNotFoundException esf) { esf.printStackTrace(); }
+						} catch (FileNotFoundException esf) { }
 						spcMesoSQL = "INSERT IGNORE INTO WxObs.SPCMesoscaleShape (mdID, Bounds) VALUES ('"+spcYear+" "+thisMDid+"','["+thisMDgeo+"]');";
 						//System.out.println(spcMesoSQL);
 						thisMDFile.delete();
@@ -161,7 +161,7 @@ public class GetSPC {
 					}
 				}
 			}			
-		} catch (FileNotFoundException e) { e.printStackTrace(); }
+		} catch (Exception e) { }
 
 		String spcWWsubURL = null;
 		String spcWatchSQL = null;
@@ -200,7 +200,7 @@ public class GetSPC {
 									}
 								}
 							}
-						} catch (FileNotFoundException esf) { esf.printStackTrace(); }
+						} catch (FileNotFoundException esf) { }
 						spcWatchSQL = "INSERT IGNORE INTO WxObs.SPCWatchBoxes (WatchID, WatchBox) VALUES ('"+spcYear+" "+thisWWid+"','["+thisWWgeo+"]');";
 						//System.out.println(spcWatchSQL);
 						thisWWFile.delete();				
@@ -209,7 +209,7 @@ public class GetSPC {
 					}
 				}
 			}		
-		} catch (FileNotFoundException e) { e.printStackTrace(); }
+		} catch (Exception e) { }
 
 		String cleanReportsSQL = "DELETE FROM WxObs.SPCReportsLive WHERE AssocID LIKE '%satellite%';";
 		String cleanWatchSQL = "DELETE FROM WxObs.SPCWatchBoxes WHERE WatchID = ' ';";
@@ -253,10 +253,10 @@ public class GetSPC {
         String cleanSPCmdSQL = "DELETE FROM WxObs.SPCMesoscale WHERE title LIKE 'SPC - No MDs are in effect as of %';";
         String cleanSPCwwSQL = "DELETE FROM WxObs.SPCWatches WHERE title LIKE 'SPC - No watches are valid as %';";
 
-        try { wc.q2do1c(dbc, loadSPCmdSQL, null); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.q2do1c(dbc, loadSPCwwSQL, null); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.q2do1c(dbc, cleanSPCmdSQL, null); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.q2do1c(dbc, cleanSPCwwSQL, null); } catch (Exception e) { e.printStackTrace(); }
+        try { wc.q2do1c(dbc, loadSPCmdSQL, null); } catch (Exception e) { }
+        try { wc.q2do1c(dbc, loadSPCwwSQL, null); } catch (Exception e) { }
+        try { wc.q2do1c(dbc, cleanSPCmdSQL, null); } catch (Exception e) { }
+        try { wc.q2do1c(dbc, cleanSPCwwSQL, null); } catch (Exception e) { }
         
         spcMDFile.delete();
         spcWWFile.delete();

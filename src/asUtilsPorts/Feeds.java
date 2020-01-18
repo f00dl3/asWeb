@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 14 Jan 2020
+Updated: 17 Jan 2020
 */
 
 package asUtilsPorts;
@@ -11,6 +11,7 @@ import java.sql.Connection;
 
 import asUtilsPorts.CamPusher;
 import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.ANSSQuakes;
 import asUtilsPorts.Feed.GetSPC;
@@ -33,6 +34,7 @@ public class Feeds {
         GetSPC getSPC = new GetSPC();
         KCScout kcScout = new KCScout();
         CamBeans camBeans = new CamBeans();
+        CamSensors camSensors = new CamSensors();
         
 		final File camPath = camBeans.getCamPath();
 
@@ -44,6 +46,7 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             

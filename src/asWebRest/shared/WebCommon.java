@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 11 Jan 2020
+Updated: 16 Jan 2020
 */
 
 package asWebRest.shared;
@@ -265,7 +265,7 @@ public class WebCommon {
         catch (SocketTimeoutException stx) { stx.printStackTrace(); }
 		catch (Exception e) { e.printStackTrace(); }
 		if (cacheFile.length() > 0) {
-			moveFile(cacheFile.getPath(), outFile.getPath());
+			moveFileSilently(cacheFile.getPath(), outFile.getPath());
 		} else { System.out.println("0 byte download!"); }
 		cacheFile.delete();
 		System.out.flush();

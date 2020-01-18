@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 10 Jan 2020
+Updated: 16 Jan 2020
 */
 
 package asUtilsPorts;
@@ -17,10 +17,9 @@ import java.util.ArrayList;
 
 public class CamController {
         
-    private static void mainCamLoop(File camPath) {            
-        final String[] hf1Arg = { camPath.getPath(), "X" };
-        int tester = 1;            
-        CamWorkerHF.main(hf1Arg);
+    private static void mainCamLoop(File camPath) {           
+    	CamWorkerHF cwhf = new CamWorkerHF();
+        cwhf.main(camPath.getPath(), "X");
     }
 
 	public static void initCams() {

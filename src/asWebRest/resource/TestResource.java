@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 10 Jan 2020
+Updated: 18 Jan 2020
  */
 
 package asWebRest.resource;
@@ -32,8 +32,10 @@ import org.restlet.resource.ServerResource;
 
 import asUtilsPorts.Stations;
 import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.cWazey;
+import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Tests.TestStuff;
 
 public class TestResource extends ServerResource {
@@ -134,6 +136,11 @@ public class TestResource extends ServerResource {
 	        		returnData = TestStuff.stupidTomcatSandboxing();
 	        		break;
 	        		
+	        	case "CamTemp":
+	        		CamSensors cSense = new CamSensors();
+	        		cSense.logTemperature(dbc);
+	        		break;
+	        		
 	        	case "CamURLTest":
 	        		CamBeans camBeans = new CamBeans();
 	        		CamWorkerURL cwURL = new CamWorkerURL();
@@ -153,6 +160,11 @@ public class TestResource extends ServerResource {
                             null
                     );
                     break;
+                    
+                case "SNMP-UVM":
+                	UbuntuVM uvmSnmp = new UbuntuVM();
+                	uvmSnmp.snmpUbuntuVM(dbc);
+                	break;
 
             	case "ThreadTest":
             		ArrayList<Runnable> testList = new ArrayList<Runnable>();

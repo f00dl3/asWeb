@@ -295,7 +295,7 @@ public class FitnessResource extends ServerResource {
                     String todayRSMile = null; if(wc.isSet(argsInForm.getFirstValue("TodayRSMile"))) { todayRSMile = argsInForm.getFirstValue("TodayRSMile"); } qParams.add(todayRSMile);
                     String todayCycling = null; if(wc.isSet(argsInForm.getFirstValue("TodayCycling"))) { todayCycling = argsInForm.getFirstValue("TodayCycling"); } qParams.add(todayCycling);
                     String todayBkStudT = null; if(wc.isSet(argsInForm.getFirstValue("TodayBkStudT"))) { todayBkStudT = argsInForm.getFirstValue("TodayBkStudT"); } qParams.add(todayBkStudT);
-                    String todayGym = null; if(wc.isSet(argsInForm.getFirstValue("TodayGymWorkout"))) { todayGym = "1"; } qParams.add(todayGym);
+                    String todayGym = "0"; if(wc.isSet(argsInForm.getFirstValue("TodayGymWorkout"))) { todayGym = "1"; } qParams.add(todayGym);
                     String todayGymWorkout = null; if(wc.isSet(argsInForm.getFirstValue("TodayGymWorkout"))) { todayGymWorkout = argsInForm.getFirstValue("TodayGymWorkout"); } qParams.add(todayGymWorkout);
                     String todayReelMow = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayReelMow = "1"; } qParams.add(todayReelMow);
                     String todayMowNotes = null; if(wc.isSet(argsInForm.getFirstValue("TodayMowNotes"))) { todayMowNotes = argsInForm.getFirstValue("TodayMowNotes"); } qParams.add(todayMowNotes);

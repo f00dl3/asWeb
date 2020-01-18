@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 14 Jan 2020
+Updated: 16 Jan 2020
 */
 
 package asUtilsPorts;
@@ -31,7 +31,6 @@ public class CamNightly {
         ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
                 
-		final File ramDrive = new File(cb.getRamPath());
 		final File helpers = junkyBeans.getHelpers();
 		final DateTime dtYesterday = new DateTime().minusDays(1);
 		final DateTimeFormatter dtFormat = DateTimeFormat.forPattern("yyMMdd");
@@ -42,28 +41,34 @@ public class CamNightly {
 		final Path cListing = Paths.get(unpackFolder.toString()+"/Listing.txt");
         final File mp4Log = new File(camPath.toString()+"/MakeMP4_GIF.log");
 		final Path mp4OutFile = Paths.get(camPath.toString()+"/MP4/"+getYesterday+"JT.mp4");
-
-        try { GDrive.deleteChildItemsFromFolder("CloudCams"); } catch (IOException ix) { ix.printStackTrace(); }
+ 
+		System.out.println("CNDEB: Deleting off Google Drive...");
+        try { GDrive.deleteChildItemsFromFolder("CloudCams"); } catch (Exception ix) { ix.printStackTrace(); }
                 
-		try { Files.createDirectories(unpackFolder); } catch (IOException ix) { ix.printStackTrace(); }
+        System.out.println("CNDEB: Creating folder to unpack...");
+		try { Files.createDirectories(unpackFolder); } catch (Exception ix) { ix.printStackTrace(); }
 
+		System.out.println("CNDEB: Moving and sorting files...");
 		wc.runProcess("mv "+sourceFolder.toString()+"/* "+unpackFolder.toString());
 		wc.runProcess("bash "+helpers.getPath()+"/Sequence.sh "+unpackFolder.toString()+"/ mp4");
 		List<String> camFiles = wc.fileSorter(unpackFolder, "*.mp4");
 		
-		try { Files.delete(cListing); } catch (IOException ix) { }
+		System.out.println("CNDEB: Delete cListing...");
+		try { Files.delete(cListing); } catch (Exception ix) { }
 
+		System.out.println("CNDEB: Generating listing file...");
 		for (String thisLoop : camFiles) {
 			String fileListStr = "file '"+thisLoop+"'\n"; 
-			try { wc.varToFile(fileListStr, cListing.toFile(), true); } catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			try { wc.varToFile(fileListStr, cListing.toFile(), true); } catch (Exception fnf) { fnf.printStackTrace(); }
 		}
 
+		System.out.println("CNDEB: Starting FFMPEG...");
 		wc.runProcess("(ffmpeg -threads "+tr.getMaxThreads()+" -safe 0 -f concat -i "+cListing.toString()+" -c copy "+mp4OutFile.toString()+" 2> "+mp4Log.toString()+")");
 
 		int camImgQty = 0;
 
 		long camMP4Size = 0;
-		try { camMP4Size = (Files.size(mp4OutFile)/1024); } catch (IOException ix) { ix.printStackTrace(); }
+		try { camMP4Size = (Files.size(mp4OutFile)/1024); } catch (Exception ix) { ix.printStackTrace(); }
 
 		String camLogSQL = "INSERT INTO Core.Log_CamsMP4 (Date,ImgCount,MP4Size) VALUES (CURDATE()-1,'"+camImgQty+"',"+camMP4Size+");";
 

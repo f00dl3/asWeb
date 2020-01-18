@@ -1,12 +1,14 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 27 May 2019
+Updated: 18 Jan 2020
  */
 
 package asWebRest.resource;
 
 import java.io.*;
+import java.sql.Connection;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -22,7 +24,9 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import asUtilsPorts.SNMP.Desktop;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
 public class UploadResource extends ServerResource {
@@ -31,6 +35,10 @@ public class UploadResource extends ServerResource {
         
     	WebCommon wc = new WebCommon();
     	CommonBeans cb = new CommonBeans();
+        
+        MyDBConnector mdb = new MyDBConnector();
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
     	
         File cacherFolder = new File(cb.getPathChartCache());
         if(wc.isSet(pathOverride)) { cacherFolder = new File(pathOverride); }
@@ -71,6 +79,10 @@ public class UploadResource extends ServerResource {
                             	String[] args = { "OldNavy" };
                                 asUtilsPorts.CCImports.main(args);
                             	sb.append("\nProcessed Old Navy credit card data!");
+                            } else if (fileName.contains("snmpDesktop.zip")) {
+                            	System.out.println("File upload successful - " + fileName.toString());
+                            	Desktop sDesktop = new Desktop();
+                            	sDesktop.snmpDesktop(dbc);
                             } else {
                             	sb.append("\nNo further post-processing actions!");                            	
                             }
@@ -87,8 +99,11 @@ public class UploadResource extends ServerResource {
            setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
            throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
         }
+        
         System.out.println("This was reached");
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
         return result;
+        
     }
     
     @Post @Options

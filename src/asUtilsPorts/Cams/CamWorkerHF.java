@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 10 Jan 2020
+Updated: 17 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -17,10 +17,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-
 public class CamWorkerHF {
 
-	public static void main(String[] args) {
+	public void main(String camPath, String instance) {
 
         CamBeans camBeans = new CamBeans();
         CommonBeans cb = new CommonBeans();
@@ -30,9 +29,7 @@ public class CamWorkerHF {
         
 		final int testVal = 1;
 
-		final String camPath = args[0];
         final String capRes = camBeans.getCapRes();
-		final String instance = args[1];
 		final String cachePath = cb.getPathChartCache();
 
 		DateFormat dateOverlayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -44,7 +41,7 @@ public class CamWorkerHF {
 		final File lastGarageTemp = camBeans.getTfOutGarage();
         final File urlFile = camBeans.getCamUrl();
 
-        File webCWFile = new File(camPath+"/XwebcW-temp.jpeg");
+        File webCWFile = new File(camPath+"/webcW-temp.jpeg");
 		File webC1File = new File(camPath+"/webc1-temp.jpeg");
         File webC2File = new File(camPath+"/webc2-temp.jpeg");
 		File webC3File = new File(camPath+"/webc3-temp.jpeg");
@@ -56,17 +53,19 @@ public class CamWorkerHF {
                 
         while (testVal == testVal) {
 
+        	CamSensors cSense = new CamSensors();
 			Date date = new Date();
 			final String camTimestamp = dateOverlayFormat.format(date);
 			final String fileTimestamp = dateFileFormat.format(date);
 
 			Scanner caseScanner = null; int tempCase = 0; try { caseScanner = new Scanner(lastCaseTemp); while(caseScanner.hasNext()) { tempCase = Integer.parseInt(caseScanner.nextLine()); } } catch (FileNotFoundException e) { }
 			Scanner cpuScanner = null; int tempCPU = 0; try { cpuScanner = new Scanner(lastCPUTemp); while(cpuScanner.hasNext()) { tempCPU = Integer.parseInt(cpuScanner.nextLine()); } } catch (FileNotFoundException e) { }
-            Scanner garageScanner = null; int tempGarage = 0; try { garageScanner = new Scanner(lastGarageTemp); while(garageScanner.hasNext()) { tempGarage = Integer.parseInt(garageScanner.nextLine()); } } catch (FileNotFoundException e) { }
+            //int tempGarage = cSense.getTemperatureForSnapshot()
+			//Scanner garageScanner = null; int tempGarage = 0; try { garageScanner = new Scanner(lastGarageTemp); while(garageScanner.hasNext()) { tempGarage = Integer.parseInt(garageScanner.nextLine()); } } catch (FileNotFoundException e) { }
 			Scanner upsScanner = null; String upsStatus = null; try { upsScanner = new Scanner(lastUPSStatus); while(upsScanner.hasNext()) { upsStatus = upsScanner.nextLine(); } } catch (FileNotFoundException e) { }
             Scanner urlScanner = null; String thisUrl = ""; try { urlScanner = new Scanner(urlFile); while(urlScanner.hasNext()) { thisUrl = urlScanner.nextLine(); } } catch (FileNotFoundException e) { }
                         
-            final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F -- GA "+tempGarage+"F -- CPU "+tempCPU+"F -- "+upsStatus;
+            final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F " /* -- GA "+tempGarage+"F */ + "-- CPU "+tempCPU+"F -- "+upsStatus;
   
 			if(!webCWFile.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+webCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 			if(!webC1File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC1File.getPath()+" > /dev/null 2>&1 < /dev/null"); }

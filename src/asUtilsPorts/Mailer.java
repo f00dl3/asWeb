@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 2 Jan 2020
+Updated: 18 Jan 2020
 */
 
 package asUtilsPorts;
@@ -175,8 +175,8 @@ public class Mailer {
                 + ") VALUES "+sqlStatementAppending;
 
 		
-        try { wc.q2do1c(dbc, mailUpdateSQL, null); } catch (Exception e) { e.printStackTrace(); }
-        try { runMailActions(dbc); } catch (Exception e) { e.printStackTrace(); }
+        try { wc.q2do1c(dbc, mailUpdateSQL, null); } catch (Exception e) { }
+        try { runMailActions(dbc); } catch (Exception e) { }
         
         return mailUpdateSQL;
         

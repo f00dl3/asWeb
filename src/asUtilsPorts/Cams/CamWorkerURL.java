@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 23 Oct 2018
-Updated: 6 Jan 2020
+Updated: 14 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -31,7 +31,7 @@ public class CamWorkerURL {
         
 		final DateFormat dateOverlayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         final String capRes = camBeans.getCapRes();
-        final String masterPrefix = "XwebcW-temp";
+        final String masterPrefix = "webcW-temp";
         final File urlCamFile = new File(camPath+"/"+masterPrefix+".jpeg");
         final File urlTempFile = new File(camPath+"/"+masterPrefix+"-A.jpeg");
         final File taFile = new File(camPath+"/"+masterPrefix+"-m1.jpeg");
