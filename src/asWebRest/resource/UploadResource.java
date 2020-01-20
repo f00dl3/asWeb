@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 18 Jan 2020
+Updated: 20 Jan 2020
  */
 
 package asWebRest.resource;
@@ -25,6 +25,9 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import asUtilsPorts.SNMP.Desktop;
+import asUtilsPorts.SNMP.Note3;
+import asUtilsPorts.SNMP.Pi;
+import asUtilsPorts.SNMP.Pi2;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -79,10 +82,18 @@ public class UploadResource extends ServerResource {
                             	String[] args = { "OldNavy" };
                                 asUtilsPorts.CCImports.main(args);
                             	sb.append("\nProcessed Old Navy credit card data!");
+                            } else if (fileName.contains("aPayload.zip")) {
+                            	Note3 sNote3 = new Note3();
+                            	sNote3.snmpNote3(dbc);
                             } else if (fileName.contains("snmpDesktop.zip")) {
-                            	System.out.println("File upload successful - " + fileName.toString());
                             	Desktop sDesktop = new Desktop();
                             	sDesktop.snmpDesktop(dbc);
+                            } else if (fileName.contains("snmpPi.zip")) {
+                            	Pi sPi = new Pi();
+                            	sPi.snmpPi(dbc);
+                            } else if (fileName.contains("snmpPi2.zip")) {
+                            	Pi2 sPi2 = new Pi2();
+                            	sPi2.snmpPi2(dbc);
                             } else {
                             	sb.append("\nNo further post-processing actions!");                            	
                             }

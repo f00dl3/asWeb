@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 17 Jan 2020
+Updated: 18 Jan 2020
 */
 
 package asUtilsPorts;
@@ -18,6 +18,7 @@ import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.KCScout;
 import asUtilsPorts.Feed.NHCFetch;
 import asUtilsPorts.Feed.NWSWarnings;
+import asUtilsPorts.SNMP.UbuntuVM;
 //import asUtilsPorts.Feed.RSSSources;
 
 public class Feeds {
@@ -32,9 +33,8 @@ public class Feeds {
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
         GetSPC getSPC = new GetSPC();
-        KCScout kcScout = new KCScout();
         CamBeans camBeans = new CamBeans();
-        CamSensors camSensors = new CamSensors();
+        UbuntuVM uvmSnmp = new UbuntuVM();
         
 		final File camPath = camBeans.getCamPath();
 
@@ -42,11 +42,10 @@ public class Feeds {
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
-    	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             
@@ -55,12 +54,16 @@ public class Feeds {
     public static String do5Minute(Connection dbc) {
     	
     	String returnData = "Fetch 5 minute feeds:\n";
-    	
+
+        CamSensors camSensors = new CamSensors();
+        KCScout kcScout = new KCScout();
         Radar radar = new Radar();
         Stations stations = new Stations();
         
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
     	try { stations.fetch("Wunder"); } catch (Exception e) { e.printStackTrace(); }
+    	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	
