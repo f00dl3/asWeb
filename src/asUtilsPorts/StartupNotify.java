@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 2 Jan 2020
+Updated: 21 Jan 2020
  */
 
 package asUtilsPorts;
@@ -12,6 +12,7 @@ import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class StartupNotify {
@@ -38,11 +39,12 @@ public class StartupNotify {
         		"Threads: " + tr.getMaxThreads();
 
         wc.zipThisFile(sysLog, packedLog);
-        Thread cm1 = new Thread(() -> { mailer.sendMail(myCell, thisSubject, thisMessage, null); });
-        Thread cm2 = new Thread(() -> { mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog); });
-        Thread mailers[] = { cm1, cm2 };
-        for (Thread thread : mailers) { thread.start(); }
-        for (int i = 0; i < mailers.length; i++) { try { mailers[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
+
+		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
+		alerts.add(() -> mailer.sendMail(myCell, thisSubject, thisMessage, null));
+		alerts.add(() -> mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog));
+		tr.runProcesses(alerts, false, false);
+		
         packedLog.delete();
                 
         try { wc.copyFile(hostWalkFile.toString(), guestDestination.toString()); } catch (Exception e) { e.printStackTrace(); }

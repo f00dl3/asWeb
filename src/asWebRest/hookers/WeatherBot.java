@@ -1,35 +1,55 @@
 /*
 by Anthony Stump
 Created: 14 Dec 2019
-Updated: 30 Dec 2019
+Updated: 21 Jan 2020
  */
 
 package asWebRest.hookers;
 
+import java.util.ArrayList;
+
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 public class WeatherBot {
-        
-	public static void startBot() {
+	
+	public void botBroadcastOnly(String message) {
 
 		CommonBeans cb = new CommonBeans();
+		ThreadRipper tr = new ThreadRipper();
 		WebCommon wc = new WebCommon();
 		
 		String thisWorkingFolder = cb.getWarDeployBase();
-		
-		String sendMessage = "node bot.js 'Auto-start @ " + thisWorkingFolder + "'";
-		String startBot = "node bot.js > /dev/null 2>&1 < /dev/null &";
-		
+		String sendMessage = "node bot.js '" +message + "'";		
 		
 		String commandToRun = "cd '" + thisWorkingFolder + "';" +
-				" cd asWxBot;" +
-				// sendMessage + ";" +
+				" cd asWxBot;" + 
+				sendMessage;
+		
+		ArrayList<Runnable> bots = new ArrayList<Runnable>();
+		bots.add(() -> wc.runProcess(commandToRun));
+		tr.runProcesses(bots, false, false);
+		
+	}
+        
+	public void startBot() {
+
+		CommonBeans cb = new CommonBeans();
+		ThreadRipper tr = new ThreadRipper();
+		WebCommon wc = new WebCommon();
+		
+		String thisWorkingFolder = cb.getWarDeployBase();		
+		String startBot = "node bot.js > /dev/null 2>&1 < /dev/null &";		
+		
+		String commandToRun = "cd '" + thisWorkingFolder + "';" +
+				" cd asWxBot;" + 
 				startBot;
-			
-		Thread wxbot = new Thread(() -> { try { wc.runProcess(commandToRun); } catch (Exception e) { e.printStackTrace(); } });
-		Thread bots[] = { wxbot };
-		for (Thread bot : bots) { bot.start(); } 
+		
+		ArrayList<Runnable> bots = new ArrayList<Runnable>();
+		bots.add(() -> wc.runProcess(commandToRun));
+		tr.runProcesses(bots, false, true);
+		
 				
 	}
     

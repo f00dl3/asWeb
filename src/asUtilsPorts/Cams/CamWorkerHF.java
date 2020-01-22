@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 17 Jan 2020
+Updated: 21 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -38,7 +38,6 @@ public class CamWorkerHF {
 		final File lastUPSStatus = new File(camPath+"/LUStatus.txt");
 		final File lastCaseTemp = camBeans.getTfOutCase();
 		final File lastCPUTemp = camBeans.getTfOutCPU();
-		final File lastGarageTemp = camBeans.getTfOutGarage();
         final File urlFile = camBeans.getCamUrl();
 
         File webCWFile = new File(camPath+"/webcW-temp.jpeg");

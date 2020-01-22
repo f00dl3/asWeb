@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 20 Feb 2019
+Updated: 22 Jan 2020
  */
 
 package asWebRest.dao;
@@ -376,6 +376,19 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
+
+    public String getCountySAME(Connection dbc, String sameCode) {
+        final String query_Logs_XMLWxObs = "SELECT County, State FROM WxObs.SAMECodes WHERE SAME='" + sameCode + "';";
+        String dataBack = "";
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Logs_XMLWxObs, null);
+            while (resultSet.next()) {
+                dataBack = resultSet.getString("County") + " (" + resultSet.getString("State") + "), ";
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return dataBack;
+    }   
     
     public JSONArray getGfsFha(Connection dbc) {
         final String query_GFSFHA = "SELECT FHour, GFS, NAM, RAP, CMC, HRRR, HRWA, HRWA as HRWN, SRFA, SRFA as SRFN FROM WxObs.GFSFHA WHERE DoGet=1;";
@@ -931,6 +944,115 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    public JSONArray getRecentEarthquakes(Connection dbc) {
+    	final double magThreshold = 6.00;
+    	final double magThresholdLocal = 3.00;
+    	DateTime nUtc = new DateTime(DateTimeZone.UTC);
+    	DateTime lUtc = new DateTime(DateTimeZone.UTC);
+    	lUtc = lUtc.minusHours(24);
+        final DateTimeFormatter tdtFormat = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        final String timestampNow = tdtFormat.print(nUtc);
+    	final String timestampLast = tdtFormat.print(lUtc);
+        final String query_RecentQuakes = "SELECT" +
+        		" time, latitude, longitude, depth, mag, magType, nst, gap, dmin, rms, net, id, updated, place," +
+        		" type, horizontalError, depthError, magError, magNst, status, locationSource, magSource," +
+        		" TIMESTAMPDIFF(MINUTE, time, '" + timestampNow + "') as tDiff, AlertSent" +
+        		" FROM WxObs.ANSSQuakes" +
+        		" WHERE " +
+        		"  AlertSent = 0" +
+        		"  AND (time BETWEEN '" + timestampLast + "' AND '" + timestampNow + "')" +
+        		"  AND (" + 
+        		"   mag > " + magThreshold +
+        		"   OR (" +
+        		"    mag > " + magThresholdLocal + " AND mag < " + magThreshold +
+        		"    AND (" +
+        		"     place LIKE '%, Iowa'" +
+        		"     OR place LIKE '%, Kansas'" +
+        		"     OR place LIKE '%, Nebraska'" +
+        		"     OR place LIKE '%, Oklahoma'" +
+        		"     OR place LIKE '%, Missouri'" +
+        		"    )" +
+        		"   )" +
+        		"  )" + 
+        		" ORDER BY time DESC LIMIT 100;";
+        System.out.println("DEBUG: " + query_RecentQuakes);
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RecentQuakes, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("time", resultSet.getString("time"))
+                	.put("latitude", resultSet.getString("latitude"))
+                	.put("longitude", resultSet.getString("longitude"))
+                	.put("depth", resultSet.getString("depth"))
+                	.put("mag", resultSet.getDouble("mag"))
+                	.put("magType", resultSet.getString("magType"))
+                	.put("nst", resultSet.getInt("nst"))
+                	.put("gap", resultSet.getDouble("gap"))
+                	.put("dmin", resultSet.getString("dmin"))
+                	.put("rms", resultSet.getString("rms"))
+                	.put("net", resultSet.getString("net"))
+                	.put("id", resultSet.getString("id"))
+                	.put("updated", resultSet.getString("updated"))
+                	.put("place", resultSet.getString("place"))
+                	.put("type", resultSet.getString("type"))
+                	.put("horizontalError", resultSet.getDouble("horizontalError"))
+                	.put("depthError", resultSet.getDouble("depthError"))
+                	.put("magError", resultSet.getDouble("magError"))
+                	.put("magNst", resultSet.getInt("magNst"))
+                	.put("status", resultSet.getString("status"))
+                	.put("locationSource", resultSet.getString("locationSource"))
+                	.put("magSource", resultSet.getString("magSource"))
+                	.put("tDiff", resultSet.getInt("tDiff"))
+                	.put("AlertSent", resultSet.getInt("AlertSent"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    public JSONArray getRecentCapAlerts(Connection dbc) {
+    	final String query_RecentWarnings = "SELECT * FROM (" + 
+    			"  SELECT capVersion, id, published, updated, title," + 
+    			"	summary, cappolygon, cap12polygon, cap12same, cap12ugc," + 
+    			"	capgeocode, capparameter, capevent, GetTime" + 
+    			"	FROM WxObs.LiveWarnings " + 
+    			"	ORDER BY GetTime" + 
+    			"	DESC LIMIT 5000" + 
+    			" ) as lw" + 
+    			" LEFT JOIN WxObs.LiveWarnings_Sent lws on lw.id = lws.id" + 
+    			" WHERE title IS NOT NULL" + 
+    			" AND (title LIKE '%NWS Kansas City%' OR title LIKE '%NWS Topeka%')" + 
+    			" AND Sent IS NULL" + 
+    			" ORDER BY GetTime DESC" + 
+    			" LIMIT 25;";
+    	JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RecentWarnings, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("capVersion", resultSet.getDouble("capVersion"))
+                	.put("id", resultSet.getString("id"))
+                	.put("published", resultSet.getString("published"))
+                	.put("updated", resultSet.getString("updated"))
+                	.put("title", resultSet.getString("title"))
+                	.put("summary", resultSet.getString("summary"))
+                	.put("capevent", resultSet.getString("capevent"))
+                	.put("capparameter", resultSet.getString("capparameter"))
+                	.put("cap12ugc",  resultSet.getString("cap12ugc"))
+                	.put("cap12polygon", resultSet.getString("cap12polygon"))
+                	.put("cap12same", resultSet.getString("cap12same").replaceAll("\\s", ""))
+                	.put("GetTime", resultSet.getString("GetTime"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     public JSONArray getSpcLive(Connection dbc, List<String> qParams) {
         final String query_SPCLive = "SELECT GetTime, Type, title, description FROM (" +
@@ -1064,7 +1186,21 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
- 
+
+    public String setAlertSentCapAlert(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_SentAlert = "INSERT INTO WxObs.LiveWarnings_Sent (id, Sent) VALUES (?, 1);";
+        try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setAlertSentEarthquake(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_SentAlert = "UPDATE WxObs.ANSSQuakes SET AlertSent=1 WHERE id=?;";
+        try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     public String setUpdateRainGauge(Connection dbc, List<String> qParams) { return updateRainGauge(dbc, qParams); }
         
 }

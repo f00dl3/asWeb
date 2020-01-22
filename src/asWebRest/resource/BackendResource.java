@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 13 Jan 2020
+Updated: 22 Jan 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -29,10 +29,10 @@ import asUtilsPorts.CamPusher;
 import asUtilsPorts.CodexImport;
 import asUtilsPorts.Feeds;
 import asUtilsPorts.GetDaily;
+import asUtilsPorts.Mailer;
 import asUtilsPorts.Radar;
 import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
-import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
 
@@ -62,8 +62,11 @@ public class BackendResource extends ServerResource {
         if(doWhat != null) {
             switch(doWhat) {
             		
-            	case "AlertMe":
-            		AlertMe.doAlert();
+            	case "Broadcast":
+            		Mailer mailer = new Mailer();
+            		String message = "(NO MESSAGE TO BROADCAST)";
+            		try { message = argsInForm.getFirstValue("message"); } catch (Exception e) { }
+            		mailer.sendMultiAlert(message, false);
             		break;
             		
             	case "CamController":
@@ -127,7 +130,8 @@ public class BackendResource extends ServerResource {
 	                break;
 	                
 	            case "WxBot":
-	            	WeatherBot.startBot();
+	        		WeatherBot wxb = new WeatherBot();
+	            	wxb.startBot();
 	            	break;
                 
             }

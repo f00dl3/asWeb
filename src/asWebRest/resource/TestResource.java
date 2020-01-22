@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 18 Jan 2020
+Updated: 22 Jan 2020
  */
 
 package asWebRest.resource;
@@ -37,6 +37,7 @@ import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Tests.TestStuff;
+import asUtilsPorts.Weather.AlertMe;
 
 public class TestResource extends ServerResource {
     
@@ -135,7 +136,16 @@ public class TestResource extends ServerResource {
 	        	case "_TEST":
 	        		returnData = TestStuff.stupidTomcatSandboxing();
 	        		break;
+
+            	case "AlertMe":
+            		AlertMe.doAlert();
+            		break;
 	        		
+	        	case "AudioTest":
+	        		MediaTools mTools = new MediaTools();
+	        		mTools.doPlayMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Tournament - Phantom.mp3");
+	        		break;	        		
+            		
 	        	case "CamTemp":
 	        		CamSensors cSense = new CamSensors();
 	        		cSense.logTemperature(dbc);
@@ -147,9 +157,9 @@ public class TestResource extends ServerResource {
 	        		cwURL.doJob(dbc, camBeans.getCamPath().getPath());
 	        		break;
 	        		
-	        	case "AudioTest":
-	        		MediaTools mTools = new MediaTools();
-	        		mTools.doPlayMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Tournament - Phantom.mp3");
+	        	case "EarthquakeAlert":
+	        		AlertMe alertMe = new AlertMe();
+	        		alertMe.earthquakeAlerts(dbc);
 	        		break;
 	        		
                 case "dojoDataStoreTest":

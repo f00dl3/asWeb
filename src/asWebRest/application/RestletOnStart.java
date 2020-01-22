@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 30 Dec 2019
+Updated: 21 Jan 2020
  */
 
 package asWebRest.application;
@@ -23,11 +23,12 @@ public class RestletOnStart {
     public static void ExecuteOnStartup() {    
     	
         CommonBeans cb = new CommonBeans();
-        CamBeans camBeans = new CamBeans();        
+        CamBeans camBeans = new CamBeans();      
+        WeatherBot wxb = new WeatherBot();
         
         StartupNotify.getAtBoot();
         
-        try { WeatherBot.startBot(); } catch (Exception e) { e.printStackTrace(); }
+        try { wxb.startBot(); } catch (Exception e) { e.printStackTrace(); }
         
         final File cachePath = new File(cb.getPathChartCache().toString());
         if(!cachePath.exists()) { cachePath.mkdirs(); }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Aug 2017
-Updated: 2 Feb 2020
+Updated: 22 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -23,7 +23,7 @@ public class RadarWorker {
 		MyDBConnector mdb = new MyDBConnector();
 		
         Connection dbc = null;
-        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { }
         
 		CommonBeans cb = new CommonBeans();
 		WebCommon wc = new WebCommon();
@@ -34,8 +34,8 @@ public class RadarWorker {
 		final File rdObj = new File(ramDrive);
 		final File radPathObj = new File(radPath);
 		
-		if(!rdObj.exists()) { try { rdObj.mkdirs(); } catch (Exception e) { e.printStackTrace(); } }
-		if(!radPathObj.exists()) { try { radPathObj.mkdirs(); } catch (Exception e) { e.printStackTrace(); } }
+		if(!rdObj.exists()) { try { rdObj.mkdirs(); } catch (Exception e) { } }
+		if(!radPathObj.exists()) { try { radPathObj.mkdirs(); } catch (Exception e) { } }
 
 		DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
 		Date date = new Date();
@@ -93,7 +93,7 @@ public class RadarWorker {
 
 		} catch (Exception e) { }
 
-		try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+		try { dbc.close(); } catch (Exception e) { }
 		
 	}
 

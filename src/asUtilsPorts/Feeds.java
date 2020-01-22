@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 18 Jan 2020
+Updated: 22 Jan 2020
 */
 
 package asUtilsPorts;
@@ -19,6 +19,7 @@ import asUtilsPorts.Feed.KCScout;
 import asUtilsPorts.Feed.NHCFetch;
 import asUtilsPorts.Feed.NWSWarnings;
 import asUtilsPorts.SNMP.UbuntuVM;
+import asUtilsPorts.Weather.AlertMe;
 //import asUtilsPorts.Feed.RSSSources;
 
 public class Feeds {
@@ -28,6 +29,7 @@ public class Feeds {
 		String returnData = "Fetch 2 minute feeds:\n";
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
+    	AlertMe alertMe = new AlertMe();
     	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
@@ -46,6 +48,8 @@ public class Feeds {
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             

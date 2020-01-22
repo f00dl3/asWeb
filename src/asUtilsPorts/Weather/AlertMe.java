@@ -1,24 +1,62 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 2 Jan 2020
+Updated: 22 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter; 
+import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import asUtilsPorts.Mailer;
+import asWebRest.action.GetWeatherAction;
+import asWebRest.action.UpdateWeatherAction;
+import asWebRest.dao.WeatherDAO;
+import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
 
 public class AlertMe {
 
+	public void capAlerts(Connection dbc) {
+		
+		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+		UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
+		Mailer mailer = new Mailer();
+		WeatherBot wxBot = new WeatherBot();
+		JSONArray recentQuakes = getWeatherAction.getRecentCapAlerts(dbc);
+		
+		for (int i = 0; i < recentQuakes.length(); i++) {
+			List<String> qParams = new ArrayList<>();
+			JSONObject tCapData = recentQuakes.getJSONObject(i);
+			JSONArray sameCodes = new JSONArray();
+			qParams.add(0, tCapData.getString("id"));
+			String messageToCompile = tCapData.getString("title");
+			String addToMessage = " for ";
+			try {
+				try { 
+					sameCodes = new JSONArray(tCapData.getString("cap12same")); 
+				} catch (Exception e) { e.printStackTrace(); }
+				for(int j = 0; j < sameCodes.length(); j++) {
+					String tSAME = sameCodes.getString(j);
+					addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
+					if(tSAME.equals("020091")) { mailer.sendQuickText(messageToCompile); }
+				}
+			} catch (Exception e) { }					
+			messageToCompile += addToMessage + " (" + tCapData.getString("id") + ")";	
+			wxBot.botBroadcastOnly(messageToCompile);
+			updateWeatherAction.setAlertSentCapAlert(dbc, qParams);
+		}			
+		
+	}
         public static void doAlert() {
             
 	        MyDBConnector mdb = new MyDBConnector();
@@ -61,8 +99,30 @@ public class AlertMe {
         
         }
 
-    
-        private static void getAlertsForUser(Connection dbc, JSONObject params) {
+		public void earthquakeAlerts(Connection dbc) {
+			
+			GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+			UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
+			Mailer mailer = new Mailer();
+			JSONArray recentQuakes = getWeatherAction.getRecentEarthquakes(dbc);
+			
+			for (int i = 0; i < recentQuakes.length(); i++) {
+				List<String> qParams = new ArrayList<>();
+				JSONObject tQuakeData = recentQuakes.getJSONObject(i);
+				String messageToCompile = "EQ: " +
+						" mag " + tQuakeData.getDouble("mag") +
+						" depth " + tQuakeData.getString("depth") +
+						" " + tQuakeData.getString("time") +
+						" @ " + tQuakeData.getString("place") + 
+						" [" + tQuakeData.getString("latitude") + "," + tQuakeData.getString("longitude") + "]";
+				qParams.add(0, tQuakeData.getString("id"));
+				mailer.sendMultiAlert(messageToCompile, false);		
+				updateWeatherAction.setAlertSentEarthquake(dbc, qParams);
+			}			
+			
+		}
+
+		private static void getAlertsForUser(Connection dbc, JSONObject params) {
             
         	Mailer mailer = new Mailer();
             MyDBConnector mdb = new MyDBConnector();

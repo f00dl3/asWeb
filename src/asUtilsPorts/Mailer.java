@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 18 Jan 2020
+Updated: 22 Jan 2020
 */
 
 package asUtilsPorts;
@@ -11,6 +11,8 @@ import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.MyDBConnector;
 import asUtils.Shares.SSHTools;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.WeatherBot;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 import com.jcraft.jsch.JSchException;
@@ -327,6 +329,33 @@ public class Mailer {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public void sendMultiAlert(String message, boolean testing) {
+		
+		JunkyPrivate junkyPrivate = new JunkyPrivate();
+		ThreadRipper tr = new ThreadRipper();
+		WeatherBot wxBot = new WeatherBot();
+		
+		final String eaSubject = "asWeb Broadcast";
+        final String myCell = junkyPrivate.getSmsAddress();
+        final String myGmail = junkyPrivate.getGmailUser();
+        
+		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
+		alerts.add(() -> sendMail(myGmail, eaSubject, message, null));
+		if(!testing) {
+			alerts.add(() -> sendMail(myCell, eaSubject, message, null));
+			alerts.add(() -> wxBot.botBroadcastOnly(message));
+		}
+		tr.runProcesses(alerts, false, false);
+		
+	}
+	
+	public void sendQuickText(String message) {
+		JunkyPrivate junkyPrivate = new JunkyPrivate();
+		final String eaSubject = "asWeb Alert";
+        final String myCell = junkyPrivate.getSmsAddress();
+        sendMail(myCell, eaSubject, message, null);		
 	}
 	
 }

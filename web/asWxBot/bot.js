@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 37;
-var bUpdated = "13 JAN 2020";
+var bBuild = 42;
+var bUpdated = "21 JAN 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -163,10 +163,10 @@ function getWeatherData(msg, station, date) {
 	var url = webUiBase + "Wx";
 	var dateOverrideStart = returnTimestamp(-24);
 	var dateOverrideEnd = returnTimestamp();
-	if(date) {
+	if(isSet(date)) { 
 		dateOverrideStart = date + " 00:00:00";
-		dateOverrideEnd = date + " 23:59:59";
-	}	
+		dateOverrideEnd = date + " 23:59:59";	
+	}
 	var pData = "doWhat=getObsJsonMerged" +
 		"&startTime=" + dateOverrideStart +
 		"&endTime=" + dateOverrideEnd +
@@ -476,17 +476,22 @@ function respondWeatherDataTable(station, data, msg) {
 	var lastMessage = "Station: " + station;
 	msg.reply(trimForDiscord(lastMessage));
 
-	var jds = data.wxObsM1H;
-	jds.forEach(function(jd) {
-		var message = tabulateWeatherData(jd);
-		if(message != lastMessage) { msg.reply("RECENT => " + message); }
-		lastMessage = message;
-	});
-
+	if(station === "KOJC") {
+		var jds = data.wxObsM1H;
+		jds.forEach(function(jd) {
+			var message = tabulateWeatherData(jd);
+			if(message !== lastMessage) { msg.reply("RECENT => " + message); }
+			lastMessage = message;
+		});
+	}
 	var jdt = data.wxObsNow;
 	jdt.forEach(function(jd) {
 		var message = tabulateWeatherData(jd);
-		if(message != lastMessage) { msg.reply(message); }
+		if(message !== lastMessage) {
+			msg.reply(message);
+		} else {
+			//msg.reply(message+"*");
+		}
 		lastMessage = message;
 	});
 	
