@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 16 Dec 2019
+Updated: 25 Jan 2020
  */
 
 package asWebRest.shared;
@@ -24,6 +24,7 @@ public class CommonBeans {
     private int chartMaxWidth = 1920;
     private String defaultNotRanYet = "Query has not ran or has failed!";
     private double elecCost = 0.14;
+    private String fakeUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0";
     private String lastPhotoWar = "2017";
     private String pathApache = "/var/www";
     private String pathMediaServer = pathApache+"/MediaServ";
@@ -40,6 +41,7 @@ public class CommonBeans {
     public int getChartMaxWidth() { return chartMaxWidth; }
     public String getDefaultNotRanYet() { return defaultNotRanYet; }
     public double getElecCost() { return elecCost; }
+    public String getFakeUserAgent() { return fakeUserAgent; }
     public String getLastPhotoWar() { return lastPhotoWar; }
     public String getPathApache() { return pathApache; }
     public String getPathChartCache() { return pathChartCache; }

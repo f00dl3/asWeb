@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 23 Dec 2019
+Updated: 25 Jan 2020
 */
 
 package asWebRest.dao;
@@ -366,6 +366,20 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+        
+    private int countyHomeValue(Connection dbc) {
+    	int returnData = 0;
+        final String query_AutoMaint = "SELECT Value FROM Core.FB_Assets WHERE Description='# House Assessed Value';";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
+            while (resultSet.next()) { 
+                returnData = resultSet.getInt("Value");
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }   
     
     private JSONArray decorTools(Connection dbc) {
         final String query_FBook_DecorTools = "SELECT Description, Quantity, Location, Checked FROM Core.DecorTools ORDER BY Description;";
@@ -704,6 +718,43 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    private String zillowDailyUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ZillowUpdate = "INSERT INTO Feeds.ZillowEstimates (Date, jsonData) VALUES (CURDATE(), ?);";
+        try { returnData = wc.q2do1c(dbc, query_ZillowUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    private String zillowHomeValue(Connection dbc, String zestimate) {
+    	int assessedValue = 0;
+    	int zestimateDifference = 0;
+    	try { assessedValue = countyHomeValue(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { zestimateDifference = Integer.parseInt(zestimate) - assessedValue; } catch (Exception e) { e.printStackTrace(); }
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ZillowHomeUpdate = "UPDATE Core.FB_Assets SET Value="+zestimateDifference+", Checked=CURDATE() WHERE Description='# Zillow House Adjustment';";
+        try { returnData = wc.q2do1c(dbc, query_ZillowHomeUpdate, null); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+	private JSONArray zillowPIDs(Connection dbc) {
+		final String query_GetZPIDs = "SELECT Who, Address, ZPID, MyAsset FROM Core.FB_CompHomeVals WHERE ZPID IS NOT null;";
+		JSONArray tContainer = new JSONArray();
+		try {
+			ResultSet resultSet = wc.q2rs1c(dbc, query_GetZPIDs, null);
+			while(resultSet.next()) {
+				JSONObject tObject = new JSONObject();
+				tObject
+					.put("Who", resultSet.getString("Who"))
+					.put("Address", resultSet.getString("Address"))
+					.put("ZPID", resultSet.getString("ZPID"))
+					.put("MyAsset", resultSet.getInt("MyAsset"));
+				tContainer.put(tObject);
+			}
+			resultSet.close();
+		} catch (Exception e) { e.printStackTrace(); }
+		return tContainer;
+	}				
      
     public JSONArray get3NetWorth(Connection dbc) { return netWorth3(dbc); }
     public JSONArray getAmSch(Connection dbc) { return amSch(dbc); }
@@ -719,6 +770,7 @@ public class FinanceDAO {
     public JSONArray getChecking(Connection dbc) { return checking(dbc); }
     public JSONArray getCkBk(Connection dbc) { return ckBk(dbc); }
     public JSONArray getCkBkComb(Connection dbc) { return ckBkComb(dbc); }
+    public int getCountyHomeValue(Connection dbc) { return countyHomeValue(dbc); }
     public JSONArray getDecorTools(Connection dbc) { return decorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return enw(dbc); }
     public JSONArray getEnwChart(Connection dbc, String periodLength) { return enwChart(dbc, periodLength); }
@@ -733,11 +785,14 @@ public class FinanceDAO {
     public JSONArray getSettingC(Connection dbc) { return settingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return settingH(dbc); }
     public JSONArray getSvBk(Connection dbc) { return svBk(dbc); }
-    public String setAssetTrackUpdate(Connection dbc, List<String> qParams) { return assetTrackUpdate(dbc, qParams); }
+	public JSONArray getZillowPIDs(Connection dbc) { return zillowPIDs(dbc); }
+	public String setAssetTrackUpdate(Connection dbc, List<String> qParams) { return assetTrackUpdate(dbc, qParams); }
     public String setAutoMpgAdd(Connection dbc, List<String> qParams) { return autoMpgAdd(dbc, qParams); }
     public String setCheckbookAdd(Connection dbc, List<String> qParams) { return checkbookAdd(dbc, qParams); }
     public String setCheckbookUpdate(Connection dbc, List<String> qParams) { return checkbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return savingsAdd(dbc, qParams); }
+    public String setZillowDailyUpdate(Connection dbc, List<String> qParams) { return zillowDailyUpdate(dbc, qParams); }
+    public String setZillowHomeValue(Connection dbc, String zestimate) { return zillowHomeValue(dbc, zestimate); }
     
 }

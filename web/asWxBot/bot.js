@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 42;
-var bUpdated = "21 JAN 2020";
+var bBuild = 44;
+var bUpdated = "23 JAN 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;

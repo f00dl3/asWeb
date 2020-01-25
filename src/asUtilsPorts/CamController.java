@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 16 Jan 2020
+Updated: 22 Jan 2020
 */
 
 package asUtilsPorts;
@@ -31,11 +31,9 @@ public class CamController {
             final File pushTemp = camBeans.getPushTemp();
             final File pushTempPub = camBeans.getPushTempPub();
 
-            if (!pushTemp.exists()) {
-                    camPath.mkdirs();
-                    pushTemp.mkdirs();
-                    pushTempPub.mkdirs();
-            }
+            if (!camPath.exists()) { camPath.mkdirs(); }
+            if (!pushTemp.exists()) { pushTemp.mkdirs(); }
+            if (!pushTempPub.exists()) { pushTempPub.mkdirs(); }
 
     		ArrayList<Runnable> cct = new ArrayList<Runnable>();
     		cct.add(() -> mainCamLoop(camPath));

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 23 Dec 2019
+Updated: 25 Jan 2020
  */
 
 package asWebRest.resource;
@@ -223,6 +223,9 @@ public class FinanceResource extends ServerResource {
                     qParams.add(ASvCredit);
                     returnData += updateFinanceAction.setSavingsAdd(dbc, qParams);
                     break;
+                    
+                case "zestimateUpdate":
+                	break;
                 
             }
         }

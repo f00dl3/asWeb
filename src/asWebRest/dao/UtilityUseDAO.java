@@ -1,12 +1,15 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Jul 2018
+Updated: 25 Jan 2020
 */
 
 package asWebRest.dao;
 
 import java.sql.ResultSet;
+import java.util.List;
+
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
 import org.joda.time.DateTime;
@@ -18,6 +21,7 @@ import org.json.JSONObject;
 public class UtilityUseDAO {
     
     WebCommon wc = new WebCommon();
+    CommonBeans wcb = new CommonBeans();
     
     private JSONArray chCellUse(Connection dbc) {
         final String query_ch_CellUse = "SELECT A.Bill AS Bill," +
@@ -57,7 +61,7 @@ public class UtilityUseDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Date", resultSet.getString("Date"))
-                    .put("kWh", resultSet.getDouble("kWh"));
+                    .put("kWh", Double.parseDouble(resultSet.getString("kWh")));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -163,5 +167,13 @@ public class UtilityUseDAO {
         return tContainer;
     }
 
+    public String setElectricityUse(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_kWhUse = "INSERT IGNORE INTO Core.UseElecD" +
+        		" (Date, kWh, kWh_Demand, kWh_PeakDemand, PeakDemandTime, Cost)" +
+        		" VALUES (?,?,?,?,?,?);";
+        try { returnData = wc.q2do1c(dbc, query_kWhUse, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
   
 }

@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 13 Jan 2020
+Updated: 25 Jan 2020
 */
 
 package asUtilsPorts;
@@ -9,6 +9,8 @@ package asUtilsPorts;
 import asUtils.Secure.JunkyPrivate;
 import asUtilsPorts.Feed.CF6Daily;
 import asUtilsPorts.Weather.RadarNightly;
+import asWebRest.hookers.EvergyAPIHook;
+import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.shared.WebCommon;
 
 import java.sql.*;
@@ -19,6 +21,8 @@ public class GetDaily {
 
         CamNightly cn = new CamNightly();
 		CF6Daily cf6 = new CF6Daily();
+		EvergyAPIHook evergy = new EvergyAPIHook();
+		ZillowAPIHook zapi = new ZillowAPIHook();
 		String returnData = "";
 		
 		returnData += cf6.getCf6(dbc, daysBack);
@@ -60,12 +64,15 @@ public class GetDaily {
 		
         String ffxivGilQuery = "INSERT INTO FFXIV_GilByDate (Gil) VALUES " +
                     "((SELECT SUM(Value) FROM Core.FFXIV_Assets) + (SELECT Gil FROM Core.FFXIV_Gil ORDER BY AsOf DESC LIMIT 1));";
+
+        try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, ffxivGilQuery, null); } catch (Exception e) { e.printStackTrace(); }
         
         try { cn.doJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+        try { evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
 
         return returnData;
         

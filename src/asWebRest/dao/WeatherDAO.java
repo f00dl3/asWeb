@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 22 Jan 2020
+Updated: 23 Jan 2020
  */
 
 package asWebRest.dao;
@@ -768,8 +768,9 @@ public class WeatherDAO {
     }
     
     public JSONArray getObsJsonLast(Connection dbc) {
+    	final int offset = 1;
         final String query_ObsJSON_Last = "SELECT ObsID, JSON_EXTRACT(jsonData, '$.KOJC') as jsonSet" +
-                " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID)-1 FROM WxObs.StationDataIndexed);";
+                " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID) FROM WxObs.StationDataIndexed);";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Last, null);

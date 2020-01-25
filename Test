@@ -1,3 +1,1 @@
- -> DEBUG: (String) getHour = 23
- -> DEBUG: (String) getHourMin = 2326
- -> DEBUG: (String) getDate = 20200102Updates completed! Runtime: 1
+{"data":[{"date":"1/16/2020","period":"Thursday","cost":21.735,"billEnd":"0001-01-01T00:00:00","usage":19.4838,"maxTemp":24.6,"billDate":"2020-01-16T00:00:00","peakDateTime":"9:15 p.m.","demand":2.2512,"avgTemp":18.895833,"minTemp":12.9,"peakDemand":2.2512,"billStart":"0001-01-01T00:00:00","isPartial":false,"avgDemand":0},{"date":"1/17/2020","period":"Friday","cost":24.6354,"billEnd":"0001-01-01T00:00:00","usage":22.3818,"maxTemp":36.3,"billDate":"2020-01-17T00:00:00","peakDateTime":"7:30 p.m.","demand":2.2536,"avgTemp":29.8875,"minTemp":23.2,"peakDemand":2.2536,"billStart":"0001-01-01T00:00:00","isPartial":false,"avgDemand":0}],"unitOfMeasure":"kWh","maxDigits":2}
