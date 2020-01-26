@@ -8,10 +8,8 @@ package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
-import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
-import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
@@ -163,11 +161,6 @@ public class TestResource extends ServerResource {
 	        		AlertMe alertMe = new AlertMe();
 	        		alertMe.earthquakeAlerts(dbc);
 	        		break;
-
-	        	case "Evergy":
-	        		EvergyAPIHook evergy = new EvergyAPIHook();
-	        		evergy.dailyJob(dbc);
-	        		break;
 	        		
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
@@ -203,11 +196,6 @@ public class TestResource extends ServerResource {
                     }
 	            	returnData += stations.fetch(wxTest);
 	            	break;
-
-				case "Zillow":
-					ZillowAPIHook zapi = new ZillowAPIHook();
-					zapi.autoZestimates(dbc);
-					break;
 	            	
             }
         }

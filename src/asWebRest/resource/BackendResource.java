@@ -12,6 +12,7 @@ package asWebRest.resource;
 
 import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.WeatherBot;
+import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.shared.MyDBConnector;
 
 import java.sql.Connection;
@@ -138,7 +139,12 @@ public class BackendResource extends ServerResource {
 	                try { mhpArg1 = argsInForm.getFirstValue("troop"); } catch (Exception e) { }
 	                MHPFetch.doMHP(dbc, mhpArg1);                    
 	                break;
-	                
+
+				case "Zillow":
+					ZillowAPIHook zapi = new ZillowAPIHook();
+					zapi.autoZestimates(dbc);
+					break;
+					
 	            case "WxBot":
 	        		WeatherBot wxb = new WeatherBot();
 	            	wxb.startBot();

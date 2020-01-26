@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: on creation
+Updated: 26 Jan 2020
  */
 
 package asWebRest.hookers;
@@ -23,6 +23,7 @@ import org.jsoup.Jsoup;
 
 import asWebRest.action.UpdateUtilityUseAction;
 import asWebRest.dao.UtilityUseDAO;
+import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.secure.EvergyBeans;
 
 public class EvergyAPIHook {
@@ -58,14 +59,15 @@ public class EvergyAPIHook {
 		try { updateDatabase(dbc, friendlyDate, friendlyDate); } catch (Exception e) { e.printStackTrace(); }
     }
     
-	private Response initialLogin() {
+	private Response initialLogin(Connection dbc) {
+		WebUIserAuthDAO auth = new WebUIserAuthDAO();
 		EvergyBeans eb = new EvergyBeans();
 		String url = "https://www.evergy.com/log-in";
 		Response res = null;
 		try {
 			res = Jsoup.connect(url)
 				.data("username", eb.getUser())
-				.data("password", eb.getPass())
+				.data("password", auth.getExternalPassword(dbc, "Evergy"))
 				.method(Method.POST)
 				.execute();
 		} catch (Exception e) {
@@ -74,10 +76,10 @@ public class EvergyAPIHook {
 		return res;
 	}
 	
-	public Map<String, String> returnLogin() {
+	public Map<String, String> returnLogin(Connection dbc) {
 		Map<String, String> cookies = null;
 		try {
-			Response res = initialLogin();
+			Response res = initialLogin(dbc);
 			cookies = res.cookies();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +87,7 @@ public class EvergyAPIHook {
 		return cookies;
 	}
 	
-	public String returnEnergyUse(String dateForUseA, String dateForUseB) {
+	public String returnEnergyUse(Connection dbc, String dateForUseA, String dateForUseB) {
 		DateTimeFormatter formatIn = DateTimeFormat.forPattern("yyyy-MM-dd");
 		DateTimeFormatter formatOut = DateTimeFormat.forPattern("M/d/yyyy");
 		DateTime dateForUseAdt = formatIn.parseDateTime(dateForUseA);
@@ -94,7 +96,7 @@ public class EvergyAPIHook {
 		String dateForUseBf = formatOut.print(dateForUseBdt);
 		String returnVal = "returnEnergyUse()\n";
 		try {
-			returnVal = apiCallEnergyUse(returnLogin(), dateForUseAf, dateForUseBf);
+			returnVal = apiCallEnergyUse(returnLogin(dbc), dateForUseAf, dateForUseBf);
 		} catch (Exception e) {
 			returnVal += "\n" + ExceptionUtils.getStackTrace(e);
 		}
@@ -106,7 +108,7 @@ public class EvergyAPIHook {
 		UpdateUtilityUseAction updateUtilityUseAction = new UpdateUtilityUseAction(new UtilityUseDAO());
 		JSONObject energyData = new JSONObject();
 		try {
-			energyData = new JSONObject(returnEnergyUse(dateForUseA, dateForUseB));
+			energyData = new JSONObject(returnEnergyUse(dbc, dateForUseA, dateForUseB));
 			returnData = energyData.toString();
 			JSONArray dataArray = energyData.getJSONArray("data"); 
 			for(int i = 0; i < dataArray.length(); i++) {

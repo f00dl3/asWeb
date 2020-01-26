@@ -11,6 +11,7 @@ import asUtils.Shares.JunkyBeans;
 import asUtils.Shares.MyDBConnector;
 import asUtils.Shares.SSHTools;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
@@ -125,24 +126,12 @@ public class Mailer {
 	}
         
 	public static String mailAuthSsh(File keyfile) throws JSchException {
-            
-                com.jcraft.jsch.Session sessionT = SSHTools.portForwardSessionDesktop(keyfile, 3307, 3306);
-                sessionT.connect();
-
-                MyDBConnector mdb = new MyDBConnector();
-                Connection dbc = null;
-                try { dbc = mdb.getMyConnectionSsh(); } catch (Exception e) { e.printStackTrace(); }
-                
-				final String getAuthSQL = "SELECT Value FROM JavaSex WHERE Item='gmpa' LIMIT 1;";
-				String password = null;
-				try ( ResultSet resultSetGetAuth = mdb.q2rs1c(dbc, getAuthSQL, null); ) {
-					while (resultSetGetAuth.next()) { password = resultSetGetAuth.getString("Value"); }
-				} catch (Exception e) { e.printStackTrace(); }
-		                
-                try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
-                
-                sessionT.disconnect();
-                
+        String password = "";
+		WebUIserAuthDAO auth = new WebUIserAuthDAO();
+        Connection dbc = null;
+        try { dbc = MyDBConnector.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        try { password = auth.getExternalPassword(dbc, "gmpa"); } catch (Exception e) { e.printStackTrace(); }
+        try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
 		return password;
 	}
         
