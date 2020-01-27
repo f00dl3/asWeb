@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 25 Jan 2020
+Updated: 26 Jan 2020
  */
 
 package asWebRest.resource;
@@ -35,6 +35,7 @@ import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.cWazey;
+import asUtilsPorts.SNMP.Router;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
@@ -171,9 +172,9 @@ public class TestResource extends ServerResource {
                     );
                     break;
                     
-                case "SNMP-UVM":
-                	UbuntuVM uvmSnmp = new UbuntuVM();
-                	uvmSnmp.snmpUbuntuVM(dbc);
+                case "SNMP-Router":
+                	Router routerSnmp = new Router();
+                	routerSnmp.snmpRouter(dbc);
                 	break;
 
             	case "ThreadTest":

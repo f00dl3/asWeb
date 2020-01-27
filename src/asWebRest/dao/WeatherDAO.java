@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 23 Jan 2020
+Updated: 26 Jan 2020
  */
 
 package asWebRest.dao;
@@ -383,7 +383,7 @@ public class WeatherDAO {
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Logs_XMLWxObs, null);
             while (resultSet.next()) {
-                dataBack = resultSet.getString("County") + " (" + resultSet.getString("State") + "), ";
+                dataBack = resultSet.getString("State") + "/" + resultSet.getString("County") + ", ";
             }
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); } 

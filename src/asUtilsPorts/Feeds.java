@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 22 Jan 2020
+Updated: 26 Jan 2020
 */
 
 package asUtilsPorts;
@@ -18,6 +18,7 @@ import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.KCScout;
 import asUtilsPorts.Feed.NHCFetch;
 import asUtilsPorts.Feed.NWSWarnings;
+import asUtilsPorts.SNMP.Router;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Weather.AlertMe;
 //import asUtilsPorts.Feed.RSSSources;
@@ -30,12 +31,13 @@ public class Feeds {
 
     	ANSSQuakes anssQuakes = new ANSSQuakes();
     	AlertMe alertMe = new AlertMe();
+        CamBeans camBeans = new CamBeans();
     	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
+        GetSPC getSPC = new GetSPC();
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
-        GetSPC getSPC = new GetSPC();
-        CamBeans camBeans = new CamBeans();
+        Router routerSnmp = new Router();
         UbuntuVM uvmSnmp = new UbuntuVM();
         
 		final File camPath = camBeans.getCamPath();
@@ -47,9 +49,10 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             

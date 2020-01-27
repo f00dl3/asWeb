@@ -53,7 +53,7 @@ public class EvergyAPIHook {
 	}
     
     public void dailyJob(Connection dbc) {
-    	DateTime tDateTime = new DateTime().minusDays(1);
+    	DateTime tDateTime = new DateTime().minusDays(2);
 		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");	
 		String friendlyDate = formatOut.print(tDateTime);
 		try { updateDatabase(dbc, friendlyDate, friendlyDate); } catch (Exception e) { e.printStackTrace(); }

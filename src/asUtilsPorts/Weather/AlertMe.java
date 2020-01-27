@@ -1,6 +1,6 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 22 Jan 2020
+Updated: 26 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -51,7 +51,7 @@ public class AlertMe {
 					if(tSAME.equals("020091")) { mailer.sendQuickText(messageToCompile); }
 				}
 			} catch (Exception e) { }					
-			messageToCompile += addToMessage + " (" + tCapData.getString("id") + ")";	
+			messageToCompile += addToMessage;	
 			wxBot.botBroadcastOnly(messageToCompile);
 			updateWeatherAction.setAlertSentCapAlert(dbc, qParams);
 		}			
