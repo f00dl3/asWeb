@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from Entertainment.java: 14 Nov 2019
-Updated: 20 Nov 2019
+Updated: 29 Jan 2020
 */
 
 package asWebRest.dao;
@@ -213,6 +213,14 @@ public class FfxivDAO {
 	    String returnData = wcb.getDefaultNotRanYet();
 	    final String query_FFXIV_Gil = "INSERT INTO Core.FFXIV_Gil (Gil) VALUES (?);";
 	    try { returnData = wc.q2do1c(dbc, query_FFXIV_Gil, qParams); } catch (Exception e) { e.printStackTrace(); }
+	    return returnData;
+	}
+	
+	private String ffxivGilAuto(Connection dbc) {
+	    String returnData = wcb.getDefaultNotRanYet();
+		String ffxivGilQuery = "INSERT INTO FFXIV_GilByDate (Gil) VALUES " +
+                "((SELECT SUM(Value) FROM Core.FFXIV_Assets) + (SELECT Gil FROM Core.FFXIV_Gil ORDER BY AsOf DESC LIMIT 1));";
+	    try { returnData = wc.q2do1c(dbc, ffxivGilQuery, null); } catch (Exception e) { e.printStackTrace(); }
 	    return returnData;
 	}
         
@@ -659,6 +667,7 @@ public class FfxivDAO {
     public String setFfxivFateDone(Connection dbc, List<String> qParams) { return ffxivFateDone(dbc, qParams); }
     public String setFfxivGatheringDone(Connection dbc, List<String> qParams) { return ffxivGatheringDone(dbc, qParams); }
     public String setFfxivGil(Connection dbc, List<String> qParams) { return ffxivGil(dbc, qParams); }
+    public String setFfxivGilAuto(Connection dbc) { return ffxivGilAuto(dbc); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setFfxivLevelsIncrease(Connection dbc, List<String> qParams) { return ffxivLevelsIncrease(dbc, qParams); }
    

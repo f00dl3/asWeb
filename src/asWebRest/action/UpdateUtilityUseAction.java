@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: on Creation
+Updated: 29 Jan 2020
  */
 
 package asWebRest.action;
@@ -16,6 +16,7 @@ public class UpdateUtilityUseAction {
 	private UtilityUseDAO utilityUseDAO;
 	public UpdateUtilityUseAction(UtilityUseDAO utilityUseDAO) { this.utilityUseDAO = utilityUseDAO; }
     
-    public String setElectricityUse(Connection dbc, List<String> qParams) { return utilityUseDAO.setElectricityUse(dbc, qParams); }
+	public String setElectricityUse(Connection dbc, List<String> qParams) { return utilityUseDAO.setElectricityUse(dbc, qParams); }
+	public String setGasUse(Connection dbc, List<String> qParams) { return utilityUseDAO.setGasUse(dbc, qParams); }
 
 }

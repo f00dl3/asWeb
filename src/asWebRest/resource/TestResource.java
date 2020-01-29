@@ -1,14 +1,13 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 28 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
-import asWebRest.hookers.KansasGasHook;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
 import asWebRest.hookers.WaterOneHook;
@@ -37,8 +36,6 @@ import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.cWazey;
-import asUtilsPorts.SNMP.Router;
-import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
 
@@ -174,11 +171,6 @@ public class TestResource extends ServerResource {
                     );
                     break;
                     
-                case "Gas":
-                	KansasGasHook kgs = new KansasGasHook();
-                	returnData = kgs.returnGasUse(dbc);
-                	break;
-
             	case "ThreadTest":
             		ArrayList<Runnable> testList = new ArrayList<Runnable>();
             		testList.add(() -> wc.runProcess("echo 1 of 6"));

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asWebRest.dao;
@@ -70,7 +70,8 @@ public class UtilityUseDAO {
     }
     
     public JSONArray getChUseGas(Connection dbc) {
-        final String query_ch_UseGas = "SELECT Month, TotalMCF FROM Core.UseGas ORDER BY Month;";
+        final String query_ch_UseGas = "SELECT Month, TotalMCF, BilledAmount, BilledDays" +
+        		" FROM Core.UseGas ORDER BY Month;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ch_UseGas, null);
@@ -78,7 +79,9 @@ public class UtilityUseDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Month", resultSet.getString("Month"))
-                    .put("TotalMCF", resultSet.getDouble("TotalMCF"));
+                    .put("TotalMCF", resultSet.getDouble("TotalMCF"))
+                    .put("BilledAmount", resultSet.getDouble("BilledAmount"))
+                    .put("BilledDays", resultSet.getInt("BilledDays"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -175,5 +178,16 @@ public class UtilityUseDAO {
         try { returnData = wc.q2do1c(dbc, query_kWhUse, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
+
+    public String setGasUse(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_Gas = "INSERT INTO Core.UseGas" +
+        		" (Month, TotalMCF, BilledAmount, BilledDays)" +
+        		" VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE" +
+        		" TotalMCF=?, BilledAmount=?, BilledDays=?;";
+        try { returnData = wc.q2do1c(dbc, query_Gas, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+  
   
 }

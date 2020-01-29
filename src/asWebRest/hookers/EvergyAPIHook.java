@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: 26 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asWebRest.hookers;
@@ -107,13 +107,13 @@ public class EvergyAPIHook {
 		String returnData = "";
 		UpdateUtilityUseAction updateUtilityUseAction = new UpdateUtilityUseAction(new UtilityUseDAO());
 		JSONObject energyData = new JSONObject();
+		DateTimeFormatter formatIn = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");		
 		try {
 			energyData = new JSONObject(returnEnergyUse(dbc, dateForUseA, dateForUseB));
 			returnData = energyData.toString();
 			JSONArray dataArray = energyData.getJSONArray("data"); 
-			for(int i = 0; i < dataArray.length(); i++) {
-				DateTimeFormatter formatIn = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
-				DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");			
+			for(int i = 0; i < dataArray.length(); i++) {	
 				List<String> qParams = new ArrayList<String>();
 				JSONObject tJo = dataArray.getJSONObject(i);
 				String evergyDate = tJo.getString("billDate");	

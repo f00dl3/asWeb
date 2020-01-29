@@ -1,25 +1,32 @@
 /*
 by Anthony Stump
 Created: 26 Jan 2020
-Updated: 27 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asWebRest.hookers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.sql.Connection;
 import org.apache.commons.lang3.exception.*;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
+import asWebRest.action.UpdateUtilityUseAction;
+import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.secure.KansasGasBeans;
 
 public class KansasGasHook {
-	
+		
 	private KansasGasBeans kgb = new KansasGasBeans();
 	
 	private String apiBase = "https://api.kansasgasservice.com/api";
@@ -116,6 +123,40 @@ public class KansasGasHook {
 		}
 		//returnVal += debugData;
 		return returnVal;
+	}
+	
+	public void writeToDatabase(Connection dbc) {
+		JSONObject chartData = null;
+		UpdateUtilityUseAction updateUtilityUseAction = new UpdateUtilityUseAction(new UtilityUseDAO());
+		DateTimeFormatter formatIn = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM");		
+		try {
+			chartData = new JSONObject(apiCallGasUse(returnLogin(dbc)));
+			JSONArray theArray = chartData.getJSONArray("chartSeries");
+			for(int i = 0; i < theArray.length(); i++) {
+				JSONObject thisDataset = theArray.getJSONObject(i);
+				JSONArray theseItems = thisDataset.getJSONArray("chartItems");
+				for(int j = 0; j < theseItems.length(); j++) {
+					List<String> qParams = new ArrayList<String>();
+					JSONObject thisMonth = theseItems.getJSONObject(j);
+					String tMcf = Double.toString(thisMonth.getDouble("consumption"));
+					String dateIn = thisMonth.getString("plotDate");
+					String billedAmount = Double.toString(thisMonth.getDouble("billedAmount"));
+					String billedDays = Integer.toString(thisMonth.getInt("daysOfService"));
+					DateTime tDateTime = formatIn.parseDateTime(dateIn);
+					String friendlyDate = formatOut.print(tDateTime);
+					qParams.add(friendlyDate);
+					qParams.add(tMcf);
+					qParams.add(billedAmount);
+					qParams.add(billedDays);
+					qParams.add(tMcf);
+					qParams.add(billedAmount);
+					qParams.add(billedDays);
+					try { updateUtilityUseAction.setGasUse(dbc, qParams); } catch (Exception e) { e.printStackTrace(); }					
+				}
+			}
+		} catch (Exception e) { e.printStackTrace(); }
+		
 	}
 	
 }

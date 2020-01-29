@@ -1,13 +1,15 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 26 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
 import java.io.File;
 import java.sql.Connection;
+
+import org.joda.time.DateTime;
 
 import asUtilsPorts.CamPusher;
 import asUtilsPorts.Cams.CamBeans;
@@ -78,6 +80,7 @@ public class Feeds {
     
     public static String doHourly(Connection dbc) {
     	
+    	DateTime rightNow = new DateTime();
     	String returnData = "Fetch hourly feeds:\n";
     	
     	//RSSSources rssSources = new RSSSources();
@@ -87,6 +90,10 @@ public class Feeds {
     	try { getSPC.doGetSPCHourly(dbc); } catch (Exception e) { e.printStackTrace(); }    	
     	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	//try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	
+    	if(rightNow.getHourOfDay() == 6) {
+    		returnData += GetDaily.getDaily(dbc, 1);
+    	}
     	
     	return returnData;
     	

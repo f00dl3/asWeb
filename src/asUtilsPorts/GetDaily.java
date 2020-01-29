@@ -7,21 +7,30 @@ Updated: 29 Jan 2020
 package asUtilsPorts;
 
 import asUtilsPorts.Feed.CF6Daily;
+import asUtilsPorts.UbuntuVM.BackThatAssUp;
 import asUtilsPorts.Weather.RadarNightly;
+import asWebRest.action.UpdateFfxivAction;
+import asWebRest.dao.FfxivDAO;
 import asWebRest.hookers.EvergyAPIHook;
+import asWebRest.hookers.KansasGasHook;
 import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
 
 import java.sql.*;
 
+import org.joda.time.DateTime;
+
 public class GetDaily {
 
 	public static String getDaily(Connection dbc, int daysBack) {
 
+		DateTime rightNow = new DateTime();
+		
         CamNightly cn = new CamNightly();
 		CF6Daily cf6 = new CF6Daily();
 		EvergyAPIHook evergy = new EvergyAPIHook();
+		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
 		ZillowAPIHook zapi = new ZillowAPIHook();
 		String returnData = "";
 		
@@ -62,17 +71,26 @@ public class GetDaily {
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'TR')"
 			+ ");";
 		
-        String ffxivGilQuery = "INSERT INTO FFXIV_GilByDate (Gil) VALUES " +
-                    "((SELECT SUM(Value) FROM Core.FFXIV_Assets) + (SELECT Gil FROM Core.FFXIV_Gil ORDER BY AsOf DESC LIMIT 1));";
+        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.q2do1c(dbc, ffxivGilQuery, null); } catch (Exception e) { e.printStackTrace(); }
+        try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         try { cn.doJob(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+        
+        if(rightNow.dayOfWeek().get() == 1) {
+        	KansasGasHook kgs = new KansasGasHook();
+        	kgs.writeToDatabase(dbc);
+        }
+        
+        if(rightNow.dayOfMonth().get() == 1 || rightNow.dayOfMonth().get() == 15) {
+        	BackThatAssUp btau = new BackThatAssUp();
+        	btau.reminder();
+        }
 
         return returnData;
         
