@@ -2,15 +2,14 @@
 by Anthony Stump
 Created: 4 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
-import asUtils.Shares.MyDBConnector;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,12 +31,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import asUtilsPorts.Shares.JunkyBeans;
+
 
 public class GPSParse {
 
 	public static void main(String[] args) {
 
 		CommonBeans cb = new CommonBeans();
+		MyDBConnector mdb = new MyDBConnector();
         JunkyBeans junkyBeans = new JunkyBeans();
         WebCommon wc = new WebCommon();
         
@@ -590,7 +592,7 @@ public class GPSParse {
 
 		System.out.println(gpsQuery);
                 if(sourceType.equals("csv") || sourceType.equals("gpx") || sourceType.equals("fit")) {
-                    try ( Connection conn = MyDBConnector.getMyConnection(); Statement stmt = conn.createStatement();) {
+                    try ( Connection conn = mdb.getMyConnection(); Statement stmt = conn.createStatement();) {
                     	stmt.executeUpdate(gpsQuery);
                     	stmt.executeUpdate(squeezeThisQueryIn);
                 	}

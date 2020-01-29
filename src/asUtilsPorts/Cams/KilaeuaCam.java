@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 17 May 2018
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
 
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
 import java.io.*;
@@ -15,13 +16,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import asUtils.Shares.MyDBConnector;
-
 public class KilaeuaCam {
 
 	public void doKilaeua() {
 
         CommonBeans cb = new CommonBeans();
+        MyDBConnector mdb = new MyDBConnector();
         WebCommon wc = new WebCommon();
         
 		final String ramDrive = cb.getRamPath().toString()+"/kilaeua";
@@ -39,7 +39,7 @@ public class KilaeuaCam {
 		String volCamUrlSQL = "SELECT URL FROM Core.WebLinks WHERE Bubble='KIVC';";
 
 		try (
-			Connection conn = MyDBConnector.getMyConnection();
+			Connection conn = mdb.getMyConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(volCamUrlSQL);
 		) {	

@@ -1,22 +1,23 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 22 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
-import asUtils.Secure.JunkyPrivate;
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.MyDBConnector;
-import asUtils.Shares.SSHTools;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.dao.WebUIserAuthDAO;
 import asWebRest.hookers.WeatherBot;
+import asWebRest.secure.JunkyPrivate;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 import com.jcraft.jsch.JSchException;
+
+import asUtilsPorts.Shares.JunkyBeans;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -110,13 +111,15 @@ public class Mailer {
 
 	public static String mailAuth() {
             
-                MyDBConnector mdb = new MyDBConnector();
-                Connection dbc = null;
-                try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        MyDBConnector mdb = new MyDBConnector();
+        WebCommon wc = new WebCommon();
+        
+        Connection dbc = null;
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
                 
 		final String getAuthSQL = "SELECT Value FROM JavaSex WHERE Item='gmpa' LIMIT 1;";
 		String password = null;
-		try ( ResultSet resultSetGetAuth = mdb.q2rs1c(dbc, getAuthSQL, null); ) {
+		try ( ResultSet resultSetGetAuth = wc.q2rs1c(dbc, getAuthSQL, null); ) {
 			while (resultSetGetAuth.next()) { password = resultSetGetAuth.getString("Value"); }
 		} catch (Exception e) { e.printStackTrace(); }
                 
@@ -127,9 +130,10 @@ public class Mailer {
         
 	public static String mailAuthSsh(File keyfile) throws JSchException {
         String password = "";
+        MyDBConnector mdb = new MyDBConnector();
 		WebUIserAuthDAO auth = new WebUIserAuthDAO();
         Connection dbc = null;
-        try { dbc = MyDBConnector.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
+        try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         try { password = auth.getExternalPassword(dbc, "gmpa"); } catch (Exception e) { e.printStackTrace(); }
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
 		return password;

@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 28 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
-import asUtils.Shares.JunkyBeans;
 import java.io.File;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class CodexImport {
     

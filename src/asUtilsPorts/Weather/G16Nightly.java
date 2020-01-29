@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 7 SEP 2017
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -18,6 +17,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 
 public class G16Nightly {

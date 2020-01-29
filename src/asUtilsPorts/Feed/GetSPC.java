@@ -1,12 +1,11 @@
 /* 
 by Anthony Stump
 Created: 17 Aug 2017
-Updated: 18 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Feed;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
@@ -24,6 +23,8 @@ import java.util.Scanner;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 
 public class GetSPC {

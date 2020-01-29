@@ -1,15 +1,14 @@
 /*
 by Anthony Stump
 Created: 20 Dec 2017
-Updated: 10 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
-
 import java.io.File;
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class CamBeans {
     

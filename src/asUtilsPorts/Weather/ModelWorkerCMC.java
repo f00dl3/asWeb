@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Oct 2017
-Updated: 2 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Weather;
@@ -21,7 +21,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.*;
 
-import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class ModelWorkerCMC {
 	

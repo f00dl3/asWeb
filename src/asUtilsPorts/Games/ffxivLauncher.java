@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 2 Jan 2018
-Updated: 28 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Games;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
@@ -18,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class ffxivLauncher {
     

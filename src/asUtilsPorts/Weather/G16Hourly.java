@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 7 Sep 2017
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 
@@ -14,6 +13,8 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 
 public class G16Hourly {

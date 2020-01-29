@@ -1,16 +1,16 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 25 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
-import asUtils.Secure.JunkyPrivate;
 import asUtilsPorts.Feed.CF6Daily;
 import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.ZillowAPIHook;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
 
 import java.sql.*;

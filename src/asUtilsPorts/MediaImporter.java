@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Dec 2017
-Updated: 29 Dec 2019
+Updated: 29 Jan 2020
 utilizes:
     https://github.com/bramp/ffmpeg-cli-wrapper
     https://stackoverflow.com/questions/3571223/how-do-i-get-the-file-extension-of-a-file-in-java
@@ -9,13 +9,15 @@ utilizes:
 
 package asUtilsPorts;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.WebCommon;
 
 import com.spikeify.ffmpeg.FFprobe;
 import com.spikeify.ffmpeg.probe.FFmpegFormat;
 import com.spikeify.ffmpeg.probe.FFmpegProbeResult;
 import com.spikeify.ffmpeg.probe.FFmpegStream;
+
+import asUtilsPorts.Shares.JunkyBeans;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;

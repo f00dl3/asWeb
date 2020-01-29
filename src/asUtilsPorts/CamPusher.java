@@ -1,18 +1,18 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 10 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 import asWebRest.secure.GDriveAttribs;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
-import asUtils.Shares.JunkyBeans;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

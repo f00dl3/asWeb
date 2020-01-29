@@ -2,12 +2,12 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 27 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 

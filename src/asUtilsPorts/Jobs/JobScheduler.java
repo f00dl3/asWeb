@@ -6,8 +6,6 @@ Updated: 29 Dec 2019
 
 package asUtilsPorts.Jobs;
 
-import asUtils.Jobs.HelloJob;
-import asUtils.Jobs.RadarJob;
 import static org.quartz.DateBuilder.evenMinuteDate;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;

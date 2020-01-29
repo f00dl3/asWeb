@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 21 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -9,13 +9,14 @@ package asUtilsPorts.Cams;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
-import asUtils.Shares.JunkyBeans;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class CamWorkerHF {
 

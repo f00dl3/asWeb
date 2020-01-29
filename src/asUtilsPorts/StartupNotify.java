@@ -1,12 +1,12 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 21 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asUtilsPorts;
 
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;

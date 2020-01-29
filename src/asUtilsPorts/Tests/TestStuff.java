@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 1 Jul 2018
 Ported to asWeb: 11 Feb 2019
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
  */
 
 package asUtilsPorts.Tests;
@@ -10,8 +10,8 @@ package asUtilsPorts.Tests;
 import java.io.File;
 import org.apache.commons.lang3.exception.*;
 
-import asUtils.Shares.JunkyBeans;
 import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 import asWebRest.shared.WebCommon;
 
 public class TestStuff {

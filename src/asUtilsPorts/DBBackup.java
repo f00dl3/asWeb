@@ -1,17 +1,18 @@
 /*
 by Anthony Stump
 Created 24 Dec 2017
-Updated 28 Jan 2020
+Updated 29 Jan 2020
  */
 
 package asUtilsPorts;
 
-import asUtils.UbuntuVM.BackThatAssUp;
 import asWebRest.secure.GDriveAttribs;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.WebCommon;
-import asUtils.Secure.JunkyPrivate;
-import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.Shares.JunkyBeans;
+import asUtilsPorts.UbuntuVM.BackThatAssUp;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

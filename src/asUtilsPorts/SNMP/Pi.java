@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Raspberry Pi class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 20 Jan 2020
+Last updated: 29 Jan 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -13,8 +13,6 @@ import asWebRest.shared.WebCommon;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.text.DateFormat;

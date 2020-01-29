@@ -1,17 +1,16 @@
 /* 
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 16 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Cams.CamBeans;
-import asWebRest.shared.CommonBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 import asWebRest.shared.GDrive;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
-import asUtils.Shares.JunkyBeans;
 import java.io.*;
 import java.sql.*;
 import java.nio.file.*;
@@ -27,7 +26,6 @@ public class CamNightly {
 
         JunkyBeans junkyBeans = new JunkyBeans();
         CamBeans camBeans = new CamBeans();
-        CommonBeans cb = new CommonBeans();
         ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();
                 

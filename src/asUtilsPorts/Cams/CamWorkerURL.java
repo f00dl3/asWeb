@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 23 Oct 2018
-Updated: 14 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
@@ -17,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class CamWorkerURL {
 

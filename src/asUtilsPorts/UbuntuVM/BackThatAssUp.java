@@ -1,24 +1,26 @@
 /*
 by Anthony Stump
 Created: 2 May 2019
-Updated: 28 Jan 2020
+Updated: 29 Jan 2020
  */
 
 package asUtilsPorts.UbuntuVM;
 
-import asUtils.Secure.JunkyPrivate;
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.Mailer;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
+import asUtilsPorts.Mailer;
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class BackThatAssUp {
 	
 	public void reminder() {
 		
 		JunkyPrivate junkyPrivate = new JunkyPrivate();
+		Mailer mailer = new Mailer();
     
 	    final String myCell = junkyPrivate.getSmsAddress();
 	    final String myGmail = junkyPrivate.getGmailUser();
@@ -31,14 +33,15 @@ public class BackThatAssUp {
                 " Please run backup manually via command line. \n" +
                 " Estimated file size not available from API.";
         
-        Mailer.sendMail(myCell, thisSubject, thisMessage, null);
-        Mailer.sendMail(myGmail, thisSubject, thisMessage, null);
+        mailer.sendMail(myCell, thisSubject, thisMessage, null);
+        mailer.sendMail(myGmail, thisSubject, thisMessage, null);
         
 	}
     
     public static void sendEmail(String onEvent, long fileSize) {
         
         JunkyPrivate junkyPrivate = new JunkyPrivate();
+        Mailer mailer = new Mailer();
         
         final String myCell = junkyPrivate.getSmsAddress();
         final String myGmail = junkyPrivate.getGmailUser();
@@ -72,8 +75,8 @@ public class BackThatAssUp {
                 
         }
                 
-        Mailer.sendMail(myCell, thisSubject, thisMessage, null);
-        Mailer.sendMail(myGmail, thisSubject, thisMessage, null);
+        mailer.sendMail(myCell, thisSubject, thisMessage, null);
+        mailer.sendMail(myGmail, thisSubject, thisMessage, null);
         
     }
     

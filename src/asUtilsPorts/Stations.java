@@ -1,12 +1,12 @@
 /*
 Stations - Core Process 
 Created: 4 Sep 2016
-Updated: 14 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts;
 
-import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Weather.ModelBeans;
 import asUtilsPorts.Weather.xsImageOp;
 import asUtilsPorts.Weather.xsMETARAutoAdd;

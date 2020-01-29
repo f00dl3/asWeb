@@ -3,7 +3,7 @@ by Anthony Stump
 Models 2020 core class Tomcat Port
 
 Created: 22 Sep 2017
-Updated: 6 Jan 2020
+Updated: 29 Jan 2020
 Status: UNTESTED on Tomcat
 */
 
@@ -22,7 +22,6 @@ import asUtilsPorts.Weather.ModelBeans;
 import asUtilsPorts.Weather.ModelImageOps;
 import asUtilsPorts.Weather.ModelShare;
 import asUtilsPorts.Weather.ModelWorker;
-import asUtilsPorts.Weather.RadarWorker;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;

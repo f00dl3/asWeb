@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 17 May 2018
-Updated: 30 Dec 2019
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
 
-import asUtils.Shares.JunkyBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
@@ -16,6 +15,8 @@ import java.nio.file.*;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import asUtilsPorts.Shares.JunkyBeans;
 
 
 public class KilaeuaNightly {

@@ -2,12 +2,12 @@
 SNMP Walk -> Database --- Router class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 26 Jan 2020
+Last updated: 29 Jan 2020
  */
 
 package asUtilsPorts.SNMP;
 
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 

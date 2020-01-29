@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Jan 2020
-Updated: 17 Jan 2020
+Updated: 29 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
 
 public class CamSensors {
