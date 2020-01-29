@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 25 Jan 2020
+Updated: 28 Jan 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -35,6 +35,7 @@ import asUtilsPorts.Mailer;
 import asUtilsPorts.Radar;
 import asUtilsPorts.Cams.KilaeuaCam;
 import asUtilsPorts.Feed.MHPFetch;
+import asUtilsPorts.UbuntuVM.BackThatAssUp;
 import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
 
@@ -63,6 +64,11 @@ public class BackendResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
+            
+            	case "Backup":
+        			BackThatAssUp btau = new BackThatAssUp();
+        			btau.reminder();
+        			break;
             		
             	case "Broadcast":
             		Mailer mailer = new Mailer();

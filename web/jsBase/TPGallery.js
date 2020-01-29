@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 20 Dec 2019
+Updated: 28 Jan 2020
  */
 
 var maxListing = 5000;
@@ -90,7 +90,7 @@ function fetchTpiDiff(formData) {
                 handleAs: "json"
             }).then(
                 function(data) {
-                	window.alert("Fetch TPI Difference for " + formData.TPDiffDo + " successful!");
+                	showNotice("Fetch " + formData.TPDiffDo + " successful!");
                     aniPreload("off");
                 },
                 function(error) { 

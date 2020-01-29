@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 9 Jan 2020
+Updated: 27 Jan 2020
 */
 
 package asUtilsPorts.Cams;
@@ -65,7 +65,7 @@ public class CamWorkerStream {
 		File c4_file = new File(camPath+"/webc4-temp.jpeg");
 		File c5_file = new File(camPath+"/webc5-temp.jpeg");
         
-        final String c1_url = "/dev/video0";
+        final String c1_url = "rtsp://localhost:8555/unicast";
         final String c2_url = "rtsp://" + ipCamUser + ":" + ipCamPass + "@" + jp.getIpForCam2() + ":88/videoMain";
         final String c3_url = "rtsp://" + ipCamUser + ":" + ipCamPass + "@" + jp.getIpForCam1() + ":88/videoMain";
         final String c4_url = "rtsp://" + jp.getIpForRaspPi1() + ":8554/unicast";

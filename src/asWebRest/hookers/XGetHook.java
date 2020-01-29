@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Oct 2019
-Updated: 30 Dec 2019
+Updated: 28 Jan 2020
  */
 
 package asWebRest.hookers;
@@ -51,9 +51,11 @@ public class XGetHook {
 		
 		String tpBase = xb.getTpGalleryBasePath();		
 		String tpImageBase = xb.getTpGalleryImageBasePath();
-		File tpSwap = new File(xb.getTpSwapFolder().toString() + "/xSwap.htm");
+		File tpRamSpace = new File(xb.getTpSwapFolder().toString() + "/" + imageSet);
+		File tpSwap = new File(tpRamSpace.toString() + "/xSwap.htm");
 		String hashPath = "";
 		
+		try { tpRamSpace.mkdirs(); } catch (Exception e) { e.printStackTrace(); }
 		tpBase = tpBase + imageSet + ".html";
 
 		try { wc.jsoupOutBinary(tpBase, tpSwap, 30); } catch (Exception e) { e.printStackTrace(); }
@@ -136,15 +138,15 @@ public class XGetHook {
 			} else {
 				System.out.println("DEBUG: [ " + thisImage + " ] - Downloading...");
 				String fileToGet = tpImageBase + thisImage;
-				File tImageFile = new File(xb.getTpSwapFolder().toString() + "/" + thisImage);
+				File tImageFile = new File(tpRamSpace.toString() + "/" + thisImage);
 				try { wc.jsoupOutBinary(fileToGet, tImageFile, 30); } catch (Exception e) { e.printStackTrace(); }
 			}
 		}
 		
 		try { 
-			wc.runProcess("cp " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathF.toString());
-			wc.runProcess("mogrify -resize 64x64! " + xb.getTpSwapFolder().toString() + "/*.jpg");
-			wc.runProcess("mv " + xb.getTpSwapFolder().toString() + "/*.jpg " + vaultPathT.toString());			
+			wc.runProcess("cp " + tpRamSpace.toString() + "/*.jpg " + vaultPathF.toString());
+			wc.runProcess("mogrify -resize 64x64! " + tpRamSpace.toString() + "/*.jpg");
+			wc.runProcess("mv " + tpRamSpace.toString() + "/*.jpg " + vaultPathT.toString());			
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}
@@ -157,6 +159,8 @@ public class XGetHook {
 		qParams.add(hashPath);
     	try { updateTpAction.setTpCheck2019(dbc, qParams).toString(); } catch (Exception e) { e.printStackTrace(); }
 		
+	try { wc.deleteDir(tpRamSpace); } catch (Exception e) { e.printStackTrace(); }
+
     	System.out.println("DEBUG: Completed " + hashPath + "!");
 		
 	}	

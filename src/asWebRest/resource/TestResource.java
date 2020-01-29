@@ -1,15 +1,17 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 26 Jan 2020
+Updated: 28 Jan 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.KansasGasHook;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
+import asWebRest.hookers.WaterOneHook;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
@@ -172,9 +174,9 @@ public class TestResource extends ServerResource {
                     );
                     break;
                     
-                case "SNMP-Router":
-                	Router routerSnmp = new Router();
-                	routerSnmp.snmpRouter(dbc);
+                case "Gas":
+                	KansasGasHook kgs = new KansasGasHook();
+                	returnData = kgs.returnGasUse(dbc);
                 	break;
 
             	case "ThreadTest":
@@ -197,6 +199,11 @@ public class TestResource extends ServerResource {
                     }
 	            	returnData += stations.fetch(wxTest);
 	            	break;
+
+		case "WaterOne":
+			WaterOneHook w1h = new WaterOneHook();
+			returnData = w1h.testPrefetch(dbc);
+			break;
 	            	
             }
         }
