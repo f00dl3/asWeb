@@ -1,3 +1,7 @@
+#asWeb Auto Deployer
+#Created: Dec 2019
+#Updated: 1 Feb 2020
+
 fn_ymd=$(date +%y%m%d)
 fn_hm=$(date +%H%M)
 version=$fn_ymd"."$fn_hm
@@ -15,7 +19,11 @@ mv asWeb.war $fileName
 
 if [[ -f "$fileName" ]]; then 
 	ls -l $fileName
-	echo "MySQL Auth:"
+	echo "Copying to /Scripts on HOST OS"
+	cp $fileName /home/astump/Scripts/asWeb.war
+	echo "Local sudo auth to extract to RAM"
+	sudo unzip /home/astump/Scripts/asWeb.war 'WEB-INF/*' -d /dev/shm/asWeb
+	echo "MySQL Auth for DB log:"
 	echo "$sqlStatement" | mysql -u f00dl3 -p -h 127.0.0.1
 	sftp -i ~/.ssh/uvmKey -P 20022 -b tbf astump@127.0.0.1
 	echo "UVM sudo Auth:"

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 29 Jan 2020
+Updated: 1 Feb 2020
  */
 
 package asWebRest.resource;
@@ -172,15 +172,8 @@ public class TestResource extends ServerResource {
                     break;
                     
             	case "ThreadTest":
-            		ArrayList<Runnable> testList = new ArrayList<Runnable>();
-            		testList.add(() -> wc.runProcess("echo 1 of 6"));
-            		testList.add(() -> wc.runProcess("echo 2 of 6"));
-            		testList.add(() -> wc.runProcess("echo 3 of 6"));
-            		testList.add(() -> wc.runProcess("echo 4 of 6"));
-            		testList.add(() -> wc.runProcess("echo 5 of 6"));
-            		testList.add(() -> wc.runProcess("echo 6 of 6"));
             		ThreadRipper tr = new ThreadRipper();
-            		returnData += tr.runProcesses(testList, true, false);
+            		returnData += tr.selfTest();
             		break;
 	
 	            case "Stations":

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 31 Jan 2020
+Updated: 1 Feb 2020
  */
 
 package asUtilsPorts.Pi;
@@ -11,7 +11,7 @@ import asUtilsPorts.Shares.SSLHelper;
 
 public class SendAPICall {
     
-    public static void doDoor(String door) {
+    public void doDoor(String door) {
 	PiBeans piBeans = new PiBeans();
         System.out.println("DEBUG: Logging door event: " + door);
         try {
@@ -25,7 +25,7 @@ public class SendAPICall {
         }
     }
     
-    public static void doEnvironmental(String what) {
+    public void doEnvironmental(String what) {
 	PiBeans piBeans = new PiBeans();
         System.out.println("DEBUG: Logging environmental event: " + what);
         try {
@@ -39,7 +39,7 @@ public class SendAPICall {
         }
     }
     
-    public static void smarthomeDoorEvent(String door) {        
+    public void smarthomeDoorEvent(String door) {        
         try {
             doDoor(door);             
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class SendAPICall {
         }
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
         
         String inArgs = args[0];
         

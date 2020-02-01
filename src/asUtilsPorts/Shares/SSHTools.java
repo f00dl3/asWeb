@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Dec 2017
-Updated: 29 Jan 2020
+Updated: 1 Feb 2020
  */
 
 package asUtilsPorts.Shares;
@@ -25,7 +25,7 @@ public class SSHTools {
 
     private static int globalSshTimeout = 5;
     
-    public static void backupPortForwardMethod(File keyfile, String user, String hostIP, int sshPort, int portL, int portR) {
+    public void backupPortForwardMethod(File keyfile, String user, String hostIP, int sshPort, int portL, int portR) {
         
     	WebCommon wc = new WebCommon();
         System.out.println("BACKUP METHOD");
@@ -38,7 +38,7 @@ public class SSHTools {
         
     }
     
-    public static Session getDesktopSession(File keyfile, String whatIP) throws JSchException {
+    public Session getDesktopSession(File keyfile, String whatIP) throws JSchException {
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         SSHVars sshVars = new SSHVars();
         sshVars.setHostIP(whatIP);
@@ -58,21 +58,21 @@ public class SSHTools {
         return session;
     }    
     
-    public static Session portForwardSessionDesktop(File keyfile, int portL, int portR) throws JSchException {
+    public Session portForwardSessionDesktop(File keyfile, int portL, int portR) throws JSchException {
         JunkyPrivate jp = new JunkyPrivate();
         Session session = getDesktopSession(keyfile, jp.getIpForDesktop());
         session.setPortForwardingL(portL, "localhost", portR);
         return session;
     }
 	
-    public static Session portForwardSessionDesktopLAN(File keyfile, int portL, int portR) throws JSchException {
+    public Session portForwardSessionDesktopLAN(File keyfile, int portL, int portR) throws JSchException {
         JunkyPrivate jp = new JunkyPrivate();
         Session session = getDesktopSession(keyfile, jp.getIpForDesktopLAN());   
         session.setPortForwardingL(portL, "localhost", portR);
         return session;
     }
     
-    public static void sshRunCommands(String user, String hostIP, int port, File hostKey, String[] commands) {
+    public void sshRunCommands(String user, String hostIP, int port, File hostKey, String[] commands) {
 		
             SSHVars sshVars = new SSHVars();
             sshVars.setHostIP(hostIP);
@@ -118,7 +118,7 @@ public class SSHTools {
 
     }
         
-    public static void sftpUpload(String user, String hostIP, int port, File localFullPath, File uploadFullPath, File hostKey) {
+    public void sftpUpload(String user, String hostIP, int port, File localFullPath, File uploadFullPath, File hostKey) {
 
             System.out.println("Starting SSH transaction - PUT "+localFullPath.toString()
                     +" TO "+uploadFullPath.toString()+" on "+user+"@"+hostIP+":"+port
@@ -142,7 +142,7 @@ public class SSHTools {
                 java.util.Properties config = new java.util.Properties();
                 config.put("StrictHostKeyChecking", "no");
                 session.setConfig(config);
-		session.setTimeout(1000*globalSshTimeout);
+                session.setTimeout(1000*globalSshTimeout);
                 session.connect();
                 channel = session.openChannel("sftp");
                 channel.connect();
@@ -157,7 +157,7 @@ public class SSHTools {
 
     }
     
-    public static void sftpDownload(String user, String hostIP, int port, File localFullPath, File downloadFullPath, File hostKey) {
+    public void sftpDownload(String user, String hostIP, int port, File localFullPath, File downloadFullPath, File hostKey) {
 
             System.out.println("Starting SSH transaction - GET "+downloadFullPath.toString()
                     +" from "+user+"@"+hostIP+":"+port
@@ -181,7 +181,7 @@ public class SSHTools {
                 java.util.Properties config = new java.util.Properties();
                 config.put("StrictHostKeyChecking", "no");
                 session.setConfig(config);
-		session.setTimeout(1000*globalSshTimeout);
+                session.setTimeout(1000*globalSshTimeout);
                 session.connect();
                 channel = session.openChannel("sftp");
                 channel.connect();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 30 Dec 2019
-Updated: 7 Jan 2020
+Updated: 1 Feb 2020
  */
 
 package asWebRest.shared;
@@ -78,4 +78,19 @@ public class ThreadRipper {
 	public int getMaxThreadsHost() { return maxThreadsHost; }
 	public int getMinThreads() { return minThreads; }
     
+	public String selfTest() {
+		String returnData = "NOT RAN YET";
+		WebCommon wc = new WebCommon();
+		ArrayList<Runnable> testList = new ArrayList<Runnable>();
+		testList.add(() -> wc.runProcess("echo 1 of 6"));
+		testList.add(() -> wc.runProcess("echo 2 of 6"));
+		testList.add(() -> wc.runProcess("echo 3 of 6"));
+		testList.add(() -> wc.runProcess("echo 4 of 6"));
+		testList.add(() -> wc.runProcess("echo 5 of 6"));
+		testList.add(() -> wc.runProcess("echo 6 of 6"));
+		ThreadRipper tr = new ThreadRipper();
+		returnData = tr.runProcesses(testList, true, false);		
+		return returnData;
+	}
+	
 }
