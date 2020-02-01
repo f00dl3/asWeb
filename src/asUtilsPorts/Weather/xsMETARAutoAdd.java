@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Sep 2017
-Updated: 19 Dec 2019
+Updated: 1 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -31,8 +31,9 @@ public class xsMETARAutoAdd {
 		return nVal.getNodeValue();
 	}
 
-	public void main(String xsTmp) {
+	public void main(boolean sysProc) {
 
+		ModelShare ms = new ModelShare();
         MyDBConnector mdb = new MyDBConnector();
         WebCommon wc = new WebCommon();
         
@@ -40,6 +41,8 @@ public class xsMETARAutoAdd {
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
 
 		List<String> wxStations = new ArrayList<>();
+
+		final String xsTmp = ms.get_xsTmp(sysProc);
 		final String getStationListSQL = "SELECT Station FROM WxObs.Stations;";
 		final File xmlMetarsIn = new File(xsTmp+"/metars.xml");
 		String addStationTestSQL = "INSERT IGNORE INTO WxObs.Stations (Station, Point, City, State, Active, Priority, Region, DataSource, Frequency) VALUES";

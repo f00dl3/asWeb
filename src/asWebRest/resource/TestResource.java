@@ -190,7 +190,7 @@ public class TestResource extends ServerResource {
                     if(wc.isSet(argsInForm.getFirstValue("action"))) { 
                     	wxTest = argsInForm.getFirstValue("action");
                     }
-	            	returnData += stations.fetch(wxTest);
+	            	returnData += stations.fetch(false, wxTest);
 	            	break;
 
 				case "WaterOne":

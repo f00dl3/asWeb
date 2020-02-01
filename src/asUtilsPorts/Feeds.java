@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 29 Jan 2020
+Updated: 1 Feb 2020
 */
 
 package asUtilsPorts;
@@ -71,7 +71,7 @@ public class Feeds {
         
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
-    	try { stations.fetch("Wunder"); } catch (Exception e) { e.printStackTrace(); }
+    	try { stations.fetch(false, "Wunder"); } catch (Exception e) { e.printStackTrace(); }
     	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;

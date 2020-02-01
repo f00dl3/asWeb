@@ -1,13 +1,14 @@
 /*
 Stations - Core Process 
 Created: 4 Sep 2016
-Updated: 29 Jan 2020
+Updated: 1 Feb 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Weather.ModelBeans;
+import asUtilsPorts.Weather.ModelShare;
 import asUtilsPorts.Weather.xsImageOp;
 import asUtilsPorts.Weather.xsMETARAutoAdd;
 import asUtilsPorts.Weather.xsWorkerBasic;
@@ -33,15 +34,15 @@ import asWebRest.shared.WebCommon;
 
 public class Stations {
 
-	public String fetch(String fType) {
+	public String fetch(boolean sysProc, String fType) {
 		
 		String returnData = "";
             
         final boolean debugMode = false;
 
-        CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
         ModelBeans modelBeans = new ModelBeans();
+        ModelShare ms = new ModelShare();
         MyDBConnector mdb = new MyDBConnector();
         ThreadRipper tr = new ThreadRipper();
         WebCommon wc = new WebCommon();        
@@ -59,7 +60,9 @@ public class Stations {
     
 		final long startTime = System.currentTimeMillis();
 
-		final String xsTmp = modelBeans.getDiskSwap().toString();
+		final String xsTmp = ms.get_xsTmp(sysProc);
+		final File wwwOutObj = ms.get_xsOut(sysProc);
+		
 		final String tFHour2D = "02";
 		final String tSFHour2D = "03";
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(2);
@@ -76,7 +79,6 @@ public class Stations {
 		final File logFile = new File(xsTmp+"/xs.log");
 		final File metarsZipFile = new File(xsTmp+"/metars.xml.gz");
 		final File nwsObsXMLzipFile = new File(xsTmp+"/index.zip");
-		final File wwwOutObj = new File(cb.getPersistTomcat()+"/G2Out/xsOut");
 		final File xsTmpObj = new File(xsTmp);
 		final String gVarsSQL = "SELECT gVar FROM WxObs.gradsOutType WHERE Active=1;";
 		final String gVarsHSQL = "SELECT gVar FROM WxObs.gradsOutType WHERE Active=1 AND HighRes=1;";
@@ -169,9 +171,9 @@ public class Stations {
                 for (String gVar : gVarsH) { wc.runProcess("convert \""+gradsOutObj.getPath()+"/"+gVar+"/"+getDate+"_"+getHourMin+"_"+gVar+".png\" -gravity Center -crop "+resHigh+"+0+0 "+gradsOutObj.getPath()+"/"+gVar+"/"+getDate+"_"+getHourMin+"_"+gVar+".png"); }
                 for (String gVar : gVarsL) { wc.runProcess("convert \""+gradsOutObj.getPath()+"/"+gVar+"/"+getDate+"_"+getHourMin+"_"+gVar+".png\" -gravity Center -crop "+resLow+"+0+0 "+gradsOutObj.getPath()+"/"+gVar+"/"+getDate+"_"+getHourMin+"_"+gVar+".png"); }
 
-                final String[] xsImageOpArgs = { xsTmp }; xsio.main(xsImageOpArgs, gVars, gVarsH, gVarsL);
+                xsio.main(sysProc, gVars, gVarsH, gVarsL);
 
-                xsmaa.main(xsTmp);
+                xsmaa.main(sysProc);
 
     			ArrayList<Runnable> stp3 = new ArrayList<Runnable>();
     			stp3.add(() -> xswf.stations(false, xsTmp, "USC"));
@@ -220,6 +222,11 @@ public class Stations {
         
         return returnData;
 		
+	}
+	
+	public static void main(String[] args) {
+		Stations stations = new Stations();
+		stations.fetch(true, args[0]);
 	}
 
 }
