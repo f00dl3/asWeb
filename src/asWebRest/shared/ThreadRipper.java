@@ -78,19 +78,21 @@ public class ThreadRipper {
 	public int getMaxThreadsHost() { return maxThreadsHost; }
 	public int getMinThreads() { return minThreads; }
     
-	public String selfTest() {
+	public String selfTest(int testsToRun) {
 		String returnData = "NOT RAN YET";
-		WebCommon wc = new WebCommon();
 		ArrayList<Runnable> testList = new ArrayList<Runnable>();
-		testList.add(() -> wc.runProcess("echo 1 of 6"));
-		testList.add(() -> wc.runProcess("echo 2 of 6"));
-		testList.add(() -> wc.runProcess("echo 3 of 6"));
-		testList.add(() -> wc.runProcess("echo 4 of 6"));
-		testList.add(() -> wc.runProcess("echo 5 of 6"));
-		testList.add(() -> wc.runProcess("echo 6 of 6"));
+		for(int i = 0; i < testsToRun; i++) {
+			final int thisIterator = i;
+			testList.add(() -> testString(thisIterator + " of " + testsToRun));
+		}
 		ThreadRipper tr = new ThreadRipper();
 		returnData = tr.runProcesses(testList, true, false);		
 		return returnData;
+	}
+	
+	private String testString(String what) {
+		System.out.println(what);
+		return what + "\n";
 	}
 	
 }

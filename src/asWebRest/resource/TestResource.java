@@ -35,6 +35,7 @@ import asUtilsPorts.Stations;
 import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
+import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
@@ -171,9 +172,16 @@ public class TestResource extends ServerResource {
                     );
                     break;
                     
+                case "RSS":
+                	RSSSources rss = new RSSSources();
+                	rss.getRSS(dbc);
+                	break;
+                    
             	case "ThreadTest":
+            		int testsToRun = 1;
+                    testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
             		ThreadRipper tr = new ThreadRipper();
-            		returnData += tr.selfTest();
+            		returnData += tr.selfTest(testsToRun);
             		break;
 	
 	            case "Stations":
@@ -185,10 +193,10 @@ public class TestResource extends ServerResource {
 	            	returnData += stations.fetch(wxTest);
 	            	break;
 
-		case "WaterOne":
-			WaterOneHook w1h = new WaterOneHook();
-			returnData = w1h.testPrefetch(dbc);
-			break;
+				case "WaterOne":
+					WaterOneHook w1h = new WaterOneHook();
+					returnData = w1h.testPrefetch(dbc);
+					break;
 	            	
             }
         }
