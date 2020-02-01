@@ -1,7 +1,7 @@
 /*
 By Anthony Stump
 Created: 19 Dec 2017
-Updated: 29 Dec 2020
+Updated: 31 Dec 2020
  */
 
 package asUtilsPorts.Shares;
@@ -12,6 +12,7 @@ import java.nio.file.*;
 public class JunkyBeans {
     
         private final String api = "https://localhost:8444/asWeb/r/Backend";
+	private final String apiByIp = "https://127.0.0.1:8444/asWeb/r/Backend";
         private final String applicationName = "asUtils";
         private final int applicationMajorVersion = 4;
         private final File appShareSys = new File("/usr/local/bin");
@@ -44,6 +45,7 @@ public class JunkyBeans {
         private final File mediaServerRoot = new File(webRoot.toString()+"/MediaServ");
         
         public String getApi() { return api; }
+	public String getApiByIp() { return apiByIp; }
         public String getApplicationName() { return applicationName; }
         public int getApplicationMajorVersion() { return applicationMajorVersion; }
         public File getAppShareSys() { return appShareSys; }

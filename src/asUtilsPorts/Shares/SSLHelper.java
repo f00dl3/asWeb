@@ -40,7 +40,9 @@ public class SSLHelper {
     }
     
     static public Connection getConnection(String url){
-        return Jsoup.connect(url).sslSocketFactory(SSLHelper.socketFactory());
+        return Jsoup.connect(url)
+		.timeout(0)
+		.sslSocketFactory(SSLHelper.socketFactory());
     }
 
     static private SSLSocketFactory socketFactory() {

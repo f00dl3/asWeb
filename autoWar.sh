@@ -19,7 +19,7 @@ if [[ -f "$fileName" ]]; then
 	echo "$sqlStatement" | mysql -u f00dl3 -p -h 127.0.0.1
 	sftp -i ~/.ssh/uvmKey -P 20022 -b tbf astump@127.0.0.1
 	echo "UVM sudo Auth:"
-	ssh -t -i ~/.ssh/uvmKey -p 20022 astump@127.0.0.1 "sudo mv asWeb#*.war /var/lib/tomcat9/webapps; sudo service tomcat9 restart"
+	ssh -t -i ~/.ssh/uvmKey -p 20022 astump@127.0.0.1 "sudo cp asWeb##*.war Scripts/asWeb.war; sudo mv asWeb#*.war /var/lib/tomcat9/webapps; sudo service tomcat9 restart"
 else
 	echo "BUILD FAILED!"
 fi
