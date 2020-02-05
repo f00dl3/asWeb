@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 20 Jan 2020
-Updated: 30 Jan 2020
+Updated: 3 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
@@ -50,12 +50,14 @@ public class AtBoot {
         
     	WebCommon wc = new WebCommon();
         JunkyBeans jb = new JunkyBeans();
-        final String basicCamCap = "ffmpeg -i /dev/video0 -update 1 /var/www/html/camLive.jpg > /dev/null 2>&1";
+        //final String basicCamCap = "ffmpeg -i /dev/video0 -update 1 /var/www/html/camLive.jpg > /dev/null 2>&1";
         final String start_v4l2ctl = "v4l2-ctl --set-fmt-video=width=1024,height=768 --set-ctrl=exposure_time_absolute=220";
-        //final String start_h264server = "v4l2rtspserver -W 954 -H 540 -F 15 -P 8554 -fYUVJ /dev/video0 &";
+ 	final String start_v4l2loopback = "v4l2compress_omx /dev/video0 /dev/video20 &";
+        final String start_h264server = "v4l2rtspserver -W 954 -H 540 -F 15 -P 8554 /dev/video10 &";
         try { wc.runProcess(start_v4l2ctl); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.runProcess(basicCamCap); } catch (Exception e) { e.printStackTrace(); }
-        //try { wc.runProcess(start_h264server); } catch (Exception e) { e.printStackTrace(); }
+        //try { wc.runProcess(basicCamCap); } catch (Exception e) { e.printStackTrace(); }
+	try { wc.runProcess(start_v4l2loopback); } catch (Exception e) { e.printStackTrace(); }
+        try { wc.runProcess(start_h264server); } catch (Exception e) { e.printStackTrace(); }
         
     }
     

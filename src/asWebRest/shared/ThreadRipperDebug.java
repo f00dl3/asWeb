@@ -1,6 +1,7 @@
 /*
 by Anthony Stump
 Created: 30 Dec 2019
+Debug split: 4 Feb 2020
 Updated: 4 Feb 2020
  */
 
@@ -13,18 +14,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreadRipper {
+public class ThreadRipperDebug {
     
 	private int maxThreads = 4;
 	private int minThreads = maxThreads/2;
 	private int maxThreadsHost = 8;	
 	
-	private void execThreads(List<Thread> tPool, boolean asynch) {
+	private String execThreads(List<Thread> tPool, boolean asynch) {
+		String returnData = "";
 		if(!asynch) { 
+			returnData += "DEBUG: Not asynch - joining threads!";
 			for (int j = 0; j < tPool.size(); j++) {
 				try {  tPool.get(j).join();  } catch (Exception nx) { }
 			}
+		} else {
+			returnData += "DEBUG: Asynchronous. Not joining threads.\n";
 		}
+		return returnData;
 	}
 	
 	public String runProcesses(List<Runnable> threadList, boolean pool, boolean asynch) {
@@ -35,43 +41,50 @@ public class ThreadRipper {
 		int procLoop = 0;
 		int inPool = 0;
 		
-		if(!pool) {			
+		if(!pool) {
+			runResults += "DEBUG: Non-pooled threads.\n";
 			for(Runnable exTask : threadList) {
 				runResults += "Task [" + taskNo + "] Loop [" + procLoop + "] Thread [" + inPool + "]: " + exTask + "\n";
 				Thread tThread = new Thread(exTask);
 				if(inPool <= maxThreads) {
+					runResults += "DEBUG: Thread " + taskNo + " in range of max" + maxThreads + "\n";
 					try { 
 						tThread.start();
 						tPool.add(tThread); 
 					} catch (Exception e) { }
 					inPool++;
 				} else {
+					runResults += "DEBUG: Thread " + taskNo + " not in range of threads" + maxThreads + "\n";
 					procLoop++;
-					execThreads(tPool, asynch);
+					runResults += execThreads(tPool, asynch);
 					inPool = 0;
 					tPool.clear();
 					//tThread.start();
 					tPool.add(tThread);
 				
 					try { 
-						if(!tPool.isEmpty()) {				
+						if(!tPool.isEmpty()) {		
+							runResults += "DEBUG: Thread pool not empty\n";		
 							tThread.start();
-							execThreads(tPool, asynch);
+							runResults += execThreads(tPool, asynch);
 							inPool = 0;
-							tPool = null;
+							tPool.clear();
+						} else {
+							runResults += "DEBUG: Thread pool is empty!\n";
 						}
 					} catch (Exception e) { }
 				}
 				taskNo++;
 			}
 		} else {
+			runResults += "DEBUG: Pooled threads.\n";
 			for(Runnable exTask : threadList) {
 				runResults += "Task [" + taskNo + "] Loop [" + procLoop + "] Thread [" + inPool + "]: " + exTask + "\n";
 				Thread tThread = new Thread(exTask);
 				tThread.start();
 				tPool.add(tThread); 
 			}
-			execThreads(tPool, asynch);
+			runResults += execThreads(tPool, asynch);
 		}
 		
 		return runResults;
@@ -89,7 +102,7 @@ public class ThreadRipper {
 			final int thisIterator = i;
 			testList.add(() -> testString(thisIterator + " of " + testsToRun, isSys, thisIterator));
 		}
-		ThreadRipper tr = new ThreadRipper();
+		ThreadRipperDebug tr = new ThreadRipperDebug();
 		returnData = tr.runProcesses(testList, true, false);		
 		return returnData;
 	}
@@ -110,10 +123,12 @@ public class ThreadRipper {
 	}
 
 	public static void main(String[] args) {
-		ThreadRipper tr = new ThreadRipper();
+		String returnData = "NOT ITERATED OUT!";
+		ThreadRipperDebug tr = new ThreadRipperDebug();
 		int ttp = 1;
 		try { ttp = Integer.parseInt(args[0]); } catch (Exception e) { e.printStackTrace(); }
-		tr.selfTest(ttp, true);
+		returnData += tr.selfTest(ttp, true);
+		System.out.println(returnData);
 	}
 	
 }

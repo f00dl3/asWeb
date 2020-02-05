@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 1 Feb 2020
+Updated: 4 Feb 2020
  */
 
 package asWebRest.resource;
@@ -181,7 +181,7 @@ public class TestResource extends ServerResource {
             		int testsToRun = 1;
                     testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
             		ThreadRipper tr = new ThreadRipper();
-            		returnData += tr.selfTest(testsToRun);
+            		returnData += tr.selfTest(testsToRun, false);
             		break;
 	
 	            case "Stations":

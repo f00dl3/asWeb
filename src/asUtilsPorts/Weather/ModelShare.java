@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Oct 2017
-Updated: 1 Feb 2020
+Updated: 3 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -29,7 +29,7 @@ public class ModelShare {
         
 	public String get_xsTmp(boolean isProc) {
 		String ret_xsTmp = modelBeans.getDiskSwap().toString();
-		if(isProc) { ret_xsTmp = junkyBeans.getRamDrive().toString()+"/xsTmpJ_19"; }
+		if(isProc) { ret_xsTmp = junkyBeans.getRamDrive().toString()+"/Weather2020"; }
 		return ret_xsTmp;
 	}
 	

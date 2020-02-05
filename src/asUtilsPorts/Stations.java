@@ -1,7 +1,7 @@
 /*
 Stations - Core Process 
 Created: 4 Sep 2016
-Updated: 1 Feb 2020
+Updated: 4 Feb 2020
 */
 
 package asUtilsPorts;
@@ -29,7 +29,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
-import asWebRest.shared.ThreadRipper;
+import asWebRest.shared.ThreadRipperDebug;
 import asWebRest.shared.WebCommon;
 
 public class Stations {
@@ -37,14 +37,16 @@ public class Stations {
 	public String fetch(boolean sysProc, String fType) {
 		
 		String returnData = "";
-            
-        final boolean debugMode = false;
 
+	boolean debugMode = false;
+	if(fType.equals("Debug")) { debugMode = true; }
+	final boolean fDebugMode = debugMode;
+            
         JunkyBeans junkyBeans = new JunkyBeans();
         ModelBeans modelBeans = new ModelBeans();
         ModelShare ms = new ModelShare();
         MyDBConnector mdb = new MyDBConnector();
-        ThreadRipper tr = new ThreadRipper();
+        ThreadRipperDebug tr = new ThreadRipperDebug();
         WebCommon wc = new WebCommon();        
         xsImageOp xsio = new xsImageOp();
         xsMETARAutoAdd xsmaa = new xsMETARAutoAdd();
@@ -176,9 +178,9 @@ public class Stations {
                 xsmaa.main(sysProc);
 
     			ArrayList<Runnable> stp3 = new ArrayList<Runnable>();
-    			stp3.add(() -> xswf.stations(false, xsTmp, "USC"));
-    			stp3.add(() -> xswf.stations(false, xsTmp, "USE"));
-    			stp3.add(() -> xswf.stations(false, xsTmp, "USW"));
+    			stp3.add(() -> xswf.stations(fDebugMode, xsTmp, "USC"));
+    			stp3.add(() -> xswf.stations(fDebugMode, xsTmp, "USE"));
+    			stp3.add(() -> xswf.stations(fDebugMode, xsTmp, "USW"));
     			stp3.add(() -> xswb.stations(xsTmp, "None"));    			
     			stp3.add(() -> xswm.main(xsTmp));
     			stp3.add(() -> xswy.main(xsTmp, "None"));
