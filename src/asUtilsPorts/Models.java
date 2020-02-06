@@ -48,6 +48,7 @@ public class Models {
 		final String modelRunString = getDate+"_"+getHour+"Z";
 		final File imgOutPath = modelBeans.getImgOutPath();
 		final File xml2Path = modelBeans.getXml2Path();
+		final String wwwBase = wms.get_wwwBase(true).toString();
 		final File mSQLDebugDumpFile = new File(xml2Path.getPath()+"/mSQLDebugDump.json");
 
 		wc.deleteDir(xml2Path);
@@ -83,7 +84,7 @@ public class Models {
 		pool.add(() -> mw.main(getHour, "27"));
 		tr.runProcesses(pool, false, false);		
 
-		mio.main(getHour, xml2Path);
+		mio.main(getHour, xml2Path, wwwBase);
 		
 		String mSQLIndex = null;
 		String mSQLQuery = null;

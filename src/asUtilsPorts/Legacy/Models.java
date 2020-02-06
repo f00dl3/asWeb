@@ -47,6 +47,7 @@ public class Models {
 		final String modelRunString = getDate+"_"+getHour+"Z";
 		final File imgOutPath = modelBeans.getImgOutPath();
 		final File xml2Path = modelBeans.getXml2Path();
+		final String wwwBase = ms.get_wwwBase(sysProc).toString();
 		final File mSQLDebugDumpFile = new File(xml2Path.getPath()+"/mSQLDebugDump.json");
 
 		wc.deleteDir(xml2Path);
@@ -111,7 +112,7 @@ public class Models {
 		for (Thread thread : mwPool) { thread.start(); }
 		for (int i = 0; i < mwPool.length; i++) { try { mwPool[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 		
-		mio.main(getHour, xml2Path);
+		mio.main(getHour, xml2Path, wwwBase);
 		
 		String mSQLIndex = null;
 		String mSQLQuery = null;

@@ -19,7 +19,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class ModelImageOps {
 
-	public void main(String getHour, File xml2Path) {
+	public void main(String getHour, File xml2Path, String wwwOutBase) {
 
 		CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
@@ -29,7 +29,6 @@ public class ModelImageOps {
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(4);
 		final DateTimeFormatter getDateFormat = DateTimeFormat.forPattern("yyyyMMdd");
 		final String getDate = getDateFormat.print(tDateTime);
-		final String wwwOutBase = cb.getPersistTomcat()+"/G2Out";
 		final String stdRes = modelBeans.getImageResStd();
 		final File focusMP4 = new File(xml2Path.getPath()+"/FOCUS_Loop.mp4");
 		final File helpers = junkyBeans.getHelpers();
