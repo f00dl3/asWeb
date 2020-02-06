@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Oct 2017
-Updated: 3 Feb 2020
+Updated: 5 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -26,7 +26,7 @@ public class ModelShare {
 	final public double windSpdCalc(double tWUin, double tWVin) { return Math.sqrt(tWUin*tWUin+tWVin*tWVin)*1.944; }
 	final public double calcSLCL(double tTCin, double tRHin) { return (20+(tTCin/5))*(100-tRHin); }
 	final public double calcDwpt(double tTCin, double tRHin) { return tTCin-(100-tRHin)/5; }
-        
+	
 	public String get_xsTmp(boolean isProc) {
 		String ret_xsTmp = modelBeans.getDiskSwap().toString();
 		if(isProc) { ret_xsTmp = junkyBeans.getRamDrive().toString()+"/Weather2020"; }
@@ -37,6 +37,13 @@ public class ModelShare {
 		CommonBeans cb = new CommonBeans();
 		File webPath = new File(cb.getPersistTomcat()+"/G2Out/xsOut");
 		if(isProc) { webPath = new File(junkyBeans.getWebRoot().toString()+"/G2Out/xsOut"); }
+		return webPath;
+	}
+	
+	public File get_wwwBase(boolean isProc) {
+		CommonBeans cb = new CommonBeans();
+		File webPath = new File(cb.getPersistTomcat()+"/G2Out");
+		if(isProc) { webPath = new File(junkyBeans.getWebRoot().toString()+"/G2Out"); }
 		return webPath;
 	}
 	

@@ -257,7 +257,7 @@
 	<classpathentry kind="lib" path="libs/javafx.media.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/jsoup-1.12.1.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/restfb-2.0.0.jar"/>
-	<classpathentry kind="lib" path="libs/asUtils-200129-0825.jar"/>
 	<classpathentry kind="lib" path="libs/jsch-0.1.55.jar"/>
+	<classpathentry kind="lib" path="libs/asUtils-200205-0744.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

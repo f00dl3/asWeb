@@ -1,12 +1,12 @@
 /*
 by Anthony Stump
 Created: 4 Oct 2017
-Updated: 2 Jan 2020
+Updated: 5 Feb 2020
 */
 
 package asUtilsPorts.Weather;
 
-import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 

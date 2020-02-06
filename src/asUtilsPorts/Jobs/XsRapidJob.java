@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Jul 2018
-Updated: 2 Jan 2020
+Updated: 5 Feb 2020
  */
 
 package asUtilsPorts.Jobs;
@@ -22,7 +22,7 @@ public class XsRapidJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         _log.info("Executed asUtils.xs7 (Rapid) @ " + new Date());
         String[] argsToPass = { "Rapid" };
-        asUtils.xs19.main(argsToPass);
+        asUtilsPorts.Legacy.xs19.main(argsToPass);
     }
         
 }

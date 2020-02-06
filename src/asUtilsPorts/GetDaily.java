@@ -8,7 +8,6 @@ package asUtilsPorts;
 
 import asUtilsPorts.Feed.CF6Daily;
 import asUtilsPorts.UbuntuVM.BackThatAssUp;
-import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.action.UpdateFfxivAction;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.hookers.EvergyAPIHook;
@@ -27,18 +26,16 @@ public class GetDaily {
 
 		DateTime rightNow = new DateTime();
 		
-        CamNightly cn = new CamNightly();
 		CF6Daily cf6 = new CF6Daily();
 		EvergyAPIHook evergy = new EvergyAPIHook();
+        JunkyPrivate junkyPrivate = new JunkyPrivate();
 		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
+        WebCommon wc = new WebCommon();
 		ZillowAPIHook zapi = new ZillowAPIHook();
+		
 		String returnData = "";
 		
-		returnData += cf6.getCf6(dbc, daysBack);
-		RadarNightly.process(dbc);
-
-        JunkyPrivate junkyPrivate = new JunkyPrivate();
-        WebCommon wc = new WebCommon();
+		try { returnData += cf6.getCf6(dbc, daysBack); } catch (Exception e) { e.printStackTrace(); }
 		
 		String anwPrepSQLQuery = "SET @runtot := "+junkyPrivate.getMortBeginningBalance()+";";
 		
@@ -77,7 +74,6 @@ public class GetDaily {
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }
         
-        try { cn.doJob(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         if(rightNow.dayOfWeek().get() == 1) {

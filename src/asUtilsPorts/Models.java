@@ -3,7 +3,7 @@ by Anthony Stump
 Models 2020 core class Tomcat Port
 
 Created: 22 Sep 2017
-Updated: 29 Jan 2020
+Updated: 5 Jan 2020
 Status: UNTESTED on Tomcat
 */
 
@@ -32,6 +32,7 @@ public class Models {
 
         ModelBeans modelBeans = new ModelBeans();
         ModelShare wms = new ModelShare();
+        ModelImageOps mio = new ModelImageOps();
         ModelWorker mw = new ModelWorker();
         MyDBConnector mdb = new MyDBConnector();
         ThreadRipper tr = new ThreadRipper();
@@ -81,8 +82,8 @@ public class Models {
 		pool.add(() -> mw.main(getHour, "26"));
 		pool.add(() -> mw.main(getHour, "27"));
 		tr.runProcesses(pool, false, false);		
-		
-		final String[] imgOpArgs = { getHour }; ModelImageOps.main(imgOpArgs);
+
+		mio.main(getHour, xml2Path);
 		
 		String mSQLIndex = null;
 		String mSQLQuery = null;

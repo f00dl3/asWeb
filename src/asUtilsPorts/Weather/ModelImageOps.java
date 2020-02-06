@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 12 Oct 2017
-Updated: 29 Jan 2020
+Updated: 5 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -19,7 +19,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class ModelImageOps {
 
-	public static void main(String[] args) {
+	public void main(String getHour, File xml2Path) {
 
 		CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
@@ -29,7 +29,6 @@ public class ModelImageOps {
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(4);
 		final DateTimeFormatter getDateFormat = DateTimeFormat.forPattern("yyyyMMdd");
 		final String getDate = getDateFormat.print(tDateTime);
-		final File xml2Path = modelBeans.getXml2Path();
 		final String wwwOutBase = cb.getPersistTomcat()+"/G2Out";
 		final String stdRes = modelBeans.getImageResStd();
 		final File focusMP4 = new File(xml2Path.getPath()+"/FOCUS_Loop.mp4");
@@ -40,7 +39,6 @@ public class ModelImageOps {
 		final File wwwOutArchive = new File(wwwOutBase+"/MergedJ/Archive");
 		final File wwwOutLoops = new File(wwwOutBase+"/MergedJ/Loops");
 		final File wwwOutImages = new File(wwwOutBase+"/MergedJ/Images");
-		final String getHour = args[0];
 		final String modelRunString = getDate+"_"+getHour+"Z";
 
 		wwwOutArchive.mkdirs();

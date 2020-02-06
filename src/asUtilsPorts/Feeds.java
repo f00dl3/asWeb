@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 1 Feb 2020
+Updated: 5 Feb 2020
 */
 
 package asUtilsPorts;
@@ -24,6 +24,7 @@ import asUtilsPorts.SNMP.Router;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Weather.AlertMe;
 //import asUtilsPorts.Feed.RSSSources;
+import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
 
@@ -91,12 +92,29 @@ public class Feeds {
     	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	//try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
     	
+
+    	if(rightNow.getHourOfDay() == 2) {
+            CamNightly cn = new CamNightly();
+            try { cn.doJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+		}
+    	
+    	if(rightNow.getHourOfDay() == 4) {
+    		RadarNightly.process(dbc);
+    	}
+    	
     	if(rightNow.getHourOfDay() == 6) {
     		returnData += GetDaily.getDaily(dbc, 1);
     	}
     	
     	return returnData;
     	
+    }
+        
+    public String testHourOfDay() {
+    	String returnData = "";
+    	DateTime rightNow = new DateTime();
+    	returnData = Integer.toString(rightNow.getHourOfDay());
+    	return returnData;    	
     }
     
 }

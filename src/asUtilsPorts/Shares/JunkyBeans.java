@@ -1,7 +1,7 @@
 /*
 By Anthony Stump
 Created: 19 Dec 2017
-Updated: 31 Dec 2020
+Updated: 5 Feb 2020
  */
 
 package asUtilsPorts.Shares;
@@ -22,7 +22,7 @@ public class JunkyBeans {
         private final String gmailSmtpServer = "smtp.gmail.com";
         private final File mySqlShare = new File("/var/lib/mysql-files");
 		private final File ramDrive = new File("/dev/shm");
-		private final File helpers = new File(ramDrive.getPath()+"/asUtils/helpers");
+		private final File helpers = new File(ramDrive.getPath()+"/asWeb/WEB-INF/helpers");
         private final String pathTomcatWebapps = System.getProperty("catalina.base") + "/webapps";
         private final String pathWebappCache = pathTomcatWebapps + "/asWeb#cache";
         private final File sdCardPath = new File("/media/astump/PHONE");

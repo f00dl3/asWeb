@@ -27,7 +27,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.ThreadRipperDebug;
 import asWebRest.shared.WebCommon;
@@ -37,10 +36,8 @@ public class Stations {
 	public String fetch(boolean sysProc, String fType) {
 		
 		String returnData = "";
-
-	boolean debugMode = false;
-	if(fType.equals("Debug")) { debugMode = true; }
-	final boolean fDebugMode = debugMode;
+		boolean debugMode = false;
+		if(fType.equals("Debug")) { debugMode = true; }
             
         JunkyBeans junkyBeans = new JunkyBeans();
         ModelBeans modelBeans = new ModelBeans();
@@ -64,7 +61,8 @@ public class Stations {
 
 		final String xsTmp = ms.get_xsTmp(sysProc);
 		final File wwwOutObj = ms.get_xsOut(sysProc);
-		
+
+		final boolean fDebugMode = debugMode;
 		final String tFHour2D = "02";
 		final String tSFHour2D = "03";
 		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(2);
@@ -152,11 +150,13 @@ public class Stations {
 			wc.runProcess("(\""+appPath+"/g2ctl\" "+hrrrGrib2File.getPath()+" > "+hrrrCtlFile.getPath()+")");
 			wc.runProcess("\""+appPath+"/gribmap\" -v -i "+hrrrCtlFile.getPath());
 
+			System.out.println("DEBUG: Process array 1 - Downloads");
 			ArrayList<Runnable> stp1 = new ArrayList<Runnable>();
 			stp1.add(() -> wc.jsoupOutBinary(xmlObsURL, nwsObsXMLzipFile, 15.0));
 			stp1.add(() -> wc.jsoupOutBinary(metarsURL, metarsZipFile, 15.0));
 			tr.runProcesses(stp1, false, false);		
-
+			
+			System.out.println("DEBUG: Process array 2 - Unzipping");
 			ArrayList<Runnable> stp2 = new ArrayList<Runnable>();
 			stp2.add(() -> wc.unzipFile(nwsObsXMLzipFile.getPath(), xsTmp));
 			stp2.add(() -> wc.runProcess("gunzip \""+metarsZipFile.getPath()+"\""));
@@ -164,7 +164,7 @@ public class Stations {
 			
             if(debugMode) {
 
-                System.out.println("DEBUG MODE ON!");
+                System.out.println("DEBUG / DEBUG MODE ON!");
                 xswf.stations(true, xsTmp, "USC");
 
             } else {
@@ -177,6 +177,7 @@ public class Stations {
 
                 xsmaa.main(sysProc);
 
+                System.out.println("DEBUG: Process array 3 - Workers");
     			ArrayList<Runnable> stp3 = new ArrayList<Runnable>();
     			stp3.add(() -> xswf.stations(fDebugMode, xsTmp, "USC"));
     			stp3.add(() -> xswf.stations(fDebugMode, xsTmp, "USE"));

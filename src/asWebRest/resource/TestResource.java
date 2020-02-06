@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 4 Feb 2020
+Updated: 5 Feb 2020
  */
 
 package asWebRest.resource;
@@ -31,6 +31,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import asUtilsPorts.Feeds;
 import asUtilsPorts.Stations;
 import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
@@ -158,11 +159,6 @@ public class TestResource extends ServerResource {
 	        		cwURL.doJob(dbc, camBeans.getCamPath().getPath());
 	        		break;
 	        		
-	        	case "EarthquakeAlert":
-	        		AlertMe alertMe = new AlertMe();
-	        		alertMe.earthquakeAlerts(dbc);
-	        		break;
-	        		
                 case "dojoDataStoreTest":
                     qParams.add(0, argsInForm.getFirstValue("searchDate"));
                     returnData = jw.getDesiredDataType(
@@ -171,6 +167,16 @@ public class TestResource extends ServerResource {
                             null
                     );
                     break;
+	        		
+	        	case "EarthquakeAlert":
+	        		AlertMe alertMe = new AlertMe();
+	        		alertMe.earthquakeAlerts(dbc);
+	        		break;
+	        		
+	        	case "JodaHour":
+	        		Feeds feeds = new Feeds();
+	        		returnData += feeds.testHourOfDay();
+	        		break;
                     
                 case "RSS":
                 	RSSSources rss = new RSSSources();
