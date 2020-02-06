@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 5 Feb 2020
+Updated: 6 Feb 2020
  */
 
 package asWebRest.resource;
@@ -38,6 +38,7 @@ import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.cWazey;
+import asUtilsPorts.Jobs.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
 
@@ -176,6 +177,11 @@ public class TestResource extends ServerResource {
 	        	case "JodaHour":
 	        		Feeds feeds = new Feeds();
 	        		returnData += feeds.testHourOfDay();
+	        		break;
+	        		
+	        	case "quartz":
+	        		Crontabs_UVM cUVM = new Crontabs_UVM();
+	        		cUVM.scheduler();
 	        		break;
                     
                 case "RSS":

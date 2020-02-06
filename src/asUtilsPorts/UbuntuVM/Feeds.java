@@ -18,7 +18,7 @@ public class Feeds {
 
 	public static void main(String[] args) {
 
-                JunkyBeans junkyBeans = new JunkyBeans();
+        JunkyBeans junkyBeans = new JunkyBeans();
 		MyDBConnector mdb = new MyDBConnector();
 		WebCommon wc = new WebCommon();
                 

@@ -10,11 +10,8 @@ public class Every2Minutes {
     
     public static void execJobs() {
         
-        Feeds feeds = new Feeds();
-        
-        String feedsArgs[] = { "TwoMinute" };
-        
-        feeds.main(feedsArgs);
+        String feedsArgs[] = { "TwoMinute" };        
+        Feeds.main(feedsArgs);
         
     }
     

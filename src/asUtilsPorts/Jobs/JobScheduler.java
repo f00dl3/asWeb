@@ -1,7 +1,10 @@
 /*
 by Anthony Stump
 Created: 1 Jul 2018
-Updated: 29 Dec 2019
+Updated: 5 Feb 2020
+
+http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html#crontrigger-tutorial
+
  */
 
 package asUtilsPorts.Jobs;

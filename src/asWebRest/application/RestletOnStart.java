@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 21 Jan 2020
+Updated: 6 Feb 2020
  */
 
 package asWebRest.application;
@@ -17,13 +17,15 @@ import java.nio.file.Paths;
 import asUtilsPorts.CamController;
 import asUtilsPorts.StartupNotify;
 import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Jobs.Crontabs_UVM;
 
 public class RestletOnStart {
     
     public static void ExecuteOnStartup() {    
-    	
+
+        CamBeans camBeans = new CamBeans();
         CommonBeans cb = new CommonBeans();
-        CamBeans camBeans = new CamBeans();      
+        Crontabs_UVM cUVM = new Crontabs_UVM();
         WeatherBot wxb = new WeatherBot();
         
         StartupNotify.getAtBoot();
@@ -50,6 +52,7 @@ public class RestletOnStart {
 		} 
 		
         try { CamController.initCams(); } catch (Exception e) { e.printStackTrace(); }
+        try { cUVM.scheduler(); } catch (Exception e) { e.printStackTrace(); }
                 
     }
         
