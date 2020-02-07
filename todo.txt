@@ -1,4 +1,6 @@
 Things to do:
-	- Implement Weather backend APIs (xs7/models19/etc)
+	- Create Desktop classes
+	- Create daily jobs to clean /var/log/*.gz; *.1 files on Pis	
+	- Fully migrate backend APIs (xs7/models19/etc)
 	? Code all Note 3 stuff to asUtils, as dep in ANDROID APP
 	- to run migrated libraries, use " java -cp classes:lib/* asUtilsPorts.DBBackup Clone "

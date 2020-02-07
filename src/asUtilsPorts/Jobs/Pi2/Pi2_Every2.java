@@ -4,18 +4,19 @@ Created: 6 Feb 2020
 Updated: on creation
  */
 
-package asUtilsPorts.Jobs;
+package asUtilsPorts.Jobs.Pi2;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import asUtilsPorts.UbuntuVM.Every5Minutes;
+import asUtilsPorts.Pi2.TwoMinute;
 
-public class UVM_Feeds5 implements Job {
+public class Pi2_Every2 implements Job {
 	    
     public void execute(JobExecutionContext context) throws JobExecutionException {
-    	Every5Minutes.execJobs5();
+    	String[] args = null;
+    	TwoMinute.main(args);
     }
         
 }

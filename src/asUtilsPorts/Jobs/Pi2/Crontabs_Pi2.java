@@ -4,7 +4,7 @@ Created: 6 Feb 2020
 Updated: on creation
  */
 
-package asUtilsPorts.Jobs;
+package asUtilsPorts.Jobs.Pi2;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -13,6 +13,8 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+
+import asUtilsPorts.Jobs.CronBeans;
 
 public class Crontabs_Pi2 {	
 

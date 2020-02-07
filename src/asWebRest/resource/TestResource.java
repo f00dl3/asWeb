@@ -38,7 +38,7 @@ import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.cWazey;
-import asUtilsPorts.Jobs.Crontabs_UVM;
+import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
 

@@ -6,7 +6,6 @@ Updated on 6 Feb 2020
 
 package asUtilsPorts.UbuntuVM;
 
-import asUtilsPorts.Jobs.Crontabs_UVM;
 import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Shares.UVMBeans;
 import asUtilsPorts.Shares.SSHTools;
@@ -18,7 +17,6 @@ public class AtBoot {
     
     private static void doAtBootUvm() {
         
-    	Crontabs_UVM cUVM = new Crontabs_UVM();
         JunkyBeans junkyBeans = new JunkyBeans();
         UVMBeans uvmBeans = new UVMBeans();
         WebCommon wc = new WebCommon();

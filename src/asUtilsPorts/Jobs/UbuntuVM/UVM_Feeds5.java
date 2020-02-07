@@ -4,19 +4,18 @@ Created: 6 Feb 2020
 Updated: on creation
  */
 
-package asUtilsPorts.Jobs;
+package asUtilsPorts.Jobs.UbuntuVM;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import asUtilsPorts.UbuntuVM.Feeds;
+import asUtilsPorts.UbuntuVM.Every5Minutes;
 
-public class UVM_Feeds1H implements Job {
+public class UVM_Feeds5 implements Job {
 	    
     public void execute(JobExecutionContext context) throws JobExecutionException {
-    	String args[] = { "Hour" };
-    	Feeds.main(args);
+    	Every5Minutes.execJobs5();
     }
         
 }

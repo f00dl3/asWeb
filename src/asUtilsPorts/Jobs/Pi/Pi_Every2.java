@@ -4,7 +4,7 @@ Created: 6 Feb 2020
 Updated: on creation
  */
 
-package asUtilsPorts.Jobs;
+package asUtilsPorts.Jobs.Pi;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
