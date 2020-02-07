@@ -1,11 +1,12 @@
 /*
 Created by Anthony Stump
 Created: 22 May 2019
-Updated: 31 Jan 2020
+Updated: 6 Jan 2020
  */
 
 package asUtilsPorts.Pi;
 
+import asUtilsPorts.Jobs.Crontabs_Pi;
 import asUtilsPorts.Pi.SendAPICall;
 import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
@@ -17,11 +18,13 @@ public class AtBoot {
     
     private static void doAtBoot() {       
         
+    	Crontabs_Pi cPi = new Crontabs_Pi();
         Thread ta = new Thread(() -> { startHomeSeer(); });
         Thread tb = new Thread(() -> { startVideo(); });
         Thread tc = new Thread(() -> { serialMonitor(); });
         Thread td = new Thread(() -> { pi2DesktopTunnel(); });
-        Thread procs[] = { ta, tb, tc, td };
+        Thread te = new Thread(() -> { cPi.scheduler(); });
+        Thread procs[] = { ta, tb, tc, td, te };
         for (Thread thread : procs) { thread.start(); }
         
     }

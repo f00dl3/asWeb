@@ -10,13 +10,13 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import asUtilsPorts.UbuntuVM.Feeds;
+import asUtilsPorts.Pi.TwoMinute;
 
-public class UVM_Feeds1H implements Job {
+public class Pi_Every2 implements Job {
 	    
     public void execute(JobExecutionContext context) throws JobExecutionException {
-    	String args[] = { "Hour" };
-    	Feeds.main(args);
+    	String[] args = null;
+    	TwoMinute.main(args);
     }
         
 }

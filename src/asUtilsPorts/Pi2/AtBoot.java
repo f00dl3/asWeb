@@ -1,11 +1,13 @@
 /*
 Created by Anthony Stump
 Created: 20 Jan 2020
-Updated: 5 Feb 2020
+Updated: 6 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
 
+import asUtilsPorts.Mailer;
+import asUtilsPorts.Jobs.Crontabs_Pi2;
 import asUtilsPorts.Shares.SSHTools;
 import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
@@ -15,16 +17,18 @@ import java.io.File;
 public class AtBoot {
     
     private static void doAtBoot() {       
-        
+
+		Crontabs_Pi2 cPi2 = new Crontabs_Pi2();		
         Thread ta = new Thread(() -> { pi2DesktopTunnel2(); });
         Thread tb = new Thread(() -> { startVideo(); });
-        Thread procs[] = { ta , tb };
+        Thread tc = new Thread(() -> { cPi2.scheduler(); });
+        Thread procs[] = { ta , tb, tc };
         for (Thread thread : procs) { thread.start(); }
-        
+
     }
     
     public static void main(String[] args) {
-        
+
         System.out.println("Raspberry Pi 2 @Boot");
         doAtBoot();
         
@@ -47,16 +51,19 @@ public class AtBoot {
     
     private static void startVideo() {
         
+    	Mailer mailer = new Mailer();
     	WebCommon wc = new WebCommon();
         final int vOut = 20;
         final String start_modprobe = "modprobe v4l2loopback video_nr="+vOut;
         final String start_v4l2ctl = "v4l2-ctl --set-fmt-video=width=1024,height=768 --set-ctrl=exposure_time_absolute=220";
         final String start_v4l2loopback = "v4l2compress_omx /dev/video0 /dev/video"+vOut+" &";
         final String start_h264server = "v4l2rtspserver -W 954 -H 540 -F 15 -P 8554 /dev/video"+vOut+" &";
-        try { wc.runProcess(start_v4l2ctl); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.runProcess(start_modprobe); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.runProcess(start_v4l2loopback); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.runProcess(start_h264server); } catch (Exception e) { e.printStackTrace(); }
+        final String mergedStart = start_modprobe + "; " + start_v4l2loopback + "; " + start_h264server;
+        //try { wc.runProcess(start_v4l2ctl); } catch (Exception e) { e.printStackTrace(); }
+        try { wc.runProcess(mergedStart); } catch (Exception e) { e.printStackTrace(); }
+        //try { wc.runProcess(start_v4l2loopback); } catch (Exception e) { e.printStackTrace(); }
+        //try { wc.runProcess(start_h264server); } catch (Exception e) { e.printStackTrace(); }
+        System.out.println("DEBUG: " + mergedStart);
         
     }
     
