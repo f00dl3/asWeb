@@ -20,7 +20,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import asUtilsPorts.Mailer;
 import asUtilsPorts.Weather.ModelBeans;
 import asUtilsPorts.Weather.ModelImageOps;
 import asUtilsPorts.Weather.ModelShare;
@@ -32,12 +31,9 @@ public class Models {
 
 	public void initiator(boolean sysProc, String getHour) {
 
-		Mailer mailer = new Mailer();
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
-        
-        mailer.sendQuickEmail("asWeb INFO: Models kicked off for hour " + getHour);
-        
+                
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
         ModelBeans modelBeans = new ModelBeans();

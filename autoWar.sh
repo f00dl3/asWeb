@@ -37,10 +37,8 @@ if [[ -f "$fileName" ]]; then
 	echo "$sqlStatement" | mysql -u f00dl3 -p -h 127.0.0.1
 	echo "Deploying to Raspberry Pi #1 (background)..."
 	sftp -i ~/.ssh/Desktop2Pi -P 39408 -b tbh pi@192.168.1.8 &
-	ssh -t -i ~/.ssh/Desktop2Pi -p 30408 pi@192.168.1.8 "sudo "$helperSet
 	echo "Deploying to Raspberry Pi #2 (background)..."
 	sftp -i ~/.ssh/forPi2v2 -P 39409 -b tbg pi@$publicIp &
-	ssh -t -i ~/.ssh/forPi2v2 -p 39409 pi@$publicIp "sudo "$helperSet
 	echo "Deploying to Ubuntu Virtual Machine (Guest)..."
 	sftp -i ~/.ssh/uvmKey -P 20022 -b tbf astump@127.0.0.1 
 	echo "UVM sudo Auth:"
