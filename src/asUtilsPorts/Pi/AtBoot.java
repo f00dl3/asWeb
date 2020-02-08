@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 22 May 2019
-Updated: 6 Jan 2020
+Updated: 8 Feb 2020
  */
 
 package asUtilsPorts.Pi;
@@ -10,6 +10,7 @@ import asUtilsPorts.Jobs.Pi.Crontabs_Pi;
 import asUtilsPorts.Pi.SendAPICall;
 import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.WebCommon;
+import asUtilsPorts.Shares.HelperPermissions;
 import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Shares.SSHTools;
 import java.io.File;
@@ -19,6 +20,10 @@ public class AtBoot {
     private static void doAtBoot() {       
         
     	Crontabs_Pi cPi = new Crontabs_Pi();
+    	HelperPermissions hp = new HelperPermissions();
+    	
+    	hp.helperChmods();
+    	
         Thread ta = new Thread(() -> { startHomeSeer(); });
         Thread tb = new Thread(() -> { startVideo(); });
         Thread tc = new Thread(() -> { serialMonitor(); });

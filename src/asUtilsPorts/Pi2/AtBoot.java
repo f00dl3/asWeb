@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 20 Jan 2020
-Updated: 7 Feb 2020
+Updated: 8 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
@@ -13,17 +13,24 @@ import asWebRest.shared.WebCommon;
 
 import java.io.File;
 
+import asUtilsPorts.Shares.HelperPermissions;
 import asUtilsPorts.Shares.JunkyBeans;
 
 public class AtBoot {
     
-    private static void doAtBoot() {       
-		Crontabs_Pi2 cPi2 = new Crontabs_Pi2();		
+    private static void doAtBoot() {
+    	
+		Crontabs_Pi2 cPi2 = new Crontabs_Pi2();
+		HelperPermissions hp = new HelperPermissions();
+		
+		hp.helperChmods();
+		
         Thread ta = new Thread(() -> { pi2DesktopTunnel2(); });
         Thread tb = new Thread(() -> { startVideo(); });
         Thread tc = new Thread(() -> { cPi2.scheduler(); });
         Thread procs[] = { ta , tb, tc };
         for (Thread thread : procs) { thread.start(); }
+        
     }
     
     public static void main(String[] args) {

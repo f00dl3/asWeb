@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created on 8 May 2019
-Updated on 6 Feb 2020
+Updated on 8 Feb 2020
  */
 
 package asUtilsPorts.UbuntuVM;
 
+import asUtilsPorts.Shares.HelperPermissions;
 import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Shares.UVMBeans;
 import asUtilsPorts.Shares.SSHTools;
@@ -17,6 +18,7 @@ public class AtBoot {
     
     private static void doAtBootUvm() {
         
+    	HelperPermissions hp = new HelperPermissions();
         JunkyBeans junkyBeans = new JunkyBeans();
         UVMBeans uvmBeans = new UVMBeans();
         WebCommon wc = new WebCommon();
@@ -26,6 +28,8 @@ public class AtBoot {
         final File tomcatShare = new File(uvmBeans.getTomcatShare());
         final File hostWalkFile = new File(sharePath+"/snmpwalk.txt");
         final File guestDestination = new File(ramDrive+"/snmpwalk.txt");
+        
+        hp.helperChmods();
         
         try { wc.copyFile(hostWalkFile.toString(), guestDestination.toString()); } catch (Exception e) { e.printStackTrace(); }
         

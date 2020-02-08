@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Sep 2017
-Updated: 2 Jan 2020
+Updated: 8 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -95,7 +95,7 @@ public class xsWorkerBouy {
 					if(line.contains("<visibility_mi>")) { Pattern p = Pattern.compile("<visibility_mi>(.*)</visibility_mi>"); Matcher m = p.matcher(line); if (m.find()) { tVisibility = m.group(1); } }
 				}
 			}
-			catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
+			catch (FileNotFoundException fnf) { }
 		
 			if (wc.isSet(tTempF)) { jStationData.put("Temperature", tTempF); } else { thisNullCounter++; }
 			if (wc.isSet(tDewpointF)) { jStationData.put("Dewpoint", tDewpointF); } else { thisNullCounter++; }
