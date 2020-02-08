@@ -1,7 +1,7 @@
 /*
 XML Stations 2019 - Core Process 
 Created: 4 Sep 2016
-Updated: 4 Feb 2020
+Updated: 7 Feb 2020
 LEGACY - DEPRECIATE WHEN asUtilsPorts.Stations WORKS
 */
 
@@ -9,6 +9,7 @@ package asUtilsPorts.Legacy;
 
 import asUtilsPorts.Shares.JunkyBeans;
 import asUtilsPorts.Weather.ModelBeans;
+import asUtilsPorts.Weather.ModelShare;
 import asUtilsPorts.Weather.xsImageOp;
 import asUtilsPorts.Weather.xsMETARAutoAdd;
 import asUtilsPorts.Weather.xsWorkerBasic;
@@ -42,6 +43,7 @@ public class xs19 {
 
         JunkyBeans junkyBeans = new JunkyBeans();
         ModelBeans modelBeans = new ModelBeans();
+	ModelShare ms = new ModelShare();
         WebCommon wc = new WebCommon();
         xsImageOp xsio = new xsImageOp();
         xsMETARAutoAdd xsmaa = new xsMETARAutoAdd();
@@ -54,8 +56,7 @@ public class xs19 {
             
 		final long startTime = System.currentTimeMillis();
 
-		final File ramDrive = junkyBeans.getRamDrive();
-		final String xsTmp = ramDrive.getPath()+"/xsTmpJ_19";
+		final String xsTmp = ms.get_xsTmp(true);
 		final String tFHour2D = "02";
 		final String tFHour4D = "0002";
 		final String tSFHour2D = "03";

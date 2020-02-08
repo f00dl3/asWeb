@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 12 Oct 2017
-Updated: 5 Feb 2020
+Updated: 7 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -20,6 +20,10 @@ import org.joda.time.format.DateTimeFormatter;
 public class ModelImageOps {
 
 	public void main(String getHour, File xml2Path, String wwwOutBase) {
+
+		System.out.println("DEBUG: MIO Paths: \n" +
+			"xml2Path: " + xml2Path.toString() + "\n" +
+			"wwwOutBase: " + wwwOutBase);
 
 		CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();

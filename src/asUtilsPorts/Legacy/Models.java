@@ -3,7 +3,7 @@ by Anthony Stump
 Models core class
 
 Created: 22 Sep 2017
-Updated: 5 Feb 2020
+Updated: 7 Feb 2020
 Status: Production
 DECOM ASAP - LEGACY PORT
 
@@ -20,7 +20,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import asUtils.Model.ModelBeans;
+import asUtilsPorts.Weather.ModelBeans;
 import asUtilsPorts.Weather.ModelImageOps;
 import asUtilsPorts.Weather.ModelShare;
 import asUtils.Model.ModelWorker;
@@ -46,9 +46,13 @@ public class Models {
 		final String getDate = getDateFormat.print(tDateTime);
 		final String modelRunString = getDate+"_"+getHour+"Z";
 		final File imgOutPath = modelBeans.getImgOutPath();
-		final File xml2Path = modelBeans.getXml2Path();
+		final File xml2Path = new File(ms.get_xsTmp(sysProc));
 		final String wwwBase = ms.get_wwwBase(sysProc).toString();
 		final File mSQLDebugDumpFile = new File(xml2Path.getPath()+"/mSQLDebugDump.json");
+
+		System.out.println("DEBUG: Paths: \n" +
+			"xml2Path: " + xml2Path.toString() + "\n" +
+			"wwwBase: " + wwwBase);
 
 		wc.deleteDir(xml2Path);
 		imgOutPath.mkdirs();

@@ -1,7 +1,7 @@
 /*
 By Anthony Stump
 Created: 20 Dec 2017
-Updated: 4 Feb 2020
+Updated: 7 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -25,7 +25,7 @@ public class ModelBeans {
         final private String wgrib2Path = "/home/astump/src/grib2/wgrib2";
        
 		//final private File xml2Path = diskSwap;
-        final private File xml2Path = new File(ramDrive.getPath()+"/modelsJ");
+        final private File xml2Path = new File(ramDrive.getPath()+"/Weather2020");
         final private double defaultDataValue = 0.001;
         final private double downloadTimeout = 15.0;
 		final private File imgOutPath = new File(xml2Path.getPath()+"/tmpic");

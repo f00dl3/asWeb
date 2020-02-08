@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Split to UVM: 16 Oct 2019
-Updated: 31 Jan 2020
+Updated: 7 Feb 2020
 */
 
 package asUtilsPorts.UbuntuVM;
@@ -70,8 +70,13 @@ public class Feeds {
 					wc.moveFile(ramTemp+"/"+thisFeedFileStr, mysqlShare+"/"+thisFeedFileStr);
 
 					String thisFeedUpSQL = "LOAD XML LOCAL INFILE '"+mysqlShare+"/"+thisFeedFileStr+"' IGNORE INTO TABLE Feeds.RSSFeeds CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<item>';";
-					try ( Statement subStmt = conn.createStatement();) { subStmt.executeUpdate(thisFeedUpSQL); } catch (Exception e) { e.printStackTrace(); }
-
+					try ( 
+						Connection subConn = mdb.getMyConnection();
+						Statement subStmt = subConn.createStatement();
+					) { 
+						subStmt.executeUpdate(thisFeedUpSQL);
+						subConn.close();
+					} catch (Exception e) { e.printStackTrace(); }
 					thisFeedFile.delete();
 					thisFeedDestFile.delete();
 				}

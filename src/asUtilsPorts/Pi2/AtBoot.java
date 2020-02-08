@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 20 Jan 2020
-Updated: 6 Feb 2020
+Updated: 7 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
@@ -13,7 +13,7 @@ import asWebRest.shared.WebCommon;
 
 import java.io.File;
 
-import asUtils.Shares.JunkyBeans;
+import asUtilsPorts.Shares.JunkyBeans;
 
 public class AtBoot {
     
