@@ -6,15 +6,6 @@ Updated: 8 Feb 2020
 
 package asUtilsPorts.Weather;
 
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerCMC;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerGFS;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerHRRR;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerHRWA;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerHRWN;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerNAM;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerSRFA;
-import asUtilsPorts.Weather.OldModelWorkers.ModelWorkerSRFN;
-
 public class ModelWorker {
 	
 	public void main(String getHour, String round) {            
