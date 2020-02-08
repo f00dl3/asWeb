@@ -9,9 +9,11 @@ package asUtilsPorts.Pi2;
 import asUtilsPorts.Jobs.Pi2.Crontabs_Pi2;
 import asUtilsPorts.Shares.SSHTools;
 import asWebRest.secure.JunkyPrivate;
+import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import asUtilsPorts.Shares.HelperPermissions;
 import asUtilsPorts.Shares.JunkyBeans;
@@ -51,14 +53,25 @@ public class AtBoot {
     }
     
     
-    private static void startVideo() {        
-    	JunkyBeans jb = new JunkyBeans();
+    public static void startVideo() {
+    	
+    	ThreadRipper tr = new ThreadRipper();
     	WebCommon wc = new WebCommon();
-    	final String startVideo = "bash " + jb.getHelpers().toString() + "/startPi2Video.sh";
-        System.out.println("DEBUG: " + startVideo); 
-        Thread ta = new Thread(() -> { wc.runProcess(startVideo); });
-        Thread procs[] = { ta };
-        for(Thread thread : procs) { thread.start(); }        
+    	
+		ArrayList<String> prereqs = new ArrayList<String>();
+		prereqs.add("modprobe v4l2loopback video_nr=20");
+		prereqs.add("v4l2-ctl --set-fmt-video=width=1024,height=768 --set-ctrl=exposure_time_absolute=220");
+		prereqs.add("v4l2compress_omx /dev/video0 /dev/video20 &");
+		prereqs.add("v4l2rtspserver -W 954 -H 540 -F 15 -P 8554 /dev/video20 &");
+        
+		ArrayList<Runnable> threads = new ArrayList<Runnable>();
+		for(int i = 0; i < prereqs.size(); i++) {
+			final int tpi = i;
+			threads.add(() -> wc.runProcess(prereqs.get(tpi)));	
+			try { Thread.sleep(1000); } catch (Exception e) { e.printStackTrace(); }
+		}
+		tr.runProcesses(threads, true, true);
+        
     }
     
 }

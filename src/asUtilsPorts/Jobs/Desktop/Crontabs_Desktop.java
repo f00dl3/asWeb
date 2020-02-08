@@ -24,14 +24,13 @@ public class Crontabs_Desktop {
 
 		try {
 			
-			JobDetail dt_2m = JobBuilder.newJob(Desktop_Every2.class).withIdentity("dt_sh", "dtJobs").build();
+			JobDetail dt_2m = JobBuilder.newJob(Desktop_Every2.class).withIdentity("dt_2m", "dtJobs").build();
 			
 			Trigger dt_2m_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_dt_2m", "dtJobs").forJob(dt_2m)
 					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int2m())).build();
 			
 			Scheduler sched_2m = new StdSchedulerFactory().getScheduler();
-			sched_2m.start();
-			sched_2m.scheduleJob(dt_2m, dt_2m_Trigger);
+			sched_2m.start(); sched_2m.scheduleJob(dt_2m, dt_2m_Trigger);
 			
 		} catch (Exception e) {
 			
@@ -47,8 +46,7 @@ public class Crontabs_Desktop {
 					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_subHourly())).build();
 			
 			Scheduler sched_sh = new StdSchedulerFactory().getScheduler();
-			sched_sh.start();
-			sched_sh.scheduleJob(dt_sh, dt_sh_Trigger);
+			sched_sh.start(); sched_sh.scheduleJob(dt_sh, dt_sh_Trigger);
 			
 		} catch (Exception e) {
 			
@@ -63,8 +61,7 @@ public class Crontabs_Desktop {
 					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int1h())).build();
 			
 			Scheduler sched_1h = new StdSchedulerFactory().getScheduler();
-			sched_1h.start();
-			sched_1h.scheduleJob(dt_1h, dt_1h_Trigger);
+			sched_1h.start(); sched_1h.scheduleJob(dt_1h, dt_1h_Trigger);
 			
 		} catch (Exception e) {
 			

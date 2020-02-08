@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 6 Feb 2020
-Updated: 7 Feb 2020
+Updated: 8 Feb 2020
  */
 
 package asUtilsPorts.Jobs.Pi2;
@@ -24,18 +24,13 @@ public class Crontabs_Pi2 {
 
 		try {
 			
-			JobDetail pi2_2m = JobBuilder.newJob(Pi2_Every2.class)
-					.withIdentity("pi2_2m", "pi2Jobs").build();
+			JobDetail pi2_2m = JobBuilder.newJob(Pi2_Every2.class).withIdentity("pi2_2m", "pi2Jobs").build();
 			
-			Trigger pi2_2m_Trigger = TriggerBuilder.newTrigger()
-					.withIdentity("cron_pi2_2m", "pi2Jobs")
-					.forJob(pi2_2m)
-					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int2m()))
-					.build();
+			Trigger pi2_2m_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_pi2_2m", "pi2Jobs").forJob(pi2_2m)
+					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int2m())).build();
 			
 			Scheduler sched_2m = new StdSchedulerFactory().getScheduler();
-			sched_2m.start();
-			sched_2m.scheduleJob(pi2_2m, pi2_2m_Trigger);
+			sched_2m.start(); sched_2m.scheduleJob(pi2_2m, pi2_2m_Trigger);
 			
 		} catch (Exception e) {
 			

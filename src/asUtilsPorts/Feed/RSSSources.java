@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Split to RSSSources: 23 Nov 2019
-Updated: 30 Dec 2019
+Updated: 8 Feb 2020
 */
 
 package asUtilsPorts.Feed;
@@ -10,11 +10,13 @@ package asUtilsPorts.Feed;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
 public class RSSSources {
@@ -23,6 +25,7 @@ public class RSSSources {
 
     	String returnData = "";
     	
+    	MyDBConnector mdb = new MyDBConnector();
         CommonBeans cb = new CommonBeans();
         WebCommon wc = new WebCommon();
 
@@ -57,10 +60,16 @@ public class RSSSources {
 			wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "<!\\[CDATA\\[", "");
 			wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "\\]\\]", "");
 			String thisFeedUpSQL = "LOAD XML LOCAL INFILE '"+ramTemp+"/"+thisFeedFileStr+"' IGNORE INTO TABLE Feeds.RSSFeeds CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<item>';";
-			try { 
-				System.out.println("Loading infile for: " +thisLinkName+" ("+thisLinkURL+")");
-				returnData += wc.q2do1c(dbc, thisFeedUpSQL, null);
-			} catch (Exception e) { e.printStackTrace(); }
+			try ( 
+					Connection subConn = mdb.getMyConnection();
+					Statement subStmt = subConn.createStatement();
+				) { 
+					System.out.println("Loading infile for: " +thisLinkName+" ("+thisLinkURL+")");
+					subStmt.executeUpdate(thisFeedUpSQL);
+					subConn.close();
+				} catch (Exception e) { 
+					e.printStackTrace();
+			}
 			thisFeedFile.delete();
 			try { Thread.sleep(250); } catch (InterruptedException e) { e.printStackTrace(); }
         }

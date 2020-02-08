@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 5 Feb 2020
+Updated: 8 Feb 2020
 */
 
 package asUtilsPorts;
@@ -23,7 +23,7 @@ import asUtilsPorts.Feed.NWSWarnings;
 import asUtilsPorts.SNMP.Router;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Weather.AlertMe;
-//import asUtilsPorts.Feed.RSSSources;
+import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
@@ -84,13 +84,13 @@ public class Feeds {
     	DateTime rightNow = new DateTime();
     	String returnData = "Fetch hourly feeds:\n";
     	
-    	//RSSSources rssSources = new RSSSources();
+    	RSSSources rssSources = new RSSSources();
     	NHCFetch nhcFetch = new NHCFetch();
     	GetSPC getSPC = new GetSPC();
     	
     	try { getSPC.doGetSPCHourly(dbc); } catch (Exception e) { e.printStackTrace(); }    	
     	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
-    	//try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
     	
 
     	if(rightNow.getHourOfDay() == 2) {
