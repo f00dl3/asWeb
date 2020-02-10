@@ -1,16 +1,16 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 2 Jan 2020
+Updated: 10 Feb 2020
  */
 
 package asWebRest.hookers;
 
 import java.io.File;
 
-import asUtils.Secure.JunkyPrivate;
-import asUtils.Shares.JunkyBeans;
-import asUtils.Shares.SSHTools;
+import asWebRest.secure.JunkyPrivate;
+import asUtilsPorts.Shares.JunkyBeans;
+import asUtilsPorts.Shares.SSHTools;
 import asWebRest.secure.SshBeans;
 
 public class SmartplugInterface {
@@ -18,6 +18,7 @@ public class SmartplugInterface {
 	public void setPlug(String command, String device) {
 		
 		SshBeans ssh = new SshBeans();
+		SSHTools sshTools = new SSHTools();
 		JunkyBeans jb = new JunkyBeans();
 		JunkyPrivate jp = new JunkyPrivate();
 		
@@ -45,7 +46,7 @@ public class SmartplugInterface {
 		
 		try {
 			System.out.println("DEBUG: Setting up tunnel...");
-			SSHTools.sshRunCommands("pi", ip_controller, 39409, keyFile, commandsToRun);
+			sshTools.sshRunCommands("pi", ip_controller, 39409, keyFile, commandsToRun);
 			System.out.println("DEBUG: Commands ran successfully");
 		} catch (Exception e) {
 			e.printStackTrace();

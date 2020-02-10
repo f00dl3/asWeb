@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 22 May 2019
-Updated: 9 Feb 2020
+Updated: 10 Feb 2020
  */
 
 package asUtilsPorts.Pi;
@@ -29,7 +29,7 @@ public class AtBoot {
         Thread tc = new Thread(() -> { serialMonitor(); });
         Thread td = new Thread(() -> { pi2DesktopTunnel(); });
         Thread te = new Thread(() -> { cPi.scheduler(); });
-        Thread procs[] = { ta, tb, tc, td, te };
+        Thread procs[] = { ta, tb, /* tc,*/ td, te };
         for (Thread thread : procs) { thread.start(); }
         
     }
@@ -58,9 +58,11 @@ public class AtBoot {
     }
 
     private static void serialMonitor() {
+    		SendAPICall sapi = new SendAPICall();
             WebCommon wc = new WebCommon();
             String processString = "cat /dev/ttyACM0 > /dev/shm/pioSerialMon.log &";
             try { wc.runProcess(processString); } catch (Exception e) { e.printStackTrace(); }
+            sapi.smarthomeDoorEvent("API Test Call");
     }
     
     private static void startHomeSeer() {
@@ -76,7 +78,7 @@ public class AtBoot {
         WebCommon wc = new WebCommon();
         JunkyBeans jb = new JunkyBeans();
         final String start_v4l2ctl = "v4l2-ctl --set-ctrl=vertical_flip=1 --set-ctrl=horizontal_flip=1 --set-ctrl=exposure_time_absolute=220";
-        final String start_h264server = jb.getHelpers().toString() + "/h264_v4l2_rtspserver /dev/video0 -W 954 -H 540 -F 15 -P 8554";
+        final String start_h264server = "v4l2rtspserver /dev/video0 -W 954 -H 540 -F 15 -P 8554 &";
         try { wc.runProcess(start_v4l2ctl); } catch (Exception e) { e.printStackTrace(); }
         try { wc.runProcess(start_h264server); } catch (Exception e) { e.printStackTrace(); }
         

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 4 Jan 2020
+Updated: 10 Feb 2020
  */
 
 package asWebRest.hookers;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import java.sql.Connection;
 
-import asUtils.Secure.JunkyPrivate;
+import asWebRest.secure.JunkyPrivate;
 import asUtilsPorts.Mailer;
 import asWebRest.action.GetSmarthomeAction;
 import asWebRest.dao.SmarthomeDAO;

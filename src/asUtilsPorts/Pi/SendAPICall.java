@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Nov 2019
-Updated: 1 Feb 2020
+Updated: 10 Feb 2020
  */
 
 package asUtilsPorts.Pi;
@@ -47,50 +47,51 @@ public class SendAPICall {
         }
     }
     
-    public void main(String[] args) {
+    public static void main(String[] args) {
         
+    	SendAPICall sac = new SendAPICall();
         String inArgs = args[0];
         
         switch(inArgs) {
             
             case "EventDoorBasement": 
-                smarthomeDoorEvent("Door Open Basement");
+                sac.smarthomeDoorEvent("Door Open Basement");
                 break;
                 
             case "EventDoorDeck": 
-                smarthomeDoorEvent("Door Open Deck");
+            	sac.smarthomeDoorEvent("Door Open Deck");
                 break;
                 
             case "EventDoorFront":
-                smarthomeDoorEvent("Door Open Front");
+            	sac.smarthomeDoorEvent("Door Open Front");
                 break;
             
             case "EventDownHallCO2":
-                doEnvironmental("Downstairs Hallway CO2 Alarm");
+            	sac.doEnvironmental("Downstairs Hallway CO2 Alarm");
                 break;
                 
             case "EventDownHallFire":
-                doEnvironmental("Downstairs Hallway Fire Alarm");
+            	sac.doEnvironmental("Downstairs Hallway Fire Alarm");
                 break;
                 
             case "EventDownHallOther":
-                doEnvironmental("Downstairs Hallway Other Alarm");
+            	sac.doEnvironmental("Downstairs Hallway Other Alarm");
                 break;
             
             case "EventUpHallCO2":
-                doEnvironmental("Upstairs Hallway CO2 Alarm");
+            	sac.doEnvironmental("Upstairs Hallway CO2 Alarm");
                 break;
                 
             case "EventUpHallFire":
-                doEnvironmental("Upstairs Hallway Fire Alarm");
+            	sac.doEnvironmental("Upstairs Hallway Fire Alarm");
                 break;
                 
             case "EventUpHallOther":
-                doEnvironmental("Upstairs Hallway Other Alarm");
+            	sac.doEnvironmental("Upstairs Hallway Other Alarm");
                 break;
                 
             case "TEST":
-                smarthomeDoorEvent("API Test Call");
+            	sac.smarthomeDoorEvent("API Test Call");
                 break;
             
             default:

@@ -3,7 +3,7 @@ by Anthony Stump
 Models 2020 core class Tomcat Port
 
 Created: 22 Sep 2017
-Updated: 5 Jan 2020
+Updated: 8 Jan 2020
 Status: UNTESTED on Tomcat
 */
 
@@ -41,7 +41,7 @@ public class Models {
         Connection dbc = null;
         try { dbc = mdb.getMyConnection(); } catch (Exception e) { e.printStackTrace(); }
         
-		final DateTime tDateTime = new DateTime(DateTimeZone.UTC).minusHours(4);
+		final DateTime tDateTime = new DateTime().minusHours(2);
 		final DateTimeFormatter getDateFormat = DateTimeFormat.forPattern("yyyyMMdd");
 		final String getHour = args[0];
 		final String getDate = getDateFormat.print(tDateTime);
