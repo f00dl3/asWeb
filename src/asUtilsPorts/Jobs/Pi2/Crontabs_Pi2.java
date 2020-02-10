@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 6 Feb 2020
-Updated: 8 Feb 2020
+Updated: 9 Feb 2020
  */
 
 package asUtilsPorts.Jobs.Pi2;
@@ -37,7 +37,22 @@ public class Crontabs_Pi2 {
 			e.printStackTrace();
 			
 		}
-		
+
+		try {
+			
+			JobDetail pi2_1h = JobBuilder.newJob(Pi2_Every1H.class).withIdentity("pi2_1h", "pi2Jobs").build();
+			
+			Trigger pi2_1h_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_pi2_1h", "pi2Jobs").forJob(pi2_1h)
+					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int1h())).build();
+			
+			Scheduler sched_1h = new StdSchedulerFactory().getScheduler();
+			sched_1h.start(); sched_1h.scheduleJob(pi2_1h, pi2_1h_Trigger);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
 	}
 	
 	public static void main(String[] args) {

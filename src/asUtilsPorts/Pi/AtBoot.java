@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 22 May 2019
-Updated: 8 Feb 2020
+Updated: 9 Feb 2020
  */
 
 package asUtilsPorts.Pi;
@@ -41,7 +41,7 @@ public class AtBoot {
         
     }
     
-    private static void pi2DesktopTunnel() {
+    public static void pi2DesktopTunnel() {
         
     	SendAPICall sapi = new SendAPICall();
         SSHTools sshTools = new SSHTools();

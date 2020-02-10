@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 6 Feb 2020
-Updated: 8 Feb 2020
+Updated: 9 Feb 2020
  */
 
 package asUtilsPorts.Jobs.Pi;
@@ -25,7 +25,7 @@ public class Crontabs_Pi {
 
 		try {
 			
-			JobDetail pi_2m = JobBuilder.newJob(Pi2_Every2.class).withIdentity("pi_2m", "piJobs").build();
+			JobDetail pi_2m = JobBuilder.newJob(Pi_Every2.class).withIdentity("pi_2m", "piJobs").build();
 			
 			Trigger pi_2m_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_pi_2m", "piJobs").forJob(pi_2m)
 					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int2m())).build();
@@ -38,7 +38,22 @@ public class Crontabs_Pi {
 			e.printStackTrace();
 			
 		}
-		
+
+		try {
+			
+			JobDetail pi_1h = JobBuilder.newJob(Pi_Every1H.class).withIdentity("pi_1h", "piJobs").build();
+			
+			Trigger pi_1h_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_pi_1h", "piJobs").forJob(pi_1h)
+					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_int1h())).build();
+			
+			Scheduler sched_1h = new StdSchedulerFactory().getScheduler();
+			sched_1h.start(); sched_1h.scheduleJob(pi_1h, pi_1h_Trigger);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
 	}
 	
 	public static void main(String[] args) {

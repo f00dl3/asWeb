@@ -1,7 +1,7 @@
 /*
 Created by Anthony Stump
 Created: 20 Jan 2020
-Updated: 8 Feb 2020
+Updated: 9 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
@@ -30,7 +30,7 @@ public class AtBoot {
         Thread ta = new Thread(() -> { pi2DesktopTunnel2(); });
         Thread tb = new Thread(() -> { startVideo(); });
         Thread tc = new Thread(() -> { cPi2.scheduler(); });
-        Thread procs[] = { ta , tb, tc };
+        Thread procs[] = { ta /*, tb*/, tc };
         for (Thread thread : procs) { thread.start(); }
         
     }
@@ -40,7 +40,7 @@ public class AtBoot {
         doAtBoot();        
     }
     
-    private static void pi2DesktopTunnel2() {        
+    public static void pi2DesktopTunnel2() {        
         SSHTools sshTools = new SSHTools();
         JunkyPrivate jp = new JunkyPrivate();
         final File keyfile = jp.getPi2DesktopKey();
@@ -54,6 +54,8 @@ public class AtBoot {
     
     
     public static void startVideo() {
+    	
+    	// Feb 9 2020 - Does not work due to something?
     	
     	ThreadRipper tr = new ThreadRipper();
     	WebCommon wc = new WebCommon();
