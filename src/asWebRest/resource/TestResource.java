@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 6 Feb 2020
+Updated: 12 Feb 2020
  */
 
 package asWebRest.resource;
@@ -37,6 +37,7 @@ import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.RSSSources;
+import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
@@ -184,9 +185,9 @@ public class TestResource extends ServerResource {
 	        		cUVM.scheduler();
 	        		break;
                     
-                case "RSS":
-                	RSSSources rss = new RSSSources();
-                	rss.getRSS(dbc);
+                case "Reddit":
+                	Reddit reddit = new Reddit();
+                	returnData += reddit.checkIfSent(dbc);
                 	break;
                     
             	case "ThreadTest":

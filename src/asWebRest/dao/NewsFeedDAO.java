@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 30 Nov 2019
+Updated: 12 Feb 2020
 */
 
 package asWebRest.dao;
@@ -103,6 +103,38 @@ public class NewsFeedDAO {
         return tContainer;
     }
 
+    public JSONArray getRedditKcregionalwxInventory(Connection dbc) {
+        final String query_RedditFeeds = "SELECT GetTime, title, id FROM Feeds.RedditFeeds" +
+    				" WHERE content LIKE '%kcregionalwx%' ORDER BY GetTime DESC LIMIT 100;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RedditFeeds, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("id", resultSet.getString("id"))
+                    .put("title", resultSet.getString("title"))
+                    .put("GetTime", resultSet.getString("GetTime"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+
+    public int getRedditFeedSent(Connection dbc, List<String> qParams) {
+        final String query_CheckIfSent = "SELECT sent FROM Feeds.RedditNotices WHERE id=?;";
+        int wasSent = 0;
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_CheckIfSent, qParams);
+            while (resultSet.next()) {
+                wasSent = resultSet.getInt("sent");
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return wasSent;
+    }
+
     public String setMessageActionTaken(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         final String query_MessageActionTaken = "UPDATE Feeds.Messages SET ActionTaken=1 WHERE MessageID=?;";
@@ -110,4 +142,10 @@ public class NewsFeedDAO {
         return returnData;
     }
 
+    public String setRedditSentNotice(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        final String query_RedditSent = "INSERT INTO Feeds.RedditNotices VALUES (?,1);";
+        try { returnData = wc.q2do1c(dbc, query_RedditSent, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
 }

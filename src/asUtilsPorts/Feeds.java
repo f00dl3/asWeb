@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 8 Feb 2020
+Updated: 12 Feb 2020
 */
 
 package asUtilsPorts;
@@ -24,6 +24,7 @@ import asUtilsPorts.SNMP.Router;
 import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Feed.RSSSources;
+import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
@@ -40,6 +41,7 @@ public class Feeds {
         GetSPC getSPC = new GetSPC();
     	Mailer mailer = new Mailer();
         NWSWarnings nwsWarnings = new NWSWarnings();
+        Reddit reddit = new Reddit();
         Router routerSnmp = new Router();
         UbuntuVM uvmSnmp = new UbuntuVM();
         
@@ -56,6 +58,7 @@ public class Feeds {
     	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { reddit.checkIfSent(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             
