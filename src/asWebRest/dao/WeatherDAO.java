@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Jan 2020
+Updated: 15 Feb 2020
  */
 
 package asWebRest.dao;
@@ -1078,6 +1078,69 @@ public class WeatherDAO {
         return tContainer;
     }
     
+    public JSONArray getSpcMesoSent(Connection dbc) {
+        final String query_spcMesoSent = "SELECT GetTime, title, description, Notified FROM WxObs.SPCMesoscale" +
+        		" WHERE (description LIKE '% KANSAS %' OR description LIKE '% MISSOURI %')" +
+        		" ORDER BY GetTime DESC LIMIT 25;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_spcMesoSent, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("title", resultSet.getString("title"))
+                    .put("description", resultSet.getString("description"))
+                    .put("Notified", resultSet.getInt("Notified"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
+    public JSONArray getSpcOutlookSent(Connection dbc) {
+        final String query_spcOLSent = "SELECT GetTime, title, description, Notified FROM WxObs.SPCOutlooks" +
+        		" WHERE (description LIKE '% KANSAS %' OR description LIKE '% MISSOURI %')" +
+        		" ORDER BY GetTime DESC LIMIT 25;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_spcOLSent, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("title", resultSet.getString("title"))
+                    .put("description", resultSet.getString("description"))
+                    .put("Notified", resultSet.getInt("Notified"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
+    public JSONArray getSpcWatchSent(Connection dbc) {
+        final String query_spcWWSent = "SELECT GetTime, title, description, Notified FROM WxObs.SPCWatches" +
+        		" WHERE (description LIKE '% KANSAS %' OR description LIKE '% MISSOURI %')" +
+        		" ORDER BY GetTime DESC LIMIT 25;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_spcWWSent, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("title", resultSet.getString("title"))
+                    .put("description", resultSet.getString("description"))
+                    .put("Notified", resultSet.getInt("Notified"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
     public JSONArray getStormReportsByDate(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
@@ -1198,6 +1261,27 @@ public class WeatherDAO {
     public String setAlertSentEarthquake(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_SentAlert = "UPDATE WxObs.ANSSQuakes SET AlertSent=1 WHERE id=?;";
+        try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+
+    public String setSpcMesoSent(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_SentAlert = "UPDATE WxObs.SPCMesoscale SET Notified=1 WHERE title=?;";
+        try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+
+    public String setSpcOutlookSent(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_SentAlert = "UPDATE WxObs.SPCOutlooks SET Notified=1 WHERE title=?;";
+        try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    public String setSpcWatchSent(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_SentAlert = "UPDATE WxObs.SPCWatches SET Notified=1 WHERE title=?;";
         try { returnData = wc.q2do1c(dbc, query_SentAlert, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }

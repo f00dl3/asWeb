@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 12 Feb 2020
+Updated: 15 Feb 2020
  */
 
 package asWebRest.resource;
@@ -36,6 +36,7 @@ import asUtilsPorts.Stations;
 import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
+import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.cWazey;
@@ -183,13 +184,13 @@ public class TestResource extends ServerResource {
 	        	case "quartz":
 	        		Crontabs_UVM cUVM = new Crontabs_UVM();
 	        		cUVM.scheduler();
-	        		break;
-                    
-                case "Reddit":
-                	Reddit reddit = new Reddit();
-                	returnData += reddit.checkIfSent(dbc);
-                	break;
-                    
+	        		break;                    
+
+			 	case "Reddit":
+	               	Reddit rd = new Reddit();
+					returnData += rd.checkIfSent(dbc);
+					break;
+
             	case "ThreadTest":
             		int testsToRun = 1;
                     testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
@@ -206,6 +207,12 @@ public class TestResource extends ServerResource {
 	            	returnData += stations.fetch(false, wxTest);
 	            	break;
 
+                case "Watch":
+            		GetSPC getSPC = new GetSPC();
+                	returnData += getSPC.checkSentWatch(dbc);
+                	returnData += getSPC.checkSentOutlook(dbc);
+                	break;
+                	
 				case "WaterOne":
 					WaterOneHook w1h = new WaterOneHook();
 					returnData = w1h.testPrefetch(dbc);

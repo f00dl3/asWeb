@@ -1,11 +1,12 @@
 /*
  * by Anthony Stump
  * Created December 2019
- * Updated 29 Jan 2020
+ * Updated 13 Feb 2020
  */
 
 package asUtilsPorts.Pi2;
 
+import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.SNMP.Pi2Pusher;
 
 public class TwoMinute {
@@ -14,7 +15,7 @@ public class TwoMinute {
 
 		Pi2Pusher snmp_pi2 = new Pi2Pusher();
 		snmp_pi2.snmpPi2();
-
+		
 	}
 
 }

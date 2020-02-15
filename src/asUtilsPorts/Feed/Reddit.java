@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created 7 Sep 2017
-Updated: 12 Feb 2020
+Updated: 14 Feb 2020
 */
 
 package asUtilsPorts.Feed;
@@ -165,6 +165,7 @@ public class Reddit {
 		GetNewsFeedAction getNewsFeedAction = new GetNewsFeedAction(new NewsFeedDAO());
 		UpdateNewsFeedAction updateNewsFeedAction = new UpdateNewsFeedAction(new NewsFeedDAO());		
 		WeatherBot wxBot = new WeatherBot();
+		WebCommon wc = new WebCommon();
 		
 		JSONArray thisFeedStore = new JSONArray();
 		
@@ -176,7 +177,7 @@ public class Reddit {
 				
 				JSONObject tFeed = thisFeedStore.getJSONObject(i);
 				String id = tFeed.getString("id");
-				String title = tFeed.getString("title");
+				String title = wc.basicInputFilter(tFeed.getString("title").replaceAll("\'",""));
 				
 				List<String> qParams = new ArrayList<>();
 				qParams.add(id);
@@ -188,8 +189,8 @@ public class Reddit {
 					returnData += "\nFEED " + id + " WAS ALREADY SENT!";
 				} else {
 					returnData += "\nFEED " + id + " HAS NOT BEEN SENT YET!";
-					String messageToSend = "Someone be typin on Reddit! An article typed " + title +
-							" was just published at https://reddit.com/r/kcregionalwx !";
+					String messageToSend = "Someone be typin on Reddit! An article titled \"" + title +
+							"\" was just published at https://reddit.com/r/kcregionalwx !";
 					try {
 						wxBot.botBroadcastOnly(messageToSend);
 						updateNewsFeedAction.setRedditSentNotice(dbc, qParams); 

@@ -1,11 +1,15 @@
 /* 
 by Anthony Stump
 Created: 17 Aug 2017
-Updated: 29 Jan 2020
+Updated: 15 Feb 2020
 */
 
 package asUtilsPorts.Feed;
 
+import asWebRest.action.GetWeatherAction;
+import asWebRest.action.UpdateWeatherAction;
+import asWebRest.dao.WeatherDAO;
+import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
 import asWebRest.shared.WebCommon;
@@ -16,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Scanner;
@@ -23,6 +28,8 @@ import java.util.Scanner;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import asUtilsPorts.Shares.JunkyBeans;
 
@@ -282,5 +289,108 @@ public class GetSPC {
 		new File(mysqlShare+"/spcacrss.xml").delete();
 		
     }
+    
+    public String checkSentMeso(Connection dbc) {
+    	
+    	String returnData = "";
+    	
+    	GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+    	UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
+    	WeatherBot wxBot = new WeatherBot();
+    	WebCommon wc = new WebCommon();
+    	
+    	JSONArray mesos = new JSONArray();
+    	try {
+    		mesos = getWeatherAction.getSpcMesoSent(dbc);
+    		for(int i = 0; i < mesos.length(); i++) {
+    			JSONObject tMeso = mesos.getJSONObject(i);
+    			int sent = tMeso.getInt("Notified");
+    			returnData += "\nDBG: S" + sent + " - " + tMeso.getString("title");
+    			if(sent == 0) {
+    				List<String> qParams = new ArrayList<String>();
+        			String title = tMeso.getString("title");
+        			String description = (tMeso.getString("description")).split("\n")[0];
+    				qParams.add(title);
+        			String message = "New SPC Mesoscale Discussion: " + title + " " + description + " (https://www.spc.noaa.gov)";
+        			String safeMessage = wc.basicInputFilter(message.replaceAll("\'", ""));
+        			returnData += "DBG: SENDING " + safeMessage;
+    				wxBot.botBroadcastOnly(safeMessage);
+    				updateWeatherAction.setSpcMesoSent(dbc, qParams);
+    			}
+    		}
+    	} catch (Exception e) { e.printStackTrace(); }
+    	
+    	return returnData;
+    	
+    }
+    
+    public String checkSentOutlook(Connection dbc) {
+    	
+    	String returnData = "";
+    	
+    	GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+    	UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
+    	WeatherBot wxBot = new WeatherBot();
+    	WebCommon wc = new WebCommon();
+    	
+    	JSONArray ols = new JSONArray();
+    	try {
+    		ols = getWeatherAction.getSpcOutlookSent(dbc);
+    		for(int i = 0; i < ols.length(); i++) {
+    			JSONObject tOl = ols.getJSONObject(i);
+    			int sent = tOl.getInt("Notified");
+    			returnData += "\nDBG: S" + sent + " - " + tOl.getString("title");
+    			if(sent == 0) {
+    				List<String> qParams = new ArrayList<String>();
+        			String title = tOl.getString("title");
+        			String description = (tOl.getString("description")).split("\n")[0];
+    				qParams.add(title);
+        			String message = "New SPC Outlook: " + title + " " + description + " (https://www.spc.noaa.gov)";
+        			String safeMessage = wc.basicInputFilter(message.replaceAll("\'", ""));
+        			returnData += "DBG: SENDING " + safeMessage;
+    				wxBot.botBroadcastOnly(safeMessage);
+    				updateWeatherAction.setSpcOutlookSent(dbc, qParams);
+    			}
+    		}
+    	} catch (Exception e) { e.printStackTrace(); }
+    	
+    	return returnData;
+    	
+    }
+    
+    public String checkSentWatch(Connection dbc) {
+    	
+    	String returnData = "";
+    	
+    	GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+    	UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
+    	WeatherBot wxBot = new WeatherBot();
+    	WebCommon wc = new WebCommon();
+    	
+    	JSONArray watches = new JSONArray();
+    	try {
+    		watches = getWeatherAction.getSpcWatchSent(dbc);
+    		for(int i = 0; i < watches.length(); i++) {
+    			JSONObject tWatch = watches.getJSONObject(i);
+    			int sent = tWatch.getInt("Notified");
+    			returnData += "\nDBG: S" + sent + " - " + tWatch.getString("title");
+    			if(sent == 0) {
+    				List<String> qParams = new ArrayList<String>();
+        			String title = tWatch.getString("title");
+        			String description = (tWatch.getString("description")).split("\n")[0];
+    				qParams.add(title);
+        			String message = "New SPC Watch: " + title + " " + description + " (https://www.spc.noaa.gov)";
+        			String safeMessage = wc.basicInputFilter(message.replaceAll("\'", ""));
+        			returnData += "DBG: SENDING " + safeMessage;
+    				wxBot.botBroadcastOnly(safeMessage);
+    				updateWeatherAction.setSpcWatchSent(dbc, qParams);
+    			}
+    		}
+    	} catch (Exception e) { e.printStackTrace(); }
+    	
+    	return returnData;
+    	
+    }
+    
     
 }
