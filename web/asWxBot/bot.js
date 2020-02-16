@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 44;
-var bUpdated = "23 JAN 2020";
+var bBuild = 47;
+var bUpdated = "15 FEB 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -541,17 +541,32 @@ function returnTimestamp(oH) {
 	return tJ.dY + "-" + tJ.dM + "-" + tJ.dD + " " + tJ.dh + ":" + tJ.dm + ":" + tJ.ds;
 }
 
+
 function sendMessageOnStartup(client, myArgs) {
 
 	if(isSet(myArgs) && myArgs != '') {
+		client.login(auth.token);
 		var messageToSendOnStartUp = myArgs[0];
+		var channel = client.channels.get(homeForBot);
+		if(isSet(myArgs[1]) && myArgs[1] != '') {
+			try {
+				// THIS PART BROKEN - 15 FEB 2020
+				var fileToSend = myArgs[1];
+                client.on('ready', function() {   
+                	channel.send(messageToSendOnStartUp);
+                	channel.send(messageToSendOnStartUp, { files : [ fileToSend ] });
+                });
+			} catch(e) {
+				console.log("ERROR: ", er);
+		 	}
+		} else {
+			try {
+				channel.send(messageToSendOnStartUp);
+			} catch(e) {
+				console.log("ERROR: ", e);
+		 	}
+		}
 		console.log(myArgs);
-		try {
-			var channel = client.channels.get(homeForBot);
-			channel.send(messageToSendOnStartUp);
-		} catch(e) {
-			console.log("ERROR: ", e);
-	 	}
 		client.destroy();
 	} 
 	

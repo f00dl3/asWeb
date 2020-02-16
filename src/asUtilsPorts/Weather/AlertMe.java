@@ -1,6 +1,6 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 26 Jan 2020
+Updated: 15 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -32,11 +32,12 @@ public class AlertMe {
 		UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
 		Mailer mailer = new Mailer();
 		WeatherBot wxBot = new WeatherBot();
-		JSONArray recentQuakes = getWeatherAction.getRecentCapAlerts(dbc);
+		JSONArray alerts = getWeatherAction.getRecentCapAlerts(dbc);
 		
-		for (int i = 0; i < recentQuakes.length(); i++) {
+		for (int i = 0; i < alerts.length(); i++) {
+			int excessCounter = 0;
 			List<String> qParams = new ArrayList<>();
-			JSONObject tCapData = recentQuakes.getJSONObject(i);
+			JSONObject tCapData = alerts.getJSONObject(i);
 			JSONArray sameCodes = new JSONArray();
 			qParams.add(0, tCapData.getString("id"));
 			String messageToCompile = tCapData.getString("title");
@@ -47,8 +48,15 @@ public class AlertMe {
 				} catch (Exception e) { e.printStackTrace(); }
 				for(int j = 0; j < sameCodes.length(); j++) {
 					String tSAME = sameCodes.getString(j);
-					addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
 					if(tSAME.equals("020091")) { mailer.sendQuickText(messageToCompile); }
+					if(j < 2) {
+						addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
+					} else {
+						excessCounter++;
+					}
+				}
+				if(excessCounter != 0) {
+					addToMessage += "and " + excessCounter + " more.";
 				}
 			} catch (Exception e) { }					
 			messageToCompile += addToMessage;	

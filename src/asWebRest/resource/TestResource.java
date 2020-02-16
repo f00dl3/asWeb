@@ -8,6 +8,7 @@ package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.MapGenerator;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
 import asWebRest.hookers.WaterOneHook;
@@ -180,6 +181,11 @@ public class TestResource extends ServerResource {
 	        		Feeds feeds = new Feeds();
 	        		returnData += feeds.testHourOfDay();
 	        		break;
+	        		
+	        	case "Map": 
+        			MapGenerator mgen = new MapGenerator();
+        			returnData += mgen.testMapCreation();
+        			break;
 	        		
 	        	case "quartz":
 	        		Crontabs_UVM cUVM = new Crontabs_UVM();
