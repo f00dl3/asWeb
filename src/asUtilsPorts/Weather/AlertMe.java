@@ -1,6 +1,6 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 15 Feb 2020
+Updated: 16 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -26,11 +26,17 @@ import asWebRest.shared.WebCommon;
 
 public class AlertMe {
 
+	public void areaBasedWarningTexts(String sameCode, String alertText) {
+		Mailer mailer = new Mailer();
+		switch(sameCode) {
+			case "020091": mailer.sendQuickText(alertText); break;
+		}
+	}
+	
 	public void capAlerts(Connection dbc) {
 		
 		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
 		UpdateWeatherAction updateWeatherAction = new UpdateWeatherAction(new WeatherDAO());
-		Mailer mailer = new Mailer();
 		WeatherBot wxBot = new WeatherBot();
 		JSONArray alerts = getWeatherAction.getRecentCapAlerts(dbc);
 		
@@ -39,6 +45,7 @@ public class AlertMe {
 			List<String> qParams = new ArrayList<>();
 			JSONObject tCapData = alerts.getJSONObject(i);
 			JSONArray sameCodes = new JSONArray();
+			int priority = tCapData.getInt("Priority");
 			qParams.add(0, tCapData.getString("id"));
 			String messageToCompile = tCapData.getString("title");
 			String addToMessage = " for ";
@@ -48,7 +55,7 @@ public class AlertMe {
 				} catch (Exception e) { e.printStackTrace(); }
 				for(int j = 0; j < sameCodes.length(); j++) {
 					String tSAME = sameCodes.getString(j);
-					if(tSAME.equals("020091")) { mailer.sendQuickText(messageToCompile); }
+					if(priority <= 2) { areaBasedWarningTexts(tSAME, messageToCompile); }
 					if(j < 2) {
 						addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
 					} else {
@@ -60,8 +67,10 @@ public class AlertMe {
 				}
 			} catch (Exception e) { }					
 			messageToCompile += addToMessage;	
-			wxBot.botBroadcastOnly(messageToCompile);
-			updateWeatherAction.setAlertSentCapAlert(dbc, qParams);
+			if(priority <= 3) {
+				wxBot.botBroadcastOnly(messageToCompile);
+				updateWeatherAction.setAlertSentCapAlert(dbc, qParams);
+			}
 		}			
 		
 	}

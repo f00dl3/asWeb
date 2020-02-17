@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 5 Jan 2020
+Updated: 16 Feb 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -14,6 +14,7 @@ import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.KansasGasHook;
 import asWebRest.hookers.WeatherBot;
 import asWebRest.hookers.ZillowAPIHook;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.MyDBConnector;
 
 import java.sql.Connection;
@@ -139,6 +140,16 @@ public class BackendResource extends ServerResource {
             	case "Kilauea":
             		KilaeuaCam kc = new KilaeuaCam();
             		kc.doKilaeua();
+            		break;
+            		
+            	case "Mail":
+            		Mailer mail = new Mailer();
+            		JunkyPrivate jp = new JunkyPrivate();
+	        		String who = jp.getSmsAddress();
+	        		String what = "TEST";;
+	        		try { who = argsInForm.getFirstValue("target"); } catch (Exception e) { e.printStackTrace(); }
+	        		try { what = argsInForm.getFirstValue("message"); } catch (Exception e) { e.printStackTrace(); }
+            		mail.sendQuickEmailTo(who, what);
             		break;
             		
             	case "Radar":

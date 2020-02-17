@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 15 Feb 2020
+Updated: 16 Feb 2020
  */
 
 package asWebRest.dao;
@@ -1017,14 +1017,15 @@ public class WeatherDAO {
     
     public JSONArray getRecentCapAlerts(Connection dbc) {
     	final String query_RecentWarnings = "SELECT * FROM (" + 
-    			"  SELECT capVersion, id, published, updated, title," + 
-    			"	summary, cappolygon, cap12polygon, cap12same, cap12ugc," + 
-    			"	capgeocode, capparameter, capevent, GetTime" + 
-    			"	FROM WxObs.LiveWarnings " + 
+    			"  SELECT lw.capVersion, lw.id, lw.published, lw.updated, lw.title," + 
+    			"	lw.summary, lw.cappolygon, lw.cap12polygon, lw.cap12same, lw.cap12ugc," + 
+    			"	lw.capgeocode, lw.capparameter, lw.capevent, lw.GetTime, lwc.Priority" + 
+    			"	FROM WxObs.LiveWarnings lw" +
+    			"   LEFT JOIN WxObs.LiveWarningColors lwc on lw.capevent = lwc.WarnType" +
     			"	ORDER BY GetTime" + 
     			"	DESC LIMIT 5000" + 
     			" ) as lw" + 
-    			" LEFT JOIN WxObs.LiveWarnings_Sent lws on lw.id = lws.id" + 
+    			" LEFT JOIN WxObs.LiveWarnings_Sent lws on lw.id = lws.id" +
     			" WHERE title IS NOT NULL" + 
     			" AND (title LIKE '%NWS Kansas City%' OR title LIKE '%NWS Topeka%')" + 
     			" AND Sent IS NULL" + 
@@ -1047,7 +1048,8 @@ public class WeatherDAO {
                 	.put("cap12ugc",  resultSet.getString("cap12ugc"))
                 	.put("cap12polygon", resultSet.getString("cap12polygon"))
                 	.put("cap12same", resultSet.getString("cap12same").replaceAll("\\s", ""))
-                	.put("GetTime", resultSet.getString("GetTime"));
+                	.put("GetTime", resultSet.getString("GetTime"))
+                	.put("Priority",  resultSet.getInt("Priority"));
                 tContainer.put(tObject);
             }
             resultSet.close();
