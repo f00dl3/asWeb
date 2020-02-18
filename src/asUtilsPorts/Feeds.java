@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 14 Feb 2020
+Updated: 17 Feb 2020
 */
 
 package asUtilsPorts;
@@ -29,17 +29,31 @@ import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
 
+	public static String do1Minute(Connection dbc) {
+
+		String returnData = "Fetch 1 minute feeds:\n";
+
+		ANSSQuakes anssQuakes = new ANSSQuakes();
+        	AlertMe alertMe = new AlertMe();
+		NWSWarnings nwsWarnings = new NWSWarnings();
+
+		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
+	    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+	    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+
+		return returnData;
+
+	}
+
     public static String do2Minute(Connection dbc) {
 
 		String returnData = "Fetch 2 minute feeds:\n";
 
-    	ANSSQuakes anssQuakes = new ANSSQuakes();
-    	AlertMe alertMe = new AlertMe();
-        CamBeans camBeans = new CamBeans();
+    	CamBeans camBeans = new CamBeans();
     	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
-        NWSWarnings nwsWarnings = new NWSWarnings();
         Router routerSnmp = new Router();
         UbuntuVM uvmSnmp = new UbuntuVM();
         
@@ -48,10 +62,6 @@ public class Feeds {
 		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
-    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
-    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
         

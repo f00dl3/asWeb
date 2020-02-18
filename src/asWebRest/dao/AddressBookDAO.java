@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 Feb 2018
-Updated: 16 Feb 2020
+Updated: 17 Feb 2020
 */
 
 package asWebRest.dao;
@@ -15,10 +15,10 @@ import org.json.JSONObject;
 public class AddressBookDAO {
     
     WebCommon wc = new WebCommon();
-    
+
     public JSONArray getAddressBook(Connection dbc) {
         final String query_AddressBook = "SELECT Business, LastName, FirstName,"
-            + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2, smsSuffix,"
+            + " Category, Address, City, State, Zip, P_Business, P_Home, P_Cell, P_Cell2, smsSuffix, smsKey, alertsActive, sameCodes,"
             + " EMail, AsOf, Holiday2014, Birthday, Point, Website, QuickName, Active, OldAddresses"
             + " FROM Core.Addresses"
             + " ORDER BY Business, LastName, FirstName"
@@ -50,6 +50,9 @@ public class AddressBookDAO {
                     .put("Website", resultSet.getString("Website"))
                     .put("OldAddresses", resultSet.getString("OldAddresses"))
                     .put("QuickName", resultSet.getString("QuickName"))
+			.put("smsKey", resultSet.getString("smsKey"))
+			.put("alertsActive", resultSet.getInt("alertsActive"))
+			.put("sameCodes", resultSet.getString("sameCodes"))
                     .put("smsSuffix", resultSet.getString("smsSuffix"));
                 addressBook.put(tAddressBook);
             }
@@ -57,5 +60,27 @@ public class AddressBookDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return addressBook;
     }
-    
+
+	public JSONArray getSubscribedAlerts(Connection dbc) {
+		final String querySubscribers = "SELECT P_Cell, smsSuffix, smsKey, sameCodes FROM Core.Addresses WHERE alertsAcitve = 1;";
+		JSONArray tArray = new JSONArray();
+		try {
+			ResultSet rs = wc.q2rs1c(dbc, querySubscribers, null);
+			while (rs.next()) {
+				JSONObject tJo = new JSONObject();
+				tJo
+					.put("P_Cell", rs.getString("P_Cell"))
+					.put("smsSuffix", rs.getString("smsSuffix"))
+					.put("smsKey", rs.getString("smsKey"))
+					.put("sameCodes", rs.getString("sameCodes"))
+					.put("alertsActive", rs.getInt("alertsActive"));
+				tArray.put(tJo);
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tArray;
+	}
+        
 }

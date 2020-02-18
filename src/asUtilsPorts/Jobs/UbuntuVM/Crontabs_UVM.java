@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 6 Feb 2020
-Updated: 8 Feb 2020
+Updated: 17 Feb 2020
  */
 
 package asUtilsPorts.Jobs.UbuntuVM;
@@ -24,6 +24,21 @@ public class Crontabs_UVM {
 		
 		try {
 			
+			JobDetail uvmFeeds_1m = JobBuilder.newJob(UVM_Feeds1.class).withIdentity("uvmFeeds_1m", "uvmJobs").build();
+			
+			Trigger uvmFeeds_1m_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_1m", "uvmJobs").forJob(uvmFeeds_1m)
+					.withSchedule(CronScheduleBuilder.cronSchedule(crb.get_rapid())).build();
+			
+			Scheduler sched_1m = new StdSchedulerFactory().getScheduler();
+			sched_1m.start(); sched_1m.scheduleJob(uvmFeeds_1m, uvmFeeds_1m_Trigger);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+
+		try {
 			JobDetail uvmFeeds_2m = JobBuilder.newJob(UVM_Feeds2.class).withIdentity("uvmFeeds_2m", "uvmJobs").build();
 			
 			Trigger uvmFeeds_2m_Trigger = TriggerBuilder.newTrigger().withIdentity("cron_2m", "uvmJobs").forJob(uvmFeeds_2m)

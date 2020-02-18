@@ -1,6 +1,6 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 16 Feb 2020
+Updated: 17 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -16,8 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import asUtilsPorts.Mailer;
+import asWebRest.action.GetAddressBookAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.action.UpdateWeatherAction;
+import asWebRest.dao.AddressBookDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.WeatherBot;
 import asWebRest.shared.MyDBConnector;
@@ -26,10 +28,26 @@ import asWebRest.shared.WebCommon;
 
 public class AlertMe {
 
-	public void areaBasedWarningTexts(String sameCode, String alertText) {
+	public void areaBasedWarningTexts(Connection dbc, JSONArray sameCodes, String alertText) {
+		GetAddressBookAction getAddressBookAction = new GetAddressBookAction(new AddressBookDAO());
 		Mailer mailer = new Mailer();
-		switch(sameCode) {
-			case "020091": mailer.sendQuickText(alertText); break;
+		try {
+			JSONArray tSubscribers = getAddressBookAction.getSubscribedAlerts(dbc);
+			for(int i = 0; i < tSubscribers.length(); i++) {
+				JSONObject tSub = tSubscribers.getJSONObject(i);
+				String smsAddress = tSub.getString("P_Cell") + "@" + tSub.getString("smsSuffix");
+				String subSames = tSub.getString("sameCodes");
+				boolean areaMatch = false;
+				for(int j = 0; j < sameCodes.length(); j++) {
+					String tSame = sameCodes.getString(j);
+					if(subSames.contains(tSame)) { areaMatch = true; }
+				}
+				if(areaMatch) {
+					mailer.sendQuickEmailTo(smsAddress, alertText);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -53,9 +71,9 @@ public class AlertMe {
 				try { 
 					sameCodes = new JSONArray(tCapData.getString("cap12same")); 
 				} catch (Exception e) { e.printStackTrace(); }
+				if(priority <= 2) { areaBasedWarningTexts(dbc, sameCodes, messageToCompile); }
 				for(int j = 0; j < sameCodes.length(); j++) {
 					String tSAME = sameCodes.getString(j);
-					if(priority <= 2) { areaBasedWarningTexts(tSAME, messageToCompile); }
 					if(j < 2) {
 						addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
 					} else {

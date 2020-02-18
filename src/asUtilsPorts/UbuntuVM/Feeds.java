@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Aug 2017
 Split to UVM: 16 Oct 2019
-Updated: 8 Feb 2020
+Updated: 17 Feb 2020
 */
 
 package asUtilsPorts.UbuntuVM;
@@ -24,6 +24,21 @@ public class Feeds {
 		String freq = args[0];
 
 		ramTempF.mkdirs();
+
+		if (freq.equals("OneMinute")) {
+			
+                try {
+                    System.out.println("Executing calls to asWeb API for 1 minute interval fetches:");
+                	System.out.println("DEBUG: " + junkyBeans.getApi());
+            		SSLHelper.getConnection(junkyBeans.getApi())
+                        .data("doWhat", "Feeds")
+                        .data("interval", "1m")
+                        .post();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+			
+		}
 
 		if (freq.equals("TwoMinute")) {
 			

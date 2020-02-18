@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 16 Feb 2020
+Updated: 17 Feb 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -122,6 +122,7 @@ public class BackendResource extends ServerResource {
             		switch(interval) {
             			case "1h": returnData = Feeds.doHourly(dbc); break;
             			case "5m": returnData = Feeds.do5Minute(dbc); break;
+				case "1m": returnData = Feeds.do1Minute(dbc); break;
             			case "2m": default: returnData = Feeds.do2Minute(dbc); break;
             		}
             		break;
