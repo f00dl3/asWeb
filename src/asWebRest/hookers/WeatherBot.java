@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Dec 2019
-Updated: 15 Feb 2020
+Updated: 20 Feb 2020
  */
 
 package asWebRest.hookers;
@@ -23,6 +23,25 @@ public class WeatherBot {
 		
 		String thisWorkingFolder = cb.getWarDeployBase();
 		String sendMessage = "node bot.js '" +message + "' '" + imageFile.toString() + "'";		
+		
+		String commandToRun = "cd '" + thisWorkingFolder + "';" +
+				" cd asWxBot;" + 
+				sendMessage;
+		
+		ArrayList<Runnable> bots = new ArrayList<Runnable>();
+		bots.add(() -> wc.runProcess(commandToRun));
+		tr.runProcesses(bots, false, false);
+		
+	}
+	
+	public void botBroadcastImageTest(File imageFile, String message) {
+
+		CommonBeans cb = new CommonBeans();
+		ThreadRipper tr = new ThreadRipper();
+		WebCommon wc = new WebCommon();
+		
+		String thisWorkingFolder = cb.getWarDeployBase();
+		String sendMessage = "node bot_chmsgr.js '" +message + "' '" + imageFile.toString() + "'";		
 		
 		String commandToRun = "cd '" + thisWorkingFolder + "';" +
 				" cd asWxBot;" + 

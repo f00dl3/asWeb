@@ -1,10 +1,11 @@
 /* by Anthony Stump
 Created: 11 Sep 2017
-Updated: 17 Feb 2020
+Updated: 20 Feb 2020
 */
 
 package asUtilsPorts.Weather;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,11 @@ import asWebRest.action.GetWeatherAction;
 import asWebRest.action.UpdateWeatherAction;
 import asWebRest.dao.AddressBookDAO;
 import asWebRest.dao.WeatherDAO;
+import asWebRest.hookers.MapGenerator;
 import asWebRest.hookers.WeatherBot;
+import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
-
 
 public class AlertMe {
 
@@ -44,6 +46,29 @@ public class AlertMe {
 				}
 				if(areaMatch) {
 					mailer.sendQuickEmailTo(smsAddress, alertText);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void areaBasedWarningMMS(Connection dbc, JSONArray sameCodes, String alertText, File attachment) {
+		GetAddressBookAction getAddressBookAction = new GetAddressBookAction(new AddressBookDAO());
+		Mailer mailer = new Mailer();
+		try {
+			JSONArray tSubscribers = getAddressBookAction.getSubscribedAlerts(dbc);
+			for(int i = 0; i < tSubscribers.length(); i++) {
+				JSONObject tSub = tSubscribers.getJSONObject(i);
+				String smsAddress = tSub.getString("P_Cell") + "@" + tSub.getString("smsSuffix");
+				String subSames = tSub.getString("sameCodes");
+				boolean areaMatch = true; // forced true for testing
+				for(int j = 0; j < sameCodes.length(); j++) {
+					String tSame = sameCodes.getString(j);
+					if(subSames.contains(tSame)) { areaMatch = true; }
+				}
+				if(areaMatch) {
+					mailer.sendQuickEmailAttachmentTo(smsAddress, alertText, attachment);
 				}
 			}
 		} catch (Exception e) {
@@ -92,6 +117,66 @@ public class AlertMe {
 		}			
 		
 	}
+    
+		public String capAlertsMap(Connection dbc) {
+
+			String returnData = "";
+			
+			CommonBeans cb = new CommonBeans();
+			GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+			JSONArray alerts = getWeatherAction.getRecentCapAlerts(dbc);
+			MapGenerator mGen = new MapGenerator();
+			WeatherBot wxBot = new WeatherBot();
+			WebCommon wc = new WebCommon();
+						
+			for (int i = 0; i < alerts.length(); i++) {
+				String addToMessage = " for ";
+				int excessCounter = 0;
+				String geodata = "";
+				JSONArray sameCodes = new JSONArray();
+				File tempImage = null;
+				JSONObject tCapData = alerts.getJSONObject(i);
+				String messageToCompile = tCapData.getString("title");
+				int priority = tCapData.getInt("Priority");
+				try { geodata = tCapData.getString("cap12polygon"); } catch (Exception e) { }
+				returnData += tCapData.getString("id") + " : " + geodata + "\n";
+				if(wc.isSet(geodata)) {
+					String cacheId = tCapData.getString("id").replace("https://api.weather.gov/alerts/", "");
+					tempImage = new File(cb.getPathChartCache() + "/" + cacheId + ".jpg");
+				}
+				try {
+					try { 
+						sameCodes = new JSONArray(tCapData.getString("cap12same")); 
+					} catch (Exception e) { e.printStackTrace(); }
+					for(int j = 0; j < sameCodes.length(); j++) {
+						String tSAME = sameCodes.getString(j);
+						if(j < 2) {
+							addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
+						} else {
+							excessCounter++;
+						}
+					}
+					if(excessCounter != 0) {
+						addToMessage += "and " + excessCounter + " more.";
+					}
+				} catch (Exception e) { }					
+				messageToCompile += addToMessage;
+				if(wc.isSet(geodata)) {
+					returnData += messageToCompile + " @ " + tempImage.toString() + "\n";
+					mGen.cap12toImage(tempImage, new JSONArray(geodata), false);
+					wxBot.botBroadcastImage(tempImage, messageToCompile);
+				} else {
+					wxBot.botBroadcastOnly(messageToCompile);
+				}
+				if(priority <= 2) { 
+					areaBasedWarningTexts(dbc, sameCodes, messageToCompile);
+				}
+			}			
+			
+			return returnData;
+			
+		}	    
+	
         public static void doAlert() {
             
 	        MyDBConnector mdb = new MyDBConnector();
@@ -236,7 +321,82 @@ public class AlertMe {
                 rs.close();
             } catch (Exception e) { e.printStackTrace(); }
         }
-    
+		
+		public String testAlertMap(Connection dbc) {
+
+			String returnData = "";
+			
+			CommonBeans cb = new CommonBeans();
+			GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+			JSONArray alerts = getWeatherAction.getLastCapAlertForTesting(dbc);
+			MapGenerator mGen = new MapGenerator();
+			WeatherBot wxBot = new WeatherBot();
+			WebCommon wc = new WebCommon();
+						
+			for (int i = 0; i < alerts.length(); i++) {
+				String addToMessage = " for ";
+				JSONArray countyBounds = new JSONArray();
+				int excessCounter = 0;
+				String geodata = "";
+				JSONArray sameCodes = new JSONArray();
+				File tempImage = null;
+				int zoomOverride = 0;
+				JSONObject tCapData = alerts.getJSONObject(i);
+				String messageToCompile = tCapData.getString("title");
+				int priority = tCapData.getInt("Priority");
+				try { geodata = tCapData.getString("cap12polygon"); } catch (Exception e) { }
+				returnData += tCapData.getString("id") + " : " + geodata + "\n";
+				String cacheId = tCapData.getString("id").replace("https://api.weather.gov/alerts/", "");
+				tempImage = new File(cb.getPathChartCache() + "/" + cacheId + ".jpg");
+				try {
+					try { 
+						sameCodes = new JSONArray(tCapData.getString("cap12same")); 
+					} catch (Exception e) { e.printStackTrace(); }
+					for(int j = 0; j < sameCodes.length(); j++) {
+						String tSAME = sameCodes.getString(j);
+						if(!wc.isSet(geodata)) {
+							List<String> cbqp = new ArrayList<>();
+							cbqp.add(tSAME);
+							JSONArray tCountyBounds = new JSONArray();
+							try {
+								tCountyBounds = getWeatherAction.getLiveWarningsSameBounds(dbc, cbqp);
+								for(int k = 0; i < tCountyBounds.length(); i++) {
+									JSONObject tCountyData = tCountyBounds.getJSONObject(k);
+									countyBounds.put(tCountyData.getJSONArray("coords"));
+								}
+							} catch (Exception e) { e.printStackTrace(); }
+						}
+						if(j < 2) {
+							addToMessage += getWeatherAction.getCountySAME(dbc, tSAME);
+						} else {
+							excessCounter++;
+						}
+					}
+					if(excessCounter != 0) {
+						addToMessage += "and " + excessCounter + " more.";
+					}
+				} catch (Exception e) { }					
+				messageToCompile += addToMessage;
+				returnData += "DBG: zoom = " + zoomOverride + "; countyBounds = " + countyBounds.toString() + "\n";
+				if(wc.isSet(geodata)) {
+					mGen.cap12toImage(tempImage, new JSONArray(geodata), false);
+					wxBot.botBroadcastImage(tempImage, messageToCompile);
+				} else {
+					try { 
+						mGen.cap12toImage(tempImage, countyBounds, true); 
+					} catch (Exception e) { }
+				}
+				returnData += messageToCompile + " @ " + tempImage.toString() + "\n";
+				wxBot.botBroadcastImage(tempImage, messageToCompile);
+				if(priority <= 2) { 
+					//areaBasedWarningTexts(dbc, sameCodes, messageToCompile);
+				}
+			}			
+			
+			return returnData;
+			
+		}
+		
 		public static void main(String[] args) {
 	            doAlert();
 		}

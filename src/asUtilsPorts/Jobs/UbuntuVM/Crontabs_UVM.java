@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 6 Feb 2020
-Updated: 17 Feb 2020
+Updated: 18 Feb 2020
  */
 
 package asUtilsPorts.Jobs.UbuntuVM;
@@ -21,7 +21,7 @@ public class Crontabs_UVM {
 	public void scheduler() {
 		
 		CronBeans crb = new CronBeans();
-		
+ 		
 		try {
 			
 			JobDetail uvmFeeds_1m = JobBuilder.newJob(UVM_Feeds1.class).withIdentity("uvmFeeds_1m", "uvmJobs").build();

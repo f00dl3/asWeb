@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 49;
-var bUpdated = "16 FEB 2020";
+var bBuild = 50;
+var bUpdated = "20 FEB 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -547,7 +547,6 @@ function sendMessageOnStartup(client, myArgs) {
                 var messageToSendOnStartUp = myArgs[0];
                 var channel = client.channels.get(homeForBot);
                 if(isSet(myArgs[1]) && myArgs[1] != '') {
-			channel = client.channels.get(auth.bottesting);
                         let tFile = myArgs[1];
                         return new Promise(resolve => {
                                 channel.send(messageToSendOnStartUp, new Discord.Attachment(tFile));

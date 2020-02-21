@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 16 Feb 2020
+Updated: 20 Feb 2020
  */
 
 package asWebRest.dao;
@@ -549,7 +549,47 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
-        
+
+    public JSONArray getLastCapAlertForTesting(Connection dbc) {
+    	final String query_RecentWarnings = "SELECT * FROM (" + 
+    			"  SELECT lw.capVersion, lw.id, lw.published, lw.updated, lw.title," + 
+    			"	lw.summary, lw.cappolygon, lw.cap12polygon, lw.cap12same, lw.cap12ugc," + 
+    			"	lw.capgeocode, lw.capparameter, lw.capevent, lw.GetTime, lwc.Priority" + 
+    			"	FROM WxObs.LiveWarnings lw" +
+    			"   LEFT JOIN WxObs.LiveWarningColors lwc on lw.capevent = lwc.WarnType" +
+    			"	ORDER BY GetTime" + 
+    			"	DESC LIMIT 5000" + 
+    			" ) as lw" + 
+    			" LEFT JOIN WxObs.LiveWarnings_Sent lws on lw.id = lws.id" +
+    			" WHERE title IS NOT NULL AND cap12polygon IS NOT NULL" + 
+    			" ORDER BY GetTime DESC" + 
+    			" LIMIT 1;";
+    	JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RecentWarnings, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("capVersion", resultSet.getDouble("capVersion"))
+                	.put("id", resultSet.getString("id"))
+                	.put("published", resultSet.getString("published"))
+                	.put("updated", resultSet.getString("updated"))
+                	.put("title", resultSet.getString("title"))
+                	.put("summary", resultSet.getString("summary"))
+                	.put("capevent", resultSet.getString("capevent"))
+                	.put("capparameter", resultSet.getString("capparameter"))
+                	.put("cap12ugc",  resultSet.getString("cap12ugc"))
+                	.put("cap12polygon", resultSet.getString("cap12polygon"))
+                	.put("cap12same", resultSet.getString("cap12same").replaceAll("\\s", ""))
+                	.put("GetTime", resultSet.getString("GetTime"))
+                	.put("Priority",  resultSet.getInt("Priority"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
     public JSONArray getLiveReports(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
@@ -1056,7 +1096,7 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-    
+
     public JSONArray getSpcLive(Connection dbc, List<String> qParams) {
         final String query_SPCLive = "SELECT GetTime, Type, title, description FROM (" +
                 " SELECT GetTime, 'HN' AS Type, title, description FROM WxObs.NHCFeeds UNION ALL" +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 15 Feb 2020
+Updated: 20 Feb 2020
  */
 
 package asWebRest.resource;
@@ -172,19 +172,14 @@ public class TestResource extends ServerResource {
                     );
                     break;
 	        		
-	        	case "EarthquakeAlert":
-	        		AlertMe alertMe = new AlertMe();
-	        		alertMe.earthquakeAlerts(dbc);
-	        		break;
-	        		
 	        	case "JodaHour":
 	        		Feeds feeds = new Feeds();
 	        		returnData += feeds.testHourOfDay();
 	        		break;
 	        		
 	        	case "Map": 
-        			MapGenerator mgen = new MapGenerator();
-        			returnData += mgen.testMapCreation();
+	        		AlertMe alertMe = new AlertMe();
+	        		returnData += alertMe.testAlertMap(dbc);
         			break;
 	        		
 	        	case "quartz":

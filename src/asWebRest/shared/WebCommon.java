@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 16 Jan 2020
+Updated: 18 Feb 2020
 */
 
 package asWebRest.shared;
@@ -149,6 +149,10 @@ public class WebCommon {
     
     public String basicInputFilter(String inString) {
         return inString.replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n");
+    }
+
+    public String basicInputFilterAll(String inString) {
+        return inString.replaceAll("\'", "\\\'").replaceAll("\"", "\\\"").replaceAll("\n", "\\n");
     }
     
     public String basicInputFilterICS(String inString) {

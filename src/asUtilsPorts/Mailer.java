@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 16 Feb 2020
+Updated: 20 Feb 2020
 */
 
 package asUtilsPorts;
@@ -363,6 +363,13 @@ public class Mailer {
 		final String eaSubject = "asWeb Alert";
         final String myGmail = junkyPrivate.getGmailUser();
         sendMail(recipient, eaSubject, message, null);		
+	}
+
+	public void sendQuickEmailAttachmentTo(String recipient, String message, File attachment) {
+		JunkyPrivate junkyPrivate = new JunkyPrivate();
+		final String eaSubject = "asWeb Alert";
+        final String myGmail = junkyPrivate.getGmailUser();
+        sendMail(recipient, eaSubject, message, attachment);		
 	}
 	
 }

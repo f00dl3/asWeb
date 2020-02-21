@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2020
-Updated: on creation
+Updated: 20 Feb 2020
 https://developer.mapquest.com/documentation/open/static-map-api/v4/map/get/
  */
 
@@ -24,22 +24,37 @@ public class MapGenerator {
 	
 	private static String apiBaseUri = "https://www.mapquestapi.com";
 	
-	public String cap12toImage(File outFile, JSONArray cap12in) {
-		return imageWithBox(outFile, parseCap12Json(cap12in));
+	public String cap12toImage(File outFile, JSONArray cap12in, boolean countyBounds) {
+		return imageWithBox(outFile, parseCap12Json(cap12in, countyBounds));
 	}
 	
-	public String parseCap12Json(JSONArray cap12in) {
+	public String parseCap12Json(JSONArray cap12in, boolean countyBounds) {
 		
 		String dataBack = "";
 		
-		for(int i = 0; i < cap12in.length(); i++) {
-			JSONArray tCoords = cap12in.getJSONArray(i);
-			double tLon = tCoords.getDouble(0);
-			double tLat = tCoords.getDouble(1);
-			dataBack += tLat + "," + tLon + "|";
+		if(countyBounds) {
+			for(int i = 0; i < cap12in.length(); i++) {
+				JSONArray tCba = cap12in.getJSONArray(i);
+				for(int k = 0; k < tCba.length(); k++) {
+					JSONArray tCoords = tCba.getJSONArray(k);
+					double tLon = tCoords.getDouble(0);
+					double tLat = tCoords.getDouble(1);
+					dataBack += tLat + "," + tLon + "|";
+				}
+				try { dataBack = dataBack.substring(0, dataBack.length() - 1); } catch (Exception e) { } 
+				dataBack += dataBack + "&shape=|";
+			}
+		} else {
+			for(int i = 0; i < cap12in.length(); i++) {
+				JSONArray tCoords = cap12in.getJSONArray(i);
+				double tLon = tCoords.getDouble(0);
+				double tLat = tCoords.getDouble(1);
+				dataBack += tLat + "," + tLon + "|";
+			}
 		}
 		
-		return dataBack.substring(0, dataBack.length() - 1);
+		try { dataBack = dataBack.substring(0, dataBack.length() - 1); } catch (Exception e) { }
+		return dataBack;
 		
 	}
 	
