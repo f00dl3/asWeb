@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Aug 2017
-Updated: 22 Jan 2020
+Updated: 22 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -41,7 +41,7 @@ public class RadarWorker {
 		Date date = new Date();
 		String thisTimestamp = dateFormat.format(date);
 
-		String getRadarSetSQL = "SELECT Site FROM WxObs.RadarList WHERE Active=1 AND Round='"+thisRound+"' ORDER BY Site ASC;";
+		String getRadarSetSQL = "SELECT Site, DoOverlay FROM WxObs.RadarList WHERE Active=1 AND Round='"+thisRound+"' ORDER BY Site ASC;";
 
         try (
         	ResultSet resultSet = wc.q2rs1c(dbc, getRadarSetSQL, null);
@@ -56,6 +56,7 @@ public class RadarWorker {
 
 				final File radAoutFile = new File(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif");
 				final File radBoutFile = new File(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif");
+				final String thisOverlay = radPath+"/"+thisRad+"/_Overlay.jpg";
 				
 				Thread gr1a = new Thread(() -> {
                     String radarURLa = null;
@@ -75,9 +76,17 @@ public class RadarWorker {
 				for (Thread thread : grListA) { thread.start(); }
 				for (int i = 0; i < grListA.length; i++) { try { grListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
-				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/_BLatest.gif");
-				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".gif", radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
-				wc.copyFile(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".gif", radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
+				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/_BLatest_NO.gif");
+				wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/_VLatest_NO.gif");
+				
+				if(resultSet.getInt("DoOverlay") == 1) {
+					wc.runProcess("convert -composite "+thisOverlay+" "+radAoutFile.toString()+" -gravity center "+radAoutFile.toString());
+					wc.runProcess("convert -composite "+thisOverlay+" "+radBoutFile.toString()+" -gravity center "+radBoutFile.toString());
+				}
+				
+				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/_BLatest.gif");
+				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/B"+thisTimestamp+".gif");
+				wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/V"+thisTimestamp+".gif");
 
 				wc.runProcess("(ls "+radPath+"/"+thisRad+"/B*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/B*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
 				wc.runProcess("(ls "+radPath+"/"+thisRad+"/V*.gif -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.gif)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");

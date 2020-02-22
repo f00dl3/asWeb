@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 28 Dec 2019
+Updated: 22 Feb 2020
  */
 
 var radarImage = [];
@@ -104,7 +104,7 @@ function generateRadarKml(radarList, mobiLocObj, timestamp, hideNext) {
                     "W: " + inBoundsW + " " + wCheck +")";
             //if(!checkMobile() || opacity === 0.2) {
             /* Can get away with this now - OL performance much better than Leaflet! */ if(1 === 1) {
-                var imageSource = getBasePath("get2") + "/Radar/" + tRad.Site + "/_BLatest.gif";
+                var imageSource = getBasePath("get2") + "/Radar/" + tRad.Site + "/_BLatest_NO.gif";
                 var extent = ol.extent.applyTransform(
                         [bounds[3], bounds[1], bounds[2], bounds[0]],
                         ol.proj.getTransform('EPSG:4326', 'EPSG:3857')

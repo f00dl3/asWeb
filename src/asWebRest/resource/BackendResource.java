@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 17 Feb 2020
+Updated: 22 Feb 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -12,6 +12,7 @@ package asWebRest.resource;
 
 import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.KansasGasHook;
+import asWebRest.hookers.MapGenerator;
 import asWebRest.hookers.WeatherBot;
 import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.secure.JunkyPrivate;
@@ -147,7 +148,7 @@ public class BackendResource extends ServerResource {
             		Mailer mail = new Mailer();
             		JunkyPrivate jp = new JunkyPrivate();
 	        		String who = jp.getSmsAddress();
-	        		String what = "TEST";;
+	        		String what = "TEST";
 	        		try { who = argsInForm.getFirstValue("target"); } catch (Exception e) { e.printStackTrace(); }
 	        		try { what = argsInForm.getFirstValue("message"); } catch (Exception e) { e.printStackTrace(); }
             		mail.sendQuickEmailTo(who, what);
@@ -164,6 +165,13 @@ public class BackendResource extends ServerResource {
             		
             	case "RadarNightly":
             		RadarNightly.process(dbc);
+            		break;
+            		
+            	case "RadarOverlay":
+            		MapGenerator mg = new MapGenerator();
+	        		String site = "TEST";
+	        		try { site = argsInForm.getFirstValue("site"); } catch (Exception e) { e.printStackTrace(); }
+            		returnData = mg.doRadarOverlay(dbc, site);
             		break;
             		
 	            case "MHPFetch":

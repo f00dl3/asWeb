@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Feb 2020
-Updated: 20 Feb 2020
+Updated: 22 Feb 2020
 https://developer.mapquest.com/documentation/open/static-map-api/v4/map/get/
  */
 
@@ -10,12 +10,19 @@ package asWebRest.hookers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.SocketTimeoutException;
+import java.sql.Connection;
 
 import org.jsoup.Jsoup;
+
+import asUtilsPorts.Weather.RadarBeans;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 
+import asWebRest.action.GetWeatherAction;
+import asWebRest.dao.WeatherDAO;
 import asWebRest.secure.MapQuestBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
@@ -95,6 +102,57 @@ public class MapGenerator {
 		System.out.flush();		
 		
 		return rData;
+		
+	}
+	
+	public String doRadarOverlay(Connection dbc, String radarSite) {
+
+		String dataBack = "";
+		
+		CommonBeans cb = new CommonBeans();
+		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+		MapQuestBeans mqb = new MapQuestBeans();
+		RadarBeans rb = new RadarBeans();
+		
+		final int toS = 30;		
+		int toLength = (int) (1000.0*toS*60);
+		final String genPoint = apiBaseUri + "/staticmap/v5/map";
+		final int rW = rb.getRadW();
+		final int rH = rb.getRadH();
+		
+		try {
+			JSONArray radarList = getWeatherAction.getRadarList(dbc);
+			for(int i = 0; i < radarList.length(); i++) {
+				JSONObject tRad = radarList.getJSONObject(i);
+				String tSite = tRad.getString("Site");
+				if(tSite.equals(radarSite) || radarSite.equals("_ALL")) {
+					JSONArray bounds = new JSONArray(tRad.getString("BoundsNSEW"));
+					double bN = bounds.getDouble(0);
+					double bS = bounds.getDouble(1);
+					double bE = bounds.getDouble(2);
+					double bW = bounds.getDouble(3);
+					String bbString = bN + "," + bW + "," + bS + "," + bE;
+					dataBack += "Doing overlay for " + tSite + " - bounds = " + bbString;
+					File overlayFile = new File(cb.getPersistTomcat()+"/Get/Radar/" + tSite + "/_Overlay.jpg");
+					FileOutputStream out = new FileOutputStream(overlayFile);
+					Response binaryResult = Jsoup.connect(genPoint)
+						.ignoreContentType(true)
+						.maxBodySize(1024*1024*1024*100)
+						.timeout(toLength)
+						.data("key", mqb.getApiKey())
+						.data("boundingBox", bbString)
+						.data("size", rW+","+rH)
+						.data("margin", "-250")
+						.method(Method.GET)
+						.execute();
+					out.write(binaryResult.bodyAsBytes());
+					out.close();
+				}				
+			}
+		}
+		catch (Exception e) { e.printStackTrace(); }
+		
+		return dataBack;
 		
 	}
 

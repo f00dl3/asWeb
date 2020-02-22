@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 20 Feb 2020
+Updated: 22 Feb 2020
  */
 
 package asWebRest.dao;
@@ -945,7 +945,8 @@ public class WeatherDAO {
     }
         
     public JSONArray getRadarList(Connection dbc) {
-        final String query_RadarList = "SELECT Site, BoundsNSEW FROM WxObs.RadarList WHERE Active=1;";
+        final String query_RadarList = "SELECT Site, BoundsNSEW, Description, Active, Round, DoOverlay" +
+        		" FROM WxObs.RadarList WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_RadarList, null);
@@ -953,14 +954,40 @@ public class WeatherDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                     .put("Site", resultSet.getString("Site"))
-                    .put("BoundsNSEW", resultSet.getString("BoundsNSEW"));
+                    .put("BoundsNSEW", resultSet.getString("BoundsNSEW"))
+                    .put("Description", resultSet.getString("Description"))
+                    .put("Active", resultSet.getInt("Active"))
+                    .put("Round", resultSet.getInt("Round"))
+                    .put("DoOverlay", resultSet.getInt("DoOverlay"));
                 tContainer.put(tObject);
             }
             resultSet.close();
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-            
+
+    public JSONArray getRadarSite(Connection dbc, List<String> qParams) {
+        final String query_RadarList = "SELECT Site, BoundsNSEW, Description, Active, Round, DoOverlay" +
+        		" FROM WxObs.RadarList WHERE Site=?;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_RadarList, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Site", resultSet.getString("Site"))
+                    .put("BoundsNSEW", resultSet.getString("BoundsNSEW"))
+                    .put("Description", resultSet.getString("Description"))
+                    .put("Active", resultSet.getInt("Active"))
+                    .put("Round", resultSet.getInt("Round"))
+                    .put("DoOverlay", resultSet.getInt("DoOverlay"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+             
     public JSONArray getReanalysis(List<String> qParams) {
         final String query_Reanalysis = "SELECT" +
                 " DateTime, CONCAT(SUBSTRING(DateTime,1,4),'_',LPAD(SUBSTRING(DateTime,6,10),4,'0')) AS DateTime4D," +
