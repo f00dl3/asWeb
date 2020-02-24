@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 22 Feb 2020
+Updated: 24 Feb 2020
  */
 
 package asWebRest.dao;
@@ -824,6 +824,24 @@ public class WeatherDAO {
         return tContainer;
     }
     
+    public JSONArray getObsJsonLastByStation(Connection dbc, List<String> inParams) {
+    	final int offset = 1;
+	String station = inParams.get(0);
+        final String query_ObsJSON_Last = "SELECT ObsID, JSON_EXTRACT(jsonData, '$."+station+"') as jsonSet" +
+                " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID) FROM WxObs.StationDataIndexed);";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Last, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject.put("jsonSet", resultSet.getString("jsonSet"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
     public JSONArray getObsJsonByStation(Connection dbc, List<String> inParams) {
         final String xdt1 = inParams.get(0);
         final String xdt2 = inParams.get(1);
@@ -854,8 +872,8 @@ public class WeatherDAO {
     
     public JSONArray getObsJsonStations(Connection dbc, List<String> qParams) {
         final String query_ObsJSON_Stations = "SELECT " +
-                " st.Station as Station, st.Point as Point, st.City as City, st.State as State," +
-                " st.SfcMB as SfcMB, st.Priority as Priority, st.Region as Region, cs.Description as Description" +
+                " st.Station as Station, st.Point as Point, st.City as City, st.State as State, st.DataSource as DataSource," +
+                " st.SfcMB as SfcMB, st.Priority as Priority, st.Region as Region, cs.Description as Description, st.GFSData as GFSData" +
                 " FROM WxObs.Stations st" +
                 " LEFT OUTER JOIN WxObs.CountryStates2 cs ON cs.Region = st.Region AND SUBSTRING(cs.CCSC,3,2) = st.State" +
                 " WHERE Active=1 AND Station LIKE ?" +
@@ -873,6 +891,8 @@ public class WeatherDAO {
                     .put("SfcMB", resultSet.getInt("SfcMB"))
                     .put("Priority", resultSet.getInt("Priority"))
                     .put("Region", resultSet.getString("Region"))
+			.put("GFSData", resultSet.getInt("GFSData"))
+			.put("DataSource", resultSet.getString("DataSource"))
                     .put("Description", resultSet.getString("Description"));
                 tContainer.put(tObject);
             }

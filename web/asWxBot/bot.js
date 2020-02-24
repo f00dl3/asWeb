@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 50;
-var bUpdated = "20 FEB 2020";
+var bBuild = 54;
+var bUpdated = "24 FEB 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -248,9 +248,28 @@ function getWeatherRadar(msg, site) {
 
 	var radarSite = "EAX";
 	if(isSet(site)) { radarSite = site.toUpperCase(); }
-	var radarFile = "/var/www/Get/Radar/" + radarSite + "/_BLatest.gif";
-	var radarFileNew = "/media/sf_SharePoint/Get/Radar/" + radarSite + "/_BLatest.gif";
+	var radarFileNew = "/media/sf_SharePoint/Get/Radar/" + radarSite + "/_BLatest.jpg";
 	msg.reply("Latest radar image for " + radarSite + ":\n", { files :  [ radarFileNew ] });
+
+}
+
+function getWeatherSarcastic(msg) {
+
+	var commandRan = "getWeatherSarcastic(msg)";
+	basicAccessLog(msg, commandRan, "start");
+
+	var rData = "DEBUG: getWeatherSarcastic() did not get data back yet!";
+	var url = webUiBase + "Wx";
+	var pData = "doWhat=getObsJsonLast";
+
+	axios.post(url, pData).then((res) => { 
+		rData = res.data[0].jsonSet,
+		respondWeatherSarcastic(rData, msg)
+	}).catch((error) => {
+		console.log(error)
+	});
+
+	basicAccessLog(msg, commandRan, "stop");
 
 }
 
@@ -536,6 +555,23 @@ function respondWeatherForecast(msg, last, heightsIn, hours, runs, jmd) {
 
 }
 
+function respondWeatherSarcastic(data, msg) {
+
+	var jds = JSON.parse(data);
+	var theWeather = jds.Weather.toLowerCase();
+	
+	var finalMessage = "OMG really bro? Last I checked it is " + jds.Weather;
+	
+	if(theWeather.includes("rain") || theWeather.includes("snow")) {
+		finalMessage += " - I guess you're right!";
+	} else {
+		finalMessage += " - Maybe you're on something?";
+	}
+	
+	msg.reply(trimForDiscord(finalMessage));
+
+}
+
 function returnTimestamp(oH) {
 	var tJ = parseDate(oH);
 	return tJ.dY + "-" + tJ.dM + "-" + tJ.dD + " " + tJ.dh + ":" + tJ.dm + ":" + tJ.ds;
@@ -603,96 +639,103 @@ client.on('ready', async () => {
 
 client.on('message', msg => {
 
-	var msgArray = (msg.content).split(' ');
-	var matchMsg = msgArray[0];
-	var ncmsg = (matchMsg).toLowerCase();
-	var msgBack = "DEBUG: Message back not set yet!";
-
-	switch(ncmsg) {
-
-		case "!help":
-			generateHelpMessage(msg);
-			break;
+	if((msg.content).includes("coming down")) {
 		
-		case "!ping":
-			msgBack = "pong!";
-			msg.reply(msgBack);
-			break;
-			
-		case "!serverInfo":
-			getServerInfo(msg);
-			break;
-
-		case "!test1":
-			msg.reply(trimForDiscord2("Testing"));
-			break;
-			
-		case "!test2":
-			msg.reply("Testing image attachment to bot message:", { files : ['../img/DiscordApp/pwned.jpg'] });
-			break;
-			
-		case "cam":
-			getWeatherCameras(msg);
-			break;
-			
-		case "camloop":
-			getWeatherCameraLoop(msg);
-			break;
-
-		case "cf6":
-			var month = msgArray[1];
-			getCf6Data(msg, month);
-			break;
-
-		case "find":
-			var station = "",
-				date = "";
-			try { station = msgArray[1].toUpperCase(); } catch (e) { console.log(e); }
-			try { date = msgArray[2]; } catch (e) { console.log(e); }
-		 	getWeatherData(msg, station, date);
-			break;
-
-		case "forecast": 
-			getWeatherForecast(msg);
-			break;
+		getWeatherSarcastic(msg);
 		
-		case "lol":
-			getLaughing(msg);
-			break;
+	} else {
+		
+		var msgArray = (msg.content).split(' ');
+		var matchMsg = msgArray[0];
+		var ncmsg = (matchMsg).toLowerCase();
+		var msgBack = "DEBUG: Message back not set yet!";
+	
+		switch(ncmsg) {
+	
+			case "!help":
+				generateHelpMessage(msg);
+				break;
 			
-		case "nearby":
-			if(msgArray)
-			getNearMe(msg);
-			break;
+			case "!ping":
+				msgBack = "pong!";
+				msg.reply(msgBack);
+				break;
+				
+			case "!serverInfo":
+				getServerInfo(msg);
+				break;
+	
+			case "!test1":
+				msg.reply(trimForDiscord2("Testing"));
+				break;
+				
+			case "!test2":
+				msg.reply("Testing image attachment to bot message:", { files : ['../img/DiscordApp/pwned.jpg'] });
+				break;
+				
+			case "cam":
+				getWeatherCameras(msg);
+				break;
+				
+			case "camloop":
+				getWeatherCameraLoop(msg);
+				break;
+	
+			case "cf6":
+				var month = msgArray[1];
+				getCf6Data(msg, month);
+				break;
+	
+			case "find":
+				var station = "",
+					date = "";
+				try { station = msgArray[1].toUpperCase(); } catch (e) { console.log(e); }
+				try { date = msgArray[2]; } catch (e) { console.log(e); }
+			 	getWeatherData(msg, station, date);
+				break;
+	
+			case "forecast": 
+				getWeatherForecast(msg);
+				break;
+			
+			case "lol":
+				getLaughing(msg);
+				break;
+				
+			case "nearby":
+				if(msgArray)
+				getNearMe(msg);
+				break;
+	
+			case "quote":
+				getRandomQuotes(msg);
+				break;
+	
+			case "radar":
+				var site = msgArray[1];
+				getWeatherRadar(msg, site);
+				break;
+	
+			case "search":
+				var searchString = "";
+				try { searchString = msgArray[1].toLowerCase(); } catch (e) { console.log(e); }
+				if(searchString.length < 4) {
+					msg.reply("Please enter more characters of the location!");
+				} else {
+					msg.reply("Finding stations similar to [" + searchString + "]...");
+					getWeatherStations(msg, searchString);
+				}
+				break;
+	
+			case "server":
+				getServerInfo(msg);
+				break;
+	
+			case "weather":
+				getWeatherLatest(msg);
+				break;
 
-		case "quote":
-			getRandomQuotes(msg);
-			break;
-
-		case "radar":
-			var site = msgArray[1];
-			getWeatherRadar(msg, site);
-			break;
-
-		case "search":
-			var searchString = "";
-			try { searchString = msgArray[1].toLowerCase(); } catch (e) { console.log(e); }
-			if(searchString.length < 4) {
-				msg.reply("Please enter more characters of the location!");
-			} else {
-				msg.reply("Finding stations similar to [" + searchString + "]...");
-				getWeatherStations(msg, searchString);
-			}
-			break;
-
-		case "server":
-			getServerInfo(msg);
-			break;
-
-		case "weather":
-			getWeatherLatest(msg);
-			break;
-
+		}
 	}
 
 });

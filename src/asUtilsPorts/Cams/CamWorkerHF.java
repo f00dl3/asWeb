@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 29 Jan 2020
+Updated: 24 Feb 2020
 */
 
 package asUtilsPorts.Cams;
@@ -41,7 +41,8 @@ public class CamWorkerHF {
 		final File lastCPUTemp = camBeans.getTfOutCPU();
         final File urlFile = camBeans.getCamUrl();
 
-        File webCWFile = new File(camPath+"/webcW-temp.jpeg");
+        //File webCWFile = new File(camPath+"/webcW-temp.jpeg")
+		File webCWFile = new File(cb.getPersistTomcat().toString()+"/Get/Radar/EAX/_BLatest.gif");
 		File webC1File = new File(camPath+"/webc1-temp.jpeg");
         File webC2File = new File(camPath+"/webc2-temp.jpeg");
 		File webC3File = new File(camPath+"/webc3-temp.jpeg");
@@ -67,7 +68,7 @@ public class CamWorkerHF {
                         
             final String camCaption = junkyBeans.getApplicationName()+" Cams - "+camTimestamp+" -- IN "+tempCase+"F " /* -- GA "+tempGarage+"F */ + "-- CPU "+tempCPU+"F -- "+upsStatus;
   
-			if(!webCWFile.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+webCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+			//if(!webCWFile.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"CamW temporarily unavailable!\n"+thisUrl+"\" -pointsize 42 -fill Yellow xc:navy "+webCWFile.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 			if(!webC1File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam1 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC1File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 			if(!webC2File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam2 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC2File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
             if(!webC3File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC3File.getPath()+" > /dev/null 2>&1 < /dev/null"); }

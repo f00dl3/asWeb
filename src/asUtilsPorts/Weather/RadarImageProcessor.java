@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 29 Aug 2017
-Updated: 22 Feb 2020
+Updated: 24 Feb 2020
 */
 
 package asUtilsPorts.Weather;
@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.shared.CommonBeans;
+import asWebRest.shared.WebCommon;
 
 public class RadarImageProcessor {
 	
@@ -83,6 +84,81 @@ public class RadarImageProcessor {
 		// Take width/height of image minus difference in latitudes/longitudes to calculate per pixel lat diff
 		
 		return returnData;
+		
+	}
+	
+	public String generateConvertStringsForStationData(Connection dbc, JSONArray bounds) {
+
+		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+		RadarBeans rb = new RadarBeans();
+		WebCommon wc = new WebCommon();
+
+		String rData = " -append -gravity Southwest -pointsize 13";
+		JSONArray matchingStations = new JSONArray();
+  
+		final double rW = (double) rb.getRadW();
+		final double rH = (double) rb.getRadH();
+		
+		final double bN = bounds.getDouble(0);
+		final double bS = bounds.getDouble(1);
+		final double bE = bounds.getDouble(2);
+		final double bW = bounds.getDouble(3);
+		
+		final double diffNS = Math.abs(bN - bS);
+		final double diffWE = Math.abs(bW - bE);
+		
+		final double pixelsPerDegreeNS = rH / diffNS;
+		final double pixelsPerDegreeWE = rW / diffWE;
+		
+		List<String> qParams = new ArrayList<>();
+		qParams.add("%");
+
+		try {
+			JSONArray tStations = getWeatherAction.getObsJsonStations(dbc, qParams);
+			for(int i = 0; i < tStations.length(); i++) {
+				JSONObject tData = tStations.getJSONObject(i);
+				JSONArray lonLat = new JSONArray(tData.getString("Point"));
+				double tLon = lonLat.getDouble(0);
+				double tLat = lonLat.getDouble(1);
+				if(
+					(tLon <= bE && tLon >= bW) &&
+					(tLat <= bN && tLat >= bS) &&
+					tData.getString("DataSource").equals("NWS")
+				) {
+					int nsOffset = (int) Math.round(
+						(Math.abs(bS - tLat))*pixelsPerDegreeNS
+					);
+					int weOffset = (int) Math.round(
+						(Math.abs(bW) - Math.abs(tLon))*pixelsPerDegreeWE
+					);
+					String tLabel = ""; //tData.getString("Station") + "\n";
+					try {
+						List<String> inParams = new ArrayList<>();
+						inParams.add(tData.getString("Station"));
+						JSONArray tWeather = getWeatherAction.getObsJsonLastByStation(dbc, inParams);
+						for(int j = 0; j < tWeather.length(); j++) {
+							JSONObject tStationWeather = tWeather.getJSONObject(j);
+							JSONObject tSubObj = new JSONObject(tStationWeather.getString("jsonSet"));
+							double tTemp = tSubObj.getDouble("Temperature");
+							double tDewp = tSubObj.getDouble("Dewpoint");
+							if(tSubObj.has("RawMETAR") && wc.isSet(tSubObj.getString("RawMETAR"))) {
+								tTemp = wc.tempC2F(tTemp);
+								tDewp = wc.tempC2F(tDewp);
+							}
+							String tTempR = Integer.toString((int) Math.round(tTemp));
+							String tDewpR = Integer.toString((int) Math.round(tDewp));
+							tLabel += tTempR;
+						}
+					} catch (Exception e) { e.printStackTrace(); }
+					rData += " -annotate +"+weOffset+"+"+nsOffset+" '" + tLabel + "'";		
+				} else {
+					//rData += " = FALSE!";
+				}
+			}
+		} catch (Exception e) { e.printStackTrace(); }
+		
+		// convert -composite _BLatest_NO.gif _Overlay.jpg -alpha set -channel A -evaluate set 20 -gravity center -append -gravity Southwest -pointsize 15 -annotate +248+272 'OJC'  ~/Desktop/testOpacity.jpg	
+		return rData;
 		
 	}
 

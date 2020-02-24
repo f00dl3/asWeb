@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 20 Feb 2020
+Updated: 24 Feb 2020
  */
 
 package asWebRest.resource;
@@ -44,6 +44,7 @@ import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
+import asUtilsPorts.Weather.RadarWorker;
 
 public class TestResource extends ServerResource {
     
@@ -185,7 +186,12 @@ public class TestResource extends ServerResource {
 	        	case "quartz":
 	        		Crontabs_UVM cUVM = new Crontabs_UVM();
 	        		cUVM.scheduler();
-	        		break;                    
+	        		break;
+	        		
+	        	case "RadarOverlay":
+	        		RadarWorker rw = new RadarWorker();
+	        		returnData += rw.opacityTest(dbc);
+	        		break;
 
 			 	case "Reddit":
 	               	Reddit rd = new Reddit();

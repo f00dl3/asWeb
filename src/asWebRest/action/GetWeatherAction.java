@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 22 Feb 2020
+Updated: 24 Feb 2020
  */
 
 package asWebRest.action;
@@ -42,6 +42,7 @@ public class GetWeatherAction {
     public JSONArray getObsJson(Connection dbc, List<String> qParams, List<String> inParams) { return weatherDAO.getObsJson(dbc, qParams, inParams); }
     public JSONArray getObsJsonRapid(Connection dbc, List<String> qParams, List<String> inParams) { return weatherDAO.getObsJsonRapid(dbc, qParams, inParams); }
     public JSONArray getObsJsonLast(Connection dbc) { return weatherDAO.getObsJsonLast(dbc); }
+    public JSONArray getObsJsonLastByStation(Connection dbc, List<String> inParams) { return weatherDAO.getObsJsonLastByStation(dbc, inParams); }
     public JSONArray getObsJsonByStation(Connection dbc, List<String> inParams) { return weatherDAO.getObsJsonByStation(dbc, inParams); }
     public JSONArray getObsJsonStations(Connection dbc, List<String> qParams) { return weatherDAO.getObsJsonStations(dbc, qParams); }
     public JSONArray getObsJsonStationCount(Connection dbc) { return weatherDAO.getObsJsonStationCount(dbc); }
