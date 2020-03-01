@@ -1,13 +1,14 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 29 Jan 2020
+Updated: 1 Mar 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Feed.CF6Daily;
 import asUtilsPorts.UbuntuVM.BackThatAssUp;
+import asUtilsPorts.Weather.SPCMapDownloader;
 import asWebRest.action.UpdateFfxivAction;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.hookers.EvergyAPIHook;
@@ -29,6 +30,7 @@ public class GetDaily {
 		CF6Daily cf6 = new CF6Daily();
 		EvergyAPIHook evergy = new EvergyAPIHook();
         JunkyPrivate junkyPrivate = new JunkyPrivate();
+        SPCMapDownloader smd = new SPCMapDownloader();
 		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
         WebCommon wc = new WebCommon();
 		ZillowAPIHook zapi = new ZillowAPIHook();
@@ -72,9 +74,9 @@ public class GetDaily {
         
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
-        try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }
-        
+        try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        
         try { evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+        try { smd.getYesterday(); } catch (Exception e) { e.printStackTrace(); }
         
         if(rightNow.dayOfWeek().get() == 1) {
         	KansasGasHook kgs = new KansasGasHook();

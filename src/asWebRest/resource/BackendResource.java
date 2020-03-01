@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Nov 2019
-Updated: 22 Feb 2020
+Updated: 29 Feb 2020
 
 POST REQUEST VIA COMMAND LINE ala 
 	wget --no-check-certificate --post-data 'doWhat=getFfxivMerged' https://localhost:8444/asWeb/r/FFXIV
@@ -42,6 +42,7 @@ import asUtilsPorts.Feed.MHPFetch;
 import asUtilsPorts.UbuntuVM.BackThatAssUp;
 import asUtilsPorts.Weather.RadarList;
 import asUtilsPorts.Weather.RadarNightly;
+import asUtilsPorts.Weather.SPCMapDownloader;
 
 public class BackendResource extends ServerResource {
     
@@ -173,6 +174,13 @@ public class BackendResource extends ServerResource {
 	        		try { site = argsInForm.getFirstValue("site"); } catch (Exception e) { e.printStackTrace(); }
             		returnData = mg.doRadarOverlay(dbc, site);
             		break;
+            		
+            	case "SPCMaps":
+            		SPCMapDownloader smd = new SPCMapDownloader();
+	        		String dateIn = "200201";
+	        		try { dateIn = argsInForm.getFirstValue("date"); } catch (Exception e) { e.printStackTrace(); }
+	        		smd.getByDay(dateIn);
+	        		break;
             		
 	            case "MHPFetch":
 	                String mhpArg1 = "A";

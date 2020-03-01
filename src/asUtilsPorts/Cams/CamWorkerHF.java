@@ -42,7 +42,7 @@ public class CamWorkerHF {
         final File urlFile = camBeans.getCamUrl();
 
         //File webCWFile = new File(camPath+"/webcW-temp.jpeg")
-		File webCWFile = new File(cb.getPersistTomcat().toString()+"/Get/Radar/EAX/_BLatest.gif");
+		File webCWFile = new File(cb.getPersistTomcat().toString()+"/Get/Radar/EAX/_BLatest.jpg");
 		File webC1File = new File(camPath+"/webc1-temp.jpeg");
         File webC2File = new File(camPath+"/webc2-temp.jpeg");
 		File webC3File = new File(camPath+"/webc3-temp.jpeg");

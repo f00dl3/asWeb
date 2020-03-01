@@ -93,8 +93,7 @@ public class RadarImageProcessor {
 		RadarBeans rb = new RadarBeans();
 		WebCommon wc = new WebCommon();
 
-		String rData = " -append -gravity Southwest -pointsize 13";
-		JSONArray matchingStations = new JSONArray();
+		String rData = " -append -gravity Southwest -pointsize 10";
   
 		final double rW = (double) rb.getRadW();
 		final double rH = (double) rb.getRadH();
@@ -131,7 +130,7 @@ public class RadarImageProcessor {
 					int weOffset = (int) Math.round(
 						(Math.abs(bW) - Math.abs(tLon))*pixelsPerDegreeWE
 					);
-					String tLabel = ""; //tData.getString("Station") + "\n";
+					String tLabel = "";// tData.getString("Station") + "\n";
 					try {
 						List<String> inParams = new ArrayList<>();
 						inParams.add(tData.getString("Station"));
@@ -141,13 +140,16 @@ public class RadarImageProcessor {
 							JSONObject tSubObj = new JSONObject(tStationWeather.getString("jsonSet"));
 							double tTemp = tSubObj.getDouble("Temperature");
 							double tDewp = tSubObj.getDouble("Dewpoint");
+							double tWindS = tSubObj.getDouble("WindSpeed");
+							int tWindD = tSubObj.getInt("WindDegrees");
 							if(tSubObj.has("RawMETAR") && wc.isSet(tSubObj.getString("RawMETAR"))) {
 								tTemp = wc.tempC2F(tTemp);
 								tDewp = wc.tempC2F(tDewp);
 							}
 							String tTempR = Integer.toString((int) Math.round(tTemp));
 							String tDewpR = Integer.toString((int) Math.round(tDewp));
-							tLabel += tTempR;
+							tLabel += tTempR;// + "/" + tDewpR + "\n" +
+								//tWindD + "@" + tWindS;
 						}
 					} catch (Exception e) { e.printStackTrace(); }
 					rData += " -annotate +"+weOffset+"+"+nsOffset+" '" + tLabel + "'";		

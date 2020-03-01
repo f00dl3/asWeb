@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 24 Feb 2020
+Updated: 1 Mar 2020
  */
 
 package asWebRest.resource;
@@ -45,6 +45,7 @@ import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
 import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Weather.RadarWorker;
+import asUtilsPorts.Weather.SPCMapDownloader;
 
 public class TestResource extends ServerResource {
     
@@ -203,6 +204,11 @@ public class TestResource extends ServerResource {
                     testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
             		ThreadRipper tr = new ThreadRipper();
             		returnData += tr.selfTest(testsToRun, false);
+            		break;
+            		
+            	case "SPCMapsHistorical":
+            		SPCMapDownloader spcMd = new SPCMapDownloader();
+            		returnData += spcMd.goBackXdays("7750");
             		break;
 	
 	            case "Stations":

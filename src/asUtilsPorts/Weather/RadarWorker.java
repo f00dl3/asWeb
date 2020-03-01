@@ -20,7 +20,6 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
 public class RadarWorker {
 
 	public static void fetch(String thisRound) {
@@ -87,11 +86,11 @@ public class RadarWorker {
 				final String convertArgs = "-alpha set -channel A -evaluate set 20 -gravity center";
 				
 				if(resultSet.getInt("DoOverlay") == 1) {
-					final JSONArray tBounds = new JSONArray(resultSet.getString("BoundsNSEW"));
 					RadarImageProcessor rip = new RadarImageProcessor();
+					final JSONArray tBounds = new JSONArray(resultSet.getString("BoundsNSEW"));
 					final String appendData = rip.generateConvertStringsForStationData(dbc, tBounds);
 					wc.runProcess("convert -composite "+thisOverlay+" "+radAoutFile.toString()+" "+ convertArgs + " " + appendData + " " + radAoutFile.toString());
-					wc.runProcess("convert -composite "+thisOverlay+" "+radBoutFile.toString()+" "+ convertArgs + " " + appendData + " " + radBoutFile.toString());
+					wc.runProcess("convert -composite "+thisOverlay+" "+radBoutFile.toString()+" "+ convertArgs + " " + radBoutFile.toString());
 				}
 				
 				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/_BLatest.jpg");
@@ -122,6 +121,7 @@ public class RadarWorker {
 		String appendData = "";
 		
 		CommonBeans cb = new CommonBeans();
+		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
 		RadarImageProcessor rip = new RadarImageProcessor();
 		WebCommon wc = new WebCommon();
 		
@@ -152,9 +152,6 @@ public class RadarWorker {
 							
 		final String convertArgs = "-alpha set -channel A -evaluate set 20% -gravity center";
 
-		GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
-		String tStationData = "KOJC";
-
 		String getRadarSetSQL = "SELECT Site, BoundsNSEW, DoOverlay FROM WxObs.RadarList WHERE Site='EAX';";
 
         	try (
@@ -169,7 +166,6 @@ public class RadarWorker {
 			e.printStackTrace();
 		}
 
-
 		try { 
 			JSONArray dataSet = getWeatherAction.getObsJsonLast(dbc);
 			for(int o = 0; o < dataSet.length(); o++) {
@@ -177,7 +173,7 @@ public class RadarWorker {
 				JSONObject tSubObj = new JSONObject(tObj.getString("jsonSet"));
 				double tTemperature = tSubObj.getDouble("Temperature");
 				int tTempInt = (int) Math.round(tTemperature);
-				tStationData = Integer.toString(tTempInt);
+				String tStationData = Integer.toString(tTempInt);
 			}
 		} catch (Exception e) { e.printStackTrace(); }
 

@@ -7,8 +7,8 @@ const FormData = require('form-data');
 const axios = require('axios');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 54;
-var bUpdated = "24 FEB 2020";
+var bBuild = 58;
+var bUpdated = "27 FEB 2020";
 var webUiBase = "https://localhost:8444/asWeb/r/";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = 256;
@@ -109,6 +109,23 @@ function getLaughing(msg) {
 
 function getNearMe(msg) {
 	var commandRan = "getNearMe(msg)";
+	msg.reply("What do you think this is, Google?");
+	basicAccessLog(msg, commandRan, "null");
+}
+
+function getPho(msg) {
+	var commandRan = "getPho(msg)";
+	var randInt = Math.floor(Math.random() * 6);
+	var randReply = "phone";
+	switch(randInt) {
+		case 0: break;
+		case 1: randReply = "5"; break;
+		case 2: randReply = "restaurants"; break;
+		case 3: randReply = "food"; break;
+		case 4: randReply = "fish"; break;
+		case 5: randReply = "fools"; break
+	}
+	msg.reply("Searching for " + randReply);
 	msg.reply("What do you think this is, Google?");
 	basicAccessLog(msg, commandRan, "null");
 }
@@ -705,6 +722,10 @@ client.on('message', msg => {
 			case "nearby":
 				if(msgArray)
 				getNearMe(msg);
+				break;
+		
+			case "pho":
+				getPho(msg);
 				break;
 	
 			case "quote":
