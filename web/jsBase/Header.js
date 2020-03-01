@@ -1,8 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 27 Dec 2019
-
+Updated: 1 Mar 2020
  */
 
 var annMaint = 841.92;
@@ -327,6 +326,7 @@ function getResource(what) {
     switch(what) {
         case "Addresses": return getBasePath("rest") + "/Addresses"; break;
         case "Anthony": case "f00dl3": return getBasePath("ui") + "/Anthony.jsp"; break;
+        case "Automotive": return getBasePath("rest") + "/Automotive"; break;
         case "Cams": return getBasePath("ui") + "/Cams.jsp"; break;
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;

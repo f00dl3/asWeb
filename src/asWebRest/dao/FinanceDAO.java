@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Jan 2020
+Updated: 1 Mar 2020
 */
 
 package asWebRest.dao;
@@ -61,115 +61,6 @@ public class FinanceDAO {
         try { returnData = wc.q2do1c(dbc, query_FBook_ATrackUp, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
-    
-    private JSONArray autoBillSum(Connection dbc) {
-        final String query_AutoBillSum = "SELECT SUM(Bill) AS BillSum from Core.AutoMaint_MAZ6;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoBillSum, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("BillSum", resultSet.getDouble("BillSum"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }   
-    
-    private JSONArray autoMaint(Connection dbc) {
-        final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
-                " FROM Core.AutoMaint_MAZ6 ORDER BY Date DESC LIMIT 10;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Invoice", resultSet.getInt("Invoice"))
-                    .put("Miles", resultSet.getInt("Miles"))
-                    .put("Date", resultSet.getString("Date"))
-                    .put("Location", resultSet.getString("Location"))
-                    .put("Services", resultSet.getString("Services"))
-                    .put("Bill", resultSet.getDouble("Bill"))
-                    .put("OilCh", resultSet.getInt("OilCh"))
-                    .put("TireRotate", resultSet.getInt("TireRotate"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }   
-      
-    private JSONArray autoMaintHondaCivic(Connection dbc) {
-        final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
-                " FROM Core.AutoMaint_HONCIV ORDER BY Date DESC LIMIT 10;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Invoice", resultSet.getInt("Invoice"))
-                    .put("Miles", resultSet.getInt("Miles"))
-                    .put("Date", resultSet.getString("Date"))
-                    .put("Location", resultSet.getString("Location"))
-                    .put("Services", resultSet.getString("Services"))
-                    .put("Bill", resultSet.getDouble("Bill"))
-                    .put("OilCh", resultSet.getInt("OilCh"))
-                    .put("TireRotate", resultSet.getInt("TireRotate"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }   
-      
-    private JSONArray autoMpg(Connection dbc) {
-        final String query_AutoMPG = "SELECT Date, TotMiles, CostPG, Gallons FROM Auto_MPG ORDER BY Date DESC LIMIT 10;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Date", resultSet.getString("Date"))
-                    .put("TotMiles", resultSet.getInt("TotMiles"))
-                    .put("Gallons", resultSet.getDouble("Gallons"))
-                    .put("CostPG", resultSet.getDouble("CostPG"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }    
-    
-    private String autoMpgAdd(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_AddAutoMpg = "INSERT IGNORE INTO Core.Auto_MPG VALUES (?,?,?,?,0,0);";
-        try { returnData = wc.q2do1c(dbc, query_AddAutoMpg, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-    
-    private JSONArray autoMpgAverage(Connection dbc) {
-        final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, AVG(CostPG) AS AvgCost FROM Core.Auto_MPG;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG_Average, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("EndMiles", resultSet.getInt("EndMiles"))
-                    .put("StartMiles", resultSet.getInt("StartMiles"))
-                    .put("Gallons", resultSet.getDouble("Gallons"))
-                    .put("AvgCost", resultSet.getDouble("AvgCost"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }    
     
     private JSONArray assetTrack(Connection dbc) {
         final String query_FBook_ATrackPrep1 = "UPDATE Core.FB_Assets SET Value=(SELECT sum(Quantity)*7 FROM Core.BGames), Checked=CURDATE() WHERE Related='BGames';";
@@ -758,11 +649,6 @@ public class FinanceDAO {
      
     public JSONArray get3NetWorth(Connection dbc) { return netWorth3(dbc); }
     public JSONArray getAmSch(Connection dbc) { return amSch(dbc); }
-    public JSONArray getAutoBillSum(Connection dbc) { return autoBillSum(dbc); }
-    public JSONArray getAutoMaint(Connection dbc) { return autoMaint(dbc); }
-    public JSONArray getAutoMaintHondaCivic(Connection dbc) { return autoMaintHondaCivic(dbc); }
-    public JSONArray getAutoMpg(Connection dbc) { return autoMpg(dbc); }
-    public JSONArray getAutoMpgAverage(Connection dbc) { return autoMpgAverage(dbc); }
     public JSONArray getAssetTrack(Connection dbc) { return assetTrack(dbc); }
     public JSONArray getBGames(Connection dbc) { return bGames(dbc); }
     public JSONArray getBills(Connection dbc) { return bills(dbc); }
@@ -787,7 +673,6 @@ public class FinanceDAO {
     public JSONArray getSvBk(Connection dbc) { return svBk(dbc); }
 	public JSONArray getZillowPIDs(Connection dbc) { return zillowPIDs(dbc); }
 	public String setAssetTrackUpdate(Connection dbc, List<String> qParams) { return assetTrackUpdate(dbc, qParams); }
-    public String setAutoMpgAdd(Connection dbc, List<String> qParams) { return autoMpgAdd(dbc, qParams); }
     public String setCheckbookAdd(Connection dbc, List<String> qParams) { return checkbookAdd(dbc, qParams); }
     public String setCheckbookUpdate(Connection dbc, List<String> qParams) { return checkbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }

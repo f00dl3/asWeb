@@ -1,4 +1,4 @@
 Things to do:
 	? Code all Note 3 stuff to asUtils, as dep in ANDROID APP
-	- radar transparency in overlays
-	- temperature data on radar ?
+	- test warning cones
+	- https://forecast.weather.gov/product.php?site=NWS&issuedby=EAX&product=HWO&format=txt&version=1

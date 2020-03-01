@@ -6,9 +6,11 @@ Updated: 14 Jan 2020
 
 package asWebRest.resource;
 
+import asWebRest.action.GetAutomotiveAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.UpdateFitnessAction;
+import asWebRest.dao.AutomotiveDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.shared.JsonWorkers;
@@ -35,6 +37,7 @@ public class FitnessResource extends ServerResource {
         
         JsonWorkers jw = new JsonWorkers();
         WebCommon wc = new WebCommon();
+        GetAutomotiveAction getAutomotiveAction = new GetAutomotiveAction(new AutomotiveDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         UpdateFitnessAction updateFitnessAction = new UpdateFitnessAction(new FitnessDAO());
@@ -76,7 +79,7 @@ public class FitnessResource extends ServerResource {
                         JSONArray rShoe = getFitnessAction.getRShoe(dbc);
                         JSONArray tot = getFitnessAction.getTot(dbc);
                         JSONArray yData = getFitnessAction.getYear(dbc, year);
-                        JSONArray autoMpg = getFinanceAction.getAutoMpgAverage(dbc);
+                        JSONArray autoMpg = getAutomotiveAction.getAutoMpgAverage(dbc);
                         JSONArray yesterday = getFitnessAction.getDayY(dbc);
                         JSONArray strength = getFitnessAction.getStrengthTraining(dbc, qParams3);
                         mergedResults

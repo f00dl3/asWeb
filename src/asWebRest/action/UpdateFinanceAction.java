@@ -16,7 +16,6 @@ public class UpdateFinanceAction {
     public UpdateFinanceAction(FinanceDAO financeDAO) { this.financeDAO = financeDAO; }
     
     public String setAssetTrackUpdate(Connection dbc, List qParams) { return financeDAO.setAssetTrackUpdate(dbc, qParams); }
-    public String setAutoMpgAdd(Connection dbc, List qParams) { return financeDAO.setAutoMpgAdd(dbc, qParams); }
     public String setCheckbookAdd(Connection dbc, List qParams) { return financeDAO.setCheckbookAdd(dbc, qParams); }
     public String setCheckbookUpdate(Connection dbc, List qParams) { return financeDAO.setCheckbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List qParams) { return financeDAO.setDecorToolsUpdate(dbc, qParams); }

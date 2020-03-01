@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
-    Updated: 12 Apr 2018
+    Updated: 1 Mar 2020
     Author     : astump
 --%>
 
@@ -24,7 +24,8 @@
         
         <div id="ButtonNavi">
             <button class="UButton" id="ShowFBAsset">AS</button>
-            <button class="UButton" id="ShowFBAuto">AU</button>
+            <button class="UButton" id="ShowFBAuto">CM</button>
+            <button class="UButton" id="ShowFBAutoHC">CH</button>
             <button class="UButton" id="ShowFBBills">BI</button>
             <button class="UButton" id="ShowFBBlue">BP</button>
             <button class="UButton" id="ShowFBCheck">CK</button>
@@ -41,6 +42,7 @@
     
         <div id="FBAsset"></div>
         <div id="FBAuto"></div>
+        <div id="FBAutoHC"></div>
         <div id="FBBills"></div>
         <div id="FBBlue"></div>
         <div id="FBCheck"></div>

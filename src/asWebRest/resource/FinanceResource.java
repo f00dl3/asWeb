@@ -76,19 +76,6 @@ public class FinanceResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
                 
-                case "getAuto":
-                    JSONArray autoMpg = getFinanceAction.getAutoMpg(dbc);
-                    JSONArray autoMpgAvg = getFinanceAction.getAutoMpgAverage(dbc);
-                    JSONArray billSum = getFinanceAction.getAutoBillSum(dbc);
-                    JSONArray autoMaint = getFinanceAction.getAutoMaint(dbc);
-                    mergedResults
-                        .put("autoMpg", autoMpg)
-                        .put("autoMpgAvg", autoMpgAvg)
-                        .put("billSum", billSum)
-                        .put("amrData", autoMaint);
-                    returnData += mergedResults.toString();
-                    break;
-                    
                 case "getBills":
                     JSONArray bills = getFinanceAction.getBills(dbc);
                     returnData += bills.toString();
@@ -156,22 +143,6 @@ public class FinanceResource extends ServerResource {
                     qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("AssetNotes")));
                     qParams.add(wc.basicInputFilter(argsInForm.getFirstValue("AssetDescription")));
                     returnData += updateFinanceAction.setAssetTrackUpdate(dbc, qParams);
-                    break;
-                    
-                case "putAutoMpgAdd":
-                    String aMpgDate = "0000-00-00";
-                    String aMpgMiles = "0";
-                    String aMpgPrice = "0.00";
-                    String aMpgGallons = "0.00";
-                    if(wc.isSet(argsInForm.getFirstValue("mpgDate"))) { aMpgDate = argsInForm.getFirstValue("mpgDate"); }
-                    if(wc.isSet(argsInForm.getFirstValue("mpgMiles"))) { aMpgMiles = argsInForm.getFirstValue("mpgMiles"); }
-                    if(wc.isSet(argsInForm.getFirstValue("mpgPrice"))) { aMpgPrice = argsInForm.getFirstValue("mpgPrice"); }
-                    if(wc.isSet(argsInForm.getFirstValue("mpgGallons"))) { aMpgGallons = argsInForm.getFirstValue("mpgGallons"); }
-                    qParams.add(0, aMpgDate);
-                    qParams.add(1, aMpgMiles);
-                    qParams.add(2, aMpgPrice);
-                    qParams.add(3, aMpgGallons);
-                    returnData += updateFinanceAction.setAutoMpgAdd(dbc, qParams);
                     break;
                     
                 case "putCheckbookAdd":
