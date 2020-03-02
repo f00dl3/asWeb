@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 15 Jul 2018
-Updated: 10 Feb 2020
+Updated: 2 Mar 2020
 */
 
 package asWebRest.hookers;
 
 import asUtilsPorts.Shares.JunkyBeans;
-//import asWebRest.shared.WebCommon;
+import asUtilsPorts.Shares.SSHTools;
+import asWebRest.secure.JunkyPrivate;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -28,8 +29,31 @@ public class MediaTools {
 		MediaPlayer mediaPlayer = new MediaPlayer(hit);
 		mediaPlayer.play();
 		
-		/* WebCommon wc = new WebCommon();
-		wc.runProcess("ffplay -nodisp \"" + mp3File + "\""); */
+	}
+	
+	private void playMediaRemotely(String mp3File) {
+		
+		JunkyBeans jb = new JunkyBeans();
+		JunkyPrivate jp = new JunkyPrivate();
+		SSHTools sshTools = new SSHTools();
+		
+		String sshUser = jp.getDesktopUser();
+		String sshIp = jp.getIpForDesktopLAN();
+		int sshPort = jp.getDesktopSshPort();
+		File sshKey = jp.getPiDesktopKey();
+		File ramDrivePath = jb.getRamDrive();
+		
+		String asWebDeploy = ramDrivePath.toString() + "/asWeb/WEB-INF";
+		String javaCommand = "java -cp " + asWebDeploy + "/classes:" + asWebDeploy + "/lib/* asWebRest.hookers.MediaTools '" + mp3File + "'";
+		
+		String[] commands = { javaCommand };
+		
+		try {
+			sshTools.sshRunCommands(sshUser, sshIp, sshPort, sshKey, commands);
+			//sshTools.backupRunCommand(sshKey, sshUser, sshIp, sshPort, commands[0]);
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
 		
 	}
     
@@ -58,6 +82,12 @@ public class MediaTools {
 
     public void doPlayMediaOnServer(String mp3File) { playMediaOnServer(mp3File); }
     public void doPlayMediaOnServer_TEST() { playMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Gold - Foundry.mp3"); }
+    public void doPlayMediaRemotely(String mp3File) { playMediaRemotely(mp3File); }
     public JSONObject getImageInfo(String fileToWorkWith) { return imageInfo(fileToWorkWith); }
+    
+    public static void main(String[] args) {
+    	MediaTools mt = new MediaTools();
+    	mt.doPlayMediaRemotely(args[0]);
+    }
     
 }

@@ -1,13 +1,14 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 16 May 2018
+Updated: 1 Mar 2020
  */
 
 function displayUtils() {
     getUtils();
     $("#FBUUse").toggle();
     $("#FBAuto").hide();
+    $("#FBAutoHC").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();

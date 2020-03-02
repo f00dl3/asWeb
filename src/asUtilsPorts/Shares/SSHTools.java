@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Dec 2017
-Updated: 1 Feb 2020
+Updated: 2 Mar 2020
  */
 
 package asUtilsPorts.Shares;
@@ -33,6 +33,19 @@ public class SSHTools {
                 " -p " + sshPort +
                 " -L " + portL + ":localhost:" + portR +
                 " " + user + "@" + hostIP+ " &";
+        System.out.println("DEBUG Command: " + sshProcessCommand);
+        wc.runProcess(sshProcessCommand);
+        
+    }
+
+    public void backupRunCommand(File keyfile, String user, String hostIP, int sshPort, String command) {
+        
+    	WebCommon wc = new WebCommon();
+        System.out.println("BACKUP METHOD");
+        final String sshProcessCommand = "ssh -fNT -t -i " + keyfile.toString() + 
+                " -p " + sshPort +
+                " " + user + "@" + hostIP +
+                " " + command;
         System.out.println("DEBUG Command: " + sshProcessCommand);
         wc.runProcess(sshProcessCommand);
         

@@ -2,13 +2,14 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Bills.js Split: 4 Apr 2018
-Updated: 25 Jul 2018
+Updated: 1 Mar 2020
  */
 
 function displayBills() {
     getBills();
     $("#FBBills").toggle();
     $("#FBAuto").hide();
+    $("#FBAutoHC").hide();
     $("#FBAsset").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();

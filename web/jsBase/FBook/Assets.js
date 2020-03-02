@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Assets.js Split: 4 Apr 2018
-Updated: 28 Dec 2018
+Updated: 1 Mar 2020
  */
 
 function actOnAssetUpdate(event) {
@@ -21,6 +21,7 @@ function displayAssets() {
     var target = "FBAsset";
     getAssetData(target);
     $("#FBAuto").hide();
+    $("#FBAutoHC").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();

@@ -8,18 +8,10 @@ Updated: 1 Mar 2020
 package asWebRest.resource;
 
 import asWebRest.action.GetAutomotiveAction;
-import asWebRest.action.GetFinanceAction;
-import asWebRest.action.GetUtilityUseAction;
-import asWebRest.action.GetWebLinkAction;
 import asWebRest.action.UpdateAutomotiveAction;
-import asWebRest.action.UpdateFinanceAction;
 import asWebRest.dao.AutomotiveDAO;
-import asWebRest.dao.FinanceDAO;
-import asWebRest.dao.UtilityUseDAO;
-import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
-import asUtilsPorts.CCImports;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Sep 2017
-Updated: 30 Dec 2019
+Updated: 2 Mar 2020
 */
 
 package asUtilsPorts.Weather;
@@ -62,7 +62,7 @@ public class RadarNightly {
                 final File tmpRadPath = new File(ramDrive + "/" + thisSite);
                 final File sourceFolder = new File(radPath + "/" + thisSite + "/Archive");
                 tmpRadPath.mkdirs();
-                wc.runProcess("mv " + sourceFolder.toString() + "/*.gif " + tmpRadPath.toString());
+                wc.runProcess("mv " + sourceFolder.toString() + "/*.jpg " + tmpRadPath.toString());
             }            
         } catch (Exception e) {
             e.printStackTrace();

@@ -151,7 +151,9 @@ public class TestResource extends ServerResource {
 	        		
 	        	case "AudioTest":
 	        		MediaTools mTools = new MediaTools();
-	        		mTools.doPlayMediaOnServer("/extra1/MediaServer/Games/U-Z/Unreal Tournament - Phantom.mp3");
+	        		String mediaPath = "/extra1/MediaServer/Games/U-Z/Unreal Tournament - Phantom.mp3";
+                    if(wc.isSet(argsInForm.getFirstValue("file"))) { mediaPath = argsInForm.getFirstValue("file"); }
+	        		mTools.doPlayMediaRemotely(mediaPath);
 	        		break;	        		
             		
 	        	case "CamTemp":
