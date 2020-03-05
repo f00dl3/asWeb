@@ -16,8 +16,8 @@ const aLog = require('./asModules/accessLog.js');
 const resp = require('./asModules/responses.js');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 61;
-var bUpdated = "4 MAR 2020";
+var bBuild = 63;
+var bUpdated = "5 MAR 2020";
 var homeForBot = auth.kcregionalwx;
 var maxMessageSize = asm.maxMessageSize;
 var webUiBase = asm.webUiBase;
@@ -74,32 +74,6 @@ function getCf6Data(msg, month) {
 	}).catch((error) => {
 		console.log(error)
 	});	
-
-	aLog.basicAccessLog(msg, commandRan, "stop");
-
-}
-
-function getNearMe(msg) {
-	var commandRan = "getNearMe(msg)";
-	msg.reply("What do you think this is, Google?");
-	aLog.basicAccessLog(msg, commandRan, "null");
-}
-
-function getRandomQuotes(msg) {
-
-	var commandRan = "getRandomQuotes(msg)";
-	aLog.basicAccessLog(msg, commandRan, "start");
-
-	var rData = "DEBUG: getRandomQuotes() did not get data back yet!";
-	var url = webUiBase + "Entertainment";
-	var pData = "doWhat=getRandomQuotes";
-
-	axios.post(url, pData).then((res) => { 
-		rData = res.data,
-		respondRandomQuotes(msg, rData)
-	}).catch((error) => {
-		console.log(error)
-	});
 
 	aLog.basicAccessLog(msg, commandRan, "stop");
 
@@ -216,15 +190,6 @@ function getWeatherLatest(msg) {
 
 }
 
-function getWeatherRadar(msg, site) {
-
-	var radarSite = "EAX";
-	if(asm.isSet(site)) { radarSite = site.toUpperCase(); }
-	var radarFileNew = "/media/sf_SharePoint/Get/Radar/" + radarSite + "/_BLatest.jpg";
-	msg.reply("Latest radar image for " + radarSite + ":\n", { files :  [ radarFileNew ] });
-
-}
-
 function getWeatherSarcastic(msg) {
 
 	var commandRan = "getWeatherSarcastic(msg)";
@@ -305,14 +270,6 @@ function respondCf6Data(msg, cf6in) {
 		msg.reply(asm.trimForDiscord(returnString));
 	});
 
-}
-
-function respondRandomQuotes(msg, rqDataIn) {
-	var quotesHere = rqDataIn.length;
-	var rI = (Math.random() * (quotesHere-1)).toFixed(0);
-	console.log("DEBUG: Random number = " + rI + " - total quotes: " + quotesHere);
-	var thisQuote = rqDataIn[rI];
-	msg.reply(thisQuote.Quote + " -" + thisQuote.Author);
 }
 
 function respondServerInfo(msg, dataIn) {
@@ -636,8 +593,7 @@ client.on('message', msg => {
 				break;
 				
 			case "nearby":
-				if(msgArray)
-				getNearMe(msg);
+				resp.getNearMe(msg);
 				break;
 		
 			case "pho":
@@ -645,12 +601,12 @@ client.on('message', msg => {
 				break;
 	
 			case "quote":
-				getRandomQuotes(msg);
+				resp.getRandomQuotes(msg);
 				break;
 	
 			case "radar":
 				var site = msgArray[1];
-				getWeatherRadar(msg, site);
+				resp.getWeatherRadar(msg, site);
 				break;
 	
 			case "search":
