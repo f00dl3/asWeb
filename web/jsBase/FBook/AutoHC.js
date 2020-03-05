@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Apr 2018
 Split from Auto on 1 Mar 2020
-Updated: 1 Mar 2020
+Updated: 4 Mar 2020
  */
 
 function actOnMpgEntryHC(event) {
@@ -15,7 +15,7 @@ function actOnMpgEntryHC(event) {
         isSet(thisFormData.mpgPrice) &&
         isSet(thisFormData.mpgGallons)
     ) {
-        setAddAutoMpg(thisFormData);
+        setAddAutoMpgHC(thisFormData);
     } else {
         window.alert("You missed something!\n" + thisFormDataJ)
     }
@@ -118,7 +118,7 @@ function popAutoMpgEntryFormHC() {
             "<span class='td'><input name='mpgMiles' id='mpgMiles' type='number' step='1' value='' style='width: 75px;' /><br/>Miles</span>" +
             "<span class='td'><input name='mpgPrice' id='mpgPrice' type='number' step='0.001' value='' style='width: 50px;' /><br/>Price</span>" +
             "<span class='td'><input name='mpgGallons' id='mpgGallons' type='number' step='0.001' value='' style='width: 50px;' /><br/>Gallons</span>" +
-            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmit'>Fuel!</button></span>" +
+            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmitHC'>Fuel!</button></span>" +
             "</form></div>";
     dojo.byId("mpgEntryFormHC").innerHTML = rData;
     var enterMpgButtonHC = dojo.byId("mpgSubmitHC");

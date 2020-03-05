@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
-Updated: 5 Nov 2019
+Updated: 2 Mar 2020
  */
 
 package asWebRest.chartHelpers;
@@ -37,24 +37,26 @@ public class Ffxiv {
                 .put("s8Name", "TOTAL").put("s7Color", "Gray")
                 .put("xLabel", "Date").put("yLabel", "Completed");
         for(int i = 0; i < dataIn.length(); i++) {
-            JSONObject thisObject = dataIn.getJSONObject(i);
-            int quests = thisObject.getInt("Quests");
-            int hunting = thisObject.getInt("Hunting");
-            int crafting = thisObject.getInt("Crafting");
-            int achievements = thisObject.getInt("Achievements");
-            int gathering = thisObject.getInt("Gathering");
-            int dungeons = thisObject.getInt("Dungeons");
-            int fates = thisObject.getInt("FATEs");
-            int total = (quests + hunting + crafting + achievements + gathering + dungeons);
-            this_Labels.put(thisObject.getString("OrigCompDate"));
-            this_Data.put(quests);
-            this_Data2.put(hunting);
-            this_Data3.put(crafting);
-            this_Data4.put(dungeons);
-            this_Data5.put(achievements);
-            this_Data6.put(gathering);
-            this_Data7.put(fates);
-            this_Data8.put(total);
+		if(i >= (dataIn.length() - 365)) {
+        	    JSONObject thisObject = dataIn.getJSONObject(i);
+        	    int quests = thisObject.getInt("Quests");
+        	    int hunting = thisObject.getInt("Hunting");
+        	    int crafting = thisObject.getInt("Crafting");
+        	    int achievements = thisObject.getInt("Achievements");
+        	    int gathering = thisObject.getInt("Gathering");
+        	    int dungeons = thisObject.getInt("Dungeons");
+        	    int fates = thisObject.getInt("FATEs");
+        	    int total = (quests + hunting + crafting + achievements + gathering + dungeons);
+        	    this_Labels.put(thisObject.getString("OrigCompDate"));
+        	    this_Data.put(quests);
+        	    this_Data2.put(hunting);
+        	    this_Data3.put(crafting);
+        	    this_Data4.put(dungeons);
+        	    this_Data5.put(achievements);
+        	    this_Data6.put(gathering);
+        	    this_Data7.put(fates);
+        	    this_Data8.put(total);
+		}
         }
         /* System.out.println("Days: " + this_Labels.length());
         System.out.println("Quest days: " + this_Data.length());
