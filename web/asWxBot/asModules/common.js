@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Oct 2019
-Updated: 4 Mar 2020
+Updated: 7 Mar 2020
  */
 
 var maxMessageSize = 256;
