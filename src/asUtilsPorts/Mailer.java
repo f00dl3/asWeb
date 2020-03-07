@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Sep 2017
-Updated: 20 Feb 2020
+Updated: 5 Mar 2020
 */
 
 package asUtilsPorts;
@@ -335,11 +335,9 @@ public class Mailer {
         final String myGmail = junkyPrivate.getGmailUser();
         
 		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
+		alerts.add(() -> wxBot.botBroadcastOnly(message));
+		alerts.add(() -> sendMail(myCell, eaSubject, message, null));
 		alerts.add(() -> sendMail(myGmail, eaSubject, message, null));
-		if(!testing) {
-			alerts.add(() -> sendMail(myCell, eaSubject, message, null));
-			alerts.add(() -> wxBot.botBroadcastOnly(message));
-		}
 		tr.runProcesses(alerts, false, false);
 		
 	}
