@@ -1,15 +1,15 @@
 /*
 by Anthony Stump
 Created: 4 Mar 2020
-Updated: 5 Mar 2020
+Updated: 6 Mar 2020
 */
 
 
-const lol = require('./asModules/resp/lol.js');
-const nearMe = require('./asModules/resp/nearMe.js');
-const pho = require('./asModules/resp/pho.js');
-const randomQuote = require('./asModules/resp/randomQuote.js');
-const wxRadar = require('./asModules/respo/wxRadar.js');
+const lol = require('./resp/lol.js');
+const nearMe = require('./resp/nearMe.js');
+const pho = require('./resp/pho.js');
+const randomQuote = require('./resp/randomQuote.js');
+const wxRadar = require('./resp/wxRadar.js');
 
 module.exports = {
 

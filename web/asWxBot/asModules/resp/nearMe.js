@@ -1,10 +1,10 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2020
-Updated: on creation
+Updated: 6 Mar 2020
  */
 
-const aLog = require('./accessLog.js');
+const aLog = require('./../accessLog.js');
 
 module.exports = {
 
