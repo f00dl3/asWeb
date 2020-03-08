@@ -1,11 +1,11 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: on Creation
+Updated: 8 Mar 2020
  */
 
 const aLog = require('./../accessLog.js');
-const asm = require('./../commmon.js');
+const asm = require('./../common.js');
 
 module.exports = {
 

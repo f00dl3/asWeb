@@ -1,12 +1,12 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: on creation
+Updated: 8 Mar 2020
  */
 
 const axios = require('axios');
 const aLog = require('./../accessLog.js');
-const asm = require('./../commmon.js');
+const asm = require('./../common.js');
 
 module.exports = {
 
