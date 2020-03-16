@@ -80,7 +80,7 @@
 	<property name="web-directory" value="web" />
 	<property name="deployment.dir" value="." />
 	<property name="web-xml-file" value="web/WEB-INF/web.xml" />
-	<property name="lib-home" value="libs" />
+	<property name="lib-home" value="web/WEB-INF/lib" />
 	<property name="build-directory" value="build" />
 
 	<path id="classpath">

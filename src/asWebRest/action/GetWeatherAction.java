@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 24 Feb 2020
+Updated: 15 Mar 2020
  */
 
 package asWebRest.action;
@@ -53,6 +53,7 @@ public class GetWeatherAction {
     public JSONArray getRecentCapAlerts(Connection dbc) { return weatherDAO.getRecentCapAlerts(dbc); }
     public JSONArray getRecentEarthquakes(Connection dbc) { return weatherDAO.getRecentEarthquakes(dbc); }
     public JSONArray getReanalysis(List<String> qParams) { return weatherDAO.getReanalysis(qParams); }
+    public JSONArray getSnowReports(Connection dbc) { return weatherDAO.getSnowReports(dbc); }
     public JSONArray getSpcLive(Connection dbc, List<String> qParams) { return weatherDAO.getSpcLive(dbc, qParams); }
     public JSONArray getSpcMesoSent(Connection dbc) { return weatherDAO.getSpcMesoSent(dbc); }
     public JSONArray getSpcOutlookSent(Connection dbc) { return weatherDAO.getSpcOutlookSent(dbc); }

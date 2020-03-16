@@ -1,12 +1,12 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 1 Mar 2020
+Updated: 16 Mar 2020
  */
 
 var annMaint = 841.92;
 var annMiles = 12861;
-var bicycleUsed = "A16";
+var bicycleUsed = "E12";
 var carOwnershipYears = (2019-2010);
 var carStartMiles = 44150;
 var costPerMile = 3.50;
@@ -16,7 +16,7 @@ var hiddenFeatures = 0;
 var timeOutMilli = (60*1000);
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
 
-var timeEntryWidth = 110;91
+var timeEntryWidth = 110;
 var dateEntryWidth = 75;
 if(checkMobile()) {
     timeEntryWidth = 75;

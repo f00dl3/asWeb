@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 24 Feb 2020
+Updated: 15 Mar 2020
  */
 
 package asWebRest.dao;
@@ -1144,6 +1144,30 @@ public class WeatherDAO {
         return tContainer;
     }
 
+    public JSONArray getSnowReports(Connection dbc) {
+        final String query_Snow = "SELECT FROM_UNIXTIME(timestamp) as uTimestamp, " +
+        			" amount, id, point, location, state, remarks " +
+        			" FROM WxObs.SnowReports ORDER BY timestamp DESC LIMIT 1024;";        
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_Snow, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("uTimestamp", resultSet.getString("uTimestamp"))
+                    .put("id", resultSet.getString("id"))
+                    .put("point", resultSet.getString("point"))
+                    .put("location", resultSet.getString("location"))
+                    .put("state", resultSet.getString("state"))
+                    .put("remarks", resultSet.getString("remarks"))
+                    .put("amount", resultSet.getString("amount"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
     public JSONArray getSpcLive(Connection dbc, List<String> qParams) {
         final String query_SPCLive = "SELECT GetTime, Type, title, description FROM (" +
                 " SELECT GetTime, 'HN' AS Type, title, description FROM WxObs.NHCFeeds UNION ALL" +
@@ -1170,6 +1194,7 @@ public class WeatherDAO {
     public JSONArray getSpcMesoSent(Connection dbc) {
         final String query_spcMesoSent = "SELECT GetTime, title, description, Notified FROM WxObs.SPCMesoscale" +
         		" WHERE (description LIKE '% KANSAS %' OR description LIKE '% MISSOURI %')" +
+        		" AND (description LIKE '% SLIGHT RISK %')" +
         		" ORDER BY GetTime DESC LIMIT 25;";
         JSONArray tContainer = new JSONArray();
         try {

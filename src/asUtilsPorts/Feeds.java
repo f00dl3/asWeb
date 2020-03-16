@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 17 Feb 2020
+Updated: 15 Mar 2020
 */
 
 package asUtilsPorts;
@@ -25,6 +25,7 @@ import asUtilsPorts.SNMP.UbuntuVM;
 import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.Reddit;
+import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
@@ -98,14 +99,16 @@ public class Feeds {
     	
     	DateTime rightNow = new DateTime();
     	String returnData = "Fetch hourly feeds:\n";
-    	
-    	RSSSources rssSources = new RSSSources();
-    	NHCFetch nhcFetch = new NHCFetch();
+
     	GetSPC getSPC = new GetSPC();
+    	NHCFetch nhcFetch = new NHCFetch();
+    	RSSSources rssSources = new RSSSources();
+    	SnowReports snow = new SnowReports();
     	
     	try { getSPC.doGetSPCHourly(dbc); } catch (Exception e) { e.printStackTrace(); }    	
     	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
-    	try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { snow.doSnow(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentOutlook(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
 
