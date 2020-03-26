@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 22 May 2018
 Split from UpdateEntertainmentAction.java on 14 Nov 2019
-Updated: 29 Jan 2020
+Updated: 25 Mar 2020
  */
 
 package asWebRest.action;
@@ -27,6 +27,7 @@ public class UpdateFfxivAction {
     public String setFfxivGilAuto(Connection dbc) { return ffxivDAO.setFfxivGilAuto(dbc); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivDAO.setFfxivHuntingDone(dbc, qParams); }
     public String setFfxivLevelsIncrease(Connection dbc, List<String> qParams) { return ffxivDAO.setFfxivLevelsIncrease(dbc, qParams); }
+    public String setFfxivMarketGil(Connection dbc, List<String> qParams) { return ffxivDAO.setFfxivMarketGil(dbc, qParams); }
     public String setFfxivQuestDone(Connection dbc, List<String> qParams) { return ffxivDAO.setFfxivQuestDone(dbc, qParams); }
 
 }

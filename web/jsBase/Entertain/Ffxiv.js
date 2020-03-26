@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 4 Dec 2019
+Updated: 25 Mar 2020
 
  */
 
@@ -31,6 +31,12 @@ function actOnFfxivLevelIncrease(event) {
 	dojo.stopEvent(event);
 	var thisFormData = dojo.formToObject(this.form);
 	setFfxivLevelsIncrease(thisFormData);
+}
+
+function actOnFfxivMarketGil(event) {
+	dojo.stopEvent(event);
+	var thisFormData = dojo.formToObject(this.form);
+	setFfxivMarketGil(thisFormData);
 }
 
 function actOnFfxivQuestDone(event) {
@@ -726,6 +732,10 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
             "<form id='gilForm'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
             " <input name='Gil' type='number' step='0' value='" + currentGil + "' style='width: 168px;'/>" +
             " <button id='gilUpdateButton' type='submit'>gil</button>" +
+            "</form> " +
+            "<form id='gilMarketForm'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
+            " <input name='MarketGil' type='number' step='0' value='0' style='width: 168px;'/>" +
+            " <button id='gilMarketUpdateButton' type='submit'>mkt</button>" +
             "</form>" +
             "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
             "<a href='" + doCh("j", "ffxivGilWorthByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilWorthByDay", "th") + "'/></a>" +
@@ -785,7 +795,9 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
     putFfxivMergedList("mergedList", mergedData);
     getWebLinks("ffxivChars", "charList", "list");
     var setGilButton = dojo.byId("gilUpdateButton");
+    var setMarketGilButton = dojo.byId("gilMarketUpdateButton");
     dojo.connect(setGilButton, "onclick", actOnFfxivGil);
+    dojo.connect(setMarketGilButton, "onclick", actOnFfxivMarketGil);
     dojo.query(".doLevelIncrease").connect("onclick", actOnFfxivLevelIncrease);
 }
 
@@ -1051,6 +1063,31 @@ function setFfxivLevelsIncrease(formData) {
                 function(error) { 
                     aniPreload("off");
                     window.alert("request to set Level Inrease FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
+
+function setFfxivMarketGil(formData) {
+    var target = "ETGFF14Q";
+    aniPreload("on");
+    var thePostData = {
+        "doWhat": "setFfxivMarketGil",
+        "gil": formData.MarketGil
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("FFXIV"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                    showNotice("Market " + formData.Name + " updated!");
+                    getGameFf14q(target, false);
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request to set Market Gil FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

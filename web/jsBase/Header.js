@@ -1,12 +1,12 @@
-/* 
+2/* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 16 Mar 2020
+Updated: 20 Mar 2020
  */
 
 var annMaint = 841.92;
 var annMiles = 12861;
-var bicycleUsed = "E12";
+var bicycleUsed = "A16";
 var carOwnershipYears = (2019-2010);
 var carStartMiles = 44150;
 var costPerMile = 3.50;

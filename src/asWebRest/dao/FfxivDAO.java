@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from Entertainment.java: 14 Nov 2019
-Updated: 29 Jan 2020
+Updated: 25 Mar 2020
 */
 
 package asWebRest.dao;
@@ -207,7 +207,6 @@ public class FfxivDAO {
         try { returnData = wc.q2do1c(dbc, query_FFXIV_GatherDone, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
-
     
 	private String ffxivGil(Connection dbc, List<String> qParams) {
 	    String returnData = wcb.getDefaultNotRanYet();
@@ -324,7 +323,14 @@ public class FfxivDAO {
         try { returnData = wc.q2do1c(dbc, query_FFXIV_LevelsIncrease, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }    
-        
+    
+	private String ffxivMarketGil(Connection dbc, List<String> qParams) {
+	    String returnData = wcb.getDefaultNotRanYet();
+	    final String query_FFXIV_MarketGil = "INSERT INTO Core.FFXIV_MarketGil (Gil) VALUES (?);";
+	    try { returnData = wc.q2do1c(dbc, query_FFXIV_MarketGil, qParams); } catch (Exception e) { e.printStackTrace(); }
+	    return returnData;
+	}
+	
     private JSONArray ffxivMerged(Connection dbc, int minRange, int maxRange, String completed) {
         String query_FFXIV_Merged = "SELECT * FROM (" +
                 " SELECT q.MinLevel, q.Name, q.CoordX, q.CoordY, q.Zone, q.Exp, q.Gil," +
@@ -670,5 +676,6 @@ public class FfxivDAO {
     public String setFfxivGilAuto(Connection dbc) { return ffxivGilAuto(dbc); }
     public String setFfxivHuntingDone(Connection dbc, List<String> qParams) { return ffxivHuntingDone(dbc, qParams); }
     public String setFfxivLevelsIncrease(Connection dbc, List<String> qParams) { return ffxivLevelsIncrease(dbc, qParams); }
+    public String setFfxivMarketGil(Connection dbc, List<String> qParams) { return ffxivMarketGil(dbc, qParams); }
    
 }

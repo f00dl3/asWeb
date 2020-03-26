@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from EntertinmentResource.java on 14 Nov 2019
-Updated: 4 Dec 2019
+Updated: 25 Mar 2020
  */
 
 package asWebRest.resource;
@@ -164,6 +164,11 @@ public class FfxivResource extends ServerResource {
                     qParams.add(0, argsInForm.getFirstValue("classCode"));
                     returnData += updateFfxivAction.setFfxivLevelsIncrease(dbc, qParams);
                     break;
+
+                case "setFfxivMarketGil":
+                	qParams.add(0, argsInForm.getFirstValue("gil"));
+                    returnData += updateFfxivAction.setFfxivMarketGil(dbc, qParams);
+                    break;    
                     
                 case "setFfxivQuestDone":
                     qParams.add(0, argsInForm.getFirstValue("questOrder"));
