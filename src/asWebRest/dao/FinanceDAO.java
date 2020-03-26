@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 1 Mar 2020
+Updated: 26 Mar 2020
 */
 
 package asWebRest.dao;
@@ -628,6 +628,33 @@ public class FinanceDAO {
         return returnData;
     }
     
+    private JSONArray stockList(Connection dbc) { 
+        final String query_GetStocks = "SELECT Symbol, Count, Holder, LastValue FROM Core.StockShares WHERE Active=1;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("Symbol", resultSet.getString("Symbol"))
+                	.put("Count", resultSet.getInt("Count"))
+                	.put("Holder", resultSet.getString("Holder"))
+                	.put("LastValue", resultSet.getString("LastValue"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    private String stockUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=? WHERE Symbol=?;";
+        String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares), Checked=CURDATE() WHERE Description='Stocks';";
+        try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_UpdateStockB, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
 	private JSONArray zillowPIDs(Connection dbc) {
 		final String query_GetZPIDs = "SELECT Who, Address, ZPID, MyAsset FROM Core.FB_CompHomeVals WHERE ZPID IS NOT null;";
 		JSONArray tContainer = new JSONArray();
@@ -670,6 +697,7 @@ public class FinanceDAO {
     public JSONArray getSavingChart(Connection dbc, List<String> qParams) { return savingChart(dbc, qParams); }
     public JSONArray getSettingC(Connection dbc) { return settingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return settingH(dbc); }
+    public JSONArray getStockList(Connection dbc) { return stockList(dbc); }
     public JSONArray getSvBk(Connection dbc) { return svBk(dbc); }
 	public JSONArray getZillowPIDs(Connection dbc) { return zillowPIDs(dbc); }
 	public String setAssetTrackUpdate(Connection dbc, List<String> qParams) { return assetTrackUpdate(dbc, qParams); }
@@ -677,6 +705,7 @@ public class FinanceDAO {
     public String setCheckbookUpdate(Connection dbc, List<String> qParams) { return checkbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return savingsAdd(dbc, qParams); }
+    public String setStockUpdate(Connection dbc, List<String> qParams) { return stockUpdate(dbc, qParams); }
     public String setZillowDailyUpdate(Connection dbc, List<String> qParams) { return zillowDailyUpdate(dbc, qParams); }
     public String setZillowHomeValue(Connection dbc, String zestimate) { return zillowHomeValue(dbc, zestimate); }
     

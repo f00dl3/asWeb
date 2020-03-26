@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 15 Mar 2020
+Updated: 26 Mar 2020
  */
 
 package asWebRest.resource;
@@ -41,6 +41,7 @@ import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.SnowReports;
+import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
@@ -226,6 +227,11 @@ public class TestResource extends ServerResource {
                     	wxTest = argsInForm.getFirstValue("action");
                     }
 	            	returnData += stations.fetch(false, wxTest);
+	            	break;
+	            	
+	            case "Stock":
+	            	Stocks stocks = new Stocks();
+	            	returnData += stocks.getStockQuote(dbc);
 	            	break;
 
                 case "Watch":
