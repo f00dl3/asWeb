@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 25 Jan 2020
+Updated: 28 Mar 2020
  */
 
 package asWebRest.resource;
@@ -102,6 +102,7 @@ public class FinanceResource extends ServerResource {
                     JSONArray nwga = getFinanceAction.getNwga(dbc);
                     JSONArray enwt = getFinanceAction.getEnwt(dbc);
                     JSONArray mdfbal = getFinanceAction.getMortDumpFund(dbc);
+                    JSONArray stocks = getFinanceAction.getStockList(dbc);
                     mergedResults
                         .put("amSch", amSch)
                         .put("checking", checking)
@@ -112,7 +113,8 @@ public class FinanceResource extends ServerResource {
                         .put("x3nw", x3nw)
                         .put("nwga", nwga)
                         .put("enwt", enwt)
-                        .put("mdfbal", mdfbal);
+                        .put("mdfbal", mdfbal)
+                        .put("stock", stocks);
                     returnData += mergedResults.toString();
                     break;
                     

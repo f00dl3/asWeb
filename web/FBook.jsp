@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
-    Updated: 1 Mar 2020
+    Updated: 28 Mar 2020
     Author     : astump
 --%>
 
@@ -36,6 +36,7 @@
         <div id="FinOverview">
             <span id="HoldChecking"></span>
             <span id="HoldSavings"></span>
+            <span id="HoldStock"></span>
             <span id="HoldMortgage"></span>
             <span id="HoldWorth"></span>
         </div><p>

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 23 Dec 2019
+Updated: 28 Mar 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -76,6 +76,33 @@ function genOverviewSavings(svData, svBk) {
     dojo.byId("HoldSavings").innerHTML = bubble;
     var svButton = dojo.byId("SvBkAddButton");
     dojo.connect(svButton, "onclick", actOnSavingsSubmit);
+}
+
+function genOverviewStock(stockData) {
+	var stockWorth = 0;
+	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
+    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth"];
+    var bubble = "<div class='UBox'>Stocks<br/><span>$" + (stockWorth ).toFixed(0) + "</span>" +
+            "<div class='UBoxO'>" +
+            "<strong>Holdings</strong><br/>";
+    var bTable = "<table><thead><tr>";
+    for (var i = 0; i < sCols.length; i++) {
+        bTable += "<th>" + sCols[i] + "</th>";
+    }
+    bTable += "</tr></thead><tbody>";
+    stockData.forEach(function (sd) {
+        bTable += "<tr>" +
+                    "<td>" + sd.Symbol + "</td>" +
+                    "<td>" + sd.Description + "</td>" +
+                    "<td>" + sd.Count + "</td>" +
+                    "<td>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
+                    "<td>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
+                    "</tr>";
+        }
+    );
+    bTable += "</tbody></table>";
+    bubble += bTable + "</div></div>";
+    dojo.byId("HoldStock").innerHTML = bubble;
 }
 
 function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
@@ -191,8 +218,10 @@ function putOverview(finGlob) {
     var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
     var mdfbal = finGlob.mdfbal[0];
+    var stockData = finGlob.stock;
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
+    genOverviewStock(stockData);
     genOverviewMortgage(mortData, amSch, mdfbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }

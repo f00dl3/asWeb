@@ -73,7 +73,7 @@ public class GetDaily {
 			+ ");";        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }
-        try { stocks.getStockQuote(dbc); } catch (Exception e) { e.printStackTrace(); }
+        try { stocks.getStockQuote(dbc, true); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        

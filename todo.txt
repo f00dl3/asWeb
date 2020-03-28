@@ -2,4 +2,3 @@ Things to do:
 	? Code all Note 3 stuff to asUtils, as dep in ANDROID APP
 	- test warning cones
 
-https://query1.finance.yahoo.com/v8/finance/chart/HAL?region=US&lang=en-US

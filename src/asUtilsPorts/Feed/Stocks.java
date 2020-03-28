@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: on creation
+Updated: 28 Mar 2020
 
 */
 
@@ -39,9 +39,9 @@ public class Stocks {
 			return dataBack;
 	}
 	
-	public String getStockQuote(Connection dbc) {
+	public String getStockQuote(Connection dbc, boolean sendEmail) {
 
-		String quote = "Daily stock report\n\n";
+		String quote = "Daily stock market report\n\n";
 		
 		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
 		Mailer mailer = new Mailer();
@@ -52,6 +52,7 @@ public class Stocks {
 		for(int i = 0; i < stocksToFetch.length(); i++) {			
 			JSONObject tStock = stocksToFetch.getJSONObject(i);
 			String tTicker = tStock.getString("Symbol");
+			String tDescription = tStock.getString("Description");
 			int tShares = tStock.getInt("Count");
 			try { 
 				JSONObject tStockData = new JSONObject(apiCallStock(tTicker));
@@ -66,13 +67,13 @@ public class Stocks {
 				qParams.add(0, valueNowS);
 				qParams.add(1, tTicker);
 				updateFinanceAction.setStockUpdate(dbc, qParams);
-				quote += "\n" + tTicker + " : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
+				quote += "\n" + tDescription + " (" + tTicker + ") : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
 		}
         
-		mailer.sendQuickEmail(quote);
+		if(sendEmail) { mailer.sendQuickEmail(quote); }
 		
 		return quote;
 

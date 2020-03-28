@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 15 Mar 2020
+Updated: 28 Mar 2020
 */
 
 package asUtilsPorts;
@@ -26,6 +26,7 @@ import asUtilsPorts.Weather.AlertMe;
 import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.SnowReports;
+import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Weather.RadarNightly;
 
 public class Feeds {
@@ -35,13 +36,13 @@ public class Feeds {
 		String returnData = "Fetch 1 minute feeds:\n";
 
 		ANSSQuakes anssQuakes = new ANSSQuakes();
-        	AlertMe alertMe = new AlertMe();
+    	AlertMe alertMe = new AlertMe();
 		NWSWarnings nwsWarnings = new NWSWarnings();
 
 		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
-    	    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
-	    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-	    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
+    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
 
 		return returnData;
 
@@ -80,6 +81,7 @@ public class Feeds {
         Radar radar = new Radar();
         Reddit reddit = new Reddit();
         Stations stations = new Stations();
+        Stocks stocks = new Stocks();
         
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
@@ -90,6 +92,7 @@ public class Feeds {
     	try { returnData += reddit.checkIfSent(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentWatch(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	
