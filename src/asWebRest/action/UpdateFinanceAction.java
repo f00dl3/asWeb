@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 26 Mar 2020
+Updated: 28 Mar 2020
  */
 
 package asWebRest.action;
@@ -20,6 +20,7 @@ public class UpdateFinanceAction {
     public String setCheckbookUpdate(Connection dbc, List<String> qParams) { return financeDAO.setCheckbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return financeDAO.setDecorToolsUpdate(dbc, qParams); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return financeDAO.setSavingsAdd(dbc, qParams); }
+    public String setStockIndex(Connection dbc, List<String> qParams) { return financeDAO.setStockIndex(dbc, qParams); }
     public String setStockUpdate(Connection dbc, List<String> qParams) { return financeDAO.setStockUpdate(dbc, qParams); }
     public String setZillowDailyUpdate(Connection dbc, List<String> qParams) { return financeDAO.setZillowDailyUpdate(dbc, qParams); }
     public String setZillowHomeValue(Connection dbc, String zestimate) { return financeDAO.setZillowHomeValue(dbc, zestimate); }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Mar 2020
-Updated: 8 Mar 2020
+Updated: 30 Mar 2020
 */
 
 const cams = require('./resp/cams.js');
@@ -12,6 +12,7 @@ const nearMe = require('./resp/nearMe.js');
 const pho = require('./resp/pho.js');
 const randomQuote = require('./resp/randomQuote.js');
 const serverInfo = require('./resp/serverInfo.js');
+const stocks = require('./resp/stocks.js');
 const wxData = require('./resp/wxData.js');
 const wxForecast = require('./resp/wxForecast.js');
 const wxLatest = require('./resp/wxLatest.js');
@@ -21,9 +22,10 @@ const wxStationSearch = require('./resp/wxStationSearch.js');
 
 module.exports = {
 
-		generateHelpMessage: function(msg) { help.generateHelpMesage(msg) },
+		generateHelpMessage: function(msg) { help.helpMessage(msg) },
 		getCf6Data: function(msg, month) { cf6.getCf6Data(msg, month) },
 		getServerInfo: function(msg) { serverInfo.getServerInfo(msg) },
+		getStocks: function(msg) { stocks.getStocks(msg) },
 		getWeatherCameras: function(msg) { cams.getWeatherCameras(msg) },
 		getWeatherCameraLoop: function(msg) { cams.getWeatherCameraLoop(msg) },
 		getWeatherData: function(msg, station, date) { wxData.getWeatherData(msg, station, date) },

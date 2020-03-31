@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 26 Mar 2020
+Updated: 30 Mar 2020
  */
 
 package asWebRest.action;
@@ -39,7 +39,9 @@ public class GetFinanceAction {
     public JSONArray getSavingChart(Connection dbc, List<String> qParams) { return financeDAO.getSavingChart(dbc, qParams); }
     public JSONArray getSettingC(Connection dbc) { return financeDAO.getSettingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return financeDAO.getSettingH(dbc); }
+    public JSONArray getStockHistory(Connection dbc) { return financeDAO.getStockHistory(dbc); }
     public JSONArray getStockList(Connection dbc) { return financeDAO.getStockList(dbc); }
+    public JSONArray getStockListPublic(Connection dbc) { return financeDAO.getStockListPublic(dbc); }
     public JSONArray getSvBk(Connection dbc) { return financeDAO.getSvBk(dbc); }
 	public JSONArray getZillowPIDs(Connection dbc) { return financeDAO.getZillowPIDs(dbc); }
     

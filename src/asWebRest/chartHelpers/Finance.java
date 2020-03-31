@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 11 Apr 2019
+Updated: 30 Mar 2020
  */
 
 package asWebRest.chartHelpers;
@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public class Finance {
 
-    private static JSONObject billCh(JSONArray dataIn) {
+    private JSONObject billCh(JSONArray dataIn) {
         String bill_Name = "Bills";
         JSONObject bill_Glob = new JSONObject();
         JSONObject bill_Props = new JSONObject();
@@ -54,7 +54,7 @@ public class Finance {
         return bill_Glob;
     }
 
-    private static JSONObject finEnw(JSONArray dataIn, String periodLength, String dataSelection) {
+    private JSONObject finEnw(JSONArray dataIn, String periodLength, String dataSelection) {
         String enw_Name = "Estimated Net Worth (" + periodLength + " - " + dataSelection + ")";
         JSONObject enw_Glob = new JSONObject();
         JSONObject enw_Props = new JSONObject();
@@ -131,7 +131,7 @@ public class Finance {
         return enw_Glob;
     }
     
-    private static JSONObject savingsOpt(JSONArray dataIn) {
+    private JSONObject savingsOpt(JSONArray dataIn) {
         String svChart_Name = "Savings Balance";
         JSONObject svChart_Glob = new JSONObject();
         JSONObject svChart_Props = new JSONObject();
@@ -154,8 +154,37 @@ public class Finance {
         return svChart_Glob;
     }
     
-    public static JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
-    public static JSONObject getFinEnw(JSONArray dataIn, String periodLength, String dataSelection) { return finEnw(dataIn, periodLength, dataSelection); }
-    public static JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
+    private JSONObject stockChart(JSONArray dataIn, String symbol) {
+    	String ch_Name = "Stock Value: " + symbol;
+    	JSONObject ch_Glob = new JSONObject();
+    	JSONObject ch_Props = new JSONObject();
+    	JSONArray ch_Labels = new JSONArray();
+    	JSONArray ch_Data = new JSONArray();
+    	ch_Props
+		        .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+		        .put("chartName", ch_Name).put("chartFileName", "FinStock_"+symbol)
+		        .put("sName", "Value").put("sColor", "Red")
+		        .put("xLabel", "Date").put("yLabel", "USD");
+		for (int i = 0; i < dataIn.length(); i++) {
+		    try { 
+		    	JSONObject thisObject = dataIn.getJSONObject(i);
+			    JSONObject tSubData = new JSONObject(thisObject.getString("jsonData"));
+			    JSONObject tTicker = tSubData.getJSONObject(symbol);
+			    ch_Labels.put(thisObject.getString("AsOf"));
+			    ch_Data.put(tTicker.getString("valueEach"));
+		    } catch (Exception e) { }
+		}
+		ch_Glob
+		        .put("labels", ch_Labels)
+		        .put("data", ch_Data)
+		        .put("props", ch_Props);
+		return ch_Glob;
+    	
+    }
+    
+    public JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
+    public JSONObject getFinEnw(JSONArray dataIn, String periodLength, String dataSelection) { return finEnw(dataIn, periodLength, dataSelection); }
+    public JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
+    public JSONObject getStockChart(JSONArray dataIn, String symbol) { return stockChart(dataIn, symbol); }
 
 }

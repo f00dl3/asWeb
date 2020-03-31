@@ -16,8 +16,8 @@ const aLog = require('./asModules/accessLog.js');
 const resp = require('./asModules/responses.js');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 68;
-var bUpdated = "20 MAR 2020";
+var bBuild = 69;
+var bUpdated = "30 MAR 2020";
 var homeForBot = auth.kcregionalwx;
 var alertChan = auth.wxalerts;
 var maxMessageSize = asm.maxMessageSize;
@@ -28,6 +28,9 @@ function sendMessageOnStartup(client, myArgs) {
         if(asm.isSet(myArgs) && myArgs != '') {
                 var messageToSendOnStartUp = myArgs[0];
                 var channel = client.channels.get(alertChan);
+                if(messageToSendOnStartup.toLowerCase().includes("reddit")) {
+                	channel = clent.channels.get(homeForBot); 
+            	}
                 if(asm.isSet(myArgs[1]) && myArgs[1] != '') {
                         let tFile = myArgs[1];
                         return new Promise(resolve => {
@@ -156,6 +159,12 @@ client.on('message', msg => {
 			case "server":
 				resp.getServerInfo(msg);
 				break;
+
+			case "stock":
+				var ticker = "";
+				try { ticker = msgArray[1].toUpperCase(); } catch (e) { console.log(e); }
+			 	resp.getStocks(msg, ticker);
+				break;	
 	
 			case "weather":
 				resp.getWeatherLatest(msg);

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 28 Mar 2020
+Updated: 30 Mar 2020
  */
 
 package asWebRest.resource;
@@ -116,6 +116,11 @@ public class FinanceResource extends ServerResource {
                         .put("mdfbal", mdfbal)
                         .put("stock", stocks);
                     returnData += mergedResults.toString();
+                    break;
+
+                case "getStocks":
+                    JSONArray stocksP = getFinanceAction.getStockListPublic(dbc);
+                    returnData += stocksP.toString();
                     break;
                     
                 case "getUtils":

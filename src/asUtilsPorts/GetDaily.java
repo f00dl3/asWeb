@@ -1,13 +1,12 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 26 Mar 2020
+Updated: 28 Mar 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Feed.CF6Daily;
-import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.UbuntuVM.BackThatAssUp;
 import asUtilsPorts.Weather.SPCMapDownloader;
 import asWebRest.action.UpdateFfxivAction;
@@ -32,7 +31,6 @@ public class GetDaily {
 		EvergyAPIHook evergy = new EvergyAPIHook();
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         SPCMapDownloader smd = new SPCMapDownloader();
-        Stocks stocks = new Stocks();
 		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
         WebCommon wc = new WebCommon();
 		ZillowAPIHook zapi = new ZillowAPIHook();
@@ -73,7 +71,6 @@ public class GetDaily {
 			+ ");";        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }
-        try { stocks.getStockQuote(dbc, true); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        

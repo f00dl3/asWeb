@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: on creation
+Updated: 30 Mar 2020
  */
 
 const aLog = require('./../accessLog.js');
@@ -9,11 +9,11 @@ const asm = require('./../common.js');
 
 module.exports = {
 		
-		generateHelpMessage: function(msg) { generateHelpMesage(msg) }
+		helpMessage: function(msg) { helpMesage(msg) }
 
 }
 
-function generateHelpMessage(msg) {
+function helpMessage(msg) {
 
 	var commandRan = "generateHelpMessage(msg)";
 	aLog.basicAccessLog(msg, commandRan, "start");
@@ -29,6 +29,7 @@ function generateHelpMessage(msg) {
 		"\n\'radar\': Get latest weather radar loop. No basemap! Default: EAX. Usage: \'radar <SITE>\'" +
 		"\n\'search\': Search station inventory to get station code for \'find\' tool" +
 		"\n\'server\': Gets latest server status information" +
+		//"\n\'stocks\': Get stock quote for desired stock" + 
 		"\n\'weather\': Get latest weather data from KOJC (Olathe, KS)";
 	
 	var returnData = "DEBUG: function getWebVersion()";

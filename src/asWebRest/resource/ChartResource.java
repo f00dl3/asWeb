@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 14 Nov 2019
+Updated: 28 Mar 2020
  */
 
 package asWebRest.resource;
@@ -132,6 +132,11 @@ public class ChartResource extends ServerResource {
                     JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
                     JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
+                    JSONArray svals = getFinanceAction.getStockHistory(dbc);
+                    JSONObject stockGlob_DJI = fin.getStockChart(svals, "^DJI");
+                    JSONObject stockGlob_HAL = fin.getStockChart(svals, "HAL");
+                    JSONObject stockGlob_S = fin.getStockChart(svals, "S");
+                    JSONObject stockGlob_CAR = fin.getStockChart(svals, "CAR");
                     JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");
                     JSONObject enw_GlobY = fin.getFinEnw(enw_RawY, "Year", "T");
                     JSONObject enw_GlobYL = fin.getFinEnw(enw_RawY, "Year", "L");
@@ -144,6 +149,10 @@ public class ChartResource extends ServerResource {
                     try { dynChart.LineChart(enw_GlobYD); returnData += "Chart generated - Est Net Worth Year D!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(stockGlob_DJI); returnData += "Chart generated - Stocks DJI!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(stockGlob_HAL); returnData += "Chart generated - Stocks HAL!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(stockGlob_S); returnData += "Chart generated - Stocks S!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(stockGlob_CAR); returnData += "Chart generated - Stocks CAR!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                  
                 case "FitnessCharts":

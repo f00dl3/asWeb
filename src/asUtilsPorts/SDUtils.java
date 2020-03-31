@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 1 Feb 2020
+Updated: 28 Mar 2020
 */
 
 package asUtilsPorts;
@@ -28,8 +28,8 @@ public class SDUtils {
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         WebCommon wc = new WebCommon();
                 
-		sduVars.setBuild("SD Utils Java - Build 365");
-		sduVars.setUpdated("1 Feb 2020 @ 7:48 AM CT");
+		sduVars.setBuild("SD Utils Java - Build 366");
+		sduVars.setUpdated("28 MAR 2020 @ 12:10 CT");
         File usbDrivePath = junkyBeans.getSdCardPath();
         final String userHome = junkyBeans.getUserHome().toString();
         final String uName = junkyBeans.getUName();
@@ -69,11 +69,11 @@ public class SDUtils {
 			thisFile.delete();
 		}
 		
-                System.out.println("Creating encrypted backup of MySQL critical databases...");
+        System.out.println("Creating encrypted backup of MySQL critical databases...");
 		System.setProperty("user.dir", usbDrivePath.toString()+"/");
 		new File(sduVars.getCachePath()+"/SQLDumps").mkdirs();
 		
-		String[] sqlTasks = { "Core", "Feeds", "net_snmp", "WebCal" };
+		String[] sqlTasks = { "Core", "Feeds", "WebCal" };
 		for (String task : sqlTasks) {
 			wc.runProcess("sudo -i mysqldump -h " + junkyPrivate.getAss() + " " +task+" --result-file="+sduVars.getCachePath()+"/SQLDumps/"+task+".sql");
 		}

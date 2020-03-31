@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 28 Mar 2020
+Updated: 30 Mar 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -44,7 +44,7 @@ function genOverviewMortgage(mortData, amSch, mdfbal) {
 function genOverviewSavings(svData, svBk) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
     var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
-            "<div class='UBoxO'><strong>Savings</strong><p>" +
+            "<div class='UBoxO'><strong>Saving</strong><p>" +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
     var bForm = "<form id='SavingsBookForm'>" +
@@ -81,22 +81,27 @@ function genOverviewSavings(svData, svBk) {
 function genOverviewStock(stockData) {
 	var stockWorth = 0;
 	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
-    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth"];
-    var bubble = "<div class='UBox'>Stocks<br/><span>$" + (stockWorth ).toFixed(0) + "</span>" +
+    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day"];
+    var bubble = "<div class='UBox'>Stock<br/><span>$" + (stockWorth ).toFixed(0) + "</span>" +
             "<div class='UBoxO'>" +
-            "<strong>Holdings</strong><br/>";
+            "<a href='" + doCh("j", "FinStock_^DJI", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_^DJI", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinStock_CAR", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_CAR", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinStock_HAL", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_HAL", "th") + "' /></a>" +
+            "<br/><strong>Holdings</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
         bTable += "<th>" + sCols[i] + "</th>";
     }
     bTable += "</tr></thead><tbody>";
     stockData.forEach(function (sd) {
+    	let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2); 
         bTable += "<tr>" +
                     "<td>" + sd.Symbol + "</td>" +
                     "<td>" + sd.Description + "</td>" +
                     "<td>" + sd.Count + "</td>" +
                     "<td>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
                     "<td>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
+                    "<td>" + change + "</td>" +
                     "</tr>";
         }
     );
@@ -120,7 +125,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var pro30y = fnwGrow(nwci, nwgm, 30);
     var proRet = fnwGrow(nwci, nwgm, 32);
     var projections = [pro03m, pro01y, pro05y, pro10y, pro20y, pro30y, proRet];
-    var bubble = "<div class='UBox'>EWorth<br/><span>$" + cnw1d + "K</span>" +
+    var bubble = "<div class='UBox'>Worth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
             "<p><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%" +
             "<p><em>Projections (starting from last period.)</em>";
@@ -163,6 +168,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
 }
 
 function getOverviewData() {
+    var timeout = getRefresh("medium");
     aniPreload("on");
     var thePostData = { "doWhat": "FinanceOverviewCharts" };
     require(["dojo/request"], function(request) {
@@ -180,6 +186,7 @@ function getOverviewData() {
                     console.log("request for FOverCharts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
+    setTimeout(function () { getOverviewData(); }, timeout);
 }
 
 function getOverviewData2() {
