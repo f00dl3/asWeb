@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 28 Mar 2020
+Updated: 31 Mar 2020
 */
 
 package asUtilsPorts;
@@ -57,6 +57,7 @@ public class Feeds {
     	CamWorkerURL cwURL = new CamWorkerURL();
     	Mailer mailer = new Mailer();
         Router routerSnmp = new Router();
+        Stocks stocks = new Stocks();
         UbuntuVM uvmSnmp = new UbuntuVM();
         
 		final File camPath = camBeans.getCamPath();
@@ -66,6 +67,7 @@ public class Feeds {
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             
@@ -81,7 +83,6 @@ public class Feeds {
         Radar radar = new Radar();
         Reddit reddit = new Reddit();
         Stations stations = new Stations();
-        Stocks stocks = new Stocks();
         
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
@@ -92,7 +93,6 @@ public class Feeds {
     	try { returnData += reddit.checkIfSent(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentWatch(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	

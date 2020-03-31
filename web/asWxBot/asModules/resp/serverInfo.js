@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 8 Mar 2020
+Updated: 31 Mar 2020
  */
 
 const axios = require('axios');
@@ -20,7 +20,7 @@ function getServerInfo(msg) {
 	aLog.basicAccessLog(msg, commandRan, "start");
 	
 	var rData = "TODO: BUILD SNMP DATA QUERY NON-CHART SPECIFIC!";
-	var url = webUiBase + "SNMP";
+	var url = asm.webUiBase + "SNMP";
 	var pData = "doWhat=getMainRecent";
 
 	axios.post(url, pData).then((res) => { 
@@ -51,7 +51,7 @@ function respondServerInfo(msg, dataIn) {
 			td.dtCPULoad8) / 8).toFixed(2);
 	
 	//var memUse = ();
-	var networkUse = (td.dtOctestIn + td.dtOctetsOut);
+	var networkUse = (td.dtOctetsIn + td.dtOctetsOut);
 	var dbRows = (td.dtMySQLRowsCore + td.dtMySQLRowsFeeds + td.dtMySQLRowsWxObs + td.dtMySQLRowsNetSNMP);	
 	var linesCode = (
 			xj.LOC_aswjCss + 

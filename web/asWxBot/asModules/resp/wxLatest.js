@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 8 Mar 2020
+Updated: 31 Mar 2020
  */
 
 const axios = require('axios');
@@ -21,10 +21,12 @@ function getWeatherLatest(msg) {
 
 	var rData = "DEBUG: getWeatherLatest() did not get data back yet!";
 	var url = asm.webUiBase + "Wx";
+	console.log("DBG: " + url);
 	var pData = "doWhat=getObsJsonLast";
 
 	axios.post(url, pData).then((res) => { 
 		rData = res.data[0].jsonSet,
+		console.log("\nDBG --> rData from getWeatherLatest: " + rData);
 		respondWeatherData("KOJC", rData, msg)
 	}).catch((error) => {
 		console.log(error)
@@ -46,6 +48,7 @@ function respondWeatherData(station, data, msg) {
 		"\nHumidity: " + jds.RelativeHumidity + "%" +
 		"\nPressure: " + jds.Pressure + " mb" +
 		"\nWind: " + jds.WindDirection + " at " + jds.WindSpeed + " mph";
+	console.log("\nDBG --> finalMessage = " + finalMessage);
 	if(asm.isSet(jds.WindGust)) { finalMessage += "\nGusts: " + jds.WindGust + " mph"; }
 	msg.reply(asm.trimForDiscord(finalMessage));
 

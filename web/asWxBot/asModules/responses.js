@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Mar 2020
-Updated: 30 Mar 2020
+Updated: 31 Mar 2020
 */
 
 const cams = require('./resp/cams.js');
@@ -25,7 +25,7 @@ module.exports = {
 		generateHelpMessage: function(msg) { help.helpMessage(msg) },
 		getCf6Data: function(msg, month) { cf6.getCf6Data(msg, month) },
 		getServerInfo: function(msg) { serverInfo.getServerInfo(msg) },
-		getStocks: function(msg) { stocks.getStocks(msg) },
+		getStocks: function(msg, ticker) { stocks.getStocks(msg, ticker) },
 		getWeatherCameras: function(msg) { cams.getWeatherCameras(msg) },
 		getWeatherCameraLoop: function(msg) { cams.getWeatherCameraLoop(msg) },
 		getWeatherData: function(msg, station, date) { wxData.getWeatherData(msg, station, date) },
