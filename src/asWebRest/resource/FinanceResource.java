@@ -103,6 +103,7 @@ public class FinanceResource extends ServerResource {
                     JSONArray enwt = getFinanceAction.getEnwt(dbc);
                     JSONArray mdfbal = getFinanceAction.getMortDumpFund(dbc);
                     JSONArray stocks = getFinanceAction.getStockList(dbc);
+                    JSONArray etaBal = getFinanceAction.getETradeBalance(dbc);
                     mergedResults
                         .put("amSch", amSch)
                         .put("checking", checking)
@@ -114,7 +115,8 @@ public class FinanceResource extends ServerResource {
                         .put("nwga", nwga)
                         .put("enwt", enwt)
                         .put("mdfbal", mdfbal)
-                        .put("stock", stocks);
+                        .put("stock", stocks)
+                        .put("eTrade", etaBal);
                     returnData += mergedResults.toString();
                     break;
 

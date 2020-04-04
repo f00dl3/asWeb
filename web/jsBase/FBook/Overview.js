@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 30 Mar 2020
+Updated: 4 Apr 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -14,11 +14,11 @@ function actOnSavingsSubmit(event) {
 function genOverviewMortgage(mortData, amSch, mdfbal) {
     var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
     var masDate = getDate("day", 0, "dateOnly");
-    var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</span>" +
+    var bubble = "<div class='UBox'>Mort<br/><span><strong>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</strong></span>" +
             "<div class='UBoxO'>" +
             "to payoff: $" + ((mortData[0].MBal - mdfbal.Value)/1000).toFixed(1) + "K<br/>" +
             "<strong>Amortization</strong><br/>" +
-            "<em>Payments after today(" + masDate + ")</em><br/>";
+            "<em>Payments after today (" + masDate + ")</em><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < asCols.length; i++) {
         bTable += "<th>" + asCols[i] + "</th>";
@@ -78,16 +78,19 @@ function genOverviewSavings(svData, svBk) {
     dojo.connect(svButton, "onclick", actOnSavingsSubmit);
 }
 
-function genOverviewStock(stockData) {
+function genOverviewStock(stockData, eTrade) {
+	var etaBalance = eTrade.Balance;
 	var stockWorth = 0;
 	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day"];
+    var stockSymbols = [ "^DJI", "ACB", "CAR", "HAL" ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + (stockWorth ).toFixed(0) + "</span>" +
             "<div class='UBoxO'>" +
-            "<a href='" + doCh("j", "FinStock_^DJI", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_^DJI", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinStock_CAR", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_CAR", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinStock_HAL", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_HAL", "th") + "' /></a>" +
-            "<br/><strong>Holdings</strong><br/>";
+            "eTrade Balance: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>";
+    stockSymbols.forEach(function(sym) {
+    	bubble += "<a href='" + doCh("j", "FinStock_"+sym, null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_"+sym, "th") + "' /></a>";
+    });
+    bubble += "<br/><strong>Holdings</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
         bTable += "<th>" + sCols[i] + "</th>";
@@ -225,10 +228,11 @@ function putOverview(finGlob) {
     var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
     var mdfbal = finGlob.mdfbal[0];
+    var eTrade = finGlob.eTrade[0];
     var stockData = finGlob.stock;
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
-    genOverviewStock(stockData);
+    genOverviewStock(stockData, eTrade);
     genOverviewMortgage(mortData, amSch, mdfbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }

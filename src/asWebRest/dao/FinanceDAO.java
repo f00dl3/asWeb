@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 30 Mar 2020
+Updated: 2 Apr 2020
 */
 
 package asWebRest.dao;
@@ -385,6 +385,23 @@ public class FinanceDAO {
         return tContainer;
     }
     
+    private JSONArray eTradeBalance(Connection dbc) {
+        final String query_etb = "SELECT SUM((SELECT Value FROM Core.FB_Assets WHERE Description LIKE 'eTrade%') + (SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='eTrade')) AS Balance;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_etb, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Balance", resultSet.getDouble("Balance"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    	
+    }
+    
     private JSONArray licenses(Connection dbc) {
         final String query_FBook_Licenses = "SELECT Title, Type FROM Core.Licenses ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
@@ -731,6 +748,7 @@ public class FinanceDAO {
     public JSONArray getEnw(Connection dbc) { return enw(dbc); }
     public JSONArray getEnwChart(Connection dbc, String periodLength) { return enwChart(dbc, periodLength); }
     public JSONArray getEnwt(Connection dbc) { return enwt(dbc); }
+    public JSONArray getETradeBalance(Connection dbc) { return eTradeBalance(dbc); }
     public JSONArray getLicenses(Connection dbc) { return licenses(dbc); }
     public JSONArray getMort(Connection dbc) { return mort(dbc); }
     public JSONArray getMortDumpFund(Connection dbc) { return mortDumpFund(dbc); }
