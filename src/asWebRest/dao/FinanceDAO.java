@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 Apr 2020
+Updated: 16 Apr 2020
 */
 
 package asWebRest.dao;
@@ -330,8 +330,8 @@ public class FinanceDAO {
         				" ORDER BY AsOf LIMIT 730;";
         		break;
         	case "All": default:
-        		query_ch_ENW += " WHERE (AsOf LIKE '%1'" +
-		                " OR AsOf LIKE '%6')" +
+        		query_ch_ENW += /* " WHERE (AsOf LIKE '%1'" +
+		                " OR AsOf LIKE '%6')" + */
 		                " ORDER BY AsOf;";
 	        	break;
         }

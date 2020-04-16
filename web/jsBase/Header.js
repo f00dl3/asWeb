@@ -1,7 +1,7 @@
-2/* 
+/* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 20 Mar 2020
+Updated: 4 Apr 2020
  */
 
 var annMaint = 841.92;
@@ -480,6 +480,10 @@ function nodeState(tNode, state) {
         case "online": return "<button style='background-color: #666666; color: white;'>" + tNode + "</button>"; break;
         case "offline": return "<button style='background-color: yellow; color: black;'>" + tNode + "</button>"; break; 
     }
+}
+
+function numComma(x) {
+    return x.toString();    		
 }
 
 function olMapImageLink(olPicPath, olResolution, oldFlag) {

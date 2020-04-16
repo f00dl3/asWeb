@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 26 Apr 2018
-Updated: 28 Dec 2019
+Updated: 16 Apr 2019
  */
 
 package asWebRest.hookers;
@@ -62,8 +62,8 @@ public class DynChartX {
         
         int width = cb.getChartMaxWidth();
         int height = cb.getChartMaxHeight();
-        int thWidth = width/6;
-        int thHeight = height/6;
+        int thWidth = width/12;
+        int thHeight = height/12;
         
         XYChart chart = new XYChart(width, height);
         XYChart thChart = new XYChart(thWidth, thHeight);

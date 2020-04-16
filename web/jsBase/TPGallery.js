@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 28 Jan 2020
+Updated: 5 Apr 2020
  */
 
 var maxListing = 5000;
@@ -276,13 +276,15 @@ function populateNimsBox(nsData) {
 	var countUnindexed = nsData[0].NotInMS;
 	var countMediaServer = nsData[0].MediaServerSize;
 	var countTotal = nsData[0].TotalImages;
+	var addsToday = nsData[0].AddsToday;
 	var rData = "<div class='UPop'>" +
 		" Indexed : <strong>" + ((countIndexed/countTotal)*100).toFixed(2) + "%</strong>" +
 		"<div class='UPopO'>" + 
 		"<strong>Media Server Size: </strong>" + countMediaServer + "<br/>" +
 		"<strong>TP Image Count: </strong>" + countTotal + "<br/>" +
 		"<strong>TP Unindexed: </strong>" + countUnindexed + "<br/>" +
-		"<strong>TP Indexed: </strong>" + countIndexed +
+		"<strong>TP Indexed: </strong>" + countIndexed + "<br/>" +
+		"<strong>Adds Today: </strong>" + addsToday +
 		"</div></div>";
 	dojo.byId("TPNimsDataHolder").innerHTML = rData;	
 }

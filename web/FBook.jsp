@@ -1,13 +1,13 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
-    Updated: 28 Mar 2020
+    Updated: 4 Apr 2020
     Author     : astump
 --%>
 
 <%
     String headerType = "full";
-    String pageTitle = "Finance Book";
+    String pageTitle = "Finances";
     String scriptIt = "true";
     String authCheck = "true";
 %>

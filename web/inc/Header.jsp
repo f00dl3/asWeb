@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    1 Mar 2020
+    Updated:    5 Apr 2020
     Author     : astump
 --%>
 
@@ -228,7 +228,7 @@
                 scripts2Load += etScriptPack;
                 break;
             case "FBook":
-                fullTitle = "Finance Book";
+                fullTitle = "Finances";
                 scripts2Load += fbScriptPack;
                 break;
             case "Fitness":

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 25 Jan 2020
+Updated: 16 Apr 2020
  */
 
 package asWebRest.shared;
@@ -20,8 +20,8 @@ public class CommonBeans {
 	private String ramPath = "/dev/shm/tomcatShare";
     
     private String catalinaHome = System.getenv("CATALINA_HOME");
-    private int chartMaxHeight = 1080;
-    private int chartMaxWidth = 1920;
+    private int chartMaxHeight = 2160;
+    private int chartMaxWidth = 3840;
     private String defaultNotRanYet = "Query has not ran or has failed!";
     private double elecCost = 0.14;
     private String fakeUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0";

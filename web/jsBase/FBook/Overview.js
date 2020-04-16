@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 4 Apr 2020
+Updated: 12 Apr 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -11,13 +11,18 @@ function actOnSavingsSubmit(event) {
     setSavingsAdd(thisFormData);
 }
 
-function genOverviewMortgage(mortData, amSch, mdfbal) {
+function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
     var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
+    var svCushion = 7000;
+    var easyPay = (mortData[0].MBal - mdfbal.Value);
+    var fastPay = (mortData[0].MBal - mdfbal.Value - (svbal-svCushion));
     var masDate = getDate("day", 0, "dateOnly");
-    var bubble = "<div class='UBox'>Mort<br/><span><strong>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</strong></span>" +
+    var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</span>" +
             "<div class='UBoxO'>" +
-            "to payoff: $" + ((mortData[0].MBal - mdfbal.Value)/1000).toFixed(1) + "K<br/>" +
-            "<strong>Amortization</strong><br/>" +
+            "to payoff: <strong>$" + (easyPay/1000).toFixed(1) + "K</strong><br/>" +
+            "aggressive: <strong>$" + (fastPay/1000).toFixed(1) + "K</strong><br/>" +
+            "(assuming sv xfer of $" + (svbal-svCushion).toFixed(0) + ")<br/>" +
+            "<p><strong>Amortization</strong><br/>" +
             "<em>Payments after today (" + masDate + ")</em><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < asCols.length; i++) {
@@ -43,7 +48,7 @@ function genOverviewMortgage(mortData, amSch, mdfbal) {
 
 function genOverviewSavings(svData, svBk) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
-    var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
+    var bubble = "<div class='UBox'>Savings<br/><span>$" + numComma(Math.round(svData.SBal)) + "</span>" +
             "<div class='UBoxO'><strong>Saving</strong><p>" +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
@@ -84,7 +89,7 @@ function genOverviewStock(stockData, eTrade) {
 	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day"];
     var stockSymbols = [ "^DJI", "ACB", "CAR", "HAL" ];
-    var bubble = "<div class='UBox'>Stock<br/><span>$" + (stockWorth ).toFixed(0) + "</span>" +
+    var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
             "eTrade Balance: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>";
     stockSymbols.forEach(function(sym) {
@@ -117,6 +122,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var proCols = ["3M", "1Y", "5Y", "10Y", "20Y", "30Y", "RET"];
     var wCols = ["As of Date", "ENW", "Liq", "Fix", "Life", "Credit", "Debt", "Growth"];
     var cnw1d = (enw.NetWorth / 1000).toFixed(1);
+    var cnw1d_L = (enw.NetWorth).toFixed(2);
     var mlb1d = (mort.MBal / 1000).toFixed(1);
     var nwci = x3nw.Worth;
     var nwgm = (nwga.GrowthAvg / 100);
@@ -130,7 +136,8 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var projections = [pro03m, pro01y, pro05y, pro10y, pro20y, pro30y, proRet];
     var bubble = "<div class='UBox'>Worth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
-            "<p><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%" +
+            "Current estimate: $" + numComma(cnw1d_L) +
+            "<br/><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%" +
             "<p><em>Projections (starting from last period.)</em>";
     var pTable = "<table><thead><tr>";
     for (var i = 0; i < proCols.length; i++) {
@@ -228,12 +235,13 @@ function putOverview(finGlob) {
     var nwga = finGlob.nwga[0];
     var enwt = finGlob.enwt;
     var mdfbal = finGlob.mdfbal[0];
+    var svbal = svData.SBal;
     var eTrade = finGlob.eTrade[0];
     var stockData = finGlob.stock;
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
     genOverviewStock(stockData, eTrade);
-    genOverviewMortgage(mortData, amSch, mdfbal);
+    genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }
 
