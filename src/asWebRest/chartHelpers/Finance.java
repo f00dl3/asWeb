@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 30 Mar 2020
+Updated: 25 Apr 2020
  */
 
 package asWebRest.chartHelpers;
@@ -170,8 +170,9 @@ public class Finance {
 		    	JSONObject thisObject = dataIn.getJSONObject(i);
 			    JSONObject tSubData = new JSONObject(thisObject.getString("jsonData"));
 			    JSONObject tTicker = tSubData.getJSONObject(symbol);
+			    String thisValue = tTicker.getString("valueEach");
 			    ch_Labels.put(thisObject.getString("AsOf"));
-			    ch_Data.put(tTicker.getString("valueEach"));
+			    ch_Data.put(thisValue);			
 		    } catch (Exception e) { }
 		}
 		ch_Glob

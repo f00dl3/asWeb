@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 28 Mar 2020
+Updated: 30 Apr 2020
 */
 
 package asUtilsPorts;
@@ -15,6 +15,7 @@ import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.KansasGasHook;
 import asWebRest.hookers.ZillowAPIHook;
 import asWebRest.secure.JunkyPrivate;
+import asWebRest.secure.MortgageBeans;
 import asWebRest.shared.WebCommon;
 
 import java.sql.*;
@@ -26,6 +27,7 @@ public class GetDaily {
 	public static String getDaily(Connection dbc, int daysBack) {
 
 		DateTime rightNow = new DateTime();
+		MortgageBeans mb = new MortgageBeans();
 		
 		CF6Daily cf6 = new CF6Daily();
 		EvergyAPIHook evergy = new EvergyAPIHook();
@@ -52,9 +54,13 @@ public class GetDaily {
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM FB_CFSV59 WHERE Date <= current_date))),"
 			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM FB_Assets WHERE Type = 'F'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'LI'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CR'),"
-			+ "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day),1,"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CA'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CR'),";
+		if(mb.getPayed() == 0) {
+			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day),1,";
+		} else {
+			autoNetWorthSQLQuery += " 0.0 AS MBal,";
+		}
+			autoNetWorthSQLQuery += "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CA'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'NV'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'HM'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'AU'),"

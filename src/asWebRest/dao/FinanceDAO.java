@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 Apr 2020
+Updated: 30 Apr 2020
 */
 
 package asWebRest.dao;
@@ -299,10 +299,12 @@ public class FinanceDAO {
     }
     
     private JSONArray enw(Connection dbc) {
-        final String query_FBook_ENW = "SELECT SUM(Assets) AS NetWorth FROM (" +
-                " SELECT SUM(Value) AS Assets FROM Core.FB_Assets UNION ALL" +
-                " SELECT -(min(CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS DECIMAL(10, 1)))) AS Assets FROM Core.FB_WFML35 WHERE DueDate < current_date + interval '30' day UNION ALL" +
-                " SELECT SUM(Credit-Debit) AS Assets FROM Core.FB_CFCK01 WHERE Date <= current_date UNION ALL" +
+        String query_FBook_ENW = "SELECT SUM(Assets) AS NetWorth FROM (" +
+                " SELECT SUM(Value) AS Assets FROM Core.FB_Assets UNION ALL";
+        if(mb.getPayed() == 0) {
+                query_FBook_ENW += " SELECT -(min(CAST((@runtot := @runtot + (@runtot * (("+mb.getMortRate()+"/12)/100)) - (Extra + "+mb.getMortPayment()+")) AS DECIMAL(10, 1)))) AS Assets FROM Core.FB_WFML35 WHERE DueDate < current_date + interval '30' day UNION ALL";
+        }
+        query_FBook_ENW += " SELECT SUM(Credit-Debit) AS Assets FROM Core.FB_CFCK01 WHERE Date <= current_date UNION ALL" +
                 " SELECT SUM(Credit-Debit) AS Assets FROM Core.FB_CFSV59 WHERE Date <= current_date" +
                 ") as tmp;";
         JSONArray tContainer = new JSONArray();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: 29 Jan 2020
+Updated: 17 Apr 2020
  */
 
 package asWebRest.hookers;
@@ -53,10 +53,12 @@ public class EvergyAPIHook {
 	}
     
     public void dailyJob(Connection dbc) {
-    	DateTime tDateTime = new DateTime().minusDays(2);
+    	DateTime tDateTimeS = new DateTime().minusDays(2);
+    	DateTime tDateTimeF = new DateTime().minusDays(31);
 		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");	
-		String friendlyDate = formatOut.print(tDateTime);
-		try { updateDatabase(dbc, friendlyDate, friendlyDate); } catch (Exception e) { e.printStackTrace(); }
+		String friendlyDate = formatOut.print(tDateTimeS);
+		String friendlyDateF = formatOut.print(tDateTimeF);
+		try { updateDatabase(dbc, friendlyDate, friendlyDateF); } catch (Exception e) { e.printStackTrace(); }
     }
     
 	private Response initialLogin(Connection dbc) {

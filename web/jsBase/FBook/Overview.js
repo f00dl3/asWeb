@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 12 Apr 2020
+Updated: 30 Apr 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -12,37 +12,45 @@ function actOnSavingsSubmit(event) {
 }
 
 function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
-    var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
     var svCushion = 7000;
-    var easyPay = (mortData[0].MBal - mdfbal.Value);
-    var fastPay = (mortData[0].MBal - mdfbal.Value - (svbal-svCushion));
-    var masDate = getDate("day", 0, "dateOnly");
-    var bubble = "<div class='UBox'>Mort<br/><span>$" + (mortData[0].MBal / 1000).toFixed(1) + "K</span>" +
-            "<div class='UBoxO'>" +
-            "to payoff: <strong>$" + (easyPay/1000).toFixed(1) + "K</strong><br/>" +
-            "aggressive: <strong>$" + (fastPay/1000).toFixed(1) + "K</strong><br/>" +
-            "(assuming sv xfer of $" + (svbal-svCushion).toFixed(0) + ")<br/>" +
-            "<p><strong>Amortization</strong><br/>" +
-            "<em>Payments after today (" + masDate + ")</em><br/>";
-    var bTable = "<table><thead><tr>";
-    for (var i = 0; i < asCols.length; i++) {
-        bTable += "<th>" + asCols[i] + "</th>";
+    var svCushionMdt = 11000;
+    var outstandingAdditional = 808;
+    var actualMortgageBalance = mortData[0].MBal + outstandingAdditional;
+    var bubble = "";
+    if(actualMortgageBalance > 0) {
+        var asCols = ["DueDate", "Payment", "Extra", "Planned", "Interest", "Balance"];
+        var easyPay = actualMortgageBalance - mdfbal.Value;
+        var fastPay = actualMortgageBalance - mdfbal.Value - (svbal-svCushion);
+        var midPay = actualMortgageBalance - mdfbal.Value - (svbal-svCushionMdt);
+        var masDate = getDate("day", 0, "dateOnly");
+    	bubble = "<div class='UBox'>Mort<br/><span>$" + (actualMortgageBalance / 1000).toFixed(1) + "K</span>" +
+	            "<div class='UBoxO'>" +
+	            "to payoff: <strong>$" + (easyPay/1000).toFixed(1) + "K</strong><br/>" +
+	            "moderate: <strong>$" + (midPay/1000).toFixed(1) + "K</strong><br/>" +
+	            "aggressive: <strong>$" + (fastPay/1000).toFixed(1) + "K</strong><br/>" +
+	            "(assuming sv xfer of $" + (svbal-svCushion).toFixed(0) + ")<br/>" +
+	            "<p><strong>Amortization</strong><br/>" +
+	            "<em>Payments after today (" + masDate + ")</em><br/>";
+	    var bTable = "<table><thead><tr>";
+	    for (var i = 0; i < asCols.length; i++) {
+	        bTable += "<th>" + asCols[i] + "</th>";
+	    }
+	    bTable += "</tr></thead><tbody>";
+	    amSch.forEach(function (tams) {
+	        if (tams.DueDate >= masDate && tams.Balance >= 0.01) {
+	            bTable += "<tr>" +
+	                    "<td>" + tams.DueDate + "</td>" +
+	                    "<td>" + tams.Payment + "</td>" +
+	                    "<td>" + tams.Extra + "</td>" +
+	                    "<td>" + tams.Planned + "</td>" +
+	                    "<td>" + tams.Interest + "</td>" +
+	                    "<td>" + tams.Balance + "</td>" +
+	                    "</tr>";
+	        }
+	    });
+	    bTable += "</tbody></table>";
+	    bubble += bTable + "</div></div>";
     }
-    bTable += "</tr></thead><tbody>";
-    amSch.forEach(function (tams) {
-        if (tams.DueDate >= masDate && tams.Balance >= 0.01) {
-            bTable += "<tr>" +
-                    "<td>" + tams.DueDate + "</td>" +
-                    "<td>" + tams.Payment + "</td>" +
-                    "<td>" + tams.Extra + "</td>" +
-                    "<td>" + tams.Planned + "</td>" +
-                    "<td>" + tams.Interest + "</td>" +
-                    "<td>" + tams.Balance + "</td>" +
-                    "</tr>";
-        }
-    });
-    bTable += "</tbody></table>";
-    bubble += bTable + "</div></div>";
     dojo.byId("HoldMortgage").innerHTML = bubble;
 }
 
@@ -87,14 +95,10 @@ function genOverviewStock(stockData, eTrade) {
 	var etaBalance = eTrade.Balance;
 	var stockWorth = 0;
 	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
-    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day"];
-    var stockSymbols = [ "^DJI", "ACB", "CAR", "HAL" ];
+    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day", "Ch" ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
             "eTrade Balance: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>";
-    stockSymbols.forEach(function(sym) {
-    	bubble += "<a href='" + doCh("j", "FinStock_"+sym, null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinStock_"+sym, "th") + "' /></a>";
-    });
     bubble += "<br/><strong>Holdings</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
@@ -110,6 +114,7 @@ function genOverviewStock(stockData, eTrade) {
                     "<td>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
                     "<td>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
                     "<td>" + change + "</td>" +
+                    "<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
                     "</tr>";
         }
     );
