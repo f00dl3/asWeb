@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 30 Apr 2020
+Updated: 2 May 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -14,7 +14,7 @@ function actOnSavingsSubmit(event) {
 function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
     var svCushion = 7000;
     var svCushionMdt = 11000;
-    var outstandingAdditional = 808;
+    var outstandingAdditional = 0;
     var actualMortgageBalance = mortData[0].MBal + outstandingAdditional;
     var bubble = "";
     if(actualMortgageBalance > 0) {

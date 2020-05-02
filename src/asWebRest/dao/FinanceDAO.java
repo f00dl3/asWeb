@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 30 Apr 2020
+Updated: 2 May 2020
 */
 
 package asWebRest.dao;
@@ -363,7 +363,7 @@ public class FinanceDAO {
                 " AsLiq, AsFix, Life, Credits, Debts, Growth" +
                 " FROM Core.FB_ENWT" +
                 " WHERE" +
-                " AsOf > CURRENT_DATE - INTERVAL '365' day" +
+                " AsOf > CURRENT_DATE - INTERVAL '730' day" +
                 " AND (AsOf LIKE '%03-01%' OR AsOf LIKE '%06-01%' OR AsOf LIKE '%09-01%' OR AsOf LIKE '%12-01%')" +
                 " ORDER BY AsOf DESC LIMIT 20;";
         JSONArray tContainer = new JSONArray();
