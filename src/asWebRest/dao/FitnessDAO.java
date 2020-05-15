@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 14 Jan 2020
+Updated: 14 May 2020
 */
 
 package asWebRest.dao;
@@ -96,7 +96,9 @@ public class FitnessDAO {
                 " f.Bicycle, f.Cycling, f.BkStudT," +
                 " f.ReelMow, f.MowNotes, f.Calories," +
                 " CASE WHEN f.gpsLogRun IS NULL THEN f.RunGeoJSON ELSE null END AS RunGeoJSON," +
+                //" NULL AS RunGeoJSON," +
                 " CASE WHEN f.gpsLogCyc IS NULL THEN f.CycGeoJSON ELSE null END AS CycGeoJSON," +
+                //" NULL AS CycGeoJSON," +
                 " CASE WHEN" +
                 "   (f.gpsLogRun2 IS NULL AND f.gpsLogRun3 IS NULL AND f.gpsLogRun4 IS NULL AND" +
                 "   f.gpsLogCyc2 IS NULL AND f.gpsLogCyc3 IS NULL AND f.gpsLogCyc4 IS NULL)" +
@@ -110,13 +112,21 @@ public class FitnessDAO {
                 " f.CaloriesBurned, f.Steps, f.IntensityMinutes," +
                 " cf6.High, cf6.Low, cf6.Average, tls.Types," +
                 " CASE WHEN f.gpsLogCyc IS NOT NULL THEN true ELSE false END AS isGPSCycJSON," +
+                //" NULL AS isGPSCycJSON," +
                 " CASE WHEN f.gpsLogRun IS NOT NULL THEN true ELSE false END AS isGPSRunJSON," +
+                //" NULL AS isGPSRunJSON," +
                 " CASE WHEN f.gpsLogCyc2 IS NOT NULL THEN true ELSE false END AS isGPSCyc2JSON," +
+                //" NULL AS isGPSCyc2JSON," +
                 " CASE WHEN f.gpsLogRun2 IS NOT NULL THEN true ELSE false END AS isGPSRun2JSON," +
+                //" NULL AS isGPSRun2JSON," +
                 " CASE WHEN f.gpsLogCyc3 IS NOT NULL THEN true ELSE false END AS isGPSCyc3JSON," +
+                //" NULL AS isGPSCyc3JSON," +
                 " CASE WHEN f.gpsLogRun3 IS NOT NULL THEN true ELSE false END AS isGPSRun3JSON," +
+                //" NULL AS isGPSRun3JSON," +
                 " CASE WHEN f.gpsLogCyc4 IS NOT NULL THEN true ELSE false END AS isGPSCyc4JSON," +
+                //" NULL AS isGPSCyc4JSON," +
                 " CASE WHEN f.gpsLogRun4 IS NOT NULL THEN true ELSE false END AS isGPSRun4JSON" +
+                //" NULL AS isGPSRun4JSON," +
                 " FROM Core.Fitness f" +
                 " LEFT OUTER JOIN WxObs.CF6MCI cf6 ON f.Date = cf6.Date" +
                 " LEFT OUTER JOIN Core.AO_TLS tls ON f.Date = tls.DateUsed" +

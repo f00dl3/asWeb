@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 14 Jan 2020
+Updated: 2 May 2020
  */
 
 var myHeight = 67;
@@ -156,7 +156,7 @@ function getFitnessAllData(doReload, inXdt1, inXdt2) {
                 	processFitnessAll(data.allRecs, data.autoMpg[0]);
 	                fitnessCalories(data.calories);
 	                fitnessPlans(data.plans);
-	                fitnessStrength(data.strength);
+	                //fitnessStrength(data.strength);
 	                fitnessToday(data.today[0]);
 	                fitnessYesterday(data.yesterday[0]);
 	                fitnessBubbles(

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 31 Mar 2020
+Updated: 15 May 2020
 */
 
 package asUtilsPorts;
@@ -35,14 +35,7 @@ public class Feeds {
 
 		String returnData = "Fetch 1 minute feeds:\n";
 
-		ANSSQuakes anssQuakes = new ANSSQuakes();
-    	AlertMe alertMe = new AlertMe();
-		NWSWarnings nwsWarnings = new NWSWarnings();
-
-		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
-    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
-    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+		// Disabled due to performance hit
 
 		return returnData;
 
@@ -52,6 +45,9 @@ public class Feeds {
 
 		String returnData = "Fetch 2 minute feeds:\n";
 
+		ANSSQuakes anssQuakes = new ANSSQuakes();
+    	AlertMe alertMe = new AlertMe();
+		NWSWarnings nwsWarnings = new NWSWarnings();
     	CamBeans camBeans = new CamBeans();
     	CamPusher camPusher = new CamPusher();
     	CamWorkerURL cwURL = new CamWorkerURL();
@@ -62,6 +58,10 @@ public class Feeds {
         
 		final File camPath = camBeans.getCamPath();
 
+		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
+    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
+    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
 		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); }        
         try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
@@ -75,7 +75,7 @@ public class Feeds {
     
     public static String do5Minute(Connection dbc) {
     	
-    	String returnData = "Fetch 5/10 minute feeds:\n";
+    	String returnData = "Fetch 5-15 minute feeds:\n";
 
         CamSensors camSensors = new CamSensors();
         GetSPC getSPC = new GetSPC();
@@ -124,7 +124,7 @@ public class Feeds {
     		RadarNightly.process(dbc);
     	}
     	
-    	if(rightNow.getHourOfDay() == 6) {
+    	if(rightNow.getHourOfDay() == 9) {
     		returnData += GetDaily.getDaily(dbc, 1);
     	}
     	

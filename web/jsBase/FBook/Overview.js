@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 2 May 2020
+Updated: 15 May 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -14,7 +14,7 @@ function actOnSavingsSubmit(event) {
 function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
     var svCushion = 7000;
     var svCushionMdt = 11000;
-    var outstandingAdditional = 0;
+    var outstandingAdditional = 808;
     var actualMortgageBalance = mortData[0].MBal + outstandingAdditional;
     var bubble = "";
     if(actualMortgageBalance > 0) {
@@ -95,7 +95,7 @@ function genOverviewStock(stockData, eTrade) {
 	var etaBalance = eTrade.Balance;
 	var stockWorth = 0;
 	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
-    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day", "Ch" ];
+    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day" ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
             "eTrade Balance: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>";
@@ -114,7 +114,7 @@ function genOverviewStock(stockData, eTrade) {
                     "<td>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
                     "<td>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
                     "<td>" + change + "</td>" +
-                    "<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
+                    //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
                     "</tr>";
         }
     );

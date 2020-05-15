@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 24 Feb 2020
+Updated: 7 May 2020
 */
 
 package asUtilsPorts.Cams;
@@ -48,6 +48,7 @@ public class CamWorkerHF {
 		File webC3File = new File(camPath+"/webc3-temp.jpeg");
 		File webC4File = new File(camPath+"/webc4-temp.jpeg");
 		File webC5File = new File(camPath+"/webc5-temp.jpeg");
+		File webC6File = new File(camPath+"/webc6-temp.jpeg");
 		File webcYaFile = new File(camPath+"/webc"+instance+"a-temp.jpeg");
 		File webcYbFile = new File(camPath+"/webc"+instance+"b-temp.jpeg");
 		File webcYFile = new File(camPath+"/webc"+instance+"-temp.jpeg");
@@ -74,11 +75,12 @@ public class CamWorkerHF {
             if(!webC3File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam3 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC3File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
             if(!webC4File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam4 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC4File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
             if(!webC5File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam5 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC5File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
+            //if(!webC6File.exists()) { wc.runProcess("convert -size "+capRes+" -gravity center -annotate 0 \"Cam6 temporarily unavailable!\" -pointsize 42 -fill Yellow xc:navy "+webC6File.getPath()+" > /dev/null 2>&1 < /dev/null"); }
 
 			String convertA = "convert \\( "+webC4File.getPath()+" -resize "+capRes+"! "+webC1File.getPath()+" -resize "+capRes+"! "+webCWFile.getPath()+" -resize "+capRes+"! +append \\)"
 				+ " -background Black -append "+webcYaFile.getPath();
 
-			String convertB = "convert \\( "+webC3File.getPath()+" -resize "+capRes+"! " + webC5File.getPath()+" -resize "+capRes+"! "+webC2File.getPath()+" -resize "+capRes+"! +append \\)"
+			String convertB = "convert \\( "+webC3File.getPath()+" -resize "+capRes+"! " + webC5File.getPath()+" -resize "+capRes+"! "+webC2File.getPath()+" -resize "+capRes+/*"! "+webC6File.getPath()+" -resize "+capRes+*/"! +append \\)"
 				+ " \\( -gravity south -background Black -pointsize 36 -fill Yellow label:\""+camCaption+"\" +append \\)"
 				+ " -background Black -append "+webcYbFile.getPath();
 

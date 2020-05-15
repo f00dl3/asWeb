@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 3 Feb 2020
+Updated: 7 May 2020
 */
 
 package asUtilsPorts.Cams;
@@ -23,12 +23,11 @@ public class CamWorkerStream {
 		}
 	}
     
-    private static void ffmpegCall(String url, File outFile, String capRes) {
+    private static void ffmpegCall(String url, File outFile, String capRes, int fps) {
 
     	WebCommon wc = new WebCommon();
     	
-    	final int fps = 8;
-        final int killTime = (1*60)*60;
+        final int killTime = (1*15)*60;
     	final int tester = 1;
         final int timeout = -1; //(60*1000);
         final int threadTimeout = 5;
@@ -36,8 +35,10 @@ public class CamWorkerStream {
         String ffmpegCall = "flock -n "+outFile.toString()+".lock" +
         		" timeout --kill-after="+killTime+" "+killTime +
         		" ffmpeg -y" +
-		" -i " + url +
+        		//" -rtsp_transport tcp" +
+        		" -i " + url +
                 " -timeout " + timeout +
+                " -stimeout " + timeout +
                 " -threads 1" +
                 " -f image2" +
                 " -filter:v fps=fps="+fps +
@@ -71,21 +72,24 @@ public class CamWorkerStream {
 		File c3_file = new File(camPath+"/webc3-temp.jpeg");
 		File c4_file = new File(camPath+"/webc4-temp.jpeg");
 		File c5_file = new File(camPath+"/webc5-temp.jpeg");
+		File c6_file = new File(camPath+"/webc6-temp.jpeg");
         
-	//final String c1_url = "http://localhost:8555/camLive.jpg";
+		//final String c1_url = "http://localhost:8555/camLive.jpg";
         final String c1_url = "rtsp://localhost:8555/unicast";
         final String c2_url = "rtsp://" + ipCamUser + ":" + ipCamPass + "@" + jp.getIpForCam2() + ":88/videoMain";
         final String c3_url = "rtsp://" + ipCamUser + ":" + ipCamPass + "@" + jp.getIpForCam1() + ":88/videoMain";
         final String c4_url = "rtsp://" + jp.getIpForRaspPi1() + ":8554/unicast";
         final String c5_url = "rtsp://admin:@" + jp.getIpForCam3() + ":88/videoMain";
+        //final String c6_url = "rtsp://" + jp.getIpForRaspPi1() + ":8554/unicast";
         
 		ArrayList<Runnable> cs = new ArrayList<Runnable>();
 		//cs.add(() -> camImageGet(c1_url, c1_file));
-		cs.add(() -> ffmpegCall(c1_url, c1_file, capRes));
-		cs.add(() -> ffmpegCall(c2_url, c2_file, capRes));
-		cs.add(() -> ffmpegCall(c3_url, c3_file, capRes));
-		cs.add(() -> ffmpegCall(c4_url, c4_file, capRes));
-		cs.add(() -> ffmpegCall(c5_url, c5_file, capRes));
+		cs.add(() -> ffmpegCall(c1_url, c1_file, capRes, 2));
+		cs.add(() -> ffmpegCall(c2_url, c2_file, capRes, 4));
+		cs.add(() -> ffmpegCall(c3_url, c3_file, capRes, 8));
+		cs.add(() -> ffmpegCall(c4_url, c4_file, capRes, 2));
+		cs.add(() -> ffmpegCall(c5_url, c5_file, capRes, 8));
+		//cs.add(() -> ffmpegCall(c6_url, c6_file, capRes, 2));
 		tr.runProcesses(cs, true, true);
                 
 	}
