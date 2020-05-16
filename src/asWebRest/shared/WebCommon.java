@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 18 Feb 2020
+Updated: 15 May 2020
 */
 
 package asWebRest.shared;
@@ -394,7 +394,7 @@ public class WebCommon {
             }
             pStatement.execute();
             messageBack = "Query ran - Success!";
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { }
         return messageBack;
     }
         
@@ -430,7 +430,7 @@ public class WebCommon {
             }
             pStatement.execute();
             messageBack = "Query ran - Success!";
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { }
         return messageBack;
     }
     

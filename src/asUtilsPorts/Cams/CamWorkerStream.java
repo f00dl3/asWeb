@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 7 May 2020
+Updated: 16 May 2020
 */
 
 package asUtilsPorts.Cams;
@@ -27,7 +27,7 @@ public class CamWorkerStream {
 
     	WebCommon wc = new WebCommon();
     	
-        final int killTime = (1*15)*60;
+        final int killTime = (1*30)*60;
     	final int tester = 1;
         final int timeout = -1; //(60*1000);
         final int threadTimeout = 5;
@@ -72,7 +72,7 @@ public class CamWorkerStream {
 		File c3_file = new File(camPath+"/webc3-temp.jpeg");
 		File c4_file = new File(camPath+"/webc4-temp.jpeg");
 		File c5_file = new File(camPath+"/webc5-temp.jpeg");
-		File c6_file = new File(camPath+"/webc6-temp.jpeg");
+		//File c6_file = new File(camPath+"/webc6-temp.jpeg");
         
 		//final String c1_url = "http://localhost:8555/camLive.jpg";
         final String c1_url = "rtsp://localhost:8555/unicast";
@@ -86,9 +86,9 @@ public class CamWorkerStream {
 		//cs.add(() -> camImageGet(c1_url, c1_file));
 		cs.add(() -> ffmpegCall(c1_url, c1_file, capRes, 2));
 		cs.add(() -> ffmpegCall(c2_url, c2_file, capRes, 4));
-		cs.add(() -> ffmpegCall(c3_url, c3_file, capRes, 8));
+		cs.add(() -> ffmpegCall(c3_url, c3_file, capRes, 4));
 		cs.add(() -> ffmpegCall(c4_url, c4_file, capRes, 2));
-		cs.add(() -> ffmpegCall(c5_url, c5_file, capRes, 8));
+		cs.add(() -> ffmpegCall(c5_url, c5_file, capRes, 4));
 		//cs.add(() -> ffmpegCall(c6_url, c6_file, capRes, 2));
 		tr.runProcesses(cs, true, true);
                 

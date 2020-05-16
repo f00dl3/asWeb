@@ -151,7 +151,7 @@ public class RadarImageProcessor {
 							tLabel += tTempR;// + "/" + tDewpR + "\n" +
 								//tWindD + "@" + tWindS;
 						}
-					} catch (Exception e) { e.printStackTrace(); }
+					} catch (Exception e) { }
 					rData += " -annotate +"+weOffset+"+"+nsOffset+" '" + tLabel + "'";		
 				} else {
 					//rData += " = FALSE!";

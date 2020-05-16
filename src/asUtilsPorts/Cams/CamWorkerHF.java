@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Aug 2017
-Updated: 7 May 2020
+Updated: 16 May 2020
 */
 
 package asUtilsPorts.Cams;
@@ -48,7 +48,7 @@ public class CamWorkerHF {
 		File webC3File = new File(camPath+"/webc3-temp.jpeg");
 		File webC4File = new File(camPath+"/webc4-temp.jpeg");
 		File webC5File = new File(camPath+"/webc5-temp.jpeg");
-		File webC6File = new File(camPath+"/webc6-temp.jpeg");
+		//File webC6File = new File(camPath+"/webc6-temp.jpeg");
 		File webcYaFile = new File(camPath+"/webc"+instance+"a-temp.jpeg");
 		File webcYbFile = new File(camPath+"/webc"+instance+"b-temp.jpeg");
 		File webcYFile = new File(camPath+"/webc"+instance+"-temp.jpeg");
