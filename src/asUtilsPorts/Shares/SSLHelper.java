@@ -1,7 +1,7 @@
 /*
 created by Anthony Stump
 Created on 23 Nov 2019
-Updated on 29 Jan 2020
+Updated on 16 May 2020
 Based off web code
  */
 
@@ -24,7 +24,7 @@ public class SSLHelper {
     
     public final String getApiUpload() { return apiUpload; }
     public final String getApiUploadPi() { return apiUploadPi; }
-        
+    
     static {
         javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
         new javax.net.ssl.HostnameVerifier(){
@@ -40,8 +40,9 @@ public class SSLHelper {
     }
     
     static public Connection getConnection(String url){
+    	int socketTimeout = 5 * 1000; // 0 for infinite
         return Jsoup.connect(url)
-		.timeout(0)
+		.timeout(socketTimeout)
 		.sslSocketFactory(SSLHelper.socketFactory());
     }
 

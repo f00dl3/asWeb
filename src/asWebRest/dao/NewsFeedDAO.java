@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 12 Feb 2020
+Updated: 16 May 2020
 */
 
 package asWebRest.dao;
@@ -60,7 +60,7 @@ public class NewsFeedDAO {
     	tParams.add(1, sTimeNow);
     	final String query_RecentEmail = "SELECT " +
 	        " MessageID, Received, FromAddress, Subject, Body, GetTime, ActionTaken" +
-	        " FROM Feeds.Messages WHERE GetTime BETWEEN ? AND ? AND ActionTaken=0 ORDER BY GetTime";
+	        " FROM Feeds.Messages WHERE GetTime BETWEEN ? AND ? AND ActionTaken=0 ORDER BY GetTime DESC LIMIT 25;";
 	        JSONArray tContainer = new JSONArray();
 	        try {
 	            ResultSet resultSet = wc.q2rs1c(dbc, query_RecentEmail, tParams);
