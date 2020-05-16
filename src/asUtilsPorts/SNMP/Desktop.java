@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 29 Jan 2020
+Last updated: 16 May 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -247,31 +247,31 @@ public class Desktop {
                         if(line.contains("Core,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
-                                mySQLSizeCore = Double.parseDouble(strThisVal);
+                                try { mySQLSizeCore = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsCore = drc.totalRowCountFromDatabase(dbc, "Core");
                         }	
                         if(line.contains("Feeds,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
-                                mySQLSizeFeeds = Double.parseDouble(strThisVal);
+                                try { mySQLSizeFeeds = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsFeeds = drc.totalRowCountFromDatabase(dbc, "Feeds");
                         }	
                         if(line.contains("net_snmp,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
-                                mySQLSizeNetSNMP = Double.parseDouble(strThisVal);
+                                try { mySQLSizeNetSNMP = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsNetSNMP = drc.totalRowCountFromDatabase(dbc, "net_snmp");
                         }	
                         if(line.contains("WebCal,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
-                                mySQLSizeWebCal = Double.parseDouble(strThisVal);
+                                try { mySQLSizeWebCal = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsWebCal = drc.totalRowCountFromDatabase(dbc, "WebCal");
                         }	
                         if(line.contains("WxObs,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
-                                mySQLSizeWxObs = Double.parseDouble(strThisVal);
+                                try { mySQLSizeWxObs = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsWxObs = drc.totalRowCountFromDatabase(dbc, "WxObs");
                         }	
                 }

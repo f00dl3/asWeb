@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 29 Jan 2020
+Updated: 16 May 2020
 */
 
 package asUtilsPorts;
@@ -97,8 +97,9 @@ public class CamPusher {
         try { wc.copyFile(mp4Out.toString(), camWebRoot.toString()+"/_Loop.mp4"); } catch (IOException ix) { ix.printStackTrace(); }
         wc.deleteDir(dumpTemp);
        
-        try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (Exception ix) { ix.printStackTrace(); }
+        try { GDrive.uploadFile(mp4Out, "video/mp4", parentFolder); } catch (Exception ix) { }
 
+        // Disable this if needed - for Discord bot.
         dumpTemp.mkdirs();
         wc.runProcess("mv "+pushTempPub.toString()+"/*.jpeg "+dumpTemp.toString());
         wc.runProcess("find "+dumpTemp.toString()+"/ -type f -size 0b -delete");

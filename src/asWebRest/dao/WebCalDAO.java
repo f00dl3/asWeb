@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Mar 2018
-Updated: 24 Dec 2019
+Updated: 16 May 2020
 */
 
 package asWebRest.dao;
@@ -67,9 +67,11 @@ public class WebCalDAO {
 	            	String fDate = tObject.getString("cal_type").toUpperCase();
 	            	if(fDate.contentEquals("MONTHLYBYDAY")) { fDate = "MONTHLY"; }
             		fObject.put("fDate",  fDate);
-	            	if(wc.isSet(tObject.getString("cal_byday"))) {
-		            	fObject.put("byDay",  tObject.getString("cal_byday"));
-	            	}
+	            	try {
+	            		if(wc.isSet(tObject.getString("cal_byday"))) {
+	            			fObject.put("byDay",  tObject.getString("cal_byday"));
+	            		}
+	            	} catch (Exception e) { }
 	            	if(wc.isSet(Integer.toString(tObject.getInt("cal_end")))) {
 	            		final String formatted_calEnd = String.format("%08d", tObject.getInt("cal_end"));
 	            		final String formatted_calEndTime = String.format("%06d", tObject.getInt("cal_endtime"));

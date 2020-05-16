@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Raspberry Pi 2 class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 29 Jan 2020
+Last updated: 16 May 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -67,7 +67,7 @@ public class Pi2Pusher {
     
     public static void main(String[] args) {
         Pi2Pusher pi2p = new Pi2Pusher();
-        pi2p.snmpPi2();
+        try { pi2p.snmpPi2(); } catch (Exception e) { }
     }
    
     

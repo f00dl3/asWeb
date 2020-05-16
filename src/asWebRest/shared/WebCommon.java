@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 15 May 2020
+Updated: 16 May 2020
 */
 
 package asWebRest.shared;
@@ -640,7 +640,7 @@ public class WebCommon {
 			content = content.trim().replaceAll(toFind, replaceTo);
 			Files.write(path, content.getBytes(charset));
 		}
-		catch (IOException io) { io.printStackTrace(); }
+		catch (IOException io) { }
 	}
 
 	public double sumListDouble(List<Double> dList) {

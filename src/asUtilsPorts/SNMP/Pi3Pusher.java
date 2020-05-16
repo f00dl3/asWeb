@@ -1,7 +1,7 @@
 /*
 SNMP Walk -> Database --- Raspberry Pi 3 class
 Java created: 5 Mar 2020
-Last updated: on creation
+Last updated: 16 May 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -66,7 +66,7 @@ public class Pi3Pusher {
     
     public static void main(String[] args) {
         Pi3Pusher pi3p = new Pi3Pusher();
-        pi3p.snmpPi3();
+        try { pi3p.snmpPi3(); } catch (Exception e) { }
     }
    
     

@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 1 Feb 2020
+Last updated: 16 May 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -50,7 +50,7 @@ public class DesktopPusher {
         Thread s1t1 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("sensors", sensorFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
         Thread s1t2 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("snmpwalk localhost .", theWalkFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
         Thread s1t3 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("netstat -W | grep \"astump-Desktop\" | grep \"ESTAB\"", ns5File, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
-        Thread s1t4 = new Thread(new Runnable() { public void run() { wc.jsoupOutFile("http://127.0.0.1/cgi-bin/apcupsd/upsstats.cgi", upsFile); }});		
+        Thread s1t4 = new Thread(new Runnable() { public void run() { try { wc.jsoupOutFile("http://127.0.0.1/cgi-bin/apcupsd/upsstats.cgi", upsFile); } catch (Exception e) { } }});		
         Thread s1t5 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("du /var/lib/mysql", duMySQLFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
         Thread s1t6 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("nvidia-smi", nvOutFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
         Thread thListA[] = { s1t1, s1t2, s1t3, s1t4, s1t5, s1t6 };
@@ -154,7 +154,7 @@ public class DesktopPusher {
     
     public static void main(String[] args) {
         DesktopPusher dp = new DesktopPusher();
-        dp.snmpDesktopPusher();
+        try { dp.snmpDesktopPusher(); } catch (Exception e) { }
     }
     
     
