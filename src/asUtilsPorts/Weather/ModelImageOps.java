@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 12 Oct 2017
-Updated: 7 Feb 2020
+Updated: 16 May 2020
 */
 
 package asUtilsPorts.Weather;
@@ -21,6 +21,7 @@ public class ModelImageOps {
 
 	public void main(String getHour, File xml2Path, String wwwOutBase) {
 
+		/* Disabled as unused 5/16/20
 		System.out.println("DEBUG: MIO Paths: \n" +
 			"xml2Path: " + xml2Path.toString() + "\n" +
 			"wwwOutBase: " + wwwOutBase);
@@ -178,6 +179,9 @@ public class ModelImageOps {
 		//StumpJunk.runProcess("chown www-data "+wwwOutArchive.getPath()+"/"+modelRunString+".zip");
 		wc.runProcess("(ls "+wwwOutArchive.getPath()+"/*.zip -t | head -n 12; ls "+wwwOutArchive.getPath()+"/*.zip)|sort|uniq -u|xargs rm");
 
+	
+	*/
+		
 	}
 
 }
