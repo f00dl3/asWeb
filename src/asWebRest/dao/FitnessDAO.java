@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 14 May 2020
+Updated: 21 May 2020
 */
 
 package asWebRest.dao;
@@ -267,8 +267,8 @@ public class FitnessDAO {
                 " Date, Type, GeoJSON FROM (" +
                 " SELECT Date, 'R' AS Type, RunGeoJSON as GeoJSON FROM Core.Fitness WHERE RunGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
                 " SELECT Date, 'C' AS Type, CycGeoJSON as GeoJSON FROM Core.Fitness WHERE CycGeoJSON IS NOT NULL AND " + commonRouteCheck + " UNION ALL" +
-                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND " + commonRouteCheck + ") as tmp" +
-                " ORDER BY Date DESC";
+                " SELECT Date, 'A' AS Type, AltGeoJSON as GeoJSON FROM Core.Fitness WHERE AltGeoJSON IS NOT NULL AND " + commonRouteCheck + ") as tmp;";
+                //" ORDER BY Date DESC";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_AllRoutes, null);

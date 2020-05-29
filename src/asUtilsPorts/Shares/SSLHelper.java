@@ -1,8 +1,7 @@
 /*
 created by Anthony Stump
 Created on 23 Nov 2019
-Updated on 16 May 2020
-Based off web code
+Updated on 20 May 2020
  */
 
 package asUtilsPorts.Shares;
@@ -40,7 +39,14 @@ public class SSLHelper {
     }
     
     static public Connection getConnection(String url){
-    	int socketTimeout = 5 * 1000; // 0 for infinite
+    	int socketTimeout = 2 * 60 * 1000;
+        return Jsoup.connect(url)
+		.timeout(socketTimeout)
+		.sslSocketFactory(SSLHelper.socketFactory());
+    }
+
+    static public Connection getConnectionUnsafe(String url){
+    	int socketTimeout = 0;
         return Jsoup.connect(url)
 		.timeout(socketTimeout)
 		.sslSocketFactory(SSLHelper.socketFactory());

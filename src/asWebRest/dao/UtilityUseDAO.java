@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 29 Jan 2020
+Updated: 26 May 2020
 */
 
 package asWebRest.dao;
@@ -172,7 +172,7 @@ public class UtilityUseDAO {
 
     public String setElectricityUse(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_kWhUse = "INSERT IGNORE INTO Core.UseElecD" +
+        String query_kWhUse = "REPLACE INTO Core.UseElecD" +
         		" (Date, kWh, kWh_Demand, kWh_PeakDemand, PeakDemandTime, Cost)" +
         		" VALUES (?,?,?,?,?,?);";
         try { returnData = wc.q2do1c(dbc, query_kWhUse, qParams); } catch (Exception e) { e.printStackTrace(); }
@@ -181,7 +181,7 @@ public class UtilityUseDAO {
 
     public String setGasUse(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_Gas = "INSERT INTO Core.UseGas" +
+        String query_Gas = "REPLACE INTO Core.UseGas" +
         		" (Month, TotalMCF, BilledAmount, BilledDays)" +
         		" VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE" +
         		" TotalMCF=?, BilledAmount=?, BilledDays=?;";

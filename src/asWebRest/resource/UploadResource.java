@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 5 Mar 2020
+Updated: 20 Mar 2020
  */
 
 package asWebRest.resource;
@@ -49,7 +49,7 @@ public class UploadResource extends ServerResource {
         if(!cacherFolder.exists()) { cacherFolder.mkdirs(); }
         
         Representation result = null;
-        int sizeThreshold = 1000240;
+        int sizeThreshold = 10000240;
         if(entity != null & MediaType.MULTIPART_FORM_DATA.equals(
                 entity.getMediaType(), true)) {
             DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -64,6 +64,7 @@ public class UploadResource extends ServerResource {
                         found = true;
                         StringBuilder sb = new StringBuilder("media type: ");
                         String fileName = fi.getName();
+                    	System.out.println("UPLOAD: Starting upload of: " + fileName);
                         File outFile = new File(cacherFolder.toString() + "/" + fileName);
                         sb
                                .append(fi.getContentType()).append("\n")

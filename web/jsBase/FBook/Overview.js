@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 15 May 2020
+Updated: 28 May 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -12,8 +12,8 @@ function actOnSavingsSubmit(event) {
 }
 
 function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
-    var svCushion = 7000;
-    var svCushionMdt = 11000;
+    var svCushion = 8000;
+    var svCushionMdt = 10000;
     var outstandingAdditional = 808;
     var actualMortgageBalance = mortData[0].MBal + outstandingAdditional;
     var bubble = "";
@@ -94,12 +94,19 @@ function genOverviewSavings(svData, svBk) {
 function genOverviewStock(stockData, eTrade) {
 	var etaBalance = eTrade.Balance;
 	var stockWorth = 0;
-	stockData.forEach(function(sd) { if (sd.Count != 0) { stockWorth += (sd.Count * parseFloat(sd.LastValue)); } });
+	var vestDiff = etaBalance - eTradeVested;
+	stockData.forEach(function(sd) { 
+		if (sd.Count != 0) { 
+			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
+			console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
+			} 
+		});
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day" ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
-            "eTrade Balance: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>";
-    bubble += "<br/><strong>Holdings</strong><br/>";
+            "eTrade: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>" +
+            "Change: <strong>$" + vestDiff.toFixed(2) + "</strong><br/>";
+    bubble += "<br/><strong>Watching</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
         bTable += "<th>" + sCols[i] + "</th>";
@@ -107,13 +114,15 @@ function genOverviewStock(stockData, eTrade) {
     bTable += "</tr></thead><tbody>";
     stockData.forEach(function (sd) {
     	let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2); 
+    	let txtColor = "yellow";
+    	if(sd.Count === 0) { txtColor = "white"; }
         bTable += "<tr>" +
-                    "<td>" + sd.Symbol + "</td>" +
-                    "<td>" + sd.Description + "</td>" +
-                    "<td>" + sd.Count + "</td>" +
-                    "<td>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
-                    "<td>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
-                    "<td>" + change + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + sd.Symbol + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + sd.Description + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
+                    "<td style='color: " + txtColor + "'>" + change + "</td>" +
                     //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
                     "</tr>";
         }

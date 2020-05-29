@@ -1,23 +1,23 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 16 May 2020
+Updated: 17 May 2020
 */
 
 package asUtilsPorts;
 
-//import java.io.File;
+import java.io.File;
 import java.sql.Connection;
 
 import org.joda.time.DateTime;
 
 import asUtilsPorts.CamPusher;
-//import asUtilsPorts.Cams.CamBeans;
-//import asUtilsPorts.Cams.CamSensors;
-//import asUtilsPorts.Cams.CamWorkerURL;
+import asUtilsPorts.Cams.CamBeans;
+import asUtilsPorts.Cams.CamSensors;
+import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.ANSSQuakes;
 import asUtilsPorts.Feed.GetSPC;
-//import asUtilsPorts.Feed.KCScout;
+import asUtilsPorts.Feed.KCScout;
 import asUtilsPorts.Feed.NHCFetch;
 import asUtilsPorts.Feed.NWSWarnings;
 import asUtilsPorts.SNMP.Router;
@@ -35,8 +35,15 @@ public class Feeds {
 
 		String returnData = "Fetch 1 minute feeds:\n";
 
-		// Disabled due to performance hit
+		ANSSQuakes anssQuakes = new ANSSQuakes();
+    	AlertMe alertMe = new AlertMe();
+		NWSWarnings nwsWarnings = new NWSWarnings();
 
+		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); } 
+    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }    
+    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	
 		return returnData;
 
 	}
@@ -45,24 +52,26 @@ public class Feeds {
 
 		String returnData = "Fetch 2 minute feeds:\n";
 
-		ANSSQuakes anssQuakes = new ANSSQuakes();
-    	AlertMe alertMe = new AlertMe();
-		NWSWarnings nwsWarnings = new NWSWarnings();
+    	CamBeans camBeans = new CamBeans();
     	CamPusher camPusher = new CamPusher();
+    	CamWorkerURL cwURL = new CamWorkerURL();
+        GetSPC getSPC = new GetSPC();
     	Mailer mailer = new Mailer();
         Router routerSnmp = new Router();
         Stocks stocks = new Stocks();
         UbuntuVM uvmSnmp = new UbuntuVM();        
 
-        try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }
-		try { anssQuakes.doAnssQuakes(dbc); } catch (Exception e) { e.printStackTrace(); }     	
-    	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }     
-    	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+		final File camPath = camBeans.getCamPath();
+        try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); } 
+        try { mailer.mailForSQL(dbc); } catch (Exception e) { e.printStackTrace(); }    
 		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
+    	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
+    	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += getSPC.checkSentWatch(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         return returnData;
             
@@ -72,26 +81,17 @@ public class Feeds {
     	
     	String returnData = "Fetch 5-15 minute feeds:\n";
 
-    	//CamBeans camBeans = new CamBeans();
-        //CamSensors camSensors = new CamSensors();
-    	//CamWorkerURL cwURL = new CamWorkerURL();
-        GetSPC getSPC = new GetSPC();
-        //KCScout kcScout = new KCScout();
+        CamSensors camSensors = new CamSensors();
+        KCScout kcScout = new KCScout();
         Radar radar = new Radar();
         Reddit reddit = new Reddit();
         Stations stations = new Stations();
 
-		//final File camPath = camBeans.getCamPath();
-        //try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); } 
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
-    	//try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
+    	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
     	try { stations.fetch(false, "Wunder"); } catch (Exception e) { e.printStackTrace(); }
-    	//try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
-    	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += reddit.checkIfSent(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { returnData += getSPC.checkSentWatch(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	

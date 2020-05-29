@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Feb 2018
-Updated: 15 Dec 2019
+Updated: 17 May 2019
  */
 
 package asWebRest.resource;
@@ -118,42 +118,42 @@ public class SnmpResource extends ServerResource {
                     String uptime = "";
                     try { 
                         SnmpWalk snmpWalk = new SnmpWalk();
-                        try { cpu1Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196608")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu2Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196609")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu3Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196610")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu4Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196611")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu5Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196612")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu6Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196613")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu7Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196614")); } catch (Exception e) { e.printStackTrace(); }
-                        try { cpu8Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196615")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoNode = Integer.parseInt(snmpWalk.get("desktop", "dskPercentNode", "3")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoRx = Long.parseLong(snmpWalk.get("desktop", "ssIORawReceived", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { diskIoTx = Long.parseLong(snmpWalk.get("desktop", "ssIORawSent", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { eth0In = Long.parseLong(snmpWalk.get("desktop", "ifInOctets", "2")); } catch (Exception e) { e.printStackTrace(); }
-                        try { eth0Out = Long.parseLong(snmpWalk.get("desktop", "ifOutOctets", "2")); } catch (Exception e) { e.printStackTrace(); }
-                        try { hdd0Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "31")); } catch (Exception e) { e.printStackTrace(); }
+                        try { cpu1Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196608")); } catch (Exception e) { }
+                        try { cpu2Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196609")); } catch (Exception e) { }
+                        try { cpu3Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196610")); } catch (Exception e) { }
+                        try { cpu4Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196611")); } catch (Exception e) { }
+                        try { cpu5Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196612")); } catch (Exception e) { }
+                        try { cpu6Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196613")); } catch (Exception e) { }
+                        try { cpu7Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196614")); } catch (Exception e) { }
+                        try { cpu8Load = Integer.parseInt(snmpWalk.get("desktop", "hrProcessorLoad", "196615")); } catch (Exception e) { }
+                        try { diskIoNode = Integer.parseInt(snmpWalk.get("desktop", "dskPercentNode", "3")); } catch (Exception e) { }
+                        try { diskIoRx = Long.parseLong(snmpWalk.get("desktop", "ssIORawReceived", "0")); } catch (Exception e) { }
+                        try { diskIoTx = Long.parseLong(snmpWalk.get("desktop", "ssIORawSent", "0")); } catch (Exception e) { }
+                        try { eth0In = Long.parseLong(snmpWalk.get("desktop", "ifInOctets", "2")); } catch (Exception e) { }
+                        try { eth0Out = Long.parseLong(snmpWalk.get("desktop", "ifOutOctets", "2")); } catch (Exception e) { }
+                        try { hdd0Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "31")); } catch (Exception e) { }
                         try { hdd1Used = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", extraDiskID)); } catch (Exception e) { }
-                        try { loadIndex = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { loadIndex5 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "2")); } catch (Exception e) { e.printStackTrace(); }
-                        try { loadIndex15 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "3")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memBuffSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "6")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memBuffUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "6")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memCachSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "7")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memCachUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "7")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memIoNode = Integer.parseInt(snmpWalk.get("desktop", "dskPercentNode", "5")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memPhysSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memPhysUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "1")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memVirtSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "3")); } catch (Exception e) { e.printStackTrace(); }
-                        try { memVirtUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "3")); } catch (Exception e) { e.printStackTrace(); }
+                        try { loadIndex = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "1")); } catch (Exception e) { }
+                        try { loadIndex5 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "2")); } catch (Exception e) { }
+                        try { loadIndex15 = Double.parseDouble(snmpWalk.get("desktop", "laLoad", "3")); } catch (Exception e) { }
+                        try { memBuffSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "6")); } catch (Exception e) { }
+                        try { memBuffUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "6")); } catch (Exception e) { }
+                        try { memCachSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "7")); } catch (Exception e) { }
+                        try { memCachUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "7")); } catch (Exception e) { }
+                        try { memIoNode = Integer.parseInt(snmpWalk.get("desktop", "dskPercentNode", "5")); } catch (Exception e) { }
+                        try { memPhysSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "1")); } catch (Exception e) { }
+                        try { memPhysUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "1")); } catch (Exception e) { }
+                        try { memVirtSize = Long.parseLong(snmpWalk.get("desktop", "hrStorageSize", "3")); } catch (Exception e) { }
+                        try { memVirtUsed = Long.parseLong(snmpWalk.get("desktop", "hrStorageUsed", "3")); } catch (Exception e) { }
                         //try { myDelete = Long.parseLong(snmpWalk.get("desktop", "myComDelete", "0")); } catch (Exception e) { e.printStackTrace(); }
                         //try { myInsert = Long.parseLong(snmpWalk.get("desktop", "myComInsert", "0")); } catch (Exception e) { e.printStackTrace(); }
                         //try { myReplace = Long.parseLong(snmpWalk.get("desktop", "myComReplace", "0")); } catch (Exception e) { e.printStackTrace(); }
                         //try { mySelect = Long.parseLong(snmpWalk.get("desktop", "myComSelect", "0")); } catch (Exception e) { e.printStackTrace(); }
                         //try { myUpdate = Long.parseLong(snmpWalk.get("desktop", "myComUpdate", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { runningProcs = Integer.parseInt(snmpWalk.get("desktop", "hrSystemProcesses", "0")); } catch (Exception e) { e.printStackTrace(); }
-                        try { tempCase = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "22")); } catch (Exception e) { e.printStackTrace(); }
-                        try { tempCPU = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "35")); } catch (Exception e) { e.printStackTrace(); }
-                        try { uptime = snmpWalk.get("desktop", "hrSystemUptime", "0"); } catch (Exception e) { e.printStackTrace(); }
+                        try { runningProcs = Integer.parseInt(snmpWalk.get("desktop", "hrSystemProcesses", "0")); } catch (Exception e) { }
+                        try { tempCase = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "22")); } catch (Exception e) { }
+                        try { tempCPU = Integer.parseInt(snmpWalk.get("desktop", "lmTempSensorsValue", "35")); } catch (Exception e) { }
+                        try { uptime = snmpWalk.get("desktop", "hrSystemUptime", "0"); } catch (Exception e) { }
                     } catch (IOException ix) {
                         ix.printStackTrace();
                     }
