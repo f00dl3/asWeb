@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 16 May 2020
+Last updated: 29 May 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -81,14 +81,14 @@ public class Desktop {
             e.printStackTrace();
         }
         
-        wc.sedFileReplace(ramPath+"/sensors.txt", " +", ",");
-        wc.sedFileReplace(ramPath+"/ns5out.txt", " +", ",");
-        wc.sedFileReplace(ramPath+"/dbsizes.txt", "null", "0");
-        wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ",");
-        wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ",");
+        try { wc.sedFileReplace(ramPath+"/sensors.txt", " +", ","); } catch (Exception e) { }
+        try { wc.sedFileReplace(ramPath+"/ns5out.txt", " +", ","); } catch (Exception e) { }
+        try { wc.sedFileReplace(ramPath+"/dbsizes.txt", "null", "0"); } catch (Exception e) { }
+        try { wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ","); } catch (Exception e) { }
+        try { wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ","); } catch (Exception e) { }
         //StumpJunk.sedFileReplace(nvOutFile.getPath(), "|", " ");
-        wc.sedFileReplace(nvOutFile.getPath(), "\\/", " ");
-        wc.sedFileReplace(nvOutFile.getPath(), " +", ",");
+        try { wc.sedFileReplace(nvOutFile.getPath(), "\\/", " "); } catch (Exception e) { }
+        try { wc.sedFileReplace(nvOutFile.getPath(), " +", ","); } catch (Exception e) { }
         
         int numUsers = 0;
         int cpuLoad1 = 0;
