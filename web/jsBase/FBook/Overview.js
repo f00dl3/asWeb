@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 28 May 2020
+Updated: 5 Jun 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -93,6 +93,7 @@ function genOverviewSavings(svData, svBk) {
 
 function genOverviewStock(stockData, eTrade) {
 	var etaBalance = eTrade.Balance;
+	let eTradeVested = eTrade.Contributions;
 	var stockWorth = 0;
 	var vestDiff = etaBalance - eTradeVested;
 	stockData.forEach(function(sd) { 

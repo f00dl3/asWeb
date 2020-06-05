@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 May 2020
+Updated: 5 Jun 2020
 */
 
 package asWebRest.dao;
@@ -388,14 +388,20 @@ public class FinanceDAO {
     }
     
     private JSONArray eTradeBalance(Connection dbc) {
-        final String query_etb = "SELECT SUM((SELECT Value FROM Core.FB_Assets WHERE Description LIKE 'eTrade%') + (SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='eTrade')) AS Balance;";
+        final String query_etb = "SELECT" +
+        		" SUM(" +
+        		"  (SELECT Value FROM Core.FB_Assets WHERE Description LIKE 'eTrade%') +" +
+        		"  (SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='eTrade')" +
+        		") AS Balance," +
+        		" (SELECT SUM(Credit-Debit) FROM Core.FB_ETIBXX) AS Contributions";		
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_etb, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
                 tObject
-                    .put("Balance", resultSet.getDouble("Balance"));
+                    .put("Balance", resultSet.getDouble("Balance"))
+                    .put("Contributions", resultSet.getDouble("Contributions"));
                 tContainer.put(tObject);
             }
             resultSet.close();
