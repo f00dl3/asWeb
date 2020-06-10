@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 20 Feb 2018
 Split from Entertainment.java: 14 Nov 2019
-Updated: 25 Mar 2020
+Updated: 9 Jul 2020
 */
 
 package asWebRest.dao;
@@ -436,8 +436,8 @@ public class FfxivDAO {
                     .put("CoordX", resultSet.getInt("CoordX"))
                     .put("CoordY", resultSet.getInt("CoordY"))
                     .put("Zone", resultSet.getString("Zone"))
-                    .put("Exp", resultSet.getInt("Exp"))
-                    .put("Gil", resultSet.getInt("Gil"))
+                    .put("Exp", resultSet.getString("Exp"))
+                    .put("Gil", resultSet.getString("Gil"))
                     .put("Classes", resultSet.getString("Classes"))
                     .put("Clears", resultSet.getInt("Clears"))
                     .put("QuestOrder", resultSet.getString("QuestOrder"))

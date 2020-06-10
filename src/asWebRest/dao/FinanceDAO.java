@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 5 Jun 2020
+Updated: 6 Jun 2020
 */
 
 package asWebRest.dao;
@@ -654,7 +654,10 @@ public class FinanceDAO {
     }
     
     private JSONArray stockList(Connection dbc) { 
-        final String query_GetStocks = "SELECT Symbol, Count, Holder, LastValue, Description, PreviousClose FROM Core.StockShares WHERE Active=1;";
+        final String query_GetStocks = "SELECT Symbol, Count, Holder," +
+        		" LastValue, Description, PreviousClose," +
+        		" LastBuy, LastSell, Invested" +
+        		" FROM Core.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
@@ -666,6 +669,9 @@ public class FinanceDAO {
                 	.put("Holder", resultSet.getString("Holder"))
                 	.put("LastValue", resultSet.getString("LastValue"))
                 	.put("Description", resultSet.getString("Description"))
+                	.put("LastBuy", resultSet.getDouble("LastBuy"))
+                	.put("LastSell", resultSet.getDouble("LastSell"))
+                	.put("Invested", resultSet.getDouble("Invested"))
                 	.put("PreviousClose", resultSet.getString("PreviousClose"));
                 tContainer.put(tObject);
             }
@@ -674,7 +680,7 @@ public class FinanceDAO {
     }
 
     private JSONArray stockListPublic(Connection dbc) { 
-        final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose FROM Core.StockShares WHERE Active=1;";
+        final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose, FROM Core.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);

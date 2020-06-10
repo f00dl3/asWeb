@@ -14,7 +14,11 @@ public class MyDBConnector {
 	public Connection getMyConnection() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
 		DatabaseProps DBProperties = new DatabaseProps();
-		return DriverManager.getConnection(DBProperties.getDbUrl(), DBProperties.getDbUser(), DBProperties.getDbPass());
+		return DriverManager.getConnection(
+				DBProperties.getDbUrl(),
+				DBProperties.getDbUser(),
+				DBProperties.getDbPass()
+		);
 	}
 
 	public void main(String[] args) {

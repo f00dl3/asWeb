@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 31 Aug 2017
 Separated from CamWorkerHF: 5 Dec 2019
-Updated: 1 Jun 2020
+Updated: 6 Jun 2020
 */
 
 package asUtilsPorts.Cams;
@@ -27,15 +27,13 @@ public class CamWorkerStream {
 
     	WebCommon wc = new WebCommon();
     	
-        final int killTime = 1*30*60;
+        final int killTime = 15*60;
     	final int tester = 1;
         final int timeout = -1; //(60*1000);
         final int threadTimeout = 5;
         
         final File lockFile = new File(outFile.toString() + ".lock");
 
-        try { outFile.delete(); } catch (Exception e) { }
-        try { lockFile.delete(); } catch (Exception e) { }
         
         String ffmpegCall = "flock -n "+lockFile.toString() +
         		" timeout --kill-after="+killTime+" "+killTime +
@@ -53,6 +51,8 @@ public class CamWorkerStream {
                 " > /dev/null 2>&1 < /dev/null";
         
         while (tester == tester) {
+	            try { outFile.delete(); } catch (Exception e) { }
+	            try { lockFile.delete(); } catch (Exception e) { }
                 try { wc.runProcess(ffmpegCall); } catch (Exception e) { }
                 try { Thread.sleep(threadTimeout*1000); } catch (Exception e) { }
         }

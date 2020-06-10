@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 5 Jun 2020
+Updated: 9 Jun 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -96,6 +96,8 @@ function genOverviewStock(stockData, eTrade) {
 	let eTradeVested = eTrade.Contributions;
 	var stockWorth = 0;
 	var vestDiff = etaBalance - eTradeVested;
+	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
+	let mktUrl = "https://www.marketwatch.com/investing/stock/";
 	stockData.forEach(function(sd) { 
 		if (sd.Count != 0) { 
 			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
@@ -105,8 +107,8 @@ function genOverviewStock(stockData, eTrade) {
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day" ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
-            "eTrade: <strong>$" + etaBalance.toFixed(2) + "</strong><br/>" +
-            "Change: <strong>$" + vestDiff.toFixed(2) + "</strong><br/>";
+            "eTrade: <strong>$" + etaBalance.toFixed(0) + "</strong> (<strong>$" + eTradeVested + "</strong>)<br/>" +
+            "Change: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<br/>";
     bubble += "<br/><strong>Watching</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
@@ -114,11 +116,11 @@ function genOverviewStock(stockData, eTrade) {
     }
     bTable += "</tr></thead><tbody>";
     stockData.forEach(function (sd) {
-    	let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2); 
+    	let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2);
     	let txtColor = "yellow";
     	if(sd.Count === 0) { txtColor = "white"; }
         bTable += "<tr>" +
-                    "<td style='color: " + txtColor + "'>" + sd.Symbol + "</td>" +
+                    "<td style='color: " + txtColor + "'><a href='" + mktUrl + sd.Symbol + "' target='stonew'>" + sd.Symbol + "</a></td>" +
                     "<td style='color: " + txtColor + "'>" + sd.Description + "</td>" +
                     "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
                     "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +

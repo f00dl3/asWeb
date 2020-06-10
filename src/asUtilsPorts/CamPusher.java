@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 24 Dec 2017
-Updated: 5 Jun 2020
+Updated: 6 Jun 2020
 */
 
 package asUtilsPorts;
@@ -109,14 +109,6 @@ public class CamPusher {
         wc.runProcess("bash "+helpers.toString()+"/Sequence.sh "+dumpTemp.toString()+"/ jpeg");
         wc.runProcess("(ffmpeg -y -threads "+tr.getMaxThreads()+" -framerate "+camBeans.getFrameRate()+" -i "+dumpTemp.toString()+"/%05d.jpeg -vf "+ffParams+" "+mp4OutPub.toString()+ " 2> "+mp4LogPub.toString()+")");
         wc.deleteDir(dumpTemp);
-        
-        for(int i = 1; i <= numCams; i++) {
-        	File tCamFile = new File(camPath + "/webc"+i+"-temp.jpeg");
-            File tLockFile = new File(tCamFile.toString() + ".lock");
-            try { tCamFile.delete(); } catch (Exception e) { }
-            try { tLockFile.delete(); } catch (Exception e) { }
-        }
-        
         
         return "End of program!";
         
