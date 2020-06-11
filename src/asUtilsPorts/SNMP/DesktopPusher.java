@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 16 May 2020
+Last updated: 11 Jun 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -53,7 +53,7 @@ public class DesktopPusher {
         Thread s1t4 = new Thread(new Runnable() { public void run() { try { wc.jsoupOutFile("http://127.0.0.1/cgi-bin/apcupsd/upsstats.cgi", upsFile); } catch (Exception e) { } }});		
         Thread s1t5 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("du /var/lib/mysql", duMySQLFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
         Thread s1t6 = new Thread(new Runnable() { public void run() { try { wc.runProcessOutFile("nvidia-smi", nvOutFile, false); } catch (FileNotFoundException fe) { fe.printStackTrace(); } }});
-        Thread thListA[] = { s1t1, s1t2, s1t3, s1t4, s1t5, s1t6 };
+        Thread thListA[] = { s1t1, s1t2, s1t3, /* s1t4, */ s1t5, s1t6 };
         for (Thread thread : thListA) { thread.start(); try { thread.join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
         /* for (int i = 0; i < thListA.length; i++) { try { thListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } } */
 

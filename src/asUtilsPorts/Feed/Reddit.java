@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created 7 Sep 2017
-Updated: 14 Feb 2020
+Updated: 11 Jun 2020
 */
 
 package asUtilsPorts.Feed;
@@ -68,8 +68,9 @@ public class Reddit {
 				wc.jsoupOutBinary(thisLinkURL, thisFeedFile, 15.0);
 				wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "<!\\[CDATA\\[", "");
 				wc.sedFileReplace(ramTemp+"/"+thisFeedFileStr, "\\]\\]", "");
-				wc.runProcess("iconv -f ISO-8859-1 -t UTF-8 '"+ramTemp+"/"+thisFeedFileStr+"' > '"+mysqlShare+"/"+thisFeedFileStr+"'");
-					
+				wc.runProcess("iconv -f ISO-8859-1 -t UTF-8 '"+thisFeedFile.toString()+"' > '"+thisFeedFile.toString()+"'");
+				wc.moveFile(thisFeedFile.toString(), thisFeedDestFile.toString());	
+				
 				String thisRedditUpSQL = "LOAD XML LOCAL INFILE '"+mysqlShare+"/"+thisFeedFileStr+"' IGNORE INTO TABLE Feeds.RedditFeeds CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<entry>';";
 				try ( Statement subStmtR = connR.createStatement();) { subStmtR.executeUpdate(thisRedditUpSQL); }
 					

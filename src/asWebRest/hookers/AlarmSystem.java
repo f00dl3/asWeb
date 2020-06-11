@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 10 Feb 2020
+Updated: 10 Jun 2020
  */
 
 package asWebRest.hookers;
@@ -30,7 +30,8 @@ public class AlarmSystem {
         GetSmarthomeAction getSmarthomeAction = new GetSmarthomeAction(new SmarthomeDAO());
 		final DateTime nowTime = new DateTime();
         final DateTime constraint = new DateTime(nowTime.minusHours(2));
-        final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S");
+        final DateTimeFormatter theDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        final DateTimeFormatter theDateFormatOld = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.S");
         boolean exitLoop = false;
         
         JSONArray requestStore = getSmarthomeAction.getArmDisarm(dbc);

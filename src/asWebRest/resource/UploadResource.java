@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 20 Mar 2020
+Updated: 11 Jun 2020
  */
 
 package asWebRest.resource;
@@ -104,6 +104,7 @@ public class UploadResource extends ServerResource {
                             }
                         } catch (Exception e) { 
                             e.printStackTrace();
+                            System.out.println("DBG: ABOVE FAILED AT: " + fi.getName());
                         }
                         result = new StringRepresentation(sb.toString(), MediaType.TEXT_PLAIN);
                     }

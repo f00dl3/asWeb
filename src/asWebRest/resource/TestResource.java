@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 26 Mar 2020
+Updated: 11 Jun 2020
  */
 
 package asWebRest.resource;
@@ -200,6 +200,7 @@ public class TestResource extends ServerResource {
 
 			 	case "Reddit":
 	               	Reddit rd = new Reddit();
+	               	rd.actualClass();
 					returnData += rd.checkIfSent(dbc);
 					break;
 
