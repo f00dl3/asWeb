@@ -16,8 +16,8 @@ const aLog = require('./asModules/accessLog.js');
 const resp = require('./asModules/responses.js');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 72;
-var bUpdated = "31 MAR 2020";
+var bBuild = 73;
+var bUpdated = "22 JUN 2020";
 var homeForBot = auth.kcregionalwx;
 var alertChan = auth.wxalerts;
 var maxMessageSize = asm.maxMessageSize;
@@ -74,6 +74,7 @@ client.on('message', msg => {
 		var msgArray = (msg.content).split(' ');
 		var matchMsg = msgArray[0];
 		var ncmsg = (matchMsg).toLowerCase();
+		var dChan = client.channels.get(homeForBot);
 		var msgBack = "DEBUG: Message back not set yet!";
 	
 		switch(ncmsg) {
@@ -126,6 +127,7 @@ client.on('message', msg => {
 			
 			case "lol":
 				resp.lol(msg);
+				//dChan.send("lol");
 				break;
 				
 			case "nearby":

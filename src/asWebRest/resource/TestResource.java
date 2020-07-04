@@ -1,13 +1,14 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 11 Jun 2020
+Updated: 4 Jul 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.MapGenerator;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
@@ -177,6 +178,12 @@ public class TestResource extends ServerResource {
                             null
                     );
                     break;
+
+	        	case "EvergyDaily":
+	        		EvergyAPIHook evergy = new EvergyAPIHook();
+	        		evergy.dailyJob(dbc);
+	        		returnData += "Ran";
+	        		break;
 	        		
 	        	case "JodaHour":
 	        		Feeds feeds = new Feeds();

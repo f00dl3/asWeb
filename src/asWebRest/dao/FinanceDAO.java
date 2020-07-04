@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 6 Jun 2020
+Updated: 2 Jul 2020
 */
 
 package asWebRest.dao;
@@ -428,10 +428,15 @@ public class FinanceDAO {
     }
     
     private JSONArray mort(Connection dbc) {
-        final String query_Mort = "SELECT" +
-            " MIN(@runtot := @runtot + (@runtot * ("+mb.getMortRate()+"/12)/100) - (Extra + "+mb.getMortPayment()+")) AS MBal" +
-            " FROM Core.FB_WFML35" +
-            " WHERE DueDate < current_date + interval '30' day;";
+        String query_Mort = "SELECT";
+        if(mb.getPayed() == 1) {
+        	query_Mort += " 0 AS MBal";
+        } else {
+        	query_Mort += " MIN(@runtot := @runtot + (@runtot * ("+mb.getMortRate()+"/12)/100) - (Extra + "+mb.getMortPayment()+")) AS MBal";
+                    
+        }
+        query_Mort += " FROM Core.FB_WFML35";
+		if(mb.getPayed() == 0) { query_Mort += " WHERE DueDate < current_date + interval '30' day;"; }
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT120K(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 9 Jun 2020
+Updated: 2 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -258,7 +258,7 @@ function putOverview(finGlob) {
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk);
     genOverviewStock(stockData, eTrade);
-    genOverviewMortgage(mortData, amSch, mdfbal, svbal);
+    //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }
 

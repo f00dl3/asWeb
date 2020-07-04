@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 30 Apr 2020
+Updated: 2 Jul 2020
 */
 
 package asUtilsPorts;
@@ -48,7 +48,7 @@ public class GetDaily {
 			+ " AsFixHM, AsFixAU, AsFixDF, AsFixFT, AsFixEL, AsFixJC, AsFixKT, AsFixMD, AsFixTL,"
 			+ " AsFixPT, AsFixUN, AsFixTR"
 			+ ") VALUES ("
-			+ "current_date,(SELECT SUM("
+			+ "(current_date),(SELECT SUM("
 			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM FB_Assets WHERE Category IN ('NV','CA')) +"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM FB_CFCK01 WHERE Date <= current_date) +"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM FB_CFSV59 WHERE Date <= current_date))),"
@@ -56,11 +56,12 @@ public class GetDaily {
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'LI'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CR'),";
 		if(mb.getPayed() == 0) {
-			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day),1,";
+			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day),";
 		} else {
-			autoNetWorthSQLQuery += " 0.0 AS MBal,";
+			autoNetWorthSQLQuery += "0.0,";
 		}
-			autoNetWorthSQLQuery += "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CA'),"
+		autoNetWorthSQLQuery += "1,"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'CA'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'NV'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'HM'),"
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM FB_Assets WHERE Category = 'AU'),"
@@ -77,7 +78,7 @@ public class GetDaily {
 			+ ");";        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }
-        try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
+        if(mb.getPayed() == 0) { try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); } }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        
         try { evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
