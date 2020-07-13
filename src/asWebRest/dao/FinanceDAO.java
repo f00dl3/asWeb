@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 9 Jul 2020
+Updated: 13 Jul 2020
 */
 
 package asWebRest.dao;
@@ -661,7 +661,7 @@ public class FinanceDAO {
     private JSONArray stockList(Connection dbc) { 
         final String query_GetStocks = "SELECT Symbol, Count, Holder," +
         		" LastValue, Description, PreviousClose," +
-        		" LastBuy, LastSell, Invested" +
+        		" LastBuy, LastSell, Invested, Managed" +
         		" FROM Core.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -677,6 +677,7 @@ public class FinanceDAO {
                 	.put("LastBuy", resultSet.getDouble("LastBuy"))
                 	.put("LastSell", resultSet.getDouble("LastSell"))
                 	.put("Invested", resultSet.getDouble("Invested"))
+                	.put("Managed", resultSet.getInt("Managed"))
                 	.put("PreviousClose", resultSet.getString("PreviousClose"));
                 tContainer.put(tObject);
             }

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 2 Jul 2020
+Updated: 13 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -99,7 +99,7 @@ function genOverviewStock(stockData, eTrade) {
 	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
 	let mktUrl = "https://www.marketwatch.com/investing/stock/";
 	stockData.forEach(function(sd) { 
-		if (sd.Count != 0) { 
+		if (sd.Count != 0 && sd.Managed != 1) { 
 			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
 			console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
 			} 
@@ -116,19 +116,21 @@ function genOverviewStock(stockData, eTrade) {
     }
     bTable += "</tr></thead><tbody>";
     stockData.forEach(function (sd) {
-    	let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2);
-    	let txtColor = "yellow";
-    	if(sd.Count === 0) { txtColor = "white"; }
-        bTable += "<tr>" +
-                    "<td style='color: " + txtColor + "'><a href='" + mktUrl + sd.Symbol + "' target='stonew'>" + sd.Symbol + "</a></td>" +
-                    "<td style='color: " + txtColor + "'>" + sd.Description + "</td>" +
-                    "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
-                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
-                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
-                    "<td style='color: " + txtColor + "'>" + change + "</td>" +
-                    //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
-                    "</tr>";
-        }
+    	if(sd.Managed != 1) {
+    		let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2);
+    		let txtColor = "yellow";
+	    	if(sd.Count === 0) { txtColor = "white"; }
+	        bTable += "<tr>" +
+	                    "<td style='color: " + txtColor + "'><a href='" + mktUrl + sd.Symbol + "' target='stonew'>" + sd.Symbol + "</a></td>" +
+	                    "<td style='color: " + txtColor + "'>" + sd.Description + "</td>" +
+	                    "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
+	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
+	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
+	                    "<td style='color: " + txtColor + "'>" + change + "</td>" +
+	                    //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
+	                    "</tr>";
+	        }
+    	}
     );
     bTable += "</tbody></table>";
     bubble += bTable + "</div></div>";

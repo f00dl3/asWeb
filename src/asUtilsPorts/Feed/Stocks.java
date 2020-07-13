@@ -78,7 +78,13 @@ public class Stocks {
 				String tTicker = tStock.getString("Symbol");
 				String tDescription = tStock.getString("Description");
 				int tShares = tStock.getInt("Count");
-				JSONObject tStockData = new JSONObject(apiCallStock(tTicker));
+				int tManaged = tStock.getInt("Managed");
+				JSONObject tStockData = null;
+				if(tManaged == 0) {
+					tStockData = new JSONObject(apiCallStock(tTicker));
+				} else {
+					tStockData = new JSONObject(apiCallStock_FinnHub(tTicker));
+				}
 				JSONObject tChart = tStockData.getJSONObject("chart");
 				JSONArray result = tChart.getJSONArray("result");
 				JSONObject first = result.getJSONObject(0);
