@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 4 Jul 2020
+Updated: 13 Jul 2020
  */
 
 package asWebRest.resource;
@@ -181,8 +181,7 @@ public class TestResource extends ServerResource {
 
 	        	case "EvergyDaily":
 	        		EvergyAPIHook evergy = new EvergyAPIHook();
-	        		evergy.dailyJob(dbc);
-	        		returnData += "Ran";
+	        		returnData += evergy.dailyJob(dbc);
 	        		break;
 	        		
 	        	case "JodaHour":
@@ -242,6 +241,11 @@ public class TestResource extends ServerResource {
 	            	returnData += stocks.getStockQuote(dbc, true);
 	            	break;
 
+	            case "StockFH":
+	            	Stocks stocks2 = new Stocks();
+	            	returnData += stocks2.getStockQuote_FinnHub(dbc, true);
+	            	break;
+	            	
                 case "Watch":
             		GetSPC getSPC = new GetSPC();
                 	returnData += getSPC.checkSentWatch(dbc);

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 Jul 2020
+Updated: 9 Jul 2020
 */
 
 package asWebRest.dao;
@@ -670,7 +670,7 @@ public class FinanceDAO {
                 JSONObject tObject = new JSONObject();
                 tObject
                 	.put("Symbol", resultSet.getString("Symbol"))
-                	.put("Count", resultSet.getInt("Count"))
+                	.put("Count", resultSet.getDouble("Count"))
                 	.put("Holder", resultSet.getString("Holder"))
                 	.put("LastValue", resultSet.getString("LastValue"))
                 	.put("Description", resultSet.getString("Description"))

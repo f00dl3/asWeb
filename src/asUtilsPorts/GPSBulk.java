@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 30 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 28 Dec 2019
+Updated: 10 Jul 2020
 */
 
 package asUtilsPorts;
@@ -28,7 +28,7 @@ public class GPSBulk {
 		if (dirList != null) {
 			for (File child : dirList) {
 				String childPath = child.getPath();
-				if(childPath.contains(".csv")) {
+				/* if(childPath.contains(".csv")) {
 					Pattern p = Pattern.compile(dropLocation+"/(.*).csv");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
@@ -47,7 +47,7 @@ public class GPSBulk {
 						String gpsProcArgs[] = { thisTrace, archFlag, "json" };
 						GPSParse.main(gpsProcArgs);
 					}
-				}
+				} */
 				if(childPath.contains(".fit")) {
 					Pattern p = Pattern.compile(dropLocation+"/(.*).fit");
 					Matcher m = p.matcher(childPath);
@@ -58,7 +58,7 @@ public class GPSBulk {
 						GPSParse.main(gpsProcArgs);
 					}
 				}
-				if(childPath.contains(".gpx")) {
+				/* if(childPath.contains(".gpx")) {
 					Pattern p = Pattern.compile(dropLocation+"/(.*).gpx");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
@@ -67,7 +67,7 @@ public class GPSBulk {
 						String gpsProcArgs[] = { thisTrace, archFlag, "gpx" };
 						GPSParse.main(gpsProcArgs);
 					}
-				}
+				} */
 			}
 		}
 

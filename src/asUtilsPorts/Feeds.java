@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 17 May 2020
+Updated: 13 Jul 2020
 */
 
 package asUtilsPorts;
@@ -67,7 +67,7 @@ public class Feeds {
 		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
+    	try { stocks.getStockQuote_FinnHub(dbc, false); } catch (Exception e) { e.printStackTrace(); }
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }

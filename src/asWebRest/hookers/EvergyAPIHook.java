@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: 17 Apr 2020
+Updated: 4 Jul 2020
  */
 
 package asWebRest.hookers;
@@ -49,16 +49,24 @@ public class EvergyAPIHook {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		dataBack += "DBG --> Fetched Evergy from " + dateForUseA + " to " + dateForUseB + "\n";
 		return dataBack;
 	}
     
-    public void dailyJob(Connection dbc) {
-    	DateTime tDateTimeS = new DateTime().minusDays(2);
+    public String dailyJob(Connection dbc) {
+    	String dataBack = "";
+    	DateTime tDateTimeS = new DateTime().minusDays(0);
     	DateTime tDateTimeF = new DateTime().minusDays(31);
-		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");	
-		String friendlyDate = formatOut.print(tDateTimeS);
-		String friendlyDateF = formatOut.print(tDateTimeF);
-		try { updateDatabase(dbc, friendlyDate, friendlyDateF); } catch (Exception e) { e.printStackTrace(); }
+		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");
+		String friendlyDate = formatOut.print(tDateTimeF);
+		String friendlyDateF = formatOut.print(tDateTimeS);
+		try {
+			dataBack += updateDatabase(dbc, friendlyDate, friendlyDateF);
+		} catch (Exception e) { 
+			e.printStackTrace();
+			dataBack += "ERROR ON " + friendlyDate + " TO " + friendlyDate;
+		}
+		return dataBack;
     }
     
 	private Response initialLogin(Connection dbc) {
@@ -111,8 +119,9 @@ public class EvergyAPIHook {
 		JSONObject energyData = new JSONObject();
 		DateTimeFormatter formatIn = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
 		DateTimeFormatter formatOut = DateTimeFormat.forPattern("yyyy-MM-dd");		
+		String reu = returnEnergyUse(dbc, dateForUseA, dateForUseB);
 		try {
-			energyData = new JSONObject(returnEnergyUse(dbc, dateForUseA, dateForUseB));
+			energyData = new JSONObject(reu);
 			returnData = energyData.toString();
 			JSONArray dataArray = energyData.getJSONArray("data"); 
 			for(int i = 0; i < dataArray.length(); i++) {	
@@ -131,7 +140,10 @@ public class EvergyAPIHook {
 					updateUtilityUseAction.setElectricityUse(dbc, qParams);
 				} catch (Exception e) { e.printStackTrace(); }
 			}			
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) { 
+			e.printStackTrace();
+			returnData += reu;
+		}
 		return returnData;
 	}
 	

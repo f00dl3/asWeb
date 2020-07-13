@@ -16,8 +16,8 @@ const aLog = require('./asModules/accessLog.js');
 const resp = require('./asModules/responses.js');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 73;
-var bUpdated = "22 JUN 2020";
+var bBuild = 74;
+var bUpdated = "4 JUL 2020";
 var homeForBot = auth.kcregionalwx;
 var alertChan = auth.wxalerts;
 var maxMessageSize = asm.maxMessageSize;
