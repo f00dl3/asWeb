@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 4 Jul 2020
+Updated: 14 Jul 2020
 */
 
 package asUtilsPorts;
@@ -43,7 +43,7 @@ public class GetDaily {
 		
 		String anwPrepSQLQuery = "SET @runtot := "+junkyPrivate.getMortBeginningBalance()+";";
 		
-		String autoNetWorthSQLQuery = "REPLACE INTO FB_ENWT ("
+		String autoNetWorthSQLQuery = "REPLACE INTO Core.FB_ENWT ("
 			+ "AsOf, AsLiq, AsFix, Life, Credits, Debts, Auto, AsLiqCA, AsLiqNV,"
 			+ " AsFixHM, AsFixAU, AsFixDF, AsFixFT, AsFixEL, AsFixJC, AsFixKT, AsFixMD, AsFixTL,"
 			+ " AsFixPT, AsFixUN, AsFixTR"

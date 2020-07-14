@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 13 Jul 2020
+Updated: 14 Jul 2020
 */
 
 package asUtilsPorts;
@@ -28,6 +28,7 @@ import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Weather.RadarNightly;
+import asWebRest.dao.FinanceDAO;
 
 public class Feeds {
 
@@ -54,12 +55,13 @@ public class Feeds {
 
     	CamBeans camBeans = new CamBeans();
     	CamPusher camPusher = new CamPusher();
-    	CamWorkerURL cwURL = new CamWorkerURL();
+    	CamWorkerURL cwURL = new CamWorkerURL();    
+        FinanceDAO fd = new FinanceDAO();
         GetSPC getSPC = new GetSPC();
     	Mailer mailer = new Mailer();
         Router routerSnmp = new Router();
         Stocks stocks = new Stocks();
-        UbuntuVM uvmSnmp = new UbuntuVM();        
+        UbuntuVM uvmSnmp = new UbuntuVM();
 
 		final File camPath = camBeans.getCamPath();
         try { cwURL.doJob(dbc, camPath.getPath()); } catch (Exception e) { e.printStackTrace(); } 
@@ -68,7 +70,7 @@ public class Feeds {
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
-	//try { stocks.getStockQuote_FinnHub(dbc, false); } catch (Exception e) { e.printStackTrace; }
+    	try { returnData += fd.setRapidAutoNetWorth(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentMeso(dbc); } catch (Exception e) { e.printStackTrace(); }

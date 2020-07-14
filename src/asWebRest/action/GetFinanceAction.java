@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 2 Apr 2020
+Updated: 14 Jul 2020
  */
 
 package asWebRest.action;
@@ -29,7 +29,9 @@ public class GetFinanceAction {
     public JSONArray getDecorTools(Connection dbc) { return financeDAO.getDecorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return financeDAO.getEnw(dbc); }
     public JSONArray getEnwChart(Connection dbc, String periodLength) { return financeDAO.getEnwChart(dbc, periodLength); }
+    public JSONArray getEnwChartRapid(Connection dbc) { return financeDAO.getEnwChartRapid(dbc); }
     public JSONArray getEnwt(Connection dbc) { return financeDAO.getEnwt(dbc); }
+    public JSONArray getEnwtRapid(Connection dbc) { return financeDAO.getEnwtRapid(dbc); }
     public JSONArray getETradeBalance(Connection dbc) { return financeDAO.getETradeBalance(dbc); }
     public JSONArray getLicenses(Connection dbc) { return financeDAO.getLicenses(dbc); }
     public JSONArray getMort(Connection dbc) { return financeDAO.getMort(dbc); }

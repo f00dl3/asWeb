@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 13 Jul 2020
+Updated: 14 Jul 2020
 */
 
 package asWebRest.dao;
 
 import asWebRest.secure.CheckbookBeans;
+import asWebRest.secure.JunkyPrivate;
 import asWebRest.secure.MortgageBeans;
 import asWebRest.shared.CommonBeans;
 import java.sql.ResultSet;
@@ -356,6 +357,33 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
+
+    
+    private JSONArray enwChartRapid(Connection dbc) {
+        String query_ch_ENWr = "SELECT " +
+                " AsOf, AsLiq, AsFix, Life, Credits, Debts," +
+                " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
+                " FROM Core.FB_ENWT_Rapid" +
+        		" ORDER BY AsOf LIMIT 2040;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ch_ENWr, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                        .put("AsOf", resultSet.getString("AsOf"))
+                        .put("Worth", resultSet.getDouble("Worth"))
+                        .put("AsLiq", resultSet.getDouble("AsLiq"))
+                        .put("AsFix", resultSet.getDouble("AsFix"))
+                        .put("Life", resultSet.getDouble("Life"))
+                        .put("Credits", resultSet.getDouble("Credits"))
+                        .put("Debts", resultSet.getDouble("Debts"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
     
     private JSONArray enwt(Connection dbc) {
         final String query_FBook_ENWT = "SELECT" +
@@ -380,6 +408,32 @@ public class FinanceDAO {
                     .put("Credits", resultSet.getDouble("Credits"))
                     .put("Debts", resultSet.getDouble("Debts"))
                     .put("Growth", resultSet.getDouble("Growth"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+
+    private JSONArray enwtRapid(Connection dbc) {
+        final String query_FBook_ENWTr = "SELECT" +
+                " AsOf, ((AsLiq + AsFix + Life + Credits) - Debts) AS Worth," +
+                " AsLiq, AsFix, Life, Credits, Debts, Growth" +
+                " FROM Core.FB_ENWT_Rapid" +
+                " ORDER BY AsOf DESC LIMIT 2048;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_ENWTr, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("AsOf", resultSet.getString("AsOf"))
+                    .put("Worth", resultSet.getDouble("Worth"))
+                    .put("AsLiq", resultSet.getDouble("AsLiq"))
+                    .put("AsFix", resultSet.getDouble("AsFix"))
+                    .put("Life", resultSet.getDouble("Life"))
+                    .put("Credits", resultSet.getDouble("Credits"))
+                    .put("Debts", resultSet.getDouble("Debts"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -524,7 +578,30 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-    
+        
+    private String rapidAutoNetWorth(Connection dbc) {
+        String returnData = wcb.getDefaultNotRanYet();
+    	JunkyPrivate jp = new JunkyPrivate();
+    	String autoNetWorthSQLQuery = "REPLACE INTO Core.FB_ENWT_Rapid ("
+    			+ "AsLiq, AsFix, Life, Credits, Debts"
+    			+ ") VALUES ("
+    			+ "(SELECT SUM("
+    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category IN ('NV','CA')) +"
+    			+ "(SELECT SUM(Credit-Debit) FROM FB_CFCK01 WHERE Date <= current_date) +"
+    			+ "(SELECT SUM(Credit-Debit) FROM FB_CFSV59 WHERE Date <= current_date))),"
+    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Type = 'F'),"
+    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category = 'LI'),"
+    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category = 'CR'),";
+    		if(mb.getPayed() == 0) {
+    			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+jp.getMortIntRate()+"/12)/100)) - (Extra + "+jp.getMortBaseMonthly()+")),1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day)";
+    		} else {
+    			autoNetWorthSQLQuery += "0";
+    		}
+			autoNetWorthSQLQuery += ");";    
+        try { returnData = wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }    
+	  
     private JSONArray saving(Connection dbc) {
         final String query_FBook_Saving = "SELECT (SUM(Credit-Debit)) AS SBal FROM Core.FB_CFSV59 WHERE Date <= current_date;";
         JSONArray tContainer = new JSONArray();
@@ -729,9 +806,11 @@ public class FinanceDAO {
     private String stockUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
-        String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares), Checked=CURDATE() WHERE Description='Stocks';";
+        String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
+        String query_UpdateStockC = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
         try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData = wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
@@ -767,7 +846,9 @@ public class FinanceDAO {
     public JSONArray getDecorTools(Connection dbc) { return decorTools(dbc); }
     public JSONArray getEnw(Connection dbc) { return enw(dbc); }
     public JSONArray getEnwChart(Connection dbc, String periodLength) { return enwChart(dbc, periodLength); }
+    public JSONArray getEnwChartRapid(Connection dbc) { return enwChartRapid(dbc); }
     public JSONArray getEnwt(Connection dbc) { return enwt(dbc); }
+    public JSONArray getEnwtRapid(Connection dbc) { return enwtRapid(dbc); }
     public JSONArray getETradeBalance(Connection dbc) { return eTradeBalance(dbc); }
     public JSONArray getLicenses(Connection dbc) { return licenses(dbc); }
     public JSONArray getMort(Connection dbc) { return mort(dbc); }
@@ -787,6 +868,7 @@ public class FinanceDAO {
     public String setCheckbookAdd(Connection dbc, List<String> qParams) { return checkbookAdd(dbc, qParams); }
     public String setCheckbookUpdate(Connection dbc, List<String> qParams) { return checkbookUpdate(dbc, qParams); }
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }
+    public String setRapidAutoNetWorth(Connection dbc) { return rapidAutoNetWorth(dbc); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return savingsAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
     public String setStockUpdate(Connection dbc, List<String> qParams) { return stockUpdate(dbc, qParams); }

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 13 Jul 2020
+Updated: 14 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -172,7 +172,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
             "<a href='" + doCh("j", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinENW_Year_D", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_D", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinENW_Year_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_R", "th") + "' /></a>" +
             "<p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {

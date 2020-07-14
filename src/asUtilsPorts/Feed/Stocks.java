@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 13 Jul 2020
+Updated: 14 Jul 2020
 
 */
 
@@ -77,22 +77,28 @@ public class Stocks {
 				JSONObject tStock = stocksToFetch.getJSONObject(i);
 				String tTicker = tStock.getString("Symbol");
 				String tDescription = tStock.getString("Description");
-				int tShares = tStock.getInt("Count");
+				double tShares = tStock.getDouble("Count");
 				int tManaged = tStock.getInt("Managed");
 				JSONObject tStockData = null;
+				double valueNow = 0.0;
+				String valueNowS = "";
+				String previousClose = "";
 				if(tManaged == 0) {
 					tStockData = new JSONObject(apiCallStock(tTicker));
+					JSONObject tChart = tStockData.getJSONObject("chart");
+					JSONArray result = tChart.getJSONArray("result");
+					JSONObject first = result.getJSONObject(0);
+					JSONObject meta = first.getJSONObject("meta");
+					valueNow = meta.getDouble("regularMarketPrice");
+					previousClose = String.valueOf(meta.getDouble("previousClose"));
 				} else {
 					tStockData = new JSONObject(apiCallStock_FinnHub(tTicker));
+					//quote += tTicker + " : " + tStockData.toString();
+					valueNow = tStockData.getDouble("c");
+					previousClose = String.valueOf(tStockData.getDouble("pc"));
 				}
-				JSONObject tChart = tStockData.getJSONObject("chart");
-				JSONArray result = tChart.getJSONArray("result");
-				JSONObject first = result.getJSONObject(0);
-				JSONObject meta = first.getJSONObject("meta");
-				double valueNow = meta.getDouble("regularMarketPrice");
-				String previousClose = String.valueOf(meta.getDouble("previousClose"));
+				valueNowS = String.valueOf(valueNow);
 				double totVal = valueNow * tShares;
-				String valueNowS = String.valueOf(valueNow);
 				List<String> qParams = new ArrayList<>();
 				qParams.add(0, valueNowS);
 				qParams.add(1, previousClose);

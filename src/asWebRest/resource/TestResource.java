@@ -1,15 +1,15 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 13 Jul 2020
+Updated: 14 Jul 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetNewsFeedAction;
+import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.NewsFeedDAO;
 import asWebRest.hookers.EvergyAPIHook;
-import asWebRest.hookers.MapGenerator;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
 import asWebRest.hookers.WaterOneHook;
@@ -39,7 +39,6 @@ import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
 import asUtilsPorts.Feed.GetSPC;
-import asUtilsPorts.Feed.RSSSources;
 import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
@@ -204,7 +203,12 @@ public class TestResource extends ServerResource {
 	        		returnData += rw.opacityTest(dbc);
 	        		break;
 
-			 	case "Reddit":
+	            case "RapidWorth":
+	            	FinanceDAO fd = new FinanceDAO();
+	            	returnData += fd.setRapidAutoNetWorth(dbc);
+	            	break;
+
+	            case "Reddit":
 	               	Reddit rd = new Reddit();
 	               	rd.actualClass();
 					returnData += rd.checkIfSent(dbc);
@@ -214,13 +218,6 @@ public class TestResource extends ServerResource {
 	        		SnowReports sr = new SnowReports();
 	        		returnData += sr.doSnow(dbc);
         			break;
-        			
-            	case "ThreadTest":
-            		int testsToRun = 1;
-                    testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
-            		ThreadRipper tr = new ThreadRipper();
-            		returnData += tr.selfTest(testsToRun, false);
-            		break;
             		
             	case "SPCMapsHistorical":
             		SPCMapDownloader spcMd = new SPCMapDownloader();
@@ -245,7 +242,14 @@ public class TestResource extends ServerResource {
 	            	Stocks stocks2 = new Stocks();
 	            	returnData += stocks2.getStockQuote_FinnHub(dbc, true);
 	            	break;
-	            	
+        			
+            	case "ThreadTest":
+            		int testsToRun = 1;
+                    testsToRun = Integer.parseInt(argsInForm.getFirstValue("count"));
+            		ThreadRipper tr = new ThreadRipper();
+            		returnData += tr.selfTest(testsToRun, false);
+            		break;
+            		
                 case "Watch":
             		GetSPC getSPC = new GetSPC();
                 	returnData += getSPC.checkSentWatch(dbc);

@@ -65,10 +65,14 @@ public class Finance {
         JSONArray enw_Data4 = new JSONArray();
         JSONArray enw_Data5 = new JSONArray();
         JSONArray enw_Data6 = new JSONArray();
+        if(dataSelection.contentEquals("R")) {
+        	enw_Props.put("dateFormat", "yyyy-MM-dd HH:mm:ss");
+        } else {
+        	enw_Props.put("dateFormat", "yyyy-MM-dd");
+        }
         enw_Props
-                .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", enw_Name).put("chartFileName", "FinENW_" + periodLength + "_" + dataSelection)
-                .put("xLabel", "Date").put("yLabel", "K USD");
+                .put("xLabel", "Date").put("yLabel", "(K) USD");
         switch(dataSelection) {
 	        case "A": default:
 		        enw_Props
@@ -78,6 +82,9 @@ public class Finance {
 			        .put("s4Name", "Insurance").put("s4Color", "Gray")
 			        .put("s5Name", "Credits").put("s5Color", "Yellow")
 			        .put("s6Name", "Debt").put("s6Color", "Red");
+		        break;
+	        case "R":
+		        enw_Props.put("sName", "Liquid").put("sColor", "Green");
 		        break;
 	        case "T": 
 		        enw_Props.put("sName", "Worth").put("sColor", "White");
@@ -127,6 +134,9 @@ public class Finance {
 	        case "D": 
 	    		enw_Glob.put("data", enw_Data6);
 	        	break;
+	        case "R":
+	    		enw_Glob.put("data", enw_Data2);
+	    		break;
         }
         return enw_Glob;
     }
