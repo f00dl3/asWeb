@@ -808,9 +808,13 @@ public class FinanceDAO {
         String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
         String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
         String query_UpdateStockC = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
+        String query_UpdateStockD = "UPDATE Core.FB_Assets SET Value=(SELECT SUM((Count*LastValue)*1.300178) FROM Core.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
+        String query_UpdateStockE = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";
         try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData = wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData = wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData += wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData += wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData += wc.q2do1c(dbc, query_UpdateStockD, null); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData += wc.q2do1c(dbc, query_UpdateStockE, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

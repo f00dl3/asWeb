@@ -235,7 +235,7 @@ public class TestResource extends ServerResource {
 	            	
 	            case "Stock":
 	            	Stocks stocks = new Stocks();
-	            	returnData += stocks.getStockQuote(dbc, true);
+	            	returnData += stocks.getStockQuote(dbc, true, false);
 	            	break;
 
 	            case "StockFH":

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 25 Apr 2020
+Updated: 14 Jul 2020
  */
 
 package asWebRest.chartHelpers;
@@ -65,7 +65,7 @@ public class Finance {
         JSONArray enw_Data4 = new JSONArray();
         JSONArray enw_Data5 = new JSONArray();
         JSONArray enw_Data6 = new JSONArray();
-        if(dataSelection.contentEquals("R")) {
+        if(dataSelection.equals("R")) {
         	enw_Props.put("dateFormat", "yyyy-MM-dd HH:mm:ss");
         } else {
         	enw_Props.put("dateFormat", "yyyy-MM-dd");
@@ -83,10 +83,7 @@ public class Finance {
 			        .put("s5Name", "Credits").put("s5Color", "Yellow")
 			        .put("s6Name", "Debt").put("s6Color", "Red");
 		        break;
-	        case "R":
-		        enw_Props.put("sName", "Liquid").put("sColor", "Green");
-		        break;
-	        case "T": 
+	        case "T": case "R":
 		        enw_Props.put("sName", "Worth").put("sColor", "White");
 	        	break;
 	        case "L":
@@ -135,7 +132,7 @@ public class Finance {
 	    		enw_Glob.put("data", enw_Data6);
 	        	break;
 	        case "R":
-	    		enw_Glob.put("data", enw_Data2);
+	    		enw_Glob.put("data", enw_Data);
 	    		break;
         }
         return enw_Glob;

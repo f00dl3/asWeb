@@ -172,7 +172,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
             "<a href='" + doCh("j", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinENW_Year_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_R", "th") + "' /></a>" +
+            "<a href='" + doCh("j", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
             "<p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {

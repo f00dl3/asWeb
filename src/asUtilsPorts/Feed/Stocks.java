@@ -60,7 +60,7 @@ public class Stocks {
 		return dataBack;
 	}
 	
-	public String getStockQuote(Connection dbc, boolean sendEmail) {
+	public String getStockQuote(Connection dbc, boolean sendEmail, boolean doManaged) {
 
 		String quote = "Daily stock market report\n\n";
 		
@@ -83,7 +83,7 @@ public class Stocks {
 				double valueNow = 0.0;
 				String valueNowS = "";
 				String previousClose = "";
-				if(tManaged == 0) {
+				if(tManaged == 0 && !doManaged) {
 					tStockData = new JSONObject(apiCallStock(tTicker));
 					JSONObject tChart = tStockData.getJSONObject("chart");
 					JSONArray result = tChart.getJSONArray("result");

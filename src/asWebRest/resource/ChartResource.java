@@ -139,7 +139,7 @@ public class ChartResource extends ServerResource {
                     JSONObject enw_GlobY = fin.getFinEnw(enw_RawY, "Year", "T");
                     JSONObject enw_GlobYL = fin.getFinEnw(enw_RawY, "Year", "L");
                     JSONObject enw_GlobYF = fin.getFinEnw(enw_RawY, "Year", "F");
-                    JSONObject enw_GlobR = fin.getFinEnw(enw_RawR, "All", "A");
+                    JSONObject enw_GlobR = fin.getFinEnw(enw_RawR, "All", "R");
                     JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
                     try { dynChart.LineChart(enw_GlobY); returnData += "Chart generated - Est Net Worth Year!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobYF); returnData += "Chart generated - Est Net Worth Year F!\n"; } catch (Exception e) { e.printStackTrace(); }

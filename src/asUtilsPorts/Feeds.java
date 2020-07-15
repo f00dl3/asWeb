@@ -69,7 +69,7 @@ public class Feeds {
 		try { camPusher.pushIt(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { uvmSnmp.snmpUbuntuVM(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { routerSnmp.snmpRouter(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { stocks.getStockQuote(dbc, false); } catch (Exception e) { e.printStackTrace(); }
+    	try { stocks.getStockQuote(dbc, false, false); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += fd.setRapidAutoNetWorth(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { getSPC.doGetSPC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { getSPC.doGetSPCb(dbc); } catch (Exception e) { e.printStackTrace(); }
@@ -109,12 +109,14 @@ public class Feeds {
     	NHCFetch nhcFetch = new NHCFetch();
     	RSSSources rssSources = new RSSSources();
     	SnowReports snow = new SnowReports();
+        Stocks stocks = new Stocks();
     	
     	try { getSPC.doGetSPCHourly(dbc); } catch (Exception e) { e.printStackTrace(); }    	
     	try { nhcFetch.getNHC(dbc); } catch (Exception e) { e.printStackTrace(); } 
     	try { rssSources.getRSS(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { snow.doSnow(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += getSPC.checkSentOutlook(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { stocks.getStockQuote(dbc, false, true); } catch (Exception e) { e.printStackTrace(); }
     	
 
     	if(rightNow.getHourOfDay() == 2) {
