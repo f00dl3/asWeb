@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Blue.js Split: 4 Apr 2018
-Updated: 1 Mar 2020
+Updated: 16 Jul 2020
  */
 
 function displayBlue() {
@@ -15,6 +15,7 @@ function displayBlue() {
     $("#FBCheck").hide();
     $("#FBWorkPTO").hide();
     $("#FBUUse").hide();
+    $("#FBStocks").hide();
 }
 
 function getBlue(level) {

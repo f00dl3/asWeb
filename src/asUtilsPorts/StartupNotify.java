@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 29 Jan 2020
+Updated: 16 Jul 2020
  */
 
 package asUtilsPorts;
 
+import asWebRest.hookers.WeatherBot;
 import asWebRest.secure.JunkyPrivate;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.ThreadRipper;
@@ -23,6 +24,7 @@ public class StartupNotify {
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         Mailer mailer = new Mailer();
         ThreadRipper tr = new ThreadRipper();
+        WeatherBot wxb = new WeatherBot();
         WebCommon wc = new WebCommon();
                 
         final String ramDrive = cb.getRamPath();
@@ -39,10 +41,12 @@ public class StartupNotify {
         		"Threads: " + tr.getMaxThreads();
 
         wc.zipThisFile(sysLog, packedLog);
+        
 
 		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
 		alerts.add(() -> mailer.sendMail(myCell, thisSubject, thisMessage, null));
 		alerts.add(() -> mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog));
+		//alerts.add(() -> wxb.botBroadcastOnly("API started up: " + cb.getWarDeployBase()));
 		tr.runProcesses(alerts, false, false);
 		
         packedLog.delete();

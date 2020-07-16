@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 30 Mar 2020
+Updated: 16 Jul 2020
  */
 
 package asWebRest.resource;
@@ -124,6 +124,11 @@ public class FinanceResource extends ServerResource {
                     JSONArray stocksP = getFinanceAction.getStockListPublic(dbc);
                     returnData += stocksP.toString();
                     break;
+
+                case "getStocksAll":
+                    JSONArray stocksA = getFinanceAction.getStockList(dbc);
+                    returnData += stocksA.toString();
+                    break;
                     
                 case "getUtils":
                     String month = argsInForm.getFirstValue("tMonth");
@@ -203,6 +208,22 @@ public class FinanceResource extends ServerResource {
                     qParams.add(ASvCredit);
                     returnData += updateFinanceAction.setSavingsAdd(dbc, qParams);
                     break;
+                    
+                case "putStockAdd":
+                    qParams.add(argsInForm.getFirstValue("Symbol"));
+                    qParams.add(argsInForm.getFirstValue("Count"));
+                    qParams.add(argsInForm.getFirstValue("Holder"));
+                    qParams.add(argsInForm.getFirstValue("Description"));
+                    qParams.add(argsInForm.getFirstValue("Managed"));
+                    returnData += updateFinanceAction.setStockAdd(dbc, qParams);
+                    break;
+                    
+                case "putStockUpdate":
+                    qParams.add(argsInForm.getFirstValue("Count"));
+                    qParams.add(argsInForm.getFirstValue("Holder"));
+                    qParams.add(argsInForm.getFirstValue("Symbol"));
+                    returnData += updateFinanceAction.setStockShareUpdate(dbc, qParams);
+                    break;                    
                     
                 case "zestimateUpdate":
                 	break;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 1 Mar 2020
+Updated: 16 Jul 2020
  */
 
 function actOnMpgEntry(event) {
@@ -22,14 +22,15 @@ function actOnMpgEntry(event) {
 
 function displayAuto() {
     getAuto();
-    $("#FBAutoHC").hide();
     $("#FBAuto").toggle();
+    $("#FBAutoHC").hide();
     $("#FBAsset").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();
     $("#FBWorkPTO").hide();
     $("#FBUUse").hide();
+    $("#FBStocks").hide();
 }
 
 function getAuto() {

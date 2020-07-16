@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 14 Jul 2020
+Updated: 16 Jul 2020
 */
 
 package asWebRest.dao;
@@ -364,7 +364,7 @@ public class FinanceDAO {
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
                 " FROM Core.FB_ENWT_Rapid" +
-        		" ORDER BY AsOf LIMIT 2040;";
+        		" ORDER BY AsOf DESC LIMIT 1024;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ch_ENWr, null);
@@ -762,6 +762,16 @@ public class FinanceDAO {
         return tContainer;
     }
 
+    private String stockAdd(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_AddStock = "INSERT INTO Core.StockShares " +
+        		" (Symbol, Count, Active, Holder, Description, Managed)" +
+        		" VALUES " +
+        		" (?, ?, 1, ?, ?, ?);";
+        try { returnData = wc.q2do1c(dbc, query_AddStock, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray stockListPublic(Connection dbc) { 
         final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose, FROM Core.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
@@ -800,6 +810,13 @@ public class FinanceDAO {
         String returnData = wcb.getDefaultNotRanYet();
         String query_UpdateIndex = "INSERT INTO Feeds.StockPrices (jsonData) VALUES (?);";
         try { returnData = wc.q2do1c(dbc, query_UpdateIndex, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+
+    private String stockShareUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ShareUpdate = "UPDATE Core.StockShares SET Count=?, Holder=? WHERE Symbol=?;";
+        try { returnData = wc.q2do1c(dbc, query_ShareUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
 
@@ -874,7 +891,9 @@ public class FinanceDAO {
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }
     public String setRapidAutoNetWorth(Connection dbc) { return rapidAutoNetWorth(dbc); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return savingsAdd(dbc, qParams); }
+    public String setStockAdd(Connection dbc, List<String> qParams) { return stockAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
+    public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockShareUpdate(dbc, qParams); }
     public String setStockUpdate(Connection dbc, List<String> qParams) { return stockUpdate(dbc, qParams); }
     public String setZillowDailyUpdate(Connection dbc, List<String> qParams) { return zillowDailyUpdate(dbc, qParams); }
     public String setZillowHomeValue(Connection dbc, String zestimate) { return zillowHomeValue(dbc, zestimate); }

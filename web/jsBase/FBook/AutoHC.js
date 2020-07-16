@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Apr 2018
 Split from Auto on 1 Mar 2020
-Updated: 4 Mar 2020
+Updated: 16 Jul 2020
  */
 
 function actOnMpgEntryHC(event) {
@@ -23,14 +23,15 @@ function actOnMpgEntryHC(event) {
 
 function displayAutoHC() {
     getAutoHC();
-    $("#FBAuto").hide();
     $("#FBAutoHC").toggle();
+    $("#FBAuto").hide();
     $("#FBAsset").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();
     $("#FBWorkPTO").hide();
     $("#FBUUse").hide();
+    $("#FBStocks").hide();
 }
 
 function getAutoHC() {

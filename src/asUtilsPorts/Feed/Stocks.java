@@ -60,7 +60,7 @@ public class Stocks {
 		return dataBack;
 	}
 	
-	public String getStockQuote(Connection dbc, boolean sendEmail, boolean doManaged) {
+	public String getStockQuote(Connection dbc, boolean sendEmail) {
 
 		String quote = "Daily stock market report\n\n";
 		
@@ -82,8 +82,9 @@ public class Stocks {
 				JSONObject tStockData = null;
 				double valueNow = 0.0;
 				String valueNowS = "";
+				
 				String previousClose = "";
-				if(tManaged == 0 && !doManaged) {
+				if(tManaged == 0) {
 					tStockData = new JSONObject(apiCallStock(tTicker));
 					JSONObject tChart = tStockData.getJSONObject("chart");
 					JSONArray result = tChart.getJSONArray("result");
@@ -98,21 +99,25 @@ public class Stocks {
 					previousClose = String.valueOf(tStockData.getDouble("pc"));
 				}
 				valueNowS = String.valueOf(valueNow);
+				if(valueNowS.equals("")) { valueNowS = previousClose; }
 				double totVal = valueNow * tShares;
-				List<String> qParams = new ArrayList<>();
-				qParams.add(0, valueNowS);
-				qParams.add(1, previousClose);
-				qParams.add(2, tTicker);
-				updateFinanceAction.setStockUpdate(dbc, qParams);
-				quote += "\n" + tDescription + " (" + tTicker + ") : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
-				JSONObject tSubStock = new JSONObject();
-				tSubStock
-					.put("description", tDescription)
-					.put("shares",  tShares)
-					.put("valueEach", valueNowS)
-					.put("totalValue", totVal)
-					.put("previousClose", previousClose);
-				stockIndex.put(tTicker, tSubStock);
+				if(!valueNowS
+						.equals("0.0")) {
+					List<String> qParams = new ArrayList<>();
+					qParams.add(0, valueNowS);
+					qParams.add(1, previousClose);
+					qParams.add(2, tTicker);
+					updateFinanceAction.setStockUpdate(dbc, qParams);
+					quote += "\n" + tDescription + " (" + tTicker + ") : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
+					JSONObject tSubStock = new JSONObject();
+					tSubStock
+						.put("description", tDescription)
+						.put("shares",  tShares)
+						.put("valueEach", valueNowS)
+						.put("totalValue", totVal)
+						.put("previousClose", previousClose);
+					stockIndex.put(tTicker, tSubStock);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			

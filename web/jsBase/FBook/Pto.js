@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Pto.js Split: 4 Apr 2018
-Updated: 1 Mar 2020
+Updated: 16 Jul 2020
  */
 
 function displayWorkPTO() {
@@ -15,6 +15,7 @@ function displayWorkPTO() {
     $("#FBCheck").hide();
     $("#FBAsset").hide();
     $("#FBUUse").hide();
+    $("#FBStocks").hide();
 }
 
 function getWorkPTO() {

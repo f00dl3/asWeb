@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 1 Mar 2020
+Updated: 16 Jul 2020
  */
 
 function displayUtils() {
@@ -14,6 +14,7 @@ function displayUtils() {
     $("#FBCheck").hide();
     $("#FBWorkPTO").hide();
     $("#FBAsset").hide();
+    $("#FBStocks").hide();
 }
 
 function getUtils() {

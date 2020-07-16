@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 14 Jul 2020
+Updated: 16 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -101,7 +101,7 @@ function genOverviewStock(stockData, eTrade) {
 	stockData.forEach(function(sd) { 
 		if (sd.Count != 0 && sd.Managed != 1) { 
 			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
-			console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
+			//console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
 			} 
 		});
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day" ];

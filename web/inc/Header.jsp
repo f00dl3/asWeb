@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    5 Apr 2020
+    Updated:    16 Jul 2020
     Author     : astump
 --%>
 
@@ -49,6 +49,7 @@
         "FBook/Blue",
         "FBook/CkBk",
         "FBook/Pto",
+        "FBook/Stock",
         "FBook/Utils"
     };
     
