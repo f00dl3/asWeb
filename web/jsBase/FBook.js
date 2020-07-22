@@ -1,7 +1,7 @@
 /* 
  by Anthony Stump
  Created: 23 Mar 2018
- Updated: 16 Jul 2020
+ Updated: 17 Jul 2020
  */
 
 function checkTransactionAge(dtAge) {

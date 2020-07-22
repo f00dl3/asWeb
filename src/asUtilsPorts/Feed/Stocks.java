@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 14 Jul 2020
+Updated: 19 Jul 2020
 
 */
 
@@ -24,6 +24,8 @@ import asWebRest.dao.FinanceDAO;
 import asWebRest.secure.FinnHubBeans;
 
 public class Stocks {	
+	
+//https://query1.finance.yahoo.com/v7/finance/spark?symbols=TMUS,HAL
 	 
 	private String apiCallStock(String quote) {
 			String url = "https://query1.finance.yahoo.com/v8/finance/chart/" + quote;
@@ -60,6 +62,24 @@ public class Stocks {
 		return dataBack;
 	}
 	
+	private String apiCallStock_Yahoo7Multi(String quotes) {
+		String url = "https://query1.finance.yahoo.com/v7/finance/spark";
+		String dataBack = "qpiCallStock()\n";
+		try {
+			dataBack = Jsoup.connect(url)
+				.ignoreContentType(true)
+				.data("region", "US")
+				.data("lang", "en-US")
+				.data("symbols", quotes)
+				.execute()
+				.body();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataBack;
+}
+
+
 	public String getStockQuote(Connection dbc, boolean sendEmail) {
 
 		String quote = "Daily stock market report\n\n";
@@ -81,23 +101,22 @@ public class Stocks {
 				int tManaged = tStock.getInt("Managed");
 				JSONObject tStockData = null;
 				double valueNow = 0.0;
-				String valueNowS = "";
-				
+				String valueNowS = "";				
 				String previousClose = "";
-				if(tManaged == 0) {
+				/* if(tManaged == 0) { */
 					tStockData = new JSONObject(apiCallStock(tTicker));
 					JSONObject tChart = tStockData.getJSONObject("chart");
 					JSONArray result = tChart.getJSONArray("result");
 					JSONObject first = result.getJSONObject(0);
 					JSONObject meta = first.getJSONObject("meta");
 					valueNow = meta.getDouble("regularMarketPrice");
-					previousClose = String.valueOf(meta.getDouble("previousClose"));
-				} else {
+					previousClose = String.valueOf(meta.getDouble("chartPreviousClose"));
+				/* } else {
 					tStockData = new JSONObject(apiCallStock_FinnHub(tTicker));
 					//quote += tTicker + " : " + tStockData.toString();
 					valueNow = tStockData.getDouble("c");
 					previousClose = String.valueOf(tStockData.getDouble("pc"));
-				}
+				} */
 				valueNowS = String.valueOf(valueNow);
 				if(valueNowS.equals("")) { valueNowS = previousClose; }
 				double totVal = valueNow * tShares;
@@ -188,5 +207,74 @@ public class Stocks {
 		return quote;
 
 	}	
+	
+
+	public String getStockQuote_Yahoo7Multi(Connection dbc) {
+
+		String quote = "Daily stock market report using MultiQuote Yahoo v7 API\n\n";
+		String stockQuoteList = "";
+		
+		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+		UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
+		
+		JSONArray stocksToFetch = getFinanceAction.getStockList(dbc);
+
+		JSONObject stockIndex = new JSONObject();
+		
+		
+		for(int i = 0; i < stocksToFetch.length(); i++) {		
+			JSONObject tStock = stocksToFetch.getJSONObject(i);
+			String tTicker = tStock.getString("Symbol");
+			stockQuoteList += tTicker + ",";
+		}
+		
+		quote += "\nDBG: Ticker List: " + stockQuoteList;
+		
+		try { 
+			JSONObject tStockData = null;
+			tStockData = new JSONObject(apiCallStock_Yahoo7Multi(stockQuoteList));
+			//quote += "\nDBG: " + tStockData.toString();
+			JSONObject tChart = tStockData.getJSONObject("spark");
+			JSONArray result = tChart.getJSONArray("result");
+			for(int i = 0; i < result.length(); i++) {
+				String tTicker = "";
+				double valueNow = 0.0;
+				String valueNowS = "";				
+				String previousClose = "";
+				JSONObject quoteHolder = result.getJSONObject(i);
+				JSONArray quoteData = quoteHolder.getJSONArray("response");
+				JSONObject first = quoteData.getJSONObject(0);
+				JSONObject meta = first.getJSONObject("meta");
+				tTicker = meta.getString("symbol");
+				valueNow = meta.getDouble("regularMarketPrice");
+				previousClose = String.valueOf(meta.getDouble("chartPreviousClose"));
+				valueNowS = String.valueOf(valueNow);
+				if(valueNowS.equals("")) { valueNowS = previousClose; }
+				//quote += "\n" + tTicker + ": " + valueNowS;  
+				if(!valueNowS.equals("0.0")) {
+					List<String> qParams = new ArrayList<>();
+					qParams.add(0, valueNowS);
+					qParams.add(1, previousClose);
+					qParams.add(2, tTicker);
+					updateFinanceAction.setStockUpdate(dbc, qParams);
+					JSONObject tSubStock = new JSONObject();
+					tSubStock
+						.put("valueEach", valueNowS)
+						.put("previousClose", previousClose);
+					stockIndex.put(tTicker, tSubStock);
+				}
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+		List<String> qParams2 = new ArrayList<>();
+		qParams2.add(stockIndex.toString());
+		updateFinanceAction.setStockIndex(dbc, qParams2);
+		
+		return quote;
+
+	}	
+
 	
 }

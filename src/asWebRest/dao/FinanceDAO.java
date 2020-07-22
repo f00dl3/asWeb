@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 Jul 2020
+Updated: 20 Jul 2020
 */
 
 package asWebRest.dao;
@@ -538,13 +538,23 @@ public class FinanceDAO {
     }
     
     private JSONArray nwga(Connection dbc) {
-        final String query_FBook_NWGA = "SELECT FORMAT((AVG(Growth)),2) AS GrowthAvg FROM Core.FB_ENWT;";
+        final String query_FBook_NWGA = "SELECT" + 
+        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 7 day)-1)*100 as p7day," + 
+        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 30 day)-1)*100 as p30day," + 
+        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 90 day)-1)*100 as p90day," + 
+        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 365 day)-1)*100 as p1year," + 
+        		" FORMAT((SELECT AVG(Growth) FROM Core.FB_ENWT),2) AS GrowthAvg;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_FBook_NWGA, null);
             while (resultSet.next()) { 
                 JSONObject tObject = new JSONObject();
-                tObject.put("GrowthAvg", resultSet.getDouble("GrowthAvg"));
+                tObject
+                	.put("p7day", resultSet.getDouble("p7day"))
+                	.put("p30day", resultSet.getDouble("p30day"))
+                	.put("p90day", resultSet.getDouble("p90day"))
+                	.put("p1year", resultSet.getDouble("p1year"))
+                	.put("GrowthAvg", resultSet.getDouble("GrowthAvg"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -716,24 +726,6 @@ public class FinanceDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-
-    private String zillowDailyUpdate(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_ZillowUpdate = "INSERT INTO Feeds.ZillowEstimates (Date, jsonData) VALUES (CURDATE(), ?);";
-        try { returnData = wc.q2do1c(dbc, query_ZillowUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-    
-    private String zillowHomeValue(Connection dbc, String zestimate) {
-    	int assessedValue = 0;
-    	int zestimateDifference = 0;
-    	try { assessedValue = countyHomeValue(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { zestimateDifference = Integer.parseInt(zestimate) - assessedValue; } catch (Exception e) { e.printStackTrace(); }
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_ZillowHomeUpdate = "UPDATE Core.FB_Assets SET Value="+zestimateDifference+", Checked=CURDATE() WHERE Description='# Zillow House Adjustment';";
-        try { returnData = wc.q2do1c(dbc, query_ZillowHomeUpdate, null); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
     
     private JSONArray stockList(Connection dbc) { 
         final String query_GetStocks = "SELECT Symbol, Count, Holder," +
@@ -825,13 +817,31 @@ public class FinanceDAO {
         String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
         String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
         String query_UpdateStockC = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
-        String query_UpdateStockD = "UPDATE Core.FB_Assets SET Value=(SELECT SUM((Count*LastValue)*1.300178) FROM Core.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
+        String query_UpdateStockD = "UPDATE Core.FB_Assets SET Value=(SELECT SUM((Count*LastValue)*1.29992) FROM Core.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
         String query_UpdateStockE = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";
         try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockD, null); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockE, null); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+
+    private String zillowDailyUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ZillowUpdate = "INSERT INTO Feeds.ZillowEstimates (Date, jsonData) VALUES (CURDATE(), ?);";
+        try { returnData = wc.q2do1c(dbc, query_ZillowUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    private String zillowHomeValue(Connection dbc, String zestimate) {
+    	int assessedValue = 0;
+    	int zestimateDifference = 0;
+    	try { assessedValue = countyHomeValue(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { zestimateDifference = Integer.parseInt(zestimate) - assessedValue; } catch (Exception e) { e.printStackTrace(); }
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ZillowHomeUpdate = "UPDATE Core.FB_Assets SET Value="+zestimateDifference+", Checked=CURDATE() WHERE Description='# Zillow House Adjustment';";
+        try { returnData = wc.q2do1c(dbc, query_ZillowHomeUpdate, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     

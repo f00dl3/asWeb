@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 15 May 2020
+Updated: 19 May 2020
  */
 
 package asWebRest.resource;
@@ -39,6 +39,7 @@ import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
+import asWebRest.hookers.WealthGrowth;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -128,12 +129,14 @@ public class ChartResource extends ServerResource {
                     break;
                 
                 case "FinanceOverviewCharts":
+                	WealthGrowth wg = new WealthGrowth();
                     genericCharts = false;
                     JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
                     JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
                     JSONArray svals = getFinanceAction.getStockHistory(dbc);
+                    JSONArray wealth = wg.generateProjections(dbc);
                     //JSONObject stockGlob_DJI = fin.getStockChart(svals, "^DJI");
                     JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");
                     JSONObject enw_GlobY = fin.getFinEnw(enw_RawY, "Year", "T");
@@ -141,12 +144,14 @@ public class ChartResource extends ServerResource {
                     JSONObject enw_GlobYF = fin.getFinEnw(enw_RawY, "Year", "F");
                     JSONObject enw_GlobR = fin.getFinEnw(enw_RawR, "All", "R");
                     JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
+                    JSONObject wGlob = fin.getWealthGrowth(wealth);
                     try { dynChart.LineChart(enw_GlobY); returnData += "Chart generated - Est Net Worth Year!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobYF); returnData += "Chart generated - Est Net Worth Year F!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobYL); returnData += "Chart generated - Est Net Worth Year L!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobR); returnData += "Chart generated - Est Net Worth Rapid!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    try { dynChart.LineChart(wGlob); returnData += "Chart generated - Wealth!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(stockGlob_DJI); returnData += "Chart generated - Stocks DJI!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                  

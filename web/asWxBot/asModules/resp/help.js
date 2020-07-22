@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 30 Mar 2020
+Updated: 17 Jul 2020
  */
 
 const aLog = require('./../accessLog.js');
@@ -9,7 +9,7 @@ const asm = require('./../common.js');
 
 module.exports = {
 		
-		helpMessage: function(msg) { helpMesage(msg) }
+		helpMessage: function(msg) { helpMessage(msg) }
 
 }
 
@@ -18,7 +18,7 @@ function helpMessage(msg) {
 	var commandRan = "generateHelpMessage(msg)";
 	aLog.basicAccessLog(msg, commandRan, "start");
 	var apiVer = "UNSYNCH";
-	var helpMessageHeader = "asWxBot (f00dl3) - build "+bBuild+" ("+bUpdated+") ==> Commands:";
+	var helpMessageHeader = "asWxBot (f00dl3) ==> Commands:";
 	var helpMessageBody = "\n\'!ping\': Return \'pong\' reply back to user" +
 		"\n\'cam\': Get bot\'s cameras!" +
 		"\n\'camloop\': Get bot\'s camera video loop!" +
@@ -32,6 +32,8 @@ function helpMessage(msg) {
 		//"\n\'stocks\': Get stock quote for desired stock" + 
 		"\n\'weather\': Get latest weather data from KOJC (Olathe, KS)";
 	
+/*
+
 	var returnData = "DEBUG: function getWebVersion()";
 	var url = asm.webUiBase + "WebVersion";
 	fetch(url).then((res) => {
@@ -39,9 +41,11 @@ function helpMessage(msg) {
 		console.log(res),
 		console.log("API asWebUI v"+returnData.Version),
 		apiVer = returnData.Version,
-		helpMessageHeader = "asWxBot (f00dl3) - Build "+bBuild+" ("+bUpdated+") - asWebUI API v"+apiVer+"\n";
+		helpMessageHeader = "asWxBot (f00dl3) - API v"+apiVer+"\n";
 	});
-
+	
+*/
+	
 	var helpMessage = helpMessageHeader + helpMessageBody;
 	msg.reply(helpMessage);
 

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 14 Jul 2020
+Updated: 19 Jul 2020
  */
 
 package asWebRest.resource;
@@ -13,6 +13,7 @@ import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
 import asWebRest.hookers.WaterOneHook;
+import asWebRest.hookers.WealthGrowth;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.JsonWorkers;
 import asWebRest.shared.MyDBConnector;
@@ -235,7 +236,7 @@ public class TestResource extends ServerResource {
 	            	
 	            case "Stock":
 	            	Stocks stocks = new Stocks();
-	            	returnData += stocks.getStockQuote(dbc, true);
+	            	returnData += stocks.getStockQuote_Yahoo7Multi(dbc);
 	            	break;
 
 	            case "StockFH":
@@ -260,6 +261,12 @@ public class TestResource extends ServerResource {
 					WaterOneHook w1h = new WaterOneHook();
 					returnData = w1h.testPrefetch(dbc);
 					break;
+
+				case "Wealth":
+					WealthGrowth wg = new WealthGrowth();
+					returnData = wg.generateProjections(dbc).toString();
+					break;			
+					
 	            	
             }
         }

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 16 Jul 2020
+Updated: 19 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -97,7 +97,6 @@ function genOverviewStock(stockData, eTrade) {
 	var stockWorth = 0;
 	var vestDiff = etaBalance - eTradeVested;
 	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
-	let mktUrl = "https://www.marketwatch.com/investing/stock/";
 	stockData.forEach(function(sd) { 
 		if (sd.Count != 0 && sd.Managed != 1) { 
 			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
@@ -156,7 +155,12 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var bubble = "<div class='UBox'>Worth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
             "Current estimate: $" + numComma(cnw1d_L) +
-            "<br/><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%" +
+            "<br/><em>Now WMQY growth</em>: " +
+            	nwga.p7day.toFixed(1) + "/" + 
+            	nwga.p30day.toFixed(1) + "/" + 
+            	nwga.p90day.toFixed(1) + "/" + 
+            	nwga.p1year.toFixed(1) + "%" +
+            "<br/><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%"
             "<p><em>Projections (starting from last period.)</em>";
     var pTable = "<table><thead><tr>";
     for (var i = 0; i < proCols.length; i++) {
@@ -173,7 +177,8 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
             "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
-            "<p>";
+            "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
+                       "<p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {
         wTable += "<th>" + wCols[i] + "</th>";

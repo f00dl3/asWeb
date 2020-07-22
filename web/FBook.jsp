@@ -26,9 +26,9 @@
             <button class="UButton" id="ShowFBAsset">A</button>
             <button class="UButton" id="ShowFBBills">B</button>
             <button class="UButton" id="ShowFBCheck">C</button>
-            <button class="UButton" id="ShowFBAuto">CM</button>
-            <button class="UButton" id="ShowFBAutoHC">CH</button>
-            <button class="UButton" id="ShowFBBlue">L</button>
+            <button class="UButton" id="ShowFBAutoHC">H</button>
+            <button class="UButton" id="ShowFBAuto">M</button>
+            <button class="UButton" id="ShowFBBlue">P</button>
             <button class="UButton" id="ShowFBStocks">S</button>
             <button class="UButton" id="ShowFBWorkPTO">T</button>
             <button class="UButton" id="ShowFBUUse">U</button>

@@ -2,7 +2,7 @@
 by Anthony Stump
 Adapted from old ASWebUI
 Created: Unknown
-Updated: 16 Jul 2020
+Updated: 17 Jul 2020
 */
 
 /* Hidden DIVs */
@@ -446,6 +446,28 @@ Updated: 16 Jul 2020
 	top: 50%;
 	width: auto;
 	z-index: 10;
+}
+
+.UPopCenterTriggered {
+	background-color: #999999;
+	border: 2px solid black;
+	border-radius: 3px;
+	box-shadow: 0px 0 3px rgba(0,0,0,0,25);
+	color: black;
+	clear: both;
+	display: inline;
+	position: absolute;
+	top: 40%;
+	left: 40%;
+	height: auto;
+	margin: 0;
+	width: auto;
+	max-height: 256px;
+	max-width: 320px;
+	overflow: hidden;
+	padding: 6px;
+	width: auto;
+	z-index: 999;
 }
 
 .UPopNM { clear: both; display: inline; }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 4 Apr 2020
+Updated: 17 Jul 2020
  */
 
 var annMaint = 841.92;
@@ -13,6 +13,7 @@ var costPerMile = 3.50;
 var cpmNoMpg = (annMaint / annMiles);
 var elecCost = 0.14;
 var hiddenFeatures = 0;
+var mktUrl = "https://www.marketwatch.com/investing/stock/";
 var timeOutMilli = (60*1000);
 var playIcon = "<img class='th_icon' src='" + getBasePath("icon") + "/ic_ply.png' />";
 
@@ -566,6 +567,18 @@ function scLd(scriptName) {
 function showNotice(message) {
     dojo.byId("NoticeHolder").innerHTML = "<div class='Notice'>" + message + "</notice>";
     $('.Notice').fadeIn('slow').delay(5000).fadeOut('slow');
+}
+
+function showPopupNotice(message) {
+	let rData = "<div class='UPopCenterTriggered' id='thisPopupCentered'>" + message +
+		"<p/><button class='UButton' id='closeThis'>Close</button></div>";
+	document.body.innerHTML += rData;
+	let closeButton = dojo.byId('closeThis');
+	dojo.connect(closeButton, "click", showPopupNoticeCloser);
+}
+
+function showPopupNoticeCloser() {
+	document.getElementById('thisPopupCentered').style.display = "none";
 }
 
 function stickyPopClose() {

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 14 Jul 2020
+Updated: 19 Jul 2020
  */
 
 package asWebRest.chartHelpers;
@@ -190,9 +190,46 @@ public class Finance {
     	
     }
     
+    private JSONObject wealthGrowth(JSONArray dataIn) {
+    	String ch_Name = "Wealth Growth";
+    	JSONObject ch_Glob = new JSONObject();
+    	JSONObject ch_Props = new JSONObject();
+    	JSONArray ch_Labels = new JSONArray();
+    	JSONArray ch_Data = new JSONArray();
+    	JSONArray ch_Data2 = new JSONArray();
+    	JSONArray ch_Data3 = new JSONArray();
+    	JSONArray ch_Data4 = new JSONArray();
+    	ch_Props
+		        .put("dateFormat", "yyyy-MM-dd")
+		        .put("chartName", ch_Name).put("chartFileName", "FinGrowth")
+		        .put("sName", "Week").put("sColor", "Green")
+		        .put("s2Name", "Month").put("s2Color", "Yellow")
+		        .put("s3Name", "Quarter").put("s3Color", "Red")
+		        .put("s4Name", "Year").put("s4Color", "White")
+		        .put("xLabel", "Date").put("yLabel", "USD");
+        for (int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            ch_Labels.put(thisObject.getString("asOf"));
+            ch_Data.put(thisObject.getInt("mW"));
+            ch_Data2.put(thisObject.getInt("mM"));
+            ch_Data3.put(thisObject.getInt("mQ"));
+            ch_Data4.put(thisObject.getInt("mY"));
+        }
+		ch_Glob
+		        .put("labels", ch_Labels)
+		        .put("data", ch_Data)
+		        .put("data2", ch_Data2)
+		        .put("data3", ch_Data3)
+		        .put("data4", ch_Data4)
+		        .put("props", ch_Props);
+		return ch_Glob;
+    	
+    }
+    
     public JSONObject getBillCh(JSONArray dataIn) { return billCh(dataIn); }
     public JSONObject getFinEnw(JSONArray dataIn, String periodLength, String dataSelection) { return finEnw(dataIn, periodLength, dataSelection); }
     public JSONObject getSavingsOpt(JSONArray dataIn) { return savingsOpt(dataIn); }
     public JSONObject getStockChart(JSONArray dataIn, String symbol) { return stockChart(dataIn, symbol); }
+    public JSONObject getWealthGrowth(JSONArray dataIn) { return wealthGrowth(dataIn); }
 
 }
