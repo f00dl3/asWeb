@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 27 Mar 2018
 Split from WxLive: 23 Apr 2018
-Updated: 14 Dec 2019
+Updated: 26 Jul 2020
  */
 
 function actOnShowFeed() {
@@ -200,7 +200,9 @@ function popLiveContainer() {
     popLiveButtonNavi();
     popLiveLinksList();
     getLiveLinks3d();
-    getObsDataMerged("ObsCurrent", "static");
+    //getObsDataMerged("ObsCurrent", "static");
+    //getObsDataMergedHome("ObsCurrent", "static");
+    getObsDataMergedAndHome("ObsCurrent", "static");
 }
 
 function popLiveLinks3d(irsLinks, df7Links) {

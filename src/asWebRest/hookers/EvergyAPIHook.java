@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Jan 2020
-Updated: 4 Jul 2020
+Updated: 22 Jul 2020
  */
 
 package asWebRest.hookers;
@@ -135,7 +135,8 @@ public class EvergyAPIHook {
 					qParams.add(Double.toString(tJo.getDouble("usage")));
 					qParams.add(Double.toString(tJo.getDouble("demand")));
 					qParams.add(Double.toString(tJo.getDouble("peakDemand")));
-					qParams.add(tJo.getString("peakDateTime"));
+					//qParams.add(tJo.getString("peakDateTime"));
+					qParams.add("Empty");
 					qParams.add(Double.toString(tJo.getDouble("cost")));
 					updateUtilityUseAction.setElectricityUse(dbc, qParams);
 				} catch (Exception e) { e.printStackTrace(); }

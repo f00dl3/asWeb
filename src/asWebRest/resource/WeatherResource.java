@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 20 Feb 2019
+Updated: 26 Jul 2020
  */
 
 package asWebRest.resource;
@@ -245,7 +245,40 @@ public class WeatherResource extends ServerResource {
                         .put("indoorObs", indorObs);
                     returnData = mergedResults.toString();
                     break;          
-                      
+                    
+                case "getObsJsonMergedHome":
+                    JSONArray latestObsBa = getWeatherAction.getObsJsonLast(dbc);
+                    JSONArray wxObsBa = getWeatherAction.getObsJsonHome(dbc);
+                    JSONArray indorObsC = getSnmpAction.getMergedLastTemp(dbc);
+                    mergedResults
+                        .put("wxObsM1H", latestObsBa)
+                        .put("wxObsNow", wxObsBa)
+                        .put("indoorObs", indorObsC);
+                    returnData = mergedResults.toString();
+                    break;          
+                        
+                case "getObsJsonMergedAndHome":
+                    try {
+                        inParams.add(0, argsInForm.getFirstValue("startTime"));
+                        inParams.add(1, argsInForm.getFirstValue("endTime"));
+                        inParams.add(2, argsInForm.getFirstValue("order"));
+                        inParams.add(3, argsInForm.getFirstValue("limit"));
+                        inParams.add(4, argsInForm.getFirstValue("stationId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray wxObsB2 = getWeatherAction.getObsJsonByStation(dbc, inParams);
+                    JSONArray latestObsB2 = getWeatherAction.getObsJsonLast(dbc);
+                    JSONArray indorObs2 = getSnmpAction.getMergedLastTemp(dbc);
+                    JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
+                    mergedResults
+                        .put("wxObsM1H", latestObsB2)
+                        .put("wxObsNow", wxObsB2)
+                        .put("indoorObs", indorObs2)
+                        .put("homeWxObs", wxObsBa2);
+                    returnData = mergedResults.toString();
+                    break;          
+                                 
                 case "getObsJMWS":
                     try {
                         inParams.add(0, "DESC");

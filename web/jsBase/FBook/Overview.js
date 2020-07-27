@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 19 Jul 2020
+Updated: 23 Jul 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -103,7 +103,7 @@ function genOverviewStock(stockData, eTrade) {
 			//console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
 			} 
 		});
-    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth", "Day" ];
+    var sCols = ["Symbol", "Description", "Shares", "Value", "Worth" /*, "Day" */ ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
             "<div class='UBoxO'>" +
             "eTrade: <strong>$" + etaBalance.toFixed(0) + "</strong> (<strong>$" + eTradeVested + "</strong>)<br/>" +
@@ -125,7 +125,7 @@ function genOverviewStock(stockData, eTrade) {
 	                    "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
 	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
 	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
-	                    "<td style='color: " + txtColor + "'>" + change + "</td>" +
+	                    //"<td style='color: " + txtColor + "'>" + change + "</td>" +
 	                    //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
 	                    "</tr>";
 	        }

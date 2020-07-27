@@ -1,11 +1,13 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 15 Mar 2020
+Updated: 26 Mar 2020
  */
 
 package asWebRest.dao;
 
+import asWebRest.secure.AmbientWeatherBeans;
+import asWebRest.secure.WUndergroundBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -811,9 +813,11 @@ public class WeatherDAO {
     	final int offset = 1;
         final String query_ObsJSON_Last = "SELECT ObsID, JSON_EXTRACT(jsonData, '$.KOJC') as jsonSet" +
                 " FROM WxObs.StationDataIndexed WHERE ObsID=(SELECT MAX(ObsID) FROM WxObs.StationDataIndexed);";
+        final String query_ObsJSON_Last_Home = "SELECT ObsID, JSON_EXTRACT(jsonData, '$.KKSLENEX98') as jsonSet" +
+                " FROM WxObs.RapidSDI_Home WHERE ObsID=(SELECT MAX(ObsID) FROM WxObs.RapidSDI_Home);";
         JSONArray tContainer = new JSONArray();
         try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Last, null);
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSON_Last_Home, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject.put("jsonSet", resultSet.getString("jsonSet"));
@@ -857,6 +861,29 @@ public class WeatherDAO {
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONbyStation, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("ObsID", resultSet.getLong("ObsID"))
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("jsonSet", resultSet.getString("jsonSet"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+
+    public JSONArray getObsJsonHome(Connection dbc) {
+    	WUndergroundBeans wub = new WUndergroundBeans();
+        final String station = "$." + wub.getStation_Home();
+        final String query_ObsJSONHome = "SELECT ObsID, GetTime, " +
+        		" JSON_EXTRACT(jsonData, '"+station+"') as jsonSet" +
+        		" FROM WxObs.RapidSDI_Home" +
+                " ORDER BY GetTime DESC LIMIT 1;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONHome, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
                 tObject
@@ -1379,6 +1406,14 @@ public class WeatherDAO {
         return returnData;
     }
 
+
+    public String setRapidSDIHome(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_rapidSDIHome = "INSERT INTO WxObs.RapidSDI_Home (jsonData) VALUES (?);";
+        try { returnData = wc.q2do1c(dbc, query_rapidSDIHome, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     public String setSpcMesoSent(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_SentAlert = "UPDATE WxObs.SPCMesoscale SET Notified=1 WHERE title=?;";

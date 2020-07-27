@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 4 Mar 2018
+Updated: 26 Jul 2020
  */
 
 function getChartDataWXOJ(stationId) {
@@ -73,7 +73,7 @@ function getObsData(targetDiv, displayType) {
     
     var dateOverrideStart = getDate("hour", -2, "full"); 
     var dateOverrideEnd = getDate("hour", 0, "full");
-    var obsJsonPostData = "doWhat=getObjsJson" +
+    var obsJsonPostData = "doWhat=getObsJson" +
         "&startTime=" + dateOverrideStart +
         "&endTime=" + dateOverrideEnd +
         "&order=DESC" +
@@ -89,7 +89,6 @@ function getObsData(targetDiv, displayType) {
     };
     dojo.xhrPost(arObsJsonMq);
 }
-
 
 function getObsDataMerged(targetDiv, displayType) {
     var timeout = getRefresh("medium");
@@ -135,6 +134,92 @@ function getObsDataMerged(targetDiv, displayType) {
     };
     dojo.xhrPost(arObsJsonMq);
     setTimeout(function() { getObsDataMerged(targetDiv, displayType); }, timeout);
+}
+
+function getObsDataMergedHome(targetDiv, displayType) {
+    var timeout = getRefresh("medium");
+    aniPreload("on");
+    var obsJson = getResource("Wx");
+    var obsJsonPostData = "doWhat=getObsJsonMergedHome";
+    var arObsJsonMq = {
+        preventCache: true,
+        url: obsJson,
+        postData: obsJsonPostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            var lastData;
+            var theData = JSON.parse(data.wxObsNow[0].jsonSet);
+            var nowObsId = data.wxObsNow[0].ObsID;
+            if(isSet(data.wxObsM1H[0])) { lastData = JSON.parse(data.wxObsM1H[0].jsonSet); } else { lastData = theData; }
+            var indoorObs = data.indoorObs;
+            switch(displayType) {
+                case "marquee":
+                    processMarqueeData(theData, lastData, targetDiv);
+                    break;
+                case "static":
+                    getChartDataWXOJ("KOJC");
+                    processObservationData(nowObsId, theData, lastData, indoorObs, targetDiv);
+                    $(targetDiv).html(data.WxObs);
+                    break;
+            }
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            aniPreload("off");
+            console.log("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(arObsJsonMq);
+    setTimeout(function() { getObsDataMergedHome(targetDiv, displayType); }, timeout);
+}
+
+function getObsDataMergedAndHome(targetDiv, displayType) {
+    var timeout = getRefresh("medium");
+    aniPreload("on");
+    var dateOverrideStart = getDate("hour", -1, "full"); 
+    var dateOverrideEnd = getDate("hour", 0, "full");
+    var obsJson = getResource("Wx");
+    var stationId = "KOJC";
+    var obsJsonPostData = "doWhat=getObsJsonMergedAndHome" +
+        "&startTime=" + dateOverrideStart +
+        "&endTime=" + dateOverrideEnd +
+        "&order=DESC" +
+        "&limit=1" +
+        "&stationId=" + stationId;
+    var arObsJsonMq = {
+        preventCache: true,
+        url: obsJson,
+        postData: obsJsonPostData,
+        handleAs: "json",
+        timeout: timeOutMilli,
+        load: function(data) {
+            var lastData;
+            var theData = JSON.parse(data.wxObsNow[0].jsonSet);
+            var homeData = JSON.parse(data.homeWxObs[0].jsonSet);
+            var nowObsId = data.wxObsNow[0].ObsID;
+            var homeObsId = data.homeWxObs[0].ObsID;
+            if(isSet(data.wxObsM1H[0])) { lastData = JSON.parse(data.wxObsM1H[0].jsonSet); } else { lastData = theData; }
+            var indoorObs = data.indoorObs;
+            switch(displayType) {
+                case "marquee":
+                    processMarqueeData(homeData, lastData, targetDiv);
+                    break;
+                case "static":
+                    getChartDataWXOJ(stationId);
+                    processObservationDataV2(nowObsId, theData, lastData, indoorObs, targetDiv, homeData, homeObsId);
+                    $(targetDiv).html(data.WxObs);
+                    break;
+            }
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            aniPreload("off");
+            console.log("xhrGet obsJson: FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+        }
+    };
+    dojo.xhrPost(arObsJsonMq);
+    setTimeout(function() { getObsDataMergedAndHome(targetDiv, displayType); }, timeout);
 }
 
 function processMarqueeData(theData, lastData, targetDiv) {
@@ -191,7 +276,8 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
     if(lastData === "") { console.log("ERROR fetching LastObsData"); }
     var returnData = "";
     var theTemperature = theData.Temperature;
-    var stationId = "KOJC"; // forced
+    //var stationId = "KOJC"; // forced
+    var stationId = "(HOME)";
     var getTime = theData.GetTime;
     var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs[0].ExtTemp/1000));
     var indoorPiTemp = Math.round(indoorObs[1].ExtTemp);
@@ -226,9 +312,9 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             processUpperAirData(998, theData) +
             "</div><br/>" +
             "<div class='UPop'>" + theData.Weather +
-            "<div class='UPopO'>" +
-            "Visibility: " + theData.Visibility + " mi.<br/>" +
-            "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb.<br/>" +
+            "<div class='UPopO'>";
+        if(isSet(theData.Visibility)) { returnData += "Visibility: " + theData.Visibility + " mi.<br/>"; }
+        returnData += "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb.<br/>" +
             "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'>" +
             "<img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
             "</div></div><br/>" +
@@ -263,7 +349,98 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
             "</div></div><br/>";
         }
+        if(isSet(theData.DailyRain)) {
+        	returnData += "<br/>Precip: " + theData.DailyRain + "\"";
+        }
         if(isSet(theData.CAPE)) { returnData += "CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
+        console.log(convertToJsDate(shortTime));
+    }
+    returnData += "</div>";        
+    dojo.byId(targetDiv).innerHTML = returnData;
+}
+
+function processObservationDataV2(nowObsId, theData, lastData, indoorObs, targetDiv, homeData, homeObsId) {
+    if(theData === "") { console.log("ERROR fetching ThisObsData"); }
+    if(lastData === "") { console.log("ERROR fetching LastObsData"); }
+    var returnData = "";
+    var theTemperature = homeData.Temperature;
+    var stationId = "KOJC"; // forced
+    var getTime = homeData.GetTime;
+    var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs[0].ExtTemp/1000));
+    var indoorPiTemp = Math.round(indoorObs[1].ExtTemp);
+    var indoorPi2Temp = Math.round(indoorObs[2].ExtTemp);
+    if(!isSet(theTemperature)) {
+        returnData += "<div id='LWObs'>";
+        returnData += "<strong>WARNING! " + stationId + " [Obs] data unavailable!</strong>";
+        returnData += "<br/>Fetch timestamp: " + getTime;
+    } else {
+        var diffTemperature = parseInt(homeData.Temperature) - parseInt(lastData.Temperature);
+        var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
+        var diffPressure = parseInt(theData.Pressure) - parseInt(lastData.Pressure);
+        var gustLine = "";
+        var shortTime = wxShortTime(homeData.TimeString);
+        if(!isSet(homeData.Dewpoint)) { homeData.Dewpoint = homeData.Temperature; }
+        if(isSet(homeData.WindGust)) { gustLine = "<br/>Winds gusting to <span style='" + styleWind(homeData.WindGust) + "'>" + homeData.WindGust + " mph</span>"; }
+        var passJson = {'v1':homeData.Temperature, 'v2':homeData.Dewpoint};
+        var oDivStyle = color2Grad("T", "right", passJson);
+        var rSpeed = parseInt(homeData.WindSpeed) + 5;
+        var cSpeed = parseInt(homeData.WindSpeed) + 13;
+        var flTemp = wxObs("Feel", theData.TimeString, homeData.Temperature, homeData.WindSpeed, homeData.RelativeHumidity, theData.Weather);
+        var flTempR = wxObs("Feel", theData.TimeString, homeData.Temperature, rSpeed, homeData.RelativeHumidity, theData.Weather);
+        var flTempC = wxObs("Feel", theData.TimeString, homeData.Temperature, cSpeed, homeData.RelativeHumidity, theData.Weather);
+        returnData += "<div id='LWObs' style='" + oDivStyle + "'>" +
+            "<div class='UPopNM'><strong>" + shortTime + "</strong>" +
+            "<div class='UPopNMO'>" +
+            "<a href='" + getBasePath("ui") + "/WxStation.jsp' target='new'>JSON</a><br/>" +
+            "Obs #: " + nowObsId + " station " + stationId + "<br/>" +
+            "Home Obs #: " + homeObsId + " merged in!<br/>" +
+            "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
+            "<br/><div class='UPopNM'>" +
+            "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
+            processUpperAirData(998, theData) +
+            "</div><br/>" +
+            "<div class='UPop'>" + theData.Weather +
+            "<div class='UPopO'>";
+        if(isSet(theData.Visibility)) { returnData += "Visibility: " + theData.Visibility + " mi.<br/>"; }
+        returnData += "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb.<br/>" +
+            "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
+            "</div></div><br/>" +
+            "<div class='UPop'>" + animatedArrow(diffTemperature) + 
+            "<span style='" + styleTemp(homeData.Temperature) + "'>" + Math.round(homeData.Temperature) + "F</span>" +
+            "<div class='UPopO'>(" + diffTemperature + "F/hr)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
+            "</a></div></div>/" +
+            "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
+            "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
+            "<div class='UPopO'>(" + diffDewpoint + "F/hr)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
+            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
+            "</a></div></div>" +
+            "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
+            "<div class='UPopO'>" +
+            "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumi", "th") + "'/></a>" +
+            "</div></div></span>" +
+            " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
+            "<div class='UPopO'>" +
+            "<button style='" + styleTemp(indoorTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_home.gif'/>" + indoorTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPiTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png'/>" + indoorPiTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button><br/>" +
+            "<button style='" + styleTemp(flTempR) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_run.jpeg'/>" + flTempR + "F</button><br/>" +
+            "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button><br/>" +
+            "<br/>As of: " + indoorObs[0].WalkTime + "</div></div>)<br/>"; 
+        if(isSet(homeData.WindSpeed)) {
+            returnData += "<div class='UPop'>Wind: "; if(isSet(homeData.WindDirection)) { returnData += homeData.WindDirection + " at "; }
+            returnData += "<span style='" + styleWind(homeData.WindSpeed) + "'>" + homeData.WindSpeed + " mph</span>" + gustLine +
+            "<div class='UPopO'>" + 
+            "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
+            "</div></div><br/>";
+        }
+        if(isSet(homeData.DailyRain)) {
+        	returnData += "Precip Today: " + homeData.DailyRain + "\"";
+        }
+        if(isSet(theData.CAPE)) { returnData += "<br/>CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
         console.log(convertToJsDate(shortTime));
     }
     returnData += "</div>";        

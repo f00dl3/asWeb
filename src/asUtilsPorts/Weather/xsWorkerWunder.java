@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Sep 2017
-Updated: 2 Jan 2020
+Updated: 26 Jul 2020
 */
 
 package asUtilsPorts.Weather; 
@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import org.json.*;
 
+import asWebRest.hookers.AmbientWxStation;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
@@ -160,6 +161,7 @@ public class xsWorkerWunder {
 		try { wc.q2do1c(dbc, addStationTestSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }
+       
         
         System.out.println(returnData);
 

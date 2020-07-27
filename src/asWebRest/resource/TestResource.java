@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 19 Jul 2020
+Updated: 25 Jul 2020
  */
 
 package asWebRest.resource;
@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetNewsFeedAction;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.NewsFeedDAO;
+import asWebRest.hookers.AmbientWxStation;
 import asWebRest.hookers.EvergyAPIHook;
 import asWebRest.hookers.MediaTools;
 import asWebRest.hookers.SnmpWalk;
@@ -150,6 +151,11 @@ public class TestResource extends ServerResource {
 
             	case "AlertMe":
             		AlertMe.doAlert();
+            		break;
+            		
+            	case "Ambient":
+            		AmbientWxStation aws = new AmbientWxStation();
+            		returnData += aws.returnWunder(dbc);
             		break;
 	        		
 	        	case "AudioTest":

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 16 Dec 2019
+Updated: 26 Jul 2020
 */
 
 function actOnHiddenToggle(event) {
@@ -289,7 +289,8 @@ function popLinkList() {
 }
 
 var initAnthony = function(event) {
-    getObsDataMerged("disHolder", "marquee");
+    //getObsDataMerged("disHolder", "marquee");
+    getObsDataMergedHome("disHolder", "marquee");
     getWebLinks("Anthony.php-SSH", "sshLinks", "bubble");
     popLinkList();
     getWebVersion("versionPlaceholder");

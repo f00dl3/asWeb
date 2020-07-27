@@ -1,13 +1,12 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 16 May 2020
+Updated: 25 Jul 2020
 */
 
 package asWebRest.shared;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -47,9 +46,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+/*
+import java.io.BufferedOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+*/
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -659,7 +661,7 @@ public class WebCommon {
 	
     public double tempC2F(double tempC) { return tempC * 9/5 + 32; }
 
-	public void unTarGz(String tarFileStr, String destStr) {
+	/* public void unTarGz(String tarFileStr, String destStr) {
 		File tarFile = new File(tarFileStr);
 		File dest = new File(destStr);
 		dest.mkdirs();
@@ -687,7 +689,7 @@ public class WebCommon {
 		}
 		catch (FileNotFoundException fnf) { fnf.printStackTrace(); }
 		catch (IOException iox) { iox.printStackTrace(); }
-	}
+	} */
 	
     public String unzipFile(String zipFile, String outputFolder) {
         String resultsBack = "";

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 19 Jul 2020
+Updated: 26 Jul 2020
 */
 
 package asUtilsPorts;
@@ -29,6 +29,7 @@ import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.dao.FinanceDAO;
+import asWebRest.hookers.AmbientWxStation;
 
 public class Feeds {
 
@@ -36,6 +37,7 @@ public class Feeds {
 
 		String returnData = "Fetch 1 minute feeds:\n";
 
+		AmbientWxStation aws = new AmbientWxStation();
 		ANSSQuakes anssQuakes = new ANSSQuakes();
     	AlertMe alertMe = new AlertMe();
 		NWSWarnings nwsWarnings = new NWSWarnings();
@@ -44,6 +46,7 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }    
     	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += aws.returnWunder(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
 		return returnData;
 

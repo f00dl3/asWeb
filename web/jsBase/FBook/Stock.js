@@ -74,7 +74,7 @@ function putStocks(stockData) {
     let stockResults = "<div class='table'>";
     stockData.forEach(function (sd) {
 	let holdingValue = (sd.Count * sd.LastValue);
-	if(sd.Symbol === 'FSNZX') { holdingValue = (sd.Count * adj401k); }
+	if(sd.Symbol === 'FSNZX') { holdingValue = (sd.Count * (sd.LastValue * adj401k)); }
 	holdingValue = holdingValue.toFixed(2);
         stockResults += "<form class='tr stockAddUpdateForm'>"+
         	"<span class='td'><input class='C2UStock' type='checkbox' name='Action' value='Update' /></span>" +
