@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 14 Dec 2019
+Updated: 26 Jul 2020
  */
 
 function actOnDoLive(event) {
@@ -54,7 +54,7 @@ function popCamHolder() {
 }
 
 function init() {
-    getObsDataMerged("disHolderCAMS", "marquee");
+    getObsDataMergedAndHome("disHolderCAMS", "marquee");
     popCamHolder();
     snmpRapid("snmpHolder");
 }

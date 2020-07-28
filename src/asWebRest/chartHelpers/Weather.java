@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 4 Nov 2018
+Updated: 27 Jul 2020
  */
 
 package asWebRest.chartHelpers;
 
+import asWebRest.secure.WUndergroundBeans;
 import asWebRest.shared.WebCommon;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 public class Weather {
     
     WebCommon wc = new WebCommon();
+    WUndergroundBeans wub = new WUndergroundBeans();
     
     private JSONObject cf6cpc(JSONArray cf6Data, String cf6ChDateStart, String cf6ChDateEnd) {       
         String cf6cpc_ChartName = "CPC Data: " + cf6ChDateStart + " to " + cf6ChDateEnd;
@@ -335,9 +337,11 @@ public class Weather {
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
         JSONArray this_Debug = new JSONArray();
+        String tChartName = "ObsJSONHumi";
+        if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
         this_Props
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
-                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONHumi")
+                .put("chartName", this_ChartName).put("chartFileName", tChartName)
                 .put("sName", "Humidity").put("sColor", "White")
                 .put("xLabel", "Date").put("yLabel", "Percent");
         for(int i = 0; i < dataIn.length(); i++) {
@@ -434,9 +438,11 @@ public class Weather {
         JSONArray this_Data = new JSONArray();
         JSONArray this_Data2 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
+        String tChartName = "ObsJSONTemp";
+        if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
         this_Props
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
-                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONTemp")
+                .put("chartName", this_ChartName).put("chartFileName", tChartName)
                 .put("sName", "Temperature").put("sColor", "Red")
                 .put("s2Name", "Dewpoint").put("s2Color", "Blue")
                 .put("xLabel", "Date").put("yLabel", "Degrees");
@@ -489,9 +495,11 @@ public class Weather {
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
         JSONArray this_Debug = new JSONArray();
+        String tChartName = "ObsJSONWind";
+        if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
         this_Props
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
-                .put("chartName", this_ChartName).put("chartFileName", "ObsJSONWind")
+                .put("chartName", this_ChartName).put("chartFileName", tChartName)
                 .put("sName", "Wind").put("sColor", "Yellow")
                 .put("xLabel", "Date").put("yLabel", "MPH");
         for(int i = 0; i < dataIn.length(); i++) {

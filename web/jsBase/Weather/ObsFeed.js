@@ -1,8 +1,28 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 26 Jul 2020
+Updated: 27 Jul 2020
  */
+
+function getChartDataWXHome() {
+    var thePostData = {
+        "doWhat": "WxObsChartsHome"
+    };
+    require(["dojo/request"], function(request) {
+        request
+            .post(getResource("Chart"), {
+                data: thePostData,
+                handleAs: "text"
+            }).then(
+                function(data) {
+                    aniPreload("off");
+                },
+                function(error) { 
+                    aniPreload("off");
+                    window.alert("request for Model Charts Home AIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                });
+    });
+}
 
 function getChartDataWXOJ(stationId) {
     var dateOverrideStart = getDate("hour", -72, "full"); 
@@ -203,10 +223,11 @@ function getObsDataMergedAndHome(targetDiv, displayType) {
             var indoorObs = data.indoorObs;
             switch(displayType) {
                 case "marquee":
-                    processMarqueeData(homeData, lastData, targetDiv);
+                    processMarqueeDataV2(theData, lastData, targetDiv, homeData);
                     break;
                 case "static":
                     getChartDataWXOJ(stationId);
+                    getChartDataWXHome();
                     processObservationDataV2(nowObsId, theData, lastData, indoorObs, targetDiv, homeData, homeObsId);
                     $(targetDiv).html(data.WxObs);
                     break;
@@ -236,7 +257,7 @@ function processMarqueeData(theData, lastData, targetDiv) {
     } else {
         var diffTemperature = parseInt(theData.Temperature) - parseInt(lastData.Temperature);
         var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
-        var diffPressure = parseInt(theData.Pressure) - parseInt(lastData.Pressure);
+        var diffPressure = parseFloat(theData.PressureIn) - parseFloat(lastData.PressureIn);
         var gust = "";
         var shortTime = wxShortTime(theData.TimeString);
         if(!isSet(theData.Dewpoint)) { theData.Dewpoint = theData.Temperature; }
@@ -264,7 +285,59 @@ function processMarqueeData(theData, lastData, targetDiv) {
         if(isSet(theData.CAPE)) {
             returnData += "<span style=" + styleCape(theData.CAPE) + ">" + theData.CAPE + "</span> - ";
         }
-        returnData += " MSLP: " + animatedArrow(diffPressure) + theData.Pressure + " <span>mb</span> --- ";
+        returnData += " MSLP: " + animatedArrow(diffPressure) + theData.PressureIn + " <span>\"</span> --- ";
+    }
+    returnData += "</div>";
+    dojo.byId(targetDiv).innerHTML = returnData;
+    $("#WxObsMarq").marquee();
+}
+
+function processMarqueeDataV2(theData, lastData, targetDiv, homeData) {
+    if(theData === "") { console.log("ERROR fetching ThisMarqData"); }
+    if(lastData === "") { console.log("ERROR fetching LastMarqData"); }
+    var returnData = "";
+    var theTemperature = homeData.Temperature;
+    var stationId = theData.Station;
+    var getTime = homeData.TimeString;
+    if(!isSet(theTemperature)) {
+        returnData += "<div id='WxObsMarq'>";
+        returnData += "<strong>WARNING! " + stationId + " [Marq] data unavailable!</strong>";
+        returnData += "<br/>Time: " + getTime;
+    } else {
+        var diffTemperature = parseInt(homeData.Temperature) - parseInt(lastData.Temperature);
+        var diffDewpoint = parseInt(homeData.Dewpoint) - parseInt(lastData.Dewpoint);
+        var diffPressure = parseFloat(homeData.PressureIn) - parseFloat(lastData.PressureIn);
+        var gust = "";
+        //var shortTime = wxShortTime(homeData.TimeString);
+        var shortTime = homeData.TimeString;
+        if(!isSet(homeData.Dewpoint)) { homeData.Dewpoint = homeData.Temperature; }
+        if(isSet(homeData.WindGust)) { gust = ", gusting to <span style=''>" + homeData.WindGust + " mph</span>"; }
+        var mqJson = {'v1':homeData.Temperature, 'v2':homeData.Dewpoint};
+        var marqStyle = color2Grad("T", "right", mqJson);
+        var rSpeed = parseInt(homeData.WindSpeed) + 5;
+        var cSpeed = parseInt(homeData.WindSpeed) + 13;
+        var flTemp = wxObs("Feel", theData.TimeString, homeData.Temperature, homeData.WindSpeed, homeData.RelativeHumidity, theData.Weather);
+        var flTempR = wxObs("Feel", theData.TimeString, homeData.Temperature, rSpeed, homeData.RelativeHumidity, theData.Weather);
+        var flTempC = wxObs("Feel", theData.TimeString, homeData.Temperature, cSpeed, homeData.RelativeHumidity, theData.Weather);
+        returnData += "<div id='WxObsMarq' style='" + marqStyle + "'>" +
+            shortTime +
+            " <img class='th_icon' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' /> " + theData.Weather + " " +
+            " " + animatedArrow(diffTemperature) + homeData.Temperature + "F (" + diffTemperature + "F/hr)" +
+            " " + animatedArrow(diffDewpoint) + homeData.Dewpoint + "F ( " + diffDewpoint + "F/hr) - " +
+            " RH: <span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%</span> - ";
+        if(isSet(homeData.WindSpeed)) {
+            returnData += " Wind: ";
+            if(isSet(homeData.WindDirection)) { returnData += homeData.WindDirection + " at "; }
+            if(isSet(homeData.WindDegrees)) { returnData += windDirTxt(parseInt(homeData.WindDegrees)) + " at "; }
+            returnData += "<span style='" + styleWind(homeData.WindSpeed) + "'>" + homeData.WindSpeed + " mph</span> " + gust + " - ";
+        }
+        returnData += " Feel: <span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
+            " (<span style='" + styleTemp(flTempC) + "'>" + flTempC + "F <img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/></span>) - ";
+        if(isSet(theData.CAPE)) {
+            returnData += "<span style=" + styleCape(theData.CAPE) + ">" + theData.CAPE + "</span> - ";
+        }
+        returnData += " MSLP: " + animatedArrow(diffPressure) + homeData.PressureIn + " <span> -" +
+        	" Liq: " + homeData.DailyRain + "\"</span> --- ";
     }
     returnData += "</div>";
     dojo.byId(targetDiv).innerHTML = returnData;
@@ -320,19 +393,20 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "</div></div><br/>" +
             "<div class='UPop'>" + animatedArrow(diffTemperature) + 
             "<span style='" + styleTemp(theData.Temperature) + "'>" + Math.round(theData.Temperature) + "F</span>" +
-            "<div class='UPopO'>(" + diffTemperature + "F/hr)<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
-            "</a></div></div>/" +
+            "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "</div></div>" +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(theData.Dewpoint) + "'>" + Math.round(theData.Dewpoint) + "F</span>" +
-            "<div class='UPopO'>(" + diffDewpoint + "F/hr)<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
-            "</a></div></div>" +
+            "<div class='UPopO'>(" + diffDewpoint + "F/min)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
             "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumi", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONHumiH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumiH", "th") + "'/></a>" +
             "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
@@ -347,6 +421,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             returnData += "<span style='" + styleWind(theData.WindSpeed) + "'>" + theData.WindSpeed + " mph</span>" + gustLine +
             "<div class='UPopO'>" + 
             "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONWindH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWindH", "th") + "'/></a>" +
             "</div></div><br/>";
         }
         if(isSet(theData.DailyRain)) {
@@ -376,7 +451,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
     } else {
         var diffTemperature = parseInt(homeData.Temperature) - parseInt(lastData.Temperature);
         var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
-        var diffPressure = parseInt(theData.Pressure) - parseInt(lastData.Pressure);
+        var diffPressure = parseFloat(homeData.PressureIn) - parseFloat(lastData.PressureIn);
         var gustLine = "";
         var shortTime = wxShortTime(homeData.TimeString);
         if(!isSet(homeData.Dewpoint)) { homeData.Dewpoint = homeData.Temperature; }
@@ -393,7 +468,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPopNMO'>" +
             "<a href='" + getBasePath("ui") + "/WxStation.jsp' target='new'>JSON</a><br/>" +
             "Obs #: " + nowObsId + " station " + stationId + "<br/>" +
-            "Home Obs #: " + homeObsId + " merged in!<br/>" +
+            "Home #: " + homeObsId + " merged!<br/>" +
             "Loaded: " + getDate("minute", 0, "full") + "</div></div>" +
             "<br/><div class='UPopNM'>" +
             "<img class='th_small' src='" + getBasePath("icon") + "/wx/" + wxObs("Icon", theData.TimeString, null, null, null, theData.Weather) + ".png' />" +
@@ -402,39 +477,44 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPop'>" + theData.Weather +
             "<div class='UPopO'>";
         if(isSet(theData.Visibility)) { returnData += "Visibility: " + theData.Visibility + " mi.<br/>"; }
-        returnData += "Pressure: " + animatedArrow(diffPressure) + Math.round(theData.Pressure) + " mb.<br/>" +
+        returnData += "Pressure: " + animatedArrow(diffPressure) + homeData.PressureIn + " \"<br/>" +
             "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'>" +
             "<img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
             "</div></div><br/>" +
             "<div class='UPop'>" + animatedArrow(diffTemperature) + 
             "<span style='" + styleTemp(homeData.Temperature) + "'>" + Math.round(homeData.Temperature) + "F</span>" +
-            "<div class='UPopO'>(" + diffTemperature + "F/hr)<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
-            "</a></div></div>/" +
+            "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "</div></div>" +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
-            "<div class='UPopO'>(" + diffDewpoint + "F/hr)<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/>" +
-            "</a></div></div>" +
+            "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
+            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
             "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumi", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONHumiH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumiH", "th") + "'/></a>" +
             "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
-            "<button style='" + styleTemp(indoorTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_home.gif'/>" + indoorTemp + "F</button><br/>" +
-            "<button style='" + styleTemp(indoorPiTemp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_gar.png'/>" + indoorPiTemp + "F</button><br/>" +
-            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button><br/>" +
+		"<button style='" + styleTemp(homeData.Temperature) + "'>OJ " + theData.Temperature + "</button><br/>" +
+            "<button style='" + styleTemp(indoorTemp) + "'>HI " + indoorTemp + "F</button><br/>" +
+            /* "<button style='" + styleTemp(indoorPiTemp) + "'>P1 " + indoorPiTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button><br/>" + */
             "<button style='" + styleTemp(flTempR) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_run.jpeg'/>" + flTempR + "F</button><br/>" +
             "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button><br/>" +
             "<br/>As of: " + indoorObs[0].WalkTime + "</div></div>)<br/>"; 
         if(isSet(homeData.WindSpeed)) {
-            returnData += "<div class='UPop'>Wind: "; if(isSet(homeData.WindDirection)) { returnData += homeData.WindDirection + " at "; }
+            returnData += "<div class='UPop'>Wind: ";
+            if(isSet(homeData.WindDirection)) { returnData += homeData.WindDirection + " at "; }
+            if(isSet(homeData.WindDegrees)) { returnData += windDirTxt(parseInt(homeData.WindDegrees)) + " at "; }
             returnData += "<span style='" + styleWind(homeData.WindSpeed) + "'>" + homeData.WindSpeed + " mph</span>" + gustLine +
             "<div class='UPopO'>" + 
             "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONWindH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWindH", "th") + "'/></a>" +
             "</div></div><br/>";
         }
         if(isSet(homeData.DailyRain)) {

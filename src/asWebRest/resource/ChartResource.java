@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 19 May 2020
+Updated: 27 Jul 2020
  */
 
 package asWebRest.resource;
@@ -40,6 +40,7 @@ import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
 import asWebRest.hookers.WealthGrowth;
+import asWebRest.secure.WUndergroundBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -499,6 +500,18 @@ public class ChartResource extends ServerResource {
                         try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind!\n"; } catch (Exception e) { e.printStackTrace(); }     
                     }
                     break;
+                    
+                case "WxObsChartsHome":
+                	WUndergroundBeans wub = new WUndergroundBeans();
+                	String stationIdHome = wub.getStation_Home();
+                    JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
+                    JSONObject obsJsonHumidity_Glob = wx.getObsJsonHumidity(wxObsBa2, stationIdHome);
+                    JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBa2, stationIdHome);
+                    JSONObject obsJsonWind_Glob = wx.getObsJsonWind(wxObsBa2, stationIdHome);                 
+                    try { dynChart.LineChart(obsJsonHumidity_Glob); returnData += "Chart generated - obsJsonHumi Home!\n"; } catch (Exception e) { e.printStackTrace(); }    
+                    try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp Home!\n"; } catch (Exception e) { e.printStackTrace(); }     
+                    try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind Home!\n"; } catch (Exception e) { e.printStackTrace(); }   
+                	break;
                     
                 case "WxXml":
                     // Troubleshoot 8/26/18

@@ -290,7 +290,7 @@ function popLinkList() {
 
 var initAnthony = function(event) {
     //getObsDataMerged("disHolder", "marquee");
-    getObsDataMergedHome("disHolder", "marquee");
+    getObsDataMergedAndHome("disHolder", "marquee");
     getWebLinks("Anthony.php-SSH", "sshLinks", "bubble");
     popLinkList();
     getWebVersion("versionPlaceholder");
