@@ -1,16 +1,18 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 16 Jul 2020
+Updated: 4 Aug 2020
  */
 
 package asWebRest.resource;
 
 import asWebRest.action.GetFinanceAction;
+import asWebRest.action.GetStockAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWebLinkAction;
 import asWebRest.action.UpdateFinanceAction;
 import asWebRest.dao.FinanceDAO;
+import asWebRest.dao.StockDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WebLinkDAO;
 import asWebRest.shared.MyDBConnector;
@@ -40,6 +42,7 @@ public class FinanceResource extends ServerResource {
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWebLinkAction getWebLinkAction = new GetWebLinkAction(new WebLinkDAO());
+        GetStockAction getStockAction = new GetStockAction(new StockDAO());
         UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
         CCImports ccImports = new CCImports();
                         
@@ -102,8 +105,8 @@ public class FinanceResource extends ServerResource {
                     JSONArray nwga = getFinanceAction.getNwga(dbc);
                     JSONArray enwt = getFinanceAction.getEnwt(dbc);
                     JSONArray mdfbal = getFinanceAction.getMortDumpFund(dbc);
-                    JSONArray stocks = getFinanceAction.getStockList(dbc);
-                    JSONArray etaBal = getFinanceAction.getETradeBalance(dbc);
+                    JSONArray stocks = getStockAction.getStockList(dbc);
+                    JSONArray etaBal = getStockAction.getETradeBalance(dbc);
                     mergedResults
                         .put("amSch", amSch)
                         .put("checking", checking)
@@ -120,16 +123,6 @@ public class FinanceResource extends ServerResource {
                     returnData += mergedResults.toString();
                     break;
 
-                case "getStocks":
-                    JSONArray stocksP = getFinanceAction.getStockListPublic(dbc);
-                    returnData += stocksP.toString();
-                    break;
-
-                case "getStocksAll":
-                    JSONArray stocksA = getFinanceAction.getStockList(dbc);
-                    returnData += stocksA.toString();
-                    break;
-                    
                 case "getUtils":
                     String month = argsInForm.getFirstValue("tMonth");
                     JSONArray uuRel = getWebLinkAction.getWebLinks(dbc, "FBook.php-UU");
@@ -208,22 +201,6 @@ public class FinanceResource extends ServerResource {
                     qParams.add(ASvCredit);
                     returnData += updateFinanceAction.setSavingsAdd(dbc, qParams);
                     break;
-                    
-                case "putStockAdd":
-                    qParams.add(argsInForm.getFirstValue("Symbol"));
-                    qParams.add(argsInForm.getFirstValue("Count"));
-                    qParams.add(argsInForm.getFirstValue("Holder"));
-                    qParams.add(argsInForm.getFirstValue("Description"));
-                    qParams.add(argsInForm.getFirstValue("Managed"));
-                    returnData += updateFinanceAction.setStockAdd(dbc, qParams);
-                    break;
-                    
-                case "putStockUpdate":
-                    qParams.add(argsInForm.getFirstValue("Count"));
-                    qParams.add(argsInForm.getFirstValue("Holder"));
-                    qParams.add(argsInForm.getFirstValue("Symbol"));
-                    returnData += updateFinanceAction.setStockShareUpdate(dbc, qParams);
-                    break;                    
                     
                 case "zestimateUpdate":
                 	break;

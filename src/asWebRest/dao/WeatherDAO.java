@@ -1,12 +1,11 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Mar 2020
+Updated: 28 Mar 2020
  */
 
 package asWebRest.dao;
 
-import asWebRest.secure.AmbientWeatherBeans;
 import asWebRest.secure.WUndergroundBeans;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.WebCommon;
@@ -880,7 +879,7 @@ public class WeatherDAO {
         final String query_ObsJSONHome = "SELECT ObsID, GetTime, " +
         		" JSON_EXTRACT(jsonData, '"+station+"') as jsonSet" +
         		" FROM WxObs.RapidSDI_Home" +
-                " ORDER BY GetTime DESC LIMIT 2480;";
+                " ORDER BY GetTime DESC LIMIT 2040;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONHome, null);

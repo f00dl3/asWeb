@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 6 Feb 2020
+Updated: 28 Jul 2020
  */
 
 package asWebRest.application;
@@ -29,8 +29,9 @@ public class RestletOnStart {
         WeatherBot wxb = new WeatherBot();
         
         StartupNotify.getAtBoot();
-        
+
         try { wxb.startBot(); } catch (Exception e) { e.printStackTrace(); }
+        //try { wxb.startBot_StartOnStop(); } catch (Exception e) { e.printStackTrace(); }
         
         final File cachePath = new File(cb.getPathChartCache().toString());
         if(!cachePath.exists()) { cachePath.mkdirs(); }

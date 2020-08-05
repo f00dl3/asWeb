@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 17 Jul 2020
+Updated: 4 Aug 2020
  */
 
 var annMaint = 841.92;
@@ -357,6 +357,7 @@ function getResource(what) {
         case "Session": return getBasePath("serv") + "/Session"; break;
         case "Smarthome": return getBasePath("rest") + "/Smarthome"; break;
         case "SNMP": return getBasePath("rest") + "/SNMP"; break;
+        case "Stock": return getBasePath("rest") + "/Stock"; break;
         case "Test": return getBasePath("rest") + "/Test"; break;
         case "Tools": return getBasePath("rest") + "/Tools"; break;
         case "TP": return getBasePath("rest") + "/TP"; break;

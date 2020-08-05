@@ -486,7 +486,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
             "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
-            "</div></div>" +
+            "</div></div> | " +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
@@ -500,10 +500,10 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
-		"<button style='" + styleTemp(homeData.Temperature) + "'>OJ " + theData.Temperature + "</button><br/>" +
-            "<button style='" + styleTemp(indoorTemp) + "'>HI " + indoorTemp + "F</button><br/>" +
-            /* "<button style='" + styleTemp(indoorPiTemp) + "'>P1 " + indoorPiTemp + "F</button><br/>" +
-            "<button style='" + styleTemp(indoorPi2Temp) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_off.jpeg'/>" + indoorPi2Temp + "F</button><br/>" + */
+		"<button style='" + styleTemp(homeData.Temperature) + "'>KOJC " + theData.Temperature + "</button><br/>" +
+            "<button style='" + styleTemp(indoorTemp) + "'>Serv " + indoorTemp + "F</button><br/>" +
+            /* "<button style='" + styleTemp(indoorPiTemp) + "'>Pi1 " + indoorPiTemp + "F</button><br/>" +
+            "<button style='" + styleTemp(indoorPi2Temp) + "'>Pi2" + indoorPi2Temp + "F</button><br/>" + */
             "<button style='" + styleTemp(flTempR) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_run.jpeg'/>" + flTempR + "F</button><br/>" +
             "<button style='" + styleTemp(flTempC) + "'><img class='th_icon' src='" + getBasePath("icon") + "/ic_cyc.jpeg'/>" + flTempC + "F</button><br/>" +
             "<br/>As of: " + indoorObs[0].WalkTime + "</div></div>)<br/>"; 
@@ -518,7 +518,9 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "</div></div><br/>";
         }
         if(isSet(homeData.DailyRain)) {
-        	returnData += "Precip Today: " + homeData.DailyRain + "\"";
+        	returnData += "<div class='UPop'>Precip: " + homeData.DailyRain + "\"" +
+			"<div class='UPopO'>Rate: " + homeData.RainRate + "\"/hr</div>" +
+			"</div>";
         }
         if(isSet(theData.CAPE)) { returnData += "<br/>CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
         console.log(convertToJsDate(shortTime));

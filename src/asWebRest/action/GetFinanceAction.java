@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 14 Jul 2020
+Updated: 4 Aug 2020
  */
 
 package asWebRest.action;
@@ -32,7 +32,6 @@ public class GetFinanceAction {
     public JSONArray getEnwChartRapid(Connection dbc) { return financeDAO.getEnwChartRapid(dbc); }
     public JSONArray getEnwt(Connection dbc) { return financeDAO.getEnwt(dbc); }
     public JSONArray getEnwtRapid(Connection dbc) { return financeDAO.getEnwtRapid(dbc); }
-    public JSONArray getETradeBalance(Connection dbc) { return financeDAO.getETradeBalance(dbc); }
     public JSONArray getLicenses(Connection dbc) { return financeDAO.getLicenses(dbc); }
     public JSONArray getMort(Connection dbc) { return financeDAO.getMort(dbc); }
     public JSONArray getMortDumpFund(Connection dbc) { return financeDAO.getMortDumpFund(dbc); }
@@ -42,9 +41,6 @@ public class GetFinanceAction {
     public JSONArray getSavingChart(Connection dbc, List<String> qParams) { return financeDAO.getSavingChart(dbc, qParams); }
     public JSONArray getSettingC(Connection dbc) { return financeDAO.getSettingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return financeDAO.getSettingH(dbc); }
-    public JSONArray getStockHistory(Connection dbc) { return financeDAO.getStockHistory(dbc); }
-    public JSONArray getStockList(Connection dbc) { return financeDAO.getStockList(dbc); }
-    public JSONArray getStockListPublic(Connection dbc) { return financeDAO.getStockListPublic(dbc); }
     public JSONArray getSvBk(Connection dbc) { return financeDAO.getSvBk(dbc); }
 	public JSONArray getZillowPIDs(Connection dbc) { return financeDAO.getZillowPIDs(dbc); }
     

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 20 Jul 2020
+Updated: 4 Aug 2020
 */
 
 package asWebRest.dao;
@@ -441,29 +441,6 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    private JSONArray eTradeBalance(Connection dbc) {
-        final String query_etb = "SELECT" +
-        		" SUM(" +
-        		"  (SELECT Value FROM Core.FB_Assets WHERE Description LIKE 'eTrade%') +" +
-        		"  (SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='eTrade')" +
-        		") AS Balance," +
-        		" (SELECT SUM(Credit-Debit) FROM Core.FB_ETIBXX) AS Contributions";		
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_etb, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                    .put("Balance", resultSet.getDouble("Balance"))
-                    .put("Contributions", resultSet.getDouble("Contributions"));
-                tContainer.put(tObject);
-            }
-            resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    	
-    }
-    
     private JSONArray licenses(Connection dbc) {
         final String query_FBook_Licenses = "SELECT Title, Type FROM Core.Licenses ORDER BY Title;";
         JSONArray tContainer = new JSONArray();
@@ -727,106 +704,6 @@ public class FinanceDAO {
         return tContainer;
     }
     
-    private JSONArray stockList(Connection dbc) { 
-        final String query_GetStocks = "SELECT Symbol, Count, Holder," +
-        		" LastValue, Description, PreviousClose," +
-        		" LastBuy, LastSell, Invested, Managed" +
-        		" FROM Core.StockShares WHERE Active=1;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                	.put("Symbol", resultSet.getString("Symbol"))
-                	.put("Count", resultSet.getDouble("Count"))
-                	.put("Holder", resultSet.getString("Holder"))
-                	.put("LastValue", resultSet.getString("LastValue"))
-                	.put("Description", resultSet.getString("Description"))
-                	.put("LastBuy", resultSet.getDouble("LastBuy"))
-                	.put("LastSell", resultSet.getDouble("LastSell"))
-                	.put("Invested", resultSet.getDouble("Invested"))
-                	.put("Managed", resultSet.getInt("Managed"))
-                	.put("PreviousClose", resultSet.getString("PreviousClose"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-
-    private String stockAdd(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_AddStock = "INSERT INTO Core.StockShares " +
-        		" (Symbol, Count, Active, Holder, Description, Managed)" +
-        		" VALUES " +
-        		" (?, ?, 1, ?, ?, ?);";
-        try { returnData = wc.q2do1c(dbc, query_AddStock, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-    
-    private JSONArray stockListPublic(Connection dbc) { 
-        final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose, FROM Core.StockShares WHERE Active=1;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                	.put("Symbol", resultSet.getString("Symbol"))
-                	.put("LastValue", resultSet.getString("LastValue"))
-                	.put("Description", resultSet.getString("Description"))
-                	.put("PreviousClose", resultSet.getString("PreviousClose"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    private JSONArray stockHistory(Connection dbc) { 
-        final String query_GetHistory = "SELECT AsOf, jsonData FROM Feeds.StockPrices ORDER BY AsOf DESC LIMIT 256;";
-        JSONArray tContainer = new JSONArray();
-        try {
-            ResultSet resultSet = wc.q2rs1c(dbc, query_GetHistory, null);
-            while (resultSet.next()) { 
-                JSONObject tObject = new JSONObject();
-                tObject
-                	.put("AsOf", resultSet.getString("AsOf"))
-                	.put("jsonData", resultSet.getString("jsonData"));
-                tContainer.put(tObject);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return tContainer;
-    }
-    
-    private String stockIndex(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_UpdateIndex = "INSERT INTO Feeds.StockPrices (jsonData) VALUES (?);";
-        try { returnData = wc.q2do1c(dbc, query_UpdateIndex, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-
-    private String stockShareUpdate(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_ShareUpdate = "UPDATE Core.StockShares SET Count=?, Holder=? WHERE Symbol=?;";
-        try { returnData = wc.q2do1c(dbc, query_ShareUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-
-    private String stockUpdate(Connection dbc, List<String> qParams) {
-        String returnData = wcb.getDefaultNotRanYet();
-        String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
-        String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
-        String query_UpdateStockC = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
-        String query_UpdateStockD = "UPDATE Core.FB_Assets SET Value=(SELECT SUM((Count*LastValue)*1.29992) FROM Core.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
-        String query_UpdateStockE = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";
-        try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData += wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData += wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData += wc.q2do1c(dbc, query_UpdateStockD, null); } catch (Exception e) { e.printStackTrace(); }
-        try { returnData += wc.q2do1c(dbc, query_UpdateStockE, null); } catch (Exception e) { e.printStackTrace(); }
-        return returnData;
-    }
-
     private String zillowDailyUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_ZillowUpdate = "INSERT INTO Feeds.ZillowEstimates (Date, jsonData) VALUES (CURDATE(), ?);";
@@ -880,7 +757,6 @@ public class FinanceDAO {
     public JSONArray getEnwChartRapid(Connection dbc) { return enwChartRapid(dbc); }
     public JSONArray getEnwt(Connection dbc) { return enwt(dbc); }
     public JSONArray getEnwtRapid(Connection dbc) { return enwtRapid(dbc); }
-    public JSONArray getETradeBalance(Connection dbc) { return eTradeBalance(dbc); }
     public JSONArray getLicenses(Connection dbc) { return licenses(dbc); }
     public JSONArray getMort(Connection dbc) { return mort(dbc); }
     public JSONArray getMortDumpFund(Connection dbc) { return mortDumpFund(dbc); }
@@ -890,9 +766,6 @@ public class FinanceDAO {
     public JSONArray getSavingChart(Connection dbc, List<String> qParams) { return savingChart(dbc, qParams); }
     public JSONArray getSettingC(Connection dbc) { return settingC(dbc); }
     public JSONArray getSettingH(Connection dbc) { return settingH(dbc); }
-    public JSONArray getStockHistory(Connection dbc) { return stockHistory(dbc); }
-    public JSONArray getStockList(Connection dbc) { return stockList(dbc); }
-    public JSONArray getStockListPublic(Connection dbc) { return stockListPublic(dbc); }
     public JSONArray getSvBk(Connection dbc) { return svBk(dbc); }
 	public JSONArray getZillowPIDs(Connection dbc) { return zillowPIDs(dbc); }
 	public String setAssetTrackUpdate(Connection dbc, List<String> qParams) { return assetTrackUpdate(dbc, qParams); }
@@ -901,10 +774,6 @@ public class FinanceDAO {
     public String setDecorToolsUpdate(Connection dbc, List<String> qParams) { return decorToolsUpdate(dbc, qParams); }
     public String setRapidAutoNetWorth(Connection dbc) { return rapidAutoNetWorth(dbc); }
     public String setSavingsAdd(Connection dbc, List<String> qParams) { return savingsAdd(dbc, qParams); }
-    public String setStockAdd(Connection dbc, List<String> qParams) { return stockAdd(dbc, qParams); }
-    public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
-    public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockShareUpdate(dbc, qParams); }
-    public String setStockUpdate(Connection dbc, List<String> qParams) { return stockUpdate(dbc, qParams); }
     public String setZillowDailyUpdate(Connection dbc, List<String> qParams) { return zillowDailyUpdate(dbc, qParams); }
     public String setZillowHomeValue(Connection dbc, String zestimate) { return zillowHomeValue(dbc, zestimate); }
     

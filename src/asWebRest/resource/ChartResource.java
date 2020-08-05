@@ -6,13 +6,13 @@ Updated: 27 Jul 2020
 
 package asWebRest.resource;
 
-import asWebRest.action.GetEntertainmentAction;
 import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetLogsAction;
 import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.GetSnmpAction;
+import asWebRest.action.GetStockAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Ffxiv;
@@ -29,13 +29,13 @@ import asWebRest.chartHelpers.SysMonRouter;
 import asWebRest.chartHelpers.SysMonUVM2;
 import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
-import asWebRest.dao.EntertainmentDAO;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.LogsDAO;
 import asWebRest.dao.MediaServerDAO;
 import asWebRest.dao.SnmpDAO;
+import asWebRest.dao.StockDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
@@ -66,12 +66,12 @@ public class ChartResource extends ServerResource {
         
         DynChartX dynChart = new DynChartX();
         Ffxiv ffxiv = new Ffxiv();
-        GetEntertainmentAction getEntertainmentAction = new GetEntertainmentAction(new EntertainmentDAO());
         GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+        GetStockAction getStockAction = new GetStockAction(new StockDAO());
         GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
         GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
@@ -92,7 +92,6 @@ public class ChartResource extends ServerResource {
         
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
-        JSONObject mergedData = new JSONObject();
         JSONObject jsonGlob = new JSONObject();
         JSONObject props = new JSONObject();
         JSONArray labels = new JSONArray();
@@ -136,7 +135,7 @@ public class ChartResource extends ServerResource {
                     JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
-                    JSONArray svals = getFinanceAction.getStockHistory(dbc);
+                    JSONArray svals = getStockAction.getStockHistory(dbc);
                     JSONArray wealth = wg.generateProjections(dbc);
                     //JSONObject stockGlob_DJI = fin.getStockChart(svals, "^DJI");
                     JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");

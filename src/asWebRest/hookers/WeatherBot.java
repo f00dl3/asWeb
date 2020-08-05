@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Dec 2019
-Updated: 20 Feb 2020
+Updated: 28 Jul 2020
  */
 
 package asWebRest.hookers;
@@ -90,6 +90,17 @@ public class WeatherBot {
 		tr.runProcesses(bots, false, true);
 		
 				
+	}
+	
+	
+	public void startBot_StartOnStop() {
+		
+		while(true) {
+			
+			startBot();
+			
+		}
+		
 	}
     
 }

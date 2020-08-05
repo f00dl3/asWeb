@@ -109,7 +109,7 @@ public class AmbientWxStation {
 			try { tDewpoint = Integer.toString(homeDataI.getInt("dewpt")); } catch (Exception e) { dataBack += e.getMessage(); }
 			try { tHeatIndex = Integer.toString(homeDataI.getInt("heatIndex")); } catch (Exception e) { dataBack += e.getMessage(); }
 			try { tPressureIn = Double.toString(homeDataI.getDouble("pressure")); } catch (Exception e) { dataBack += e.getMessage(); }
-			try { tRainRate = Double.toString(homeData.getDouble("precipRate")); } catch (Exception e) { dataBack += e.getMessage(); }
+			try { tRainRate = Double.toString(homeDataI.getDouble("precipRate")); } catch (Exception e) { dataBack += e.getMessage(); }
 			try { tRelativeHumidity = Integer.toString(homeData.getInt("humidity")); } catch (Exception e) { dataBack += e.getMessage(); }
 			try { tSunlight = Double.toString(homeData.getDouble("solarRadiation")); } catch (Exception e) { dataBack += e.getMessage(); }
 			try { tWindDegrees = Integer.toString(homeData.getInt("winddir")); } catch (Exception e) { dataBack += e.getMessage(); } 

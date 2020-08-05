@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 10 Feb 2018
-Updated: 1 Mar 2020
+Updated: 4 Aug 2020
  */
 
 package asWebRest.application;
@@ -30,6 +30,7 @@ import asWebRest.resource.SnmpResource;
 import asWebRest.resource.PtoResource;
 import asWebRest.resource.SessionResource;
 import asWebRest.resource.SmarthomeResource;
+import asWebRest.resource.StockResource;
 import asWebRest.resource.TestResource;
 import asWebRest.resource.ToolsResource;
 import asWebRest.resource.TpResource;
@@ -97,6 +98,7 @@ public class AnthonyRestlet extends Application {
         router.attach("/SessionVars", SessionResource.class);
         router.attach("/Smarthome", SmarthomeResource.class);
         router.attach("/SNMP", SnmpResource.class);
+        router.attach("/Stock", StockResource.class);
         router.attach("/PTO", PtoResource.class);
         router.attach("/Test", TestResource.class);
         router.attach("/Tools", ToolsResource.class);

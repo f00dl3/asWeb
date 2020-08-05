@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 19 Jul 2020
+Updated: 4 Aug 2020
 
 */
 
@@ -18,9 +18,9 @@ import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 
 import asUtilsPorts.Mailer;
-import asWebRest.action.GetFinanceAction;
-import asWebRest.action.UpdateFinanceAction;
-import asWebRest.dao.FinanceDAO;
+import asWebRest.action.GetStockAction;
+import asWebRest.action.UpdateStockAction;
+import asWebRest.dao.StockDAO;
 import asWebRest.secure.FinnHubBeans;
 
 public class Stocks {	
@@ -84,11 +84,11 @@ public class Stocks {
 
 		String quote = "Daily stock market report\n\n";
 		
-		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+		GetStockAction getStockAction = new GetStockAction(new StockDAO());
 		Mailer mailer = new Mailer();
-		UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
+		UpdateStockAction updateStockAction = new UpdateStockAction(new StockDAO());
 		
-		JSONArray stocksToFetch = getFinanceAction.getStockList(dbc);
+		JSONArray stocksToFetch = getStockAction.getStockList(dbc);
 
 		JSONObject stockIndex = new JSONObject();
 		
@@ -126,7 +126,7 @@ public class Stocks {
 					qParams.add(0, valueNowS);
 					qParams.add(1, previousClose);
 					qParams.add(2, tTicker);
-					updateFinanceAction.setStockUpdate(dbc, qParams);
+					updateStockAction.setStockUpdate(dbc, qParams);
 					quote += "\n" + tDescription + " (" + tTicker + ") : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
 					JSONObject tSubStock = new JSONObject();
 					tSubStock
@@ -144,7 +144,7 @@ public class Stocks {
         
 		List<String> qParams2 = new ArrayList<>();
 		qParams2.add(stockIndex.toString());
-		updateFinanceAction.setStockIndex(dbc, qParams2);
+		updateStockAction.setStockIndex(dbc, qParams2);
 		
 		if(sendEmail) { mailer.sendQuickEmail(quote); }
 		
@@ -156,11 +156,11 @@ public class Stocks {
 
 		String quote = "Daily stock market report FH\n\n";
 		
-		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+		GetStockAction getStockAction = new GetStockAction(new StockDAO());
 		Mailer mailer = new Mailer();
-		UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
+		UpdateStockAction updateStockAction = new UpdateStockAction(new StockDAO());
 		
-		JSONArray stocksToFetch = getFinanceAction.getStockList(dbc);
+		JSONArray stocksToFetch = getStockAction.getStockList(dbc);
 
 		JSONObject stockIndex = new JSONObject();
 		
@@ -182,7 +182,7 @@ public class Stocks {
 					qParams.add(0, valueNowS);
 					qParams.add(1, previousClose);
 					qParams.add(2, tTicker);
-					updateFinanceAction.setStockUpdate(dbc, qParams);
+					updateStockAction.setStockUpdate(dbc, qParams);
 					quote += "\n" + tDescription + " (" + tTicker + ") : " + tShares + " shares @ $" + valueNowS + " (Total $" + totVal + ")";  
 					JSONObject tSubStock = new JSONObject();
 					tSubStock
@@ -200,7 +200,7 @@ public class Stocks {
         
 		List<String> qParams2 = new ArrayList<>();
 		qParams2.add(stockIndex.toString());
-		updateFinanceAction.setStockIndex(dbc, qParams2);
+		updateStockAction.setStockIndex(dbc, qParams2);
 		
 		if(sendEmail) { mailer.sendQuickEmail(quote); }
 		
@@ -214,10 +214,11 @@ public class Stocks {
 		String quote = "Daily stock market report using MultiQuote Yahoo v7 API\n\n";
 		String stockQuoteList = "";
 		
-		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
-		UpdateFinanceAction updateFinanceAction = new UpdateFinanceAction(new FinanceDAO());
+		GetStockAction getStockAction = new GetStockAction(new StockDAO());
+		Mailer mailer = new Mailer();
+		UpdateStockAction updateStockAction = new UpdateStockAction(new StockDAO());
 		
-		JSONArray stocksToFetch = getFinanceAction.getStockList(dbc);
+		JSONArray stocksToFetch = getStockAction.getStockList(dbc);
 
 		JSONObject stockIndex = new JSONObject();
 		
@@ -256,7 +257,7 @@ public class Stocks {
 					qParams.add(0, valueNowS);
 					qParams.add(1, previousClose);
 					qParams.add(2, tTicker);
-					updateFinanceAction.setStockUpdate(dbc, qParams);
+					updateStockAction.setStockUpdate(dbc, qParams);
 					JSONObject tSubStock = new JSONObject();
 					tSubStock
 						.put("valueEach", valueNowS)
@@ -270,7 +271,7 @@ public class Stocks {
         
 		List<String> qParams2 = new ArrayList<>();
 		qParams2.add(stockIndex.toString());
-		updateFinanceAction.setStockIndex(dbc, qParams2);
+		updateStockAction.setStockIndex(dbc, qParams2);
 		
 		return quote;
 

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 31 Mar 2020
+Updated: 30 Jul 2020
  */
 
 const axios = require('axios');
@@ -18,16 +18,23 @@ function getWeatherLatest(msg) {
 
 	var commandRan = "getWeatherLatest(msg)";
 	aLog.basicAccessLog(msg, commandRan, "start");
-
+	let stationId = "KOJC";
 	var rData = "DEBUG: getWeatherLatest() did not get data back yet!";
 	var url = asm.webUiBase + "Wx";
+	var dateOverrideStart = asm.returnTimestamp(-24);
+	var dateOverrideEnd = asm.returnTimestamp();
+	console.log(dateOverrideStart + " to " + dateOverrideEnd);
 	console.log("DBG: " + url);
-	var pData = "doWhat=getObsJsonLast";
-
+	var pData = "doWhat=getObsJsonMergedAndHome" +
+        "&startTime=" + dateOverrideEnd +
+        "&endTime=" + dateOverrideStart +
+        "&order=DESC" +
+        "&limit=1" +
+        "&stationId=" + stationId;
 	axios.post(url, pData).then((res) => { 
-		rData = res.data[0].jsonSet,
-		console.log("\nDBG --> rData from getWeatherLatest: " + rData);
-		respondWeatherData("KOJC", rData, msg)
+        var theData = JSON.parse(res.data.wxObsM1H[0].jsonSet);
+        var homeData = JSON.parse(res.data.homeWxObs[0].jsonSet);
+		respondWeatherData("Merged KOJC and KKSLENEX98", theData, msg, homeData);
 	}).catch((error) => {
 		console.log(error)
 	});
@@ -36,20 +43,24 @@ function getWeatherLatest(msg) {
 
 }
 
-function respondWeatherData(station, data, msg) {
+function respondWeatherData(station, data, msg, homeData) {
 
-	var jds = JSON.parse(data);
+	var jds = data;
+	let jdsHome = homeData;
 	var finalMessage = "Station: " + station +
-		"\n" + jds.TimeString +
+		"\n" + jdsHome.TimeString +
 		"\nWeather: " + jds.Weather +
 		"\nVisibility: " + jds.Visibility + " miles" +
-		"\nTemperature: " + jds.Temperature + " F" +
-		"\nDewpoint: " + jds.Dewpoint + " F" +
-		"\nHumidity: " + jds.RelativeHumidity + "%" +
-		"\nPressure: " + jds.Pressure + " mb" +
-		"\nWind: " + jds.WindDirection + " at " + jds.WindSpeed + " mph";
+		"\nTemperature: " + jdsHome.Temperature + " F" +
+		"\nDewpoint: " + jdsHome.Dewpoint + " F" +
+		"\nHumidity: " + jdsHome.RelativeHumidity + "%" +
+		"\nPressure: " + jdsHome.PressureIn + "\"" +
+		"\nWind Direction: " + jdsHome.WindDegrees + " deg" +
+		"\nWind Speed: " + jdsHome.WindSpeed + " mph" +
+		"\nDaily Rain: " + jdsHome.DailyRain + "\"" +
+		"\nRain Rate: " + jdsHome.RainRate + "\"/hr";
 	console.log("\nDBG --> finalMessage = " + finalMessage);
-	if(asm.isSet(jds.WindGust)) { finalMessage += "\nGusts: " + jds.WindGust + " mph"; }
+	if(asm.isSet(jdsHome.WindGust)) { finalMessage += "\nWind Gusts: " + jdsHome.WindGust + " mph "; }
 	msg.reply(asm.trimForDiscord(finalMessage));
 
 }
