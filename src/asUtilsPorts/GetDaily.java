@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 14 Jul 2020
+Updated: 6 Aug 2020
 */
 
 package asUtilsPorts;
@@ -82,6 +82,7 @@ public class GetDaily {
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        
         try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+	try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { }
         try { smd.getYesterday(); } catch (Exception e) { e.printStackTrace(); }
         
         if(rightNow.dayOfWeek().get() == 1) {

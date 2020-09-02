@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 4 Aug 2020
+Updated: 11 Aug 2020
 
 */
 
@@ -248,7 +248,7 @@ public class Stocks {
 				JSONObject meta = first.getJSONObject("meta");
 				tTicker = meta.getString("symbol");
 				valueNow = meta.getDouble("regularMarketPrice");
-				previousClose = String.valueOf(meta.getDouble("chartPreviousClose"));
+				try { previousClose = String.valueOf(meta.getDouble("chartPreviousClose")); } catch (Exception e) { e.printStackTrace(); }
 				valueNowS = String.valueOf(valueNow);
 				if(valueNowS.equals("")) { valueNowS = previousClose; }
 				//quote += "\n" + tTicker + ": " + valueNowS;  

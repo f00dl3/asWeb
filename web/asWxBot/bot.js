@@ -16,8 +16,8 @@ const aLog = require('./asModules/accessLog.js');
 const resp = require('./asModules/responses.js');
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-var bBuild = 76;
-var bUpdated = "28 JUL 2020";
+var bBuild = 82;
+var bUpdated = "2 SEP 2020";
 var homeForBot = auth.kcregionalwx;
 var alertChan = auth.wxalerts;
 var maxMessageSize = asm.maxMessageSize;
@@ -100,6 +100,14 @@ client.on('message', msg => {
 				msg.reply("Testing image attachment to bot message:", { files : ['../img/DiscordApp/pwned.jpg'] });
 				break;
 				
+			case "\:\)": case "\:smile:":
+				resp.smile(msg);
+				break;
+
+			case "bot": case "bot's": case "bot.":
+				resp.heyBot(msg);
+				break;
+				
 			case "cam":
 				resp.getWeatherCameras(msg);
 				break;
@@ -111,6 +119,14 @@ client.on('message', msg => {
 			case "cf6":
 				var month = msgArray[1];
 				resp.getCf6Data(msg, month);
+				break;
+				
+			case "chart":
+				resp.getWeatherChart(msg);
+				break;
+
+			case "f":
+				resp.fResp(msg);
 				break;
 	
 			case "find":
@@ -125,9 +141,12 @@ client.on('message', msg => {
 				resp.getWeatherForecast(msg);
 				break;
 			
+			case "hi": case "hello":
+				resp.hello(msg);
+				break;
+			
 			case "lol":
 				resp.lol(msg);
-				//dChan.send("lol");
 				break;
 				
 			case "nearby":
@@ -145,6 +164,10 @@ client.on('message', msg => {
 			case "radar":
 				var site = msgArray[1];
 				resp.getWeatherRadar(msg, site);
+				break;
+
+			case "rip":
+				resp.rip(msg);
 				break;
 	
 			case "search":
@@ -170,6 +193,10 @@ client.on('message', msg => {
 	
 			case "weather":
 				resp.getWeatherLatest(msg);
+				break;
+
+			case "wtf": case "omg": case "smh": case "omg!": case "wtf?": case "ffs":
+				resp.shocked(msg);
 				break;
 
 		}

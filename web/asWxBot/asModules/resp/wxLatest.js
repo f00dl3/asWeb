@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 30 Jul 2020
+Updated: 2 Sep 2020
  */
 
 const axios = require('axios');
@@ -10,8 +10,27 @@ const asm = require('./../common.js');
 
 module.exports = {
 
+		getWeatherChart: function(msg) { getWeatherChart(msg) },
 		getWeatherLatest: function(msg) { getWeatherLatest(msg) }
 
+}
+
+function getWeatherChart(msg) {
+	var commandRan = "getWeatherChart(msg)";
+	aLog.basicAccessLog(msg, commandRan, "start");
+	let chartSuccess = "Chart not generated yet!";
+	var url = asm.webUiBase + "Chart";
+	var graph = "/dev/shm/tomcatShare/cache/ObsJSONTempH.png";
+    var pData = {
+        "doWhat": "WxObsChartsHome"
+    };
+    axios.post(url, pData).then((res) => {
+    	chartSuccess = "Chart generated!";
+		msg.reply(chartSuccess, { files :  [ graph ] });
+	}).catch((error) => {
+		console.log(error)
+	});
+	aLog.basicAccessLog(msg, commandRan, "stop");
 }
 
 function getWeatherLatest(msg) {
@@ -21,8 +40,8 @@ function getWeatherLatest(msg) {
 	let stationId = "KOJC";
 	var rData = "DEBUG: getWeatherLatest() did not get data back yet!";
 	var url = asm.webUiBase + "Wx";
-	var dateOverrideStart = asm.returnTimestamp(-24);
-	var dateOverrideEnd = asm.returnTimestamp();
+	var dateOverrideStart = asm.returnTimestamp();
+	var dateOverrideEnd = asm.returnTimestamp(-2);
 	console.log(dateOverrideStart + " to " + dateOverrideEnd);
 	console.log("DBG: " + url);
 	var pData = "doWhat=getObsJsonMergedAndHome" +
@@ -34,7 +53,7 @@ function getWeatherLatest(msg) {
 	axios.post(url, pData).then((res) => { 
         var theData = JSON.parse(res.data.wxObsM1H[0].jsonSet);
         var homeData = JSON.parse(res.data.homeWxObs[0].jsonSet);
-		respondWeatherData("Merged KOJC and KKSLENEX98", theData, msg, homeData);
+		respondWeatherData("KKSLENEX98", theData, msg, homeData);
 	}).catch((error) => {
 		console.log(error)
 	});
@@ -49,8 +68,8 @@ function respondWeatherData(station, data, msg, homeData) {
 	let jdsHome = homeData;
 	var finalMessage = "Station: " + station +
 		"\n" + jdsHome.TimeString +
-		"\nWeather: " + jds.Weather +
-		"\nVisibility: " + jds.Visibility + " miles" +
+		// "\nWeather: " + jds.Weather +
+		// "\nVisibility: " + jds.Visibility + " miles" +
 		"\nTemperature: " + jdsHome.Temperature + " F" +
 		"\nDewpoint: " + jdsHome.Dewpoint + " F" +
 		"\nHumidity: " + jdsHome.RelativeHumidity + "%" +

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 16 Jul 2020
+Updated: 29 Aug 2020
  */
 
 package asUtilsPorts;
@@ -39,6 +39,7 @@ public class StartupNotify {
         final String thisMessage = "This means a system reboot likely occurred!\n" +
         		"Deployment: " + cb.getWarDeployBase() + "\n" +
         		"Threads: " + tr.getMaxThreads();
+	final String greetGif = "https://gph.is/2b2nzrE";
 
         wc.zipThisFile(sysLog, packedLog);
         
@@ -46,7 +47,7 @@ public class StartupNotify {
 		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
 		alerts.add(() -> mailer.sendMail(myCell, thisSubject, thisMessage, null));
 		alerts.add(() -> mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog));
-		//alerts.add(() -> wxb.botBroadcastOnly("API started up: " + cb.getWarDeployBase()));
+		alerts.add(() -> wxb.botBroadcastOnly(greetGif));
 		tr.runProcesses(alerts, false, false);
 		
         packedLog.delete();
