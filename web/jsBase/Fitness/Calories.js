@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Calories.js split: 4 Apr 2018
-Updated: 22 Feb 2019
+Updated: 9 Sep 2020
  */
 
 function actOnCaloriesSubmit(event) {
@@ -67,7 +67,7 @@ function putCalories(formData) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrPost for Calories FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);

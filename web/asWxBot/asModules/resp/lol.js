@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2020
-Updated: 29 Aug 2020
+Updated: 8 Sep 2020
  */
 
 const aLog = require('./../accessLog.js');
@@ -55,7 +55,13 @@ module.exports = {
 
 	getShocked: function(msg) {
 		var commandRan = "getShocked(msg)";
-		msg.reply(":hear_no_evil:");
+		var randNumB = Math.floor(Math.random() * 4);
+		switch(randNumB) {
+			case 0: msg.reply(":hear_no_evil:"); break;
+			case 1: msg.reply("https://giphy.com/gifs/gottalentglobal-americas-got-talent-auditions-Tk8FFxJrEZHt8JK3lQ"); break;
+			case 2: msg.reply("Watch your mouth!"); break;
+			case 3: msg.reply("https://giphy.com/gifs/reactiongifs-vSSdLSLbGIXio"); break;
+		}
 		aLog.basicAccessLog(msg, commandRan, "null");
 	}
 

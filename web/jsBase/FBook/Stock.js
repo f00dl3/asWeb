@@ -1,8 +1,15 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 4 Aug 2020
+Updated: 9 Sep 2020
  */
+
+function actOnETBAFormSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    setETBAAdd(thisFormData);
+}
 
 function actOnStockFormSubmit(event) {
     dojo.stopEvent(event);
@@ -43,17 +50,37 @@ function getStocks() {
             }).then(
                 function(data) {
                     aniPreload("off");
-                	putStocks(data);
+                    let psObj = data;
+                	putStocks(psObj.etba, psObj.stocksA);
                     console.log("DEBUG: Stock pull success.");
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("STOCK PULL FAILURE\n " + iostatus.xhr.status + " (" + data + ")");
+                    showNotice("STOCK PULL FAILURE\n " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
 
-function putStocks(stockData) {
+function putStocks(etbaData, stockData) {
+	let etbaInsert = "<h3>ETrade Transactions</h3>" +
+		"<div class='table'>" +
+		"<div class='td'>" +
+		"<form class='tr etbaAddUpdateForm'>" +
+		"<span class='td'><input class='C2UETBA' type='checkbox' name='Action' value='Update' /></span>" + 
+		"<span class='td'><input type='date' name='etbaDate' id='etbaDate' style='width: 80px;' /></span>" +
+        "<span class='td'><input type='number' step='1' name='etbaDebit' value='0' style='width: 70px;' /></span>" +
+        "<span class='td'><input type='number' step='1' name='etbaCredit' value='0' style='width: 70px;' /></span>" +
+        "</form>" +
+        "</div>";
+	etbaData.forEach(function (etb) {
+		etbaInsert += "<div class='tr'>" +
+			"<span class='td'>" + etb.BTID + "</span>" +
+			"<span class='td'>" + etb.Date + "</span>" + 
+			"<span class='td'>" + etb.Debit + "</span>" +
+			"<span class='td'>" + etb.Credit + "</span>" +
+			"</div>";
+	});
+	etbaInsert += "</div>";
     let rData = "<h3>Stocks & Manged Funds</h3>";
     let managedBalance = 0.0;
     let myBalance = 0.0;
@@ -103,8 +130,32 @@ function putStocks(stockData) {
             "</form></div>";
     rData += stockResults +
             "<p><em>Blank space for pop-over</em>";
-    dojo.byId("FBStocks").innerHTML = rData;
+    dojo.byId("FBStocks").innerHTML = etbaInsert + rData;
     dojo.query(".C2UStock").connect("onchange", actOnStockFormSubmit);
+    dojo.query(".C2UETBA").connect("onchange", actOnETBAFormSubmit);
+}
+
+function setETBAAdd(formData) {
+    aniPreload("on");
+    formData.doWhat = "putETradeBrokerageAccountAdd";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Stock"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("ETrade ledger added!");
+            getCheckbook();
+            getStocks();
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            showNotice("xhrPost for ETBrokerageAdd FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
 }
 
 function setStockAdd(formData) {

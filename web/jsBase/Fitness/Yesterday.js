@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Feb 2019
-Updated: 22 Feb 2019
+Updated: 9 Sep 2020
  */
 
 function actUpdateYesterdaySubmit(event) {
@@ -48,7 +48,7 @@ function putUpdateYesterday(formData) {
             aniPreload("off");
         },
         error: function(data, iostatus) {
-            window.alert("xhrPost for UpdateYesterday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrPost for UpdateYesterday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };

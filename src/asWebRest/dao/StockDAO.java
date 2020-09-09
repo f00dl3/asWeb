@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 4 Aug 2020
+Updated: 9 Sep 2020
 */
 
 package asWebRest.dao;
@@ -22,6 +22,36 @@ public class StockDAO {
     CheckbookBeans ckBkBeans = new CheckbookBeans();
     WebCommon wc = new WebCommon();
     MortgageBeans mb = new MortgageBeans();
+
+    private JSONArray eTradeBrokerageAccount(Connection dbc) {
+        final String query_etba = "SELECT" +
+        		" BTID, Date, Debit, Credit" +
+        		" FROM Core.FB_ETIBXX" +
+        		" ORDER BY DATE DESC LIMIT 5;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_etba, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("Date", resultSet.getString("Date"))
+                    .put("Debit", resultSet.getDouble("Debit"))
+                    .put("Credit", resultSet.getDouble("Credit"))
+                    .put("BTID",  resultSet.getInt("BTID"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    	
+    }    
+
+    private String eTradeBrokerageAccountAdd(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_etbaAdd = "INSERT INTO Core.FB_ETIBXX (Date, Debit, Credit) VALUES (?,?,?);";
+        try { returnData = wc.q2do1c(dbc, query_etbaAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
     
     private JSONArray eTradeBalance(Connection dbc) {
         final String query_etb = "SELECT" +
@@ -152,10 +182,12 @@ public class StockDAO {
         return returnData;
     }
 
+    public JSONArray getETradeBrokerageAccount(Connection dbc) { return eTradeBrokerageAccount(dbc); }
     public JSONArray getETradeBalance(Connection dbc) { return eTradeBalance(dbc); }
     public JSONArray getStockHistory(Connection dbc) { return stockHistory(dbc); }
     public JSONArray getStockList(Connection dbc) { return stockList(dbc); }
     public JSONArray getStockListPublic(Connection dbc) { return stockListPublic(dbc); }
+    public String setETradeBrokerageAccountAdd(Connection dbc, List<String> qParams) { return eTradeBrokerageAccountAdd(dbc, qParams); }
     public String setStockAdd(Connection dbc, List<String> qParams) { return stockAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
     public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockShareUpdate(dbc, qParams); }

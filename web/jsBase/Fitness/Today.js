@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Today.js split: 4 Apr 2018
-Updated: 14 Jan 2020
+Updated: 9 Sep 2020
  */
 
 function actUpdateTodaySubmit(event) {
@@ -73,7 +73,7 @@ function putUpdateToday(formData) {
             aniPreload("off");
         },
         error: function(data, iostatus) {
-            window.alert("xhrPost for UpdateToday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrPost for UpdateToday FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };

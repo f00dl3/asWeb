@@ -1,12 +1,13 @@
 /*
 by Anthony Stump
 Created: 3 Dec 2019
-Updated: 28 Jul 2020
+Updated: 5 Sep 2020
  */
 
 package asWebRest.application;
 
 import asWebRest.hookers.WeatherBot;
+import asWebRest.hookers.WeatherBotPython;
 import asWebRest.shared.CommonBeans;
 
 import java.io.File;
@@ -27,10 +28,12 @@ public class RestletOnStart {
         CommonBeans cb = new CommonBeans();
         Crontabs_UVM cUVM = new Crontabs_UVM();
         WeatherBot wxb = new WeatherBot();
+	WeatherBotPython wxbp = new WeatherBotPython();
         
         StartupNotify.getAtBoot();
 
         try { wxb.startBot(); } catch (Exception e) { e.printStackTrace(); }
+	try { wxbp.startBot(); } catch (Exception e) { e.printStackTrace(); }
         //try { wxb.startBot_StartOnStop(); } catch (Exception e) { e.printStackTrace(); }
         
         final File cachePath = new File(cb.getPathChartCache().toString());

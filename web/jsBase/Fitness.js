@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 2 May 2020
+Updated: 9 Sep 2020
  */
 
 var myHeight = 67;
@@ -233,7 +233,7 @@ function getWeightChart(inXdt1, inXdt2) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for Fitness Charts FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrGet for Fitness Charts FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -450,7 +450,7 @@ function putRoute(formData) {
         },
         error: function(data, iostatus) {
             aniPreload("off");
-            window.alert("xhrPost for Route FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrPost for Route FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
     dojo.xhrPost(xhArgs);

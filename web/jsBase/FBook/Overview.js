@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 23 Jul 2020
+Updated: 9 Sep 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -238,7 +238,7 @@ function getOverviewData2() {
         },
         error: function (data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for Overview FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+            showNotice("xhrGet for Overview FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
     dojo.xhrPost(xhArgs);
@@ -284,7 +284,7 @@ function setSavingsAdd(formData) {
             aniPreload("off");
         },
         error: function(data, iostatus) {
-            window.alert("xhrPost for SavingsAdd FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            showNotice("xhrPost for SavingsAdd FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };

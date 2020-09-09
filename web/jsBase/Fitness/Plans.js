@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
-Updated: 13 May 2019
+Updated: 9 Sep 2020
  */
 
 function actOnCommitRoute(event) {
@@ -91,7 +91,7 @@ function processGpsTracks() {
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request to FitnessResource/processGpsTracks FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    showNotice("request to FitnessResource/processGpsTracks FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }
