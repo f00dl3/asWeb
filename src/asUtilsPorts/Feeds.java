@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 26 Jul 2020
+Updated: 12 Sep 2020
 */
 
 package asUtilsPorts;
@@ -129,7 +129,7 @@ public class Feeds {
     		RadarNightly.process(dbc);
     	}
     	
-    	if(rightNow.getHourOfDay() == 9) {
+    	if(rightNow.getHourOfDay() == 7) {
     		returnData += GetDaily.getDaily(dbc, 1);
     	}
     	

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 16 Jul 2020
+Updated: 19 Sep 2020
  */
 
 var searchableData;
@@ -45,7 +45,7 @@ function displayCheckbook() {
 }
 
 function genOverviewChecking(cbData) {
-    var bubble = "<div class='UBox'>Check<br/><span>$" + numComma((cbData.Balance).toFixed(2)) + "</span></div>";
+    var bubble = "<div class='UBox'>Check<br/><span>$" + numComma((cbData.Balance).toFixed(0)) + "</span></div>";
     dojo.byId("HoldChecking").innerHTML = bubble;
 }
 

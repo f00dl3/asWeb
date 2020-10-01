@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 28 Mar 2019
-Updated: 18 Jan 2020
+Updated: 19 Sep 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -24,7 +24,7 @@ public class DeepRowCount {
         		" FROM information_schema.tables" + 
         		" WHERE table_schema IN ('" + whatTable + "');";
         JSONArray tContainer = new JSONArray();
-        try {
+        /* try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_TableSummary, null);
             while (resultSet.next()) {
                 JSONObject tObject = new JSONObject();
@@ -40,7 +40,7 @@ public class DeepRowCount {
                 subResultSet.close();
             }
             resultSet.close();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { e.printStackTrace(); } */
         return tContainer;
         
     }
@@ -49,13 +49,13 @@ public class DeepRowCount {
         
         long rowCount = 0;
         
-        JSONArray jsonData = getLiveRowCount(dbc, whatTable);
+        /* JSONArray jsonData = getLiveRowCount(dbc, whatTable);
         
         for (int i = 0; i < jsonData.length(); i++) {
             JSONObject thisObject = jsonData.getJSONObject(i);
             long thisRowCount = thisObject.getLong("RowCount");
             rowCount += thisRowCount;
-        }
+        } */
         
         return rowCount;
         

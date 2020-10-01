@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from parent: 4 Aug 2020
-Updated: 9 Sep 2020
+Updated: 10 Sep 2020
  */
 
 package asWebRest.resource;
@@ -93,8 +93,8 @@ public class StockResource extends ServerResource {
                     if(wc.isSet(argsInForm.getFirstValue("etbaCredit"))) { etbaCredit = argsInForm.getFirstValue("etbaCredit"); }
                     if(wc.isSet(argsInForm.getFirstValue("etbaDebit"))) { etbaDebit = argsInForm.getFirstValue("etbaDebit"); }
                     qParams.add(argsInForm.getFirstValue("etbaDate"));
-                    qParams.add(etbaCredit);
                     qParams.add(etbaDebit);
+                    qParams.add(etbaCredit);
                     returnData += updateStockAction.setETradeBrokerageAccountAdd(dbc, qParams);
                     break;
                      

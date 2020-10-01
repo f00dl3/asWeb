@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 29 May 2020
+Last updated: 18 Sep 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -38,7 +38,7 @@ public class Desktop {
     	CommonBeans cb = new CommonBeans();
         JunkyBeans junkyBeans = new JunkyBeans();
         SNMPBeans snmpBeans = new SNMPBeans();
-        DeepRowCount drc = new DeepRowCount();
+        //DeepRowCount drc = new DeepRowCount();
         WebCommon wc = new WebCommon();
         
         final double tA = snmpBeans.getTa();
@@ -248,31 +248,31 @@ public class Desktop {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
                                 try { mySQLSizeCore = Double.parseDouble(strThisVal); } catch (Exception e) { }
-                                mySQLRowsCore = drc.totalRowCountFromDatabase(dbc, "Core");
+                                mySQLRowsCore = 0; //drc.totalRowCountFromDatabase(dbc, "Core");
                         }	
                         if(line.contains("Feeds,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
                                 try { mySQLSizeFeeds = Double.parseDouble(strThisVal); } catch (Exception e) { }
-                                mySQLRowsFeeds = drc.totalRowCountFromDatabase(dbc, "Feeds");
+                                mySQLRowsFeeds = 0; //drc.totalRowCountFromDatabase(dbc, "Feeds");
                         }	
                         if(line.contains("net_snmp,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
                                 try { mySQLSizeNetSNMP = Double.parseDouble(strThisVal); } catch (Exception e) { }
-                                mySQLRowsNetSNMP = drc.totalRowCountFromDatabase(dbc, "net_snmp");
+                                mySQLRowsNetSNMP = 0; //drc.totalRowCountFromDatabase(dbc, "net_snmp");
                         }	
                         if(line.contains("WebCal,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
                                 try { mySQLSizeWebCal = Double.parseDouble(strThisVal); } catch (Exception e) { }
-                                mySQLRowsWebCal = drc.totalRowCountFromDatabase(dbc, "WebCal");
+                                mySQLRowsWebCal = 0; //drc.totalRowCountFromDatabase(dbc, "WebCal");
                         }	
                         if(line.contains("WxObs,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
                                 try { mySQLSizeWxObs = Double.parseDouble(strThisVal); } catch (Exception e) { }
-                                mySQLRowsWxObs = drc.totalRowCountFromDatabase(dbc, "WxObs");
+                                mySQLRowsWxObs = 0; //drc.totalRowCountFromDatabase(dbc, "WxObs");
                         }	
                 }
         }

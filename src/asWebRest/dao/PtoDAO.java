@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 21 Feb 2018
-Updated: 13 Apr 2020
+Updated: 30 Sep 2020
 */
 
 package asWebRest.dao;
@@ -21,7 +21,7 @@ public class PtoDAO {
     public JSONArray getPto(Connection dbc) {
         final String query_PTO = "SELECT Month, New, Taken, Save," + 
                 " (@runtot := @runtot + CarryOver + New - Taken - Save) AS Balance, Notes" +
-                " FROM Core.SprintPTO WHERE Month BETWEEN '2019-04' AND '2021-03';";
+                " FROM Core.SprintPTO WHERE Month BETWEEN '2020-04' AND '2021-12';";
         JSONArray tContainer = new JSONArray();
         try { ResultSet rsA = wc.q2rs1c(dbc, wcb.getQSetRT0(), null); rsA.close(); } catch (Exception e) { e.printStackTrace(); }
         try {            

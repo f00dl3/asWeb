@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 11 Aug 2020
+Updated: 1 Oct 2020
 
 */
 
@@ -222,56 +222,80 @@ public class Stocks {
 
 		JSONObject stockIndex = new JSONObject();
 		
+		int maxLimiter = 15;
+		int indexPosition = 0;
+		int indexNumber = 0;
+		int stockCount = stocksToFetch.length();
 		
-		for(int i = 0; i < stocksToFetch.length(); i++) {		
-			JSONObject tStock = stocksToFetch.getJSONObject(i);
-			String tTicker = tStock.getString("Symbol");
-			stockQuoteList += tTicker + ",";
-		}
+		quote += "\n" + 
+				"DBG: Watched stocks count: " + stockCount +"\n";
 		
-		quote += "\nDBG: Ticker List: " + stockQuoteList;
-		
-		try { 
-			JSONObject tStockData = null;
-			tStockData = new JSONObject(apiCallStock_Yahoo7Multi(stockQuoteList));
-			//quote += "\nDBG: " + tStockData.toString();
-			JSONObject tChart = tStockData.getJSONObject("spark");
-			JSONArray result = tChart.getJSONArray("result");
-			for(int i = 0; i < result.length(); i++) {
-				String tTicker = "";
-				double valueNow = 0.0;
-				String valueNowS = "";				
-				String previousClose = "";
-				JSONObject quoteHolder = result.getJSONObject(i);
-				JSONArray quoteData = quoteHolder.getJSONArray("response");
-				JSONObject first = quoteData.getJSONObject(0);
-				JSONObject meta = first.getJSONObject("meta");
-				tTicker = meta.getString("symbol");
-				valueNow = meta.getDouble("regularMarketPrice");
-				try { previousClose = String.valueOf(meta.getDouble("chartPreviousClose")); } catch (Exception e) { e.printStackTrace(); }
-				valueNowS = String.valueOf(valueNow);
-				if(valueNowS.equals("")) { valueNowS = previousClose; }
-				//quote += "\n" + tTicker + ": " + valueNowS;  
-				if(!valueNowS.equals("0.0")) {
-					List<String> qParams = new ArrayList<>();
-					qParams.add(0, valueNowS);
-					qParams.add(1, previousClose);
-					qParams.add(2, tTicker);
-					updateStockAction.setStockUpdate(dbc, qParams);
-					JSONObject tSubStock = new JSONObject();
-					tSubStock
-						.put("valueEach", valueNowS)
-						.put("previousClose", previousClose);
-					stockIndex.put(tTicker, tSubStock);
+		for(int i = 0; i < stockCount; i++) {	
+						
+			if((indexPosition < maxLimiter) && (i != stockCount)) {
+				
+				indexPosition++;
+				JSONObject tStock = stocksToFetch.getJSONObject(i);
+				String tTicker = tStock.getString("Symbol");
+				stockQuoteList += tTicker + ",";
+				quote += "DBG: Added master index no. " + i + " (" + tTicker + ") to index list " + indexNumber + "\n";
+				
+			} else {
+				
+				quote += "DBG: Ticker List " + indexNumber + ": " + stockQuoteList + "\n";
+				
+				try { 
+					JSONObject tStockData = null;
+					tStockData = new JSONObject(apiCallStock_Yahoo7Multi(stockQuoteList));
+					//quote += "\nDBG: " + tStockData.toString();
+					JSONObject tChart = tStockData.getJSONObject("spark");
+					JSONArray result = tChart.getJSONArray("result");
+					for(int j = 0; j < result.length(); j++) {						
+						String tTicker = "";
+						double valueNow = 0.0;
+						String valueNowS = "";				
+						String previousClose = "";
+						JSONObject quoteHolder = result.getJSONObject(j);
+						JSONArray quoteData = quoteHolder.getJSONArray("response");
+						JSONObject first = quoteData.getJSONObject(0);
+						JSONObject meta = first.getJSONObject("meta");
+						tTicker = meta.getString("symbol");
+						valueNow = meta.getDouble("regularMarketPrice");
+						try { previousClose = String.valueOf(meta.getDouble("chartPreviousClose")); } catch (Exception e) { e.printStackTrace(); }
+						valueNowS = String.valueOf(valueNow);
+						if(valueNowS.equals("")) { valueNowS = previousClose; }
+						//quote += "\n" + tTicker + ": " + valueNowS;  
+						if(!valueNowS.equals("0.0")) {
+							List<String> qParams = new ArrayList<>();
+							qParams.add(0, valueNowS);
+							qParams.add(1, previousClose);
+							qParams.add(2, tTicker);
+							updateStockAction.setStockUpdate(dbc, qParams);
+							JSONObject tSubStock = new JSONObject();
+							tSubStock
+								.put("valueEach", valueNowS)
+								.put("previousClose", previousClose);
+							stockIndex.put(tTicker, tSubStock);
+						}
+					}		
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				
+				indexPosition = 0;
+				indexNumber++;
+				//i = i-1;
+				stockQuoteList = "";
+				
+			}
+			
+		}		
         
 		List<String> qParams2 = new ArrayList<>();
 		qParams2.add(stockIndex.toString());
 		updateStockAction.setStockIndex(dbc, qParams2);
+		
+		quote += "DBG: stockIndex = " + stockIndex.toString();
 		
 		return quote;
 

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 May 2020
+Updated: 25 Sep 2020
 */
 
 package asWebRest.dao;
@@ -42,7 +42,7 @@ public class FitnessDAO {
     }
     
     private JSONArray rPlanByDesc(Connection dbc, List<String> qParams) {
-        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans WHERE Description = ?;";
+        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm, DateAdded from Core.Fit_RPlans WHERE Description = ?;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RPlans, qParams);
@@ -51,6 +51,8 @@ public class FitnessDAO {
                 tObject
                     .put("Description", resultSet.getString("Description"))
                     .put("GeoJSON", resultSet.getString("GeoJSON"))
+			.put("Done", resultSet.getInt("Done"))
+			.put("DateAdded", resultSet.getString("DateAdded"))
                     .put("DistKm", resultSet.getDouble("DistKm"));
                 tContainer.put(tObject);
             }
@@ -900,7 +902,7 @@ public class FitnessDAO {
     public JSONArray getRPlanByDesc(Connection dbc, List<String> qParams) { return rPlanByDesc(dbc, qParams); }
     
     public JSONArray getRPlans(Connection dbc) {
-        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm from Core.Fit_RPlans ORDER BY Description DESC;";
+        final String query_Fitness_RPlans = "SELECT Description, GeoJSON, Done, DistKm, DateAdded from Core.Fit_RPlans ORDER BY Description DESC;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_Fitness_RPlans, null);
@@ -910,6 +912,7 @@ public class FitnessDAO {
                     .put("Description", resultSet.getString("Description"))
                     .put("GeoJSON", resultSet.getString("GeoJSON"))
                     .put("Done", resultSet.getInt("Done"))
+			.put("DateAdded", resultSet.getString("DateAdded"))
                     .put("DistKm", resultSet.getDouble("DistKm"));
                 tContainer.put(tObject);
             }

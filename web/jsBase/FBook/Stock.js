@@ -64,14 +64,12 @@ function getStocks() {
 function putStocks(etbaData, stockData) {
 	let etbaInsert = "<h3>ETrade Transactions</h3>" +
 		"<div class='table'>" +
-		"<div class='td'>" +
 		"<form class='tr etbaAddUpdateForm'>" +
 		"<span class='td'><input class='C2UETBA' type='checkbox' name='Action' value='Update' /></span>" + 
 		"<span class='td'><input type='date' name='etbaDate' id='etbaDate' style='width: 80px;' /></span>" +
         "<span class='td'><input type='number' step='1' name='etbaDebit' value='0' style='width: 70px;' /></span>" +
         "<span class='td'><input type='number' step='1' name='etbaCredit' value='0' style='width: 70px;' /></span>" +
-        "</form>" +
-        "</div>";
+        "</form>";
 	etbaData.forEach(function (etb) {
 		etbaInsert += "<div class='tr'>" +
 			"<span class='td'>" + etb.BTID + "</span>" +
