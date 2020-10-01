@@ -230,9 +230,9 @@ public class Stocks {
 		quote += "\n" + 
 				"DBG: Watched stocks count: " + stockCount +"\n";
 		
-		for(int i = 0; i < stockCount; i++) {	
+		for(int i = 0; i < stockCount + 1; i++) {	
 						
-			if((indexPosition < maxLimiter) && (i != stockCount)) {
+			if((indexPosition < maxLimiter) && (i != ( stockCount ))) {
 				
 				indexPosition++;
 				JSONObject tStock = stocksToFetch.getJSONObject(i);
@@ -284,8 +284,8 @@ public class Stocks {
 				
 				indexPosition = 0;
 				indexNumber++;
-				//i = i-1;
 				stockQuoteList = "";
+				if(i != (stockCount)) { i = i-1; }
 				
 			}
 			

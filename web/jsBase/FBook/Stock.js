@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 9 Sep 2020
+Updated: 1 Oct 2020
  */
 
 function actOnETBAFormSubmit(event) {
@@ -101,7 +101,8 @@ function putStocks(etbaData, stockData) {
             "<span class='td'><div class='UPop'>" +
             "<input type='number' step='0.001' name='Count' value='" + sd.Count + "' style='width: 80px;' />" +
             "<div class='UPopO'>";
-        if(isSet(sd.LastComparedShares)) { stockResults += "<strong>as of:</strong> " + sd.LastComparedShares + "<br/>"; }
+        if(isSet(sd.LastComparedShares)) { stockResults += "<strong>compared:</strong> " + sd.LastComparedShares + "<br/>"; }
+        if(isSet(sd.LastUpdated)) { stockResults += "<strong>as of:</strong> " + sd.LastUpdated + "<br/>"; }
         if(isSet(sd.EJTI15)) { stockResults += "<strong>EJTI15:</strong> " + sd.EJTI15 + "<br/>"; }
         if(isSet(sd.EJRI23)) { stockResults += "<strong>EJRI23:</strong> " + sd.EJRI23 + "<br/>"; }
         if(isSet(sd.EJRI07)) { stockResults += "<strong>EJRI07:</strong> " + sd.EJRI07 + "<br/>"; }
