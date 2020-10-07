@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    16 Jul 2020
+    Updated:    7 Oct 2020
     Author     : astump
 --%>
 
@@ -21,6 +21,10 @@
    		"Calendar/ByDay",
    		"Calendar/ByMonth",
    		"Calendar/Shared"
+    };
+    
+    String[] chart3Scripts = {
+   		"Charts/Test"
     };
     
     String[] etScripts = {
@@ -129,20 +133,26 @@
     if(scripts == null) { scripts = "false"; }
     
     if(type.equals("full")) { 
-        scripts2Load += "<script src='"+rootPath+"/jsLib/dojo/v1.15.0/dojo/dojo.js'></script>" +
-                "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.4.1.min.js'></script>" +
+        scripts2Load += "<script src='"+rootPath+"/jsLib/dojo/1.16.3/dojo/dojo.js'></script>" +
+                "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.5.1.min.js'></script>" +
                 "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
-                "<script src='"+rootPath+"/jsBase/Header.js'></script>" +
                 "<script src='"+rootPath+"/jsBase/Tools/comSec.js'></script>" +
-                "<script src='"+rootPath+"/jsBase/Tools/Session.js'></script>";
+                "<script src='"+rootPath+"/jsBase/Tools/Routing.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/Tools/Session.js'></script>" +
+                "<script src='"+rootPath+"/jsBase/Header.js'></script>";
     }
     
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
             " <strong><span id='preloadSize'>Loading...</span></strong></div>";
-    
+            
     String cssFiles = "";
     for(int i=0; i < css2do.length; i++) {
         cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
+    }
+    
+    String chart3ScriptPack = "<script src='"+rootPath+"/jsLib/canvasjs/3.1/jquery.canvasjs.min.js'></script>";
+    for(int i=0; i < chart3Scripts.length; i++) {
+    	chart3ScriptPack += "<script src='"+rootPath+"/jsBase/"+chart3Scripts[i]+".js'></script>";
     }
     
     String calScriptPack = "";
@@ -217,6 +227,10 @@
             	fullTitle = "WebCal Anthony Fork";
                 scripts2Load += calScriptPack;
                 break;
+            case "Charts3":
+            	fullTitle = "Dynamic Charts v3";
+            	scripts2Load += chart3ScriptPack;
+            	break;
             case "DBInfo":
                 fullTitle = "Database Info";
                 break;

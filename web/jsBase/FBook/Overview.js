@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 9 Sep 2020
+Updated: 3 Oct 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -54,10 +54,19 @@ function genOverviewMortgage(mortData, amSch, mdfbal, svbal) {
     dojo.byId("HoldMortgage").innerHTML = bubble;
 }
 
-function genOverviewSavings(svData, svBk) {
+function genOverviewSavings(svData, svBk, stockData) {
+	let spilloverSavings = 0.0;
+	stockData.forEach(function (sd) {
+		if(sd.SpilloverSavings == 1) {
+			spilloverSavings += (sd.LastValue * sd.Count);
+		}			
+	});
+	savingsWithSpillover = svData.SBal + spilloverSavings;
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
-    var bubble = "<div class='UBox'>Savings<br/><span>$" + numComma(Math.round(svData.SBal)) + "</span>" +
-            "<div class='UBoxO'><strong>Saving</strong><p>" +
+    var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
+            "<div class='UBoxO'><strong>Saving</strong><br/>" +
+		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong><br/>" +
+		"Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong><p/>" +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
     var bForm = "<form id='SavingsBookForm'>" +
@@ -118,6 +127,7 @@ function genOverviewStock(stockData, eTrade) {
     	if(sd.Managed != 1) {
     		let change = (parseFloat(sd.LastValue) - parseFloat(sd.PreviousClose)).toFixed(2);
     		let txtColor = "yellow";
+		if(sd.SpilloverSavings === 1) { txtColor = "orange"; }
 	    	if(sd.Count === 0) { txtColor = "white"; }
 	        bTable += "<tr>" +
 	                    "<td style='color: " + txtColor + "'><a href='" + mktUrl + sd.Symbol + "' target='stonew'>" + sd.Symbol + "</a></td>" +
@@ -154,7 +164,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var projections = [pro03m, pro01y, pro05y, pro10y, pro20y, pro30y, proRet];
     var bubble = "<div class='UBox'>Worth<br/><span>$" + cnw1d + "K</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
-            "Current estimate: $" + numComma(cnw1d_L) +
+            "Current estimate: <strong>$" + numComma(cnw1d_L) + "</strong>" +
             "<br/><em>Now WMQY growth</em>: " +
             	nwga.p7day.toFixed(1) + "/" + 
             	nwga.p30day.toFixed(1) + "/" + 
@@ -263,7 +273,7 @@ function putOverview(finGlob) {
     var eTrade = finGlob.eTrade[0];
     var stockData = finGlob.stock;
     genOverviewChecking(cbData);
-    genOverviewSavings(svData, svBk);
+    genOverviewSavings(svData, svBk, stockData);
     genOverviewStock(stockData, eTrade);
     //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);

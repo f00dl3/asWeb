@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 1 Oct 2020
+Updated: 3 Oct 2020
  */
 
 function actOnETBAFormSubmit(event) {
@@ -82,15 +82,20 @@ function putStocks(etbaData, stockData) {
     let rData = "<h3>Stocks & Manged Funds</h3>";
     let managedBalance = 0.0;
     let myBalance = 0.0;
+	let spilloverSavings = 0.0;
     stockData.forEach(function (sd) {
     	if(sd.Managed == 1) {
 			managedBalance += (sd.Count * (sd.LastValue * sd.Multiplier));
     	} else {
     		myBalance += (sd.Count * (sd.LastValue * sd.Multiplier));
     	}
+	if(sd.SpilloverSavings == 1) {
+		spilloverSavings += (sd.Count * sd.LastValue);
+	}
     });
     rData += "<strong>Managed Funds</strong>: $" + managedBalance.toFixed(2) + "<br/>" +
-    	"<strong>My Investments</strong>: $" + myBalance.toFixed(2) + "<p/>";
+    	"<strong>My Investments</strong>: $" + myBalance.toFixed(2) + "<br/>" +
+	"<strong>Spillover Savings</strong>: $" + spilloverSavings.toFixed(2) + "</p>";
     let stockResults = "<div class='table'>";
     stockData.forEach(function (sd) {
 		let holdingValue = (sd.Count * (sd.LastValue * sd.Multiplier));
