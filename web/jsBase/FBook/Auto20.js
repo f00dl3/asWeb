@@ -14,7 +14,7 @@ function actOnMpgEntry20(event) {
         isSet(thisFormData.mpgPrice) &&
         isSet(thisFormData.mpgGallons)
     ) {
-        setAddAutoMpgHC(thisFormData);
+        setAddAutoMpg20(thisFormData);
     } else {
         window.alert("You missed something!\n" + thisFormDataJ)
     }
@@ -44,7 +44,7 @@ function getAuto20() {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function (data) {
-            putAutoHC(
+            putAuto20(
                 data.autoMpg,
                 data.billSum[0],
                 data.amrData
@@ -142,7 +142,7 @@ function setAddAutoMpg20(formData) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    getAutoHC();
+                    getAuto20();
                 },
                 function(error) { 
                     aniPreload("off");

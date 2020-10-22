@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 4 Aug 2020
+Updated: 21 Oct 2020
 */
 
 package asWebRest.dao;
@@ -573,18 +573,19 @@ public class FinanceDAO {
     			+ "AsLiq, AsFix, Life, Credits, Debts"
     			+ ") VALUES ("
     			+ "(SELECT SUM("
-    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category IN ('NV','CA')) +"
-    			+ "(SELECT SUM(Credit-Debit) FROM FB_CFCK01 WHERE Date <= current_date) +"
-    			+ "(SELECT SUM(Credit-Debit) FROM FB_CFSV59 WHERE Date <= current_date))),"
-    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Type = 'F'),"
-    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category = 'LI'),"
-    			+ "(SELECT SUM(Value) FROM FB_Assets WHERE Category = 'CR'),";
+    			+ "(SELECT SUM(Value) FROM Core.FB_Assets WHERE Category IN ('NV','CA')) +"
+    			+ "(SELECT SUM(Credit-Debit) FROM Core.FB_CFCK01 WHERE Date <= current_date) +"
+    			+ "(SELECT SUM(Credit-Debit) FROM Core.FB_CFSV59 WHERE Date <= current_date))),"
+    			+ "(SELECT SUM(Value) FROM Core.FB_Assets WHERE Type = 'F'),"
+    			+ "(SELECT SUM(Value) FROM Core.FB_Assets WHERE Category = 'LI'),"
+    			+ "(SELECT SUM(Value) FROM Core.FB_Assets WHERE Category = 'CR'),"
+    			+ "(";
     		if(mb.getPayed() == 0) {
-    			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+jp.getMortIntRate()+"/12)/100)) - (Extra + "+jp.getMortBaseMonthly()+")),1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day)";
+    			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+jp.getMortIntRate()+"/12)/100)) - (Extra + "+jp.getMortBaseMonthly()+")),1) AS MBal FROM Core.FB_WFML35 WHERE DueDate < current_date + interval '30' day)";
     		} else {
     			autoNetWorthSQLQuery += "0";
     		}
-			autoNetWorthSQLQuery += ");";    
+			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value/1000)) FROM Core.FB_Assets WHERE Category='DB')));";    
         try { returnData = wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }    
@@ -621,7 +622,7 @@ public class FinanceDAO {
             final String thisMonthEndString = dtFormat.print(thisMonthEnd);
             intQParams.add(0, thisMonthEndString);
             intQParams.add(1, thisMonthEndString);
-            final String query_ch_Saving_Opt = "SELECT SUM(Credit-Debit) AS Value, ? AS Date FROM FB_CFSV59 WHERE Date <= ?;";        
+            final String query_ch_Saving_Opt = "SELECT SUM(Credit-Debit) AS Value, ? AS Date FROM Core.FB_CFSV59 WHERE Date <= ?;";        
             try {
                 ResultSet resultSet = wc.q2rs1c(dbc, query_ch_Saving_Opt, intQParams);
                 while (resultSet.next()) { 
