@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 3 Oct 2020
+Updated: 13 Oct 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -65,8 +65,8 @@ function genOverviewSavings(svData, svBk, stockData) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
     var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Saving</strong><br/>" +
-		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong><br/>" +
-		"Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong><p/>" +
+		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong>" +
+		" (Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>" +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
     var bForm = "<form id='SavingsBookForm'>" +

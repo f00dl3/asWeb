@@ -1,10 +1,10 @@
 /* 
 by Anthony Stump
-Created: 4 Apr 2018
-Updated: 21 Oct 2020
+Created: 21 Oct 2020
+Updated: on creation
  */
 
-function actOnMpgEntry(event) {
+function actOnMpgEntry20(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
@@ -14,17 +14,17 @@ function actOnMpgEntry(event) {
         isSet(thisFormData.mpgPrice) &&
         isSet(thisFormData.mpgGallons)
     ) {
-        setAddAutoMpg(thisFormData);
+        setAddAutoMpgHC(thisFormData);
     } else {
         window.alert("You missed something!\n" + thisFormDataJ)
     }
 }
 
-function displayAuto() {
-    getAuto();
-    $("#FBAuto").toggle();
+function displayAuto20() {
+    getAuto20();
+    $("#FBAuto20").toggle();
     $("#FBAutoHC").hide();
-    $("#FBAuto20").hide();
+    $("#FBAuto").hide();
     $("#FBAsset").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
@@ -34,9 +34,9 @@ function displayAuto() {
     $("#FBStocks").hide();
 }
 
-function getAuto() {
+function getAuto20() {
     aniPreload("on");
-    var thePostData = "doWhat=getAuto";
+    var thePostData = "doWhat=getAutoNewCar20";
     var xhArgs = {
         preventCache: true,
         url: getResource("Automotive"),
@@ -44,7 +44,7 @@ function getAuto() {
         handleAs: "json",
         timeout: timeOutMilli,
         load: function (data) {
-            putAuto(
+            putAutoHC(
                 data.autoMpg,
                 data.billSum[0],
                 data.amrData
@@ -53,17 +53,17 @@ function getAuto() {
         },
         error: function (data, iostatus) {
             aniPreload("off");
-            window.alert("xhrGet for AutoMPG FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+            window.alert("xhrGet for Auto New Car 2020 FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
         }
     };
     dojo.xhrPost(xhArgs);
 }
 
-function putAuto(autoMpgData, billSum, amrData) {
+function putAuto20(autoMpgData, billSum, amrData) {
     var autoMpgCols = [ "Date", "Total Miles", "Cost/Gallon", "Gallons", "MPG" ];
-    var rData = "<h3>Auto Maintenance: '08 Mazda 6</h3>";
+    var rData = "<h3>Auto Maintenance: (New Car 2020)</h3>";
     var fuelLog = "<h4>Fuel Log/MPG</h4>" +
-            "<div id='mpgEntryForm'></div><br/>" +
+            "<div id='mpgEntryForm20'></div><br/>" +
             "<div class='table'><div class='tr'>";
     for (var i = 0; i < autoMpgCols.length; i++) { fuelLog += "<span class='td'><strong>" + autoMpgCols[i] + "</strong></span>"; }
     fuelLog += "</div>";
@@ -90,7 +90,7 @@ function putAuto(autoMpgData, billSum, amrData) {
     rData += fuelLog + "<p>";
     var maintCols = [ "Mileage", "Date", "Flags", "Services", "Bill", "Location" ];
     var maintRecs = "<h4>Maintenance Records</h4>" +
-            "<div class='UBox'>Upkeep Cost<br/>'08 Mazda 6<br/>$" + (billSum.BillSum).toFixed(2) + "</div><p>" +
+            "<div class='UBox'>Upkeep Cost<br/>(New Car 2020)<br/>$" + (billSum.BillSum).toFixed(2) + "</div><p>" +
             "<div class='table'><div class='tr'>";
     for (var i = 0; i < maintCols.length; i++) { maintRecs += "<span class='td'><strong>" + maintCols[i] + "</strong></span>"; }
     maintRecs += "</div>";
@@ -109,26 +109,26 @@ function putAuto(autoMpgData, billSum, amrData) {
     });
     maintRecs += "</div>";
     rData += maintRecs;
-    dojo.byId("FBAuto").innerHTML = rData;
-    popAutoMpgEntryForm();
+    dojo.byId("FBAuto20").innerHTML = rData;
+    popAutoMpgEntryForm20();
 }
 
-function popAutoMpgEntryForm() {
+function popAutoMpgEntryForm20() {
     var rData = "<div class='table'><form class='tr'>" +
             "<span class='td'><input name='mpgDate' type='date' id='mpgDate' value='' style='width: 100px;' /><br/>Date</span>" +
             "<span class='td'><input name='mpgMiles' id='mpgMiles' type='number' step='1' value='' style='width: 75px;' /><br/>Miles</span>" +
             "<span class='td'><input name='mpgPrice' id='mpgPrice' type='number' step='0.001' value='' style='width: 50px;' /><br/>Price</span>" +
             "<span class='td'><input name='mpgGallons' id='mpgGallons' type='number' step='0.001' value='' style='width: 50px;' /><br/>Gallons</span>" +
-            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmit'>Fuel!</button></span>" +
+            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmitHC'>Fuel!</button></span>" +
             "</form></div>";
-    dojo.byId("mpgEntryForm").innerHTML = rData;
-    var enterMpgButton = dojo.byId("mpgSubmit");
-    dojo.connect(enterMpgButton, "click", actOnMpgEntry);
+    dojo.byId("mpgEntryForm20").innerHTML = rData;
+    var enterMpgButton20 = dojo.byId("mpgSubmit20");
+    dojo.connect(enterMpgButton20, "click", actOnMpgEntry20);
 }
 
-function setAddAutoMpg(formData) {
+function setAddAutoMpg20(formData) {
     var thePostData = {
-        "doWhat": "putAutoMpgAdd",
+        "doWhat": "putAutoMpgAddNewCar20",
         "mpgDate": formData.mpgDate,
         "mpgMiles": formData.mpgMiles,
         "mpgPrice": formData.mpgPrice,
@@ -142,11 +142,11 @@ function setAddAutoMpg(formData) {
             }).then(
                 function(data) {
                     aniPreload("off");
-                    getAuto();
+                    getAutoHC();
                 },
                 function(error) { 
                     aniPreload("off");
-                    window.alert("request for AutoMPG Entry Add FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
+                    window.alert("request to set Auto New Car 2020 Gas Entry Add FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
 }

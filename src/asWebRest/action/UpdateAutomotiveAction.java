@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split from UpdateFinanceAction 1 Mar 2020
-Updated: 1 Mar 2020
+Updated: 21 Oct 2020
  */
 
 package asWebRest.action;
@@ -19,5 +19,6 @@ public class UpdateAutomotiveAction {
     
     public String setAutoMpgAdd(Connection dbc, List<String> qParams) { return automotiveDAO.setAutoMpgAdd(dbc, qParams); }
     public String setAutoMpgAddHondaCivic(Connection dbc, List<String> qParams) { return automotiveDAO.setAutoMpgAddHondaCivic(dbc, qParams); }
+    public String setAutoMpgAddNewCar20(Connection dbc, List<String> qParams) { return automotiveDAO.setAutoMpgAddNewCar20(dbc, qParams); }
 
 }

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 19 Feb 2018
 Split from FinanceResource 1 Mar 2020
-Updated: 1 Mar 2020
+Updated: 21 Oct 2020
  */
 
 package asWebRest.resource;
@@ -77,6 +77,19 @@ public class AutomotiveResource extends ServerResource {
                         .put("amrData", autoMaintHC);
                     returnData += mergedResults.toString();
                     break;
+
+                case "getAutoNewCar20":
+                    JSONArray autoMpg20 = getAutomotiveAction.getAutoMpgNewCar20(dbc);
+                    JSONArray autoMpgAvg20 = getAutomotiveAction.getAutoMpgAverageNewCar20(dbc);
+                    JSONArray billSum20 = getAutomotiveAction.getAutoBillSumNewCar20(dbc);
+                    JSONArray autoMaint20 = getAutomotiveAction.getAutoMaintNewCar20(dbc);
+                    mergedResults
+                        .put("autoMpg", autoMpg20)
+                        .put("autoMpgAvg", autoMpgAvg20)
+                        .put("billSum", billSum20)
+                        .put("amrData", autoMaint20);
+                    returnData += mergedResults.toString();
+                    break;
                     
                 case "putAutoMpgAdd":
                     String aMpgDate = "0000-00-00";
@@ -108,6 +121,22 @@ public class AutomotiveResource extends ServerResource {
                     qParams.add(2, aMpgPriceHC);
                     qParams.add(3, aMpgGallonsHC);
                     returnData += updateAutomotiveAction.setAutoMpgAddHondaCivic(dbc, qParams);
+                    break;
+
+                case "putAutoMpgAddNewCar20":
+                    String aMpgDate20 = "0000-00-00";
+                    String aMpgMiles20 = "0";
+                    String aMpgPrice20 = "0.00";
+                    String aMpgGallons20 = "0.00";
+                    if(wc.isSet(argsInForm.getFirstValue("mpgDate"))) { aMpgDate20 = argsInForm.getFirstValue("mpgDate"); }
+                    if(wc.isSet(argsInForm.getFirstValue("mpgMiles"))) { aMpgMiles20 = argsInForm.getFirstValue("mpgMiles"); }
+                    if(wc.isSet(argsInForm.getFirstValue("mpgPrice"))) { aMpgPrice20 = argsInForm.getFirstValue("mpgPrice"); }
+                    if(wc.isSet(argsInForm.getFirstValue("mpgGallons"))) { aMpgGallons20 = argsInForm.getFirstValue("mpgGallons"); }
+                    qParams.add(0, aMpgDate20);
+                    qParams.add(1, aMpgMiles20);
+                    qParams.add(2, aMpgPrice20);
+                    qParams.add(3, aMpgGallons20);
+                    returnData += updateAutomotiveAction.setAutoMpgAddNewCar20(dbc, qParams);
                     break;
                     
                 case "zestimateUpdate":

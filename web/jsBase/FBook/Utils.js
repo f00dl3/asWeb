@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 16 Jul 2020
+Updated: 21 Oct 2020
  */
 
 function displayUtils() {
@@ -9,6 +9,7 @@ function displayUtils() {
     $("#FBUUse").toggle();
     $("#FBAuto").hide();
     $("#FBAutoHC").hide();
+    $("#FBAuto20").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBCheck").hide();

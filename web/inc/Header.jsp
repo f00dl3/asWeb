@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    7 Oct 2020
+    Updated:    21 Oct 2020
     Author     : astump
 --%>
 
@@ -49,6 +49,7 @@
         "FBook/Assets",
         "FBook/Auto",
         "FBook/AutoHC",
+        "FBook/Auto20",
         "FBook/Bills",
         "FBook/Blue",
         "FBook/CkBk",

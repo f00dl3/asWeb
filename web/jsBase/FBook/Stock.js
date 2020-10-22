@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 3 Oct 2020
+Updated: 21 Oct 2020
  */
 
 function actOnETBAFormSubmit(event) {
@@ -30,6 +30,7 @@ function displayStocks() {
     $("#FBCheck").hide();
     $("#FBAuto").hide();
     $("#FBAutoHC").hide();
+    $("#FBAuto20").hide();
     $("#FBBills").hide();
     $("#FBBlue").hide();
     $("#FBAsset").hide();
@@ -94,8 +95,8 @@ function putStocks(etbaData, stockData) {
 	}
     });
     rData += "<strong>Managed Funds</strong>: $" + managedBalance.toFixed(2) + "<br/>" +
-    	"<strong>My Investments</strong>: $" + myBalance.toFixed(2) + "<br/>" +
-	"<strong>Spillover Savings</strong>: $" + spilloverSavings.toFixed(2) + "</p>";
+    	"<strong>My Investments</strong>: $" + myBalance.toFixed(2) + "</p>";
+	//"<strong>Spillover Savings</strong>: $" + spilloverSavings.toFixed(2) + "</p>";
     let stockResults = "<div class='table'>";
     stockData.forEach(function (sd) {
 		let holdingValue = (sd.Count * (sd.LastValue * sd.Multiplier));
