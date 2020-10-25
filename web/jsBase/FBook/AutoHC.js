@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Apr 2018
 Split from Auto on 1 Mar 2020
-Updated: 21 Oct 2020
+Updated: 25 Oct 2020
  */
 
 function actOnMpgEntryHC(event) {
@@ -111,7 +111,7 @@ function putAutoHC(autoMpgData, billSum, amrData) {
     maintRecs += "</div>";
     rData += maintRecs;
     dojo.byId("FBAutoHC").innerHTML = rData;
-    popAutoMpgEntryFormHC();
+    //popAutoMpgEntryFormHC();
 }
 
 function popAutoMpgEntryFormHC() {

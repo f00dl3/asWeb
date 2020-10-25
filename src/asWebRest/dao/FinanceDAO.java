@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 21 Oct 2020
+Updated: 22 Oct 2020
 */
 
 package asWebRest.dao;
@@ -585,7 +585,7 @@ public class FinanceDAO {
     		} else {
     			autoNetWorthSQLQuery += "0";
     		}
-			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value/1000)) FROM Core.FB_Assets WHERE Category='DB')));";    
+			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value)) FROM Core.FB_Assets WHERE Category='DB')));";    
         try { returnData = wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }    

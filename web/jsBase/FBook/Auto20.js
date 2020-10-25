@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Oct 2020
-Updated: on creation
+Updated: 25 Oct 2020
  */
 
 function actOnMpgEntry20(event) {
@@ -61,7 +61,7 @@ function getAuto20() {
 
 function putAuto20(autoMpgData, billSum, amrData) {
     var autoMpgCols = [ "Date", "Total Miles", "Cost/Gallon", "Gallons", "MPG" ];
-    var rData = "<h3>Auto Maintenance: (New Car 2020)</h3>";
+    var rData = "<h3>Auto Maintenance: ('17 Kia Sorrento)</h3>";
     var fuelLog = "<h4>Fuel Log/MPG</h4>" +
             "<div id='mpgEntryForm20'></div><br/>" +
             "<div class='table'><div class='tr'>";
@@ -90,7 +90,7 @@ function putAuto20(autoMpgData, billSum, amrData) {
     rData += fuelLog + "<p>";
     var maintCols = [ "Mileage", "Date", "Flags", "Services", "Bill", "Location" ];
     var maintRecs = "<h4>Maintenance Records</h4>" +
-            "<div class='UBox'>Upkeep Cost<br/>(New Car 2020)<br/>$" + (billSum.BillSum).toFixed(2) + "</div><p>" +
+            "<div class='UBox'>Upkeep Cost<br/>('17 Kia Sorrento)<br/>$" + (billSum.BillSum).toFixed(2) + "</div><p>" +
             "<div class='table'><div class='tr'>";
     for (var i = 0; i < maintCols.length; i++) { maintRecs += "<span class='td'><strong>" + maintCols[i] + "</strong></span>"; }
     maintRecs += "</div>";

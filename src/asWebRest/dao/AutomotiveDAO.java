@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 19 Feb 2018
 Split from FinanceDAO 1 Mar 2020
-Updated: 21 Oct 2020
+Updated: 25 Oct 2020
 */
 
 package asWebRest.dao;
@@ -53,7 +53,7 @@ public class AutomotiveDAO {
     }   
 
     private JSONArray autoBillSumNewCar20(Connection dbc) {
-        final String query_AutoBillSum = "SELECT SUM(Bill) AS BillSum from Core.AutoMaint_NewCar20;";
+        final String query_AutoBillSum = "SELECT SUM(Bill) AS BillSum from Core.AutoMaint_KiaSorrento17;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_AutoBillSum, null);
@@ -118,7 +118,7 @@ public class AutomotiveDAO {
     
   private JSONArray autoMaintNewCar20(Connection dbc) {
       final String query_AutoMaint = "SELECT Invoice, Miles, Date, Location, Services, Bill, OilCh, TireRotate" +
-              " FROM Core.AutoMaint_NewCar20 ORDER BY Date DESC LIMIT 10;";
+              " FROM Core.AutoMaint_KiaSorrento17 ORDER BY Date DESC LIMIT 10;";
       JSONArray tContainer = new JSONArray();
       try {
           ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMaint, null);
@@ -179,7 +179,7 @@ public class AutomotiveDAO {
     }    
 
     private JSONArray autoMpgNewCar20(Connection dbc) {
-        final String query_AutoMPG = "SELECT Date, TotMiles, CostPG, Gallons FROM Auto_MPG_NewCar20 ORDER BY Date DESC LIMIT 10;";
+        final String query_AutoMPG = "SELECT Date, TotMiles, CostPG, Gallons FROM Auto_MPG_KiaSorrento17 ORDER BY Date DESC LIMIT 10;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG, null);
@@ -213,7 +213,7 @@ public class AutomotiveDAO {
 
     private String autoMpgAddNewCar20(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_AddAutoMpg = "INSERT IGNORE INTO Core.Auto_MPG_NewCar20 VALUES (?,?,?,?,0,0);";
+        String query_AddAutoMpg = "INSERT IGNORE INTO Core.Auto_MPG_KiaSorrento17 VALUES (?,?,?,?,0,0);";
         try { returnData = wc.q2do1c(dbc, query_AddAutoMpg, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -257,7 +257,8 @@ public class AutomotiveDAO {
     }    
     
     private JSONArray autoMpgAverageNewCar20(Connection dbc) {
-        final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, AVG(CostPG) AS AvgCost FROM Core.Auto_MPG_NewCar20;";
+        final String query_AutoMPG_Average = "SELECT MAX(TotMiles) AS EndMiles, MIN(TotMiles) AS StartMiles, SUM(Gallons) AS Gallons, " +
+    			" AVG(CostPG) AS AvgCost FROM Core.Auto_MPG_KiaSorrento17;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_AutoMPG_Average, null);
