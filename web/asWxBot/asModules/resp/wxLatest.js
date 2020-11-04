@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 2 Sep 2020
+Updated: 26 Oct 2020
  */
 
 const axios = require('axios');
@@ -75,11 +75,11 @@ function respondWeatherData(station, data, msg, homeData) {
 		"\nHumidity: " + jdsHome.RelativeHumidity + "%" +
 		"\nPressure: " + jdsHome.PressureIn + "\"" +
 		"\nWind Direction: " + jdsHome.WindDegrees + " deg" +
-		"\nWind Speed: " + jdsHome.WindSpeed + " mph" +
+		//"\nWind Speed: " + jdsHome.WindSpeed + " mph" +
 		"\nDaily Rain: " + jdsHome.DailyRain + "\"" +
 		"\nRain Rate: " + jdsHome.RainRate + "\"/hr";
 	console.log("\nDBG --> finalMessage = " + finalMessage);
-	if(asm.isSet(jdsHome.WindGust)) { finalMessage += "\nWind Gusts: " + jdsHome.WindGust + " mph "; }
+	//if(asm.isSet(jdsHome.WindGust)) { finalMessage += "\nWind Gusts: " + jdsHome.WindGust + " mph "; }
 	msg.reply(asm.trimForDiscord(finalMessage));
 
 }

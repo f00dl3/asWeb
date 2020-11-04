@@ -111,7 +111,7 @@ function putAutoHC(autoMpgData, billSum, amrData) {
     maintRecs += "</div>";
     rData += maintRecs;
     dojo.byId("FBAutoHC").innerHTML = rData;
-    //popAutoMpgEntryFormHC();
+    popAutoMpgEntryFormHC();
 }
 
 function popAutoMpgEntryFormHC() {

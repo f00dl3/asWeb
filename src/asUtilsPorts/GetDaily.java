@@ -1,12 +1,13 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 22 Oct 2020
+Updated: 4 Nov 2020
 */
 
 package asUtilsPorts;
 
 import asUtilsPorts.Feed.CF6Daily;
+import asUtilsPorts.Feed.Vehicles;
 import asUtilsPorts.UbuntuVM.BackThatAssUp;
 import asUtilsPorts.Weather.SPCMapDownloader;
 import asWebRest.action.UpdateFfxivAction;
@@ -36,6 +37,7 @@ public class GetDaily {
 		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
         WebCommon wc = new WebCommon();
 		ZillowAPIHook zapi = new ZillowAPIHook();
+		Vehicles vh = new Vehicles();
 		
 		String returnData = "";
 		
@@ -86,6 +88,7 @@ public class GetDaily {
         try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
 	try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { }
         try { smd.getYesterday(); } catch (Exception e) { e.printStackTrace(); }
+        try { vh.getVehicleValue(dbc); } catch (Exception e) { e.printStackTrace(); }
         
         if(rightNow.dayOfWeek().get() == 1) {
         	KansasGasHook kgs = new KansasGasHook();

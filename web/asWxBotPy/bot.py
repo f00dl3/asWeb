@@ -1,4 +1,4 @@
-#asWxBotPy - Python Discord bot build P.3
+#asWxBotPy - Python Discord bot build P.4
 
 import os
 import discord
@@ -22,7 +22,9 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 	if message.content == '!pHelp':
-		response = "Build 3 of asWxBotPy. Testing phase. No real stuff available yet - sorry!"
+		response = "Build 4 of asWxBotPy. Testing phase. Some snarky stuff being built in!"
 		await message.channel.send(response)
-
+	if "sciatic" in (message.content).lower():
+		response = "Man, I feel your pain!"
+		await message.channel.send(response)
 client.run(TOKEN)

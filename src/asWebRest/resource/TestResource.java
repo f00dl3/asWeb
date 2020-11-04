@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 25 Jul 2020
+Updated: 4 Nov 2020
  */
 
 package asWebRest.resource;
@@ -44,6 +44,7 @@ import asUtilsPorts.Feed.GetSPC;
 import asUtilsPorts.Feed.Reddit;
 import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
+import asUtilsPorts.Feed.Vehicles;
 import asUtilsPorts.Feed.cWazey;
 import asUtilsPorts.Jobs.UbuntuVM.Crontabs_UVM;
 import asUtilsPorts.Tests.TestStuff;
@@ -256,6 +257,11 @@ public class TestResource extends ServerResource {
             		ThreadRipper tr = new ThreadRipper();
             		returnData += tr.selfTest(testsToRun, false);
             		break;
+
+				case "Vehicle":
+					Vehicles vh = new Vehicles();
+					returnData = vh.getVehicleValue(dbc);
+					break;		
             		
                 case "Watch":
             		GetSPC getSPC = new GetSPC();

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 8 Mar 2020
+Updated: 26 Oct 2020
  */
 
 const axios = require('axios');
@@ -39,13 +39,16 @@ function respondWeatherSarcastic(data, msg) {
 	var jds = JSON.parse(data);
 	var theWeather = jds.Weather.toLowerCase();
 	
-	var finalMessage = "OMG really bro? Last I checked it is " + jds.Weather;
+	var finalMessage = "OMG really bro? Last I checked ";
+	/* it is " + jds.Weather;
 	
 	if(theWeather.includes("rain") || theWeather.includes("snow")) {
 		finalMessage += " - I guess you're right!";
 	} else {
 		finalMessage += " - Maybe you're on something?";
-	}
+	} */
+	
+	finalMessage += "my coder needs to fix his shit!";
 	
 	msg.reply(asm.trimForDiscord(finalMessage));
 
