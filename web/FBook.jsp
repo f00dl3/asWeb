@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 23 Mar 2018
-    Updated: 25 Oct 2020
+    Updated: 4 Nov 2020
     Author     : astump
 --%>
 
@@ -26,7 +26,7 @@
             <button class="UButton" id="ShowFBAsset">A</button>
             <button class="UButton" id="ShowFBBills">B</button>
             <button class="UButton" id="ShowFBCheck">C</button>
-            <button class="UButton" id="ShowFBAutoHC">H</button>
+            <!-- <button class="UButton" id="ShowFBAutoHC">H</button> -->
             <button class="UButton" id="ShowFBAuto20">K</button>
             <button class="UButton" id="ShowFBAuto">M</button>
             <button class="UButton" id="ShowFBBlue">P</button>
@@ -45,7 +45,7 @@
     
         <div id="FBAsset"></div>
         <div id="FBAuto"></div>
-        <div id="FBAutoHC"></div>
+        <!-- <div id="FBAutoHC"></div> -->
         <div id="FBAuto20"></div>
         <div id="FBBills"></div>
         <div id="FBBlue"></div>

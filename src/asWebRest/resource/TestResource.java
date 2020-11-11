@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 4 Nov 2020
+Updated: 11 Nov 2020
  */
 
 package asWebRest.resource;
@@ -260,9 +260,10 @@ public class TestResource extends ServerResource {
 
 				case "Vehicle":
 					Vehicles vh = new Vehicles();
-					returnData = vh.getVehicleValue(dbc);
+					//returnData = vh.getVehicleValue(dbc);
+					returnData = vh.getVehicleValueCXE(dbc);
 					break;		
-            		
+					
                 case "Watch":
             		GetSPC getSPC = new GetSPC();
                 	returnData += getSPC.checkSentWatch(dbc);
