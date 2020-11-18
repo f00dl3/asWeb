@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Oct 2020
-Updated: 25 Oct 2020
+Updated: 14 Nov 2020
  */
 
 function actOnMpgEntry20(event) {
@@ -119,7 +119,7 @@ function popAutoMpgEntryForm20() {
             "<span class='td'><input name='mpgMiles' id='mpgMiles' type='number' step='1' value='' style='width: 75px;' /><br/>Miles</span>" +
             "<span class='td'><input name='mpgPrice' id='mpgPrice' type='number' step='0.001' value='' style='width: 50px;' /><br/>Price</span>" +
             "<span class='td'><input name='mpgGallons' id='mpgGallons' type='number' step='0.001' value='' style='width: 50px;' /><br/>Gallons</span>" +
-            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmitHC'>Fuel!</button></span>" +
+            "<span class='td'><button class='UButton' name='mpgSubmit' id='mpgSubmit20'>Fuel!</button></span>" +
             "</form></div>";
     dojo.byId("mpgEntryForm20").innerHTML = rData;
     var enterMpgButton20 = dojo.byId("mpgSubmit20");

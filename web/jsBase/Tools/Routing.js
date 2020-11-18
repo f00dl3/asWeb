@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 4 Mar 2018
 Split from Header.js 7 Oct 2020
-Updated: 7 Oct 2020
+Updated: 18 Nov 2020
  */
 
 function getBasePath(opt) {
@@ -46,6 +46,7 @@ function getResource(what) {
         case "Cams": return getBasePath("ui") + "/Cams.jsp"; break;
         case "Chart": return getBasePath("rest") + "/Chart"; break;
         case "Chart3": return getBasePath("rest") + "/Chart3"; break;
+        case "Charts3": return getBasePath("ui") + "/Charts3.jsp"; break;
         case "Congress": return getBasePath("rest") + "/Congress"; break;
         case "Cooking": return getBasePath("rest") + "/Cooking"; break;
         case "CrashData": return getBasePath("rest") + "/CrashData"; break;

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 7 Oct 2020
+Updated: 18 Nov 2020
  */
 
 var annMaint = 841.92;
@@ -108,11 +108,11 @@ function autoFontScale(tPercent) {
 function autoUnits(tVal) {
     var tSuffix = "";
     if (tVal < 0) { tVal = ""; tSuffix = "Error!"; }
-    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "K"; }
-    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "M"; }
-    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "G"; } 
-    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "T"; } 
-    if (tVal > 1000) { tVal = (tVal/1000).toFixed(1); tSuffix = "P"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(2); tSuffix = "K"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(2); tSuffix = "M"; }
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(2); tSuffix = "G"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(2); tSuffix = "T"; } 
+    if (tVal > 1000) { tVal = (tVal/1000).toFixed(2); tSuffix = "P"; } 
     var formatting = tVal + tSuffix;
     return formatting;
 }
@@ -171,6 +171,9 @@ function doCh(type, dynVar, opts) {
         case "j":
             if(opts === "t") { chFileName = "th_" + chFileName; }
             dBack += getBasePath("chartCache") + "/" + chFileName + "?" + timestamp;
+            break;
+        case "3": 
+            dBack += getResource("Charts3") + "?doAction=" + chFileName + "&" + timestamp;
             break;
     }
     return dBack;
@@ -465,6 +468,11 @@ function putWebLinks(data, whereTo, outputType) {
 
 function timeMinutes(inMin) {
     return 1000*60*inMin;
+}
+
+function trimArray(arrayIn, dLength) {
+    arrayIn = arrayIn.slice(arrayIn.length - dLength, arrayIn.length);
+    return arrayIn;
 }
 
 function scLd(scriptName) {

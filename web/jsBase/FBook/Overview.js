@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 13 Oct 2020
+Updated: 18 Nov 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -63,7 +63,7 @@ function genOverviewSavings(svData, svBk, stockData) {
 	});
 	savingsWithSpillover = svData.SBal + spilloverSavings;
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
-    var bubble = "<div class='UBox'>Savings<br/><span>$" + Math.round(svData.SBal) + "</span>" +
+    var bubble = "<div class='UBox'>Savings<br/><span>$" + autoUnits(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Saving</strong><br/>" +
 		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong>" +
 		" (Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>" +
@@ -113,9 +113,9 @@ function genOverviewStock(stockData, eTrade) {
 			} 
 		});
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth" /*, "Day" */ ];
-    var bubble = "<div class='UBox'>Stock<br/><span>$" + numComma((stockWorth ).toFixed(0)) + "</span>" +
+    var bubble = "<div class='UBox'>Stock<br/><span>$" + autoUnits(stockWorth) + "</span>" +
             "<div class='UBoxO'>" +
-            "eTrade: <strong>$" + etaBalance.toFixed(0) + "</strong> (<strong>$" + eTradeVested + "</strong>)<br/>" +
+            "eTrade: <strong>$" + autoUnits(etaBalance) + "</strong> (<strong>$" + autoUnits(eTradeVested) + "</strong>)<br/>" +
             "Change: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<br/>";
     bubble += "<br/><strong>Watching</strong><br/>";
     var bTable = "<table><thead><tr>";
@@ -134,7 +134,7 @@ function genOverviewStock(stockData, eTrade) {
 	                    "<td style='color: " + txtColor + "'>" + sd.Description + "</td>" +
 	                    "<td style='color: " + txtColor + "'>" + sd.Count + "</td>" +
 	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue).toFixed(2) + "</td>" +
-	                    "<td style='color: " + txtColor + "'>" + parseFloat(sd.LastValue * sd.Count).toFixed(0) + "</td>" +
+	                    "<td style='color: " + txtColor + "'>" + autoUnits(parseFloat(sd.LastValue * sd.Count).toFixed(2)) + "</td>" +
 	                    //"<td style='color: " + txtColor + "'>" + change + "</td>" +
 	                    //"<td><a href='" + doCh("j", "FinStock_"+sd.Symbol, null) + "' target='pChart'><img class='th_icon' src='" + doCh("j", "FinStock_"+sd.Symbol, "th") + "' /></a>" +
 	                    "</tr>";
@@ -162,9 +162,9 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     var pro30y = fnwGrow(nwci, nwgm, 30);
     var proRet = fnwGrow(nwci, nwgm, 32);
     var projections = [pro03m, pro01y, pro05y, pro10y, pro20y, pro30y, proRet];
-    var bubble = "<div class='UBox'>Worth<br/><span>$" + cnw1d + "K</span>" +
+    var bubble = "<div class='UBox'>Worth<br/><span>$" + autoUnits(enw.NetWorth) + "</span>" +
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
-            "Current estimate: <strong>$" + numComma(cnw1d_L) + "</strong>" +
+            "Current estimate: <strong>$" + cnw1d_L + "</strong>" +
             "<br/><em>Now WMQY growth</em>: " +
             	nwga.p7day.toFixed(1) + "/" + 
             	nwga.p30day.toFixed(1) + "/" + 
@@ -186,7 +186,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
             "<a href='" + doCh("j", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
                        "<p>";
     var wTable = "<table><thead><tr>";

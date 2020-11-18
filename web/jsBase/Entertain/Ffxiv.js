@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 25 Mar 2020
+Updated: 12 Nov 2020
 
  */
 
@@ -667,8 +667,8 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
     		currentGil = asset.Value;
     	}
     });
-    var totalValue = (assetValues/1000000).toFixed(2);
-    var totalAccurateValue = (accurateAssetValues/1000000).toFixed(2);
+    var totalValue = assetValues;
+    var totalAccurateValue = accurateAssetValues;
     var counts = countIn[0];
     var aCount = counts.Achievements;
     var mCount = ffxivMerged.length;
@@ -727,7 +727,7 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
     var rData = "<span id='charList'></span>" +
     		"<div class='UPop'>[CL]<div class='UPopO'>" + lData + "</div></div> " +
             "<div class='UPop'>" +
-            totalValue + "m (" + totalAccurateValue + "m) <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
+            autoUnits(totalValue) + " (" + autoUnits(totalAccurateValue) + ") <img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/>" +
             "-- Mist Ward 1 Plot 39<br/><div class='UPopO'>" +
             "<form id='gilForm'><img class='th_icon' src='" + getBasePath("image") + "/ffxiv/Gil.png'/> " +
             " <input name='Gil' type='number' step='0' value='" + currentGil + "' style='width: 168px;'/>" +

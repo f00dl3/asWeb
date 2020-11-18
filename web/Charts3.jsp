@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 6 Oct 2020
-    Updated: 7 Oct 2020
+    Updated: 18 Nov 2020
     Author     : astump
 --%>
 
@@ -14,7 +14,6 @@
     String scriptIt = "true";
     String authCheck = "true";
     String action = "";
-    String postData = "";
     String resolution = "";
     
     WebCommon wc = new WebCommon();
@@ -22,33 +21,28 @@
     %>
     
     <script>
-        var doAction,
-            dataInput,
-            iRes,
-            legacyPath;
+        var doAction = "";
     </script>
     
     <%
-    if(wc.isSet(request.getParameter("Action"))) { action = wc.basicInputFilter(request.getParameter("Action")); }
-    if(wc.isSet(request.getParameter("Input"))) { postData = wc.basicInputFilter(request.getParameter("Input")); }
-    if(wc.isSet(request.getParameter("Resolution"))) { resolution = wc.basicInputFilter(request.getParameter("Resolution")); }
+    if(wc.isSet(request.getParameter("doAction"))) { action = wc.basicInputFilter(request.getParameter("doAction")); }
     %>
     
     <script>
         doAction = "<% out.print(action); %>";
-        dataInput = "<% out.print(postData); %>";
-        iRes = "<% out.print(resolution); %>";
-        console.log("DEBUG VARS: doAction='" + doAction + "', dataInput='" + dataInput + "', iRes='" + iRes);
-    </script>
+        console.log("DEBUG VARS: doAction='" + doAction + "'");
+     </script>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
-<jsp:include page="/inc/Header.jsp?type=full&title=Charts3&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full-ndj&title=Charts3&scripts=true"></jsp:include>
 
     <body id="Charts">
     
-        <div id="ChartHolder" style="height: 80%; width: 95%;">Load not called!</div>
+        <div id="ChartHolder" style="height: 80%; width: 95%;">
+        	<canvas id="ChartCanvas"></canvas>
+       	</div>
         
     </body>
 

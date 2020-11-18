@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 7 Oct 2020
+Updated: 18 Nov 2020
  */
 
 package asWebRest.resource;
@@ -10,11 +10,16 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import asWebRest.action.GetFinanceAction;
+import asWebRest.chartHelpers.Finance;
+import asWebRest.dao.FinanceDAO;
 import asWebRest.hookers.Chart3Helpers;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -46,8 +51,11 @@ public class Chart3Resource extends ServerResource {
         	
             switch (doWhat) {    
             
-        		case "TestData":
-        			returnData = c3h.getTestJson(dbc).toString();
+    		 	case "rapidWorth": case "testData": default:
+    				Finance fin = new Finance();
+    				GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+                    JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
+        			returnData = fin.getFinEnw(enw_RawR, "All", "R").toString();
         			break;
                       
             }

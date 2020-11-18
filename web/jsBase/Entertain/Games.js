@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
-Updated: 9 Dec 2018
+Updated: 14 Nov 2020
  */
 
 function actOnPlayedGameHours(event) {
@@ -113,7 +113,7 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
     var thCols = [ "Do", "Name", "Hours", "New" ];
     var ghe, gheA;
     ghe = gheA = "<div class='table'><div class='tr'>";
-    var totalHoursDiv = "<div class='UBox'>Total Hours<br/><span>" + (gameHoursTotal.TotalHours).toFixed(1) + "</span></div>";
+    var totalHoursDiv = "<div class='UBox'>Total Hours<br/><span>" + autoUnits((gameHoursTotal.TotalHours).toFixed(0)) + "</span></div>";
     var rData = totalHoursDiv +
             "<strong>" +
             " <a href='" + getBasePath("downloads") + "/GameLauncher.zip'>Launcher (Linux/Bash)</a></strong>" +
@@ -130,7 +130,7 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
     ghe += "<form class='tr'>" +
             "<span class='td'><input type='checkbox' class='doHours'/></span>" +
             "<span class='td'>" + latest.Name + playing + "<input type='hidden' name='gameName' value='" + latest.Name + "'/></span>" +
-            "<span class='td'><div class='UPop'>" + latest.Hours +
+            "<span class='td'><div class='UPop'>" + autoUnits(latest.Hours) +
             "<div class='UPopO'>Last played: " + latest.Last +
             "</div></div></span>" +
             "<span class='td'>" +
@@ -147,7 +147,7 @@ function putGameHours(target, gameHoursTotal, latest, gameHours) {
         gheA += "<form class='tr'>" +
                 "<span class='td'><input type='checkbox' class='doHours'/></span>" +
                 "<span class='td'><span style='color: yellow;'>" + standings + ":</span> " + game.Name + playing + "<input type='hidden' name='gameName' value='" + game.Name + "'/></span>" +
-                "<span class='td'><div class='UPop'>" + game.Hours +
+                "<span class='td'><div class='UPop'>" + autoUnits(game.Hours) +
                 "<div class='UPopO'>Last played: " + game.Last +
                 "</div></div></span>" +
                 "<span class='td'>" +

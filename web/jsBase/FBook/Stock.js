@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 21 Oct 2020
+Updated: 14 Nov 2020
  */
 
 function actOnETBAFormSubmit(event) {
@@ -94,8 +94,8 @@ function putStocks(etbaData, stockData) {
 		spilloverSavings += (sd.Count * sd.LastValue);
 	}
     });
-    rData += "<strong>Managed Funds</strong>: $" + managedBalance.toFixed(2) + "<br/>" +
-    	"<strong>My Investments</strong>: $" + myBalance.toFixed(2) + "</p>";
+    rData += "<strong>Managed Funds</strong>: $" + autoUnits(managedBalance) + "<br/>" +
+    	"<strong>My Investments</strong>: $" + autoUnits(myBalance) + "</p>";
 	//"<strong>Spillover Savings</strong>: $" + spilloverSavings.toFixed(2) + "</p>";
     let stockResults = "<div class='table'>";
     stockData.forEach(function (sd) {
@@ -103,7 +103,7 @@ function putStocks(etbaData, stockData) {
 		holdingValue = holdingValue.toFixed(2);
         stockResults += "<form class='tr stockAddUpdateForm'>"+
         	"<span class='td'><input class='C2UStock' type='checkbox' name='Action' value='Update' /></span>" +
-            "<span class='td'><input type='hidden' name='Symbol' value='" + sd.Symbol + "'/><a href='" + mktUrl + "/" + sd.Symbol + "' target='newStock'>" + sd.Symbol + "</a></span>" +
+            "<span class='td'><input type='hidden' name='Symbol' value='" + sd.Symbol + "'/><a href='" + mktUrl + sd.Symbol + "' target='newStock'>" + sd.Symbol + "</a></span>" +
             "<span class='td'><div class='UPop'>" +
             "<input type='number' step='0.001' name='Count' value='" + sd.Count + "' style='width: 80px;' />" +
             "<div class='UPopO'>";
@@ -119,7 +119,7 @@ function putStocks(etbaData, stockData) {
             "<strong>Multiplier:</strong> " + sd.Multiplier.toFixed(4) + "x" + 
             "</div></div></span>" +
             "<span class='td'><input type='text' name='Holder' value='" + sd.Holder + "' style='width: 60px;' /></span>" +
-            "<span class='td'>$" + holdingValue + "</span>" +
+            "<span class='td'>$" + autoUnits(holdingValue) + "</span>" +
             "<span class='td'>" + sd.Managed + "</span>" +
             "</form>";
     });

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 9 Sep 2020
+Updated: 11 Nov 2020
  */
 
 var myHeight = 67;
@@ -79,35 +79,35 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
         "Saved": "$" + (costPerMile * fitTot.TOTCY).toFixed(2),
         "Cleaned": bikeStats.LastCleaned,
         "LastFlat": bikeStats.LastFlat,
-        "Overhauled": bikeStats.LastOverhaul + "<br/>" + bikeStats.MilesOverhaul + " mi",
-        "Chain": bikeStats.LastChain + "<br/>" + bikeStats.MilesChain + " mi",
-        "TireFront": bikeStats.LastTireFront + "<br/>" + bikeStats.MilesTireFront + " mi",
-        "TireRear": bikeStats.LastTireRear + "<br/>" + bikeStats.MilesTireRear + " mi",
-        "StuddedFront": bikeStats.LastTireFrontStudded + "<br/>" + bikeStats.MilesTireFrontStudded + " mi",
-        "StuddedRear": bikeStats.LastTireRearStudded + "<br/>" + bikeStats.MilesTireRearStudded + " mi",
-        "WheelFront": bikeStats.LastWheelFront + "<br/>" + bikeStats.MilesWheelFront + " mi",
-        "WheelRear": bikeStats.LastWheelRear + "<br/>" + bikeStats.MilesWheelRear + " mi"
+        "Overhauled": bikeStats.LastOverhaul + "<br/>" + autoUnits(bikeStats.MilesOverhaul) + " mi",
+        "Chain": bikeStats.LastChain + "<br/>" + autoUnits(bikeStats.MilesChain) + " mi",
+        "TireFront": bikeStats.LastTireFront + "<br/>" + autoUnits(bikeStats.MilesTireFront) + " mi",
+        "TireRear": bikeStats.LastTireRear + "<br/>" + autoUnits(bikeStats.MilesTireRear) + " mi",
+        "StuddedFront": bikeStats.LastTireFrontStudded + "<br/>" + autoUnits(bikeStats.MilesTireFrontStudded) + " mi",
+        "StuddedRear": bikeStats.LastTireRearStudded + "<br/>" + autoUnits(bikeStats.MilesTireRearStudded) + " mi",
+        "WheelFront": bikeStats.LastWheelFront + "<br/>" + autoUnits(bikeStats.MilesWheelFront) + " mi",
+        "WheelRear": bikeStats.LastWheelRear + "<br/>" + autoUnits(bikeStats.MilesWheelRear) + " mi"
     };
     var boxRun = " <div class='UBox'>" +
-            "<span>RunWalk</span><br/>" + fitTot.TOTRW + "<br/><span>miles</span>" +
+            "<span>RunWalk</span><br/>" + autoUnits(fitTot.TOTRW) + "<br/><span>miles</span>" +
             "<div class='UBoxO'>" +
-            yb0 + ": <strong>" + yearStats.yb0rw + "</strong> mi<br/>" +
-            yb1 + ": <strong>" + yearStats.yb1rw + "</strong> mi<br/>" +
-            yb2 + ": <strong>" + yearStats.yb2rw + "</strong> mi<br/>" +
-            yb3 + ": <strong>" + yearStats.yb3rw + "</strong> mi<br/>" +
-            yb4 + ": <strong>" + yearStats.yb4rw + "</strong> mi<br/>" +
+            yb0 + ": <strong>" + autoUnits(yearStats.yb0rw) + "</strong> mi<br/>" +
+            yb1 + ": <strong>" + autoUnits(yearStats.yb1rw) + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + autoUnits(yearStats.yb2rw) + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + autoUnits(yearStats.yb3rw) + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + autoUnits(yearStats.yb4rw) + "</strong> mi<br/>" +
             "<p>Average pace: <br/><strong>" + avgPace.toFixed(1) + "</strong> min/mile." +
             "<p>Running shoes: <br/><strong>" + crsm.CRSM + "</strong> miles on <strong>" + rshoe.Pair + "</strong>" +
             "<p>Est. steps: <br/><strong>" + estSteps + "</strong> mil." +
             "</div></div>";
     var boxCyc = " <div class='UBox'>" +
-            "<span>Cycling</span><br/>" + fitTot.TOTCY + "<br/><span>miles</span>" +
+            "<span>Cycling</span><br/>" + autoUnits(fitTot.TOTCY) + "<br/><span>miles</span>" +
             "<div class='UBoxO'>" +
-            yb0 + ": <strong>" + yearStats.yb0cy + "</strong> mi<br/>" +
-            yb1 + ": <strong>" + yearStats.yb1cy + "</strong> mi<br/>" +
-            yb2 + ": <strong>" + yearStats.yb2cy + "</strong> mi<br/>" +
-            yb3 + ": <strong>" + yearStats.yb3cy + "</strong> mi<br/>" +
-            yb4 + ": <strong>" + yearStats.yb4cy + "</strong> mi<br/>" +
+            yb0 + ": <strong>" + autoUnits(yearStats.yb0cy) + "</strong> mi<br/>" +
+            yb1 + ": <strong>" + autoUnits(yearStats.yb1cy) + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + autoUnits(yearStats.yb2cy) + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + autoUnits(yearStats.yb3cy) + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + autoUnits(yearStats.yb4cy) + "</strong> mi<br/>" +
             "<p><em>Based on $<strong>" + costPerGallon.toFixed(2) + "</strong>/gal<br/>" +
             "and $<strong>" + annMaint.toFixed(2) + "</strong>/yr maint</em><p>" +
             "<div class='table'>";
@@ -117,13 +117,13 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
     boxCyc += "</div>" +
             "</div></div>";
     var boxTot = " <div class='UBox'>" +
-            "<span>Combined</span><br/>" + fitTot.TOTOA + "<br/><span>miles</span>" +
+            "<span>Combined</span><br/>" + autoUnits(fitTot.TOTOA) + "<br/><span>miles</span>" +
             "<div class='UBoxO'>" +
-            yb0 + ": <strong>" + yearStats.yb0oa + "</strong>mi<br/>" +
-            yb1 + ": <strong>" + yearStats.yb1oa + "</strong> mi<br/>" +
-            yb2 + ": <strong>" + yearStats.yb2oa + "</strong> mi<br/>" +
-            yb3 + ": <strong>" + yearStats.yb3oa + "</strong> mi<br/>" +
-            yb4 + ": <strong>" + yearStats.yb4oa + "</strong> mi<br/>" +
+            yb0 + ": <strong>" + autoUnits(yearStats.yb0oa) + "</strong>mi<br/>" +
+            yb1 + ": <strong>" + autoUnits(yearStats.yb1oa) + "</strong> mi<br/>" +
+            yb2 + ": <strong>" + autoUnits(yearStats.yb2oa) + "</strong> mi<br/>" +
+            yb3 + ": <strong>" + autoUnits(yearStats.yb3oa) + "</strong> mi<br/>" +
+            yb4 + ": <strong>" + autoUnits(yearStats.yb4oa) + "</strong> mi<br/>" +
             "<p><a href='" + getBasePath("ui") + "/OLMap.jsp?Action=RouteHistory'>" +
             "<button class='UButton'>All Routes</button></a>" +
             "</div></div>";

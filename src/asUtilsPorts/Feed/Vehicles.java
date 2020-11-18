@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 4 Nov 2020
-Updated: 11 Nov 2020
+Updated: 16 Nov 2020
 */
 
 package asUtilsPorts.Feed;
@@ -80,7 +80,7 @@ public class Vehicles {
 		for(int i = 0; i < assets.length(); i++) {
 			try {
 				JSONObject tVeh = assets.getJSONObject(i);
-				if(tVeh.getString("Related").equals("VehicleValue")) { 
+				if(tVeh.getString("UPC").equals("VehicleValue")) { 
 					String tVehicle = tVeh.getString("Description");
 					String tVIN = tVeh.getString("Serial");
 					String tSubdata = tVeh.getString("Notes");
@@ -125,7 +125,7 @@ public class Vehicles {
 		for(int i = 0; i < assets.length(); i++) {
 			try {
 				JSONObject tVeh = assets.getJSONObject(i);
-				if(tVeh.getString("Related").equals("VehicleValue")) { 
+				if(tVeh.getString("UPC").equals("VehicleValue")) { 
 					String tVehicle = tVeh.getString("Description");
 					String tVIN = tVeh.getString("Serial");
 					String tSubdata = tVeh.getString("Notes");
