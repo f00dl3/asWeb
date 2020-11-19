@@ -32,7 +32,8 @@
     
     String[] chart3Scripts = {
    		"Charts/Finance",
-   		"Charts/Test"
+   		"Charts/Test",
+   		"Charts/Weather"
     };
     
     String[] etScripts = {
@@ -318,7 +319,7 @@
         " <div id='NaviHolder'></div>" +
         miniHeader;
     
-    if(type.equals("full")) {
+    if(type.equals("full") || type.equals("full-ndj")) {
         theHeader = fullHeader;
     } else {
         theHeader = miniHeader;

@@ -183,9 +183,9 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     pTable += "</tr></tbody></table>";
     bubble += pTable + "<p>" +
             "<a href='" + doCh("j", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' /></a><br/>" +
-            "<a href='" + doCh("j", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
-            "<a href='" + doCh("j", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
             "<a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
             "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
                        "<p>";

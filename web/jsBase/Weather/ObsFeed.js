@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 27 Jul 2020
+Updated: 18 Nov 2020
  */
 
 function getChartDataWXHome() {
@@ -395,13 +395,13 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
             "<span style='" + styleTemp(theData.Temperature) + "'>" + Math.round(theData.Temperature) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
             "</div></div>" +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(theData.Dewpoint) + "'>" + Math.round(theData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffDewpoint + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
             "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(theData.RelativeHumidity) + "'>" + theData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
@@ -485,13 +485,13 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<span style='" + styleTemp(homeData.Temperature) + "'>" + Math.round(homeData.Temperature) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
             "</div></div> | " +
             "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
             "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
             "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +

@@ -41,8 +41,9 @@
     <body id="Charts">
     
         <div id="ChartHolder" style="height: 80%; width: 95%;">
-        	<canvas id="ChartCanvas"></canvas>
-       	</div>
+        	<canvas id="ChartCanvas" style="height: 100%; width: 100%;"></canvas>
+       	</div><br/>
+       	<div id="extraDataHolder"></div>
         
     </body>
 
