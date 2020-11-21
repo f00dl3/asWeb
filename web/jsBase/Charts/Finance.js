@@ -1,20 +1,30 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 20 Nov 2020
+Updated: 21 Nov 2020
  */
 
-
 function chart_FinENW_All_A(container, result) {
-	var timeFormat = 'YYYY-MM-DD';
+	let timeFormat = 'YYYY-MM-DD';
 	let resultJ = JSON.parse(result);
-	let aLabels = resultJ.labels;
+	let aLabels_orig = resultJ.labels;
+	let aLabels = [];
+	aLabels_orig.forEach(function (aL) {
+		let mTime = moment(aL, timeFormat);
+		aLabels.push(mTime);
+	});
 	let aData = resultJ.data;
 	let aData2 = resultJ.data2;
 	let aData3 = resultJ.data3;
 	let aData4 = resultJ.data4;
 	let aData5 = resultJ.data5;
 	let aData6 = resultJ.data6;
+	let aDataA = [];
+	let i = 0;
+	aData.forEach(function(ad) {
+		aDataA.push(ad-aData4[i]);
+		i++;
+	});
 	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
@@ -26,6 +36,11 @@ function chart_FinENW_All_A(container, result) {
 					label: 'Total',
 					borderColor: 'white',
 					data: aData
+				},
+				{
+					label: 'Reportable',
+					borderColor: 'orange',
+					data: aDataA
 				},
 				{
 					label: 'Liquid',
@@ -55,10 +70,25 @@ function chart_FinENW_All_A(container, result) {
 			]
 		},
 		options: {
+			elements: {
+				line: { borderWidth: 1, tension: 0 },
+				point: { radius: 0 }
+			},
 			scales: {
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return "$" + value + "K"; } } }
-				]
+				xAxes: [{
+					type: 'time',
+					time: { unit: 'month' }
+				}],
+				yAxes: [{ 
+					ticks: { callback: function(value, index, values) { return "$" + value + "K"; } } 
+				}]
+			},
+			plugins: {
+				zoom: {
+					zoom: {
+						enabled: true
+					}
+				}
 			}
 		}
 	});
@@ -171,10 +201,21 @@ function chart_FinENW_Year_A(container, result) {
 			]
 		},
 		options: {
+			elements: {
+				line: { borderWidth: 1, tension: 0 },
+				point: { radius: 0 }
+			},
 			scales: {
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } }
-				]
+				yAxes: [{
+					ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } 
+				}]
+			},
+			plugins: {
+				zoom: {
+					zoom: {
+						enabled: true
+					}
+				}
 			}
 		}
 	});
