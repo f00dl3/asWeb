@@ -1,15 +1,15 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: on creation
+Updated: 19 Nov 2020
  */
 
-function chart_ObsJSONTempH(result) {
+function chart_ObsJSONTempH(container, result) {
 	let limit = 256;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
-	let aData2 = resultJ.data.reverse();
+	let aData2 = resultJ.data2.reverse();
 	aLabels = trimArray(aLabels, limit);
 	aData = trimArray(aData, limit);
 	aData2 = trimArray(aData2, limit);
@@ -18,7 +18,7 @@ function chart_ObsJSONTempH(result) {
 	let previousValue_Data = aData[aData.length-2];
 	let lastValue_Change = lastValue_Data - previousValue_Data;
 	let extraDataContent = "As of " + lastValue_Label + ", temperature " + lastValue_Data + "F (changed " + lastValue_Change + "F)";
-	var ctx = document.getElementById('ChartCanvas').getContext('2d');
+	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
 		type: 'line',
@@ -27,13 +27,11 @@ function chart_ObsJSONTempH(result) {
 			datasets: [
 				{
 					label: 'Temperature',
-					backgroundColor: 'darkred',
 					borderColor: 'red',
 					data: aData
 				},
 				{
 					label: 'Dewpoint',
-					backgroundColor: 'darkblue',
 					borderColor: 'blue',
 					data: aData2
 				},
@@ -50,11 +48,11 @@ function chart_ObsJSONTempH(result) {
 	$('#extraDataHolder').text(extraDataContent);
 }
 
-function get_ObsJSONTempH() {
+function get_ObsJSONTempH(container) {
     var timeout = getRefresh("medium");
 	let pData = { "doWhat": "ObsJSONTempH" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_ObsJSONTempH(result);
+		chart_ObsJSONTempH(container, result);
   	});
-    setTimeout(function () { get_ObsJSONTempH(); }, timeout);
+    setTimeout(function () { get_ObsJSONTempH(container); }, timeout);
 }

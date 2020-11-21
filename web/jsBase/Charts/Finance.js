@@ -1,11 +1,79 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: on creation
+Updated: 20 Nov 2020
  */
 
-function chart_FinENW_All_R(result) {
-	let limit = 72;
+
+function chart_FinENW_All_A(container, result) {
+	var timeFormat = 'YYYY-MM-DD';
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels;
+	let aData = resultJ.data;
+	let aData2 = resultJ.data2;
+	let aData3 = resultJ.data3;
+	let aData4 = resultJ.data4;
+	let aData5 = resultJ.data5;
+	let aData6 = resultJ.data6;
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{
+					label: 'Total',
+					borderColor: 'white',
+					data: aData
+				},
+				{
+					label: 'Liquid',
+					borderColor: 'green',
+					data: aData2
+				},
+				{
+					label: 'Fixed',
+					borderColor: 'blue',
+					data: aData3
+				},
+				{
+					label: 'Insurance',
+					borderColor: 'grey',
+					data: aData4
+				},
+				{
+					label: 'Credits',
+					borderColor: 'yellow',
+					data: aData5
+				},
+				{
+					label: 'Debts',
+					borderColor: 'red',
+					data: aData6
+				},
+			]
+		},
+		options: {
+			scales: {
+				yAxes: [ 
+					{ ticks: { callback: function(value, index, values) { return "$" + value + "K"; } } }
+				]
+			}
+		}
+	});
+	$('#extraDataHolder').text(extraDataContent);
+}
+
+function get_FinENW_All_A(container) {
+	let pData = { "doWhat": "FinENW_All_A" };
+	$.post(getResource("Chart3"), pData, function(result) {
+		chart_FinENW_All_A(container, result);
+  	});
+}
+
+function chart_FinENW_All_R(container, result) {
+	let limit = 128;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
@@ -16,7 +84,7 @@ function chart_FinENW_All_R(result) {
 	let previousValue_Data = aData[aData.length-2];
 	let lastValue_Change = lastValue_Data - previousValue_Data;
 	let extraDataContent = "As of " + lastValue_Label + ", net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
-	var ctx = document.getElementById('ChartCanvas').getContext('2d');
+	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
 		type: 'line',
@@ -40,118 +108,67 @@ function chart_FinENW_All_R(result) {
 	$('#extraDataHolder').text(extraDataContent);
 }
 
-function get_FinENW_All_R() {
+function get_FinENW_All_R(container) {
     var timeout = getRefresh("medium");
 	let pData = { "doWhat": "wRapid" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_All_R(result);
+		chart_FinENW_All_R(container, result);
   	});
-    setTimeout(function () { get_FinENW_All_R(); }, timeout);
+    setTimeout(function () { get_FinENW_All_R(container); }, timeout);
 }
 
-function chart_FinENW_Year_F(result) {
+function chart_FinENW_Year_A(container, result) {
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels;
 	let aData = resultJ.data;
-	let lastValue_Label = aLabels[aData.length-1];
-	let lastValue_Data = aData[aData.length-1];
-	let previousValue_Data = aData[aData.length-2];
-	let lastValue_Change = lastValue_Data - previousValue_Data;
-	let extraDataContent = "As of " + lastValue_Label + ", fixed net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
-	var ctx = document.getElementById('ChartCanvas').getContext('2d');
-	var chart = null;
-	chart = new Chart(ctx, {
-		type: 'line',
-		data: {
-			labels: aLabels,
-			datasets: [{
-				label: 'Fixed Net Worth',
-				backgroundColor: 'darkblue',
-				borderColor: 'blue',
-				data: aData
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } }
-				]
-			}
-		}
-	});
-	$('#extraDataHolder').text(extraDataContent);
-}
-
-function get_FinENW_Year_F() {
-    var timeout = getRefresh("medium");
-	let pData = { "doWhat": "wFixed" };
-	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_Year_F(result);
-  	});
-}
-
-function chart_FinENW_Year_L(result) {
-	let resultJ = JSON.parse(result);
-	let aLabels = resultJ.labels;
-	let aData = resultJ.data;
-	let lastValue_Label = aLabels[aData.length-1];
-	let lastValue_Data = aData[aData.length-1];
-	let previousValue_Data = aData[aData.length-2];
-	let lastValue_Change = lastValue_Data - previousValue_Data;
-	let extraDataContent = "As of " + lastValue_Label + ", liquid net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
-	var ctx = document.getElementById('ChartCanvas').getContext('2d');
-	var chart = null;
-	chart = new Chart(ctx, {
-		type: 'line',
-		data: {
-			labels: aLabels,
-			datasets: [{
-				label: 'Liquid Net Worth',
-				backgroundColor: 'darkgreen',
-				borderColor: 'green',
-				data: aData
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } }
-				]
-			}
-		}
-	});
-	$('#extraDataHolder').text(extraDataContent);
-}
-
-function get_FinENW_Year_L() {
-    var timeout = getRefresh("medium");
-	let pData = { "doWhat": "wLiquid" };
-	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_Year_L(result);
-  	});
-}
-
-function chart_FinENW_Year_T(result) {
-	let resultJ = JSON.parse(result);
-	let aLabels = resultJ.labels;
-	let aData = resultJ.data;
+	let aData2 = resultJ.data2;
+	let aData3 = resultJ.data3;
+	let aData4 = resultJ.data4;
+	let aData5 = resultJ.data5;
+	let aData6 = resultJ.data6;
 	let lastValue_Label = aLabels[aData.length-1];
 	let lastValue_Data = aData[aData.length-1];
 	let previousValue_Data = aData[aData.length-2];
 	let lastValue_Change = lastValue_Data - previousValue_Data;
 	let extraDataContent = "As of " + lastValue_Label + ", total net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
-	var ctx = document.getElementById('ChartCanvas').getContext('2d');
+	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			labels: aLabels,
-			datasets: [{
-				label: 'Total Net Worth',
-				backgroundColor: 'grey',
-				borderColor: 'white',
-				data: aData
-			}]
+			datasets: [
+				{
+					label: 'Total',
+					borderColor: 'white',
+					data: aData
+				},
+				{
+					label: 'Liquid',
+					borderColor: 'green',
+					data: aData2
+				},
+				{
+					label: 'Fixed',
+					borderColor: 'blue',
+					data: aData3
+				},
+				{
+					label: 'Insurance',
+					borderColor: 'grey',
+					data: aData4
+				},
+				{
+					label: 'Credits',
+					borderColor: 'yellow',
+					data: aData5
+				},
+				{
+					label: 'Debts',
+					borderColor: 'red',
+					data: aData6
+				}
+			]
 		},
 		options: {
 			scales: {
@@ -164,10 +181,9 @@ function chart_FinENW_Year_T(result) {
 	$('#extraDataHolder').text(extraDataContent);
 }
 
-function get_FinENW_Year_T() {
-    var timeout = getRefresh("medium");
-	let pData = { "doWhat": "wTotal" };
+function get_FinENW_Year_A(container) {
+	let pData = { "doWhat": "FinENW_Year_A" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_Year_T(result);
+		chart_FinENW_Year_A(container, result);
   	});
 }

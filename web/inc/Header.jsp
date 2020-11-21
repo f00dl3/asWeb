@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    18 Nov 2020
+    Updated:    19 Nov 2020
     Author     : astump
 --%>
 
@@ -32,6 +32,7 @@
     
     String[] chart3Scripts = {
    		"Charts/Finance",
+		"Charts/Fitness",
    		"Charts/Test",
    		"Charts/Weather"
     };
@@ -153,7 +154,8 @@
         cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
     }
     
-    String chart3ScriptPack = "<script src='"+rootPath+"/jsLib/chart.js/2.9.4/Chart.min.js'></script>";
+    String chart3ScriptPack = "<script src='"+rootPath+"/jsLib/chart.js/2.9.4/Chart.min.js'></script>" +
+    		"<script src='"+rootPath+"/jsLib/moment/moment.min.js'></script>";
     //"<script src='"+rootPath+"/jsLib/canvasjs/3.1/jquery.canvasjs.min.js'></script>";
     for(int i=0; i < chart3Scripts.length; i++) {
     	chart3ScriptPack += "<script src='"+rootPath+"/jsBase/"+chart3Scripts[i]+".js'></script>";

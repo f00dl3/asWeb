@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 18 Nov 2020
+Updated: 19 Nov 2020
  */
 
 package asWebRest.resource;
@@ -18,10 +18,13 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import asWebRest.action.GetFinanceAction;
+import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Finance;
+import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.FinanceDAO;
+import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.Chart3Helpers;
 import asWebRest.secure.WUndergroundBeans;
@@ -46,11 +49,14 @@ public class Chart3Resource extends ServerResource {
         final Form argsInForm = new Form(argsIn);
         
 		Finance fin = new Finance();
+		Fitness fitness = new Fitness();
         Weather wx = new Weather();
         
 		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+        GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
 
+        JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
         JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
         JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
         
@@ -64,6 +70,15 @@ public class Chart3Resource extends ServerResource {
         	
             switch (doWhat) {    
 
+			
+	 			case "FinENW_All_A":
+	 				returnData = fin.getFinEnw(enw_RawA, "All", "A").toString();
+	 				break;
+
+		 		case "FinENW_Year_A":
+	    			returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString();
+	    			break;
+	    			
 		 		case "ObsJSONTempH":
                 	WUndergroundBeans wub = new WUndergroundBeans();
                 	String stationIdHome = wub.getStation_Home();
@@ -71,18 +86,13 @@ public class Chart3Resource extends ServerResource {
                     returnData = wx.getObsJsonTemps(wxObsBa2, stationIdHome).toString();
 	    			break;
     			
-		 		case "wFixed":
-	    			returnData = fin.getFinEnw(enw_RawY, "Year", "F").toString();
-	    			break;
-    			
-		 		case "wLiquid":
-	    			returnData = fin.getFinEnw(enw_RawY, "Year", "L").toString();
-	    			break;
-
-		 		case "wTotal":
-	    			returnData = fin.getFinEnw(enw_RawY, "Year", "T").toString();
-	    			break;
-	    			
+		 		case "WeightRange": 
+                    qParams.add(argsInForm.getFirstValue("XDT1"));
+                    qParams.add(argsInForm.getFirstValue("XDT2"));
+                    JSONArray jsonResultArray = getFitnessAction.getChWeightR(dbc, qParams);
+                    returnData = fitness.getWeightCh(jsonResultArray).toString();
+                    break;
+                    
     		 	case "wRapid": case "testData": default:
         			returnData = fin.getFinEnw(enw_RawR, "All", "R").toString();
         			break;

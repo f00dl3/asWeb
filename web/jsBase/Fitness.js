@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 11 Nov 2020
+Updated: 19 Nov 2020
  */
 
 var myHeight = 67;
@@ -394,7 +394,7 @@ function populateFitnessChart(chartSource) {
                     "<img class='ch_large' src='" + getBasePath("old") + "/pChart/ch_Dynamic.php?Thumb=1&DynVar=FitWeight'/>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
-                    "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeight' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href='" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
                     "<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
                     "</div></div>" +
                     "</div>";
@@ -406,7 +406,7 @@ function populateFitnessChart(chartSource) {
                     "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.png?ts=" + timestamp + "'/>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
-                    "<a href='" + getBasePath("chartCache") + "/WeightRange.png' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href=''" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
                     //"<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
                     "</div></div>" +
                     "</div>";
