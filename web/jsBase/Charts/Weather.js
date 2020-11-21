@@ -1,11 +1,12 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 19 Nov 2020
+Updated: 21 Nov 2020
  */
 
-function chart_ObsJSONTempH(container, result) {
-	let limit = 256;
+function ch_chart_ObsJSONTempH(container, result, type, pData) {
+	let timeout = getRefresh("semiRapid");
+	let limit = 512;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
@@ -13,11 +14,6 @@ function chart_ObsJSONTempH(container, result) {
 	aLabels = trimArray(aLabels, limit);
 	aData = trimArray(aData, limit);
 	aData2 = trimArray(aData2, limit);
-	let lastValue_Label = aLabels[aData.length-1];
-	let lastValue_Data = aData[aData.length-1];
-	let previousValue_Data = aData[aData.length-2];
-	let lastValue_Change = lastValue_Data - previousValue_Data;
-	let extraDataContent = "As of " + lastValue_Label + ", temperature " + lastValue_Data + "F (changed " + lastValue_Change + "F)";
 	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
@@ -45,14 +41,33 @@ function chart_ObsJSONTempH(container, result) {
 			}
 		}
 	});
-	$('#extraDataHolder').text(extraDataContent);
+	setInterval(() => { ch_get_FinENW_All_R_Update(chart, pData); }, timeout);
 }
 
-function get_ObsJSONTempH(container) {
-    var timeout = getRefresh("medium");
+function ch_get_ObsJSONTempH(container, type) {
 	let pData = { "doWhat": "ObsJSONTempH" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_ObsJSONTempH(container, result);
+		ch_chart_ObsJSONTempH(container, result, type, pData);
   	});
-    setTimeout(function () { get_ObsJSONTempH(container); }, timeout);
+}
+
+function ch_get_ObsJSONTempH_Update(chart, pData) {
+	$.post(getResource("Chart3"), pData, function (result) {
+		let resultJ = JSON.parse(result);
+		let tLabel = resultJ.labels[0];
+		let tData = resultJ.data[0];
+		let tData2 = resultJ.data2[0];
+		let currentLabel = chart.data.labels[chart.data.labels.length-1];
+		if(tLabel === currentLabel) {
+			console.log("Skipping update - duplicate data!");
+		} else {
+			chart.data.labels.push(tLabel);
+			chart.data.datasets.forEach((dataset) => { dataset.data.push(tData); dataset.data2.push(tData2); });
+			chart.update();
+			chart.data.labels.shift();
+			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); dataset.data2.shift(); });
+			chart.update();
+			console.log("Chart update completed - " + tLabel + " & " + tData);
+		}
+	});
 }

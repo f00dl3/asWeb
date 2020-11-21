@@ -4,7 +4,7 @@ Created: 18 Nov 2020
 Updated: 21 Nov 2020
  */
 
-function chart_FinENW_All_A(container, result) {
+function ch_chart_FinENW_All_A(container, result, type) {
 	let timeFormat = 'YYYY-MM-DD';
 	let resultJ = JSON.parse(result);
 	let aLabels_orig = resultJ.labels;
@@ -26,8 +26,7 @@ function chart_FinENW_All_A(container, result) {
 		i++;
 	});
 	var ctx = document.getElementById(container).getContext('2d');
-	var chart = null;
-	chart = new Chart(ctx, {
+	let chart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			labels: aLabels,
@@ -95,27 +94,23 @@ function chart_FinENW_All_A(container, result) {
 	$('#extraDataHolder').text(extraDataContent);
 }
 
-function get_FinENW_All_A(container) {
+function ch_get_FinENW_All_A(container, type) {
 	let pData = { "doWhat": "FinENW_All_A" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_All_A(container, result);
+		ch_chart_FinENW_All_A(container, result, type);
   	});
 }
 
-function chart_FinENW_All_R(container, result) {
+function ch_chart_FinENW_All_R(container, result, type, pData) {
+	let timeout = getRefresh("semiRapid");
 	let limit = 128;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
 	aLabels = trimArray(aLabels, limit);
 	aData = trimArray(aData, limit);
-	let lastValue_Label = aLabels[aData.length-1];
-	let lastValue_Data = aData[aData.length-1];
-	let previousValue_Data = aData[aData.length-2];
-	let lastValue_Change = lastValue_Data - previousValue_Data;
-	let extraDataContent = "As of " + lastValue_Label + ", net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
 	var ctx = document.getElementById(container).getContext('2d');
-	var chart = null;
+	let chart = null;
 	chart = new Chart(ctx, {
 		type: 'line',
 		data: {
@@ -136,18 +131,37 @@ function chart_FinENW_All_R(container, result) {
 		}
 	});
 	$('#extraDataHolder').text(extraDataContent);
+	setInterval(() => { ch_get_FinENW_All_R_Update(chart, pData); }, timeout);
 }
 
-function get_FinENW_All_R(container) {
-    var timeout = getRefresh("medium");
+function ch_get_FinENW_All_R(container, type) {
 	let pData = { "doWhat": "wRapid" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_All_R(container, result);
+		ch_chart_FinENW_All_R(container, result, type, pData);
   	});
-    setTimeout(function () { get_FinENW_All_R(container); }, timeout);
 }
 
-function chart_FinENW_Year_A(container, result) {
+function ch_get_FinENW_All_R_Update(chart, pData) {
+	$.post(getResource("Chart3"), pData, function (result) {
+		let resultJ = JSON.parse(result);
+		let tLabel = resultJ.labels[0];
+		let tData = resultJ.data[0];
+		let currentLabel = chart.data.labels[chart.data.labels.length-1];
+		if(tLabel === currentLabel) {
+			console.log("Skipping update - duplicate data!");
+		} else {
+			chart.data.labels.push(tLabel);
+			chart.data.datasets.forEach((dataset) => { dataset.data.push(tData); });
+			chart.update();
+			chart.data.labels.shift();
+			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); });
+			chart.update();
+			console.log("Chart update completed - " + tLabel + " & " + tData);
+		}
+	});
+}
+
+function ch_chart_FinENW_Year_A(container, result, type) {
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels;
 	let aData = resultJ.data;
@@ -160,10 +174,9 @@ function chart_FinENW_Year_A(container, result) {
 	let lastValue_Data = aData[aData.length-1];
 	let previousValue_Data = aData[aData.length-2];
 	let lastValue_Change = lastValue_Data - previousValue_Data;
-	let extraDataContent = "As of " + lastValue_Label + ", total net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change + ")";
+	let extraDataContent = "As of " + lastValue_Label + ", total net worth is $" + autoUnits(lastValue_Data) + " (changed $" + lastValue_Change.toFixed(2) + ")";
 	var ctx = document.getElementById(container).getContext('2d');
-	var chart = null;
-	chart = new Chart(ctx, {
+	let chart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			labels: aLabels,
@@ -222,9 +235,9 @@ function chart_FinENW_Year_A(container, result) {
 	$('#extraDataHolder').text(extraDataContent);
 }
 
-function get_FinENW_Year_A(container) {
+function ch_get_FinENW_Year_A(container, type) {
 	let pData = { "doWhat": "FinENW_Year_A" };
 	$.post(getResource("Chart3"), pData, function(result) {
-		chart_FinENW_Year_A(container, result);
+		ch_chart_FinENW_Year_A(container, result, type);
   	});
 }

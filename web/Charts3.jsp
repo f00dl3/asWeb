@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 6 Oct 2020
-    Updated: 18 Nov 2020
+    Updated: 21 Nov 2020
     Author     : astump
 --%>
 
@@ -14,7 +14,7 @@
     String scriptIt = "true";
     String authCheck = "true";
     String action = "";
-    String resolution = "";
+    String inList = "";
     
     WebCommon wc = new WebCommon();
        
@@ -26,21 +26,22 @@
     
     <%
     if(wc.isSet(request.getParameter("doAction"))) { action = wc.basicInputFilter(request.getParameter("doAction")); }
+    if(wc.isSet(request.getParameter("inList"))) { action = wc.basicInputFilter(request.getParameter("inList")); }
     %>
     
     <script>
         doAction = "<% out.print(action); %>";
-        console.log("DEBUG VARS: doAction='" + doAction + "'");
+        console.log("DEBUG VARS: doAction='" + doAction + "', inList='" + inList + "'");
      </script>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
-<jsp:include page="/inc/Header.jsp?type=full-ndj&title=Charts3&scripts=true"></jsp:include>
+<jsp:include page="/inc/Header.jsp?type=full&title=Charts3&scripts=true"></jsp:include>
 
     <body id="Charts">
     
-        <div id="ChartHolder" style="height: 80%; width: 95%;">
+        <div id="ChartHolder" style="height: 90%; width: 95%;">
         	<canvas id="ChartCanvas" style="height: 100%; width: 100%;"></canvas>
        	</div><br/>
        	<div id="extraDataHolder"></div>

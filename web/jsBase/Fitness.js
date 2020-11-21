@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 19 Nov 2020
+Updated: 21 Nov 2020
  */
 
 var myHeight = 67;
@@ -214,12 +214,13 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
     return genString;
 }
 
+
 function getWeightChart(inXdt1, inXdt2) {
     aniPreload("on");
     var xdt1, xdt2;
-    var oYear = getDate("year", 0, "yearOnly");
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
+    populateFitnessChart("jFree", xdt1, xdt2);
     var thePostData = "doWhat=FitnessCharts&XDT1=" + xdt1 + "&XDT2=" + xdt2;
     var xhArgs = {
         preventCache: true,
@@ -228,7 +229,6 @@ function getWeightChart(inXdt1, inXdt2) {
         handleAs: "text",
         timeout: timeOutMilli,
         load: function(data) {
-            populateFitnessChart("jFree");
             aniPreload("off");
         },
         error: function(data, iostatus) {
@@ -383,9 +383,12 @@ function populateCalorieChart() {
     dojo.byId("CalorieChartHolder").innerHTML = rData;
 }
 
-function populateFitnessChart(chartSource) {
+function populateFitnessChart(chartSource, xdt1, xdt2) {
+	let inParams = xdt1 + "|" + xdt2;
+	console.log("DBG: inParams = " + inParams);
     var timestamp = getDate("day", 0, "timestamp");
     var tElement = "";
+	let postLoadChart = false;
     switch(chartSource) {
         
         case "pChart":
@@ -403,16 +406,19 @@ function populateFitnessChart(chartSource) {
         case "jFree":
             tElement = "<div class='trafcam'>" +
                     "<div class='UPopNM'>" +
-                    "<img class='ch_large' src='" + getBasePath("chartCache") + "/th_WeightRange.png?ts=" + timestamp + "'/>" +
+                    "<div id='wrccHolder'><canvas class='ch_large' id='wrcHolder'></canvas></div>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
-                    "<a href=''" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href='" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
                     //"<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
                     "</div></div>" +
                     "</div>";
+			postLoadChart = true;
+			break;
     }
     
     dojo.byId("WeightChartHolder").innerHTML = tElement;
+	if(postLoadChart) { ch_get_WeightRange("wrcHolder", "thumb"); }
 }
 
 function populateSleepChart() {

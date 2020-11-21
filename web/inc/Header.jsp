@@ -19,13 +19,15 @@
     
     String fullBasePack = "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.5.1.min.js'></script>" +
             "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
-		"<script src='"+rootPath+"'/jsLib/hammer.min.js'></script>" +
+			"<script src='"+rootPath+"'/jsLib/hammer.min.js'></script>" +
+            "<script src='"+rootPath+"/jsLib/moment/moment.min.js'></script>" +
+			"<script src='"+rootPath+"/jsLib/chart.js/2.9.4/Chart.min.js'></script>" +
+            "<script src='"+rootPath+"/jsLib/chart.js/chartjs-plugin-zoom.min.js'></script>" +
+            "<script src='"+rootPath+"/jsLib/dojo/1.16.3/dojo/dojo.js'></script>" +
             "<script src='"+rootPath+"/jsBase/Tools/comSec.js'></script>" +
             "<script src='"+rootPath+"/jsBase/Tools/Routing.js'></script>" +
-           "<script src='"+rootPath+"/jsBase/Tools/Session.js'></script>" +
+            "<script src='"+rootPath+"/jsBase/Tools/Session.js'></script>" +
             "<script src='"+rootPath+"/jsBase/Header.js'></script>";
-            
-    String dojoScript = "<script src='"+rootPath+"/jsLib/dojo/1.16.3/dojo/dojo.js'></script>";
 
     String[] calScripts = {
    		"Calendar/ByDay",
@@ -59,6 +61,7 @@
     };
     
     String[] finScripts = {
+   		"Charts/Finance",
         "FBook/Overview",
         "FBook/Assets",
         "FBook/Auto",
@@ -73,6 +76,7 @@
     };
     
     String[] fitScripts = {
+   		"Charts/Fitness",
         "Fitness/Calories",
         "Fitness/GarminConnectApiSynch",
         "Fitness/Plans",
@@ -116,6 +120,7 @@
     };
     
     String [] sysMonScripts = {
+  		"Charts/SysMon",
         "SNMP/ReliaStump"
     };
     
@@ -124,6 +129,7 @@
     };
     
     String[] wxScripts = {
+   		"Charts/Weather",
         "Weather/Archive",
         "Weather/Cf6Data",
         "Weather/Kilaeua",
@@ -147,8 +153,7 @@
     if(type == null) { type = "full"; }
     if(scripts == null) { scripts = "false"; }
     
-    if(type.equals("full")) { scripts2Load += dojoScript + fullBasePack; }
-    if(type.equals("full-ndj")) { scripts2Load += fullBasePack; }
+    if(type.equals("full")) { scripts2Load += fullBasePack; }
     
     String preloadElement = "<div class='preload'><img src='"+rootPath+"/img/Preload/5-1.gif'/><br>" +
             " <strong><span id='preloadSize'>Loading...</span></strong></div>";
@@ -158,11 +163,7 @@
         cssFiles += "<link rel='stylesheet' type='text/css' href='"+rootPath+"/css/"+css2do[i]+".css'/>";
     }
     
-    String chart3ScriptPack = "<script src='"+rootPath+"/jsLib/moment/moment.min.js'></script>" +
-    		"<script src='"+rootPath+"/jsLib/chart.js/2.9.4/Chart.min.js'></script>" +
-    		"<script src='"+rootPath+"/jsLib/chart.js/chartjs-plugin-zoom.min.js'></script>" +
-    		dojoScript;
-    //"<script src='"+rootPath+"/jsLib/canvasjs/3.1/jquery.canvasjs.min.js'></script>";
+    String chart3ScriptPack = "";
     for(int i=0; i < chart3Scripts.length; i++) {
     	chart3ScriptPack += "<script src='"+rootPath+"/jsBase/"+chart3Scripts[i]+".js'></script>";
     }
@@ -327,7 +328,7 @@
         " <div id='NaviHolder'></div>" +
         miniHeader;
     
-    if(type.equals("full") || type.equals("full-ndj")) {
+    if(type.equals("full")) {
         theHeader = fullHeader;
     } else {
         theHeader = miniHeader;
