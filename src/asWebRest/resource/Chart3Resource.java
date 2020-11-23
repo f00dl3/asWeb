@@ -64,6 +64,10 @@ public class Chart3Resource extends ServerResource {
         JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
         JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
         JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
+        JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
+
+    	WUndergroundBeans wub = new WUndergroundBeans();
+    	String stationIdHome = wub.getStation_Home();
         
         try {
             doWhat = argsInForm.getFirstValue("doWhat");
@@ -92,11 +96,12 @@ public class Chart3Resource extends ServerResource {
 		 		case "FinENW_Year_A":
 	    			returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString();
 	    			break;
+
+		 		case "ObsJSONPrecipRateH":
+                    returnData = wx.getObsJsonPrecipRate(wxObsBa2, stationIdHome).toString();
+	    			break;
 	    			
 		 		case "ObsJSONTempH":
-                	WUndergroundBeans wub = new WUndergroundBeans();
-                	String stationIdHome = wub.getStation_Home();
-                    JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
                     returnData = wx.getObsJsonTemps(wxObsBa2, stationIdHome).toString();
 	    			break;
     			

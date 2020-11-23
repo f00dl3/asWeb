@@ -27,6 +27,7 @@ $(document).ready(function() {
 		case "FinENW_Year_L.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_T.png": ch_get_FinENW_Year_A(container, type); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
+		case "ObsJSONPrecipRateH.png": ch_get_ObsJSONPrecipRateH(container, type); break;
 		case "ObsJSONTempH.png": ch_get_ObsJSONTempH(container, type); break;
 		case "WeightRange.png": ch_get_WeightRange(container, type); break;
 		default: initCharts3(); break;

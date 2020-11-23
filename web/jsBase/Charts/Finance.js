@@ -6,8 +6,14 @@ Updated: 23 Nov 2020
 
 function ch_chart_FinENW_All_A(container, result, type) {
 	let timeFormat = 'YYYY-MM-DD';
+	let doLegend = true;
 	let doX = true;
-	if(type === "thumb") { doX = false; }
+	let lbRadius = 1;
+	if(type === "thumb") { 
+		doLegend = false;
+		doX = false; 
+		lbRadius = 0;
+	}
 	let resultJ = JSON.parse(result);
 	let aLabels_orig = resultJ.labels;
 	let aLabels = [];
@@ -28,7 +34,8 @@ function ch_chart_FinENW_All_A(container, result, type) {
 		i++;
 	});
 	var ctx = document.getElementById(container).getContext('2d');
-	let chart = new Chart(ctx, {
+	let chart = null
+	chart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			labels: aLabels,
@@ -45,7 +52,10 @@ function ch_chart_FinENW_All_A(container, result, type) {
 		options: {
 			elements: {
 				line: { borderWidth: 1, tension: 0 },
-				point: { radius: 0 }
+				point: { radius: lbRadius }
+			},
+			legend: {
+				display: doLegend
 			},
 			scales: {
 				xAxes: [{
@@ -76,11 +86,13 @@ function ch_get_FinENW_All_A(container, type) {
 }
 
 function ch_chart_FinENW_All_R(container, result, type, pData) {
-	let doX = true;
 	let description = "Rapid Estimated Net Worth";
 	let lbRadius = 1;
+	let doLegend = true;
+	let doX = true;
 	if(type === "thumb") { 
-		description = "ENW";
+		description = "RENW";
+		doLegend = false;
 		doX = false; 
 		lbRadius = 0;
 	}
@@ -105,6 +117,9 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		options: {
 			elements: {
 				point: { radius: lbRadius }
+			},
+			legend: {
+				display: doLegend
 			},
 			scales: {
 				xAxes: [
@@ -150,6 +165,14 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 
 function ch_chart_FinENW_Year_A(container, result, type) {
 	let resultJ = JSON.parse(result);
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { 
+		doLegend = false;
+		doX = false; 
+		lbRadius = 0;
+	}
 	let aLabels = resultJ.labels;
 	let aData = resultJ.data;
 	let aData2 = resultJ.data2;
@@ -186,9 +209,15 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 		options: {
 			elements: {
 				line: { borderWidth: 1, tension: 0 },
-				point: { radius: 0 }
+				point: { radius: lbRadius }
+			},
+			legend: {
+				display: doLegend
 			},
 			scales: {
+				xAxes: [
+					{ ticks: { display: doX } }
+				],
 				yAxes: [{
 					ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } 
 				}]

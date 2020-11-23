@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 21 Nov 2020
+Updated: 23 Nov 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -182,12 +182,12 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     }
     pTable += "</tr></tbody></table>";
     bubble += pTable + "<p>" +
-//            "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a><br/>" +
-		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' /></a><br/>" +
-            "<a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
-            "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
-            "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
-            "<a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_All_R", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a><br/>" +
+//		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a>" +
+            "<a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><div class='th_sm_med'><canvas id='fenwY'></canvas></div></a>" +
+//            "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
+//            "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
+            "<a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><div class='th_sm_med'><canvas id='fenwR'></canvas></div></a>" +
             "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
                        "<p>";
     var wTable = "<table><thead><tr>";
@@ -211,6 +211,8 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     bubble += wTable + "</div></div>";
     dojo.byId("HoldWorth").innerHTML = bubble;
 //	ch_get_FinENW_All_A("enwAllHolder", "thumb");
+	ch_get_FinENW_Year_A("fenwY", "thumb");
+	ch_get_FinENW_All_R("fenwR", "thumb");
 }
 
 function getOverviewData() {

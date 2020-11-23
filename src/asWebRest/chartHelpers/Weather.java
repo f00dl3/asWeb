@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 27 Jul 2020
+Updated: 23 Nov 2020
  */
 
 package asWebRest.chartHelpers;
@@ -403,6 +403,34 @@ public class Weather {
                 .put("debug", this_Debug);
         return this_Glob;
     }
+
+    private JSONObject obsJsonPrecipRate(JSONArray dataIn, String stationId) {
+        String this_ChartName = "ObsJSON Precip Rate for " + stationId;
+        JSONObject this_Glob = new JSONObject();
+        JSONObject this_Props = new JSONObject();
+        JSONArray this_Labels = new JSONArray();
+        JSONArray this_Data = new JSONArray();
+        JSONArray this_Debug = new JSONArray();
+        String tChartName = "ObsJSONPrecip";
+        if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
+        this_Props
+                .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
+                .put("chartName", this_ChartName).put("chartFileName", tChartName)
+                .put("sName", "Rate").put("sColor", "Green")
+                .put("xLabel", "Date").put("yLabel", "in/hr");
+        for(int i = 0; i < dataIn.length(); i++) {
+            JSONObject thisObject = dataIn.getJSONObject(i);
+            this_Labels.put(thisObject.getString("GetTime"));
+            JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
+            try { this_Data.put(thisSet.getDouble("RainRate")); } catch (Exception e) { }
+        }
+        this_Glob
+                .put("labels", this_Labels)
+                .put("data", this_Data)
+                .put("props", this_Props)
+                .put("debug", this_Debug);
+        return this_Glob;
+    }
     
     private JSONObject obsJsonPressure(JSONArray dataIn, String stationId) {
         String this_ChartName = "ObsJSON MSLP for " + stationId;
@@ -525,6 +553,7 @@ public class Weather {
     public JSONObject getObsJsonCapeCin(JSONArray dataIn, String stationId) { return obsJsonCapeCin(dataIn, stationId); }
     public JSONObject getObsJsonHumidity(JSONArray dataIn, String stationId) { return obsJsonHumidity(dataIn, stationId); }
     public JSONObject getObsJsonLevel(JSONArray dataIn, String stationId) { return obsJsonLevel(dataIn, stationId); }
+    public JSONObject getObsJsonPrecipRate(JSONArray dataIn, String stationId) { return obsJsonPrecipRate(dataIn, stationId); }
     public JSONObject getObsJsonPressure(JSONArray dataIn, String stationId) { return obsJsonPressure(dataIn, stationId); }
     public JSONObject getObsJsonTemps(JSONArray dataIn, String stationId) { return obsJsonTemps(dataIn, stationId); }
     public JSONObject getObsJsonWave(JSONArray dataIn, String stationId) { return obsJsonWave(dataIn, stationId); }
