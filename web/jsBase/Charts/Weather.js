@@ -1,10 +1,18 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 21 Nov 2020
+Updated: 23 Nov 2020
  */
 
 function ch_chart_ObsJSONTempH(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { 
+		doLegend = false;
+		doX = false; 
+		lbRadius = 0;
+	}
 	let timeout = getRefresh("semiRapid");
 	let limit = 512;
 	let resultJ = JSON.parse(result);
@@ -21,27 +29,28 @@ function ch_chart_ObsJSONTempH(container, result, type, pData) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{
-					label: 'Temperature',
-					borderColor: 'red',
-					data: aData
-				},
-				{
-					label: 'Dewpoint',
-					borderColor: 'blue',
-					data: aData2
-				},
+				{ label: 'Temperature', borderColor: 'red', data: aData },
+				{ label: 'Dewpoint', borderColor: 'blue', data: aData2 },
 			]
 		},
 		options: {
+			elements: {
+				point: { radius: lbRadius }
+			},
+			legend: {
+				display: doLegend
+			},
 			scales: {
+				xAxes: [
+					{ ticks: { display: doX } }
+				],
 				yAxes: [ 
 					{ ticks: { callback: function(value, index, values) { return value + "F"; } } }
 				]
 			}
 		}
 	});
-	setInterval(() => { ch_get_FinENW_All_R_Update(chart, pData); }, timeout);
+	setInterval(() => { ch_get_ObsJSONTempH_Update(chart, pData); }, timeout);
 }
 
 function ch_get_ObsJSONTempH(container, type) {
@@ -59,15 +68,16 @@ function ch_get_ObsJSONTempH_Update(chart, pData) {
 		let tData2 = resultJ.data2[0];
 		let currentLabel = chart.data.labels[chart.data.labels.length-1];
 		if(tLabel === currentLabel) {
-			console.log("Skipping update - duplicate data!");
 		} else {
 			chart.data.labels.push(tLabel);
-			chart.data.datasets.forEach((dataset) => { dataset.data.push(tData); dataset.data2.push(tData2); });
+			chart.data.datasets[0].data.push(tData);
+			chart.data.datasets[1].data.push(tData2);
 			chart.update();
 			chart.data.labels.shift();
-			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); dataset.data2.shift(); });
+			chart.data.datasets.forEach((ds) => {
+				ds.data.shift();
+			})
 			chart.update();
-			console.log("Chart update completed - " + tLabel + " & " + tData);
 		}
 	});
 }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 19 Nov 2020
+Updated: 23 Nov 2020
  */
 
 package asWebRest.resource;
@@ -17,12 +17,15 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetWeatherAction;
+import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.Weather;
+import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.WeatherDAO;
@@ -47,11 +50,13 @@ public class Chart3Resource extends ServerResource {
         List<String> inParams = new ArrayList<>();              
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
-        
+
+        Ffxiv ffxiv = new Ffxiv();
 		Finance fin = new Finance();
 		Fitness fitness = new Fitness();
         Weather wx = new Weather();
-        
+
+        GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
 		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
@@ -69,8 +74,17 @@ public class Chart3Resource extends ServerResource {
         if(doWhat != null) {
         	
             switch (doWhat) {    
-
-			
+            
+	 			case "ffxivGilWorthByDay":
+	                JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);        
+	 				returnData = ffxiv.getGilWorthByDate(gbd_Raw).toString();
+	 				break;
+	 				
+	 			case "ffxivQuestsByDay":
+	                JSONArray qbd_Raw = getFfxivAction.getFfxivQuestsByDate(dbc);        
+	 				returnData = ffxiv.getByDate(qbd_Raw).toString();
+	 				break;
+				
 	 			case "FinENW_All_A":
 	 				returnData = fin.getFinEnw(enw_RawA, "All", "A").toString();
 	 				break;

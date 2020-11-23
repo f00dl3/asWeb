@@ -1,13 +1,14 @@
 /* 
 by Anthony Stump
 Created: 19 Nov 2020
-Updated: 21 Nov 2020
+Updated: 23 Nov 2020
  */
 
-/* Figure out posting data range - needs dojo */
-
-function ch_chart_WeightRange(container, result, type) {
+function ch_chart_WeightRange(container, result, type, pData) {
+	let timeout = getRefresh("semiRapid");
 	let resultJ = JSON.parse(result);
+	let doX = true;
+	if(type === "thumb") { doX = false; }
 	let aLabels = resultJ.labels;
 	let aData = resultJ.data;
 	var ctx = document.getElementById(container).getContext('2d');
@@ -17,12 +18,7 @@ function ch_chart_WeightRange(container, result, type) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{
-					label: 'Weight',
-					borderColor: 'white',
-					backgroundColor: "grey",
-					data: aData
-				}
+				{ label: 'Weight', borderColor: 'yellow', backgroundColor: "gold", data: aData }
 			]
 		},
 		options: {
@@ -30,13 +26,20 @@ function ch_chart_WeightRange(container, result, type) {
 				line: { borderWidth: 1, tension: 0 },
 				point: { radius: 0 }
 			},
+			legend: {
+				display: false
+			},
 			scales: {
+				xAxes: [
+					{ ticks: { display: doX } }
+				],
 				yAxes: [ 
 					{ ticks: { callback: function(value, index, values) { return value + " lbs"; } } }
 				]
 			}
 		}
 	});
+	setInterval(() => { ch_get_WeightRange_Update(chart, pData); }, timeout);
 }
 
 function ch_get_WeightRange(container, type) {
@@ -44,6 +47,26 @@ function ch_get_WeightRange(container, type) {
     let xdt2 = getDate("day", 0, "dateOnly");
 	let pData = { "doWhat": "WeightRange", "XDT1": xdt1, "XDT2": xdt2 };
 	$.post(getResource("Chart3"), pData, function(result) {
-		ch_chart_WeightRange(container, result, type);
+		ch_chart_WeightRange(container, result, type, pData);
   	});
+}
+
+function ch_get_WeightRange_Update(chart, pData) {
+	$.post(getResource("Chart3"), pData, function (result) {
+		let resultJ = JSON.parse(result);
+		let tLabel = resultJ.labels[0];
+		let tData = resultJ.data[0];
+		let currentLabel = chart.data.labels[chart.data.labels.length-1];
+		if(tLabel === currentLabel) {
+		} else {
+			chart.data.labels.push(tLabel);
+			chart.data.datasets[0].data.push(tData);
+			chart.update();
+			chart.data.labels.shift();
+			chart.data.datasets.forEach((ds) => {
+				ds.data.shift();
+			})
+			chart.update();
+		}
+	});
 }

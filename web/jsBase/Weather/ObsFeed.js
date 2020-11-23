@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 18 Nov 2020
+Updated: 23 Nov 2020
  */
 
 function getChartDataWXHome() {
@@ -491,7 +491,9 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+            //"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
+			"<div class='th_sm_med'><canvas id='jsonTempH_Holder'></canvas></div><br/>" + 
+            "[<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'>Home</a>]" + 
             "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
@@ -527,6 +529,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;
+	ch_get_ObsJSONTempH("jsonTempH_Holder", "thumb");
 }
 
 function processUpperAirData(baseEle, stationData, noWrappingDiv) {

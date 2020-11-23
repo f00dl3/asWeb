@@ -3,7 +3,7 @@ by Anthony Stump
 Created: 25 Mar 2018
 Split off from Entertain.js: 10 Apr 2018
 Split off from Games.js: 22 May 2018
-Updated: 12 Nov 2020
+Updated: 23 Nov 2020
 
  */
 
@@ -316,7 +316,7 @@ function getGameFf14i(target) {
 
 function getGameFf14q(target, refresh) {
     var timeout = getRefresh("long");
-    aniPreload("on");
+    /* aniPreload("on");
     var thePostData = { "doWhat": "EntertainmentFfxivQuestsByDate" };
     require(["dojo/request"], function(request) {
         request
@@ -325,14 +325,14 @@ function getGameFf14q(target, refresh) {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    aniPreload("off");
+                    aniPreload("off"); */
                     getGameFf14qData(target);
-                },
+                /* },
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for FFXIV Quest Graph by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
-    });
+    }); */
     if(refresh) { setTimeout(function () { getGameFf14q(target, false); }, timeout); }
 }
 
@@ -737,8 +737,9 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
             " <input name='MarketGil' type='number' step='0' value='0' style='width: 168px;'/>" +
             " <button id='gilMarketUpdateButton' type='submit'>mkt</button>" +
             "</form>" +
-            "<a href='" + doCh("j", "ffxivGilByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
-            "<a href='" + doCh("j", "ffxivGilWorthByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilWorthByDay", "th") + "'/></a>" +
+//            "<a href='" + doCh("3", "ffxivGilWorthByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivGilByDay", "th") + "'/></a><br/>" +
+			"<div class='ch_small'><canvas id='ffGilHolder'></canvas></div>" +
+            "[<a href='" + doCh("3", "ffxivGilWorthByDay", null) + "' target='qCh'>Chart</a>]" +
             "</div></div>" +
             " <div class='UPop'><button class='UButton'>Maps</button>" +
             "<div class='UPopO'>" +
@@ -787,7 +788,9 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
 //			"<strong>Weapons:</strong> " + counts.Weapons + "<br/>" +
 //			"<strong>Wearables:</strong> " + counts.Wearables + "<br/>" +
             "</div></div><br/>" +
-            "<a href='" + doCh("j", "ffxivQuestsByDay", null) + "' target='qCh'><img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
+//			"<img class='ch_small' src='" + doCh("j", "ffxivQuestsByDay", "th") + "'/></a>" +
+			"<div class='ch_small'><canvas id='qbdHolder'></canvas></div>" +
+            "[<a href='" + doCh("3", "ffxivQuestsByDay", null) + "' target='qCh'>Chart</a>]" +
             "<p><div id='mSearchHolder'></div>" +
             "<p><div id='mergedList'></div>";
     dojo.byId(target).innerHTML = rData;
@@ -799,6 +802,8 @@ function putFfxivMerged(target, mergedData, countIn, iMaps, emotes, assets, leve
     dojo.connect(setGilButton, "onclick", actOnFfxivGil);
     dojo.connect(setMarketGilButton, "onclick", actOnFfxivMarketGil);
     dojo.query(".doLevelIncrease").connect("onclick", actOnFfxivLevelIncrease);
+	ch_get_ffxivQuestsByDay("qbdHolder", "thumb");
+	ch_get_ffxivGilWorthByDay("ffGilHolder", "thumb");
 }
 
 function putFfxivMergedSearchBox(target) {

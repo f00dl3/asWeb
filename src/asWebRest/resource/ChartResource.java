@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 27 Jul 2020
+Updated: 23 Nov 2020
  */
 
 package asWebRest.resource;
@@ -111,14 +111,14 @@ public class ChartResource extends ServerResource {
                                                    
                 case "EntertainmentFfxivQuestsByDate":
                     genericCharts = false;
-                    JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);            
-                    JSONArray qbd_Raw = getFfxivAction.getFfxivQuestsByDate(dbc);         
-                    JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);           
-                    JSONObject gwbd_Glob = ffxiv.getGilWorthByDate(gbd_Raw);    
-                    JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw); 
-                    try { dynChart.LineChart(gwbd_Glob); returnData += "Chart generated - FFXIV Gil Worth By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(gbd_Glob); returnData += "Chart generated - FFXIV Gil By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);            
+                    //JSONArray qbd_Raw = getFfxivAction.getFfxivQuestsByDate(dbc);         
+                    //JSONObject gbd_Glob = ffxiv.getGilByDate(gbd_Raw);           
+                    //JSONObject gwbd_Glob = ffxiv.getGilWorthByDate(gbd_Raw);    
+                    //JSONObject qbd_Glob = ffxiv.getByDate(qbd_Raw); 
+                    //try { dynChart.LineChart(gwbd_Glob); returnData += "Chart generated - FFXIV Gil Worth By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(gbd_Glob); returnData += "Chart generated - FFXIV Gil By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(qbd_Glob); returnData += "Chart generated - FFXIV By Date!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                     
                 case "FinanceBills":
@@ -164,10 +164,10 @@ public class ChartResource extends ServerResource {
                     Fitness fitness = new Fitness();
                     JSONObject calChGlob = fitness.getCalCh(jraCalorieRange);
                     JSONObject sleepGlob = fitness.getSleepCh(jsonResultArray);
-                    JSONObject wgtChGlob = fitness.getWeightCh(jsonResultArray);
+                    //JSONObject wgtChGlob = fitness.getWeightCh(jsonResultArray);
                     try { dynChart.LineChart(calChGlob); returnData += "Chart generated - CalorieRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(sleepGlob); returnData += "Chart generated - SleepRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
-                    try { dynChart.LineChart(wgtChGlob); returnData += "Chart generated - WeightRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    //try { dynChart.LineChart(wgtChGlob); returnData += "Chart generated - WeightRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
                 case "GpsCharts":

@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    21 Nov 2020
+    Updated:    22 Nov 2020
     Author     : astump
 --%>
 
@@ -36,6 +36,7 @@
     };
     
     String[] chart3Scripts = {
+   		"Charts/Ffxiv",
    		"Charts/Finance",
 		"Charts/Fitness",
 		"Charts/SysMon",
@@ -44,6 +45,7 @@
     };
     
     String[] etScripts = {
+    	"Charts/Ffxiv",
         "Entertain/ChicagoSeries",
         "Entertain/Cooking",
         "Entertain/Dbx",
@@ -234,7 +236,7 @@
                 break;
             case "Cams":
             	//fullTitle = "Smarthome Interface";
-                scripts2Load += wxScriptPack + snmpScriptPack;
+                scripts2Load += fbScriptPack + wxScriptPack + snmpScriptPack;
                 break;
             case "Calendar":
             	fullTitle = "WebCal Anthony Fork";

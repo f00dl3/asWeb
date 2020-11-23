@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 20 Nov 2020
+Updated: 21 Nov 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -182,7 +182,8 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     }
     pTable += "</tr></tbody></table>";
     bubble += pTable + "<p>" +
-            "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' /></a><br/>" +
+//            "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a><br/>" +
+		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' /></a><br/>" +
             "<a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_T", "th") + "' /></a>" +
             "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
             "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
@@ -209,6 +210,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     wTable += "</tbody></table>";
     bubble += wTable + "</div></div>";
     dojo.byId("HoldWorth").innerHTML = bubble;
+//	ch_get_FinENW_All_A("enwAllHolder", "thumb");
 }
 
 function getOverviewData() {
@@ -277,6 +279,17 @@ function putOverview(finGlob) {
     genOverviewStock(stockData, eTrade);
     //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
+}
+
+function putOverviewSmall(holder) {
+	let rData = "<div class='UPop'><button style='UButton'>Rapid Worth</button>" +
+		"<div class='UPopO'>" +
+		"<div id='rwcHolder'><canvas id='rwcChart'></canvas></div>" +
+		"<div id='extraDataHolder'></div>" +
+		"</div>" +
+		"</div>";
+	dojo.byId(holder).innerHTML = rData;
+	ch_get_FinENW_All_R("rwcChart", "thumb");
 }
 
 function setSavingsAdd(formData) {

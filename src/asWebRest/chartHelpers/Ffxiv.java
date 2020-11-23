@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 15 Nov 2018
-Updated: 2 Mar 2020
+Updated: 22 Nov 2020
  */
 
 package asWebRest.chartHelpers;
@@ -46,7 +46,7 @@ public class Ffxiv {
         	    int gathering = thisObject.getInt("Gathering");
         	    int dungeons = thisObject.getInt("Dungeons");
         	    int fates = thisObject.getInt("FATEs");
-        	    int total = (quests + hunting + crafting + achievements + gathering + dungeons);
+        	    int total = (quests + hunting + crafting + achievements + gathering + dungeons + fates);
         	    this_Labels.put(thisObject.getString("OrigCompDate"));
         	    this_Data.put(quests);
         	    this_Data2.put(hunting);
@@ -106,20 +106,25 @@ public class Ffxiv {
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd")
                 .put("chartName", this_Name).put("chartFileName", "ffxivGilWorthByDay")
                 .put("sName", "Worth").put("sColor", "Yellow")
+                .put("s2Name", "Gil").put("s2Color", "Green")
                 .put("xLabel", "Date").put("yLabel", "Gil (M)");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             long worth = thisObject.getLong("Worth");
+            long gil = thisObject.getLong("Gil");
             this_Labels.put(thisObject.getString("Date"));
             this_Data.put(worth);
+            this_Data2.put(gil);
         }
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
+                .put("data2", this_Data2)
                 .put("props", this_Props);
         return this_Glob;
     }
