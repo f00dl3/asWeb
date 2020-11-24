@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 21 Nov 2020
+Updated: 24 Nov 2020
  */
 
 function actOnDoLive(event) {
@@ -51,6 +51,23 @@ function popCamHolder() {
     dojo.connect(buttonVideo, "onclick", actOnDoVideo);
     showMiniSmartController("miniSmartControllerHolder");
     displayVideoLoop();    
+}
+
+function putOverviewSmall(holder) {
+	let rData = "<div class='UPop'><button class='UButton'>Worth</button>" +
+		"<div class='UPopO'>" +
+		"<div class='ch_small'><canvas id='rwcChart'></canvas></div>" +
+		"<div id='extraDataHolder'></div>" +
+		"</div></div>" +
+		"<div class='UPop'><button class='UButton'>Weather</button>" +
+		"<div class='UPopO'>" +
+		"<div class='ch_small'><canvas id='hTempChart'></canvas></div>" +
+		"<div class='ch_small'><canvas id='hPrecipChart'></canvas></div>" +
+		"</div></div>";
+	dojo.byId(holder).innerHTML = rData;
+	ch_get_FinENW_All_R("rwcChart", "thumb");
+	ch_get_ObsJSONTempH("hTempChart", "thumb");
+	ch_get_ObsJSONPrecipRateH("hPrecipChart", "thumb");
 }
 
 function initCams() {

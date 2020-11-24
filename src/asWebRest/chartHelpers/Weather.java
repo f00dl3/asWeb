@@ -410,6 +410,7 @@ public class Weather {
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
+	JSONArray this_Data2 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         String tChartName = "ObsJSONPrecip";
         if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
@@ -417,16 +418,19 @@ public class Weather {
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
                 .put("chartName", this_ChartName).put("chartFileName", tChartName)
                 .put("sName", "Rate").put("sColor", "Green")
-                .put("xLabel", "Date").put("yLabel", "in/hr");
+		.put("s2Name", "Daily").put("s2Color", "Blue")
+                .put("xLabel", "Date").put("yLabel", "in");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             this_Labels.put(thisObject.getString("GetTime"));
             JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
             try { this_Data.put(thisSet.getDouble("RainRate")); } catch (Exception e) { }
+		try { this_Data2.put(thisSet.getDouble("DailyRain")); } catch (Exception e) { }
         }
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
+		.put("data2", this_Data2)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
         return this_Glob;

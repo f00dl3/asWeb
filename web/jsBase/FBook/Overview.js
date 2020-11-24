@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -182,13 +182,16 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     }
     pTable += "</tr></tbody></table>";
     bubble += pTable + "<p>" +
+		"<div id='tmphld'></div>" +
             "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a><br/>" +
-//		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a>" +
-            "<a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><div class='th_sm_med'><canvas id='fenwY'></canvas></div></a>" +
+		"<div class='table'><div class='tr'>" +
+//		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' />" +
+            "<span class='td'><a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='fwY'></canvas></div></a></span>" +
 //            "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
 //            "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
-            "<a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><div class='th_sm_med'><canvas id='fenwR'></canvas></div></a>" +
-            "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
+            "<span class='td'><a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='fwR'></canvas></div></a></span>" +
+//            "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
+		"</div></div>" + 
                        "<p>";
     var wTable = "<table><thead><tr>";
     for (var i = 0; i < wCols.length; i++) {
@@ -210,9 +213,9 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     wTable += "</tbody></table>";
     bubble += wTable + "</div></div>";
     dojo.byId("HoldWorth").innerHTML = bubble;
-//	ch_get_FinENW_All_A("enwAllHolder", "thumb");
-	ch_get_FinENW_Year_A("fenwY", "thumb");
-	ch_get_FinENW_All_R("fenwR", "thumb");
+	ch_get_FinENW_All_A("enwAllHolder", "thumb");
+	ch_get_FinENW_Year_A("fwY", "thumb");
+	ch_get_FinENW_All_R("fwR", "thumb");
 }
 
 function getOverviewData() {
@@ -281,17 +284,6 @@ function putOverview(finGlob) {
     genOverviewStock(stockData, eTrade);
     //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
-}
-
-function putOverviewSmall(holder) {
-	let rData = "<div class='UPop'><button style='UButton'>Rapid Worth</button>" +
-		"<div class='UPopO'>" +
-		"<div id='rwcHolder'><canvas id='rwcChart'></canvas></div>" +
-		"<div id='extraDataHolder'></div>" +
-		"</div>" +
-		"</div>";
-	dojo.byId(holder).innerHTML = rData;
-	ch_get_FinENW_All_R("rwcChart", "thumb");
 }
 
 function setSavingsAdd(formData) {

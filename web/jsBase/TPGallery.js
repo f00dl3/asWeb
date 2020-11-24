@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 17 Apr 2018
-Updated: 5 Apr 2020
+Updated: 24 Nov 2020
  */
 
 var maxListing = 5000;
@@ -284,9 +284,11 @@ function populateNimsBox(nsData) {
 		"<strong>TP Image Count: </strong>" + countTotal + "<br/>" +
 		"<strong>TP Unindexed: </strong>" + countUnindexed + "<br/>" +
 		"<strong>TP Indexed: </strong>" + countIndexed + "<br/>" +
-		"<strong>Adds Today: </strong>" + addsToday +
+		"<strong>Adds Today: </strong>" + addsToday + "<br/>" +
+		"<a href='" + doCh('3', 'msByDate', null) + " target='xCh'><div class='ch_small'><canvas id='msByDateHolder'></canvas></div></a>" +
 		"</div></div>";
-	dojo.byId("TPNimsDataHolder").innerHTML = rData;	
+	dojo.byId("TPNimsDataHolder").innerHTML = rData;
+	ch_get_msByDate("msByDateHolder", "thumb");	
 }
 
 function populateSearchBox() {

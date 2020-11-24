@@ -9,10 +9,12 @@ function ch_chart_FinENW_All_A(container, result, type) {
 	let doLegend = true;
 	let doX = true;
 	let lbRadius = 1;
+	let doZoom = true;
 	if(type === "thumb") { 
 		doLegend = false;
 		doX = false; 
 		lbRadius = 0;
+		doZoom = false;
 	}
 	let resultJ = JSON.parse(result);
 	let aLabels_orig = resultJ.labels;
@@ -51,7 +53,7 @@ function ch_chart_FinENW_All_A(container, result, type) {
 		},
 		options: {
 			elements: {
-				line: { borderWidth: 1, tension: 0 },
+				line: { borderWidth: lbRadius, tension: 0 },
 				point: { radius: lbRadius }
 			},
 			legend: {
@@ -70,7 +72,7 @@ function ch_chart_FinENW_All_A(container, result, type) {
 			plugins: {
 				zoom: {
 					zoom: {
-						enabled: true
+						enabled: doZoom
 					}
 				}
 			}
@@ -168,10 +170,12 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 	let doLegend = true;
 	let doX = true;
 	let lbRadius = 1;
+	let doZoom = true;
 	if(type === "thumb") { 
 		doLegend = false;
 		doX = false; 
 		lbRadius = 0;
+		doZoom = false;
 	}
 	let aLabels = resultJ.labels;
 	let aData = resultJ.data;
@@ -208,7 +212,7 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 		},
 		options: {
 			elements: {
-				line: { borderWidth: 1, tension: 0 },
+				line: { borderWidth: lbRadius, tension: 0 },
 				point: { radius: lbRadius }
 			},
 			legend: {
@@ -225,7 +229,7 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 			plugins: {
 				zoom: {
 					zoom: {
-						enabled: true
+						enabled: doZoom
 					}
 				}
 			}

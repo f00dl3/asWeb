@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 package asWebRest.resource;
@@ -131,14 +131,14 @@ public class ChartResource extends ServerResource {
                 case "FinanceOverviewCharts":
                 	WealthGrowth wg = new WealthGrowth();
                     genericCharts = false;
-                    JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
+                    //JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
                     //JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     //JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
                     JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
                     //JSONArray svals = getStockAction.getStockHistory(dbc);
                     JSONArray wealth = wg.generateProjections(dbc);
                     //JSONObject stockGlob_DJI = fin.getStockChart(svals, "^DJI");
-                    JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");
+                    //JSONObject enw_GlobA = fin.getFinEnw(enw_RawA, "All", "A");
                     //JSONObject enw_GlobY = fin.getFinEnw(enw_RawY, "Year", "T");
                     //JSONObject enw_GlobYL = fin.getFinEnw(enw_RawY, "Year", "L");
                     //JSONObject enw_GlobYF = fin.getFinEnw(enw_RawY, "Year", "F");
@@ -149,7 +149,7 @@ public class ChartResource extends ServerResource {
                     //try { dynChart.LineChart(enw_GlobYF); returnData += "Chart generated - Est Net Worth Year F!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobYL); returnData += "Chart generated - Est Net Worth Year L!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobR); returnData += "Chart generated - Est Net Worth Rapid!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(wGlob); returnData += "Chart generated - Wealth!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(stockGlob_DJI); returnData += "Chart generated - Stocks DJI!\n"; } catch (Exception e) { e.printStackTrace(); } 
@@ -157,16 +157,16 @@ public class ChartResource extends ServerResource {
                  
                 case "FitnessCharts":
                     genericCharts = false;
-                    qParams.add(argsInForm.getFirstValue("XDT1"));
-                    qParams.add(argsInForm.getFirstValue("XDT2"));
-                    JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(dbc, qParams);
-                    JSONArray jsonResultArray = getFitnessAction.getChWeightR(dbc, qParams);
-                    Fitness fitness = new Fitness();
-                    JSONObject calChGlob = fitness.getCalCh(jraCalorieRange);
-                    JSONObject sleepGlob = fitness.getSleepCh(jsonResultArray);
+                    //qParams.add(argsInForm.getFirstValue("XDT1"));
+                    //qParams.add(argsInForm.getFirstValue("XDT2"));
+                    //JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(dbc, qParams);
+                    //JSONArray jsonResultArray = getFitnessAction.getChWeightR(dbc, qParams);
+                    //Fitness fitness = new Fitness();
+                    //JSONObject calChGlob = fitness.getCalCh(jraCalorieRange);
+                    //JSONObject sleepGlob = fitness.getSleepCh(jsonResultArray);
                     //JSONObject wgtChGlob = fitness.getWeightCh(jsonResultArray);
-                    try { dynChart.LineChart(calChGlob); returnData += "Chart generated - CalorieRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
-                    try { dynChart.LineChart(sleepGlob); returnData += "Chart generated - SleepRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    //try { dynChart.LineChart(calChGlob); returnData += "Chart generated - CalorieRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    //try { dynChart.LineChart(sleepGlob); returnData += "Chart generated - SleepRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     //try { dynChart.LineChart(wgtChGlob); returnData += "Chart generated - WeightRange!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
                     
@@ -215,9 +215,9 @@ public class ChartResource extends ServerResource {
 
                 case "MediaServerCharts":
                     genericCharts = false;
-                    JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
-                    JSONObject msGlob = ms.getByDate(msbd);
-                    try { dynChart.LineChart(msGlob); returnData += "Chart generated - MediaServer By Date!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    //JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
+                    //JSONObject msGlob = ms.getByDate(msbd);
+                    //try { dynChart.LineChart(msGlob); returnData += "Chart generated - MediaServer By Date!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
 
                 case "RedditStatCharts":

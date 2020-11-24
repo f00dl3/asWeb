@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 21 Nov 2020
+Updated: 23 Nov 2020
  */
 
 var myHeight = 67;
@@ -216,12 +216,13 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
 
 
 function getWeightChart(inXdt1, inXdt2) {
-    aniPreload("on");
+    //aniPreload("on");
     var xdt1, xdt2;
     if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
     if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
     populateFitnessChart("jFree", xdt1, xdt2);
-    var thePostData = "doWhat=FitnessCharts&XDT1=" + xdt1 + "&XDT2=" + xdt2;
+    /*
+	var thePostData = "doWhat=FitnessCharts&XDT1=" + xdt1 + "&XDT2=" + xdt2;
     var xhArgs = {
         preventCache: true,
         url: getResource("Chart"),
@@ -236,7 +237,8 @@ function getWeightChart(inXdt1, inXdt2) {
             showNotice("xhrGet for Fitness Charts FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
         }
     };
-    dojo.xhrPost(xhArgs);
+    dojo.xhrPost(xhArgs); 
+	*/
 }
 
 function processFitnessAll(dataIn, autoMpg) {
@@ -379,8 +381,9 @@ function processFitnessAll(dataIn, autoMpg) {
 }
 
 function populateCalorieChart() {
-    var rData = "<a href='" + doCh("j", "CalorieRange", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "CalorieRange", "th") + "'/></a>";
+    var rData = "<a href='" + doCh("3", "CalorieRange", null) + "' target='pChart'><div class='ch_large'><canvas id='calChHold'></canvas></div></a>";
     dojo.byId("CalorieChartHolder").innerHTML = rData;
+	ch_get_CalorieRange("calChHold", "thumb");
 }
 
 function populateFitnessChart(chartSource, xdt1, xdt2) {
@@ -406,7 +409,7 @@ function populateFitnessChart(chartSource, xdt1, xdt2) {
         case "jFree":
             tElement = "<div class='trafcam'>" +
                     "<div class='UPopNM'>" +
-                    "<div id='wrccHolder'><canvas class='ch_large' id='wrcHolder'></canvas></div>" +
+                    "<div id='wrccHolder' class='ch_large'><canvas id='wrcHolder'></canvas></div>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
                     "<a href='" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
@@ -422,8 +425,9 @@ function populateFitnessChart(chartSource, xdt1, xdt2) {
 }
 
 function populateSleepChart() {
-    var rData = "<a href='" + doCh("j", "SleepRange", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "SleepRange", "th") + "'/></a>";
+    var rData = "<a href='" + doCh("3", "SleepRange", null) + "' target='pChart'><div class='ch_large'><canvas id='sleepChHold'></canvas></div></a>";
     dojo.byId("SleepChartHolder").innerHTML = rData;
+	ch_get_SleepRange("sleepChHold", "thumb");
 }
 
 function populateSearchBox() {

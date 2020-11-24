@@ -55,7 +55,7 @@ function displayMediaServer() {
 }
 
 function getByDateChart(target) {
-    var timeout = getRefresh("long");
+    /* var timeout = getRefresh("long");
     aniPreload("on");
     var thePostData = { "doWhat": "MediaServerCharts" };
     require(["dojo/request"], function(request) {
@@ -65,14 +65,14 @@ function getByDateChart(target) {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    aniPreload("off");
+                    aniPreload("off"); */
                     putByDateChart(target);
-                },
+                /* },
                 function(error) { 
                     aniPreload("off");
                     window.alert("request for MediaServer by Day FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
-    });
+    }); */
 }
 
 function getIndex(target) {
@@ -218,10 +218,11 @@ function playDbxFile(formData) {
 }
 
 function putByDateChart(target) {
-	var rData = "<a href='" + doCh("j", "msByDate", null) + "' target='mCh'>" +
-		"<img class='ch_small' src='" + doCh("j", "msByDate", "th") + "'/>" +
+	var rData = "<a href='" + doCh("3", "msByDate", null) + "' target='mCh'>" +
+		"<div class='ch_large'><canvas id='msbdHolder'></canvas></div>" +
 		"</a>";
 	dojo.byId(target).innerHTML = rData;
+	ch_get_msByDate("msbdHolder", "thumb");
 }
 
 function putFileResults(msData, hitCount, matchLimitHit) {

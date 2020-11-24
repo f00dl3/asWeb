@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 console.log("DBG: loaded charts3.js"); 
@@ -19,6 +19,7 @@ $(document).ready(function() {
 	let container = "ChartCanvas";
 	let type = "full";
 	switch(doAction) {
+		case "CalorieRange.png": ch_get_CalorieRange(container, type); break;
 		case "ffxivGilWorthByDay.png": ch_get_ffxivGilWorthByDay(container, type); break;
 		case "ffxivQuestsByDay.png": ch_get_ffxivQuestsByDay(container, type); break;
 		case "FinENW_All_A.png": ch_get_FinENW_All_A(container, type); break;
@@ -26,7 +27,9 @@ $(document).ready(function() {
 		case "FinENW_Year_F.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_L.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_T.png": ch_get_FinENW_Year_A(container, type); break;
+		case "msByDate.png": ch_get_msByDate(container, type); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
+		case "SleepRange.png": ch_get_SleepRange(container, type); break;
 		case "ObsJSONPrecipRateH.png": ch_get_ObsJSONPrecipRateH(container, type); break;
 		case "ObsJSONTempH.png": ch_get_ObsJSONTempH(container, type); break;
 		case "WeightRange.png": ch_get_WeightRange(container, type); break;

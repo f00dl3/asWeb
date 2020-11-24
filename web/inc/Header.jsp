@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    22 Nov 2020
+    Updated:    24 Nov 2020
     Author     : astump
 --%>
 
@@ -36,6 +36,7 @@
     };
     
     String[] chart3Scripts = {
+   		"Charts/Entertainment",
    		"Charts/Ffxiv",
    		"Charts/Finance",
 		"Charts/Fitness",
@@ -45,6 +46,7 @@
     };
     
     String[] etScripts = {
+    	"Charts/Entertainment",
     	"Charts/Ffxiv",
         "Entertain/ChicagoSeries",
         "Entertain/Cooking",

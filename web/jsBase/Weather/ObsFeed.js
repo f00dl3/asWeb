@@ -131,8 +131,14 @@ function getObsDataMerged(targetDiv, displayType) {
         timeout: timeOutMilli,
         load: function(data) {
             var lastData;
-            var theData = JSON.parse(data.wxObsNow[0].jsonSet);
-            var nowObsId = data.wxObsNow[0].ObsID;
+            var theData = null;
+		var nowObsId = null;
+		try { 
+			theData = JSON.parse(data.wxObsNow[0].jsonSet);
+			nowObsId = data.wxObsNow[0].ObsID;
+		} catch (err) { 
+			console.log(err.message()); 
+		}
             if(isSet(data.wxObsM1H[0])) { lastData = JSON.parse(data.wxObsM1H[0].jsonSet); } else { lastData = theData; }
             var indoorObs = data.indoorObs;
             switch(displayType) {
@@ -492,8 +498,8 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
             //"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
-			"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><div class='th_sm_med'><canvas id='jsonTempH_Holder'></canvas></div></a>" + 
-			"<a href='" + doCh("3", "ObsJSONPrecipRateH", "th") + "' target='pChart'><div class='th_sm_med'><canvas id='jsonPrecipRateH_Holder'></canvas></div></a>" + 
+			"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTempH_Holder'></canvas></div></a>" + 
+			"<a href='" + doCh("3", "ObsJSONPrecipRateH", "th") + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPrecipRateH_Holder'></canvas></div></a>" + 
             "</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +

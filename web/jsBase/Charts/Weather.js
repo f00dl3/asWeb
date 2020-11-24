@@ -18,8 +18,10 @@ function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
+	let aData2 = resultJ.data2.reverse();
 	aLabels = trimArray(aLabels, limit);
 	aData = trimArray(aData, limit);
+	aData2 = trimArray(aData2, limit);
 	var ctx = document.getElementById(container).getContext('2d');
 	var chart = null;
 	chart = new Chart(ctx, {
@@ -27,7 +29,8 @@ function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: 'Rate', borderColor: 'green', backgroundColor: 'darkgreen', data: aData }
+				{ label: 'Rate', borderColor: 'green', backgroundColor: 'darkgreen', data: aData },
+				{ label: 'Daily', borderColor: 'lightblue',  data: aData2 }
 			]
 		},
 		options: {
@@ -62,11 +65,13 @@ function ch_get_ObsJSONPrecipRateH_Update(chart, pData) {
 		let resultJ = JSON.parse(result);
 		let tLabel = resultJ.labels[0];
 		let tData = resultJ.data[0];
+		let tData2 = resultJ.data2[0];
 		let currentLabel = chart.data.labels[chart.data.labels.length-1];
 		if(tLabel === currentLabel) {
 		} else {
 			chart.data.labels.push(tLabel);
 			chart.data.datasets[0].data.push(tData);
+			chart.data.datasets[1].data.push(tData2);
 			chart.update();
 			chart.data.labels.shift();
 			chart.data.datasets.forEach((ds) => {

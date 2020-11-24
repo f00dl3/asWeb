@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 package asWebRest.resource;
@@ -20,14 +20,17 @@ import org.restlet.resource.ServerResource;
 import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
+import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
+import asWebRest.chartHelpers.MediaServer;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
+import asWebRest.dao.MediaServerDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.Chart3Helpers;
 import asWebRest.secure.WUndergroundBeans;
@@ -54,11 +57,13 @@ public class Chart3Resource extends ServerResource {
         Ffxiv ffxiv = new Ffxiv();
 		Finance fin = new Finance();
 		Fitness fitness = new Fitness();
+		MediaServer ms = new MediaServer();
         Weather wx = new Weather();
 
         GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
 		GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
+        GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
 
         JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
@@ -78,7 +83,14 @@ public class Chart3Resource extends ServerResource {
         if(doWhat != null) {
         	
             switch (doWhat) {    
-            
+
+	 			case "CalorieRange": 
+	                qParams.add(argsInForm.getFirstValue("XDT1"));
+	                qParams.add(argsInForm.getFirstValue("XDT2"));
+                    JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(dbc, qParams);
+	                returnData = fitness.getCalCh(jraCalorieRange).toString();
+	                break;
+                
 	 			case "ffxivGilWorthByDay":
 	                JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);        
 	 				returnData = ffxiv.getGilWorthByDate(gbd_Raw).toString();
@@ -96,6 +108,11 @@ public class Chart3Resource extends ServerResource {
 		 		case "FinENW_Year_A":
 	    			returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString();
 	    			break;
+	    			
+		 		case "msByDate":
+                    JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
+                    returnData = ms.getByDate(msbd).toString();
+		 			break;
 
 		 		case "ObsJSONPrecipRateH":
                     returnData = wx.getObsJsonPrecipRate(wxObsBa2, stationIdHome).toString();
@@ -104,7 +121,14 @@ public class Chart3Resource extends ServerResource {
 		 		case "ObsJSONTempH":
                     returnData = wx.getObsJsonTemps(wxObsBa2, stationIdHome).toString();
 	    			break;
-    			
+
+	 			case "SleepRange": 
+	                qParams.add(argsInForm.getFirstValue("XDT1"));
+	                qParams.add(argsInForm.getFirstValue("XDT2"));
+                    JSONArray jraSleepRange = getFitnessAction.getChWeightR(dbc, qParams);
+	                returnData = fitness.getSleepCh(jraSleepRange).toString();
+	                break;
+	                
 		 		case "WeightRange": 
                     qParams.add(argsInForm.getFirstValue("XDT1"));
                     qParams.add(argsInForm.getFirstValue("XDT2"));
