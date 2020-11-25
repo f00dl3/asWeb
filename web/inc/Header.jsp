@@ -129,6 +129,7 @@
     };
     
     String[] tpScripts = {
+	"Charts/Entertainment",
         "Entertain/Gallery"
     };
     

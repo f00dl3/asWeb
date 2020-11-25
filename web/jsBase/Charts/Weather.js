@@ -1,20 +1,55 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
+
+let limit = 512;
+
+function ch_chart_ObsJSONHumidityH(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels.reverse();
+	let aData = resultJ.data.reverse();
+	aLabels = trimArray(aLabels, limit);
+	aData = trimArray(aData, limit);
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{ label: 'Humidity', borderColor: 'lightlbue', backgroundColor: "blue", data: aData }
+			]
+		},
+		options: {
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
+			scales: {
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]
+			}
+		}
+	});
+}
+
+function ch_get_ObsJSONHumidityH(container, type) {
+	let pData = { "doWhat": "ObsJSONHumidityH" };
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_ObsJSONHumidityH(container, result, type, pData);
+  	});
+}
 
 function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 	let doLegend = true;
 	let doX = true;
 	let lbRadius = 1;
-	if(type === "thumb") { 
-		doLegend = false;
-		doX = false; 
-		lbRadius = 0;
-	}
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
 	let timeout = getRefresh("semiRapid");
-	let limit = 512;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
@@ -34,19 +69,11 @@ function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 			]
 		},
 		options: {
-			elements: {
-				point: { radius: lbRadius }
-			},
-			legend: {
-				display: doLegend
-			},
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
 			scales: {
-				xAxes: [
-					{ ticks: { display: doX } }
-				],
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return value + "\"/h"; } } }
-				]
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "\"/h"; } } } ]
 			}
 		}
 	});
@@ -82,18 +109,50 @@ function ch_get_ObsJSONPrecipRateH_Update(chart, pData) {
 	});
 }
 
+function ch_chart_ObsJSONPressureH(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels.reverse();
+	let aData2 = resultJ.data2.reverse();
+	aLabels = trimArray(aLabels, limit);
+	aData2 = trimArray(aData2, limit);
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{ label: 'Pressure', borderColor: 'orange', backgroundColor: "red", data: aData2 }
+			]
+		},
+		options: {
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
+			scales: {
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]
+			}
+		}
+	});
+}
+
+function ch_get_ObsJSONPressureH(container, type) {
+	let pData = { "doWhat": "ObsJSONPressureH" };
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_ObsJSONPressureH(container, result, type, pData);
+  	});
+}
 
 function ch_chart_ObsJSONTempH(container, result, type, pData) {
 	let doLegend = true;
 	let doX = true;
 	let lbRadius = 1;
-	if(type === "thumb") { 
-		doLegend = false;
-		doX = false; 
-		lbRadius = 0;
-	}
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
 	let timeout = getRefresh("semiRapid");
-	let limit = 512;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
@@ -113,19 +172,11 @@ function ch_chart_ObsJSONTempH(container, result, type, pData) {
 			]
 		},
 		options: {
-			elements: {
-				point: { radius: lbRadius }
-			},
-			legend: {
-				display: doLegend
-			},
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
 			scales: {
-				xAxes: [
-					{ ticks: { display: doX } }
-				],
-				yAxes: [ 
-					{ ticks: { callback: function(value, index, values) { return value + "F"; } } }
-				]
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "F"; } } } ]
 			}
 		}
 	});
@@ -159,4 +210,45 @@ function ch_get_ObsJSONTempH_Update(chart, pData) {
 			chart.update();
 		}
 	});
+}
+
+function ch_chart_ObsJSONWindH(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels.reverse();
+	let aData = resultJ.data.reverse();
+	let aData2 = resultJ.data2.reverse();
+	aLabels = trimArray(aLabels, limit);
+	aData = trimArray(aData, limit);
+	aData2 = trimArray(aData2, limit);
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{ label: 'Speed', borderColor: 'yellow', backgroundColor: "gold", data: aData },
+				{ label: 'Gusts', borderColor: 'orange', data: aData2 },
+			]
+		},
+		options: {
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
+			scales: {
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]
+			}
+		}
+	});
+}
+
+function ch_get_ObsJSONWindH(container, type) {
+	let pData = { "doWhat": "ObsJSONWindH" };
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_ObsJSONWindH(container, result, type, pData);
+  	});
 }

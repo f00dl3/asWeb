@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 16 May 2018
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 package asWebRest.chartHelpers;
@@ -442,21 +442,25 @@ public class Weather {
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         this_Props
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
                 .put("chartName", this_ChartName).put("chartFileName", "ObsJSONPres")
                 .put("sName", "Pressure").put("sColor", "Green")
+                .put("s2Name", "PressureIn").put("sColor", "Yellow")
                 .put("xLabel", "Date").put("yLabel", "Mililbars");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             this_Labels.put(thisObject.getString("GetTime"));
             JSONObject thisSet = new JSONObject(thisObject.getString("jsonSet"));
             try { this_Data.put(thisSet.getDouble("Pressure")); } catch (Exception e) { }
+            try { this_Data2.put(thisSet.getDouble("PressureIn")); } catch (Exception e) { }
         }
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
+                .put("data2", this_Data2)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
         return this_Glob;
@@ -526,6 +530,7 @@ public class Weather {
         JSONObject this_Props = new JSONObject();
         JSONArray this_Labels = new JSONArray();
         JSONArray this_Data = new JSONArray();
+        JSONArray this_Data2 = new JSONArray();
         JSONArray this_Debug = new JSONArray();
         String tChartName = "ObsJSONWind";
         if(stationId.contentEquals(wub.getStation_Home())) { tChartName = tChartName + "H"; }
@@ -533,6 +538,7 @@ public class Weather {
                 .put("dateFormat", "yyyy-MM-dd HH:mm:ss")
                 .put("chartName", this_ChartName).put("chartFileName", tChartName)
                 .put("sName", "Wind").put("sColor", "Yellow")
+                .put("s2Name", "Wind").put("s2Color", "Gusts")
                 .put("xLabel", "Date").put("yLabel", "MPH");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
@@ -543,6 +549,7 @@ public class Weather {
         this_Glob
                 .put("labels", this_Labels)
                 .put("data", this_Data)
+                .put("data2", this_Data2)
                 .put("props", this_Props)
                 .put("debug", this_Debug);
         return this_Glob;

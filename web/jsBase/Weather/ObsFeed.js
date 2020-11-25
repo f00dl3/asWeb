@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 23 Nov 2020
+Updated: 24 Nov 2020
  */
 
 function getChartDataWXHome() {
@@ -456,7 +456,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
         returnData += "<br/>Fetch timestamp: " + getTime;
     } else {
         var diffTemperature = parseInt(homeData.Temperature) - parseInt(lastData.Temperature);
-        var diffDewpoint = parseInt(theData.Dewpoint) - parseInt(lastData.Dewpoint);
+        var diffDewpoint = parseInt(homeData.Dewpoint) - parseInt(lastData.Dewpoint);
         var diffPressure = parseFloat(homeData.PressureIn) - parseFloat(lastData.PressureIn);
         var gustLine = "";
         var shortTime = wxShortTime(homeData.TimeString);
@@ -484,31 +484,25 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPopO'>";
         if(isSet(theData.Visibility)) { returnData += "Visibility: " + theData.Visibility + " mi.<br/>"; }
         returnData += "Pressure: " + animatedArrow(diffPressure) + homeData.PressureIn + " \"<br/>" +
-            "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'>" +
-            "<img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
+            "<a href='" + doCh("j", "ObsJSONPres", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONPres", "th") + "'/></a>" +
+			"<a href='" + doCh("3", "ObsJSONPressureH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPressureH_Holder'></canvas></div></a>" + 
             "</div></div><br/>" +
-            "<div class='UPop'>" + animatedArrow(diffTemperature) + 
-            "<span style='" + styleTemp(homeData.Temperature) + "'>" + Math.round(homeData.Temperature) + "F</span>" +
-            "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
+            "<div class='UPop'>" + 
+			animatedArrow(diffTemperature) + "<span style='" + styleTemp(homeData.Temperature) + "'>" + Math.round(homeData.Temperature) + "F</span>" +
+			"| " +
+            animatedArrow(diffDewpoint) +  "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
+            "<div class='UPopO'>(" + diffTemperature + "F/min, " + diffDewpoint + "F/min)<br/>" +
             "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            "<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
-            "</div></div> | " +
-            "<div class='UPop'>" + animatedArrow(diffDewpoint) + 
-            "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
-            "<div class='UPopO'>(" + diffTemperature + "F/min)<br/>" +
-            "<a href='" + doCh("j", "ObsJSONTemp", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTemp", "th") + "'/></a>" +
-            //"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONTempH", "th") + "'/></a>" +
-			"<a href='" + doCh("3", "ObsJSONTempH", "th") + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTempH_Holder'></canvas></div></a>" + 
-			"<a href='" + doCh("3", "ObsJSONPrecipRateH", "th") + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPrecipRateH_Holder'></canvas></div></a>" + 
-            "</div></div>" +
+			"<a href='" + doCh("3", "ObsJSONTempH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTempH_Holder'></canvas></div></a>" + 
+			"</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
             "<a href='" + doCh("j", "ObsJSONHumi", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumi", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONHumiH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONHumiH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONHumidityH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonHumidityH_Holder'></canvas></div></a>" + 
             "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
             "<div class='UPopO'>" +
-		"<button style='" + styleTemp(homeData.Temperature) + "'>KOJC " + theData.Temperature + "</button><br/>" +
+			"<button style='" + styleTemp(theData.Temperature) + "'>KOJC " + theData.Temperature + "</button><br/>" +
             "<button style='" + styleTemp(indoorTemp) + "'>Serv " + indoorTemp + "F</button><br/>" +
             /* "<button style='" + styleTemp(indoorPiTemp) + "'>Pi1 " + indoorPiTemp + "F</button><br/>" +
             "<button style='" + styleTemp(indoorPi2Temp) + "'>Pi2" + indoorPi2Temp + "F</button><br/>" + */
@@ -522,21 +516,26 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             returnData += "<span style='" + styleWind(homeData.WindSpeed) + "'>" + homeData.WindSpeed + " mph</span>" + gustLine +
             "<div class='UPopO'>" + 
             "<a href='" + doCh("j", "ObsJSONWind", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWind", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "ObsJSONWindH", "th") + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "ObsJSONWindH", "th") + "'/></a>" +
+            "<a href='" + doCh("3", "ObsJSONWindH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonWindH_Holder'></canvas></div></a>" + 
             "</div></div><br/>";
         }
         if(isSet(homeData.DailyRain)) {
         	returnData += "<div class='UPop'>Precip: " + homeData.DailyRain + "\"" +
-			"<div class='UPopO'>Rate: " + homeData.RainRate + "\"/hr</div>" +
-			"</div>";
+			"<div class='UPopO'>Rate: " + homeData.RainRate + "\"/hr<br/>" +
+			"<a href='" + doCh("3", "ObsJSONPrecipRateH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPrecipRateH_Holder'></canvas></div></a>" +
+			"</div></div>";
         }
         if(isSet(theData.CAPE)) { returnData += "<br/>CAPE: <span style=" + styleCape(theData.CIN) + ">" + theData.CIN + "</span><br/>"; }
         console.log(convertToJsDate(shortTime));
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;
+	ch_get_ObsJSONHumidityH("jsonHumidityH_Holder", "thumb");
 	ch_get_ObsJSONTempH("jsonTempH_Holder", "thumb");
+	ch_get_ObsJSONPressureH("jsonPressureH_Holder", "thumb");
 	ch_get_ObsJSONPrecipRateH("jsonPrecipRateH_Holder", "thumb");
+	ch_get_ObsJSONPressureH("jsonPressureH_Holder", "thumb");
+	ch_get_ObsJSONWindH("jsonWindH_Holder", "thumb");
 }
 
 function processUpperAirData(baseEle, stationData, noWrappingDiv) {

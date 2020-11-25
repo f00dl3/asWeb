@@ -101,26 +101,19 @@ public class Chart3Resource extends ServerResource {
 	 				returnData = ffxiv.getByDate(qbd_Raw).toString();
 	 				break;
 				
-	 			case "FinENW_All_A":
-	 				returnData = fin.getFinEnw(enw_RawA, "All", "A").toString();
-	 				break;
-
-		 		case "FinENW_Year_A":
-	    			returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString();
-	    			break;
+	 			case "FinENW_All_A": returnData = fin.getFinEnw(enw_RawA, "All", "A").toString(); break;
+		 		case "FinENW_Year_A": returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString(); break;
 	    			
 		 		case "msByDate":
                     JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
                     returnData = ms.getByDate(msbd).toString();
 		 			break;
 
-		 		case "ObsJSONPrecipRateH":
-                    returnData = wx.getObsJsonPrecipRate(wxObsBa2, stationIdHome).toString();
-	    			break;
-	    			
-		 		case "ObsJSONTempH":
-                    returnData = wx.getObsJsonTemps(wxObsBa2, stationIdHome).toString();
-	    			break;
+		 		case "ObsJSONHumidityH": returnData = wx.getObsJsonHumidity(wxObsBa2, stationIdHome).toString(); break;	    			
+		 		case "ObsJSONPrecipRateH": returnData = wx.getObsJsonPrecipRate(wxObsBa2, stationIdHome).toString(); break;			
+		 		case "ObsJSONPressureH": returnData = wx.getObsJsonPressure(wxObsBa2, stationIdHome).toString(); break;
+		 		case "ObsJSONTempH": returnData = wx.getObsJsonTemps(wxObsBa2, stationIdHome).toString(); break;
+		 		case "ObsJSONWindH": returnData = wx.getObsJsonWind(wxObsBa2, stationIdHome).toString(); break;
 
 	 			case "SleepRange": 
 	                qParams.add(argsInForm.getFirstValue("XDT1"));
@@ -136,9 +129,7 @@ public class Chart3Resource extends ServerResource {
                     returnData = fitness.getWeightCh(jsonResultArray).toString();
                     break;
                     
-    		 	case "wRapid": case "testData": default:
-        			returnData = fin.getFinEnw(enw_RawR, "All", "R").toString();
-        			break;
+    		 	case "wRapid": case "testData": default: returnData = fin.getFinEnw(enw_RawR, "All", "R").toString(); break;
                       
             }
             

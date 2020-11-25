@@ -285,7 +285,7 @@ function populateNimsBox(nsData) {
 		"<strong>TP Unindexed: </strong>" + countUnindexed + "<br/>" +
 		"<strong>TP Indexed: </strong>" + countIndexed + "<br/>" +
 		"<strong>Adds Today: </strong>" + addsToday + "<br/>" +
-		"<a href='" + doCh('3', 'msByDate', null) + " target='xCh'><div class='ch_small'><canvas id='msByDateHolder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "msByDate", null) + "' target='xCh'><div class='ch_small'><canvas id='msByDateHolder'></canvas></div></a>" +
 		"</div></div>";
 	dojo.byId("TPNimsDataHolder").innerHTML = rData;
 	ch_get_msByDate("msByDateHolder", "thumb");	

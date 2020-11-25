@@ -30,8 +30,11 @@ $(document).ready(function() {
 		case "msByDate.png": ch_get_msByDate(container, type); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
 		case "SleepRange.png": ch_get_SleepRange(container, type); break;
+		case "ObsJSONHumidityH.png": ch_get_ObsJSONHumidityH(container, type); break;
 		case "ObsJSONPrecipRateH.png": ch_get_ObsJSONPrecipRateH(container, type); break;
+		case "ObsJSONPressureH.png": ch_get_ObsJSONPressureH(container, type); break;
 		case "ObsJSONTempH.png": ch_get_ObsJSONTempH(container, type); break;
+		case "ObsJSONWindH.png": ch_get_ObsJSONWindH(container, type); break;
 		case "WeightRange.png": ch_get_WeightRange(container, type); break;
 		default: initCharts3(); break;
 	}	

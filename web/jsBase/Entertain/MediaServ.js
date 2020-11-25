@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Mar 2018
-Updated: 30 Apr 2019
+Updated: 24 Nov 2020
  */
 
 var gSearchString;
@@ -219,7 +219,7 @@ function playDbxFile(formData) {
 
 function putByDateChart(target) {
 	var rData = "<a href='" + doCh("3", "msByDate", null) + "' target='mCh'>" +
-		"<div class='ch_large'><canvas id='msbdHolder'></canvas></div>" +
+		"<div class='ch_small'><canvas id='msbdHolder'></canvas></div>" +
 		"</a>";
 	dojo.byId(target).innerHTML = rData;
 	ch_get_msByDate("msbdHolder", "thumb");

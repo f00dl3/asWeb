@@ -505,11 +505,11 @@ public class ChartResource extends ServerResource {
                 	String stationIdHome = wub.getStation_Home();
                     JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
                     JSONObject obsJsonHumidity_Glob = wx.getObsJsonHumidity(wxObsBa2, stationIdHome);
-                    JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBa2, stationIdHome);
-                    JSONObject obsJsonWind_Glob = wx.getObsJsonWind(wxObsBa2, stationIdHome);                 
+                    //JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBa2, stationIdHome);
+                    //JSONObject obsJsonWind_Glob = wx.getObsJsonWind(wxObsBa2, stationIdHome);                 
                     try { dynChart.LineChart(obsJsonHumidity_Glob); returnData += "Chart generated - obsJsonHumi Home!\n"; } catch (Exception e) { e.printStackTrace(); }    
-                    try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp Home!\n"; } catch (Exception e) { e.printStackTrace(); }     
-                    try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind Home!\n"; } catch (Exception e) { e.printStackTrace(); }   
+                    //try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp Home!\n"; } catch (Exception e) { e.printStackTrace(); }     
+                    //try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind Home!\n"; } catch (Exception e) { e.printStackTrace(); }   
                 	break;
                     
                 case "WxXml":
