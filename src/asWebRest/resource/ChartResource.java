@@ -1,46 +1,46 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 24 Nov 2020
+Updated: 28 Nov 2020
  */
 
 package asWebRest.resource;
 
-import asWebRest.action.GetFfxivAction;
+//import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetLogsAction;
-import asWebRest.action.GetMediaServerAction;
+//import asWebRest.action.GetMediaServerAction;
 import asWebRest.action.GetSnmpAction;
-import asWebRest.action.GetStockAction;
-import asWebRest.action.GetUtilityUseAction;
+//import asWebRest.action.GetStockAction;
+//import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
-import asWebRest.chartHelpers.Ffxiv;
+//import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
-import asWebRest.chartHelpers.Fitness;
+//import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.GpsData;
 import asWebRest.chartHelpers.Logs;
-import asWebRest.chartHelpers.MediaServer;
+//import asWebRest.chartHelpers.MediaServer;
 import asWebRest.chartHelpers.SysMonNote3;
 import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.SysMonPi;
 import asWebRest.chartHelpers.SysMonPi2;
 import asWebRest.chartHelpers.SysMonRouter;
 import asWebRest.chartHelpers.SysMonUVM2;
-import asWebRest.chartHelpers.Utilities;
+//import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
-import asWebRest.dao.FfxivDAO;
+//import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.LogsDAO;
-import asWebRest.dao.MediaServerDAO;
+//import asWebRest.dao.MediaServerDAO;
 import asWebRest.dao.SnmpDAO;
-import asWebRest.dao.StockDAO;
-import asWebRest.dao.UtilityUseDAO;
+//import asWebRest.dao.StockDAO;
+//import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.DynChartX;
 import asWebRest.hookers.WealthGrowth;
-import asWebRest.secure.WUndergroundBeans;
+//import asWebRest.secure.WUndergroundBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 import java.sql.Connection;
@@ -65,21 +65,21 @@ public class ChartResource extends ServerResource {
         boolean genericCharts = false;
         
         DynChartX dynChart = new DynChartX();
-        Ffxiv ffxiv = new Ffxiv();
-        GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
+        //Ffxiv ffxiv = new Ffxiv();
+        //GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
         GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
-        GetStockAction getStockAction = new GetStockAction(new StockDAO());
-        GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
+        //GetStockAction getStockAction = new GetStockAction(new StockDAO());
+        //GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
-        GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
+        //GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
         
         Finance fin = new Finance();
         Weather wx = new Weather();
         Logs log = new Logs();
-        MediaServer ms = new MediaServer();
+        //MediaServer ms = new MediaServer();
                     
         MyDBConnector mdb = new MyDBConnector();
         Connection dbc = null;
@@ -134,7 +134,7 @@ public class ChartResource extends ServerResource {
                     //JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
                     //JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
                     //JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
-                    JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
+                    //JSONArray svChart_Raw = getFinanceAction.getSavingChart(dbc, null);
                     //JSONArray svals = getStockAction.getStockHistory(dbc);
                     JSONArray wealth = wg.generateProjections(dbc);
                     //JSONObject stockGlob_DJI = fin.getStockChart(svals, "^DJI");
@@ -143,14 +143,14 @@ public class ChartResource extends ServerResource {
                     //JSONObject enw_GlobYL = fin.getFinEnw(enw_RawY, "Year", "L");
                     //JSONObject enw_GlobYF = fin.getFinEnw(enw_RawY, "Year", "F");
                     //JSONObject enw_GlobR = fin.getFinEnw(enw_RawR, "All", "R");
-                    JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
+                    //JSONObject svChart_Glob = fin.getSavingsOpt(svChart_Raw);
                     JSONObject wGlob = fin.getWealthGrowth(wealth);
                     //try { dynChart.LineChart(enw_GlobY); returnData += "Chart generated - Est Net Worth Year!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobYF); returnData += "Chart generated - Est Net Worth Year F!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobYL); returnData += "Chart generated - Est Net Worth Year L!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobR); returnData += "Chart generated - Est Net Worth Rapid!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(enw_GlobA); returnData += "Chart generated - Est Net Worth All!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(svChart_Glob); returnData += "Chart generated - Savings!\n"; } catch (Exception e) { e.printStackTrace(); }
                     try { dynChart.LineChart(wGlob); returnData += "Chart generated - Wealth!\n"; } catch (Exception e) { e.printStackTrace(); }
                     //try { dynChart.LineChart(stockGlob_DJI); returnData += "Chart generated - Stocks DJI!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     break;
@@ -407,25 +407,25 @@ public class ChartResource extends ServerResource {
                     
                 case "Utilities":
                     genericCharts = false;
-                    Utilities util = new Utilities();
-                    JSONArray gasMcf_Raw = getUtilityUseAction.getChUseGas(dbc);
-                    JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
-                    JSONArray ph_Raw = getUtilityUseAction.getChCellUse(dbc);
-                    JSONArray webData_Raw = getUtilityUseAction.getChWebData(dbc);
-                    JSONObject gasMcf_Glob = util.getGasMcf(gasMcf_Raw);
-                    JSONObject kWhU_Glob = util.getKWhU(kWhU_Raw);
-                    JSONObject phData_Glob = util.getPhData(ph_Raw);
-                    JSONObject phMin_Glob = util.getPhMin(ph_Raw);
-                    JSONObject phMms_Glob = util.getPhMms(ph_Raw);
-                    JSONObject phText_Glob = util.getPhText(ph_Raw);
-                    JSONObject webData_Glob = util.getWebData(webData_Raw);
-                    try { dynChart.LineChart(gasMcf_Glob); returnData += "Chart generated - Gas!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(kWhU_Glob); returnData += "Chart generated - Electricity!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(phData_Glob); returnData += "Chart generated - Phone Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(phMin_Glob); returnData += "Chart generated - Phone Minutes!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(phMms_Glob); returnData += "Chart generated - Phone MMS Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(phText_Glob); returnData += "Chart generated - Phone Text Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
-                    try { dynChart.LineChart(webData_Glob); returnData += "Chart generated - Web Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //Utilities util = new Utilities();
+                    //JSONArray gasMcf_Raw = getUtilityUseAction.getChUseGas(dbc);
+                    //JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
+                    //JSONArray ph_Raw = getUtilityUseAction.getChCellUse(dbc);
+                    //JSONArray webData_Raw = getUtilityUseAction.getChWebData(dbc);
+                    //JSONObject gasMcf_Glob = util.getGasMcf(gasMcf_Raw);
+                    //JSONObject kWhU_Glob = util.getKWhU(kWhU_Raw);
+                    //JSONObject phData_Glob = util.getPhData(ph_Raw);
+                    //JSONObject phMin_Glob = util.getPhMin(ph_Raw);
+                    //JSONObject phMms_Glob = util.getPhMms(ph_Raw);
+                    //JSONObject phText_Glob = util.getPhText(ph_Raw);
+                    //JSONObject webData_Glob = util.getWebData(webData_Raw);
+                    //try { dynChart.LineChart(gasMcf_Glob); returnData += "Chart generated - Gas!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(kWhU_Glob); returnData += "Chart generated - Electricity!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(phData_Glob); returnData += "Chart generated - Phone Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(phMin_Glob); returnData += "Chart generated - Phone Minutes!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(phMms_Glob); returnData += "Chart generated - Phone MMS Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(phText_Glob); returnData += "Chart generated - Phone Text Messages!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //try { dynChart.LineChart(webData_Glob); returnData += "Chart generated - Web Data Use!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                     
                 case "WeatherCf6OverviewCharts":
@@ -501,13 +501,13 @@ public class ChartResource extends ServerResource {
                     break;
                     
                 case "WxObsChartsHome":
-                	WUndergroundBeans wub = new WUndergroundBeans();
-                	String stationIdHome = wub.getStation_Home();
-                    JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
-                    JSONObject obsJsonHumidity_Glob = wx.getObsJsonHumidity(wxObsBa2, stationIdHome);
+                	//WUndergroundBeans wub = new WUndergroundBeans();
+                	//String stationIdHome = wub.getStation_Home();
+                    //JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
+                    //JSONObject obsJsonHumidity_Glob = wx.getObsJsonHumidity(wxObsBa2, stationIdHome);
                     //JSONObject obsJsonTemps_Glob = wx.getObsJsonTemps(wxObsBa2, stationIdHome);
                     //JSONObject obsJsonWind_Glob = wx.getObsJsonWind(wxObsBa2, stationIdHome);                 
-                    try { dynChart.LineChart(obsJsonHumidity_Glob); returnData += "Chart generated - obsJsonHumi Home!\n"; } catch (Exception e) { e.printStackTrace(); }    
+                    //try { dynChart.LineChart(obsJsonHumidity_Glob); returnData += "Chart generated - obsJsonHumi Home!\n"; } catch (Exception e) { e.printStackTrace(); }    
                     //try { dynChart.LineChart(obsJsonTemps_Glob); returnData += "Chart generated - obsJsonTemp Home!\n"; } catch (Exception e) { e.printStackTrace(); }     
                     //try { dynChart.LineChart(obsJsonWind_Glob); returnData += "Chart generated - obsJsonWind Home!\n"; } catch (Exception e) { e.printStackTrace(); }   
                 	break;

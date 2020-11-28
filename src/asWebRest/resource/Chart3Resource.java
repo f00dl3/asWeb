@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 24 Nov 2020
+Updated: 28 Nov 2020
  */
 
 package asWebRest.resource;
@@ -21,16 +21,19 @@ import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetMediaServerAction;
+import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.MediaServer;
+import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.MediaServerDAO;
+import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.Chart3Helpers;
 import asWebRest.secure.WUndergroundBeans;
@@ -58,6 +61,7 @@ public class Chart3Resource extends ServerResource {
 		Finance fin = new Finance();
 		Fitness fitness = new Fitness();
 		MediaServer ms = new MediaServer();
+        Utilities util = new Utilities();
         Weather wx = new Weather();
 
         GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
@@ -65,10 +69,12 @@ public class Chart3Resource extends ServerResource {
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetMediaServerAction getMediaServerAction = new GetMediaServerAction(new MediaServerDAO());
         GetWeatherAction getWeatherAction = new GetWeatherAction(new WeatherDAO());
+        GetUtilityUseAction getUtilityUseAction = new GetUtilityUseAction(new UtilityUseDAO());
 
         JSONArray enw_RawA = getFinanceAction.getEnwChart(dbc, "All");
         JSONArray enw_RawY = getFinanceAction.getEnwChart(dbc, "Year");
         JSONArray enw_RawR = getFinanceAction.getEnwChartRapid(dbc);
+        JSONArray ph_Raw = getUtilityUseAction.getChCellUse(dbc);
         JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
 
     	WUndergroundBeans wub = new WUndergroundBeans();
@@ -90,6 +96,11 @@ public class Chart3Resource extends ServerResource {
                     JSONArray jraCalorieRange = getFitnessAction.getChCaloriesR(dbc, qParams);
 	                returnData = fitness.getCalCh(jraCalorieRange).toString();
 	                break;
+	                
+	 			case "CellData": returnData = util.getPhData(ph_Raw).toString(); break;	                
+	 			case "CellMin": returnData = util.getPhMin(ph_Raw).toString(); break;   
+	 			case "CellMMS": returnData = util.getPhMms(ph_Raw).toString(); break;
+	 			case "CellText": returnData = util.getPhText(ph_Raw).toString(); break;
                 
 	 			case "ffxivGilWorthByDay":
 	                JSONArray gbd_Raw = getFfxivAction.getFfxivGilByDate(dbc);        
@@ -101,8 +112,13 @@ public class Chart3Resource extends ServerResource {
 	 				returnData = ffxiv.getByDate(qbd_Raw).toString();
 	 				break;
 				
-	 			case "FinENW_All_A": returnData = fin.getFinEnw(enw_RawA, "All", "A").toString(); break;
-		 		case "FinENW_Year_A": returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString(); break;
+	 			case "FinENW_All_A":
+	 				returnData = fin.getFinEnw(enw_RawA, "All", "A").toString();
+	 				break;
+	 				
+		 		case "FinENW_Year_A": 
+		 			returnData = fin.getFinEnw(enw_RawY, "Year", "A").toString();
+		 			break;
 	    			
 		 		case "msByDate":
                     JSONArray msbd = getMediaServerAction.getIndexedByDate(dbc);
@@ -122,6 +138,21 @@ public class Chart3Resource extends ServerResource {
 	                returnData = fitness.getSleepCh(jraSleepRange).toString();
 	                break;
 	                
+	 			case "UseElecD":
+                    JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
+                    returnData = util.getKWhU(kWhU_Raw).toString();
+	 				break;
+	 				
+	 			case "UseGas":
+                    JSONArray gasMcf_Raw = getUtilityUseAction.getChUseGas(dbc);
+                    returnData += util.getGasMcf(gasMcf_Raw).toString();
+	 				break;
+
+	 			case "WebData":
+                    JSONArray webData_Raw = getUtilityUseAction.getChWebData(dbc);
+                    returnData = util.getWebData(webData_Raw).toString(); 
+                    break;	    
+	 			
 		 		case "WeightRange": 
                     qParams.add(argsInForm.getFirstValue("XDT1"));
                     qParams.add(argsInForm.getFirstValue("XDT2"));

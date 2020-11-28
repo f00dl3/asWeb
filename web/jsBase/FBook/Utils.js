@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Apr 2018
-Updated: 21 Oct 2020
+Updated: 28 Nov 2020
  */
 
 function displayUtils() {
@@ -19,7 +19,7 @@ function displayUtils() {
 }
 
 function getUtils() {
-    var thePostData = {
+    /* var thePostData = {
         "doWhat": "Utilities"
     };
     require(["dojo/request"], function(request) {
@@ -29,14 +29,14 @@ function getUtils() {
                 handleAs: "text"
             }).then(
                 function(data) {
-                    aniPreload("off");
+                    aniPreload("off"); */
                     getUtilsData();
-                },
+                /* },
                 function(error) { 
                     aniPreload("off");
                     console.log("request for Util Charts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
-    });    
+    });    */
 }
 
 function getUtilsData() {
@@ -68,8 +68,8 @@ function getUtilsData() {
 
 function putUtils(uuRelations, settingC, settingH, uuData) {
     var rData = "<h3>Utility Use</h3>";
-    rData += "<a href='" + doCh("j", "UseElecD", null) + "' target='newCh'><img class='ch_small' src='" + doCh("j", "UseElecD", "th") + "'/></a>" +
-            "<a href='" + doCh("j", "UseGas", null) + "' target='newCh'><img class='ch_small' src='" + doCh("j", "UseGas", "th") + "'/></a>";
+    rData += "<a href='" + doCh("3", "UseElecD", null) + "' target='newCh'><div class='ch_small'><canvas id='uedChart'></canvas></div></a>" +
+            "<a href='" + doCh("3", "UseGas", null) + "' target='newCh'><div class='ch_small'><canvas id='ugasChart'></canvas></div></a>";
     var rTable = "<table><thead><tr><th>Month<br/>(A. Tmp.)</th>" +
             "<th><div class='UPop'>Elec<br/>kWh<div class='UPopO'>";
     var coolTable = "<table><thead><tr>" +
@@ -97,11 +97,11 @@ function putUtils(uuRelations, settingC, settingH, uuData) {
     });
     heatTable += "</tbody></table>";
     rTable += heatTable + "</div></div></th>" +
-            "<th><span class='UChart'>Cell<br/>MIN<div class='UChartO'><a href='" + doCh("j", "CellMin", null) + "'><img class='ch_large' src='" + doCh("j", "CellMin", "th") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>Txt<div class='UChartO'><a href='" + doCh("j", "CellText", null) + "'><img class='ch_large' src='" + doCh("j", "CellTxt", "th") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>MMS<div class='UChartO'><a href='" + doCh("j", "CellMMS", null) + "'><img class='ch_large' src='" + doCh("j", "CellMMS", "th") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Cell<br/>Data<div class='UChartO'><a href='" + doCh("j", "CellData", null) + "'><img class='ch_large' src='" + doCh("j", "CellData", "th") + "' /></a></div></span></th>" +
-            "<th><span class='UChart'>Web<br/>Data<div class='UChartO'><a href='" + doCh("j", "WebData", null) + "'><img class='ch_large' src='" + doCh("j", "WebData", "th") + "' /></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>Min.<div class='UChartO'><a href='" + doCh("3", "CellMin", null) + "'><div class='ch_small'><canvas id='cellMinChart'></canvas></div></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>Text<div class='UChartO'><a href='" + doCh("3", "CellText", null) + "'><div class='ch_small'><canvas id='cellTextChart'></canvas></div></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>MMS<div class='UChartO'><a href='" + doCh("3", "CellMMS", null) + "'><div class='ch_small'><canvas id='cellMMSChart'></canvas></div></a></div></span></th>" +
+            "<th><span class='UChart'>Cell<br/>Data<div class='UChartO'><a href='" + doCh("3", "CellData", null) + "'><div class='ch_small'><canvas id='cellDataChart'></canvas></div></a></div></span></th>" +
+            "<th><span class='UChart'>Web<br/>Data<div class='UChartO'><a href='" + doCh("3", "WebData", null) + "'><div class='ch_small'><canvas id='webDataChart'></canvas></div></a></div></span></th>" +
             "</tr></thead><tbody>";
     Object.keys(uuData).sort().reverse().forEach(function (mo) {
         var dayEleCost = (uuData[mo].kWh_Avg * elecCost);
@@ -121,4 +121,11 @@ function putUtils(uuRelations, settingC, settingH, uuData) {
     rTable += "</tbody></table>";
     rData += rTable;
     dojo.byId("FBUUse").innerHTML = rData;
+	ch_get_UseElecD("uedChart", "thumb");
+	ch_get_UseGas("ugasChart", "thumb");
+	ch_get_CellMin("cellMinChart", "thumb");
+	ch_get_CellMMS("cellMMSChart", "thumb");
+	ch_get_CellData("cellDataChart", "thumb");
+	ch_get_CellText("cellTextChart", "thumb");
+	ch_get_WebData("webDataChart", "thumb");
 }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 24 Nov 2020
+Updated: 28 Nov 2020
  */
 
 console.log("DBG: loaded charts3.js"); 
@@ -20,6 +20,10 @@ $(document).ready(function() {
 	let type = "full";
 	switch(doAction) {
 		case "CalorieRange.png": ch_get_CalorieRange(container, type); break;
+		case "CellData.png": ch_get_CellData(container, type); break;
+		case "CellMin.png": ch_get_CellMin(container, type); break;
+		case "CellMMS.png": ch_get_CellMMS(container, type); break;
+		case "CellText.png": ch_get_CellText(container, type); break;
 		case "ffxivGilWorthByDay.png": ch_get_ffxivGilWorthByDay(container, type); break;
 		case "ffxivQuestsByDay.png": ch_get_ffxivQuestsByDay(container, type); break;
 		case "FinENW_All_A.png": ch_get_FinENW_All_A(container, type); break;
@@ -35,6 +39,9 @@ $(document).ready(function() {
 		case "ObsJSONPressureH.png": ch_get_ObsJSONPressureH(container, type); break;
 		case "ObsJSONTempH.png": ch_get_ObsJSONTempH(container, type); break;
 		case "ObsJSONWindH.png": ch_get_ObsJSONWindH(container, type); break;
+		case "UseElecD.png": ch_get_UseElecD(container, type); break;
+		case "UseGas.png": ch_get_UseGas(container, type); break;
+		case "WebData.png": ch_get_WebData(container, type); break;
 		case "WeightRange.png": ch_get_WeightRange(container, type); break;
 		default: initCharts3(); break;
 	}	

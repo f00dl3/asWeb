@@ -233,7 +233,7 @@ function getObsDataMergedAndHome(targetDiv, displayType) {
                     break;
                 case "static":
                     getChartDataWXOJ(stationId);
-                    getChartDataWXHome();
+                    //getChartDataWXHome();
                     processObservationDataV2(nowObsId, theData, lastData, indoorObs, targetDiv, homeData, homeObsId);
                     $(targetDiv).html(data.WxObs);
                     break;

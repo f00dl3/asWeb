@@ -66,9 +66,9 @@ function genOverviewSavings(svData, svBk, stockData) {
     var bubble = "<div class='UBox'>Savings<br/><span>$" + autoUnits(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Saving</strong><br/>" +
 		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong>" +
-		" (Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>" +
+		" (Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>"; /* +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
-            "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>";
+            "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>" */
     var bForm = "<form id='SavingsBookForm'>" +
             "<button id='SvBkAddButton' type='submit' name='SvSetAdd'>Add Savings</button>" +
             "<table><thead><tr>";

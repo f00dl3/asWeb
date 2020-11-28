@@ -1,2 +1,3 @@
 Fix joined query
 Response to moist
+chart.js to images using document.getelementbyid.... .toDataURL();
