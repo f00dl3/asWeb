@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 19 Jul 2020
+Updated: 28 Nov 2020
  */
 
 package asWebRest.chartHelpers;
@@ -22,6 +22,12 @@ public class Finance {
         JSONArray bill_Data4 = new JSONArray();
         JSONArray bill_Data5 = new JSONArray();
         JSONArray bill_Data6 = new JSONArray();
+        JSONArray bill_ele = new JSONArray();
+        JSONArray bill_gas = new JSONArray();
+        JSONArray bill_wat = new JSONArray();
+        JSONArray bill_swr = new JSONArray();
+        JSONArray bill_web = new JSONArray();
+        JSONArray bill_pho = new JSONArray();
         bill_Props
                 .put("dateFormat", "yyyy-MM")
                 .put("chartName", bill_Name).put("chartFileName", "FinBills")
@@ -41,6 +47,12 @@ public class Finance {
             bill_Data4.put(thisObject.getDouble("TRA"));
             bill_Data5.put(thisObject.getDouble("WEB") + thisObject.getDouble("PHO"));
             bill_Data6.put(thisObject.getDouble("Gym") + thisObject.getDouble("Other"));
+            bill_ele.put(thisObject.getDouble("ELE"));
+            bill_gas.put(thisObject.getDouble("GAS"));
+            bill_wat.put(thisObject.getDouble("WAT"));
+            bill_swr.put(thisObject.getDouble("SWR"));
+            bill_web.put(thisObject.getDouble("WEB"));
+            bill_pho.put(thisObject.getDouble("PHO"));
         }
         bill_Glob
                 .put("labels", bill_Labels)
@@ -50,6 +62,12 @@ public class Finance {
                 .put("data4", bill_Data4)
                 .put("data5", bill_Data5)
                 .put("data6", bill_Data6)
+                .put("ele", bill_ele)
+                .put("gas", bill_gas)
+                .put("wat", bill_wat)
+                .put("swr", bill_swr)
+                .put("web", bill_web)
+                .put("pho", bill_pho)
                 .put("props", bill_Props);
         return bill_Glob;
     }

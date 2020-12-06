@@ -1,4 +1,4 @@
-#asWxBotPy - Python Discord bot build P.5
+#asWxBotPy - Python Discord bot build P.6
 
 import os
 import discord
@@ -23,6 +23,9 @@ async def on_message(message):
 		return
 	if message.content == '!pHelp':
 		response = "Build 5 of asWxBotPy. Testing phase. Some snarky stuff being built in!"
+		await message.channel.send(response)
+	if ("dome") in (message.content).lower():
+		response = "https://cdn.discordapp.com/attachments/623111643924135938/782953385551724544/image0-4.png"
 		await message.channel.send(response)
 	if ("pain" or "sciatic") in (message.content).lower():
 		response = "Man, I feel your pain!"

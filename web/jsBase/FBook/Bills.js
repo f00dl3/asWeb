@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Bills.js Split: 4 Apr 2018
-Updated: 21 Oct 2020
+Updated: 28 Nov 2020
  */
 
 function displayBills() {
@@ -20,8 +20,7 @@ function displayBills() {
 }
 
 function getBillChart() {
-    var billChData = "<a href='" + doCh("j", "FinBills", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinBills", "th") + "'/></a>";
-    var thePostData = {
+    /* var thePostData = {
         "doWhat": "FinanceBills"
     };
     require(["dojo/request"], function(request) {
@@ -38,7 +37,7 @@ function getBillChart() {
                     aniPreload("off");
                     console.log("request for Bill Chart FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
-    });    
+    }); */
 }
 
 function getBills() {
@@ -63,6 +62,7 @@ function getBills() {
 }
 
 function putBills(billData) {
+    var billChData = "<a href='" + doCh("3", "Bills", null) + "' target='pChart'><div class='ch_large'><canvas id='billChHolder'></canvas></div></a>";
     var rData = "<h3>Bills</h3>";
     var bCols = [
         "Month",
@@ -77,7 +77,7 @@ function putBills(billData) {
         "OTH",
         "Total"
     ];
-    var bCharts = "<div id='billChHolder'>Loading Chart...</div>";
+    var bCharts = billChData;
     rData += bCharts + "<p>";
     var bTable = "<table>" +
             "<thead><tr>";
@@ -104,5 +104,6 @@ function putBills(billData) {
     rData += bTable;
     dojo.byId("FBBills").innerHTML = rData;
     getBillChart();
+	ch_get_Bills("billChHolder", "thumb");   
 }
 

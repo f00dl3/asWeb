@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 28 Nov 2020
+Updated: 6 Dec 2020
  */
 
 package asWebRest.resource;
@@ -90,6 +90,11 @@ public class Chart3Resource extends ServerResource {
         	
             switch (doWhat) {    
 
+	            case "Bills":
+                    JSONArray bill_Raw = getFinanceAction.getBills(dbc);
+                    returnData = fin.getBillCh(bill_Raw).toString();
+	            	break;
+	            	
 	 			case "CalorieRange": 
 	                qParams.add(argsInForm.getFirstValue("XDT1"));
 	                qParams.add(argsInForm.getFirstValue("XDT2"));
@@ -161,6 +166,31 @@ public class Chart3Resource extends ServerResource {
                     break;
                     
     		 	case "wRapid": case "testData": default: returnData = fin.getFinEnw(enw_RawR, "All", "R").toString(); break;
+
+                case "WxObsCharts":
+                    String stationId = "KOJC";
+                    String wxocType = "";
+                    try {
+                    	wxocType = argsInForm.getFirstValue("type");
+                        stationId = argsInForm.getFirstValue("stationId");
+                        inParams.add(0, argsInForm.getFirstValue("startTime"));
+                        inParams.add(1, argsInForm.getFirstValue("endTime"));
+                        inParams.add(2, argsInForm.getFirstValue("order"));
+                        inParams.add(3, argsInForm.getFirstValue("limit"));
+                        inParams.add(4, argsInForm.getFirstValue("stationId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(wc.isSet(stationId)) {
+                        JSONArray wxObsBS = getWeatherAction.getObsJsonByStation(dbc, inParams);
+	                    switch(wxocType) {
+	                    	case "humidity": returnData = wx.getObsJsonHumidity(wxObsBS, stationId).toString(); break;
+	                    	case "pressure": returnData = wx.getObsJsonPressure(wxObsBS, stationId).toString(); break;
+	                    	case "wind": returnData = wx.getObsJsonWind(wxObsBS, stationId).toString(); break;
+	                    	case "temp": default: returnData = wx.getObsJsonTemps(wxObsBS, stationId).toString(); break;
+	                    }
+                    }
+                    break;
                       
             }
             

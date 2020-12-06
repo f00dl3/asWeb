@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 18 Nov 2020
+Updated: 6 Dec 2020
  */
 
 var annMaint = 841.92;
@@ -368,6 +368,11 @@ function inRange(value, low, high) {
 	if (value > low && value <= high) { return value; }
 	else { return !value; }
 }
+
+function isEmpty(varIn) { 
+	return jQuery.isEmptyObject(varIn); 
+}
+
 
 function isSet(varIn) {
     if(typeof varIn !== 'undefined' && varIn) {

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 22 Oct 2020
+Updated: 5 Dec 2020
 */
 
 package asWebRest.dao;
@@ -516,11 +516,16 @@ public class FinanceDAO {
     }
     
     private JSONArray nwga(Connection dbc) {
+	final String basicMath = "(AsLiq+AsFix+Life+Credits)-Debts";
         final String query_FBook_NWGA = "SELECT" + 
-        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 7 day)-1)*100 as p7day," + 
-        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 30 day)-1)*100 as p30day," + 
-        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 90 day)-1)*100 as p90day," + 
-        		" SUM(((SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT (AsLiq+AsFix+Life+Credits)-Debts FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 365 day)-1)*100 as p1year," + 
+        		" SUM(((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 7 day)-1)*100 as p7day," + 
+			" SUM((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1)-(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 7 day)) as g7day," +
+        		" SUM(((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 30 day)-1)*100 as p30day," + 
+			" SUM((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1)-(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 30 day)) as g30day," +
+        		" SUM(((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 90 day)-1)*100 as p90day," + 
+			" SUM((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1)-(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 90 day)) as g90day," + 
+        		" SUM(((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1))/(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 365 day)-1)*100 as p1year," + 
+			" SUM((SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1)-(SELECT " + basicMath + " FROM Core.FB_ENWT WHERE AsOf=current_date-1 - interval 365 day)) as g1year," +
         		" FORMAT((SELECT AVG(Growth) FROM Core.FB_ENWT),2) AS GrowthAvg;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -532,6 +537,10 @@ public class FinanceDAO {
                 	.put("p30day", resultSet.getDouble("p30day"))
                 	.put("p90day", resultSet.getDouble("p90day"))
                 	.put("p1year", resultSet.getDouble("p1year"))
+			.put("g7day" , resultSet.getDouble("g7day"))
+			.put("g30day", resultSet.getDouble("g30day"))
+			.put("g90day", resultSet.getDouble("g90day"))
+			.put("g1year", resultSet.getDouble("g1year"))
                 	.put("GrowthAvg", resultSet.getDouble("GrowthAvg"));
                 tContainer.put(tObject);
             }

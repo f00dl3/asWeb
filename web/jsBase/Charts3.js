@@ -1,8 +1,10 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 28 Nov 2020
+Updated: 6 Dec 2020
  */
+
+let pOpts = {};
 
 console.log("DBG: loaded charts3.js"); 
 
@@ -19,6 +21,7 @@ $(document).ready(function() {
 	let container = "ChartCanvas";
 	let type = "full";
 	switch(doAction) {
+		case "Bills.png": ch_get_Bills(container, type); break;
 		case "CalorieRange.png": ch_get_CalorieRange(container, type); break;
 		case "CellData.png": ch_get_CellData(container, type); break;
 		case "CellMin.png": ch_get_CellMin(container, type); break;
@@ -34,10 +37,14 @@ $(document).ready(function() {
 		case "msByDate.png": ch_get_msByDate(container, type); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
 		case "SleepRange.png": ch_get_SleepRange(container, type); break;
+		case "ObsJSONHumidity.png": ch_get_ObsJSONHumidity(container, type, pOpts); break;
 		case "ObsJSONHumidityH.png": ch_get_ObsJSONHumidityH(container, type); break;
 		case "ObsJSONPrecipRateH.png": ch_get_ObsJSONPrecipRateH(container, type); break;
+		case "ObsJSONPressure.png": ch_get_ObsJSONPressure(container, type, pOpts); break;
 		case "ObsJSONPressureH.png": ch_get_ObsJSONPressureH(container, type); break;
+		case "ObsJSONTemp.png": ch_get_ObsJSONTemp(container, type, pOpts); break;
 		case "ObsJSONTempH.png": ch_get_ObsJSONTempH(container, type); break;
+		case "ObsJSONWind.png": ch_get_ObsJSONWind(container, type, pOpts); break;
 		case "ObsJSONWindH.png": ch_get_ObsJSONWindH(container, type); break;
 		case "UseElecD.png": ch_get_UseElecD(container, type); break;
 		case "UseGas.png": ch_get_UseGas(container, type); break;

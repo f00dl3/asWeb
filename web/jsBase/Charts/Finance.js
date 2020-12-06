@@ -1,19 +1,19 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 23 Nov 2020
+Updated: 5 Dec 2020
  */
 
 function ch_chart_FinENW_All_A(container, result, type) {
 	let timeFormat = 'YYYY-MM-DD';
 	let doLegend = true;
 	let doX = true;
-	let lbRadius = 1;
+	let lbRadius = 0;
 	let doZoom = true;
 	if(type === "thumb") { 
 		doLegend = false;
 		doX = false; 
-		lbRadius = 0;
+		//lbRadius = 0;
 		doZoom = false;
 	}
 	let resultJ = JSON.parse(result);
@@ -169,12 +169,12 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 	let resultJ = JSON.parse(result);
 	let doLegend = true;
 	let doX = true;
-	let lbRadius = 1;
+	let lbRadius = 0;
 	let doZoom = true;
 	if(type === "thumb") { 
 		doLegend = false;
 		doX = false; 
-		lbRadius = 0;
+		//lbRadius = 0;
 		doZoom = false;
 	}
 	let aLabels = resultJ.labels;

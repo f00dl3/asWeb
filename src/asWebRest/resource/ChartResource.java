@@ -7,7 +7,7 @@ Updated: 28 Nov 2020
 package asWebRest.resource;
 
 //import asWebRest.action.GetFfxivAction;
-import asWebRest.action.GetFinanceAction;
+//import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetLogsAction;
 //import asWebRest.action.GetMediaServerAction;
@@ -30,7 +30,7 @@ import asWebRest.chartHelpers.SysMonUVM2;
 //import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
 //import asWebRest.dao.FfxivDAO;
-import asWebRest.dao.FinanceDAO;
+//import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.LogsDAO;
 //import asWebRest.dao.MediaServerDAO;
@@ -67,7 +67,7 @@ public class ChartResource extends ServerResource {
         DynChartX dynChart = new DynChartX();
         //Ffxiv ffxiv = new Ffxiv();
         //GetFfxivAction getFfxivAction = new GetFfxivAction(new FfxivDAO());
-        GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
+        //GetFinanceAction getFinanceAction = new GetFinanceAction(new FinanceDAO());
         GetFitnessAction getFitnessAction = new GetFitnessAction(new FitnessDAO());
         GetLogsAction getLogsAction = new GetLogsAction(new LogsDAO());
         GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
@@ -123,9 +123,9 @@ public class ChartResource extends ServerResource {
                     
                 case "FinanceBills":
                     genericCharts = false;
-                    JSONArray bill_Raw = getFinanceAction.getBills(dbc);
-                    JSONObject bill_Glob = fin.getBillCh(bill_Raw);
-                    try { dynChart.LineChart(bill_Glob); returnData += "Chart generated - Bills!\n"; } catch (Exception e) { e.printStackTrace(); }
+                    //JSONArray bill_Raw = getFinanceAction.getBills(dbc);
+                    //JSONObject bill_Glob = fin.getBillCh(bill_Raw);
+                    //try { dynChart.LineChart(bill_Glob); returnData += "Chart generated - Bills!\n"; } catch (Exception e) { e.printStackTrace(); }
                     break;
                 
                 case "FinanceOverviewCharts":

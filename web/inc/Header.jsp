@@ -36,6 +36,7 @@
     };
     
     String[] chart3Scripts = {
+     	"Charts/Bills",
    		"Charts/Entertainment",
    		"Charts/Ffxiv",
    		"Charts/Finance",
@@ -66,6 +67,7 @@
     };
     
     String[] finScripts = {
+        "Charts/Bills",
    		"Charts/Finance",
    		"Charts/Utils",
         "FBook/Overview",

@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 24 Nov 2020
+Updated: 5 Dec 2020
  */
 
 function actOnSavingsSubmit(event) {
@@ -65,8 +65,8 @@ function genOverviewSavings(svData, svBk, stockData) {
     var svBkCols = ["STID", "Date", "Description", "Debit", "Credit"];
     var bubble = "<div class='UBox'>Savings<br/><span>$" + autoUnits(svData.SBal) + "</span>" +
             "<div class='UBoxO'><strong>Saving</strong><br/>" +
-		"Combined: <strong>$" + Math.round(savingsWithSpillover) + "</strong>" +
-		" (Spillover: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>"; /* +
+		"Liquidity: <strong>$" + Math.round(savingsWithSpillover) + "</strong>" + /* <br/> +
+		" (Stocks: <strong>$" + Math.round(spilloverSavings) + "</strong>)<p/>" +
             "<a href='" + doCh("j", "FinSavings", null) + "' target='pChart'>" +
             "<img class='ch_large' src='" + doCh("j", "FinSavings", "th") + "'/></a>" */
     var bForm = "<form id='SavingsBookForm'>" +
@@ -166,10 +166,10 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
             "<div class='UBoxO'><strong>Estimated Net Worth</strong><br/>" +
             "Current estimate: <strong>$" + cnw1d_L + "</strong>" +
             "<br/><em>Now WMQY growth</em>: " +
-            	nwga.p7day.toFixed(1) + "/" + 
-            	nwga.p30day.toFixed(1) + "/" + 
-            	nwga.p90day.toFixed(1) + "/" + 
-            	nwga.p1year.toFixed(1) + "%" +
+            	"<div class='UPop'>" + nwga.p7day.toFixed(1) + "<div class='UPopO'>Change: $" + nwga.g7day.toFixed(1) + "K</div></div>/" + 
+            	"<div class='UPop'>" + nwga.p30day.toFixed(1) + "<div class='UPopO'>Change: $" + nwga.g30day.toFixed(1) + "K</div></div>/" + 
+            	"<div class='UPop'>" + nwga.p90day.toFixed(1) + "<div class='UPopO'>Change: $" + nwga.g90day.toFixed(1) + "K</div></div>/" + 
+            	"<div class='UPop'>" + nwga.p1year.toFixed(1) + "<div class='UPopO'>Change: $" + nwga.g1year.toFixed(1) + "K</div></div>%" +
             "<br/><em>3 month avg. growth</em>: " + nwga.GrowthAvg + "%"
             "<p><em>Projections (starting from last period.)</em>";
     var pTable = "<table><thead><tr>";
