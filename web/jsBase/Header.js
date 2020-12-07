@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 6 Dec 2020
+Updated: 7 Dec 2020
  */
 
 var annMaint = 841.92;
@@ -174,6 +174,7 @@ function doCh(type, dynVar, opts) {
             break;
         case "3": 
             dBack += getResource("Charts3") + "?doAction=" + chFileName + "&" + timestamp;
+			if(isSet(opts)) { dBack += "&inList=" + opts; }
             break;
     }
     return dBack;

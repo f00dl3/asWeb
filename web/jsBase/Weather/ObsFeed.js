@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 5 Mar 2018
-Updated: 6 Dec 2020
+Updated: 7 Dec 2020
  */
 
 function getChartDataWXHome() {
@@ -441,8 +441,7 @@ function processObservationData(nowObsId, theData, lastData, indoorObs, targetDi
 }
 
 function processObservationDataV2(nowObsId, theData, lastData, indoorObs, targetDiv, homeData, homeObsId) {
-	let pOpts = {};
-    if(theData === "") { console.log("ERROR fetching ThisObsData"); }
+   	if(theData === "") { console.log("ERROR fetching ThisObsData"); }
     if(lastData === "") { console.log("ERROR fetching LastObsData"); }
     var returnData = "";
     var theTemperature = homeData.Temperature;
@@ -451,6 +450,12 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
     var indoorTemp = Math.round(0.93 * conv2Tf(indoorObs[0].ExtTemp/1000));
     var indoorPiTemp = Math.round(indoorObs[1].ExtTemp);
     var indoorPi2Temp = Math.round(indoorObs[2].ExtTemp);
+	let pOpts = { 
+		"dateStart": getDate("hour", -72, "full"),
+		"dateEnd": getDate("hour", 0, "full"),
+ 		"station": stationId
+	};
+	let pOptsStr = pOpts.dateStart + "," + pOpts.dateEnd + "," + pOpts.station;
     if(!isSet(theTemperature)) {
         returnData += "<div id='LWObs'>";
         returnData += "<strong>WARNING! " + stationId + " [Obs] data unavailable!</strong>";
@@ -485,7 +490,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             "<div class='UPopO'>";
         if(isSet(theData.Visibility)) { returnData += "Visibility: " + theData.Visibility + " mi.<br/>"; }
         returnData += "Pressure: " + animatedArrow(diffPressure) + homeData.PressureIn + " \"<br/>" +
-            "<a href='" + doCh("3", "ObsJSONPressure", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPressure_Holder'></canvas></div></a>" +
+            "<a href='" + doCh("3", "ObsJSONPressure", pOptsStr) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPressure_Holder'></canvas></div></a>" +
 			"<a href='" + doCh("3", "ObsJSONPressureH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonPressureH_Holder'></canvas></div></a>" + 
             "</div></div><br/>" +
             "<div class='UPop'>" + 
@@ -493,12 +498,12 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
 			"| " +
             animatedArrow(diffDewpoint) +  "<span style='" + styleTemp(homeData.Dewpoint) + "'>" + Math.round(homeData.Dewpoint) + "F</span>" +
             "<div class='UPopO'>(" + diffTemperature + "F/min, " + diffDewpoint + "F/min)<br/>" +
-            "<a href='" + doCh("3", "ObsJSONTemp", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTemp_Holder'></canvas></div></a>" +
+            "<a href='" + doCh("3", "ObsJSONTemp", pOptsStr) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTemp_Holder'></canvas></div></a>" +
 			"<a href='" + doCh("3", "ObsJSONTempH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonTempH_Holder'></canvas></div></a>" + 
 			"</div></div>" +
             "<br/>RH: <div class='UPop'><span style='" + styleRh(homeData.RelativeHumidity) + "'>" + homeData.RelativeHumidity + "%" +
             "<div class='UPopO'>" +
-            "<a href='" + doCh("3", "ObsJSONHumidity", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonHumidity_Holder'></canvas></div></a>" +
+            "<a href='" + doCh("3", "ObsJSONHumidity", pOptsStr) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonHumidity_Holder'></canvas></div></a>" +
             "<a href='" + doCh("3", "ObsJSONHumidityH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonHumidityH_Holder'></canvas></div></a>" + 
             "</div></div></span>" +
             " (<div class='UPop'><span style='" + styleTemp(flTemp) + "'>" + flTemp + "F</span>" +
@@ -516,7 +521,7 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
             if(isSet(homeData.WindDegrees)) { returnData += windDirTxt(parseInt(homeData.WindDegrees)) + " at "; }
             returnData += "<span style='" + styleWind(homeData.WindSpeed) + "'>" + homeData.WindSpeed + " mph</span>" +
             "<div class='UPopO'>" + gustLine + "<br/>" +
-            "<a href='" + doCh("3", "ObsJSONWind", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonWind_Holder'></canvas></div></a>" +
+            "<a href='" + doCh("3", "ObsJSONWind", pOptsStr) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonWind_Holder'></canvas></div></a>" +
             "<a href='" + doCh("3", "ObsJSONWindH", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='jsonWindH_Holder'></canvas></div></a>" + 
             "</div></div><br/>";
         }
@@ -531,15 +536,15 @@ function processObservationDataV2(nowObsId, theData, lastData, indoorObs, target
     }
     returnData += "</div>";        
     dojo.byId(targetDiv).innerHTML = returnData;
-	ch_get_ObsJSONHumidity("jsonHumidity_Holder", "thumb", pOpts);
-	ch_get_ObsJSONHumidityH("jsonHumidityH_Holder", "thumb");
-	ch_get_ObsJSONTemp("jsonTemp_Holder", "thumb", pOpts);
-	ch_get_ObsJSONTempH("jsonTempH_Holder", "thumb");
 	ch_get_ObsJSONPressure("jsonPressure_Holder", "thumb", pOpts);
 	ch_get_ObsJSONPressureH("jsonPressureH_Holder", "thumb");
-	ch_get_ObsJSONPrecipRateH("jsonPrecipRateH_Holder", "thumb");
+	ch_get_ObsJSONTemp("jsonTemp_Holder", "thumb", pOpts);
+	ch_get_ObsJSONTempH("jsonTempH_Holder", "thumb");
+	ch_get_ObsJSONHumidity("jsonHumidity_Holder", "thumb", pOpts);
+	ch_get_ObsJSONHumidityH("jsonHumidityH_Holder", "thumb");
 	ch_get_ObsJSONWind("jsonWind_Holder", "thumb", pOpts);
 	ch_get_ObsJSONWindH("jsonWindH_Holder", "thumb");
+	ch_get_ObsJSONPrecipRateH("jsonPrecipRateH_Holder", "thumb");
 }
 
 function processUpperAirData(baseEle, stationData, noWrappingDiv) {

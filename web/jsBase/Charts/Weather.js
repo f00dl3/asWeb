@@ -170,7 +170,7 @@ function ch_chart_ObsJSONPressure(container, result, type, pData) {
 	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
-	let aData2 = resultJ.data2.reverse();
+	let aData = resultJ.data.reverse();
 	aLabels = trimArray(aLabels, limit);
 	aData = trimArray(aData, limit);
 	var ctx = document.getElementById(container).getContext('2d');
@@ -411,7 +411,7 @@ function ch_chart_ObsJSONWind(container, result, type, pData) {
 	});
 }
 
-function ch_get_ObsJSONWind(container, type) {
+function ch_get_ObsJSONWind(container, type, pOpts) {
     let dateOverrideStart = getDate("hour", -72, "full"); 
    	let dateOverrideEnd = getDate("hour", 0, "full");
 	let stationId = "KOJC";

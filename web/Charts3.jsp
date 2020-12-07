@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 6 Oct 2020
-    Updated: 21 Nov 2020
+    Updated: 7 Dec 2020
     Author     : astump
 --%>
 
@@ -21,16 +21,17 @@
     %>
     
     <script>
-        var doAction = "";
+        var doAction = "", inList = "";
     </script>
     
     <%
     if(wc.isSet(request.getParameter("doAction"))) { action = wc.basicInputFilter(request.getParameter("doAction")); }
-    if(wc.isSet(request.getParameter("inList"))) { action = wc.basicInputFilter(request.getParameter("inList")); }
+    if(wc.isSet(request.getParameter("inList"))) { inList = wc.basicInputFilter(request.getParameter("inList")); }
     %>
     
     <script>
         doAction = "<% out.print(action); %>";
+        inList = "<% out.print(inList); %>";
         console.log("DEBUG VARS: doAction='" + doAction + "', inList='" + inList + "'");
      </script>
 
