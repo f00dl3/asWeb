@@ -1,3 +1,3 @@
-Fix joined query
-Response to moist
+?Fix joined query
 chart.js to images using document.getelementbyid.... .toDataURL();
+Build date ranges to fitness, home station data

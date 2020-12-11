@@ -1,11 +1,17 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 23 Nov 2020
+Updated: 10 Dec 2020
  */
 
 var myHeight = 67;
 var strPlan = 2;
+let xdt1, xdt2;
+console.log("Setting xdt1 & xdt2 variables globally!");
+if(!isSet(xdt1)) { xdt1 = getDate("day", -365, "dateOnly"); }
+if(!isSet(xdt2)) { xdt2 = getDate("day", 0, "dateOnly"); }
+let pOpts = { xdt1: xdt1, xdt2: xdt2 };
+let pOptsStr = xdt1 + "," + xdt2;
 
 function colorCalories(tValue) {
     switch(tValue) {
@@ -134,10 +140,14 @@ function fitnessBubbles(bikeStats, overallStats, fitTot, crsm, rshoe, autoMpg, b
 function getFitnessAllData(doReload, inXdt1, inXdt2) {
     var timeout = 90 * 1000;
     aniPreload("on");
-    var xdt1, xdt2;
     var oYear = getDate("year", 0, "yearOnly");
-    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
-    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
+	console.log("Setting xdt1 & xdt2 variables inside getFitnessAllData()!");
+    if(isSet(inXdt1) && isSet(inXdt2)) {
+		xdt1 = inXdt1; 
+		xdt2 = inXdt2;
+		pOpts = { xdt1: inXdt1, xdt2: inXdt2 };
+		pOptsStr = inXdt1 + "," + inXdt2; 
+	}
     var thePostData = { 
     		"doWhat": "getAll",
     		"XDT1": xdt1,
@@ -169,6 +179,7 @@ function getFitnessAllData(doReload, inXdt1, inXdt2) {
 	                    data.bkInf[0],
 	                    data.yData[0]
 	                );
+					getWeightChart();
 	                aniPreload("off");
                 },
                 function(error) { 
@@ -215,12 +226,9 @@ function getMapLinkString(inDate, inType, inAct, commonFlag, mapType) {
 }
 
 
-function getWeightChart(inXdt1, inXdt2) {
+function getWeightChart() {
     //aniPreload("on");
-    var xdt1, xdt2;
-    if(isSet(inXdt1)) { xdt1 = inXdt1; } else { xdt1 = getDate("day", -365, "dateOnly"); }
-    if(isSet(inXdt2)) { xdt2 = inXdt2; } else { xdt2 = getDate("day", 0, "dateOnly"); }
-    populateFitnessChart("jFree", xdt1, xdt2);
+    populateFitnessChart("jFree");
     /*
 	var thePostData = "doWhat=FitnessCharts&XDT1=" + xdt1 + "&XDT2=" + xdt2;
     var xhArgs = {
@@ -381,14 +389,14 @@ function processFitnessAll(dataIn, autoMpg) {
 }
 
 function populateCalorieChart() {
-    var rData = "<a href='" + doCh("3", "CalorieRange", null) + "' target='pChart'><div class='ch_large'><canvas id='calChHold'></canvas></div></a>";
+	console.log("cal ch " + pOptsStr);
+    var rData = "<a href='" + doCh("3", "CalorieRange", pOptsStr) + "' target='pChart'><div class='ch_large'><canvas id='calChHold'></canvas></div></a>";
     dojo.byId("CalorieChartHolder").innerHTML = rData;
-	ch_get_CalorieRange("calChHold", "thumb");
+	ch_get_CalorieRange("calChHold", "thumb", pOpts);
 }
 
-function populateFitnessChart(chartSource, xdt1, xdt2) {
-	let inParams = xdt1 + "|" + xdt2;
-	console.log("DBG: inParams = " + inParams);
+function populateFitnessChart(chartSource) {
+	console.log("fit ch " + pOptsStr);
     var timestamp = getDate("day", 0, "timestamp");
     var tElement = "";
 	let postLoadChart = false;
@@ -412,7 +420,7 @@ function populateFitnessChart(chartSource, xdt1, xdt2) {
                     "<div id='wrccHolder' class='ch_large'><canvas id='wrcHolder'></canvas></div>" +
                     "<div class='UPopNMO'>" +
                     "<strong>Chart Type</strong><br/>" +
-                    "<a href='" + doCh("3", "WeightRange", null) + "' target='pChart'><button class='UButton'>Range</button></a>" +
+                    "<a href='" + doCh("3", "WeightRange", pOptsStr) + "' target='pChart'><button class='UButton'>Range</button></a>" +
                     //"<a href='" + getBasePath("old") + "/pChart/ch_Dynamic.php?DynVar=FitWeightAll' target='pChart'><button class='UButton'>Full</button></a>" +
                     "</div></div>" +
                     "</div>";
@@ -421,13 +429,14 @@ function populateFitnessChart(chartSource, xdt1, xdt2) {
     }
     
     dojo.byId("WeightChartHolder").innerHTML = tElement;
-	if(postLoadChart) { ch_get_WeightRange("wrcHolder", "thumb"); }
+	if(postLoadChart) { ch_get_WeightRange("wrcHolder", "thumb", pOpts); }
 }
 
 function populateSleepChart() {
-    var rData = "<a href='" + doCh("3", "SleepRange", null) + "' target='pChart'><div class='ch_large'><canvas id='sleepChHold'></canvas></div></a>";
+	console.log("slp ch " + pOptsStr);
+    var rData = "<a href='" + doCh("3", "SleepRange", pOptsStr) + "' target='pChart'><div class='ch_large'><canvas id='sleepChHold'></canvas></div></a>";
     dojo.byId("SleepChartHolder").innerHTML = rData;
-	ch_get_SleepRange("sleepChHold", "thumb");
+	ch_get_SleepRange("sleepChHold", "thumb", pOpts);
 }
 
 function populateSearchBox() {
@@ -467,7 +476,6 @@ function putRoute(formData) {
 }
 
 var initFitness = function(event) {
-    getWeightChart();
     populateSearchBox();
     getFitnessAllData(true, null, null);
 };

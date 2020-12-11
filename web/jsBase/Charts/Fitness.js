@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 19 Nov 2020
-Updated: 23 Nov 2020
+Updated: 10 Dec 2020
  */
 
 function ch_chart_CalorieRange(container, result, type, pData) {
@@ -52,9 +52,13 @@ function ch_chart_CalorieRange(container, result, type, pData) {
 	});
 }
 
-function ch_get_CalorieRange(container, type) {
+function ch_get_CalorieRange(container, type, pOpts) {
     let xdt1 = getDate("day", -365, "dateOnly");
     let xdt2 = getDate("day", 0, "dateOnly");
+	if(!isEmpty(pOpts)) {
+		xdt1 = pOpts.xdt1;
+		xdt2 = pOpts.xdt2;
+	}
 	let pData = { "doWhat": "CalorieRange", "XDT1": xdt1, "XDT2": xdt2 };
 	$.post(getResource("Chart3"), pData, function(result) {
 		ch_chart_CalorieRange(container, result, type, pData);
@@ -105,9 +109,13 @@ function ch_chart_SleepRange(container, result, type, pData) {
 	});
 }
 
-function ch_get_SleepRange(container, type) {
+function ch_get_SleepRange(container, type, pOpts) {
     let xdt1 = getDate("day", -365, "dateOnly");
     let xdt2 = getDate("day", 0, "dateOnly");
+	if(!isEmpty(pOpts)) {
+		xdt1 = pOpts.xdt1;
+		xdt2 = pOpts.xdt2;
+	}
 	let pData = { "doWhat": "SleepRange", "XDT1": xdt1, "XDT2": xdt2 };
 	$.post(getResource("Chart3"), pData, function(result) {
 		ch_chart_SleepRange(container, result, type, pData);
@@ -152,9 +160,13 @@ function ch_chart_WeightRange(container, result, type, pData) {
 	setInterval(() => { ch_get_WeightRange_Update(chart, pData); }, timeout);
 }
 
-function ch_get_WeightRange(container, type) {
+function ch_get_WeightRange(container, type, pOpts) {
     let xdt1 = getDate("day", -365, "dateOnly");
     let xdt2 = getDate("day", 0, "dateOnly");
+	if(!isEmpty(pOpts)) {
+		xdt1 = pOpts.xdt1;
+		xdt2 = pOpts.xdt2;
+	}
 	let pData = { "doWhat": "WeightRange", "XDT1": xdt1, "XDT2": xdt2 };
 	$.post(getResource("Chart3"), pData, function(result) {
 		ch_chart_WeightRange(container, result, type, pData);

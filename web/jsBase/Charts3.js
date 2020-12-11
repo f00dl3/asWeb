@@ -24,7 +24,7 @@ $(document).ready(function() {
 	let type = "full";
 	switch(doAction) {
 		case "Bills.png": ch_get_Bills(container, type); break;
-		case "CalorieRange.png": ch_get_CalorieRange(container, type); break;
+		case "CalorieRange.png": ch_get_CalorieRange(container, type, { xdt1: inOpts[0], xdt2: inOpts[1] } ); break;
 		case "CellData.png": ch_get_CellData(container, type); break;
 		case "CellMin.png": ch_get_CellMin(container, type); break;
 		case "CellMMS.png": ch_get_CellMMS(container, type); break;
@@ -40,7 +40,7 @@ $(document).ready(function() {
 		case "FinENW_Year_T.png": ch_get_FinENW_Year_A(container, type); break;
 		case "msByDate.png": ch_get_msByDate(container, type); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
-		case "SleepRange.png": ch_get_SleepRange(container, type); break;
+		case "SleepRange.png": ch_get_SleepRange(container, type, { xdt1: inOpts[0], xdt2: inOpts[1] }); break;
 		case "ObsJSONHumidity.png": ch_get_ObsJSONHumidity(container, type, { dateStart: inOpts[0], dateEnd: inOpts[1], station: inOpts[2] }); break;
 		case "ObsJSONHumidityH.png": ch_get_ObsJSONHumidityH(container, type); break;
 		case "ObsJSONPrecipRateH.png": ch_get_ObsJSONPrecipRateH(container, type); break;
@@ -53,7 +53,7 @@ $(document).ready(function() {
 		case "UseElecD.png": ch_get_UseElecD(container, type); break;
 		case "UseGas.png": ch_get_UseGas(container, type); break;
 		case "WebData.png": ch_get_WebData(container, type); break;
-		case "WeightRange.png": ch_get_WeightRange(container, type); break;
+		case "WeightRange.png": ch_get_WeightRange(container, type, { xdt1 : inOpts[0], xdt2: inOpts[1] }); break;
 		default: initCharts3(); break;
 	}	
 });

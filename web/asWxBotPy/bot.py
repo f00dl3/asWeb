@@ -22,10 +22,13 @@ async def on_message(message):
 	if message.author == client.user:
 		return
 	if message.content == '!pHelp':
-		response = "Build 5 of asWxBotPy. Testing phase. Some snarky stuff being built in!"
+		response = "Build 6 of asWxBotPy. Some snarky stuff being built in!"
 		await message.channel.send(response)
 	if ("dome") in (message.content).lower():
 		response = "https://cdn.discordapp.com/attachments/623111643924135938/782953385551724544/image0-4.png"
+		await message.channel.send(response)
+	if ("moist") in (message.content).lower():
+		response = "https://giphy.com/gifs/cbc-fridge-wars-fridgewars-fw105-L3L4zXkjFFwoQEcQMf"
 		await message.channel.send(response)
 	if ("pain" or "sciatic") in (message.content).lower():
 		response = "Man, I feel your pain!"

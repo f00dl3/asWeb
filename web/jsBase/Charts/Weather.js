@@ -4,7 +4,7 @@ Created: 18 Nov 2020
 Updated: 10 Dec 2020
  */
 
-let limit = 4999;
+let limit = 1200;
 let sLimit = 256;
 
 function ch_chart_CF6Depart(container, result, type, pData) {
