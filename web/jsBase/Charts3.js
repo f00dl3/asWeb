@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 7 Dec 2020
+Updated: 10 Dec 2020
  */
 
 let pOpts = {};
@@ -29,6 +29,8 @@ $(document).ready(function() {
 		case "CellMin.png": ch_get_CellMin(container, type); break;
 		case "CellMMS.png": ch_get_CellMMS(container, type); break;
 		case "CellText.png": ch_get_CellText(container, type); break;
+		case "cf6Temps.png": ch_get_CF6Temps(container, type, { dateStart: inOpts[0], dateEnd: inOpts[1] }); break;
+		case "cf6Depart.png": ch_get_CF6Depart(container, type, { dateStart: inOpts[0], dateEnd: inOpts[1] }); break;
 		case "ffxivGilWorthByDay.png": ch_get_ffxivGilWorthByDay(container, type); break;
 		case "ffxivQuestsByDay.png": ch_get_ffxivQuestsByDay(container, type); break;
 		case "FinENW_All_A.png": ch_get_FinENW_All_A(container, type); break;

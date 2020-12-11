@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 6 Dec 2020
+Updated: 10 Dec 2020
  */
 
 package asWebRest.resource;
@@ -191,7 +191,28 @@ public class Chart3Resource extends ServerResource {
 	                    }
                     }
                     break;
-                      
+                    
+                case "WxObsChartsCF6":
+                    String cf6ChDateStart = "";
+                    String cf6ChDateEnd = "";
+                    String cf6Type = "";
+                    try {
+                        cf6ChDateStart = argsInForm.getFirstValue("dateStart");
+                        cf6ChDateEnd = argsInForm.getFirstValue("dateEnd");
+                        cf6Type = argsInForm.getFirstValue("type"); 
+                        qParams.add(0, cf6ChDateStart);
+                        qParams.add(1, cf6ChDateEnd);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(wc.isSet(cf6ChDateStart) && wc.isSet(cf6ChDateEnd)) {
+                    	JSONArray cf6Data = getWeatherAction.getCf6Main(dbc, qParams, "ASC");
+                    	switch(cf6Type) {
+                    		case "depart": returnData = wx.getCf6depart(cf6Data, cf6ChDateStart, cf6ChDateEnd).toString(); break;
+                    		case "temps": default: returnData = wx.getCf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd).toString(); break;
+                    	}
+                    }
+                    break;
             }
             
         }

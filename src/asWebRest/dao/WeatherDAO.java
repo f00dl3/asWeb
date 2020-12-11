@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 28 Mar 2020
+Updated: 10 Dec 2020
  */
 
 package asWebRest.dao;
@@ -879,7 +879,7 @@ public class WeatherDAO {
         final String query_ObsJSONHome = "SELECT ObsID, GetTime, " +
         		" JSON_EXTRACT(jsonData, '"+station+"') as jsonSet" +
         		" FROM WxObs.RapidSDI_Home" +
-                " ORDER BY GetTime DESC LIMIT 2040;";
+                " ORDER BY GetTime DESC LIMIT 5000;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONHome, null);

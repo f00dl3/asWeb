@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 31 Mar 2018
-Updated: 28 Nov 2020
+Updated: 10 Dec 2020
  */
 
 package asWebRest.resource;
@@ -430,7 +430,7 @@ public class ChartResource extends ServerResource {
                     
                 case "WeatherCf6OverviewCharts":
                     genericCharts = false;
-                    order = "ASC";
+                    /* order = "ASC";
                     String cf6ChDateStart = "";
                     String cf6ChDateEnd = "";
                     try {
@@ -447,7 +447,7 @@ public class ChartResource extends ServerResource {
                     JSONObject cf6Temps_Glob = wx.getCf6temps(cf6Data, cf6ChDateStart, cf6ChDateEnd);
                     try { dynChart.LineChart(cf6cpc_Glob); returnData += "Chart generated - cf6cpc!\n"; } catch (Exception e) { e.printStackTrace(); } 
                     try { dynChart.LineChart(cf6Depart_Glob); returnData += "Chart generated - cf6Depart!\n"; } catch (Exception e) { e.printStackTrace(); } 
-                    try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } 
+                    try { dynChart.LineChart(cf6Temps_Glob); returnData += "Chart generated - cf6Temps!\n"; } catch (Exception e) { e.printStackTrace(); } */ 
                     break;
                     
                 case "WeatherModelCharts":

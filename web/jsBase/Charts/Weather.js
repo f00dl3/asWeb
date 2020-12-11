@@ -1,10 +1,113 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 6 Dec 2020
+Updated: 10 Dec 2020
  */
 
-let limit = 2040;
+let limit = 4999;
+let sLimit = 256;
+
+function ch_chart_CF6Depart(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels;
+	let aData = resultJ.data;
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{ label: 'Departure', borderColor: 'yellow', data: aData }
+			]
+		},
+		options: {
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
+			scales: {
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "F"; } } } ]
+			}
+		}
+	});
+}
+
+function ch_get_CF6Depart(container, type, pOpts) {
+    let dateOverrideStart = getDate("day", -365, "dateOnly");
+   	let dateOverrideEnd = getDate("day", 0, "dateOnly");
+	if(!isEmpty(pOpts)) {
+		dateOverrideStart = pOpts.dateStart;
+		dateOverrideEnd = pOpts.dateEnd;
+	}
+	let pData = { 
+		"doWhat": "WxObsChartsCF6",
+        "dateStart": dateOverrideStart,
+        "dateEnd": dateOverrideEnd,
+        "type": "depart"
+	};
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_CF6Depart(container, result, type, pData);
+  	});
+}
+
+function ch_chart_CF6Temps(container, result, type, pData) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 1;
+	if(type === "thumb") { doLegend = false; doX = false; lbRadius = 0; }
+	let resultJ = JSON.parse(result);
+	let aLabels = resultJ.labels;
+	let aData = resultJ.data;
+	let aData2 = resultJ.data2;
+	var ctx = document.getElementById(container).getContext('2d');
+	var chart = null;
+	chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: aLabels,
+			datasets: [
+				{ label: 'High', borderColor: 'red', data: aData },
+				{ label: 'Low', borderColor: 'blue', data: aData2 },
+			]
+		},
+		options: {
+			elements: { point: { radius: lbRadius } },
+			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
+			scales: {
+				xAxes: [ { ticks: { display: doX } } ],
+				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "F"; } } } ]
+			}
+		}
+	});
+}
+
+function ch_get_CF6Temps(container, type, pOpts) {
+    let dateOverrideStart = getDate("day", -365, "dateOnly");
+   	let dateOverrideEnd = getDate("day", 0, "dateOnly");
+	if(!isEmpty(pOpts)) {
+		dateOverrideStart = pOpts.dateStart;
+		dateOverrideEnd = pOpts.dateEnd;
+	}
+	let pData = { 
+		"doWhat": "WxObsChartsCF6",
+        "dateStart": dateOverrideStart,
+        "dateEnd": dateOverrideEnd,
+        "type": "temps"
+	};
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_CF6Temps(container, result, type, pData);
+  	});
+}
 
 function ch_chart_ObsJSONHumidity(container, result, type, pData) {
 	let doLegend = true;
@@ -51,7 +154,7 @@ function ch_get_ObsJSONHumidity(container, type, pOpts) {
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 256,
+        "limit": sLimit,
         "stationId": stationId,
 		"type": "humidity"
 	};
@@ -125,6 +228,9 @@ function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 		options: {
 			elements: { point: { radius: lbRadius } },
 			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
 			scales: {
 				xAxes: [ { ticks: { display: doX } } ],
 				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "\"/h"; } } } ]
@@ -208,7 +314,7 @@ function ch_get_ObsJSONPressure(container, type, pOpts) {
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 256,
+        "limit": sLimit,
         "stationId": stationId,
 		"type": "pressure"
 	};
@@ -240,6 +346,9 @@ function ch_chart_ObsJSONPressureH(container, result, type, pData) {
 		options: {
 			elements: { point: { radius: lbRadius } },
 			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
 			scales: {
 				xAxes: [ { ticks: { display: doX } } ],
 				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]
@@ -303,7 +412,7 @@ function ch_get_ObsJSONTemp(container, type, pOpts) {
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 256,
+        "limit": sLimit,
         "stationId": stationId,
 		"type": "temp"
 	};
@@ -339,6 +448,9 @@ function ch_chart_ObsJSONTempH(container, result, type, pData) {
 		options: {
 			elements: { point: { radius: lbRadius } },
 			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
 			scales: {
 				xAxes: [ { ticks: { display: doX } } ],
 				yAxes: [ { ticks: { callback: function(value, index, values) { return value + "F"; } } } ]
@@ -403,6 +515,9 @@ function ch_chart_ObsJSONWind(container, result, type, pData) {
 		options: {
 			elements: { point: { radius: lbRadius } },
 			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
 			scales: {
 				xAxes: [ { ticks: { display: doX } } ],
 				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]
@@ -425,7 +540,7 @@ function ch_get_ObsJSONWind(container, type, pOpts) {
         "startTime": dateOverrideStart,
         "endTime": dateOverrideEnd,
         "order": "DESC",
-        "limit": 256,
+        "limit": sLimit,
         "stationId": stationId,
 		"type": "wind"
 	};
@@ -460,6 +575,9 @@ function ch_chart_ObsJSONWindH(container, result, type, pData) {
 		options: {
 			elements: { point: { radius: lbRadius } },
 			legend: { display: doLegend },
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
+			},
 			scales: {
 				xAxes: [ { ticks: { display: doX } } ],
 				yAxes: [ { ticks: { callback: function(value, index, values) { return value; } } } ]

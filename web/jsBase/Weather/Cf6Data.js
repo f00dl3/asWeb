@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 23 Mar 2018
-Updated: 20 Feb 2019
+Updated: 10 Dec 2020
  */
 
 if(!isSet(cf6Start)) { var cf6Start = getDate("day", -365, "dateOnly"); }
@@ -70,26 +70,8 @@ function getCf6Data(thisFormData) {
 function getCf6ChartData(dateInStart, dateInEnd) {
     if(!isSet(dateInStart)) { dateInStart = getDate("day", -365, "dateOnly"); }
     if(!isSet(dateInEnd)) { dateInEnd = getDate("day", 0, "dateOnly"); }
-    var thePostData = {
-        "doWhat": "WeatherCf6OverviewCharts",
-        "dateStart": dateInStart,
-        "dateEnd": dateInEnd
-    };
-    require(["dojo/request"], function(request) {
-        request
-            .post(getResource("Chart"), {
-                data: thePostData,
-                handleAs: "text"
-            }).then(
-                function(data) {
-                    aniPreload("off");
-                    popLastYearGraphed();
-                },
-                function(error) { 
-                    aniPreload("off");
-                    window.alert("request for CF6 Chart Data FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
-                });
-    });
+	let pOpts = { "dateStart": dateInStart, "dateEnd": dateInEnd };
+    popLastYearGraphed(pOpts);
 }
 
 function getInitialCf6Data(target) {
@@ -218,12 +200,16 @@ function popCf6Search(amDat) {
     dojo.connect(rainGaugeButton, "click", actOnRainGauge);
 }
 
-function popLastYearGraphed() {
+function popLastYearGraphed(pOpts) {
+	let pOptsStr = pOpts.dateStart + "," + pOpts.dateEnd;
     var rData = "Last year graphed:<p>" +
-            "<a href='" + doCh("j", "cf6Temps", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Temps", "t") + "'/></a>" +
-            "<a href='" + doCh("j", "cf6Depart", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6Depart", "t") + "'/></a>" +
-            "<a href='" + doCh("j", "cf6cpc", null) + "' target='pChart'><img class='th_sm_med' src='" + doCh("j", "cf6cpc", "t") + "'/></a>";
+			"<div class='table'><div class='tr'>" + 
+            "<span class='td'><a href='" + doCh("3", "cf6Temps", pOptsStr) + "' target='pChart'><div class='th_sm_med'><canvas id='cf6TempsHolder'></canvas></div></a></span>" +
+            "<span class='td'><a href='" + doCh("3", "cf6Depart", pOptsStr) + "' target='pChart'><div class='th_sm_med'><canvas id='cf6DepartHolder'></canvas></div></a></span>" +
+			"</div></div>";
     dojo.byId("cf6OverviewGraphs").innerHTML = rData;
+	ch_get_CF6Temps("cf6TempsHolder", "thumb", pOpts);
+	ch_get_CF6Depart("cf6DepartHolder", "thumb", pOpts);
 }
 
 function popStatTable(alm) {
@@ -301,7 +287,7 @@ function popStatTable(alm) {
             "<br/>Data from Jan 1900 to Jan 1934 is from Kansas City.";
     rData += rTable + dataDisclaimer;
     dojo.byId("cf6StatTableHolder").innerHTML = rData;               
-    popLastYearGraphed();
+    popLastYearGraphed({ dateStart: cf6Start, dateEnd: cf6End });
 }
 
 function popTempDistTable(trDat) {

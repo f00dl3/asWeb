@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 23 Nov 2020
+Updated: 10 Dec 2020
  */
 
 function ch_chart_ffxivGilWorthByDay(container, result, type, pData) {
@@ -35,6 +35,9 @@ function ch_chart_ffxivGilWorthByDay(container, result, type, pData) {
 			},
 			legend: {
 				display: doLegend
+			},
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
 			},
 			scales: {
 				xAxes: [
@@ -119,6 +122,9 @@ function ch_chart_ffxivQuestsByDay(container, result, type, pData) {
 			elements: {
 				line: { borderWidth: 1 },
 				point: { radius: lbRadius }
+			},
+			plugins: {
+				zoom: { zoom: { enabled: doX } }
 			},
 			scales: {
 				xAxes: [
