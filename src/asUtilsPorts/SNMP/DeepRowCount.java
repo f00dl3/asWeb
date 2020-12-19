@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 28 Mar 2019
-Updated: 19 Sep 2020
+Updated: 17 Dec 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -67,12 +67,14 @@ public class DeepRowCount {
         long rows_NetSNMP = totalRowCountFromDatabase(dbc, "net_snmp");
         long rows_WxObs = totalRowCountFromDatabase(dbc, "WxObs");
         long rows_Feeds = totalRowCountFromDatabase(dbc, "Feeds");
+        long rows_Finances = totalRowCountFromDatabase(dbc, "Finances");
         long rows_WebCal = totalRowCountFromDatabase(dbc, "WebCal");
                 
         System.out.println("Core: " + rows_Core + "\n" +
                 "Net SNMP: " + rows_NetSNMP + "\n" +
                 "WxObs: " + rows_WxObs + "\n" +
                 "Feeds: " + rows_Feeds + "\n" +
+                "Finances: " + rows_Finances + "\n" +
                 "WebCal: " + rows_WebCal);
         
         try { dbc.close(); } catch (Exception e) { e.printStackTrace(); }

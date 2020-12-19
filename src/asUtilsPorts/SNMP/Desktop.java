@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 18 Sep 2020
+Last updated: 17 Dec 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -231,11 +231,13 @@ public class Desktop {
 
         long mySQLRowsCore = 0;
         long mySQLRowsFeeds = 0;
+        long mySQLRowsFinances = 0;
         long mySQLRowsNetSNMP = 0;
         long mySQLRowsWebCal = 0;
         long mySQLRowsWxObs = 0;
         double mySQLSizeCore = 0.0;
         double mySQLSizeFeeds = 0.0;
+        double mySQLSizeFinances = 0.0;
         double mySQLSizeNetSNMP = 0.0;
         double mySQLSizeWebCal = 0.0;
         double mySQLSizeWxObs = 0.0;
@@ -256,6 +258,12 @@ public class Desktop {
                                 try { mySQLSizeFeeds = Double.parseDouble(strThisVal); } catch (Exception e) { }
                                 mySQLRowsFeeds = 0; //drc.totalRowCountFromDatabase(dbc, "Feeds");
                         }	
+                        if(line.contains("Finances,")) {
+                            String[] lineTmp = line.split(",");
+                            String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
+                            try { mySQLSizeFinances = Double.parseDouble(strThisVal); } catch (Exception e) { }
+                            mySQLRowsFinances = 0; //drc.totalRowCountFromDatabase(dbc, "Feeds");
+                    }	
                         if(line.contains("net_snmp,")) {
                                 String[] lineTmp = line.split(",");
                                 String strThisVal = lineTmp[1]; String strThisVa2 = lineTmp[2];
@@ -281,6 +289,7 @@ public class Desktop {
 
         long duMySQLCore = 0;
         long duMySQLFeeds = 0;
+        long duMySQLFinances = 0;
         long duMySQLNetSNMP = 0;
         long duMySQLTotal = 0;
         long duMySQLWebCal = 0;
@@ -291,7 +300,8 @@ public class Desktop {
                 while(duMySQLScanner.hasNext()) {			
                         String line = duMySQLScanner.nextLine();
                         if(line.contains(",/var/lib/mysql/Core")) { String[] lineTmp = line.split(","); duMySQLCore = Long.parseLong(lineTmp[0]); }	
-                        if(line.contains(",/var/lib/mysql/Feeds")) { String[] lineTmp = line.split(","); duMySQLFeeds = Long.parseLong(lineTmp[0]); }	
+                        if(line.contains(",/var/lib/mysql/Feeds")) { String[] lineTmp = line.split(","); duMySQLFeeds = Long.parseLong(lineTmp[0]); }
+                        if(line.contains(",/var/lib/mysql/Finances")) { String[] lineTmp = line.split(","); duMySQLFinances = Long.parseLong(lineTmp[0]); }
                         if(line.contains(",/var/lib/mysql/net_snmp")) { String[] lineTmp = line.split(","); duMySQLNetSNMP = Long.parseLong(lineTmp[0]); }	
                         if(line.contains(",/var/lib/mysql/WxObs")) { String[] lineTmp = line.split(","); duMySQLWxObs = Long.parseLong(lineTmp[0]); }	
                         if(line.contains(",/var/lib/mysql/WebCal")) { String[] lineTmp = line.split(","); duMySQLWebCal = Long.parseLong(lineTmp[0]); }	
@@ -406,7 +416,10 @@ public class Desktop {
             .put("nvPerf", nvPerf)
             .put("nvPowerUse", nvPowerUse) 
             .put("nvPowerCap", nvPowerCap)
-            .put("nvUtilization", nvUtilization);
+            .put("nvUtilization", nvUtilization)
+            .put("mySQLRowsFinances", mySQLRowsFinances)
+            .put("mySQLSizeFinances", mySQLSizeFinances)
+            .put("duMySQLFinances", duMySQLFinances);
 
         String thisSQLQuery = "INSERT IGNORE INTO net_snmp.Main ("
                 + "WalkTime, NumUsers,"

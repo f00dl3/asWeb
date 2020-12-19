@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2018
-Updated: 28 Nov 2020
+Updated: 19 Dec 2020
  */
 
 package asWebRest.chartHelpers;
@@ -83,6 +83,7 @@ public class Finance {
         JSONArray enw_Data4 = new JSONArray();
         JSONArray enw_Data5 = new JSONArray();
         JSONArray enw_Data6 = new JSONArray();
+        JSONArray enw_Data7 = new JSONArray();
         if(dataSelection.equals("R")) {
         	enw_Props.put("dateFormat", "yyyy-MM-dd HH:mm:ss");
         } else {
@@ -99,7 +100,8 @@ public class Finance {
 			        .put("s3Name", "Fixed").put("s3Color", "Blue")
 			        .put("s4Name", "Insurance").put("s4Color", "Gray")
 			        .put("s5Name", "Credits").put("s5Color", "Yellow")
-			        .put("s6Name", "Debt").put("s6Color", "Red");
+			        .put("s6Name", "Debt").put("s6Color", "Red")
+			        .put("s7Name", "Liquidity").put("s7Color", "Pink");
 		        break;
 	        case "T": case "R":
 		        enw_Props.put("sName", "Worth").put("sColor", "White");
@@ -123,19 +125,21 @@ public class Finance {
             enw_Data4.put(thisObject.getDouble("Life"));
             enw_Data5.put(thisObject.getDouble("Credits"));
             enw_Data6.put(thisObject.getDouble("Debts"));
+            enw_Data7.put(thisObject.getDouble("Liqiuidity"));
         }
         enw_Glob
                 .put("labels", enw_Labels)
                 .put("props", enw_Props);
         switch(dataSelection) {
-	        case "A": default:
+	        case "A": case "R": default:
 	    		enw_Glob
 		            .put("data", enw_Data)
 		            .put("data2", enw_Data2)
 		            .put("data3", enw_Data3)
 		            .put("data4", enw_Data4)
 		            .put("data5", enw_Data5)
-		            .put("data6", enw_Data6);
+		            .put("data6", enw_Data6)
+		            .put("data7", enw_Data7);
 	            break;
 	        case "T": 
 	    		enw_Glob.put("data", enw_Data);
@@ -149,8 +153,6 @@ public class Finance {
 	        case "D": 
 	    		enw_Glob.put("data", enw_Data6);
 	        	break;
-	        case "R":
-	    		enw_Glob.put("data", enw_Data);
 	    		break;
         }
         return enw_Glob;

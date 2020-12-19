@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 4 Nov 2020
+Updated: 19 Dec 2020
 */
 
 package asUtilsPorts;
@@ -45,40 +45,43 @@ public class GetDaily {
 		
 		String anwPrepSQLQuery = "SET @runtot := "+junkyPrivate.getMortBeginningBalance()+";";
 		
-		String autoNetWorthSQLQuery = "REPLACE INTO Core.FB_ENWT ("
+		String autoNetWorthSQLQuery = "REPLACE INTO Finances.FB_ENWT ("
 			+ "AsOf, AsLiq, AsFix, Life, Credits, Debts, Auto, AsLiqCA, AsLiqNV,"
 			+ " AsFixHM, AsFixAU, AsFixDF, AsFixFT, AsFixEL, AsFixJC, AsFixKT, AsFixMD, AsFixTL,"
-			+ " AsFixPT, AsFixUN, AsFixTR"
+			+ " AsFixPT, AsFixUN, AsFixTR, Liquidity"
 			+ ") VALUES ("
 			+ "(current_date),(SELECT SUM("
-			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM Core.FB_Assets WHERE Category IN ('NV','CA')) +"
-			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Core.FB_CFCK01 WHERE Date <= current_date) +"
-			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Core.FB_CFSV59 WHERE Date <= current_date))),"
-			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM Core.FB_Assets WHERE Type = 'F'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'LI'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'CR'),"
+			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM Finances.FB_Assets WHERE Category IN ('NV','CA')) +"
+			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
+			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date))),"
+			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM Finances.FB_Assets WHERE Type = 'F'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'LI'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'CR'),"
 			+ "(";
 		if(mb.getPayed() == 0) {
-			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM FB_WFML35 WHERE DueDate < current_date + interval '30' day)";
+			autoNetWorthSQLQuery += "(SELECT FORMAT(MIN(@runtot := @runtot + (@runtot * (("+junkyPrivate.getMortIntRate()+"/12)/100)) - (Extra + "+junkyPrivate.getMortBaseMonthly()+"))/1000,1) AS MBal FROM Finances.FB_WFML35 WHERE DueDate < current_date + interval '30' day)";
 		} else {
 			autoNetWorthSQLQuery += "0.0";
 		}
-		autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value/1000)) FROM Core.FB_Assets WHERE Category='DB')),"
+		autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value/1000)) FROM Finances.FB_Assets WHERE Category='DB')),"
 			+ " 1,"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'CA'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'NV'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'HM'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'AU'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'DF'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'FT'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'EL'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'JC'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'KT'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'MD'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'TL'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'PT'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'UN'),"
-			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Core.FB_Assets WHERE Category = 'TR')"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'CA'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'NV'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'HM'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'AU'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'DF'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'FT'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'EL'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'JC'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'KT'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'MD'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'TL'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'PT'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'UN'),"
+			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'TR'),"
+			+ "((SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
+			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
+			+ " (SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1))"
 			+ ");";        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }

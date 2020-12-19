@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 18 Feb 2018
-Updated: 30 Apr 2019
+Updated: 17 Dec 2020
  */
 
 package asWebRest.dao;
@@ -18,7 +18,7 @@ public class MediaServerDAO {
     WebCommon wc = new WebCommon();
     
     public JSONArray getGeoData(Connection dbc) {
-        final String query_MediaServer_GeoData = "SELECT DISTINCT GeoData FROM MediaServer WHERE GeoData IS NOT NULL;";
+        final String query_MediaServer_GeoData = "SELECT DISTINCT GeoData FROM Core.MediaServer WHERE GeoData IS NOT NULL;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_MediaServer_GeoData, null);

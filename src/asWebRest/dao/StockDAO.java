@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 3 Oct 2020
+Updated: 17 Dec 2020
 */
 
 package asWebRest.dao;
@@ -26,7 +26,7 @@ public class StockDAO {
     private JSONArray eTradeBrokerageAccount(Connection dbc) {
         final String query_etba = "SELECT" +
         		" BTID, Date, Debit, Credit" +
-        		" FROM Core.FB_ETIBXX" +
+        		" FROM Finances.FB_ETIBXX" +
         		" ORDER BY DATE DESC LIMIT 5;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -48,7 +48,7 @@ public class StockDAO {
 
     private String eTradeBrokerageAccountAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_etbaAdd = "INSERT INTO Core.FB_ETIBXX (Date, Debit, Credit) VALUES (?,?,?);";
+        String query_etbaAdd = "INSERT INTO Finances.FB_ETIBXX (Date, Debit, Credit) VALUES (?,?,?);";
         try { returnData = wc.q2do1c(dbc, query_etbaAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -56,10 +56,10 @@ public class StockDAO {
     private JSONArray eTradeBalance(Connection dbc) {
         final String query_etb = "SELECT" +
         		" SUM(" +
-        		"  (SELECT Value FROM Core.FB_Assets WHERE Description LIKE 'eTrade%') +" +
-        		"  (SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='eTrade')" +
+        		"  (SELECT Value FROM Finances.FB_Assets WHERE Description LIKE 'eTrade%') +" +
+        		"  (SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='eTrade')" +
         		") AS Balance," +
-        		" (SELECT SUM(Credit-Debit) FROM Core.FB_ETIBXX) AS Contributions";		
+        		" (SELECT SUM(Credit-Debit) FROM Finances.FB_ETIBXX) AS Contributions";		
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_etb, null);
@@ -81,7 +81,7 @@ public class StockDAO {
         		" LastValue, Description, PreviousClose," +
         		" LastBuy, LastSell, Invested, Managed, SpilloverSavings," +
         		" EJTI15, EJRI23, EJRI07, LastComparedShares, Multiplier, LastUpdated" +
-        		" FROM Core.StockShares WHERE Active=1;";
+        		" FROM Finances.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
@@ -113,7 +113,7 @@ public class StockDAO {
 
     private String stockAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_AddStock = "INSERT INTO Core.StockShares " +
+        String query_AddStock = "INSERT INTO Finances.StockShares " +
         		" (Symbol, Count, Active, Holder, Description, Managed)" +
         		" VALUES " +
         		" (?, ?, 1, ?, ?, ?);";
@@ -122,7 +122,7 @@ public class StockDAO {
     }
     
     private JSONArray stockListPublic(Connection dbc) { 
-        final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose, FROM Core.StockShares WHERE Active=1;";
+        final String query_GetStocks = "SELECT Symbol, LastValue, Description, PreviousClose, FROM Finances.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GetStocks, null);
@@ -164,18 +164,18 @@ public class StockDAO {
 
     private String stockShareUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_ShareUpdate = "UPDATE Core.StockShares SET Count=?, Holder=? WHERE Symbol=?;";
+        String query_ShareUpdate = "UPDATE Finances.StockShares SET Count=?, Holder=? WHERE Symbol=?;";
         try { returnData = wc.q2do1c(dbc, query_ShareUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
 
     private String stockUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_UpdateStock = "UPDATE Core.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
-        String query_UpdateStockB = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
-        String query_UpdateStockC = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
-        String query_UpdateStockD = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*(LastValue*Multiplier)) FROM Core.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
-        String query_UpdateStockE = "UPDATE Core.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Core.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";
+        String query_UpdateStock = "UPDATE Finances.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
+        String query_UpdateStockB = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
+        String query_UpdateStockC = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
+        String query_UpdateStockD = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*(LastValue*Multiplier)) FROM Finances.StockShares WHERE Holder='FidelityA' AND Managed=1), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
+        String query_UpdateStockE = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";
         try { returnData = wc.q2do1c(dbc, query_UpdateStock, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockB, null); } catch (Exception e) { e.printStackTrace(); }
         try { returnData += wc.q2do1c(dbc, query_UpdateStockC, null); } catch (Exception e) { e.printStackTrace(); }

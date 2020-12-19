@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 5 Dec 2020
+Updated: 19 Dec 2020
  */
 
 function ch_chart_FinENW_All_A(container, result, type) {
@@ -29,6 +29,7 @@ function ch_chart_FinENW_All_A(container, result, type) {
 	let aData4 = resultJ.data4;
 	let aData5 = resultJ.data5;
 	let aData6 = resultJ.data6;
+	let aData7 = resultJ.data7;
 	let aDataA = [];
 	let i = 0;
 	aData.forEach(function(ad) {
@@ -48,7 +49,8 @@ function ch_chart_FinENW_All_A(container, result, type) {
 				{ label: 'Fixed', borderColor: 'blue', data: aData3 },
 				{ label: 'Insurance', borderColor: 'grey', data: aData4 },
 				{ label: 'Credits', borderColor: 'yellow', data: aData5 },
-				{ label: 'Debts', borderColor: 'red', data: aData6 }
+				{ label: 'Debts', borderColor: 'red', data: aData6 },
+				{ label: 'Liquidity', borderColor: 'pink', data: aData7 }
 			]
 		},
 		options: {
@@ -184,6 +186,7 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 	let aData4 = resultJ.data4;
 	let aData5 = resultJ.data5;
 	let aData6 = resultJ.data6;
+	let aData7 = resultJ.data7;
 	let aDataA = [];
 	let i = 0;
 	aData.forEach((ad) => {
@@ -207,7 +210,8 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 				{ label: 'Fixed', borderColor: 'blue', data: aData3 },
 				{ label: 'Insurance', borderColor: 'grey', data: aData4 },
 				{ label: 'Credits', borderColor: 'yellow', data: aData5 },
-				{ label: 'Debts', borderColor: 'red', data: aData6 }
+				{ label: 'Debts', borderColor: 'red', data: aData6 },
+				{ label: 'Liquidity', borderColor: 'pink', data: aData7 }
 			]
 		},
 		options: {
