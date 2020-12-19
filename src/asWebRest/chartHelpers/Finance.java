@@ -84,6 +84,11 @@ public class Finance {
         JSONArray enw_Data5 = new JSONArray();
         JSONArray enw_Data6 = new JSONArray();
         JSONArray enw_Data7 = new JSONArray();
+        JSONArray enw_Data8 = new JSONArray();
+        JSONArray enw_Data9 = new JSONArray();
+        JSONArray enw_Data10 = new JSONArray();
+        JSONArray enw_Data11 = new JSONArray();
+        JSONArray enw_Data12 = new JSONArray();
         if(dataSelection.equals("R")) {
         	enw_Props.put("dateFormat", "yyyy-MM-dd HH:mm:ss");
         } else {
@@ -101,7 +106,12 @@ public class Finance {
 			        .put("s4Name", "Insurance").put("s4Color", "Gray")
 			        .put("s5Name", "Credits").put("s5Color", "Yellow")
 			        .put("s6Name", "Debt").put("s6Color", "Red")
-			        .put("s7Name", "Liquidity").put("s7Color", "Pink");
+			        .put("s7Name", "Liquidity").put("s7Color", "Pink")
+			        .put("s8Name", "Fidelity").put("s8Color", "Brown")
+			        .put("s9Name", "EdwardJones").put("s9Color", "Brown")
+			        .put("s10Name", "ETrade").put("s10Color", "Brown")
+			        .put("s11Name", "CFCK01").put("s11Color", "Brown")
+			        .put("s12Name", "CFSV59").put("s12Color", "Brown");
 		        break;
 	        case "T": case "R":
 		        enw_Props.put("sName", "Worth").put("sColor", "White");
@@ -125,13 +135,18 @@ public class Finance {
             enw_Data4.put(thisObject.getDouble("Life"));
             enw_Data5.put(thisObject.getDouble("Credits"));
             enw_Data6.put(thisObject.getDouble("Debts"));
-            enw_Data7.put(thisObject.getDouble("Liqiuidity"));
+            enw_Data7.put(thisObject.getDouble("Liquidity"));
+            if(dataSelection.equals("A")) { enw_Data8.put(thisObject.getDouble("AsLiq_FidA") + thisObject.getDouble("AsLiq_FidE")); }
+            if(dataSelection.equals("A")) { enw_Data9.put(thisObject.getDouble("AsLiq_EJTI15") + thisObject.getDouble("AsLiq_EJRI23") + thisObject.getDouble("AsLiq_EJRI07")); }
+            enw_Data10.put(thisObject.getDouble("AsLiq_ETra"));
+            enw_Data11.put(thisObject.getDouble("AsLiq_FBCFCK01"));
+            enw_Data12.put(thisObject.getDouble("AsLiq_FBCFSV59"));
         }
         enw_Glob
                 .put("labels", enw_Labels)
                 .put("props", enw_Props);
         switch(dataSelection) {
-	        case "A": case "R": default:
+	        case "A": default:
 	    		enw_Glob
 		            .put("data", enw_Data)
 		            .put("data2", enw_Data2)
@@ -139,7 +154,25 @@ public class Finance {
 		            .put("data4", enw_Data4)
 		            .put("data5", enw_Data5)
 		            .put("data6", enw_Data6)
-		            .put("data7", enw_Data7);
+		            .put("data7", enw_Data7)
+		            .put("data8", enw_Data8)
+		            .put("data9", enw_Data9)
+		            .put("data10", enw_Data10)
+		            .put("data11", enw_Data11)
+		            .put("data12", enw_Data12);
+	            break;
+	        case "R":
+	    		enw_Glob
+		            .put("data", enw_Data)
+		            .put("data2", enw_Data2)
+		            .put("data3", enw_Data3)
+		            .put("data4", enw_Data4)
+		            .put("data5", enw_Data5)
+		            .put("data6", enw_Data6)
+		            .put("data7", enw_Data7)
+		            .put("data10", enw_Data10)
+		            .put("data11", enw_Data11)
+		            .put("data12", enw_Data12);
 	            break;
 	        case "T": 
 	    		enw_Glob.put("data", enw_Data);
@@ -153,7 +186,6 @@ public class Finance {
 	        case "D": 
 	    		enw_Glob.put("data", enw_Data6);
 	        	break;
-	    		break;
         }
         return enw_Glob;
     }

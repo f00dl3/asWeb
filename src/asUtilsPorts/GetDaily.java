@@ -48,7 +48,9 @@ public class GetDaily {
 		String autoNetWorthSQLQuery = "REPLACE INTO Finances.FB_ENWT ("
 			+ "AsOf, AsLiq, AsFix, Life, Credits, Debts, Auto, AsLiqCA, AsLiqNV,"
 			+ " AsFixHM, AsFixAU, AsFixDF, AsFixFT, AsFixEL, AsFixJC, AsFixKT, AsFixMD, AsFixTL,"
-			+ " AsFixPT, AsFixUN, AsFixTR, Liquidity"
+			+ " AsFixPT, AsFixUN, AsFixTR, Liquidity,"
+			+ " AsLiq_FidA, AsLiq_FidE, AsLiq_EJTI15, AsLiq_EJRI23, AsLiq_EJRI07, AsLiq_ETra,"
+			+ " AsLiq_FBCFCK01, AsLiq_FBCFSV59"
 			+ ") VALUES ("
 			+ "(current_date),(SELECT SUM("
 			+ "(SELECT FORMAT(SUM(Value)/1000,1) FROM Finances.FB_Assets WHERE Category IN ('NV','CA')) +"
@@ -81,7 +83,15 @@ public class GetDaily {
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'TR'),"
 			+ "((SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-			+ " (SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1))"
+			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1)),"
+			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityA'),"
+			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityE'),"
+			+ "(SELECT FORMAT(SUM((EJTI15*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJTI15 != 0),"
+			+ "(SELECT FORMAT(SUM((EJRI23*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJRI23 != 0),"
+			+ "(SELECT FORMAT(SUM((EJRI07*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJRI07 != 0),"
+			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='eTrade'),"
+			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
+			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date)"
 			+ ");";        
 
         try { zapi.autoZestimates(dbc); } catch (Exception e) { e.printStackTrace(); }

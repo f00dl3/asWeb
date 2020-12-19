@@ -326,7 +326,9 @@ public class FinanceDAO {
     private JSONArray enwChart(Connection dbc, String periodLength) {
         String query_ch_ENW = "SELECT " +
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity," +
-                " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
+                " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth," +
+                " AsLiq_FidA, AsLiq_FidE, AsLiq_EJTI15, AsLiq_EJRI23, AsLiq_EJRI07, AsLiq_ETra," +
+                " AsLiq_FBCFSV59, AsLiq_FBCFCK01" +
                 " FROM Finances.FB_ENWT";
         switch(periodLength) {
         	case "Year": 
@@ -352,7 +354,15 @@ public class FinanceDAO {
                         .put("Life", resultSet.getDouble("Life"))
                         .put("Credits", resultSet.getDouble("Credits"))
                         .put("Debts", resultSet.getDouble("Debts"))
-                        .put("Liquidity", resultSet.getDouble("Liquidity"));
+                        .put("Liquidity", resultSet.getDouble("Liquidity"))
+                        .put("AsLiq_FidA", resultSet.getDouble("AsLiq_FidA"))
+                        .put("AsLiq_FidE", resultSet.getDouble("AsLiq_FidE"))
+                        .put("AsLiq_EJTI15", resultSet.getDouble("AsLiq_EJTI15"))
+                        .put("AsLiq_EJRI23", resultSet.getDouble("AsLiq_EJRI23"))
+                        .put("AsLiq_EJRI07", resultSet.getDouble("AsLiq_EJRI07"))
+                        .put("AsLiq_ETra", resultSet.getDouble("AsLiq_ETra"))
+                        .put("AsLiq_FBCFCK01", resultSet.getDouble("AsLiq_FBCFCK01"))
+                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -363,7 +373,8 @@ public class FinanceDAO {
     
     private JSONArray enwChartRapid(Connection dbc) {
         String query_ch_ENWr = "SELECT " +
-                " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity," +
+                " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity, AsLiq_ETra," +
+                " AsLiq_FBCFSV59, AsLiq_FBCFCK01," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
                 " FROM Finances.FB_ENWT_Rapid" +
         		" ORDER BY AsOf DESC LIMIT 1024;";
@@ -380,7 +391,10 @@ public class FinanceDAO {
                         .put("Life", resultSet.getDouble("Life"))
                         .put("Credits", resultSet.getDouble("Credits"))
                         .put("Debts", resultSet.getDouble("Debts"))
-                        .put("Liquidity", resultSet.getDouble("Liquidity"));
+                        .put("Liquidity", resultSet.getDouble("Liquidity"))
+                        .put("AsLiq_ETra", resultSet.getDouble("AsLiq_ETra"))
+                        .put("AsLiq_FBCFCK01", resultSet.getDouble("AsLiq_FBCFCK01"))
+                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -584,7 +598,8 @@ public class FinanceDAO {
         String returnData = wcb.getDefaultNotRanYet();
     	JunkyPrivate jp = new JunkyPrivate();
     	String autoNetWorthSQLQuery = "REPLACE INTO Finances.FB_ENWT_Rapid ("
-    			+ "AsLiq, AsFix, Life, Credits, Debts, Liquidity"
+    			+ "AsLiq, AsFix, Life, Credits, Debts, Liquidity," 
+    			+ "AsLiq_ETra, AsLiq_FBCFCK01, AsLiq_FBCFSV59"
     			+ ") VALUES ("
     			+ "(SELECT SUM("
     			+ "(SELECT SUM(Value) FROM Finances.FB_Assets WHERE Category IN ('NV','CA')) +"
@@ -599,10 +614,14 @@ public class FinanceDAO {
     		} else {
     			autoNetWorthSQLQuery += "0";
     		}
-			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value)) FROM Finances.FB_Assets WHERE Category='DB'))"    
+			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value)) FROM Finances.FB_Assets WHERE Category='DB')),"    
 				+ "((SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-				+ "(SELECT SUM((Count*(Multiplier*LastValue)) FROM Finances.StockShares WHERE SpilloverSavings=1)));";    
+				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE SpilloverSavings=1)),"
+				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='eTrade'),"
+				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
+				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date)" 
+				+ ");";    
         try { returnData = wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }    
