@@ -2,7 +2,7 @@
 SNMP Walk -> Database --- Desktop class
 Split off for v5 on 28 Apr 2019
 Java created: 14 Aug 2017
-Last updated: 17 Dec 2020
+Last updated: 20 Dec 2020
  */
 
 package asUtilsPorts.SNMP;
@@ -112,6 +112,7 @@ public class Desktop {
         long kMemShared = 0;
         long kSwap = 0;
         long k4Root = 0;
+        long k4Extra0 = 0;
         long k4Extra1 = 0;
         long kMemPhysU = 0;
         long kMemVirtU = 0;
@@ -120,6 +121,7 @@ public class Desktop {
         long kMemSharedU = 0;
         long kSwapU = 0;
         long k4RootU = 0;
+        long k4Extra0U = 0;
         long k4Extra1U = 0;
         long iNodeSDA1 = 0;
         long iNodeSHM = 0;
@@ -132,12 +134,14 @@ public class Desktop {
         long mySQLDelete = 0;
         long logApache2GET = 0;
         long logTomcatGET = 0;
+        String extra0DiskID = "";
         String extra1DiskID = "";
 
         Scanner walkFileScanner = null; try {		
                 walkFileScanner = new Scanner(theWalkFile);
                 while(walkFileScanner.hasNext()) {				
                         String line = walkFileScanner.nextLine();
+                        if(line.contains("hrStorage") && line.contains("/extra0")) { Pattern p = Pattern.compile("Descr.(.*) ="); Matcher m = p.matcher(line); if (m.find()) { extra0DiskID = m.group(1); }}
                         if(line.contains("hrStorage") && line.contains("/extra1")) { Pattern p = Pattern.compile("Descr.(.*) ="); Matcher m = p.matcher(line); if (m.find()) { extra1DiskID = m.group(1); }}
                         if(line.contains("hrSystemNumUsers.0 =")) { Pattern p = Pattern.compile("Gauge32: (.*)"); Matcher m = p.matcher(line); if (m.find()) { numUsers = Integer.parseInt(m.group(1)); }}
                         if(line.contains("hrProcessorLoad.196608 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { cpuLoad1 = Integer.parseInt(m.group(1)); }}
@@ -161,6 +165,7 @@ public class Desktop {
                         if(line.contains("hrStorageSize.8 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kMemShared = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageSize.10 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kSwap = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageSize.31 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4Root = Long.parseLong(m.group(1)); } }
+                        if(line.contains("hrStorageSize."+extra0DiskID+" =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4Extra0 = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageSize."+extra1DiskID+" =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4Extra1 = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageUsed.1 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kMemPhysU = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageUsed.3 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kMemVirtU = Long.parseLong(m.group(1)); } }
@@ -169,6 +174,7 @@ public class Desktop {
                         if(line.contains("hrStorageUsed.8 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kMemSharedU = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageUsed.10 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { kSwapU = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageUsed.31 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4RootU = Long.parseLong(m.group(1)); } }
+                        if(line.contains("hrStorageUsed."+extra0DiskID+" =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4Extra0U = Long.parseLong(m.group(1)); } }
                         if(line.contains("hrStorageUsed."+extra1DiskID+" =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { k4Extra1U = Long.parseLong(m.group(1)); } }
                         if(line.contains("dskPercentNode.3 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { iNodeSDA1 = Long.parseLong(m.group(1)); } }
                         if(line.contains("dskPercentNode.6 =")) { Pattern p = Pattern.compile("INTEGER: (.*)"); Matcher m = p.matcher(line); if (m.find()) { iNodeSHM = Long.parseLong(m.group(1)); } }
@@ -407,6 +413,8 @@ public class Desktop {
             .put("LOC_aswjCss", aswjLocCss)
             .put("LOC_asUtilsJava", asUtilsLocJava)
             //.put("LOC_asUtilsJavaSh", asUtilsLocJavaSh)
+            .put("k4Extra0", k4Extra0)
+            .put("k4Extra0U", k4Extra0U)
             .put("k4Extra1", k4Extra1)
             .put("k4Extra1U", k4Extra1U)
             .put("nvFan", nvFan)

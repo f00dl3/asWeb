@@ -4,6 +4,9 @@ Created: 18 Nov 2020
 Updated: 19 Dec 2020
  */
 
+let wLb = [ "T", "R", "L", "F", "I", "C", "D", "Y", "4", "J", "E", "B", "S" ];
+
+
 function ch_chart_FinENW_All_A(container, result, type) {
 	let timeFormat = 'YYYY-MM-DD';
 	let doLegend = true;
@@ -48,19 +51,19 @@ function ch_chart_FinENW_All_A(container, result, type) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: 'Total', borderColor: 'white', data: aData },
-				{ label: 'Reportable', borderColor: 'orange', data: aDataA },
-				{ label: 'Liquid', borderColor: 'green', data: aData2 },
-				{ label: 'Fixed', borderColor: 'blue', data: aData3 },
-				{ label: 'Insurance', borderColor: 'grey', data: aData4, hidden: true },
-				{ label: 'Credits', borderColor: 'yellow', data: aData5, hidden: true },
-				{ label: 'Debts', borderColor: 'red', data: aData6 },
-				{ label: 'Liquidity', borderColor: 'pink', data: aData7, hidden: true },
-				{ label: 'Fidelity', borderColor: 'green', data: aData8, hidden: true },
-				{ label: 'EJones', borderColor: 'green', data: aData9, hidden: true },
-				{ label: 'ETrade', borderColor: 'green', data: aData10, hidden: true },
-				{ label: 'Checking', borderColor: 'green', data: aData11, hidden: true },
-				{ label: 'Savings', borderColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[0], borderColor: 'white', data: aData },
+				{ label: wLb[1], borderColor: 'orange', data: aDataA },
+				{ label: wLb[2], borderColor: 'green', data: aData2 },
+				{ label: wLb[3], borderColor: 'blue', data: aData3 },
+				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
+				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[6], borderColor: 'red', data: aData6 },
+				{ label: wLb[7], borderColor: 'pink', data: aData7, hidden: true },
+				{ label: wLb[8], borderColor: 'white', data: aData8, hidden: true },
+				{ label: wLb[9], borderColor: 'white', data: aData9, hidden: true },
+				{ label: wLb[10], borderColor: 'white', data: aData10, hidden: true },
+				{ label: wLb[11], borderColor: 'white', data: aData11, hidden: true },
+				{ label: wLb[12], borderColor: 'white', data: aData12, hidden: true }
 			]
 		},
 		options: {
@@ -100,12 +103,12 @@ function ch_get_FinENW_All_A(container, type) {
 }
 
 function ch_chart_FinENW_All_R(container, result, type, pData) {
-	let description = "Rapid Estimated Net Worth";
+	let description = "Net Worth";
 	let lbRadius = 1;
 	let doLegend = true;
 	let doX = true;
 	if(type === "thumb") { 
-		description = "RENW";
+		description = "TOTL";
 		doLegend = false;
 		doX = false; 
 		lbRadius = 0;
@@ -150,17 +153,17 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: description, backgroundColor: 'grey', borderColor: 'white', data: aData },
-				{ label: 'Reportable', borderColor: 'orange', data: aDataAm, hidden: true },
-				{ label: 'Liquid', borderColor: 'green', data: aData2, hidden: true },
-				{ label: 'Fixed', borderColor: 'blue', data: aData3, hidden: true },
-				{ label: 'Insurance', borderColor: 'grey', data: aData4, hidden: true },
-				{ label: 'Credits', borderColor: 'yellow', data: aData5, hidden: true },
-				{ label: 'Debts', borderColor: 'red', data: aData6, hidden: true },
-				{ label: 'Liquidity', borderColor: 'pink', data: aData7, hidden: true },
-				{ label: 'ETrade', borderColor: 'green', data: aData10, hidden: true },
-				{ label: 'Checking', borderColor: 'green', data: aData11, hidden: true },
-				{ label: 'Savings', borderColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[0], backgroundColor: 'grey', borderColor: 'white', data: aData },
+				{ label: wLb[1], borderColor: 'orange', data: aDataA, hidden: true },
+				{ label: wLb[2], borderColor: 'green', data: aData2, hidden: true },
+				{ label: wLb[3], borderColor: 'blue', data: aData3, hidden: true },
+				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
+				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[6], borderColor: 'red', data: aData6, hidden: true },
+				{ label: wLb[7], borderColor: 'pink', data: aData7, hidden: true },
+				{ label: wLb[10], borderColor: 'white', data: aData10, hidden: true },
+				{ label: wLb[11], borderColor: 'white', data: aData11, hidden: true },
+				{ label: wLb[12], borderColor: 'white', data: aData12, hidden: true }
 			]
 		},
 		options: {
@@ -275,19 +278,19 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: 'Total', borderColor: 'white', data: aData },
-				{ label: 'Reportable', borderColor: 'orange', data: aDataA },
-				{ label: 'Liquid', borderColor: 'green', data: aData2 },
-				{ label: 'Fixed', borderColor: 'blue', data: aData3 },
-				{ label: 'Insurance', borderColor: 'grey', data: aData4, hidden: true },
-				{ label: 'Credits', borderColor: 'yellow', data: aData5, hidden: true },
-				{ label: 'Debts', borderColor: 'red', data: aData6 },
-				{ label: 'Liquidity', borderColor: 'pink', data: aData7, hidden: true },
-				{ label: 'Fidelity', borderColor: 'green', data: aData8, hidden: true },
-				{ label: 'EJones', borderColor: 'green', data: aData9, hidden: true },
-				{ label: 'ETrade', borderColor: 'green', data: aData10, hidden: true },
-				{ label: 'Checking', borderColor: 'green', data: aData11, hidden: true },
-				{ label: 'Savings', borderColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[0], borderColor: 'white', data: aData },
+				{ label: wLb[1], borderColor: 'orange', data: aDataA },
+				{ label: wLb[2], borderColor: 'green', data: aData2 },
+				{ label: wLb[3], borderColor: 'blue', data: aData3 },
+				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
+				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[6], borderColor: 'red', data: aData6 },
+				{ label: wLb[7], borderColor: 'pink', data: aData7 },
+				{ label: wLb[8], borderColor: 'white', data: aData8, hidden: true },
+				{ label: wLb[9], borderColor: 'white', data: aData9, hidden: true },
+				{ label: wLb[10], borderColor: 'white', data: aData10, hidden: true },
+				{ label: wLb[11], borderColor: 'white', data: aData11, hidden: true },
+				{ label: wLb[12], borderColor: 'white', data: aData12, hidden: true }
 			]
 		},
 		options: {
