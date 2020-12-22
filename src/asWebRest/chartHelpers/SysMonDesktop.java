@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 19 May 2019
+Updated: 21 Dec 2020
  */
 
 package asWebRest.chartHelpers;
@@ -325,16 +325,16 @@ public class SysMonDesktop {
                 .put("s2Name", "Swap").put("s2Color", "Red")
                 .put("s3Name", "Buffers").put("s3Color", "Green")
                 .put("s4Name", "Cached").put("s4Color", "Blue")
-                .put("xLabel", "WalkTime").put("yLabel", "Use in GBs");
+                .put("xLabel", "WalkTime").put("yLabel", "Use");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysMemory_Used = 0.00f;
-            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))/1024/1024); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))); } catch (Exception e) { e.printStackTrace(); }
             mSysMemory_Labels.put(thisObject.getString("WalkTime"));
             mSysMemory_Data.put(mSysMemory_Used);
-            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU")/1024/1024);
-            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU")/1024/1024);
-            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU")/1024/1024);
+            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU"));
+            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU"));
+            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU"));
         }
         mSysMemory_Glob
                 .put("labels", mSysMemory_Labels)
@@ -432,8 +432,8 @@ public class SysMonDesktop {
             if(i < 5) { System.out.println("DEBUG [" + i + "] - NET USE: IN = " + thisObject.getFloat("dtOctetsIn")/1024/1024/intLen/step + ", OUT = " + thisObject.getFloat("dtOctetsOut")/1024/1024/intLen/step); }
             float dtOctetsIn = 0;
             float dtOctetsOut = 0;
-            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn")/1024/1024/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsIn Failed!"); } }
-            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut")/1024/1024/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsOut Failed!"); } }          
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn")/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsIn Failed!"); } }
+            if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsOut")))) { try { dtOctetsOut = thisObject.getFloat("dtOctetsOut")/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsOut Failed!"); } }          
             float mSysNet_ThisOctetsTotal = dtOctetsIn + dtOctetsOut;          
             //System.out.println(i + " -- Comparing " + mSysNet_LastOctetsTotal + " to " + mSysNet_ThisOctetsTotal);
             if((mSysNet_LastOctetsTotal <= mSysNet_ThisOctetsTotal) && mSysNet_LastOctetsTotal != 0) {
@@ -552,27 +552,40 @@ public class SysMonDesktop {
         JSONArray mSysStorage_Labels = new JSONArray();
         JSONArray mSysStorage_Data = new JSONArray();
         JSONArray mSysStorage_Data2 = new JSONArray();
+        JSONArray mSysStorage_Data3 = new JSONArray();
+        JSONArray mSysStorage_Data4 = new JSONArray();
         mSysStorage_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysStorage_ChartName).put("chartFileName", "mSysStorage")
-                .put("sName", "sda1").put("sColor", "Red")
-                .put("s2Name", "sdb1").put("s2Color", "Blue")
+                .put("sName", "/").put("sColor", "Red")
+                .put("s2Name", "/extra1").put("s2Color", "Blue")
+                .put("s3Name", "/extra0").put("s3Color", "Yellow")
+                .put("s4Name", "/extra0_LBAs").put("s4Color", "White")
                 .put("xLabel", "WalkTime").put("yLabel", "% Disk Use");    
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             JSONObject thisExpanded = thisObject.getJSONObject("dtExpandedJSONData");
-            double mSysStorage_sda1Used = 0.00;
-            double mSysStorage_sdb1Used = 0.00;
-            try { mSysStorage_sda1Used = (double) 100.0 * ((double) thisObject.getFloat("dtK4RootU")/(double) thisObject.getFloat("dtK4Root")); } catch (Exception e) { e.printStackTrace(); }
-            try { mSysStorage_sdb1Used = (double) 100.0 * ((double) thisExpanded.getFloat("k4Extra1U")/(double) thisExpanded.getFloat("k4Extra1")); } catch (Exception e) { e.printStackTrace(); }
+            double mSysStorage_Used = 0.00;
+            double mSysStorage_extra1Used = 0.00;
+            double mSysStorage_extra0Used = 0.00;
+            double mSysStorage_extra0UsedLBAs = 0.00;
+            long lbaExpected = (long) 4000000000000000.00;
+            try { mSysStorage_Used = (double) 100.0 * ((double) thisObject.getFloat("dtK4RootU")/(double) thisObject.getFloat("dtK4Root")); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysStorage_extra1Used = (double) 100.0 * ((double) thisExpanded.getFloat("k4Extra1U")/(double) thisExpanded.getFloat("k4Extra1")); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysStorage_extra0Used = (double) 100.0 * ((double) thisExpanded.getFloat("k4Extra0U")/(double) thisExpanded.getFloat("k4Extra0")); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysStorage_extra0UsedLBAs = (double) 100.0 * ((long) thisExpanded.getFloat("lbaSdb1")/(long) lbaExpected); } catch (Exception e) { e.printStackTrace(); }
             mSysStorage_Labels.put(thisObject.getString("WalkTime"));
-            mSysStorage_Data.put(mSysStorage_sda1Used);
-            mSysStorage_Data2.put(mSysStorage_sdb1Used);
+            mSysStorage_Data.put(mSysStorage_Used);
+            mSysStorage_Data2.put(mSysStorage_extra1Used);
+            mSysStorage_Data3.put(mSysStorage_extra0Used);
+            mSysStorage_Data4.put(mSysStorage_extra0UsedLBAs);
         } 
         mSysStorage_Glob
                 .put("labels", mSysStorage_Labels)
                 .put("data", mSysStorage_Data)
                 .put("data2", mSysStorage_Data2)
+                .put("data3", mSysStorage_Data3)
+                .put("data4", mSysStorage_Data4)
                 .put("props", mSysStorage_Props);
         return mSysStorage_Glob;
     }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Nov 2020
-Updated: 23 Nov 2020
+Updated: 21 Dec 2020
  */
 
 function ch_chart_Rapid_CPU(container, result, type, pData) {

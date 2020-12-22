@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 29 Dec 2019
+Updated: 22 Dec 2020
 */
 
 var chartArray;
@@ -153,13 +153,13 @@ function populateCharts() {
     var timestamp = getDate("day", 0, "timestamp");
     var rData = "<div class='rWrapper'>"; // implement fContainer class
     var chartList1 = [
-        "mSysLoad", // done 4/29/18
-        "mSysCPU", // done 4/29/18
-        "mSysTemp", // done 4/29/18
-        "mSysMemory", // done 4/29/18
-        "mSysStorage", // done 4/29/18
-        "mSysDiskIO", // done 4/29/18
-        "mSysNet", // done 4/29/18
+        //"mSysLoad", // done 4/29/18
+        //"mSysCPU", // done 4/29/18
+        //"mSysTemp", // done 4/29/18
+        //"mSysMemory", // done 4/29/18
+        //"mSysStorage", // done 4/29/18
+        //"mSysDiskIO", // done 4/29/18 <<<< not converted over, not working 12/22/20
+        //"mSysNet", // done 4/29/18
         "mSysMySQLSize", // done 5/13/18
         "mSysNumUsers", // done 4/29/18
         "mSysFans", // done 4/30/18
@@ -212,6 +212,27 @@ function populateCharts() {
     dojo.byId("chartPlacement").innerHTML = rData;
     getCharts(chartArray, stepIn, dateIn);
     setTimeout(function () {  populateCharts(); }, getRefresh("veryLong"));
+}
+
+function populateCharts3() {
+	let pOpts = { "step" : stepIn, "date": dateIn };
+	let pOptsStr = pOpts.step + "," + pOpts.date;
+	let divOpts = "class='th_sm_med' style='height: 92px;'";
+	let rData = "<div class='rWrapper'>" +
+		"<a href='" + doCh("3", "mSysLoad", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysLoad_Holder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "mSysCPU", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysCPU_Holder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "mSysTemp", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysTemp_Holder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "mSysMemory", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysMemory_Holder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "mSysNet", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysNet_Holder'></canvas></div></a>" +
+		"<a href='" + doCh("3", "mSysStorage", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysStorage_Holder'></canvas></div></a>" +
+		"</div>"; 
+    dojo.byId("chartPlacement3").innerHTML = rData;
+	ch_get_mSysLoad("mSysLoad_Holder", "thumb", pOpts);
+	ch_get_mSysCPU("mSysCPU_Holder", "thumb", pOpts);
+	ch_get_mSysTemp("mSysTemp_Holder", "thumb", pOpts);
+	ch_get_mSysMemory("mSysMemory_Holder", "thumb", pOpts);
+	ch_get_mSysStorage("mSysStorage_Holder", "thumb", pOpts);
+	ch_get_mSysNet("mSysNet_Holder", "thumb", pOpts);
 }
 
 function populateEDiscovery(lastSsh) {
@@ -315,6 +336,7 @@ function initSysMon() {
     snmpRapid("snmpDataRapidHolder");
     getLastWalk("snmpStatusHolder");
     getLiveRowCount("databaseLiveHolder");
+    populateCharts3();
     populateCharts();
     getEDiscovery();
     populateReliaStump();

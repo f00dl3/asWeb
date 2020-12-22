@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 10 Dec 2020
+Updated: 22 Dec 2020
  */
 
 let pOpts = {};
@@ -39,6 +39,12 @@ $(document).ready(function() {
 		case "FinENW_Year_L.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_T.png": ch_get_FinENW_Year_A(container, type); break;
 		case "msByDate.png": ch_get_msByDate(container, type); break;
+		case "mSysCPU.png": ch_get_mSysCPU(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysLoad.png": ch_get_mSysLoad(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysMemory.png": ch_get_mSysMemory(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysNet.png": ch_get_mSysNet(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysStorage.png": ch_get_mSysStorage(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysTemp.png": ch_get_mSysTemp(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
 		case "SleepRange.png": ch_get_SleepRange(container, type, { xdt1: inOpts[0], xdt2: inOpts[1] }); break;
 		case "ObsJSONHumidity.png": ch_get_ObsJSONHumidity(container, type, { dateStart: inOpts[0], dateEnd: inOpts[1], station: inOpts[2] }); break;

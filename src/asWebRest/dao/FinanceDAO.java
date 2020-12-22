@@ -676,7 +676,7 @@ public class FinanceDAO {
 
     private String savingsAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_FBook_SvBkAdd = "INSERT INTO FB_CFSV59 VALUES (Null,?,?,?,?);";
+        String query_FBook_SvBkAdd = "INSERT INTO Finances.FB_CFSV59 VALUES (Null,?,?,?,?);";
         try { returnData = wc.q2do1c(dbc, query_FBook_SvBkAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -760,7 +760,7 @@ public class FinanceDAO {
     }
     
 	private JSONArray zillowPIDs(Connection dbc) {
-		final String query_GetZPIDs = "SELECT Who, Address, ZPID, MyAsset FROM Core.FB_CompHomeVals WHERE ZPID IS NOT null;";
+		final String query_GetZPIDs = "SELECT Who, Address, ZPID, MyAsset FROM Finances.FB_CompHomeVals WHERE ZPID IS NOT null;";
 		JSONArray tContainer = new JSONArray();
 		try {
 			ResultSet resultSet = wc.q2rs1c(dbc, query_GetZPIDs, null);

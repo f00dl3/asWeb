@@ -64,6 +64,7 @@ public class Desktop {
         final File upsFile = new File(ramPath+"/upsstats.cgi");
         final File nvOutFile = new File(ramPath+"/nvidia-smi.txt");
         final File locJson = new File(ramPath+"/codeLines.json");
+        final File lbaFile = new File(ramPath+"/lba_sdb1.txt");
 
         String dbSizeQuery = "SELECT" +
                 " table_schema 'Database'," +
@@ -86,6 +87,7 @@ public class Desktop {
         try { wc.sedFileReplace(ramPath+"/dbsizes.txt", "null", "0"); } catch (Exception e) { }
         try { wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ","); } catch (Exception e) { }
         try { wc.sedFileReplace(ramPath+"/duMySQL.txt", "\\t", ","); } catch (Exception e) { }
+        try { wc.sedFileReplace(lbaFile.toString(), " +", ","); } catch (Exception e) { }
         //StumpJunk.sedFileReplace(nvOutFile.getPath(), "|", " ");
         try { wc.sedFileReplace(nvOutFile.getPath(), "\\/", " "); } catch (Exception e) { }
         try { wc.sedFileReplace(nvOutFile.getPath(), " +", ","); } catch (Exception e) { }
@@ -406,6 +408,16 @@ public class Desktop {
         catch (FileNotFoundException e) { e.printStackTrace(); }
         catch (ArrayIndexOutOfBoundsException aix) { aix.printStackTrace(); }
 
+        long lbaSdb1 = 0;
+        try { 
+        	Scanner lbaScanner = new Scanner(lbaFile);
+	        while (lbaScanner.hasNextLine()) {
+	            String line = lbaScanner.nextLine();
+	            if(line.contains("Total_LBAs")) { String[] lineTmp = line.split(","); lbaSdb1 = Long.parseLong(lineTmp[9]); }
+	        }
+	        lbaScanner.close();
+        } catch (Exception e) { }
+        
         expandedJson
             .put("LOC_aswjJava", aswjLocJava)
             .put("LOC_aswjJsp", aswjLocJsp)
@@ -427,7 +439,8 @@ public class Desktop {
             .put("nvUtilization", nvUtilization)
             .put("mySQLRowsFinances", mySQLRowsFinances)
             .put("mySQLSizeFinances", mySQLSizeFinances)
-            .put("duMySQLFinances", duMySQLFinances);
+            .put("duMySQLFinances", duMySQLFinances)
+            .put("lbaSdb1", lbaSdb1);
 
         String thisSQLQuery = "INSERT IGNORE INTO net_snmp.Main ("
                 + "WalkTime, NumUsers,"

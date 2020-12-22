@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    28 Nov 2020
+    Updated:    22 Dec 2020
     Author     : astump
 --%>
 
@@ -41,7 +41,8 @@
    		"Charts/Ffxiv",
    		"Charts/Finance",
 		"Charts/Fitness",
-		"Charts/SysMon",
+		"Charts/SNMP",
+		"Charts/SysMonDesktop",
    		"Charts/Test",
    		"Charts/Utils",
    		"Charts/Weather"
@@ -128,7 +129,8 @@
     };
     
     String [] sysMonScripts = {
-  		"Charts/SysMon",
+     	"Charts/SNMP",
+  		"Charts/SysMonDesktop",
         "SNMP/ReliaStump"
     };
     
@@ -220,7 +222,7 @@
     
     String sysMonScriptPack = "";
     for(int i=0; i < sysMonScripts.length; i++) {
-        sysMonScriptPack += "<script src='"+rootPath+"/jsBase/"+snmpScripts[i]+".js'></script>";
+        sysMonScriptPack += "<script src='"+rootPath+"/jsBase/"+sysMonScripts[i]+".js'></script>";
     }
     
     String tpScriptPack = "";

@@ -1,13 +1,16 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 10 Dec 2020
+Updated: 22 Dec 2020
  */
 
 package asWebRest.resource;
 
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -21,18 +24,21 @@ import asWebRest.action.GetFfxivAction;
 import asWebRest.action.GetFinanceAction;
 import asWebRest.action.GetFitnessAction;
 import asWebRest.action.GetMediaServerAction;
+import asWebRest.action.GetSnmpAction;
 import asWebRest.action.GetUtilityUseAction;
 import asWebRest.action.GetWeatherAction;
 import asWebRest.chartHelpers.Ffxiv;
 import asWebRest.chartHelpers.Finance;
 import asWebRest.chartHelpers.Fitness;
 import asWebRest.chartHelpers.MediaServer;
+import asWebRest.chartHelpers.SysMonDesktop;
 import asWebRest.chartHelpers.Utilities;
 import asWebRest.chartHelpers.Weather;
 import asWebRest.dao.FfxivDAO;
 import asWebRest.dao.FinanceDAO;
 import asWebRest.dao.FitnessDAO;
 import asWebRest.dao.MediaServerDAO;
+import asWebRest.dao.SnmpDAO;
 import asWebRest.dao.UtilityUseDAO;
 import asWebRest.dao.WeatherDAO;
 import asWebRest.hookers.Chart3Helpers;
@@ -142,6 +148,42 @@ public class Chart3Resource extends ServerResource {
                     JSONArray jraSleepRange = getFitnessAction.getChWeightR(dbc, qParams);
 	                returnData = fitness.getSleepCh(jraSleepRange).toString();
 	                break;
+	                
+	 			case "SysMonCharts": 
+                    int intLen = 60 * 2;
+	 		        GetSnmpAction getSnmpAction = new GetSnmpAction(new SnmpDAO());
+                    SysMonDesktop smDesktop = new SysMonDesktop();
+                    JSONArray mainGlob = new JSONArray();
+                    final DateFormat wtf = new SimpleDateFormat("yyyyMMdd");
+                    final Date nowTimestamp = new Date();
+                    final String wtfDate = wtf.format(nowTimestamp);                    
+                    int step = 1;
+                    String stepIn = null;
+                    String stepTest = "1";
+                    String dateIn = null;
+                    String dateTest = "1";        
+                    String smcType = "";
+                    try { 
+                    	smcType = argsInForm.getFirstValue("type");
+                        stepIn = argsInForm.getFirstValue("step");
+                        dateIn = argsInForm.getFirstValue("date").replace("-", "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(wc.isSet(stepIn) && !stepIn.equals("1")) { stepTest = "0"; }
+                    if(wc.isSet(dateIn) && !dateIn.equals(wtfDate)) { dateTest = "0"; }                                       
+                    qParams.add(0, dateTest); //DateTest
+                    qParams.add(1, dateIn);      
+                    try { mainGlob = getSnmpAction.getMain(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
+                    switch(smcType) {
+                    	case "mSysCPU": returnData = smDesktop.getSysCPU(mainGlob, intLen, step).toString(); break;
+                    	case "mSysMemory": returnData = smDesktop.getSysMemory(mainGlob, intLen, step).toString(); break;
+                    	case "mSysNet": returnData = smDesktop.getSysNet(mainGlob, intLen, step).toString(); break;
+                    	case "mSysStorage": returnData = smDesktop.getSysStorage(mainGlob, intLen, step).toString(); break;
+                    	case "mSysTemp": returnData = smDesktop.getSysTemp(mainGlob, intLen, step).toString(); break;
+                    	case "mSysLoad": default: returnData = smDesktop.getSysLoad(mainGlob, intLen, step).toString(); break;
+                    }
+	 				break;
 	                
 	 			case "UseElecD":
                     JSONArray kWhU_Raw = getUtilityUseAction.getChUseElecD(dbc);
