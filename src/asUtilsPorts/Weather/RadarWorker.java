@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 27 Aug 2017
-Updated: 24 Feb 2020
+Updated: 25 Dec 2020
 */
 
 package asUtilsPorts.Weather;
@@ -58,29 +58,29 @@ public class RadarWorker {
 				if(!thisPathObject.exists()) { thisPathObject.mkdirs(); }
 				if(!thisDestPathObject.exists()) { thisDestPathObject.mkdirs(); }
 				final File radAoutFile = new File(ramDrive+"/"+thisRad+"/radTmpB_"+thisRad+".jpg");
-				final File radBoutFile = new File(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".jpg");
+				//final File radBoutFile = new File(ramDrive+"/"+thisRad+"/radTmpV_"+thisRad+".jpg");
 				final String thisOverlay = radPath+"/"+thisRad+"/_Overlay.jpg";
 				
 				Thread gr1a = new Thread(() -> {
                     String radarURLa = null;
-                    if(thisRad.equals("XXX")) { radarURLa = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif"; }
-                    else { radarURLa = "https://radar.weather.gov/ridge/RadarImg/N0R/"+thisRad+"_N0R_0.gif"; }
+                    if(thisRad.equals("XXX")) { radarURLa = "https://radar.weather.gov/ridge/lite/CONUS_0.gif"; }
+                    else { radarURLa = "https://radar.weather.gov/ridge/lite/K"+thisRad+"_0.gif"; }
                     wc.jsoupOutBinary(radarURLa, radAoutFile, 5.0);
                 });
 				
-				Thread gr1b = new Thread(() -> {
+				/* Thread gr1b = new Thread(() -> {
                     String radarURLb = null;
                     if(thisRad.equals("XXX")) { radarURLb = "https://radar.weather.gov/ridge/RadarImg/N0S/EAX_N0S_0.gif"; }
                     else { radarURLb = "https://radar.weather.gov/ridge/RadarImg/N0S/"+thisRad+"_N0S_0.gif"; }
                     wc.jsoupOutBinary(radarURLb, radBoutFile, 5.0);
-                });
+                }); */
 
-				Thread grListA[] = { gr1a, gr1b };
+				Thread grListA[] = { gr1a /*, gr1b */ };
 				for (Thread thread : grListA) { thread.start(); }
 				for (int i = 0; i < grListA.length; i++) { try { grListA[i].join(); } catch (InterruptedException nx) { nx.printStackTrace(); } }
 
 				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/_BLatest_NO.gif");
-				wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/_VLatest_NO.gif");
+				//wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/_VLatest_NO.gif");
 				
 				//final String convertArgs = "-gravity center";
 				final String convertArgs = "-alpha set -channel A -evaluate set 20 -gravity center";
@@ -90,20 +90,20 @@ public class RadarWorker {
 					final JSONArray tBounds = new JSONArray(resultSet.getString("BoundsNSEW"));
 					final String appendData = rip.generateConvertStringsForStationData(dbc, tBounds);
 					wc.runProcess("convert -composite "+thisOverlay+" "+radAoutFile.toString()+" "+ convertArgs + " " + appendData + " " + radAoutFile.toString());
-					wc.runProcess("convert -composite "+thisOverlay+" "+radBoutFile.toString()+" "+ convertArgs + " " + radBoutFile.toString());
+					//wc.runProcess("convert -composite "+thisOverlay+" "+radBoutFile.toString()+" "+ convertArgs + " " + radBoutFile.toString());
 				}
 				
 				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/_BLatest.jpg");
 				wc.copyFile(radAoutFile.toString(), radPath+"/"+thisRad+"/B"+thisTimestamp+".jpg");
-				wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/V"+thisTimestamp+".jpg");
+				//wc.copyFile(radBoutFile.toString(), radPath+"/"+thisRad+"/V"+thisTimestamp+".jpg");
 
 				wc.runProcess("(ls "+radPath+"/"+thisRad+"/B*.jpg -t | head -n 16; ls "+radPath+"/"+thisRad+"/B*.jpg)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
-				wc.runProcess("(ls "+radPath+"/"+thisRad+"/V*.jpg -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.jpg)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
+				//wc.runProcess("(ls "+radPath+"/"+thisRad+"/V*.jpg -t | head -n 16; ls "+radPath+"/"+thisRad+"/V*.jpg)|sort|uniq -u| xargs -I '{}' mv '{}' "+radPath+"/"+thisRad+"/Archive");
 				wc.runProcess("find "+radPath+"/"+thisRad+"/ -size 0 -print0 |xargs -0 rm");
 				
                 if(thisRad.equals("EAX")) { 
                 	wc.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/B*.jpg "+radPath+"/"+thisRad+"/_BLoop.gif");
-                	wc.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/V*.jpg "+radPath+"/"+thisRad+"/_VLoop.gif");
+                	//wc.runProcess("convert -delay 18 -loop 0 -dispose previous "+radPath+"/"+thisRad+"/V*.jpg "+radPath+"/"+thisRad+"/_VLoop.gif");
                 }			
 
 

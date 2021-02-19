@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 17 Jul 2020
+Updated: 2 Jan 2021
  */
 
 const aLog = require('./../accessLog.js');
@@ -20,9 +20,11 @@ function helpMessage(msg) {
 	var apiVer = "UNSYNCH";
 	var helpMessageHeader = "asWxBot (f00dl3) ==> Commands:";
 	var helpMessageBody = "\n\'!ping\': Return \'pong\' reply back to user" +
+		"\n\'c2f\': Convert Celsius to Farenheit. Use: \'c2f 15\'" +
 		"\n\'cam\': Get bot\'s cameras!" +
 		"\n\'camloop\': Get bot\'s camera video loop!" +
 		"\n\'cf6\': GetCF6 daily climate data. Use: \'cf6 <YYYY-MM>\'" +
+		"\n\'f2c\': Convert Farenheit to Celsius. Use: \'f2c 88\'" +
 		"\n\'find\': Get weather data for given station. Use: find <station> <YYYY-MM-DD>" +
 		"\n\'forecast\': Get latest forecast model output for KOJC (Olathe, KS)" +
 		"\n\'quote\': Get a random quote" +

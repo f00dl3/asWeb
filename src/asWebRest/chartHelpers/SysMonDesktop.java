@@ -2,7 +2,7 @@
 by Anthony Stump
 Base code created: 30 Mar 2018
 Split off: 7 May 2018
-Updated: 21 Dec 2020
+Updated: 23 Dec 2020
  */
 
 package asWebRest.chartHelpers;
@@ -329,12 +329,12 @@ public class SysMonDesktop {
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
             float mSysMemory_Used = 0.00f;
-            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")-(thisObject.getFloat("dtKMemBuffU")+thisObject.getFloat("dtKMemCachedU")))); } catch (Exception e) { e.printStackTrace(); }
+            try { mSysMemory_Used = ((thisObject.getFloat("dtKMemPhysU")*1024-((thisObject.getFloat("dtKMemBuffU")*1024)+(thisObject.getFloat("dtKMemCachedU")*1024)))); } catch (Exception e) { e.printStackTrace(); }
             mSysMemory_Labels.put(thisObject.getString("WalkTime"));
             mSysMemory_Data.put(mSysMemory_Used);
-            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU"));
-            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU"));
-            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU"));
+            mSysMemory_Data2.put(thisObject.getFloat("dtKSwapU")*1024);
+            mSysMemory_Data3.put(thisObject.getFloat("dtKMemBuffU")*1024);
+            mSysMemory_Data4.put(thisObject.getFloat("dtKMemCachedU")*1024);
         }
         mSysMemory_Glob
                 .put("labels", mSysMemory_Labels)
@@ -357,6 +357,7 @@ public class SysMonDesktop {
         JSONArray mSysMySQLSize_Data4 = new JSONArray();
         JSONArray mSysMySQLSize_Data5 = new JSONArray();
         JSONArray mSysMySQLSize_Data6 = new JSONArray();
+        JSONArray mSysMySQLSize_Data7 = new JSONArray();
         mSysMySQLSize_Props
                 .put("dateFormat", "yyyyMMddHHmmss")
                 .put("chartName", mSysMySQLSize_ChartName).put("chartFileName", "mSysMySQLSize")
@@ -366,9 +367,13 @@ public class SysMonDesktop {
                 .put("s4Name", "Size:NetSNMP").put("s4Color", "Yellow")
                 .put("s5Name", "Size:WxObs").put("s5Color", "Green")
                 .put("s6Name", "Size:TOTAL").put("s6Color", "White")
+                .put("s7Name", "Size:Finances").put("s7Color", "Gray")
                 .put("xLabel", "WalkTime").put("yLabel", "Size GBit");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
+            JSONObject expandedData = thisObject.getJSONObject("ExpandedJSONData");
+            float rowsFinances = 0.0f;
+            try { rowsFinances = (float) expandedData.getFloat("mySqlSizeFinances"); } catch (Exception e) { e.printStackTrace(); }
             float mSysMySQLSize_TotalRows = ((
                     thisObject.getFloat("dtMySQLRowsCore") +
                     thisObject.getFloat("dtMySQLRowsFeeds") +
@@ -392,7 +397,8 @@ public class SysMonDesktop {
             mSysMySQLSize_Data3.put(thisObject.getFloat("dtMySQLSizeFeeds")/1000000);
             mSysMySQLSize_Data4.put(thisObject.getFloat("dtMySQLSizeNetSNMP")/1000000);
             mSysMySQLSize_Data5.put(thisObject.getFloat("dtMySQLSizeWxObs")/1000000);
-            mSysMySQLSize_Data5.put(mSysMySQLSize_TotalSize);
+            mSysMySQLSize_Data6.put(mSysMySQLSize_TotalSize);
+            mSysMySQLSize_Data7.put(rowsFinances/1000000);
         }
         mSysMySQLSize_Glob
                 .put("labels", mSysMySQLSize_Labels)
@@ -402,11 +408,11 @@ public class SysMonDesktop {
                 .put("data4", mSysMySQLSize_Data4)
                 .put("data5", mSysMySQLSize_Data5)
                 .put("data6", mSysMySQLSize_Data6)
+                .put("data7", mSysMySQLSize_Data7)
                 .put("props", mSysMySQLSize_Props);
         return mSysMySQLSize_Glob;
     }
      
-    // 5/19/19 - Still not working right.
     private JSONObject mSysNet(JSONArray dataIn, int intLen, int step) {
         String returnData = "";
         String mSysNet_ChartName = "Desktop: Network Use";
@@ -429,7 +435,7 @@ public class SysMonDesktop {
                 .put("xLabel", "WalkTime").put("yLabel", "Mbps");
         for(int i = 0; i < dataIn.length(); i++) {
             JSONObject thisObject = dataIn.getJSONObject(i);
-            if(i < 5) { System.out.println("DEBUG [" + i + "] - NET USE: IN = " + thisObject.getFloat("dtOctetsIn")/1024/1024/intLen/step + ", OUT = " + thisObject.getFloat("dtOctetsOut")/1024/1024/intLen/step); }
+            if(i < 5) { System.out.println("DEBUG [" + i + "] - NET USE: IN = " + thisObject.getFloat("dtOctetsIn")/intLen/step + ", OUT = " + thisObject.getFloat("dtOctetsOut")/intLen/step); }
             float dtOctetsIn = 0;
             float dtOctetsOut = 0;
             if(wc.isSet(Float.toString(thisObject.getFloat("dtOctetsIn")))) { try { dtOctetsIn = thisObject.getFloat("dtOctetsIn")/intLen/step;  } catch (Exception e) { System.out.println(i + " dtOctetsIn Failed!"); } }

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 20 Apr 2018
-Updated: 22 Dec 2020
+Updated: 6 Feb 2021
 */
 
 var chartArray;
@@ -160,9 +160,9 @@ function populateCharts() {
         //"mSysStorage", // done 4/29/18
         //"mSysDiskIO", // done 4/29/18 <<<< not converted over, not working 12/22/20
         //"mSysNet", // done 4/29/18
-        "mSysMySQLSize", // done 5/13/18
-        "mSysNumUsers", // done 4/29/18
-        "mSysFans", // done 4/30/18
+        //"mSysMySQLSize", // done 5/13/18
+        //"mSysNumUsers", // done 4/29/18
+        //"mSysFans", // done 4/30/18
         "mSysUPSLoad", // done 4/30/18
         "mSysUPSTimeLeft", // done 4/30/18
         "mSysTomcatDeploy", // issues 4/30/18
@@ -217,22 +217,47 @@ function populateCharts() {
 function populateCharts3() {
 	let pOpts = { "step" : stepIn, "date": dateIn };
 	let pOptsStr = pOpts.step + "," + pOpts.date;
+	let c2do = [
+		"mSysLoad",
+		"mSysCPU",
+		"mSysTemp",
+		"mSysMemory",
+		"mSysNet",
+		"mSysStorage",
+		"mSysMySQLSize",
+		"mSysNumUsers",
+		"mSysFans"
+	];
 	let divOpts = "class='th_sm_med' style='height: 92px;'";
-	let rData = "<div class='rWrapper'>" +
-		"<a href='" + doCh("3", "mSysLoad", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysLoad_Holder'></canvas></div></a>" +
-		"<a href='" + doCh("3", "mSysCPU", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysCPU_Holder'></canvas></div></a>" +
-		"<a href='" + doCh("3", "mSysTemp", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysTemp_Holder'></canvas></div></a>" +
-		"<a href='" + doCh("3", "mSysMemory", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysMemory_Holder'></canvas></div></a>" +
-		"<a href='" + doCh("3", "mSysNet", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysNet_Holder'></canvas></div></a>" +
-		"<a href='" + doCh("3", "mSysStorage", pOptsStr) + "' target='nChHolder'><div " + divOpts + "><canvas id='mSysStorage_Holder'></canvas></div></a>" +
-		"</div>"; 
+	let rData = "<div class='rWrapper'><div class='table'><div class='tr'>";
+	let j = 0;
+	for(let i = 0; i < c2do.length; i++) {
+		if(j <= 5) {
+			rData += "<span class='td'>" +
+				"<a href='" + doCh("3", c2do[i], pOptsStr) + "' target='nChHolder'>" + c2do[i] + "<br/>"
+				"<div " + divOpts + " >" +
+				"<canvas id='" + c2do[i] + "_Holder'></canvas>" +
+				"</div>" + 
+				"</a></span>";
+			j++;
+			if(j == 5) { 
+				rData += "</div>" +
+					"<div class='tr'>";
+				j = 0; 
+			}
+		}
+	}
+	rData += "</div></div></div>"; 
     dojo.byId("chartPlacement3").innerHTML = rData;
 	ch_get_mSysLoad("mSysLoad_Holder", "thumb", pOpts);
 	ch_get_mSysCPU("mSysCPU_Holder", "thumb", pOpts);
 	ch_get_mSysTemp("mSysTemp_Holder", "thumb", pOpts);
 	ch_get_mSysMemory("mSysMemory_Holder", "thumb", pOpts);
-	ch_get_mSysStorage("mSysStorage_Holder", "thumb", pOpts);
 	ch_get_mSysNet("mSysNet_Holder", "thumb", pOpts);
+	ch_get_mSysStorage("mSysStorage_Holder", "thumb", pOpts);
+	ch_get_mSysMySQLSize("mSysMySQLSize_Holder", "thumb", pOpts);
+	ch_get_mSysNumUsers("mSysNumUsers_Holder", "thumb", pOpts);
+	ch_get_mSysFans("mSysFans_Holder", "thumb", pOpts);
 }
 
 function populateEDiscovery(lastSsh) {

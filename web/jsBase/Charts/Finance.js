@@ -1,11 +1,10 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 21 Dec 2020
+Updated: 22 Jan 2020
  */
 
-let wLb = [ "T", "R", "L", "F", "I", "C", "D", "Y", "4", "J", "E", "B", "S" ];
-
+let wLb = [ "*", "R", "L", "X", "?", "C", "D", "Y", "RA", "RE", "T", "B", "S", "O" ];
 
 function ch_chart_FinENW_All_A(container, result, type) {
 	let timeFormat = 'YYYY-MM-DD';
@@ -38,6 +37,7 @@ function ch_chart_FinENW_All_A(container, result, type) {
 	let aData10 = resultJ.data10;
 	let aData11 = resultJ.data11;
 	let aData12 = resultJ.data12;
+	let aData13 = resultJ.data13;
 	let aDataA = [];
 	let i = 0;
 	aData.forEach(function(ad) {
@@ -52,18 +52,19 @@ function ch_chart_FinENW_All_A(container, result, type) {
 			labels: aLabels,
 			datasets: [
 				{ label: wLb[0], borderColor: 'white', backgroundColor: 'grey', data: aData },
-				{ label: wLb[1], borderColor: 'brown', backgroundColor: 'orange', data: aDataA },
+				{ label: wLb[1], borderColor: 'yellow', backgroundColor: 'orange', data: aDataA },
 				{ label: wLb[2], borderColor: 'green', backgroundColor: 'darkgreen', data: aData2 },
 				{ label: wLb[3], borderColor: 'blue', backgroundColor: 'darkblue', data: aData3 },
 				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
-				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[5], borderColor: 'brown', data: aData5, hidden: true },
 				{ label: wLb[6], borderColor: 'red', backgroundColor: 'darkred', data: aData6 },
 				{ label: wLb[7], borderColor: 'pink', backgroundColor: 'purple', data: aData7, hidden: true },
-				{ label: wLb[8], borderColor: 'white', data: aData8, hidden: true },
-				{ label: wLb[9], borderColor: 'white', data: aData9, hidden: true },
-				{ label: wLb[10], borderColor: 'darkblue', backgroundColor: 'lightblue', data: aData10, hidden: true },
+				{ label: wLb[8], borderColor: '#99ee00', backgroundColor: 'olive', data: aData8, hidden: true },
+				{ label: wLb[9], borderColor: '#fcae1e', backgroundColor: '#fc6a03', data: aData9, hidden: true },
+				{ label: wLb[10], borderColor: 'skyblue', backgroundColor: 'blue', data: aData10, hidden: true },
 				{ label: wLb[11], borderColor: 'white', backgroundColor: 'grey', data: aData11, hidden: true },
-				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true },
+				{ label: wLb[13], borderColor: '#ed820e', backgroundColor: '#cc5801', data: aData13, hidden: true }
 			]
 		},
 		options: {
@@ -114,7 +115,7 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		lbRadius = 0;
 	}
 	let timeout = getRefresh("semiRapid");
-	let limit = 128;
+	let limit = 192;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();
@@ -124,9 +125,11 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	let aData5 = resultJ.data5.reverse();
 	let aData6 = resultJ.data6.reverse();
 	let aData7 = resultJ.data7.reverse();
+	let aData8 = resultJ.data8.reverse();
 	let aData10 = resultJ.data10.reverse();
 	let aData11 = resultJ.data11.reverse();
 	let aData12 = resultJ.data12.reverse();
+	let aData13 = resultJ.data13.reverse();
 	let aDataA = [];
 	let i = 0;
 	aData.forEach(function(ad) {
@@ -142,9 +145,11 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	aData5 = trimArray(aData5, limit);
 	aData6 = trimArray(aData6, limit);
 	aData7 = trimArray(aData7, limit);
+	aData8 = trimArray(aData8, limit);
 	aData10 = trimArray(aData10, limit);
 	aData11 = trimArray(aData11, limit);
 	aData12 = trimArray(aData12, limit);
+	aData13 = trimArray(aData13, limit);
 	var ctx = document.getElementById(container).getContext('2d');
 	let extraDataContent = aLabels[0] + ": " + autoUnits(aData[0].toFixed(2));
 	let chart = null;
@@ -153,17 +158,19 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: wLb[0], borderColor: 'white', backgroundColor: 'grey', data: aData },
-				{ label: wLb[1], borderColor: 'brown', backgroundColor: 'orange', data: aDataA, hidden: true },
+				{ label: wLb[0], borderColor: 'white', backgroundColor: 'grey', data: aData, hidden: true },
+				{ label: wLb[1], borderColor: 'yellow', backgroundColor: 'orange', data: aDataA, hidden: true },
 				{ label: wLb[2], borderColor: 'green', backgroundColor: 'darkgreen', data: aData2, hidden: true },
 				{ label: wLb[3], borderColor: 'blue', backgroundColor: 'darkblue', data: aData3, hidden: true },
 				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
-				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[5], borderColor: 'brown', data: aData5, hidden: true },
 				{ label: wLb[6], borderColor: 'red', backgroundColor: 'darkred', data: aData6, hidden: true },
 				{ label: wLb[7], borderColor: 'pink', backgroundColor: 'purple', data: aData7, hidden: true },
-				{ label: wLb[10], borderColor: 'darkblue', backgroundColor: 'lightblue', data: aData10, hidden: true },
+				{ label: wLb[8], borderColor: '#99ee00', backgroundColor: 'olive', data: aData8, hidden: true },
+				{ label: wLb[10], borderColor: 'skyblue', backgroundColor: 'blue', data: aData10, hidden: false },
 				{ label: wLb[11], borderColor: 'white', backgroundColor: 'grey', data: aData11, hidden: true },
-				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true },
+				{ label: wLb[13], borderColor: '#ed820e', backgroundColor: '#cc5801', data: aData13, hidden: true }
 			]
 		},
 		options: {
@@ -206,9 +213,11 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 		let tData5 = resultJ.data5[0];
 		let tData6 = resultJ.data6[0];
 		let tData7 = resultJ.data7[0];
+		let tData8 = resultJ.data8[0];
 		let tData10 = resultJ.data10[0];
 		let tData11 = resultJ.data11[0];
 		let tData12 = resultJ.data12[0];
+		let tData13 = resultJ.data13[0];
 		let tDataA = tData - tData4;
 		let currentLabel = chart.data.labels[chart.data.labels.length-1];
 		if(tLabel === currentLabel) {
@@ -223,9 +232,11 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 			chart.data.datasets[5].data.push(tData5);
 			chart.data.datasets[6].data.push(tData6);
 			chart.data.datasets[7].data.push(tData7);
-			chart.data.datasets[8].data.push(tData10);
-			chart.data.datasets[9].data.push(tData11);
-			chart.data.datasets[10].data.push(tData12);
+			chart.data.datasets[8].data.push(tData8);
+			chart.data.datasets[9].data.push(tData10);
+			chart.data.datasets[10].data.push(tData11);
+			chart.data.datasets[11].data.push(tData12);
+			chart.data.datasets[12].data.push(tData13);
 			chart.update();
 			chart.data.labels.shift();
 			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); });
@@ -261,6 +272,7 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 	let aData10 = resultJ.data10;
 	let aData11 = resultJ.data11;
 	let aData12 = resultJ.data12;
+	let aData13 = resultJ.data13;
 	let aDataA = [];
 	let i = 0;
 	aData.forEach((ad) => {
@@ -278,19 +290,20 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 		data: {
 			labels: aLabels,
 			datasets: [
-				{ label: wLb[0], borderColor: 'white', backgroundColor: 'grey', data: aData },
-				{ label: wLb[1], borderColor: 'brown', backgroundColor: 'orange', data: aDataA, hidden: true },
+				{ label: wLb[0], borderColor: 'white', backgroundColor: 'grey', data: aData, hidden: true },
+				{ label: wLb[1], borderColor: 'yellow', backgroundColor: 'orange', data: aDataA, hidden: false },
 				{ label: wLb[2], borderColor: 'green', backgroundColor: 'darkgreen', data: aData2, hidden: true },
 				{ label: wLb[3], borderColor: 'blue', backgroundColor: 'darkblue', data: aData3, hidden: true },
 				{ label: wLb[4], borderColor: 'grey', data: aData4, hidden: true },
-				{ label: wLb[5], borderColor: 'yellow', data: aData5, hidden: true },
+				{ label: wLb[5], borderColor: 'brown', data: aData5, hidden: true },
 				{ label: wLb[6], borderColor: 'red', backgroundColor: 'darkred', data: aData6, hidden: true },
 				{ label: wLb[7], borderColor: 'pink', backgroundColor: 'purple', data: aData7, hidden: true },
-				{ label: wLb[8], borderColor: 'white', data: aData8, hidden: true },
-				{ label: wLb[9], borderColor: 'white', data: aData9, hidden: true },
-				{ label: wLb[10], borderColor: 'darkblue', backgroundColor: 'lightblue', data: aData10, hidden: true },
+				{ label: wLb[8], borderColor: "#99ee00", backgroundColor: 'olive', data: aData8, hidden: true },
+				{ label: wLb[9], borderColor: '#fcae1e', backgroundColor: '#fc6a03', data: aData9, hidden: true },
+				{ label: wLb[10], borderColor: 'skyblue', backgroundColor: 'blue', data: aData10, hidden: true },
 				{ label: wLb[11], borderColor: 'white', backgroundColor: 'grey', data: aData11, hidden: true },
-				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true }
+				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true },
+				{ label: wLb[13], borderColor: '#ed820e', backgroundColor: '#cc5801', data: aData13, hidden: true }
 			]
 		},
 		options: {
@@ -306,7 +319,7 @@ function ch_chart_FinENW_Year_A(container, result, type) {
 					{ ticks: { display: doX } }
 				],
 				yAxes: [{
-					ticks: { callback: function(value, index, values) { return "$" + autoUnits(value); } } 
+					ticks: { callback: function(value, index, values) { return "$" + value + "K"; } } 
 				}]
 			},
 			plugins: {
@@ -327,3 +340,50 @@ function ch_get_FinENW_Year_A(container, type) {
 		ch_chart_FinENW_Year_A(container, result, type);
   	});
 }
+
+function ch_chart_LiquidDist(container, result, type) {
+	let doLegend = true;
+	let doX = true;
+	let lbRadius = 0;
+	if(type === "thumb") { 
+		doLegend = false;
+		doX = false; 
+	}
+	let resultJ = JSON.parse(result);
+	let aData3 = resultJ.data3.reverse();
+	let aData4 = resultJ.data4.reverse();
+	let aData5 = resultJ.data5.reverse();
+	let aData8 = resultJ.data8.reverse();
+	let aData9 = resultJ.data9.reverse();
+	let aData10 = resultJ.data10.reverse();
+	let aData11 = resultJ.data11.reverse();
+	let aData12 = resultJ.data12.reverse();
+	let tDatasetData = [ aData3[0], aData4[0], aData5[0], aData8[0], aData9[0], aData10[0], aData11[0], aData12[0] ];
+	let tDatasetColors = [ "darkblue", "white", "yellow", "#99ee00", "#fc6a03", "blue", "grey", "green" ];
+	var ctx = document.getElementById(container).getContext('2d');
+	let chart = null
+	chart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: [ wLb[3], wLb[4], wLb[5], wLb[8], wLb[9], wLb[10], wLb[11], wLb[12] ],
+			datasets: [ {
+				data: tDatasetData,
+				backgroundColor: tDatasetColors,
+				label: "Wealth"
+			} ]
+		},
+		options: {
+			legend: {
+				display: doLegend
+			}
+		}
+	});
+}
+
+function ch_get_LiquidDist(container, type) {
+	let pData = { "doWhat": "FinENW_Year_A" };
+	$.post(getResource("Chart3"), pData, function(result) {
+		ch_chart_LiquidDist(container, result, type);
+  	});
+}
+

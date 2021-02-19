@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from parent: 4 Aug 2020
-Updated: 10 Sep 2020
+Updated: 18 Feb 2021
  */
 
 package asWebRest.resource;
@@ -51,7 +51,12 @@ public class StockResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
-            
+
+	            case "getCryptoAccount":
+	                JSONArray cra = getStockAction.getCryptoAccount(dbc);
+	                returnData += cra.toString();
+	                break;
+	                
 	            case "getETradeBrokerageAccount":
 	                JSONArray etba = getStockAction.getETradeBrokerageAccount(dbc);
 	                returnData += etba.toString();
@@ -65,9 +70,11 @@ public class StockResource extends ServerResource {
                 case "getStocksAll":
                     JSONArray stocksA = getStockAction.getStockList(dbc);
                     JSONArray etbaData = getStockAction.getETradeBrokerageAccount(dbc);
+                    JSONArray crData = getStockAction.getCryptoAccount(dbc);
                     mergedResults
                     	.put("etba", etbaData)
-                    	.put("stocksA", stocksA);
+                    	.put("stocksA", stocksA)
+                    	.put("crypto", crData);
                     returnData += mergedResults.toString();
                     break;
                     
@@ -81,11 +88,37 @@ public class StockResource extends ServerResource {
                     break;
                     
                 case "putStockUpdate":
+                	String sEJTI15 = "0";
+                	String sEJRI07 = "0";
+                	String sFI4KAN = "0";
+                	String sFIRIAN = "0";
+                	String sFIIBAN = "0";
+                	try { sEJTI15 = argsInForm.getFirstValue("EJTI15"); } catch (Exception e) { }
+                	try { sEJRI07 = argsInForm.getFirstValue("EJRI07"); } catch (Exception e) { }
+                	try { sFI4KAN = argsInForm.getFirstValue("FI4KAN"); } catch (Exception e) { }
+                	try { sFIRIAN = argsInForm.getFirstValue("FIRIAN"); } catch (Exception e) { }
+                	try { sFIIBAN = argsInForm.getFirstValue("FIIBAN"); } catch (Exception e) { }
                     qParams.add(argsInForm.getFirstValue("Count"));
                     qParams.add(argsInForm.getFirstValue("Holder"));
+                    qParams.add(sEJTI15);
+                    qParams.add(sEJRI07);
+                    qParams.add(sFI4KAN);
+                    qParams.add(sFIRIAN);
+                    qParams.add(sFIIBAN);
                     qParams.add(argsInForm.getFirstValue("Symbol"));
                     returnData += updateStockAction.setStockShareUpdate(dbc, qParams);
                     break;                    
+
+                case "putCryptoAccountAdd":
+                    String crCredit = "0.00";
+                    String crDebit = "0.00";
+                    if(wc.isSet(argsInForm.getFirstValue("crCredit"))) { crCredit = argsInForm.getFirstValue("crCredit"); }
+                    if(wc.isSet(argsInForm.getFirstValue("crDebit"))) { crDebit = argsInForm.getFirstValue("crDebit"); }
+                    qParams.add(argsInForm.getFirstValue("crDate"));
+                    qParams.add(crDebit);
+                    qParams.add(crCredit);
+                    returnData += updateStockAction.setCryptoAccountAdd(dbc, qParams);
+                    break;
                     
                 case "putETradeBrokerageAccountAdd":
                     String etbaCredit = "0.00";

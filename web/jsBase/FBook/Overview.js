@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 6 Dec 2020
+Updated: 18 Feb 2021
  */
 
 function actOnSavingsSubmit(event) {
@@ -100,12 +100,17 @@ function genOverviewSavings(svData, svBk, stockData) {
     dojo.connect(svButton, "onclick", actOnSavingsSubmit);
 }
 
-function genOverviewStock(stockData, eTrade) {
+function genOverviewStock(stockData, eTrade, crypto) {
+	let cryptoBalance = crypto.Balance.toFixed(0);
+	let cryptoVested = crypto.Contributions;
 	var etaBalance = eTrade.Balance;
 	let eTradeVested = eTrade.Contributions;
 	var stockWorth = 0;
+	let cryptoWorth = 0;
 	var vestDiff = etaBalance - eTradeVested;
+	let cryptoDiff = cryptoBalance - cryptoVested;
 	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
+	let perChgCrypto = ((cryptoDiff/cryptoVested)*100).toFixed(1);
 	stockData.forEach(function(sd) { 
 		if (sd.Count != 0 && sd.Managed != 1) { 
 			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
@@ -115,8 +120,10 @@ function genOverviewStock(stockData, eTrade) {
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth" /*, "Day" */ ];
     var bubble = "<div class='UBox'>Stock<br/><span>$" + autoUnits(stockWorth) + "</span>" +
             "<div class='UBoxO'>" +
-            "eTrade: <strong>$" + autoUnits(etaBalance) + "</strong> (<strong>$" + autoUnits(eTradeVested) + "</strong>)<br/>" +
-            "Change: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<br/>";
+            "Brokerage: <strong>$" + autoUnits(etaBalance) + "</strong> (<strong>$" + autoUnits(eTradeVested) + "</strong>)<br/>" +
+            "Change: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<p/>" +
+            "Crypto: <strong>$" + autoUnits(cryptoBalance) + "</strong> (<strong>$" + autoUnits(cryptoVested) + "</strong>)<br/>" +
+            "Change: <strong>$" + cryptoDiff.toFixed(0) + "</strong> (<strong>" + perChgCrypto + "%</strong>)<br/>";
     bubble += "<br/><strong>Watching</strong><br/>";
     var bTable = "<table><thead><tr>";
     for (var i = 0; i < sCols.length; i++) {
@@ -183,14 +190,12 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
     pTable += "</tr></tbody></table>";
     bubble += pTable + "<p>" +
 		"<div id='tmphld'></div>" +
-            "<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='ch_large'><canvas id='enwAllHolder'></canvas></div></a><br/>" +
 		"<div class='table'><div class='tr'>" +
-//		"<a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><img class='ch_large' src='" + doCh("j", "FinENW_All_A", "th") + "' />" +
-            "<span class='td'><a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='fwY'></canvas></div></a></span>" +
-//            "<a href='" + doCh("3", "FinENW_Year_F", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_F", "th") + "' /></a>" +
-//            "<a href='" + doCh("3", "FinENW_Year_L", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinENW_Year_L", "th") + "' /></a>" +
+            "<span class='td'><a href='" + doCh("3", "FinENW_All_A", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='enwAllHolder'></canvas></div></a></span>" +
+            "<span class='td'><a href='" + doCh("3", "LiquidDist", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='wdist'></canvas></div></a></span>" +
+		"</div><div class='tr'>" +
+	    "<span class='td'><a href='" + doCh("3", "FinENW_Year_T", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='fwY'></canvas></div></a></span>" +
             "<span class='td'><a href='" + doCh("3", "FinENW_All_R", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='fwR'></canvas></div></a></span>" +
-//            "<a href='" + doCh("j", "FinGrowth", null) + "' target='pChart'><img class='th_small' src='" + doCh("j", "FinGrowth", "th") + "' /></a>" +
 		"</div></div>" + 
                        "<p>";
     var wTable = "<table><thead><tr>";
@@ -216,6 +221,7 @@ function genOverviewWorth(enw, mort, x3nw, nwga, enwt, mdfbal) {
 	ch_get_FinENW_All_A("enwAllHolder", "thumb");
 	ch_get_FinENW_Year_A("fwY", "thumb");
 	ch_get_FinENW_All_R("fwR", "thumb");
+	ch_get_LiquidDist("wdist", "thumb");
 }
 
 function getOverviewData() {
@@ -278,10 +284,11 @@ function putOverview(finGlob) {
     var mdfbal = finGlob.mdfbal[0];
     var svbal = svData.SBal;
     var eTrade = finGlob.eTrade[0];
+    var crypto = finGlob.crypto[0];
     var stockData = finGlob.stock;
     genOverviewChecking(cbData);
     genOverviewSavings(svData, svBk, stockData);
-    genOverviewStock(stockData, eTrade);
+    genOverviewStock(stockData, eTrade, crypto);
     //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);
 }

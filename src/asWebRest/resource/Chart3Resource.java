@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 7 Oct 2020
-Updated: 22 Dec 2020
+Updated: 23 Dec 2020
  */
 
 package asWebRest.resource;
@@ -177,8 +177,11 @@ public class Chart3Resource extends ServerResource {
                     try { mainGlob = getSnmpAction.getMain(dbc, qParams, step); } catch (Exception e) { e.printStackTrace(); }
                     switch(smcType) {
                     	case "mSysCPU": returnData = smDesktop.getSysCPU(mainGlob, intLen, step).toString(); break;
+                    	case "mSysFans": returnData = smDesktop.getSysFans(mainGlob, intLen, step).toString(); break;
                     	case "mSysMemory": returnData = smDesktop.getSysMemory(mainGlob, intLen, step).toString(); break;
+                    	case "mSysMySQLSize": returnData = smDesktop.getSysMySQLSize(mainGlob, intLen, step).toString(); break;
                     	case "mSysNet": returnData = smDesktop.getSysNet(mainGlob, intLen, step).toString(); break;
+                    	case "mSysNumUsers": returnData = smDesktop.getSysNumUsers(mainGlob, intLen, step).toString(); break;
                     	case "mSysStorage": returnData = smDesktop.getSysStorage(mainGlob, intLen, step).toString(); break;
                     	case "mSysTemp": returnData = smDesktop.getSysTemp(mainGlob, intLen, step).toString(); break;
                     	case "mSysLoad": default: returnData = smDesktop.getSysLoad(mainGlob, intLen, step).toString(); break;

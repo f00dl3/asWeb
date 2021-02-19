@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 30 Dec 2019
+Updated: 29 Dec 2020
 */
 
 package asUtilsPorts;
@@ -50,7 +50,7 @@ public class CCImports {
 			File oldNavyCSV = new File(placeCCImportsHere+"/OldNavy.csv");
 			wc.sedFileDeleteFirstLine(placeCCImportsHere+"/OldNavy.csv");
 
-			String oldNavySQL = "INSERT IGNORE INTO Core.FB_ONCCXX ("
+			String oldNavySQL = "INSERT IGNORE INTO Finances.FB_ONCCXX ("
 				+ "Date, Description, Debit, Credit, ReferenceNo"
 				+ ") VALUES";
 
@@ -109,7 +109,7 @@ public class CCImports {
 			File discoverCSV = new File(placeCCImportsHere+"/Discover.csv");
 			wc.sedFileDeleteFirstLine(placeCCImportsHere+"/Discover.csv");
 
-			String discoverSQL = "INSERT IGNORE INTO Core.FB_DICC45 ("
+			String discoverSQL = "INSERT IGNORE INTO Finances.FB_DICC45 ("
 				+ "Date, Description, Debit, Credit"
 				+ ") VALUES";
 

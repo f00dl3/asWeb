@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 11 Feb 2018
-Updated: 25 Jul 2020
+Updated: 28 Dec 2020
 */
 
 package asWebRest.shared;
@@ -659,6 +659,7 @@ public class WebCommon {
 		return sum;		
 	}
 	
+	public double tempF2C(double tempF) { return ((tempF - 32) * 5/9); }
     public double tempC2F(double tempC) { return tempC * 9/5 + 32; }
 
 	/* public void unTarGz(String tarFileStr, String destStr) {

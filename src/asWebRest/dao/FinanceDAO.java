@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 19 Dec 2020
+Updated: 18 Feb 2021
 */
 
 package asWebRest.dao;
@@ -328,7 +328,7 @@ public class FinanceDAO {
                 " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth," +
                 " AsLiq_FidA, AsLiq_FidE, AsLiq_EJTI15, AsLiq_EJRI23, AsLiq_EJRI07, AsLiq_ETra," +
-                " AsLiq_FBCFSV59, AsLiq_FBCFCK01" +
+                " AsLiq_FBCFSV59, AsLiq_FBCFCK01, AsLiq_FidAB, AsLiq_FidARI, AsLiq_Crypto" +
                 " FROM Finances.FB_ENWT";
         switch(periodLength) {
         	case "Year": 
@@ -356,13 +356,16 @@ public class FinanceDAO {
                         .put("Debts", resultSet.getDouble("Debts"))
                         .put("Liquidity", resultSet.getDouble("Liquidity"))
                         .put("AsLiq_FidA", resultSet.getDouble("AsLiq_FidA"))
+			.put("AsLiq_FidAB", resultSet.getDouble("AsLiq_FidAB"))
+			.put("AsLiq_FidARI", resultSet.getDouble("AsLiq_FidARI"))
                         .put("AsLiq_FidE", resultSet.getDouble("AsLiq_FidE"))
                         .put("AsLiq_EJTI15", resultSet.getDouble("AsLiq_EJTI15"))
                         .put("AsLiq_EJRI23", resultSet.getDouble("AsLiq_EJRI23"))
                         .put("AsLiq_EJRI07", resultSet.getDouble("AsLiq_EJRI07"))
                         .put("AsLiq_ETra", resultSet.getDouble("AsLiq_ETra"))
                         .put("AsLiq_FBCFCK01", resultSet.getDouble("AsLiq_FBCFCK01"))
-                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"));
+                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"))
+			.put("AsLiq_Crypto", resultSet.getDouble("AsLiq_Crypto"));
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -373,8 +376,8 @@ public class FinanceDAO {
     
     private JSONArray enwChartRapid(Connection dbc) {
         String query_ch_ENWr = "SELECT " +
-                " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity, AsLiq_ETra," +
-                " AsLiq_FBCFSV59, AsLiq_FBCFCK01," +
+                " AsOf, AsLiq, AsFix, Life, Credits, Debts, Liquidity, AsLiq_ETra, AsLiq_FidA, AsLiq_FidE," +
+                " AsLiq_FBCFSV59, AsLiq_FBCFCK01, AsLiq_FidAB, AsLiq_FidARI, AsLiq_Crypto," +
                 " ((AsFix + AsLiq + Life + Credits) - Debts) AS Worth" +
                 " FROM Finances.FB_ENWT_Rapid" +
         		" ORDER BY AsOf DESC LIMIT 1024;";
@@ -393,8 +396,16 @@ public class FinanceDAO {
                         .put("Debts", resultSet.getDouble("Debts"))
                         .put("Liquidity", resultSet.getDouble("Liquidity"))
                         .put("AsLiq_ETra", resultSet.getDouble("AsLiq_ETra"))
+			.put("AsLiq_FidA", resultSet.getDouble("AsLiq_FidA"))
+			.put("AsLiq_FidE", resultSet.getDouble("AsLiq_FidE"))
                         .put("AsLiq_FBCFCK01", resultSet.getDouble("AsLiq_FBCFCK01"))
-                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"));
+                        .put("AsLiq_FBCFSV59", resultSet.getDouble("AsLiq_FBCFSV59"))
+			.put("AsLiq_FidAB", resultSet.getDouble("AsLiq_FidAB"))
+			.put("AsLiq_FidARI", resultSet.getDouble("AsLiq_FidARI"))
+			.put("AsLiq_Crypto", resultSet.getDouble("AsLiq_Crypto"))
+			.put("AsLiq_EJTI15", 0.0)
+			.put("AsLiq_EJRI23", 0.0)
+			.put("AsLiq_EJRI07", 0.0);
                 tContainer.put(tObject);
             }
             resultSet.close();
@@ -436,7 +447,7 @@ public class FinanceDAO {
     private JSONArray enwtRapid(Connection dbc) {
         final String query_FBook_ENWTr = "SELECT" +
                 " AsOf, ((AsLiq + AsFix + Life + Credits) - Debts) AS Worth," +
-                " AsLiq, AsFix, Life, Credits, Debts, Growth, Liquidity" +
+                " AsLiq, AsFix, Life, Credits, Debts, Growth, Liquidity, AsLiq_FidA, AsLiq_FidE" +
                 " FROM Finances.FB_ENWT_Rapid" +
                 " ORDER BY AsOf DESC LIMIT 2048;";
         JSONArray tContainer = new JSONArray();
@@ -452,6 +463,8 @@ public class FinanceDAO {
                     .put("Life", resultSet.getDouble("Life"))
                     .put("Credits", resultSet.getDouble("Credits"))
                     .put("Debts", resultSet.getDouble("Debts"))
+			.put("AsLiq_FidA", resultSet.getDouble("AsLiq_FidA"))
+			.put("AsLiq_FidE", resultSet.getDouble("AsLiq_FidE"))
                     .put("Liquidity", resultSet.getDouble("Liquidity"));
                 tContainer.put(tObject);
             }
@@ -598,8 +611,9 @@ public class FinanceDAO {
         String returnData = wcb.getDefaultNotRanYet();
     	JunkyPrivate jp = new JunkyPrivate();
     	String autoNetWorthSQLQuery = "REPLACE INTO Finances.FB_ENWT_Rapid ("
-    			+ "AsLiq, AsFix, Life, Credits, Debts, Liquidity," 
-    			+ "AsLiq_ETra, AsLiq_FBCFCK01, AsLiq_FBCFSV59"
+    			+ "AsLiq, AsFix, Life, Credits, Debts, Liquidity, " 
+    			+ "AsLiq_FBCFCK01, AsLiq_FBCFSV59, "
+			+ "AsLiq_FidA, AsLiq_FidE, AsLiq_FidAB, AsLiq_FidARI, AsLiq_Crypto"
     			+ ") VALUES ("
     			+ "(SELECT SUM("
     			+ "(SELECT SUM(Value) FROM Finances.FB_Assets WHERE Category IN ('NV','CA')) +"
@@ -618,9 +632,13 @@ public class FinanceDAO {
 				+ "((SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
 				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE SpilloverSavings=1)),"
-				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='eTrade'),"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
-				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date)" 
+				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date),"
+				+ "(SELECT SUM((FI4KAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='FidelityA'),"
+				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='FidelityE'),"
+				+ "(SELECT SUM((SELECT SUM((FIIBAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FIIBAN != 0)+(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='Trading'))),"
+				+ "(SELECT SUM((FIRIAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FIRIAN != 0),"
+				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='Crypto')" 
 				+ ");";    
         try { returnData = wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;

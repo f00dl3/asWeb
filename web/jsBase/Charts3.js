@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 22 Dec 2020
+Updated: 20 Jan 2021
  */
 
 let pOpts = {};
@@ -24,6 +24,7 @@ $(document).ready(function() {
 	let type = "full";
 	switch(doAction) {
 		case "Bills.png": ch_get_Bills(container, type); break;
+		case "BrokerageDist.png": ch_get_BrokerageDist(container, type); break;
 		case "CalorieRange.png": ch_get_CalorieRange(container, type, { xdt1: inOpts[0], xdt2: inOpts[1] } ); break;
 		case "CellData.png": ch_get_CellData(container, type); break;
 		case "CellMin.png": ch_get_CellMin(container, type); break;
@@ -38,14 +39,20 @@ $(document).ready(function() {
 		case "FinENW_Year_F.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_L.png": ch_get_FinENW_Year_A(container, type); break;
 		case "FinENW_Year_T.png": ch_get_FinENW_Year_A(container, type); break;
+		case "LiquidDist.png": ch_get_LiquidDist(container, type); break;
 		case "msByDate.png": ch_get_msByDate(container, type); break;
 		case "mSysCPU.png": ch_get_mSysCPU(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysFans.png": ch_get_mSysFans(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "mSysLoad.png": ch_get_mSysLoad(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "mSysMemory.png": ch_get_mSysMemory(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysMySQLSize.png": ch_get_mSysMemory(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "mSysNet.png": ch_get_mSysNet(container, type, { step: inOpts[0], date: inOpts[1] }); break;
+		case "mSysNumUsers.png": ch_get_mSysNumUsers(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "mSysStorage.png": ch_get_mSysStorage(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "mSysTemp.png": ch_get_mSysTemp(container, type, { step: inOpts[0], date: inOpts[1] }); break;
 		case "Rapid_CPU.png": ch_get_Rapid_CPU(container, type); break;
+		case "RetirementDist.png": ch_get_RetirementDist(container, type); break;
+		case "RetirementDistE.png": ch_get_RetirementDistE(container, type); break;
 		case "SleepRange.png": ch_get_SleepRange(container, type, { xdt1: inOpts[0], xdt2: inOpts[1] }); break;
 		case "ObsJSONHumidity.png": ch_get_ObsJSONHumidity(container, type, { dateStart: inOpts[0], dateEnd: inOpts[1], station: inOpts[2] }); break;
 		case "ObsJSONHumidityH.png": ch_get_ObsJSONHumidityH(container, type); break;

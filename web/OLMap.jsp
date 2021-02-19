@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 29 May 2018
-    Updated: 24 Dec 2019
+    Updated: 8 Jan 2021
     Author     : astump
 --%>
 
@@ -41,6 +41,8 @@
         dataInput = "<% out.print(postData); %>";
         iRes = "<% out.print(resolution); %>";
         legacyPath = "<% out.print(legacyPath); %>";
+	let iResA = iRes.split("x");
+	//if(iResA[1] > iResA[0]) { iRes = iResA[1] + "x" + iResA[0]; }
         console.log("DEBUG VARS: doAction='" + doAction + "', dataInput='" + dataInput + "', iRes='" + iRes + "', legacyPath='" + legacyPath + "'");
     </script>
 
@@ -48,10 +50,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
     <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v5.3.0-dist/ol.css"/>
-    <!-- <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.css"/> -->
+    <!-- <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/v6.5.0-dist/ol.css"/> -->
     <!-- <link rel="stylesheet" type='text/css' href="/asWeb/jsLib/OpenLayers/ol-popup.css"/> -->
     <script src="/asWeb/jsLib/OpenLayers/v5.3.0-dist/ol.js"></script>
-    <!--  <script src="/asWeb/jsLib/OpenLayers/v6.1.1-dist/ol.js"></script> -->
+    <!-- <script src="/asWeb/jsLib/OpenLayers/v6.5.0-dist/ol.js"></script> -->
     <!-- <script src="/asWeb/jsLib/OpenLayers/ol-popup.js"></script> -->
     <!-- <script src="/asWeb/jsLib/OpenLayers/ol-debug.js"></script> -->
     

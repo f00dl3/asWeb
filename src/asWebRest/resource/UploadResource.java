@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 11 Jun 2020
+Updated: 25 Dec 2020
  */
 
 package asWebRest.resource;
@@ -29,6 +29,7 @@ import asUtilsPorts.SNMP.Note3;
 import asUtilsPorts.SNMP.Pi;
 import asUtilsPorts.SNMP.Pi2;
 import asUtilsPorts.SNMP.Pi3;
+import asWebRest.hookers.EJProcessor;
 import asWebRest.shared.CommonBeans;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
@@ -99,6 +100,9 @@ public class UploadResource extends ServerResource {
                             } else if (fileName.contains("snmpPi3.zip")) {
                             	Pi3 sPi3 = new Pi3();
                             	sPi3.snmpPi3(dbc);
+                            } else if (fileName.contains("data.ejones")) {
+                            	EJProcessor ejp = new EJProcessor();
+                            	sb.append(ejp.processData());
                             } else {
                             	sb.append("\nNo further post-processing actions!");                            	
                             }

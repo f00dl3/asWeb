@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    22 Dec 2020
+    Updated:    9 Jan 2021
     Author     : astump
 --%>
 
@@ -42,6 +42,7 @@
    		"Charts/Finance",
 		"Charts/Fitness",
 		"Charts/SNMP",
+		"Charts/Stocks",
 		"Charts/SysMonDesktop",
    		"Charts/Test",
    		"Charts/Utils",
@@ -70,6 +71,7 @@
     String[] finScripts = {
         "Charts/Bills",
    		"Charts/Finance",
+		"Charts/Stocks",
    		"Charts/Utils",
         "FBook/Overview",
         "FBook/Assets",

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 4 Mar 2018
-Updated: 7 Dec 2020
+Updated: 9 Jan 2021
  */
 
 var annMaint = 841.92;
@@ -470,6 +470,18 @@ function putWebLinks(data, whereTo, outputType) {
         }
     });
     dojo.byId(whereTo).innerHTML = placeholder;
+}
+
+function randomColor() {
+	let colorArray = [ 
+		"red", "green", "blue", "yellow", "white", 
+		"gray", "orange", "pink", "lightblue", "darkblue",
+		"lightgreen", "darkgreen", "purple", "darkred", "skyblue",
+		"#fcae1e", "#fc6a03", "#ed820e", "#cc5801", "brown"
+	];
+	let rand = Math.floor(Math.random()*(colorArray.length-1));
+	let colorBack = colorArray[rand];
+	return colorBack;
 }
 
 function timeMinutes(inMin) {

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 26 Jul 2020
+Updated: 28 Dec 2020
  */
 
 package asWebRest.resource;
@@ -63,6 +63,17 @@ public class WeatherResource extends ServerResource {
         if(doWhat != null) {
             switch (doWhat) {
                 
+            	case "getC2fF2c":
+            		String convType = "c2f";
+            		Double tempIn = 0.0;
+            		try { convType = argsInForm.getFirstValue("convType").toLowerCase(); } catch (Exception e) { }
+            		try { tempIn = Double.parseDouble(argsInForm.getFirstValue("temperature")); } catch (Exception e) { }
+            		switch(convType) {
+	            		case "f2c": returnData = String.valueOf(wc.tempF2C(tempIn)); break;
+	            		case "c2f": default: returnData = String.valueOf(wc.tempC2F(tempIn)); break;
+            		}
+            		break;
+            
                 case "getCf6Data":
                     qParams.add(0, argsInForm.getFirstValue("CF6Search1"));
                     qParams.add(1, argsInForm.getFirstValue("CF6Search2"));
