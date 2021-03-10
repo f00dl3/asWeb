@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 26 Oct 2020
+Updated: 10 Mar 2021
  */
 
 const axios = require('axios');
@@ -53,7 +53,8 @@ function getWeatherLatest(msg) {
 	axios.post(url, pData).then((res) => { 
         var theData = JSON.parse(res.data.wxObsM1H[0].jsonSet);
         var homeData = JSON.parse(res.data.homeWxObs[0].jsonSet);
-		respondWeatherData("KKSLENEX98", theData, msg, homeData);
+        var raymoreData = JSON.parse(res.data.homeWxObs[1].jsonSet);
+		respondWeatherData("KKSLENEX98", theData, msg, homeData, raymoreData);
 	}).catch((error) => {
 		console.log(error)
 	});
@@ -62,24 +63,31 @@ function getWeatherLatest(msg) {
 
 }
 
-function respondWeatherData(station, data, msg, homeData) {
+function respondWeatherData(station, data, msg, homeData, raymoreData) {
 
 	var jds = data;
 	let jdsHome = homeData;
-	var finalMessage = "Station: " + station +
+	let jdsRaymore = raymoreData;
+	var finalMessage = "Lenexa/Old Town (" + station + ")" + 
 		"\n" + jdsHome.TimeString +
-		// "\nWeather: " + jds.Weather +
-		// "\nVisibility: " + jds.Visibility + " miles" +
 		"\nTemperature: " + jdsHome.Temperature + " F" +
 		"\nDewpoint: " + jdsHome.Dewpoint + " F" +
 		"\nHumidity: " + jdsHome.RelativeHumidity + "%" +
 		"\nPressure: " + jdsHome.PressureIn + "\"" +
 		"\nWind Direction: " + jdsHome.WindDegrees + " deg" +
-		//"\nWind Speed: " + jdsHome.WindSpeed + " mph" +
 		"\nDaily Rain: " + jdsHome.DailyRain + "\"" +
 		"\nRain Rate: " + jdsHome.RainRate + "\"/hr";
+	var finalMessageRaymore = "Raymore:"  +
+		"\n" + jdsRaymore.TimeString +
+		"\nTemperature: " + jdsRaymore.Temperature + " F" +
+		"\nDewpoint: " + jdsRaymore.Dewpoint + " F" +
+		"\nHumidity: " + jdsRaymore.RelativeHumidity + "%" +
+		"\nPressure: " + jdsRaymore.PressureIn + "\"" +
+		"\nWind Direction: " + jdsRaymore.WindDegrees + " deg" +
+		"\nDaily Rain: " + jdsRaymore.DailyRain + "\"" +
+		"\nRain Rate: " + jdsRaymore.RainRate + "\"/hr";
 	console.log("\nDBG --> finalMessage = " + finalMessage);
-	//if(asm.isSet(jdsHome.WindGust)) { finalMessage += "\nWind Gusts: " + jdsHome.WindGust + " mph "; }
 	msg.reply(asm.trimForDiscord(finalMessage));
+	msg.reply(asm.trimForDiscord(finalMessageRaymore));
 
 }

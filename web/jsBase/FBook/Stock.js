@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 18 Feb 2021
+Updated: 26 Feb 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -117,7 +117,7 @@ function putStocks(etbaData, stockData, crypto) {
 				managedBalance += (sd.Count * (sd.LastValue * sd.Multiplier));
 			}
     	} else {
-    		myBalance += (sd.Count * (sd.LastValue * sd.Multiplier));
+    		myBalance += ((sd.Count - sd.Unvested) * (sd.LastValue * sd.Multiplier));
     	}
 	if(sd.SpilloverSavings == 1) {
 		spilloverSavings += (sd.Count * sd.LastValue);

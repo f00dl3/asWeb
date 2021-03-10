@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 12 Sep 2020
+Updated: 10 Mar 2021
 */
 
 package asUtilsPorts;
@@ -11,7 +11,6 @@ import java.sql.Connection;
 
 import org.joda.time.DateTime;
 
-import asUtilsPorts.CamPusher;
 import asUtilsPorts.Cams.CamBeans;
 import asUtilsPorts.Cams.CamSensors;
 import asUtilsPorts.Cams.CamWorkerURL;
@@ -29,7 +28,8 @@ import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.dao.FinanceDAO;
-import asWebRest.hookers.AmbientWxStation;
+//import asWebRest.hookers.AmbientWxStation;
+import asWebRest.hookers.CommunityWxStation;
 
 public class Feeds {
 
@@ -37,7 +37,8 @@ public class Feeds {
 
 		String returnData = "Fetch 1 minute feeds:\n";
 
-		AmbientWxStation aws = new AmbientWxStation();
+		//AmbientWxStation aws = new AmbientWxStation();
+		CommunityWxStation cws = new CommunityWxStation();
 		ANSSQuakes anssQuakes = new ANSSQuakes();
     	AlertMe alertMe = new AlertMe();
 		NWSWarnings nwsWarnings = new NWSWarnings();
@@ -46,7 +47,8 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }    
     	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { returnData += aws.returnWunder(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	//try { returnData += aws.returnWunder(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += cws.returnWunder_Community(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
 		return returnData;
 

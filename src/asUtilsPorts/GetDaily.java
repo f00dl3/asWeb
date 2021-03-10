@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 8 Jan 2021
+Updated: 26 Feb 2021
 */
 
 package asUtilsPorts;
@@ -83,7 +83,7 @@ public class GetDaily {
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'TR'),"
 			+ "((SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1)),"
+			+ "(SELECT FORMAT(SUM(((Count-Unvested)*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1)),"
 			+ "(SELECT FORMAT(SUM((FI4KAN*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityA'),"
 			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityE'),"
 			+ "(SELECT FORMAT(SUM((EJTI15*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJTI15 != 0),"

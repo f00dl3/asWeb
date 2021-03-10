@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 22 Jan 2020
+Updated: 26 Jan 2020
  */
 
 let wLb = [ "*", "R", "L", "X", "?", "C", "D", "Y", "RA", "RE", "T", "B", "S", "O" ];
@@ -115,7 +115,7 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		lbRadius = 0;
 	}
 	let timeout = getRefresh("semiRapid");
-	let limit = 192;
+	let limit = 256;
 	let resultJ = JSON.parse(result);
 	let aLabels = resultJ.labels.reverse();
 	let aData = resultJ.data.reverse();

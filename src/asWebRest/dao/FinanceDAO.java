@@ -631,7 +631,7 @@ public class FinanceDAO {
 			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value)) FROM Finances.FB_Assets WHERE Category='DB')),"    
 				+ "((SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE SpilloverSavings=1)),"
+				+ "(SELECT SUM((Count-Unvested)*(Multiplier*LastValue)) FROM Finances.StockShares WHERE SpilloverSavings=1)),"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date),"
 				+ "(SELECT SUM((FI4KAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='FidelityA'),"

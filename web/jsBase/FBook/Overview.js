@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 18 Feb 2021
+Updated: 26 Feb 2021
  */
 
 function actOnSavingsSubmit(event) {
@@ -58,7 +58,7 @@ function genOverviewSavings(svData, svBk, stockData) {
 	let spilloverSavings = 0.0;
 	stockData.forEach(function (sd) {
 		if(sd.SpilloverSavings == 1) {
-			spilloverSavings += (sd.LastValue * sd.Count);
+			spilloverSavings += (sd.LastValue * (sd.Count - sd.Unvested));
 		}			
 	});
 	savingsWithSpillover = svData.SBal + spilloverSavings;
@@ -113,7 +113,7 @@ function genOverviewStock(stockData, eTrade, crypto) {
 	let perChgCrypto = ((cryptoDiff/cryptoVested)*100).toFixed(1);
 	stockData.forEach(function(sd) { 
 		if (sd.Count != 0 && sd.Managed != 1) { 
-			stockWorth += (sd.Count * parseFloat(sd.LastValue)); 
+			stockWorth += ((sd.Count - sd.Unvested) * parseFloat(sd.LastValue)); 
 			//console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
 			} 
 		});

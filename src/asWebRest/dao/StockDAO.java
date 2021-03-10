@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 18 Feb 2021
+Updated: 26 Feb 2021
 */
 
 package asWebRest.dao;
@@ -133,7 +133,7 @@ public class StockDAO {
         		" LastValue, Description, PreviousClose," +
         		" LastBuy, LastSell, Invested, Managed, SpilloverSavings," +
         		" EJTI15, EJRI23, EJRI07, LastComparedShares, Multiplier, LastUpdated," +
-        		" FI4KAN, FIRIAN, FIIBAN" +
+        		" FI4KAN, FIRIAN, FIIBAN, Unvested" +
         		" FROM Finances.StockShares WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
@@ -160,6 +160,7 @@ public class StockDAO {
                 	.put("LastUpdated",  resultSet.getString("LastUpdated"))
                 	.put("Multiplier", resultSet.getDouble("Multiplier"))
 			.put("SpilloverSavings", resultSet.getInt("SpilloverSavings"))
+			.put("Unvested", resultSet.getDouble("Unvested"))
                 	.put("PreviousClose", resultSet.getString("PreviousClose"));
                 tContainer.put(tObject);
             }
