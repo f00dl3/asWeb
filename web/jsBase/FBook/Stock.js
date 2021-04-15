@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 26 Feb 2021
+Updated: 31 Mar 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -87,7 +87,7 @@ function putStocks(etbaData, stockData, crypto) {
 			"</div>";
 	});
 	etbaInsert += "</div>";
-	let crytpoInsert = "<h3>Crypto Transactions</h3>" +
+	let cryptoInsert = "<h3>Crypto Transactions</h3>" +
 		"<div class='table'>" +
 		"<form class='tr cryptoAddUpdateForm'>" +
 		"<span class='td'><input class='C2UCR' type='checkbox' name='Action' value='Update' /></span>" + 
@@ -96,34 +96,41 @@ function putStocks(etbaData, stockData, crypto) {
         "<span class='td'><input type='number' step='1' name='crCredit' value='0' style='width: 70px;' /></span>" +
         "</form>";
 	crypto.forEach(function (crd) {
-		crytpoInsert += "<div class='tr'>" +
+		cryptoInsert += "<div class='tr'>" +
 			"<span class='td'>" + crd.BTID + "</span>" +
 			"<span class='td'>" + crd.Date + "</span>" + 
 			"<span class='td'>" + crd.Debit + "</span>" +
 			"<span class='td'>" + crd.Credit + "</span>" +
 			"</div>";
 	});
-	crytpoInsert += "</div>";
+	cryptoInsert += "</div>";
     let rData = "<h3>Stocks & Manged Funds</h3>";
     let managedBalance = 0.0;
     let managedBalanceE = 0.0;
     let myBalance = 0.0;
+    let cryBalance = 0.0;
 	let spilloverSavings = 0.0;
     stockData.forEach(function (sd) {
     	if(sd.Managed == 1) {
 			if(sd.Holder == 'EJones' || sd.Holder == 'FidelityE') {
 				managedBalanceE += (sd.Count * (sd.LastValue * sd.Multiplier));
 			} else {
-				managedBalance += (sd.Count * (sd.LastValue * sd.Multiplier));
+				managedBalance += ((sd.FI4KAN + sd.FIRIAN) * (sd.LastValue * sd.Multiplier));
 			}
     	} else {
-    		myBalance += ((sd.Count - sd.Unvested) * (sd.LastValue * sd.Multiplier));
+			if (sd.Holder == 'Crypto') { cryBalance += (sd.Count * (sd.LastValue * sd.Multiplier));	}
+    		myBalance += ((sd.FIIBAN - sd.Unvested) * (sd.LastValue * sd.Multiplier));
+			managedBalance += ((sd.FI4KAN + sd.FIRIAN) * (sd.LastValue * sd.Multiplier));
     	}
 	if(sd.SpilloverSavings == 1) {
-		spilloverSavings += (sd.Count * sd.LastValue);
+		spilloverSavings += (sd.FIIBAN * sd.LastValue);
 	}
     });
     rData += "<div class='table'><div class='tr'>" +
+		"<span class='td'><strong>Crypto</strong><br/>" +
+		"<a href='" + doCh("3", "CryptoDist", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='crydist'></canvas></div></a><br/>" +
+    	"$" + autoUnits(cryBalance) +
+		"</span>" +
 		"<span class='td'><strong>Short-term</strong><br/>" +
 		"<a href='" + doCh("3", "BrokerageDist", null) + "' target='pChart'><div class='th_sm_med' style='height: 92px;'><canvas id='brkdist'></canvas></div></a><br/>" +
     	"$" + autoUnits(myBalance) +
@@ -150,12 +157,12 @@ function putStocks(etbaData, stockData, crypto) {
             "<div class='UPopO'>";
         if(isSet(sd.LastComparedShares)) { stockResults += "<strong>compared:</strong> " + sd.LastComparedShares + "<br/>"; }
         if(isSet(sd.LastUpdated)) { stockResults += "<strong>as of:</strong> " + sd.LastUpdated + "<br/>"; }
-        if(isSet(sd.EJTI15)) { stockResults += "<strong>EJTI15:</strong> <input type='number' name='EJTI15' value='" + sd.EJTI15 + "' style='width: 80px;' /><br/>"; }
-        if(isSet(sd.EJRI07)) { stockResults += "<strong>EJRI07:</strong> <input type='number' name='EJRI07' value='" + sd.EJRI07 + "' style='width: 80px;' /><br/>"; }
-        if(isSet(sd.FI4KAN)) { stockResults += "<strong>FI4KAN:</strong> <input type='number' name='FI4KAN' value='" + sd.FI4KAN + "' style='width: 80px;' /><br/>"; }
-        if(isSet(sd.FIRIAN)) { stockResults += "<strong>FIRIAN:</strong> <input type='number' name='FIRIAN' value='" + sd.FIRIAN + "' style='width: 80px;' /><br/>"; }
-        if(isSet(sd.FIIBAN)) { stockResults += "<strong>FIIBAN:</strong> <input type='number' name='FIIBAN' value='" + sd.FIIBAN + "' style='width: 80px;' /><br/>"; }
-        stockResults += "</div></div></span>" +
+		stockResults += "<strong>EJTI15:</strong> <input type='number' name='EJTI15' value='" + sd.EJTI15 + "' style='width: 80px;' /><br/>" +
+			"<strong>EJRI07:</strong> <input type='number' name='EJRI07' value='" + sd.EJRI07 + "' style='width: 80px;' /><br/>" +
+			"<strong>FI4KAN:</strong> <input type='number' name='FI4KAN' value='" + sd.FI4KAN + "' style='width: 80px;' /><br/>" +
+			"<strong>FIRIAN:</strong> <input type='number' name='FIRIAN' value='" + sd.FIRIAN + "' style='width: 80px;' /><br/>" +
+			"<strong>FIIBAN:</strong> <input type='number' name='FIIBAN' value='" + sd.FIIBAN + "' style='width: 80px;' /><br/>" +
+        	"</div></div></span>" +
             "<span class='td'>" + sd.Description + "</span>" +
             "<span class='td'><div class='UPop'>$" + parseFloat(sd.LastValue).toFixed(2) + 
             "<div class='UPopO'>" +
@@ -178,10 +185,12 @@ function putStocks(etbaData, stockData, crypto) {
             "</form></div>";
     rData += stockResults +
             "<p><em>Blank space for pop-over</em>";
-    dojo.byId("FBStocks").innerHTML = etbaInsert + crytpoInsert + rData;
+	let addTable = "<div class='table'><div class='tr'><span class='td'>" + etbaInsert + "</span><span class='td'>" + cryptoInsert + "</span></div></div>";
+	dojo.byId("FBStocks").innerHTML = addTable + rData;
     dojo.query(".C2UStock").connect("onchange", actOnStockFormSubmit);
     dojo.query(".C2UETBA").connect("onchange", actOnETBAFormSubmit);
     dojo.query(".C2UCR").connect("onchange", actOnCryptoFormSubmit);
+	ch_get_CryptoDist("crydist", "thumb");
 	ch_get_BrokerageDist("brkdist", "thumb");
 	ch_get_RetirementDist("retdist", "thumb");
 	ch_get_RetirementDistE("retdistE", "thumb");

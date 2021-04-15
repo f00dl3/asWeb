@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 2 Sep 2017
-Updated: 29 Dec 2020
+Updated: 15 Apr 2021
 */
 
 package asUtilsPorts;
@@ -26,12 +26,17 @@ public class CCImports {
 		main(args);
 	}
 	
+	private static void fidelity() {
+		String[] args = { "Fidelity" };
+		main(args);
+	}
 	private static void oldNavy() {
 		String[] args = { "OldNavy" };
 		main(args);
 	}
 	
 	public static void doDiscover() { discover(); }
+	public static void doFidelity() { fidelity(); }
 	public static void doOldNavy() { oldNavy(); }
 
 	public static void main(String[] args) {
@@ -157,6 +162,62 @@ public class CCImports {
             try { wc.q2do1c(dbc, discoverSQL, null); } catch (Exception e) { e.printStackTrace(); }
 
 			discoverCSV.delete();
+
+		}
+		
+		if (accountType.equals("Fidelity")) {
+			
+			File fidelityCSV = new File(placeCCImportsHere+"/Fidelity.csv");
+			wc.sedFileDeleteFirstLine(placeCCImportsHere+"/Fidelity.csv");
+			
+			String fidelitySQL = "INSERT IGNORE INTO Finances.FB_FICCXX ("
+					+ "Date, Description, Debit, Credit"
+					+ ") VALUES";
+			
+			Scanner fidelityScanner = null; try {
+				fidelityScanner = new Scanner(fidelityCSV);
+				while(fidelityScanner.hasNext()) {
+
+					double thisDebit = 0.00;
+					double thisCredit = 0.00;				
+					String line = fidelityScanner.nextLine();
+					line = line.replaceAll("\'", "\\\\\'").replaceAll("\"", "\\\\\"");
+					String[] lineTmp = line.split(",");
+
+					String thisTransactionDate = lineTmp[0];
+					DateTimeFormatter thisTransactionDatePattern = DateTimeFormat.forPattern("MM/dd/yyyy");
+					DateTime parsedDateTime = thisTransactionDatePattern.parseDateTime(thisTransactionDate);
+					DateTimeFormatter thisTransactionDateSQLPattern = DateTimeFormat.forPattern("yyyy-MM-dd");
+					String thisDateForSQL = thisTransactionDateSQLPattern.print(parsedDateTime);
+
+					double thisTransactionAmount = Double.parseDouble(lineTmp[4]);
+					if (thisTransactionAmount < 0.00) {
+						thisCredit = 0.00;
+						thisDebit = java.lang.Math.abs(thisTransactionAmount);
+					} else {
+						thisCredit = java.lang.Math.abs(thisTransactionAmount);
+						thisDebit = 0.00;
+					}
+					
+					String thisDescription = lineTmp[2].replaceAll(" +", " ");
+					
+					String feedback = "Transaction: \nDate: "+thisTransactionDate+" (SQL: "+thisDateForSQL+")\n"
+							+ "Amount: "+thisTransactionAmount+" (Debit: "+thisDebit+" / Credit: "+thisCredit+")\n"
+							+ "Description: "+thisDescription+"\n\n";
+
+					System.out.println(feedback);
+
+					fidelitySQL = fidelitySQL+" ('"+thisDateForSQL+"','"+thisDescription+"',"+thisDebit+","+thisCredit+"),";
+					
+				}
+			} catch (Exception e) { e.printStackTrace(); }
+
+			fidelitySQL = (fidelitySQL+";").replaceAll("\\,\\;", "\\;");
+                        
+			System.out.println(fidelitySQL);
+            try { wc.q2do1c(dbc, fidelitySQL, null); } catch (Exception e) { e.printStackTrace(); }
+
+            fidelityCSV.delete();
 
 		}
                 

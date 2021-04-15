@@ -28,8 +28,8 @@ import asUtilsPorts.Feed.SnowReports;
 import asUtilsPorts.Feed.Stocks;
 import asUtilsPorts.Weather.RadarNightly;
 import asWebRest.dao.FinanceDAO;
-//import asWebRest.hookers.AmbientWxStation;
-import asWebRest.hookers.CommunityWxStation;
+import asWebRest.hookers.AmbientWxStation;
+//import asWebRest.hookers.CommunityWxStation;
 
 public class Feeds {
 
@@ -37,8 +37,8 @@ public class Feeds {
 
 		String returnData = "Fetch 1 minute feeds:\n";
 
-		//AmbientWxStation aws = new AmbientWxStation();
-		CommunityWxStation cws = new CommunityWxStation();
+		AmbientWxStation aws = new AmbientWxStation();
+		//CommunityWxStation cws = new CommunityWxStation();
 		ANSSQuakes anssQuakes = new ANSSQuakes();
     	AlertMe alertMe = new AlertMe();
 		NWSWarnings nwsWarnings = new NWSWarnings();
@@ -47,8 +47,8 @@ public class Feeds {
     	try { nwsWarnings.doFetch(dbc); } catch (Exception e) { e.printStackTrace(); }    
     	try { alertMe.capAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { alertMe.earthquakeAlerts(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	//try { returnData += aws.returnWunder(dbc); } catch (Exception e) { e.printStackTrace(); }
-    	try { returnData += cws.returnWunder_Community(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += aws.returnWunder(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	//try { returnData += cws.returnWunder_Community(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
 		return returnData;
 

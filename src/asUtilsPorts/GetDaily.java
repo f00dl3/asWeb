@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 26 Feb 2021
+Updated: 3 Apr 2021
 */
 
 package asUtilsPorts;
@@ -83,15 +83,16 @@ public class GetDaily {
 			+ "(SELECT FORMAT((SUM(Value)/1000),1) FROM Finances.FB_Assets WHERE Category = 'TR'),"
 			+ "((SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-			+ "(SELECT FORMAT(SUM(((Count-Unvested)*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1)),"
-			+ "(SELECT FORMAT(SUM((FI4KAN*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityA'),"
+			+ "(SELECT FORMAT(SUM(((FIIBAN-Unvested)*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where SpilloverSavings=1) +"
+			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares WHERE Holder='Crypto')),"
+			+ "(SELECT FORMAT(SUM((FI4KAN*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where FI4KAN != 0),"
 			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='FidelityE'),"
 			+ "(SELECT FORMAT(SUM((EJTI15*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJTI15 != 0),"
 			+ "(SELECT FORMAT(SUM((EJRI23*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJRI23 != 0),"
 			+ "(SELECT FORMAT(SUM((EJRI07*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where EJRI07 != 0),"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
 			+ "(SELECT FORMAT(SUM(Credit-Debit)/1000,1) FROM Finances.FB_CFSV59 WHERE Date <= current_date),"
-			+ "(SELECT SUM((SELECT FORMAT(SUM((FIIBAN*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where FIIBAN != 0)+(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='Trading'))),"
+			+ "(SELECT FORMAT(SUM(((FIIBAN-Unvested)*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where FIIBAN != 0),"
 			+ "(SELECT FORMAT(SUM((FIRIAN*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where FIRIAN != 0),"
 			+ "(SELECT FORMAT(SUM((Count*(Multiplier*LastValue))/1000),1) FROM Finances.StockShares where Holder='Crypto')"
 			+ ");";        

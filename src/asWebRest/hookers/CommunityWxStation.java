@@ -25,7 +25,7 @@ import asWebRest.shared.WebCommon;
 
 public class CommunityWxStation {
 
-	private String apiCall_WUnderground_C(String station) {
+	private String apiCall_WUnderground_C(String stations) {
 		String url = "https://api.weather.com/v2/pws/observations/current";
 		String dataBack = "RUN API CALL WUNDERGROUND\n";
 		WUndergroundBeans wub = new WUndergroundBeans();
@@ -35,7 +35,7 @@ public class CommunityWxStation {
 				.data("units", "e")
 				.data("format", "json")
 				.data("apiKey", wub.getApiKey())
-				.data("stationId", station)
+				.data("stationId", stations)
 				.execute()
 				.body();
 		} catch (Exception e) {
@@ -76,6 +76,13 @@ public class CommunityWxStation {
 		JSONArray communityStations = wub.getCommunityStations();
 		JSONArray base = new JSONArray();
 		JSONObject encapsulator = new JSONObject();
+		String stations = "";
+		
+		for(int ia = 0; ia < communityStations.length(); ia++) {
+			stations += communityStations.getString(ia);
+		}
+		
+		// Figure this out for merged API call?
 		
 		for(int i = 0; i < communityStations.length(); i++) {
 			

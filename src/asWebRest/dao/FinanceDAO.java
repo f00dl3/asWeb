@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 18 Feb 2021
+Updated: 15 Apr 2021
 */
 
 package asWebRest.dao;
@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Months;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -237,6 +236,7 @@ public class FinanceDAO {
                 " SELECT 'Checking' AS Card, CTID, Bank, Date, Description, Debit, Credit FROM Finances.FB_CFCK01 UNION ALL" +
                 " SELECT 'Savings' AS Card, CONCAT('S', STID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_CFSV59 UNION ALL" +
                 " SELECT 'Discover' AS Card, CONCAT('D', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_DICC45 UNION ALL" +
+                " SELECT 'Fideltiy' AS Card, CONCAT('F', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_FICCXX UNION ALL" +
                 " SELECT 'OldNavy' AS Card, CONCAT('O', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_ONCCXX" +
                 " ) as tmp" +
                 " ORDER BY Date, CTID DESC;";
@@ -631,12 +631,13 @@ public class FinanceDAO {
 			autoNetWorthSQLQuery += " + (SELECT SUM(ABS(Value)) FROM Finances.FB_Assets WHERE Category='DB')),"    
 				+ "((SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date) +"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date) +"
-				+ "(SELECT SUM((Count-Unvested)*(Multiplier*LastValue)) FROM Finances.StockShares WHERE SpilloverSavings=1)),"
+				+ "((SELECT SUM((FIIBAN-Unvested)*(Multiplier*LastValue)) FROM Finances.StockShares WHERE SpilloverSavings=1) +"
+				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='Crypto'))),"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFCK01 WHERE Date <= current_date),"
 				+ "(SELECT SUM(Credit-Debit) FROM Finances.FB_CFSV59 WHERE Date <= current_date),"
-				+ "(SELECT SUM((FI4KAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='FidelityA'),"
+				+ "(SELECT SUM((FI4KAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FI4KAN != 0),"
 				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='FidelityE'),"
-				+ "(SELECT SUM((SELECT SUM((FIIBAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FIIBAN != 0)+(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='Trading'))),"
+				+ "(SELECT SUM(((FIIBAN-Unvested)*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FIIBAN != 0),"
 				+ "(SELECT SUM((FIRIAN*(Multiplier*LastValue))) FROM Finances.StockShares WHERE FIRIAN != 0),"
 				+ "(SELECT SUM((Count*(Multiplier*LastValue))) FROM Finances.StockShares WHERE Holder='Crypto')" 
 				+ ");";    

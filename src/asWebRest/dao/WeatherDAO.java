@@ -895,6 +895,52 @@ public class WeatherDAO {
         } catch (Exception e) { e.printStackTrace(); } 
         return tContainer;
     }
+
+    public JSONArray getObsJsonLenexaWest(Connection dbc) {
+    	WUndergroundBeans wub = new WUndergroundBeans();
+        final String station = "$." + wub.getStation_LenexaWest();
+        final String query_ObsJSONLenexaWest = "SELECT ObsID, GetTime, " +
+        		" JSON_EXTRACT(jsonData, '"+station+"') as jsonSet" +
+        		" FROM WxObs.RapidSDI_Home" +
+                " ORDER BY GetTime DESC LIMIT 5000;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONLenexaWest, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("ObsID", resultSet.getLong("ObsID"))
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("jsonSet", resultSet.getString("jsonSet"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
+    
+    public JSONArray getObsJsonRaymore(Connection dbc) {
+    	WUndergroundBeans wub = new WUndergroundBeans();
+        final String station = "$." + wub.getStation_Raymore();
+        final String query_ObsJSONHome = "SELECT ObsID, GetTime, " +
+        		" JSON_EXTRACT(jsonData, '"+station+"') as jsonSet" +
+        		" FROM WxObs.RapidSDI_Home" +
+                " ORDER BY GetTime DESC LIMIT 5000;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_ObsJSONHome, null);
+            while (resultSet.next()) {
+                JSONObject tObject = new JSONObject();
+                tObject
+                    .put("ObsID", resultSet.getLong("ObsID"))
+                    .put("GetTime", resultSet.getString("GetTime"))
+                    .put("jsonSet", resultSet.getString("jsonSet"));
+                tContainer.put(tObject);
+            }
+            resultSet.close();
+        } catch (Exception e) { e.printStackTrace(); } 
+        return tContainer;
+    }
     
     public JSONArray getObsJsonStations(Connection dbc, List<String> qParams) {
         final String query_ObsJSON_Stations = "SELECT " +

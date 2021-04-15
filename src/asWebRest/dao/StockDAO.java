@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 26 Feb 2021
+Updated: 3 Apr 2021
 */
 
 package asWebRest.dao;
@@ -110,7 +110,7 @@ public class StockDAO {
         final String query_etb = "SELECT" +
         		" SUM(" +
         		"  (SELECT Value FROM Finances.FB_Assets WHERE Description LIKE 'Brokerage%') +" +
-        		"  (SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='Trading')" +
+        		"  (SELECT SUM((FIIBAN-Unvested)*LastValue) FROM Finances.StockShares WHERE FIIBAN != 0)" +
         		") AS Balance," +
         		" (SELECT SUM(Credit-Debit) FROM Finances.FB_ETIBXX) AS Contributions";		
         JSONArray tContainer = new JSONArray();
@@ -231,7 +231,7 @@ public class StockDAO {
     private String stockUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_UpdateStock = "UPDATE Finances.StockShares SET LastValue=?, PreviousClose=? WHERE Symbol=?;";
-        String query_UpdateStockB = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Managed=0), Checked=CURDATE() WHERE Description='Stocks';";
+        String query_UpdateStockB = "UPDATE Finances.FB_Assets SET Value=((SELECT SUM(FIIBAN*LastValue) FROM Finances.StockShares WHERE Managed=0)+(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='Crypto')), Checked=CURDATE() WHERE Description='Stocks';";
         String query_UpdateStockC = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='EJones' AND Managed=1), Checked=CURDATE() WHERE Description='AE - Edward Jones';";
         String query_UpdateStockD = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(FI4KAN*(LastValue*Multiplier)) FROM Finances.StockShares WHERE FI4KAN != 0), Checked=CURDATE() WHERE Description='A - Fidelity Sprint 401k';";
         String query_UpdateStockE = "UPDATE Finances.FB_Assets SET Value=(SELECT SUM(Count*LastValue) FROM Finances.StockShares WHERE Holder='FidelityE' AND Managed=1), Checked=CURDATE() WHERE Description='E - Fidelity 401k CPFP';";

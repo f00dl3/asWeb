@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 26 Feb 2021
+Updated: 13 Apr 2021
  */
 
 function actOnSavingsSubmit(event) {
@@ -107,21 +107,24 @@ function genOverviewStock(stockData, eTrade, crypto) {
 	let eTradeVested = eTrade.Contributions;
 	var stockWorth = 0;
 	let cryptoWorth = 0;
-	var vestDiff = etaBalance - eTradeVested;
+	//var vestDiff = etaBalance - eTradeVested;
 	let cryptoDiff = cryptoBalance - cryptoVested;
-	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
+	//let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
 	let perChgCrypto = ((cryptoDiff/cryptoVested)*100).toFixed(1);
 	stockData.forEach(function(sd) { 
-		if (sd.Count != 0 && sd.Managed != 1) { 
-			stockWorth += ((sd.Count - sd.Unvested) * parseFloat(sd.LastValue)); 
+		if (sd.FIIBAN != 0 && sd.Symbol != 'TMUS') { 
+			stockWorth += ((sd.FIIBAN - sd.Unvested) * parseFloat(sd.LastValue)); 
 			//console.log("\nCumulation: " + sd.Symbol + " - " + sd.LastValue + " - TSW=" + stockWorth);
 			} 
 		});
+	let vestDiff = stockWorth - eTradeVested;
+	let perChgVest = ((vestDiff/eTradeVested)*100).toFixed(1);
     var sCols = ["Symbol", "Description", "Shares", "Value", "Worth" /*, "Day" */ ];
-    var bubble = "<div class='UBox'>Stock<br/><span>$" + autoUnits(stockWorth) + "</span>" +
+    var bubble = "<div class='UBox'>Extend<br/><span>$" + autoUnits(etaBalance+parseFloat(cryptoBalance)) + "</span>" +
             "<div class='UBoxO'>" +
             "Brokerage: <strong>$" + autoUnits(etaBalance) + "</strong> (<strong>$" + autoUnits(eTradeVested) + "</strong>)<br/>" +
-            "Change: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<p/>" +
+            "Change*: <strong>$" + vestDiff.toFixed(0) + "</strong> (<strong>" + perChgVest + "%</strong>)<br/>" +
+		"<em>*Does not include free company stock</em><p/>" +
             "Crypto: <strong>$" + autoUnits(cryptoBalance) + "</strong> (<strong>$" + autoUnits(cryptoVested) + "</strong>)<br/>" +
             "Change: <strong>$" + cryptoDiff.toFixed(0) + "</strong> (<strong>" + perChgCrypto + "%</strong>)<br/>";
     bubble += "<br/><strong>Watching</strong><br/>";
@@ -287,7 +290,7 @@ function putOverview(finGlob) {
     var crypto = finGlob.crypto[0];
     var stockData = finGlob.stock;
     genOverviewChecking(cbData);
-    genOverviewSavings(svData, svBk, stockData);
+    //genOverviewSavings(svData, svBk, stockData);
     genOverviewStock(stockData, eTrade, crypto);
     //genOverviewMortgage(mortData, amSch, mdfbal, svbal);
     genOverviewWorth(enw, mortData, x3nw, nwga, enwt, mdfbal);

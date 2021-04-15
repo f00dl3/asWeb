@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 7 Mar 2020
-Updated: 10 Mar 2021
+Updated: 11 Mar 2021
  */
 
 const axios = require('axios');
@@ -53,8 +53,11 @@ function getWeatherLatest(msg) {
 	axios.post(url, pData).then((res) => { 
         var theData = JSON.parse(res.data.wxObsM1H[0].jsonSet);
         var homeData = JSON.parse(res.data.homeWxObs[0].jsonSet);
-        var raymoreData = JSON.parse(res.data.homeWxObs[1].jsonSet);
-		respondWeatherData("KKSLENEX98", theData, msg, homeData, raymoreData);
+	let lenexaWestData = "";
+	let raymoreData = "";
+	//var lenexaWestData = JSON.parse(res.data.lenexaWestWxObs[0].jsonSet);
+        //var raymoreData = JSON.parse(res.data.raymoreWxObs[0].jsonSet);
+		respondWeatherData("KKSLENEX98", theData, msg, homeData, lenexaWestData, raymoreData);
 	}).catch((error) => {
 		console.log(error)
 	});
@@ -63,31 +66,26 @@ function getWeatherLatest(msg) {
 
 }
 
-function respondWeatherData(station, data, msg, homeData, raymoreData) {
+function respondWeatherData(station, data, msg, homeData, lenexaWestData, raymoreData) {
 
 	var jds = data;
 	let jdsHome = homeData;
 	let jdsRaymore = raymoreData;
-	var finalMessage = "Lenexa/Old Town (" + station + ")" + 
-		"\n" + jdsHome.TimeString +
-		"\nTemperature: " + jdsHome.Temperature + " F" +
-		"\nDewpoint: " + jdsHome.Dewpoint + " F" +
-		"\nHumidity: " + jdsHome.RelativeHumidity + "%" +
-		"\nPressure: " + jdsHome.PressureIn + "\"" +
-		"\nWind Direction: " + jdsHome.WindDegrees + " deg" +
-		"\nDaily Rain: " + jdsHome.DailyRain + "\"" +
-		"\nRain Rate: " + jdsHome.RainRate + "\"/hr";
-	var finalMessageRaymore = "Raymore:"  +
-		"\n" + jdsRaymore.TimeString +
-		"\nTemperature: " + jdsRaymore.Temperature + " F" +
-		"\nDewpoint: " + jdsRaymore.Dewpoint + " F" +
-		"\nHumidity: " + jdsRaymore.RelativeHumidity + "%" +
-		"\nPressure: " + jdsRaymore.PressureIn + "\"" +
-		"\nWind Direction: " + jdsRaymore.WindDegrees + " deg" +
-		"\nDaily Rain: " + jdsRaymore.DailyRain + "\"" +
-		"\nRain Rate: " + jdsRaymore.RainRate + "\"/hr";
+	let jdsLenexaWest = lenexaWestData;
+	var finalMessage = "Lenexa/Old Town @ " + jdsHome.TimeString +
+		"\nTemp/Dwpt/Humid: " + jdsHome.Temperature + "F" + "/" + jdsHome.Dewpoint + "F (" + jdsHome.RelativeHumidity + "%), Press: " + jdsHome.PressureIn + "\"" +
+		"\nWind Dir: " + jdsHome.WindDegrees + " deg, Rain: " + jdsHome.DailyRain + "\", rate " + jdsHome.RainRate + "\"/hr";
+	/*
+	var finalMessageLenexaWest = "Lenexa West @ " + jdsLenexaWest.TimeString + 
+		"\nTemp/Dwpt/Humid: " + jdsLenexaWest.Temperature + "F/" + jdsLenexaWest.Dewpoint + "F (" + jdsLenexaWest.RelativeHumidity + "%), Press: " + jdsLenexaWest.PressureIn + "\"" +
+		"\nWind Dir: " + jdsLenexaWest.WindDegrees + " deg, Rain: " + jdsLenexaWest.DailyRain + "\", rate " + jdsLenexaWest.RainRate + "\"/hr";
+	var finalMessageRaymore = "Raymore @ " + jdsRaymore.TimeString +
+		"\nTemp/Dwpt/Humid: " + jdsRaymore.Temperature + "F/" + jdsRaymore.Dewpoint + "F (" + jdsRaymore.RelativeHumidity + "%), Press: " + jdsRaymore.PressureIn + "\"" +
+		"\nWind Dir: " + jdsRaymore.WindDegrees + " deg, Rain: " + jdsRaymore.DailyRain + "\", rate " + jdsRaymore.RainRate + "\"/hr";
+	*/
 	console.log("\nDBG --> finalMessage = " + finalMessage);
 	msg.reply(asm.trimForDiscord(finalMessage));
-	msg.reply(asm.trimForDiscord(finalMessageRaymore));
+	//msg.reply(asm.trimForDiscord(finalMessageLenexaWest));
+	//msg.reply(asm.trimForDiscord(finalMessageRaymore));
 
 }

@@ -128,7 +128,6 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	let aData8 = resultJ.data8.reverse();
 	let aData10 = resultJ.data10.reverse();
 	let aData11 = resultJ.data11.reverse();
-	let aData12 = resultJ.data12.reverse();
 	let aData13 = resultJ.data13.reverse();
 	let aDataA = [];
 	let i = 0;
@@ -148,7 +147,6 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	aData8 = trimArray(aData8, limit);
 	aData10 = trimArray(aData10, limit);
 	aData11 = trimArray(aData11, limit);
-	aData12 = trimArray(aData12, limit);
 	aData13 = trimArray(aData13, limit);
 	var ctx = document.getElementById(container).getContext('2d');
 	let extraDataContent = aLabels[0] + ": " + autoUnits(aData[0].toFixed(2));
@@ -169,7 +167,6 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 				{ label: wLb[8], borderColor: '#99ee00', backgroundColor: 'olive', data: aData8, hidden: true },
 				{ label: wLb[10], borderColor: 'skyblue', backgroundColor: 'blue', data: aData10, hidden: false },
 				{ label: wLb[11], borderColor: 'white', backgroundColor: 'grey', data: aData11, hidden: true },
-				{ label: wLb[12], borderColor: 'lightgreen', backgroundColor: 'green', data: aData12, hidden: true },
 				{ label: wLb[13], borderColor: '#ed820e', backgroundColor: '#cc5801', data: aData13, hidden: true }
 			]
 		},

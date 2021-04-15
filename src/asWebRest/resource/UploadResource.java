@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 13 May 2019
-Updated: 25 Dec 2020
+Updated: 15 Apr 2020
  */
 
 package asWebRest.resource;
@@ -81,6 +81,10 @@ public class UploadResource extends ServerResource {
                             	String[] args = { "Discover" };
                                 asUtilsPorts.CCImports.main(args);
                             	sb.append("\nProcessed Discover credit card data!");
+                            } else if (fileName.contains("Fidelity.csv")) {
+                            	String[] args = { "Fidelity" };
+                                asUtilsPorts.CCImports.main(args);
+                            	sb.append("\nProcessed Fidelity credit card data!");
                             } else if (fileName.contains("OldNavy.csv")) {
                             	String[] args = { "OldNavy" };
                                 asUtilsPorts.CCImports.main(args);

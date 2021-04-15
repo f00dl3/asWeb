@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 25 Feb 2018
-Updated: 28 Dec 2020
+Updated: 11 Mar 2021
  */
 
 package asWebRest.resource;
@@ -282,11 +282,15 @@ public class WeatherResource extends ServerResource {
                     JSONArray latestObsB2 = getWeatherAction.getObsJsonLast(dbc);
                     JSONArray indorObs2 = getSnmpAction.getMergedLastTemp(dbc);
                     JSONArray wxObsBa2 = getWeatherAction.getObsJsonHome(dbc);
+                    JSONArray wxObsLenexaWest = getWeatherAction.getObsJsonLenexaWest(dbc);
+                    JSONArray wxObsRaymore = getWeatherAction.getObsJsonRaymore(dbc);
                     mergedResults
                         .put("wxObsM1H", latestObsB2)
                         .put("wxObsNow", wxObsB2)
                         .put("indoorObs", indorObs2)
-                        .put("homeWxObs", wxObsBa2);
+                        .put("homeWxObs", wxObsBa2)
+                        .put("raymoreWxObs", wxObsRaymore)
+                        .put("lenexaWestWxObs", wxObsLenexaWest);
                     returnData = mergedResults.toString();
                     break;          
                                  
