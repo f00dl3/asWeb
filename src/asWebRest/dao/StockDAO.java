@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 3 Apr 2021
+Updated: 1 May 2021
 */
 
 package asWebRest.dao;
@@ -131,7 +131,8 @@ public class StockDAO {
     private JSONArray stockList(Connection dbc) { 
         final String query_GetStocks = "SELECT Symbol, Count, Holder," +
         		" LastValue, Description, PreviousClose," +
-        		" LastBuy, LastSell, Invested, Managed, SpilloverSavings," +
+        		" LastBuy, LastBuyFIRIAN, LastBuyFI4KAN, LastBuyEJTI15, LastBuyEJRI07," +
+        		" LastSell, Invested, Managed, SpilloverSavings," +
         		" EJTI15, EJRI23, EJRI07, LastComparedShares, Multiplier, LastUpdated," +
         		" FI4KAN, FIRIAN, FIIBAN, Unvested" +
         		" FROM Finances.StockShares WHERE Active=1;";
@@ -147,6 +148,10 @@ public class StockDAO {
                 	.put("LastValue", resultSet.getString("LastValue"))
                 	.put("Description", resultSet.getString("Description"))
                 	.put("LastBuy", resultSet.getDouble("LastBuy"))
+                	.put("LastBuyFIRIAN", resultSet.getDouble("LastBuyFIRIAN"))
+                	.put("LastBuyFI4KAN", resultSet.getDouble("LastBuyFI4KAN"))
+                	.put("LastBuyEJTI15", resultSet.getDouble("LastBuyEJTI15"))
+                	.put("LastBuyEJRI07", resultSet.getDouble("LastBuyEJRI07"))
                 	.put("LastSell", resultSet.getDouble("LastSell"))
                 	.put("Invested", resultSet.getDouble("Invested"))
                 	.put("Managed", resultSet.getInt("Managed"))
@@ -171,9 +176,10 @@ public class StockDAO {
     private String stockAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
         String query_AddStock = "INSERT INTO Finances.StockShares " +
-        		" (Symbol, Count, Active, Holder, Description, Managed)" +
+        		" (Symbol, Count, Active, Holder, Description, Managed, " +
+        		" LastBuy, LastBuyFIRIAN, LastBuyFI4KAN, LastBuyEJTI15, LastBuyEJRI07)" +
         		" VALUES " +
-        		" (?, ?, 1, ?, ?, ?);";
+        		" (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?);";
         try { returnData = wc.q2do1c(dbc, query_AddStock, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
@@ -221,7 +227,8 @@ public class StockDAO {
 
     private String stockShareUpdate(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_ShareUpdate = "UPDATE Finances.StockShares SET Count=?, Holder=?, EJTI15=?, EJRI07=?, FI4KAN=?, FIRIAN=?, FIIBAN=? WHERE Symbol=?;";
+        String query_ShareUpdate = "UPDATE Finances.StockShares SET Count=?, Holder=?, EJTI15=?, EJRI07=?, FI4KAN=?, FIRIAN=?, FIIBAN=?, " +
+        		" LastBuy=?, LastBuyFIRIAN=?, LastBuyFI4KAN=?, LastBuyEJTI15=?, LastBuyEJRI07=? WHERE Symbol=?;";
         String query_ShareUpdateB = "UPDATE Finances.StockShares SET Count=EJTI15+EJRI07 WHERE Holder='EJones';";
         try { returnData = wc.q2do1c(dbc, query_ShareUpdate, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData = wc.q2do1c(dbc, query_ShareUpdateB, null); } catch (Exception e) { e.printStackTrace(); }

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from parent: 4 Aug 2020
-Updated: 18 Feb 2021
+Updated: 1 May 2021
  */
 
 package asWebRest.resource;
@@ -9,6 +9,7 @@ package asWebRest.resource;
 import asWebRest.action.GetStockAction;
 import asWebRest.action.UpdateStockAction;
 import asWebRest.dao.StockDAO;
+import asWebRest.hookers.StockFinanceCSV;
 import asWebRest.shared.MyDBConnector;
 import asWebRest.shared.WebCommon;
 
@@ -35,6 +36,7 @@ public class StockResource extends ServerResource {
         GetStockAction getStockAction = new GetStockAction(new StockDAO());
         UpdateStockAction updateStockAction = new UpdateStockAction(new StockDAO());
         WebCommon wc = new WebCommon();
+    	StockFinanceCSV sfc = new StockFinanceCSV();
                         
         List<String> qParams = new ArrayList<>();
         final Form argsInForm = new Form(argsIn);
@@ -51,6 +53,10 @@ public class StockResource extends ServerResource {
         
         if(doWhat != null) {
             switch(doWhat) {
+            
+	            case "generateCSV":
+	                returnData += sfc.generateCSV(dbc);
+	                break;
 
 	            case "getCryptoAccount":
 	                JSONArray cra = getStockAction.getCryptoAccount(dbc);
@@ -71,6 +77,8 @@ public class StockResource extends ServerResource {
                     JSONArray stocksA = getStockAction.getStockList(dbc);
                     JSONArray etbaData = getStockAction.getETradeBrokerageAccount(dbc);
                     JSONArray crData = getStockAction.getCryptoAccount(dbc);
+                    String doNotReturn = "";
+                    doNotReturn += sfc.generateCSV(dbc);
                     mergedResults
                     	.put("etba", etbaData)
                     	.put("stocksA", stocksA)
@@ -79,11 +87,26 @@ public class StockResource extends ServerResource {
                     break;
                     
                 case "putStockAdd":
+                	String sLastBuya = "0";
+                	String sLastBuyFIRIANa = "0";
+                	String sLastBuyFI4KANa = "0";
+                	String sLastBuyEJTI15a = "0";
+                	String sLastBuyEJRI07a = "0";
+                	try { sLastBuya = argsInForm.getFirstValue("LastBuy"); } catch (Exception e) { }
+                	try { sLastBuyFIRIANa = argsInForm.getFirstValue("LastBuyFIRIAN"); } catch (Exception e) { }
+                	try { sLastBuyFI4KANa = argsInForm.getFirstValue("LastBuyFI4KAN"); } catch (Exception e) { }
+                	try { sLastBuyEJTI15a = argsInForm.getFirstValue("LastBuyEJTI15"); } catch (Exception e) { }
+                	try { sLastBuyEJRI07a = argsInForm.getFirstValue("LastBuyEJRI07"); } catch (Exception e) { }
                     qParams.add(argsInForm.getFirstValue("Symbol"));
                     qParams.add(argsInForm.getFirstValue("Count"));
                     qParams.add(argsInForm.getFirstValue("Holder"));
                     qParams.add(argsInForm.getFirstValue("Description"));
                     qParams.add(argsInForm.getFirstValue("Managed"));
+                    qParams.add(sLastBuya);
+                    qParams.add(sLastBuyFIRIANa);
+                    qParams.add(sLastBuyFI4KANa);
+                    qParams.add(sLastBuyEJTI15a);
+                    qParams.add(sLastBuyEJRI07a);
                     returnData += updateStockAction.setStockAdd(dbc, qParams);
                     break;
                     
@@ -93,11 +116,21 @@ public class StockResource extends ServerResource {
                 	String sFI4KAN = "0";
                 	String sFIRIAN = "0";
                 	String sFIIBAN = "0";
+                	String sLastBuy = "0";
+                	String sLastBuyFIRIAN = "0";
+                	String sLastBuyFI4KAN = "0";
+                	String sLastBuyEJTI15 = "0";
+                	String sLastBuyEJRI07 = "0";
                 	try { sEJTI15 = argsInForm.getFirstValue("EJTI15"); } catch (Exception e) { }
                 	try { sEJRI07 = argsInForm.getFirstValue("EJRI07"); } catch (Exception e) { }
                 	try { sFI4KAN = argsInForm.getFirstValue("FI4KAN"); } catch (Exception e) { }
                 	try { sFIRIAN = argsInForm.getFirstValue("FIRIAN"); } catch (Exception e) { }
                 	try { sFIIBAN = argsInForm.getFirstValue("FIIBAN"); } catch (Exception e) { }
+                	try { sLastBuy = argsInForm.getFirstValue("LastBuy"); } catch (Exception e) { }
+                	try { sLastBuyFIRIAN = argsInForm.getFirstValue("LastBuyFIRIAN"); } catch (Exception e) { }
+                	try { sLastBuyFI4KAN = argsInForm.getFirstValue("LastBuyFI4KAN"); } catch (Exception e) { }
+                	try { sLastBuyEJTI15 = argsInForm.getFirstValue("LastBuyEJTI15"); } catch (Exception e) { }
+                	try { sLastBuyEJRI07 = argsInForm.getFirstValue("LastBuyEJRI07"); } catch (Exception e) { }
                     qParams.add(argsInForm.getFirstValue("Count"));
                     qParams.add(argsInForm.getFirstValue("Holder"));
                     qParams.add(sEJTI15);
@@ -105,6 +138,11 @@ public class StockResource extends ServerResource {
                     qParams.add(sFI4KAN);
                     qParams.add(sFIRIAN);
                     qParams.add(sFIIBAN);
+                    qParams.add(sLastBuy);
+                    qParams.add(sLastBuyFIRIAN);
+                    qParams.add(sLastBuyFI4KAN);
+                    qParams.add(sLastBuyEJTI15);
+                    qParams.add(sLastBuyEJRI07);
                     qParams.add(argsInForm.getFirstValue("Symbol"));
                     returnData += updateStockAction.setStockShareUpdate(dbc, qParams);
                     break;                    

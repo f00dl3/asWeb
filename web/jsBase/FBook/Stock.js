@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 31 Mar 2021
+Updated: 1 May 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -104,7 +104,9 @@ function putStocks(etbaData, stockData, crypto) {
 			"</div>";
 	});
 	cryptoInsert += "</div>";
-    let rData = "<h3>Stocks & Manged Funds</h3>";
+	
+    var csvData = getBasePath("chartCache") + "/stockExport.csv";
+    let rData = "<h3>Stocks & Manged Funds [<a href='" + csvData + "'>CSV</a>]</h3>";
     let managedBalance = 0.0;
     let managedBalanceE = 0.0;
     let myBalance = 0.0;
@@ -168,6 +170,15 @@ function putStocks(etbaData, stockData, crypto) {
             "<div class='UPopO'>" +
             "<strong>Multiplier:</strong> " + sd.Multiplier.toFixed(4) + "x" + 
             "</div></div></span>" +
+            "<span class='td'><div class='UPop'>" +
+			"<input type='number' name='LastBuy' value='" + sd.LastBuy + "' style='width: 60px;' />" +
+			"<div class='UPopO'>" +
+			"FIRIAN: <input type='number' name='LastBuyFIRIAN' value='" + sd.LastBuyFIRIAN + "' style='width: 60px;' /><br/>" +
+			"FI4KAN: <input type='number' name='LastBuyFI4KAN' value='" + sd.LastBuyFI4KAN + "' style='width: 60px;' /><br/>" +
+			"EJTI15: <input type='number' name='LastBuyEJTI15' value='" + sd.LastBuyEJTI15 + "' style='width: 60px;' /><br/>" +
+			"EJRI07: <input type='number' name='LastBuyEJRI07' value='" + sd.LastBuyEJRI07 + "' style='width: 60px;' /><br/>" +
+			"</div></div>" +
+			"</span>" +
             "<span class='td'><input type='text' name='Holder' value='" + sd.Holder + "' style='width: 60px;' /></span>" +
             "<span class='td'>$" + autoUnits(holdingValue) + "</span>" +
             "<span class='td'>" + sd.Managed + "</span>" +
@@ -179,6 +190,7 @@ function putStocks(etbaData, stockData, crypto) {
             "<span class='td'><input type='number' name='Count' style='width: 80px;' /></span>" +
             "<span class='td'><input type='text' name='Description' style='width: 120px;' /></span>" +
             "<span class='td'>(N/A)</span>" + 
+            "<span class='td'><input type='number' name='LastBuy' style='width: 60px;' /></span>" +
             "<span class='td'><input type='text' name='Holder' style='width: 60px;' /></span>" +
             "<span class='td'>(N/A)</span>" + 
             "<span class='td'><input type='number' step='1' name='Managed' style='width: 30px;' /></span>" +
