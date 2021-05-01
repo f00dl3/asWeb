@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 21 Feb 2019
-Updated: 9 Sep 2020
+Updated: 1 May 2021
  */
 
 function actUpdateYesterdaySubmit(event) {
@@ -44,7 +44,7 @@ function putUpdateYesterday(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice("Updated yesterday's activites!");
-            getFitnessAllData();
+            //getFitnessAllData();
             aniPreload("off");
         },
         error: function(data, iostatus) {

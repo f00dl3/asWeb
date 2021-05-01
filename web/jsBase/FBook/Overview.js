@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Overview.js Split: 8 Apr 2018
-Updated: 13 Apr 2021
+Updated: 1 May 2021
  */
 
 function actOnSavingsSubmit(event) {
@@ -246,7 +246,7 @@ function getOverviewData() {
                     console.log("request for FOverCharts FAIL!, STATUS: " + iostatus.xhr.status + " (" + data + ")");
                 });
     });
-    setTimeout(function () { getOverviewData(); }, timeout);
+    setInterval(function () { getOverviewData(); }, timeout);
 }
 
 function getOverviewData2() {
@@ -307,7 +307,7 @@ function setSavingsAdd(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice("Savings ledger added!");
-            getOverviewData();
+            //getOverviewData();
             aniPreload("off");
         },
         error: function(data, iostatus) {

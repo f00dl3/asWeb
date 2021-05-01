@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 10 Dec 2020
+Updated: 15 Apr 2021
  */
 
 let limit = 1200;
@@ -237,7 +237,7 @@ function ch_chart_ObsJSONPrecipRateH(container, result, type, pData) {
 			}
 		}
 	});
-	setInterval(() => { ch_get_ObsJSONPrecipRateH_Update(chart, pData); }, timeout);
+	setInterval(function() { ch_get_ObsJSONPrecipRateH_Update(chart, pData); }, timeout); //setInterval
 }
 
 function ch_get_ObsJSONPrecipRateH(container, type) {
@@ -457,7 +457,7 @@ function ch_chart_ObsJSONTempH(container, result, type, pData) {
 			}
 		}
 	});
-	setInterval(() => { ch_get_ObsJSONTempH_Update(chart, pData); }, timeout);
+	setTimeout(() => { ch_get_ObsJSONTempH_Update(chart, pData); }, timeout); //setIterval
 }
 
 function ch_get_ObsJSONTempH(container, type) {

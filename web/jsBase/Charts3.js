@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 6 Oct 2020
-Updated: 31 Mar 2021
+Updated: 16 Apr 2021
  */
 
 let pOpts = {};
@@ -12,6 +12,7 @@ console.log("DBG: loaded charts3.js");
 
 function initCharts3() {
 	console.log("DBG: init called for charts3");
+	//eruda.init();
 	//testChart();
 	//testChartBasic();
 	testChartBasicCjs();

@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 8 May 2019
-Updated: 1 Oct 2020
+Updated: 24 Apr 2021
  */
 
 package asUtilsPorts;
@@ -46,7 +46,7 @@ public class StartupNotify {
 
 		ArrayList<Runnable> alerts = new ArrayList<Runnable>();
 		alerts.add(() -> mailer.sendMail(myCell, thisSubject, thisMessage, null));
-		alerts.add(() -> mailer.sendMail(myGmail, thisSubject, thisMessage, packedLog));
+		alerts.add(() -> mailer.sendMail(myGmail, thisSubject, thisMessage, null));
 		//alerts.add(() -> wxb.botBroadcastOnly(greetGif));
 		tr.runProcesses(alerts, false, false);
 		

@@ -1,7 +1,7 @@
 <%-- 
     Document   : Header.jsp
     Created on : Feb 12, 2018, 7:39:30 AM
-    Updated:    9 Jan 2021
+    Updated:    16 Apr 2021
     Author     : astump
 --%>
 
@@ -18,6 +18,7 @@
     String refresh = request.getParameter("refresh");
     
     String fullBasePack = "<script src='"+rootPath+"/jsLib/jQuery/jquery-3.5.1.min.js'></script>" +
+		"<script src='"+rootPath+"/jsLib/eruda/src/eruda.js'></script>" +
             "<script src='"+rootPath+"/jsLib/jQuery/jquery.marquee.min.js'></script>" +
 			"<script src='"+rootPath+"'/jsLib/hammer.min.js'></script>" +
             "<script src='"+rootPath+"/jsLib/moment/moment.min.js'></script>" +

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 14 Feb 2018
-Updated: 10 Dec 2020
+Updated: 1 May 2021
  */
 
 var myHeight = 67;
@@ -464,7 +464,7 @@ function putRoute(formData) {
         timeout: timeOutMilli,
         load: function(data) {
             showNotice(data.routesDone[0] + " done!");
-            getFitnessAllData(false);
+            //getFitnessAllData(false);
             aniPreload("off");
         },
         error: function(data, iostatus) {

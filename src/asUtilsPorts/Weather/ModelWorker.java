@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Sep 2017
-Updated: 8 Feb 2020
+Updated: 28 Apr 2021
 */
 
 package asUtilsPorts.Weather;
@@ -30,18 +30,18 @@ public class ModelWorker {
 		mwHRRR.main(getHour, round);
 		
 		if(int6h) {
-			mwGFS.main(getHour, round);
 			mwNAM.main(getHour, round);
 			if(int12h) {
-				mwHRWA.main(getHour, round);
-				mwHRWN.main(getHour, round);
-				mwCMC.main(getHour, round);
+				mwGFS.main(getHour, round);
+				//mwHRWA.main(getHour, round);
+				//mwHRWN.main(getHour, round);
+				//mwCMC.main(getHour, round);
 			}
 		}
 
 		if(int6hO) {
-			mwSRFA.main(getHour, round);
-			mwSRFN.main(getHour, round);
+			//mwSRFA.main(getHour, round);
+			//mwSRFN.main(getHour, round);
 		}			
 		
 	}

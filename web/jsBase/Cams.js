@@ -1,8 +1,9 @@
 /* 
 by Anthony Stump
 Created: 30 Mar 2018
-Updated: 24 Nov 2020
+Updated: 15 Apr 2021
  */
+
 
 function actOnDoLive(event) {
     delete displayVideoLoop;
@@ -14,6 +15,17 @@ function actOnDoVideo(event) {
     delete displayLiveCams;
     dojo.stopEvent(event);
     displayVideoLoop();
+}
+
+function display4kAdds(holder) {
+    var timeout = 1000 * 90;
+    var timestamp = getDate("day", 0, "timestamp");
+	var iconClass = "rThumbMedium";
+	var rData = "<a href='" + getBasePath("ui") + "/OLMap.jsp?Action=Wx' target='nChartR'>" +
+            "<img class='" + iconClass + "' src='" + getBasePath("get2") + "/Radar/EAX/_BLoop.gif?ts=" + timestamp + "'/>" +
+            "</a>";
+	dojo.byId(holder).innerHTML = rData;
+    setTimeout(function() { display4kAdds(holder); }, timeout);
 }
 
 function displayLiveCams() {
@@ -75,6 +87,7 @@ function initCams() {
     popCamHolder();
     snmpRapid("snmpHolder");
 	putOverviewSmall("finOverviewHolder");
+	display4kAdds("qhdHolder");
 }
 
 require(["dojo/ready"], function(ready){

@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 26 Jan 2020
+Updated: 16 Apr 2021
  */
 
 let wLb = [ "*", "R", "L", "X", "?", "C", "D", "Y", "RA", "RE", "T", "B", "S", "O" ];
@@ -189,7 +189,8 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 		}
 	});
 	$('#extraDataHolder').text(extraDataContent);
-	setInterval(() => { ch_get_FinENW_All_R_Update(chart, pData); }, timeout);
+	let ia = 0;
+	setInterval(function() { ch_get_FinENW_All_R_Update(chart, pData); console.log("FinENW_All_R Refresh "+ia); ia++; }, timeout);
 }
 
 function ch_get_FinENW_All_R(container, type) {
@@ -213,7 +214,6 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 		let tData8 = resultJ.data8[0];
 		let tData10 = resultJ.data10[0];
 		let tData11 = resultJ.data11[0];
-		let tData12 = resultJ.data12[0];
 		let tData13 = resultJ.data13[0];
 		let tDataA = tData - tData4;
 		let currentLabel = chart.data.labels[chart.data.labels.length-1];
@@ -232,8 +232,7 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 			chart.data.datasets[8].data.push(tData8);
 			chart.data.datasets[9].data.push(tData10);
 			chart.data.datasets[10].data.push(tData11);
-			chart.data.datasets[11].data.push(tData12);
-			chart.data.datasets[12].data.push(tData13);
+			chart.data.datasets[11].data.push(tData13);
 			chart.update();
 			chart.data.labels.shift();
 			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); });

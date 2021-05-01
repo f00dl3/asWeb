@@ -1,7 +1,7 @@
 <%-- 
     Document   : Anthony
     Created on : 30 Mar 2018
-    Updated:    21 Nov 2020
+    Updated:    15 Apr 2021
     Author     : astump
 --%>
 
@@ -23,7 +23,8 @@
         </div><p>
         <div id="finOverviewHolder"></div>
         <div id="camHolder"></div><p>        
-        <div id="snmpHolder"></div>
+        <div id="snmpHolder"></div><p>
+        <div id="qhdHolder"></div>
         
             
              

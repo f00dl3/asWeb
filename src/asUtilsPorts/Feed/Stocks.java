@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 1 Oct 2020
+Updated: 24 Apr 2021
 
 */
 
@@ -279,7 +279,7 @@ public class Stocks {
 						}
 					}		
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				
 				indexPosition = 0;

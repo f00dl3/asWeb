@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/Assets.js Split: 4 Apr 2018
-Updated: 21 Oct 2020
+Updated: 1 May 2021
  */
 
 function actOnAssetUpdate(event) {
@@ -190,7 +190,7 @@ function setAssetUpdate(formData) {
         load: function (data) {
             showNotice(formData.AssetDescription + " updated!");
             getAssetData();
-            getOverviewData();
+            //getOverviewData();
             aniPreload("off");
         },
         error: function (data, iostatus) { 

@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 14 Feb 2018
 Fitness/Plans.js split: 4 Apr 2018
-Updated: 9 Sep 2020
+Updated: 1 May 2021
  */
 
 function actOnCommitRoute(event) {
@@ -87,7 +87,7 @@ function processGpsTracks() {
                 function(data) {
                     aniPreload("off");
                     showNotice("Processed GPS tracks!");
-                    getFitnessAllData();
+                    //getFitnessAllData();
                 },
                 function(error) { 
                     aniPreload("off");

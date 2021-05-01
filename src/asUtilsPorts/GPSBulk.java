@@ -2,7 +2,7 @@
 by Anthony Stump
 Created: 30 Sep 2017
 Ported to asWeb: 10 Feb 2019
-Updated: 10 Jul 2020
+Updated: 24 Apr 2021
 */
 
 package asUtilsPorts;
@@ -52,6 +52,7 @@ public class GPSBulk {
 					Pattern p = Pattern.compile(dropLocation+"/(.*).fit");
 					Matcher m = p.matcher(childPath);
 					if (m.find()) {
+						try { Thread.sleep(10*1000); } catch (Exception e) { }
 						thisTrace = m.group(1);
 						System.out.println(" --> Processing: "+thisTrace);
 						String gpsProcArgs[] = { thisTrace, archFlag, "fit" };
