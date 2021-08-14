@@ -157,6 +157,7 @@ public class StockResource extends ServerResource {
                     qParams.add(argsInForm.getFirstValue("crDate"));
                     qParams.add(crDebit);
                     qParams.add(crCredit);
+                    qParams.add(crDescription);
                     returnData += updateStockAction.setCryptoAccountAdd(dbc, qParams);
                     break;
                     
