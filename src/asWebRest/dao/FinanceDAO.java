@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 19 Feb 2018
-Updated: 15 Apr 2021
+Updated: 21 Aug 2021
 */
 
 package asWebRest.dao;
@@ -237,7 +237,8 @@ public class FinanceDAO {
                 " SELECT 'Savings' AS Card, CONCAT('S', STID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_CFSV59 UNION ALL" +
                 " SELECT 'Discover' AS Card, CONCAT('D', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_DICC45 UNION ALL" +
                 " SELECT 'Fideltiy' AS Card, CONCAT('F', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_FICCXX UNION ALL" +
-                " SELECT 'OldNavy' AS Card, CONCAT('O', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_ONCCXX" +
+                " SELECT 'OldNavy' AS Card, CONCAT('O', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_ONCCXX UNION ALL" +
+                " SELECT 'Coinbase' AS Card, CONCAT('B', CTID) AS CTID, Date AS Bank, Date, Description, Debit, Credit FROM Finances.FB_CBCRYP" +
                 " ) as tmp" +
                 " ORDER BY Date, CTID DESC;";
         JSONArray tContainer = new JSONArray();

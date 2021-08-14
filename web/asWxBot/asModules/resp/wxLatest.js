@@ -58,6 +58,9 @@ function getWeatherLatest(msg) {
 	//var lenexaWestData = JSON.parse(res.data.lenexaWestWxObs[0].jsonSet);
         //var raymoreData = JSON.parse(res.data.raymoreWxObs[0].jsonSet);
 		respondWeatherData("KKSLENEX98", theData, msg, homeData, lenexaWestData, raymoreData);
+        	 var camSnap = "/dev/shm/tomcatShare/cache/CamLive_Public.jpeg";
+	         msg.reply("Camera Snapshot", { files :  [ camSnap ] });
+
 	}).catch((error) => {
 		console.log(error)
 	});

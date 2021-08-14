@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 1 May 2021
+Updated: 14 Aug 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -94,6 +94,7 @@ function putStocks(etbaData, stockData, crypto) {
 		"<span class='td'><input type='date' name='crDate' id='crDate' style='width: 80px;' /></span>" +
         "<span class='td'><input type='number' step='1' name='crDebit' value='0' style='width: 70px;' /></span>" +
         "<span class='td'><input type='number' step='1' name='crCredit' value='0' style='width: 70px;' /></span>" +
+        "<span class='td'><input type='text' name='crDescription' value='' style='width: 120px;' /></span>" +
         "</form>";
 	crypto.forEach(function (crd) {
 		cryptoInsert += "<div class='tr'>" +
@@ -101,6 +102,7 @@ function putStocks(etbaData, stockData, crypto) {
 			"<span class='td'>" + crd.Date + "</span>" + 
 			"<span class='td'>" + crd.Debit + "</span>" +
 			"<span class='td'>" + crd.Credit + "</span>" +
+			"<span class='td'>" + crd.Description + "</span>" +
 			"</div>";
 	});
 	cryptoInsert += "</div>";

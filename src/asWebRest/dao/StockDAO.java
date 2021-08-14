@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 1 May 2021
+Updated: 14 Aug 2021
 */
 
 package asWebRest.dao;
@@ -26,7 +26,7 @@ public class StockDAO {
 
     private JSONArray CryptoAccount(Connection dbc) {
         final String query_etba = "SELECT" +
-        		" BTID, Date, Debit, Credit" +
+        		" BTID, Date, Debit, Credit, Description" +
         		" FROM Finances.FB_CBCRYP" +
         		" ORDER BY DATE DESC LIMIT 5;";
         JSONArray tContainer = new JSONArray();
@@ -38,6 +38,7 @@ public class StockDAO {
                     .put("Date", resultSet.getString("Date"))
                     .put("Debit", resultSet.getDouble("Debit"))
                     .put("Credit", resultSet.getDouble("Credit"))
+                    .put("Description", resultSet.getDouble("Description"))
                     .put("BTID",  resultSet.getInt("BTID"));
                 tContainer.put(tObject);
             }
@@ -49,7 +50,7 @@ public class StockDAO {
 
     private String CryptoAccountAdd(Connection dbc, List<String> qParams) {
         String returnData = wcb.getDefaultNotRanYet();
-        String query_cryAdd = "INSERT INTO Finances.FB_CBCRYP (Date, Debit, Credit) VALUES (?,?,?);";
+        String query_cryAdd = "INSERT INTO Finances.FB_CBCRYP (Date, Debit, Credit, Description) VALUES (?,?,?,?);";
         try { returnData = wc.q2do1c(dbc, query_cryAdd, qParams); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }

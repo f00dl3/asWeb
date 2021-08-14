@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from parent: 4 Aug 2020
-Updated: 1 May 2021
+Updated: 21 Aug 2021
  */
 
 package asWebRest.resource;
@@ -150,8 +150,10 @@ public class StockResource extends ServerResource {
                 case "putCryptoAccountAdd":
                     String crCredit = "0.00";
                     String crDebit = "0.00";
+                    String crDescription = "";
                     if(wc.isSet(argsInForm.getFirstValue("crCredit"))) { crCredit = argsInForm.getFirstValue("crCredit"); }
                     if(wc.isSet(argsInForm.getFirstValue("crDebit"))) { crDebit = argsInForm.getFirstValue("crDebit"); }
+                    if(wc.isSet(argsInForm.getFirstValue("crDescription"))) { crDescription = argsInForm.getFirstValue("crDescription"); }
                     qParams.add(argsInForm.getFirstValue("crDate"));
                     qParams.add(crDebit);
                     qParams.add(crCredit);

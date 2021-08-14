@@ -163,11 +163,11 @@ function playMediaFile(thisFormData, dbxFlag) {
     var mediaType = wfa[wfa.length-1].toLowerCase();
     var mpo, mediaMime, mediaType, filePath;
     var loopCt = 1;
-    mpo = mediaMime = "";
+    mpo = mediaMime = "";	
     if(checkMobile()) { mpo += "<div class='PlayPop'>"; } else { mpo += "<div>"; }
     filePath = getBasePath("ui") + whatFile;
     switch(mediaType) {
-        case "mp3":
+        case "mp3": case "m3u":
             mediaMime = "audio/mpeg";
             mpo += "<audio id='mediaServerAudoPlayer' controls autoplay>" + //loop
                     "<source src='" + filePath + "' type='" + mediaMime + "'>" +

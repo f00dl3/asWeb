@@ -1,4 +1,4 @@
-#asWxBotPy - Python Discord bot build P.14
+#asWxBotPy - Python Discord bot build P.15
 
 import os
 import discord
@@ -77,9 +77,9 @@ async def on_message(message):
 	if ("sciatic") in (message.content).lower():
 		response = "Man, I feel your pain!"
 		await message.channel.send(response)
-	if ("stock") in (message.content).lower():
-		response = "https://giphy.com/gifs/nyse-stock-market-stocks-AgHBbekqDik0g"
-		await message.channel.send(response)
+#	if ("stock") in (message.content).lower():
+#		response = "https://giphy.com/gifs/nyse-stock-market-stocks-AgHBbekqDik0g"
+#		await message.channel.send(response)
 	if ("stonk") in (message.content).lower():
 		response = "https://tenor.com/view/stonks-meme-gif-16107418"
 		await message.channel.send(response)

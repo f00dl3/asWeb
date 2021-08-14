@@ -1,7 +1,7 @@
 /*
 by Anhony Stump
 Created: 14 Aug 2017
-Updated: 3 Apr 2021
+Updated: 6 Jun 2021
 */
 
 package asUtilsPorts;
@@ -31,7 +31,7 @@ public class GetDaily {
 		MortgageBeans mb = new MortgageBeans();
 		
 		CF6Daily cf6 = new CF6Daily();
-		EvergyAPIHook evergy = new EvergyAPIHook();
+		// EvergyAPIHook evergy = new EvergyAPIHook();
         JunkyPrivate junkyPrivate = new JunkyPrivate();
         SPCMapDownloader smd = new SPCMapDownloader();
 		UpdateFfxivAction updateFfxivAction = new UpdateFfxivAction(new FfxivDAO());
@@ -101,15 +101,15 @@ public class GetDaily {
         if(mb.getPayed() == 0) { try { wc.q2do1c(dbc, anwPrepSQLQuery, null); } catch (Exception e) { e.printStackTrace(); } }
         try { wc.q2do1c(dbc, autoNetWorthSQLQuery, null); } catch (Exception e) { e.printStackTrace(); }
         try { updateFfxivAction.setFfxivGilAuto(dbc); } catch (Exception e) { e.printStackTrace(); }        
-        try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
-	try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { }
+	//        try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { e.printStackTrace(); }
+	//	try { returnData += evergy.dailyJob(dbc); } catch (Exception e) { }
         try { smd.getYesterday(); } catch (Exception e) { e.printStackTrace(); }
         try { vh.getVehicleValue(dbc); } catch (Exception e) { e.printStackTrace(); }
         
-        if(rightNow.dayOfWeek().get() == 1) {
+        /* if(rightNow.dayOfWeek().get() == 1) {
         	KansasGasHook kgs = new KansasGasHook();
         	kgs.writeToDatabase(dbc);
-        }
+        } */
         
         if(rightNow.dayOfMonth().get() == 1 || rightNow.dayOfMonth().get() == 15) {
         	BackThatAssUp btau = new BackThatAssUp();

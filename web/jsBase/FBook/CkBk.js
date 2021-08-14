@@ -2,7 +2,7 @@
 by Anthony Stump
 FBook.js Created: 23 Mar 2018
 FBook/CkBk.js Split: 4 Apr 2018
-Updated: 21 Oct 2020
+Updated: 10 May 2021
  */
 
 var searchableData;
@@ -120,7 +120,11 @@ function putCheckbook(ckBkData) {
         results++;
         var shortDesc = "";
         var replacePattern = "DBT PURCHASE ON ";
+	let replacePattern2 = "DEBIT CARD PURCHASE OUTSTAND AUTH ";
+	let replacePattern3 = "DEBIT CARD PURCHASE ";
         if((ckBk.Description).includes(replacePattern)) { shortDesc = (ckBk.Description).replace(replacePattern, ""); } else { shortDesc = ckBk.Description; }
+	if((shortDesc).includes(replacePattern2)) { shortDesc = (shortDesc).replace(replacePattern2, ""); }
+	if((shortDesc).includes(replacePattern3)) { shortDesc = (shortDesc).replace(replacePattern3, ""); }
         shortDesc = shortDesc.substring(0, 32);
         var fbcr = (ckBk.Credit).toFixed(2); if (!isSet(fbcr) || fbcr == 0.00) { fbcr = ""; }
         var fbdb = (ckBk.Debit).toFixed(2); if (!isSet(fbdb) || fbdb == 0.00) { fbdb = ""; }

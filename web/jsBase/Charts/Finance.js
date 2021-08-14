@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 18 Nov 2020
-Updated: 16 Apr 2021
+Updated: 6 Jun 2021
  */
 
 let wLb = [ "*", "R", "L", "X", "?", "C", "D", "Y", "RA", "RE", "T", "B", "S", "O" ];
@@ -108,11 +108,13 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	let lbRadius = 1;
 	let doLegend = true;
 	let doX = true;
+	let doPopup = true;
 	if(type === "thumb") { 
 		description = "TOTL";
 		doLegend = false;
 		doX = false; 
 		lbRadius = 0;
+		doPopup = false;
 	}
 	let timeout = getRefresh("semiRapid");
 	let limit = 256;
@@ -149,7 +151,11 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	aData11 = trimArray(aData11, limit);
 	aData13 = trimArray(aData13, limit);
 	var ctx = document.getElementById(container).getContext('2d');
-	let extraDataContent = aLabels[0] + ": " + autoUnits(aData[0].toFixed(2));
+	let allDifference = (aData[aData.length-1] - aData[0]).toFixed(2);
+	let totalDifference = (aData[aData.length-1] - aData[aData.length-limit]).toFixed(2);
+	let lastDifference = (aData[aData.length-1] - aData[aData.length-2]).toFixed(2);
+	let extraDataContent = aLabels[aLabels.length-1] + ": " + autoUnits(aData[aData.length-1].toFixed(2)) +
+		 " (P " + totalDifference + ", U " + lastDifference + ")";
 	let chart = null;
 	chart = new Chart(ctx, {
 		type: 'line',
@@ -190,7 +196,7 @@ function ch_chart_FinENW_All_R(container, result, type, pData) {
 	});
 	$('#extraDataHolder').text(extraDataContent);
 	let ia = 0;
-	setInterval(function() { ch_get_FinENW_All_R_Update(chart, pData); console.log("FinENW_All_R Refresh "+ia); ia++; }, timeout);
+	setInterval(function() { ch_get_FinENW_All_R_Update(chart, pData, doPopup); console.log("FinENW_All_R Refresh "+ia); ia++; }, timeout);
 }
 
 function ch_get_FinENW_All_R(container, type) {
@@ -200,8 +206,9 @@ function ch_get_FinENW_All_R(container, type) {
   	});
 }
 
-function ch_get_FinENW_All_R_Update(chart, pData) {
+function ch_get_FinENW_All_R_Update(chart, pData, doPopup) {
 	$.post(getResource("Chart3"), pData, function (result) {
+		let limit = 256;
 		let resultJ = JSON.parse(result);
 		let tLabel = resultJ.labels[0];
 		let tData = resultJ.data[0];
@@ -216,6 +223,10 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 		let tData11 = resultJ.data11[0];
 		let tData13 = resultJ.data13[0];
 		let tDataA = tData - tData4;
+		let aData = resultJ.data.reverse();
+		let allDifference = (aData[aData.length-1] - aData[0]).toFixed(2);
+	        let totalDifference = (aData[aData.length-1] - aData[aData.length-limit]).toFixed(2);
+        	let lastDifference = (aData[aData.length-1] - aData[aData.length-2]).toFixed(2);
 		let currentLabel = chart.data.labels[chart.data.labels.length-1];
 		if(tLabel === currentLabel) {
 			//console.log("Skipping update - duplicate data!");
@@ -237,7 +248,10 @@ function ch_get_FinENW_All_R_Update(chart, pData) {
 			chart.data.labels.shift();
 			chart.data.datasets.forEach((dataset) => { dataset.data.shift(); });
 			chart.update();
-			let extraDataContent = tLabel + ": " + autoUnits(tData.toFixed(2));
+		        let extraDataContent = tLabel + ": " + autoUnits(tData.toFixed(2)) + 
+				" (P " + totalDifference + ", U " + lastDifference + ")";
+			if(doPopup) { showNotice("Update change: " + lastDifference); }
+//			let extraDataContent = tLabel + ": " + autoUnits(tData.toFixed(2));
 			$('#extraDataHolder').text(extraDataContent);
 		}
 	});
@@ -383,3 +397,10 @@ function ch_get_LiquidDist(container, type) {
   	});
 }
 
+function returnFormatted(numberIn) {
+	let sstyle = "lightgreen";
+	if(numberIn < 0) { sstyle = "red"; }
+	if(numberIn == 0) { sstyle = "white"; }
+	let rData = "<font color=" + sstyle + ">" + numberIn + "</font>";
+	return rData;
+}

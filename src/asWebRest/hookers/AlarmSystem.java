@@ -1,11 +1,12 @@
 /*
 by Anthony Stump
 Created: 1 Dec 2019
-Updated: 10 Jun 2020
+Updated: 2 May 2021
  */
 
 package asWebRest.hookers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -15,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import asWebRest.secure.JunkyPrivate;
 import asUtilsPorts.Mailer;
@@ -71,7 +74,15 @@ public class AlarmSystem {
 		JunkyPrivate jp = new JunkyPrivate();
         String messageRecipient = jp.getSmsAddress();
 		Mailer mailer = new Mailer();
-		try { mailer.sendMail(messageRecipient, "asWeb Smarthome Event", messageContent, null); } catch (Exception e) { e.printStackTrace(); }
+		Date date = new Date();
+		DateFormat dFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+		final String timestamp = dFormat.format(date);
+		
+		try { 
+			mailer.sendMail(messageRecipient, "asWeb Smarthome Event", messageContent + " (" + timestamp + ")", null); 
+		} catch (Exception e) { 
+				e.printStackTrace(); 
+		}
 	}
 	
 }
