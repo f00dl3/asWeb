@@ -38,7 +38,7 @@ public class StockDAO {
                     .put("Date", resultSet.getString("Date"))
                     .put("Debit", resultSet.getDouble("Debit"))
                     .put("Credit", resultSet.getDouble("Credit"))
-                    .put("Description", resultSet.getDouble("Description"))
+                    .put("Description", resultSet.getString("Description"))
                     .put("BTID",  resultSet.getInt("BTID"));
                 tContainer.put(tObject);
             }
