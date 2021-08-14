@@ -7,7 +7,7 @@ Updated: 14 Aug 2021
 function actOnCryptoFormSubmit(event) {
     dojo.stopEvent(event);
     var thisFormData = dojo.formToObject(this.form);
-    var thisFormDataJ = dojo.formToa6Json(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
     setCryptoAdd(thisFormData);
 }
 
