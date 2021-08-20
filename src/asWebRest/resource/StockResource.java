@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from parent: 4 Aug 2020
-Updated: 21 Aug 2021
+Updated: 20 Aug 2021
  */
 
 package asWebRest.resource;
@@ -77,14 +77,28 @@ public class StockResource extends ServerResource {
                     JSONArray stocksA = getStockAction.getStockList(dbc);
                     JSONArray etbaData = getStockAction.getETradeBrokerageAccount(dbc);
                     JSONArray crData = getStockAction.getCryptoAccount(dbc);
+                    JSONArray shitCoins = getStockAction.getShitCoins(dbc);
                     String doNotReturn = "";
                     doNotReturn += sfc.generateCSV(dbc);
                     mergedResults
                     	.put("etba", etbaData)
                     	.put("stocksA", stocksA)
-                    	.put("crypto", crData);
+                    	.put("crypto", crData)
+                    	.put("shitCoins", shitCoins);
                     returnData += mergedResults.toString();
                     break;
+                    
+                case "putShitUpdate":
+                	String scCount = "0";
+                	String scValue = "0";
+                	try { scCount = argsInForm.getFirstValue("Count"); } catch (Exception e) { }
+                	try { scValue = argsInForm.getFirstValue("Value"); } catch (Exception e) { }
+                	String scSymbol = argsInForm.getFirstValue("Symbol");
+                	qParams.add(scCount);
+                	qParams.add(scValue);
+                	qParams.add(scSymbol);
+                	returnData += updateStockAction.setShitUpdate(dbc, qParams);
+                	break;
                     
                 case "putStockAdd":
                 	String sLastBuya = "0";

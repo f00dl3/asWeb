@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 14 Aug 2021
+Updated: 20 Aug 2021
 */
 
 package asWebRest.dao;
@@ -128,7 +128,35 @@ public class StockDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return tContainer;
     }
-        
+
+    private JSONArray shitCoins(Connection dbc) { 
+        final String query_GetShitCoins = "SELECT Symbol, Count, Value, Description, LastUpdated FROM Finances.ShitCoins WHERE Active=1;";
+        JSONArray tContainer = new JSONArray();
+        try {
+            ResultSet resultSet = wc.q2rs1c(dbc, query_GetShitCoins, null);
+            while (resultSet.next()) { 
+                JSONObject tObject = new JSONObject();
+                tObject
+                	.put("Symbol", resultSet.getString("Symbol"))
+                	.put("Value", resultSet.getDouble("Value"))
+                	.put("Description", resultSet.getString("Description"))
+                	.put("Count", resultSet.getDouble("Count"))
+                	.put("LastUpdated", resultSet.getString("LastUpdated"));
+                tContainer.put(tObject);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return tContainer;
+    }
+    
+    private String shitUpdate(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ShareUpdateSC = "UPDATE Finances.ShitCoins SET Count=?, Value=? WHERE Symbol=?;";
+        String query_ShareUpdateSC_2 ="UPDATE Finances.StockShares SET Count=(SELECT SUM(Count*Value) FROM Finances.ShitCoins WHERE Active=1) WHERE Symbol='USDC-USD';";
+        try { returnData = wc.q2do1c(dbc, query_ShareUpdateSC, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_ShareUpdateSC_2, null); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
     private JSONArray stockList(Connection dbc) { 
         final String query_GetStocks = "SELECT Symbol, Count, Holder," +
         		" LastValue, Description, PreviousClose," +
@@ -257,11 +285,13 @@ public class StockDAO {
     public JSONArray getCryptoBalance(Connection dbc) { return CryptoBalance(dbc); }
     public JSONArray getETradeBrokerageAccount(Connection dbc) { return eTradeBrokerageAccount(dbc); }
     public JSONArray getETradeBalance(Connection dbc) { return eTradeBalance(dbc); }
+    public JSONArray getShitCoins(Connection dbc) { return shitCoins(dbc); }
     public JSONArray getStockHistory(Connection dbc) { return stockHistory(dbc); }
     public JSONArray getStockList(Connection dbc) { return stockList(dbc); }
     public JSONArray getStockListPublic(Connection dbc) { return stockListPublic(dbc); }
     public String setCryptoAccountAdd(Connection dbc, List<String> qParams) { return CryptoAccountAdd(dbc, qParams); }
     public String setETradeBrokerageAccountAdd(Connection dbc, List<String> qParams) { return eTradeBrokerageAccountAdd(dbc, qParams); }
+    public String setShitUpdate(Connection dbc, List<String> qParams) { return shitUpdate(dbc, qParams); }
     public String setStockAdd(Connection dbc, List<String> qParams) { return stockAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
     public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockShareUpdate(dbc, qParams); }

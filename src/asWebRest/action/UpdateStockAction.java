@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 18 Feb 2021
+Updated: 20 Aug 2021
  */
 
 package asWebRest.action;
@@ -18,6 +18,7 @@ public class UpdateStockAction {
 
     public String setCryptoAccountAdd(Connection dbc, List<String> qParams) { return stockDAO.setCryptoAccountAdd(dbc, qParams); }
     public String setETradeBrokerageAccountAdd(Connection dbc, List<String> qParams) { return stockDAO.setETradeBrokerageAccountAdd(dbc, qParams); }
+    public String setShitUpdate(Connection dbc, List<String> qParams) { return stockDAO.setShitUpdate(dbc, qParams); }
     public String setStockAdd(Connection dbc, List<String> qParams) { return stockDAO.setStockAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockDAO.setStockIndex(dbc, qParams); }
     public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockDAO.setStockShareUpdate(dbc, qParams); }

@@ -1,6 +1,48 @@
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$205/0x00000008407d7c40@cd868cf
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$206/0x00000008407f0040@7dc2c1d8
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$207/0x00000008407f0440@7605cb64
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$208/0x00000008407f0840@76c765a8
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$209/0x00000008407f0c40@3916e5af
-Task [0] Loop [0] Thread [0]: asWebRest.resource.TestResource$$Lambda$210/0x00000008407f1040@52b12f54
+Daily stock market report using MultiQuote Yahoo v7 API
+
+
+DBG: Watched stocks count: 40
+DBG: Added master index no. 0 (AABB) to index list 0
+DBG: Added master index no. 1 (ABALX) to index list 0
+DBG: Added master index no. 2 (ABNDX) to index list 0
+DBG: Added master index no. 3 (AEPGX) to index list 0
+DBG: Added master index no. 4 (AFTEX) to index list 0
+DBG: Added master index no. 5 (AGTHX) to index list 0
+DBG: Added master index no. 6 (AHITX) to index list 0
+DBG: Added master index no. 7 (AIVSX) to index list 0
+DBG: Added master index no. 8 (AMCPX) to index list 0
+DBG: Added master index no. 9 (AMECX) to index list 0
+DBG: Added master index no. 10 (AMHIX) to index list 0
+DBG: Added master index no. 11 (AMRMX) to index list 0
+DBG: Added master index no. 12 (ARKK) to index list 0
+DBG: Added master index no. 13 (AWSHX) to index list 0
+DBG: Added master index no. 14 (BCRX) to index list 0
+DBG: Ticker List 0: AABB,ABALX,ABNDX,AEPGX,AFTEX,AGTHX,AHITX,AIVSX,AMCPX,AMECX,AMHIX,AMRMX,ARKK,AWSHX,BCRX,
+DBG: Added master index no. 15 (BFCAX) to index list 1
+DBG: Added master index no. 16 (BITF) to index list 1
+DBG: Added master index no. 17 (BNB-USD) to index list 1
+DBG: Added master index no. 18 (BND) to index list 1
+DBG: Added master index no. 19 (BTC-USD) to index list 1
+DBG: Added master index no. 20 (CWGIX) to index list 1
+DBG: Added master index no. 21 (DIA) to index list 1
+DBG: Added master index no. 22 (DOGE-USD) to index list 1
+DBG: Added master index no. 23 (ETH-USD) to index list 1
+DBG: Added master index no. 24 (FDRXX) to index list 1
+DBG: Added master index no. 25 (FSKAX) to index list 1
+DBG: Added master index no. 26 (IMMP) to index list 1
+DBG: Added master index no. 27 (PRGFX) to index list 1
+DBG: Added master index no. 28 (QQQ) to index list 1
+DBG: Added master index no. 29 (QQQM) to index list 1
+DBG: Ticker List 1: BFCAX,BITF,BNB-USD,BND,BTC-USD,CWGIX,DIA,DOGE-USD,ETH-USD,FDRXX,FSKAX,IMMP,PRGFX,QQQ,QQQM,
+DBG: Added master index no. 30 (SPY) to index list 2
+DBG: Added master index no. 31 (SRNE) to index list 2
+DBG: Added master index no. 32 (TMUS) to index list 2
+DBG: Added master index no. 33 (TRGXX) to index list 2
+DBG: Added master index no. 34 (TSLA) to index list 2
+DBG: Added master index no. 35 (USDC-USD) to index list 2
+DBG: Added master index no. 36 (VOO) to index list 2
+DBG: Added master index no. 37 (XBI) to index list 2
+DBG: Added master index no. 38 (XLM-USD) to index list 2
+DBG: Added master index no. 39 (YFI-USD) to index list 2
+DBG: Ticker List 2: SPY,SRNE,TMUS,TRGXX,TSLA,USDC-USD,VOO,XBI,XLM-USD,YFI-USD,
+DBG: stockIndex = {"AGTHX":{"previousClose":"76.43","valueEach":"76.29"},"USDC-USD":{"previousClose":"0.999514","valueEach":"1.0001693"},"ARKK":{"previousClose":"121.44","valueEach":"116.98"},"TRGXX":{"previousClose":"","valueEach":"1.0"},"AWSHX":{"previousClose":"57.1","valueEach":"57.71"},"ABNDX":{"previousClose":"13.53","valueEach":"13.58"},"TSLA":{"previousClose":"709.99","valueEach":"686.17"},"FSKAX":{"previousClose":"127.26","valueEach":"128.08"},"XLM-USD":{"previousClose":"0.360085","valueEach":"0.37426758"},"BCRX":{"previousClose":"15.21","valueEach":"15.27"},"QQQM":{"previousClose":"150.77","valueEach":"151.65"},"CWGIX":{"previousClose":"65.65","valueEach":"65.87"},"PRGFX":{"previousClose":"114.24","valueEach":"114.49"},"DIA":{"previousClose":"352.73","valueEach":"356.57"},"SPY":{"previousClose":"442.68","valueEach":"446.97"},"XBI":{"previousClose":"126.48","valueEach":"121.79"},"BNB-USD":{"previousClose":"410.9449","valueEach":"422.22076"},"ETH-USD":{"previousClose":"3322.2117","valueEach":"3187.939"},"DOGE-USD":{"previousClose":"0.286808","valueEach":"0.32918605"},"AIVSX":{"previousClose":"51.0","valueEach":"51.48"},"IMMP":{"previousClose":"3.8","valueEach":"3.41"},"BITF":{"previousClose":"6.59","valueEach":"6.39"},"AMCPX":{"previousClose":"43.7","valueEach":"43.85"},"AEPGX":{"previousClose":"71.35","valueEach":"70.82"},"AMRMX":{"previousClose":"51.11","valueEach":"51.81"},"YFI-USD":{"previousClose":"40171.465","valueEach":"40501.71"},"FDRXX":{"previousClose":"","valueEach":"1.0"},"QQQ":{"previousClose":"366.84","valueEach":"368.98"},"TMUS":{"previousClose":"143.2","valueEach":"140.73"},"SRNE":{"previousClose":"8.85","valueEach":"8.54"},"BTC-USD":{"previousClose":"47793.32","valueEach":"46146.938"},"AMHIX":{"previousClose":"17.17","valueEach":"17.15"},"AHITX":{"previousClose":"10.51","valueEach":"10.47"},"BFCAX":{"previousClose":"11.34","valueEach":"11.42"},"AMECX":{"previousClose":"26.1","valueEach":"26.29"},"AFTEX":{"previousClose":"13.75","valueEach":"13.72"},"VOO":{"previousClose":"406.98","valueEach":"410.94"},"BND":{"previousClose":"85.95","valueEach":"86.44"},"ABALX":{"previousClose":"33.13","valueEach":"33.37"},"AABB":{"previousClose":"0.124","valueEach":"0.13"}}

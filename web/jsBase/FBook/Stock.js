@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 14 Aug 2021
+Updated: 20 Aug 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -16,6 +16,18 @@ function actOnETBAFormSubmit(event) {
     var thisFormData = dojo.formToObject(this.form);
     var thisFormDataJ = dojo.formToJson(this.form);
     setETBAAdd(thisFormData);
+}
+
+function actOnShitFormSubmit(event) {
+    dojo.stopEvent(event);
+    var thisFormData = dojo.formToObject(this.form);
+    var thisFormDataJ = dojo.formToJson(this.form);
+    if(isSet(thisFormData.Action)) {
+        switch(thisFormData.Action) {
+            case "Update": setShitUpdate(thisFormData); break;
+            default: window.alert("No action set!");
+        }
+    }
 }
 
 function actOnStockFormSubmit(event) {
@@ -59,7 +71,7 @@ function getStocks() {
                 function(data) {
                     aniPreload("off");
                     let psObj = data;
-                	putStocks(psObj.etba, psObj.stocksA, psObj.crypto);
+                	putStocks(psObj.etba, psObj.stocksA, psObj.crypto, psObj.shitCoins);
                     console.log("DEBUG: Stock pull success.");
                 },
                 function(error) { 
@@ -69,7 +81,7 @@ function getStocks() {
     });
 }
 
-function putStocks(etbaData, stockData, crypto) {
+function putStocks(etbaData, stockData, crypto, shitCoinData) {
 	let etbaInsert = "<h3>Stock Transactions</h3>" +
 		"<div class='table'>" +
 		"<form class='tr etbaAddUpdateForm'>" +
@@ -197,10 +209,25 @@ function putStocks(etbaData, stockData, crypto) {
             "<span class='td'>(N/A)</span>" + 
             "<span class='td'><input type='number' step='1' name='Managed' style='width: 30px;' /></span>" +
             "</form></div>";
-    rData += stockResults +
+	shitCoins = "<div class='table'>";
+	shitCoinData.forEach(function(sc) {
+		let holdingValue = (sc.Count * sc.Value);
+		holdingValue = holdingValue.toFixed(2);
+		shitCoins += "<form class='tr shitCoinAddUPpdateForm'>" +
+			"<span class='td'><input class='C2UShit' type='checkbox' name='Action' value='Update' /></span>" +
+			"<span class='td'><input type='hidden' name='Symbol' value='" + sc.Symbol + "'/>" + sc.Symbol + "</span>" +
+			"<span class='td'>" + sc.Description + "</span>" +
+			"<span class='td'><input type='number' step='0.001' name='Count' value='" + sc.Count + "' style='width: 80px;' /></span>" +
+			"<span class='td'><input type='number' step='0.001' name='Value' value='" + sc.Value + "' style='width: 80px;' /></span>" +  
+			"<span class='td'>" + holdingValue + "</span>" +
+			"</form>";		
+	});
+	shitCoins += "</div>";
+    rData += stockResults + shitCoins +
             "<p><em>Blank space for pop-over</em>";
 	let addTable = "<div class='table'><div class='tr'><span class='td'>" + etbaInsert + "</span><span class='td'>" + cryptoInsert + "</span></div></div>";
 	dojo.byId("FBStocks").innerHTML = addTable + rData;
+    dojo.query(".C2UShit").connect("onchange", actOnShitFormSubmit);
     dojo.query(".C2UStock").connect("onchange", actOnStockFormSubmit);
     dojo.query(".C2UETBA").connect("onchange", actOnETBAFormSubmit);
     dojo.query(".C2UCR").connect("onchange", actOnCryptoFormSubmit);
@@ -272,6 +299,28 @@ function setStockAdd(formData) {
         },
         error: function(data, iostatus) {
             window.alert("Stock Add FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
+            aniPreload("off");
+        }
+    };
+    dojo.xhrPost(xhArgs);
+}
+
+function setShitUpdate(formData) {
+    aniPreload("on");
+    formData.doWhat = "putShitUpdate";
+    var xhArgs = {
+        preventCache: true,
+        url: getResource("Stock"),
+        postData: formData,
+        handleAs: "text",
+        timeout: timeOutMilli,
+        load: function(data) {
+            showNotice("Shit Coin updated!");
+            getStocks();
+            aniPreload("off");
+        },
+        error: function(data, iostatus) {
+            window.alert("Shit Coin Update FAIL!, STATUS: " + iostatus.xhr.status + " ("+data+")");
             aniPreload("off");
         }
     };
