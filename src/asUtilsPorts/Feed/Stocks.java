@@ -2,7 +2,7 @@
  * 
 by Anthony Stump
 Created: 26 Mar 2020
-Updated: 24 Apr 2021
+Updated: 21 Aug 2021
 
 */
 
@@ -21,11 +21,10 @@ import asUtilsPorts.Mailer;
 import asWebRest.action.GetStockAction;
 import asWebRest.action.UpdateStockAction;
 import asWebRest.dao.StockDAO;
+import asWebRest.secure.CoinMarketCapBeans;
 import asWebRest.secure.FinnHubBeans;
 
 public class Stocks {	
-	
-//https://query1.finance.yahoo.com/v7/finance/spark?symbols=TMUS,HAL
 	 
 	private String apiCallStock(String quote) {
 			String url = "https://query1.finance.yahoo.com/v8/finance/chart/" + quote;
@@ -42,6 +41,24 @@ public class Stocks {
 			}
 			return dataBack;
 	}
+	
+	private String apiCallStock_CoinMarketCap(String quotes) {
+		CoinMarketCapBeans cmcBeans = new CoinMarketCapBeans();
+		String url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
+		String dataBack = "qpiCallStock()\n";
+		try {
+			dataBack = Jsoup.connect(url)
+				.ignoreContentType(true)
+				.header("X-CMC_PRO_API_KEY", cmcBeans.getApiKey())
+				.data("symbol", quotes)
+				.execute()
+				.body();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataBack;
+	}
+
 	
 	public String apiCallStock_FinnHub(String quote) {
 		FinnHubBeans fhb = new FinnHubBeans();
@@ -208,6 +225,60 @@ public class Stocks {
 
 	}	
 	
+	public String getShitCoinUpdate(Connection dbc) {
+		
+		String quote = "Shitcoin update!";
+		
+		GetStockAction getStockAction = new GetStockAction(new StockDAO());
+		UpdateStockAction updateStockAction = new UpdateStockAction(new StockDAO());
+		
+		String shitCoinList = "";
+		JSONArray shitCoins = getStockAction.getShitCoins(dbc);
+		
+		int indexPosition = 0;
+		int indexNumber = 0;
+		int stockCount = shitCoins.length();
+		String scQuoteList = "";
+		JSONArray scQuoteArray = new JSONArray();
+		
+		for(int i = 0; i < stockCount; i++) {
+
+			JSONObject tStock = shitCoins.getJSONObject(i);
+			if(tStock.getInt("CMCPull") == 1) {
+				String tTicker = tStock.getString("Symbol");
+				scQuoteArray.put(tTicker);
+				scQuoteList += tTicker + ",";
+			}
+			
+		}
+
+		scQuoteList = scQuoteList.substring(0, scQuoteList.length()-1);
+		
+		JSONObject tStockData = null;
+		
+		try {
+			
+			tStockData = new JSONObject(apiCallStock_CoinMarketCap(scQuoteList));
+			JSONObject tDataObject = tStockData.getJSONObject("data");
+			for(int i = 0; i < scQuoteArray.length(); i++) {
+				JSONObject tQuote = tDataObject.getJSONObject(scQuoteArray.getString(i));
+				JSONObject tQuoteSubdata = tQuote.getJSONObject("quote");
+				JSONObject tQuoteUSD = tQuoteSubdata.getJSONObject("USD");
+				double tQuoteValue = tQuoteUSD.getDouble("price");
+				List<String> qParams = new ArrayList<>();
+				qParams.add(String.valueOf(tQuoteValue));
+				qParams.add(scQuoteArray.getString(i));
+				updateStockAction.setShitUpdateAuto(dbc, qParams);
+				quote += tQuoteValue;
+			}
+			
+		} catch (Exception e) {
+			quote += e.getMessage();
+		}
+		
+		return quote;
+		
+	}
 
 	public String getStockQuote_Yahoo7Multi(Connection dbc) {
 

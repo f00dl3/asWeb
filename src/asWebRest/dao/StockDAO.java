@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Split from Parent: 4 Aug 2020
-Updated: 20 Aug 2021
+Updated: 21 Aug 2021
 */
 
 package asWebRest.dao;
@@ -130,7 +130,7 @@ public class StockDAO {
     }
 
     private JSONArray shitCoins(Connection dbc) { 
-        final String query_GetShitCoins = "SELECT Symbol, Count, Value, Description, LastUpdated FROM Finances.ShitCoins WHERE Active=1;";
+        final String query_GetShitCoins = "SELECT Symbol, Count, Value, Description, LastUpdated, CMCPull FROM Finances.ShitCoins WHERE Active=1;";
         JSONArray tContainer = new JSONArray();
         try {
             ResultSet resultSet = wc.q2rs1c(dbc, query_GetShitCoins, null);
@@ -141,7 +141,8 @@ public class StockDAO {
                 	.put("Value", resultSet.getDouble("Value"))
                 	.put("Description", resultSet.getString("Description"))
                 	.put("Count", resultSet.getDouble("Count"))
-                	.put("LastUpdated", resultSet.getString("LastUpdated"));
+                	.put("LastUpdated", resultSet.getString("LastUpdated"))
+                	.put("CMCPull", resultSet.getInt("CMCPull"));
                 tContainer.put(tObject);
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -154,6 +155,15 @@ public class StockDAO {
         String query_ShareUpdateSC_2 ="UPDATE Finances.StockShares SET Count=(SELECT SUM(Count*Value) FROM Finances.ShitCoins WHERE Active=1) WHERE Symbol='USDC-USD';";
         try { returnData = wc.q2do1c(dbc, query_ShareUpdateSC, qParams); } catch (Exception e) { e.printStackTrace(); }
         try { returnData = wc.q2do1c(dbc, query_ShareUpdateSC_2, null); } catch (Exception e) { e.printStackTrace(); }
+        return returnData;
+    }
+    
+    private String shitUpdateAuto(Connection dbc, List<String> qParams) {
+        String returnData = wcb.getDefaultNotRanYet();
+        String query_ShareUpdateSCa = "UPDATE Finances.ShitCoins SET Value=? WHERE Symbol=?;";
+        String query_ShareUpdateSC_2a ="UPDATE Finances.StockShares SET Count=(SELECT SUM(Count*Value) FROM Finances.ShitCoins WHERE Active=1) WHERE Symbol='USDC-USD';";
+        try { returnData = wc.q2do1c(dbc, query_ShareUpdateSCa, qParams); } catch (Exception e) { e.printStackTrace(); }
+        try { returnData = wc.q2do1c(dbc, query_ShareUpdateSC_2a, null); } catch (Exception e) { e.printStackTrace(); }
         return returnData;
     }
     
@@ -292,6 +302,7 @@ public class StockDAO {
     public String setCryptoAccountAdd(Connection dbc, List<String> qParams) { return CryptoAccountAdd(dbc, qParams); }
     public String setETradeBrokerageAccountAdd(Connection dbc, List<String> qParams) { return eTradeBrokerageAccountAdd(dbc, qParams); }
     public String setShitUpdate(Connection dbc, List<String> qParams) { return shitUpdate(dbc, qParams); }
+    public String setShitUpdateAuto(Connection dbc, List<String> qParams) { return shitUpdateAuto(dbc, qParams); }
     public String setStockAdd(Connection dbc, List<String> qParams) { return stockAdd(dbc, qParams); }
     public String setStockIndex(Connection dbc, List<String> qParams) { return stockIndex(dbc, qParams); }
     public String setStockShareUpdate(Connection dbc, List<String> qParams) { return stockShareUpdate(dbc, qParams); }

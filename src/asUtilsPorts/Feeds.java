@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 14 Aug 2017
-Updated: 10 Mar 2021
+Updated: 21 Aug 2021
 */
 
 package asUtilsPorts;
@@ -94,12 +94,14 @@ public class Feeds {
         Radar radar = new Radar();
         Reddit reddit = new Reddit();
         Stations stations = new Stations();
+        Stocks stocks = new Stocks();
 
     	try { radar.fetchRadars(); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += kcScout.getScoutSQL(dbc); } catch (Exception e) { e.printStackTrace(); }  
     	try { stations.fetch(false, "Wunder"); } catch (Exception e) { e.printStackTrace(); }
     	try { camSensors.logTemperature(dbc); } catch (Exception e) { e.printStackTrace(); }
     	try { returnData += reddit.checkIfSent(dbc); } catch (Exception e) { e.printStackTrace(); }
+    	try { returnData += stocks.getShitCoinUpdate(dbc); } catch (Exception e) { e.printStackTrace(); }
     	
     	return returnData;
     	

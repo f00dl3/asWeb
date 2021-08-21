@@ -1,7 +1,7 @@
 /*
 by Anthony Stump
 Created: 22 Apr 2018
-Updated: 21 Nov 2020
+Updated: 21 Aug 2021
  */
 
 package asWebRest.resource;
@@ -222,6 +222,11 @@ public class TestResource extends ServerResource {
 					returnData += rd.checkIfSent(dbc);
 					break;
 
+	            case "ShitCoins":
+	            	Stocks stocksA = new Stocks();
+	            	returnData += stocksA.getShitCoinUpdate(dbc);
+	            	break;
+	            	
 	        	case "Snow": 
 	        		SnowReports sr = new SnowReports();
 	        		returnData += sr.doSnow(dbc);

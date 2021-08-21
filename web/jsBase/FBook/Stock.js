@@ -1,7 +1,7 @@
 /* 
 by Anthony Stump
 Created: 16 Jul 2020
-Updated: 20 Aug 2021
+Updated: 21 Aug 2021
  */
 
 function actOnCryptoFormSubmit(event) {
@@ -215,7 +215,9 @@ function putStocks(etbaData, stockData, crypto, shitCoinData) {
 		holdingValue = holdingValue.toFixed(2);
 		shitCoins += "<form class='tr shitCoinAddUPpdateForm'>" +
 			"<span class='td'><input class='C2UShit' type='checkbox' name='Action' value='Update' /></span>" +
-			"<span class='td'><input type='hidden' name='Symbol' value='" + sc.Symbol + "'/>" + sc.Symbol + "</span>" +
+			"<span class='td'><div class='UPop'><input type='hidden' name='Symbol' value='" + sc.Symbol + "'/>" + sc.Symbol +
+			"<div class='UPopO'>Last updated: " + sc.LastUpdated + "</div>" +
+			"</div></span>" +
 			"<span class='td'>" + sc.Description + "</span>" +
 			"<span class='td'><input type='number' step='0.001' name='Count' value='" + sc.Count + "' style='width: 80px;' /></span>" +
 			"<span class='td'><input type='number' step='0.001' name='Value' value='" + sc.Value + "' style='width: 80px;' /></span>" +  
